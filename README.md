@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Quaireaux</h1>
-  <img src="docs/images/logo.png" height="200">
+  <img src="docs/images/logo.png" height="200" width="200">
   <br />
   <a href="https://github.com/stark-rocket/quaireaux/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
   -
