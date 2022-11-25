@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Create a report to help Beerus to improve
+about: Create a report to help Quaireaux to improve
 title: "bug: "
 labels: "bug"
 assignees: ""
@@ -8,7 +8,7 @@ assignees: ""
 
 # Bug Report
 
-**Beerus version:**
+**Quaireaux version:**
 
 <!-- Please specify commit or tag version. -->
 

@@ -3,8 +3,8 @@ name: test
 on: [push, pull_request, pull_request_target]
 
 jobs:
-  check:
-    name: check
+  install-cairo:
+    name: Install Cairo
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,38 +14,8 @@ jobs:
           toolchain: nightly
           override: true
       - uses: Swatinem/rust-cache@v2
-      - uses: actions-rs/cargo@v1
-        with:
-          command: check
-
-  test:
-    name: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: nightly
-          override: true
-      - uses: Swatinem/rust-cache@v2
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --all
-
-  fmt:
-    name: fmt
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: nightly
-          override: true
-      - run: rustup component add rustfmt
-      - uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
+      # Clone cairo repository.
+      - run: git clone https://github.com/starkware-libs/cairo && cd cairo
+      # Build binaries.
+      - run: cargo build --release
+      # TODO: Store binaries for other jobs to use.
