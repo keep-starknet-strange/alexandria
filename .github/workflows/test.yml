@@ -21,3 +21,4 @@ jobs:
           cairo-compile src
           # Run tests
           cairo-run --path src/fibonacci.cairo
+          cairo-run --path src/perfect_number.cairo
