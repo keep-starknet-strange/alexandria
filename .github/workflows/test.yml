@@ -6,17 +6,10 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    container: starkrocket/cairo-cli:latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: nightly
-          override: true
-      - uses: Swatinem/rust-cache@v2
       - run: |
-          # Clone cairo repository and install binaries
-          git clone https://github.com/starkware-libs/cairo && cd cairo && cargo install --path crates/runner && cargo install --path crates/compiler && cd -
           # Compile
           cairo-compile src
           # Run tests
