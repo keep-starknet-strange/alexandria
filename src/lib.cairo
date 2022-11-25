@@ -1,1 +1,1 @@
-mod fibonnaci;
+mod fibonacci;
