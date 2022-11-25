@@ -3,8 +3,8 @@ name: test
 on: [push, pull_request, pull_request_target]
 
 jobs:
-  install-cairo:
-    name: Install Cairo
+  test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,8 +14,10 @@ jobs:
           toolchain: nightly
           override: true
       - uses: Swatinem/rust-cache@v2
-      # Clone cairo repository.
-      - run: git clone https://github.com/starkware-libs/cairo && cd cairo
-      # Build binaries.
-      - run: cargo build --release
-      # TODO: Store binaries for other jobs to use.
+      - run: |
+          # Clone cairo repository and install binaries
+          git clone https://github.com/starkware-libs/cairo && cd cairo && cargo install --path . && cd -
+          # Compile
+          cairo-compile src
+          # Run tests
+          cairo-run src/fibonacci.cairo

@@ -1,8 +1,8 @@
 // Calculate fibonnaci 
-func fibonnaci(a: felt, b: felt, n: felt) -> felt {
+func fibonacci(a: felt, b: felt, n: felt) -> felt {
     match n {
         0 => a,
-        _ => fibonnaci(b, a + b, n - 1),
+        _ => fibonacci(b, a + b, n - 1),
     }
 }
 
@@ -10,5 +10,5 @@ func fibonnaci(a: felt, b: felt, n: felt) -> felt {
 // TODO: replace with proper tests
 
 func main() -> felt{
-    fibonnaci(1, 2, 4)
+    fibonacci(1, 2, 4)
 }
