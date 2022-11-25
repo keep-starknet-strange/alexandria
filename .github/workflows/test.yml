@@ -16,7 +16,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: |
           # Clone cairo repository and install binaries
-          git clone https://github.com/starkware-libs/cairo && cd cairo && cargo install --path . && cd -
+          git clone https://github.com/starkware-libs/cairo && cd cairo && cargo install --path crates/runner && cargo install --path crates/compiler && cd -
           # Compile
           cairo-compile src
           # Run tests
