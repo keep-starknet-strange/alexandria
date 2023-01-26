@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Quaireaux</h1>
-  <img src="docs/images/logo.png" height="200" width="200">
+  <img src="docs/images/logo.png" height="400" width="400">
   <br />
   <a href="https://github.com/stark-rocket/quaireaux/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
   -
@@ -12,7 +12,7 @@
 <div align="center">
 <br />
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/stark-rocket/quaireaux/test?style=flat-square&logo=github)
+[![GitHub Workflow Status](https://github.com/stark-rocket/quaireaux/actions/workflows/test.yml/badge.svg)](https://github.com/stark-rocket/quaireaux/actions/workflows/test.yml)
 [![Project license](https://img.shields.io/github/license/stark-rocket/quaireaux.svg?style=flat-square)](LICENSE)
 [![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/stark-rocket/quaireaux/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 
@@ -34,7 +34,6 @@
   - [Format](#format)
 - [Features](#features)
   - [Math](#math)
-    - [Sequences](#sequences)
 - [Roadmap](#roadmap)
 - [Support](#support)
 - [Project assistance](#project-assistance)
@@ -50,7 +49,8 @@
 
 ## About
 
-> Quaireaux is a set of opinionated, and gas optimized building blocks for building verifiable programs using Cairo. 
+> Quaireaux is a community maintained standard library for Cairo 1.0.
+> It is a collection of useful algorithms and data structures implemented in Cairo.
 ## Getting Started
 
 ### Prerequisites
@@ -93,8 +93,6 @@ make format
 ## Features
 
 ### Math
-
-#### Sequences
 
 - [x] [Fibonacci](src/math/sequence/fibonacci.cairo)
 
