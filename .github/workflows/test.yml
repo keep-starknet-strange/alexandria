@@ -1,17 +1,41 @@
 name: test
 
-on: [push, pull_request, pull_request_target]
+on: [push, pull_request]
+
+env:
+  CAIRO_COMPILER_VERSION: v1.0.0-alpha.2
 
 jobs:
-  test:
-    name: Test
+  build:
+    name: build
     runs-on: ubuntu-latest
-    container: starkrocket/cairo-cli:latest
     steps:
       - uses: actions/checkout@v2
       - run: |
-          # Compile
-          cairo-compile src
-          # Run tests
-          cairo-run --path src/fibonacci.cairo
-          cairo-run --path src/perfect_number.cairo
+          wget https://github.com/starkware-libs/cairo/releases/download/$CAIRO_COMPILER_VERSION/cairo-lang-0.1.0-x86_64-unknown-linux-musl.tar.gz
+          tar -xvf cairo-lang-0.1.0-x86_64-unknown-linux-musl.tar.gz
+          export PATH=$PATH:$(pwd)/cairo/bin
+          make build
+
+  run:
+    name: run
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          wget https://github.com/starkware-libs/cairo/releases/download/$CAIRO_COMPILER_VERSION/cairo-lang-0.1.0-x86_64-unknown-linux-musl.tar.gz
+          tar -xvf cairo-lang-0.1.0-x86_64-unknown-linux-musl.tar.gz
+          export PATH=$PATH:$(pwd)/cairo/bin
+          # TODO: uncomment when demo is ready
+          #make run
+
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          wget https://github.com/starkware-libs/cairo/releases/download/$CAIRO_COMPILER_VERSION/cairo-lang-0.1.0-x86_64-unknown-linux-musl.tar.gz
+          tar -xvf cairo-lang-0.1.0-x86_64-unknown-linux-musl.tar.gz
+          export PATH=$PATH:$(pwd)/cairo/bin
+          make test

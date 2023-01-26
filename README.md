@@ -28,6 +28,13 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Usage](#usage)
+  - [Build](#build)
+  - [Run](#run)
+  - [Test](#test)
+  - [Format](#format)
+- [Features](#features)
+  - [Math](#math)
+    - [Sequences](#sequences)
 - [Roadmap](#roadmap)
 - [Support](#support)
 - [Project assistance](#project-assistance)
@@ -57,7 +64,39 @@
 
 ## Usage
 
-> **[TODO]**
+
+### Build
+
+```bash
+make build
+```
+
+### Run
+
+```bash
+make run
+```
+
+### Test
+
+```bash
+make test
+```
+
+### Format
+
+```bash
+make format
+```
+
+
+## Features
+
+### Math
+
+#### Sequences
+
+- [x] [Fibonacci](src/math/sequence/fibonacci.cairo)
 
 ## Roadmap
 

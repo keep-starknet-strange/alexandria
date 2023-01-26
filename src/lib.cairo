@@ -1,2 +1,8 @@
-mod fibonacci;
-mod perfect_number;
+// Math module
+mod math;
+
+// Demo module
+mod demo;
+
+// Test modules
+mod tests;
