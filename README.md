@@ -42,6 +42,7 @@
 - [Security](#security)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
+- [Contributors ✨](#contributors-)
 
 </details>
 
@@ -95,6 +96,7 @@ make format
 ### Math
 
 - [x] [Fibonacci](src/math/sequence/fibonacci.cairo)
+- [x] [Zeller's congruence](src/math/zellers_congruence.cairo)
 
 ## Roadmap
 
