@@ -24,6 +24,8 @@
 - [Report a Bug](#report-a-bug)
 - [Request a Feature](#request-a-feature)
 - [About](#about)
+- [Features](#features)
+  - [Math](#math)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -32,8 +34,6 @@
   - [Run](#run)
   - [Test](#test)
   - [Format](#format)
-- [Features](#features)
-  - [Math](#math)
 - [Roadmap](#roadmap)
 - [Support](#support)
 - [Project assistance](#project-assistance)
@@ -50,8 +50,16 @@
 
 ## About
 
-> Quaireaux is a community maintained standard library for Cairo 1.0.
-> It is a collection of useful algorithms and data structures implemented in Cairo.
+Quaireaux is a community maintained standard library for Cairo 1.0.
+It is a collection of useful algorithms and data structures implemented in Cairo.
+
+## Features
+
+### Math
+
+- [x] [Fibonacci](src/math/sequence/fibonacci.cairo)
+- [x] [Zeller's congruence](src/math/zellers_congruence.cairo)
+- [x] [Extended Euclidean Algorithm](src/math/extended_euclidean_algorithm.cairo) 
 ## Getting Started
 
 ### Prerequisites
@@ -89,15 +97,6 @@ make test
 ```bash
 make format
 ```
-
-
-## Features
-
-### Math
-
-- [x] [Fibonacci](src/math/sequence/fibonacci.cairo)
-- [x] [Zeller's congruence](src/math/zellers_congruence.cairo)
-- [x] [Extended Euclidean Algorithm](src/math/extended_euclidean_algorithm.cairo) 
 
 ## Roadmap
 
