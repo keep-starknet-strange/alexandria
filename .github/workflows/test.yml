@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          curl -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -L -o $RELEASE_ARCHIVE_NAME $RELEASE_ARCHIVE_LINK
+          curl -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -L -o $ARTIFACT_RELEASE_ARCHIVE_NAME $ARTIFACT_RELEASE_ARCHIVE_LINK
           unzip $ARTIFACT_RELEASE_ARCHIVE_NAME
           tar -xvf $RELEASE_ARCHIVE_NAME
           export PATH=$PATH:$(pwd)/cairo/bin
@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          curl -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -L -o $RELEASE_ARCHIVE_NAME $RELEASE_ARCHIVE_LINK
+          curl -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -L -o $ARTIFACT_RELEASE_ARCHIVE_NAME $ARTIFACT_RELEASE_ARCHIVE_LINK
           unzip $ARTIFACT_RELEASE_ARCHIVE_NAME
           tar -xvf $RELEASE_ARCHIVE_NAME
           export PATH=$PATH:$(pwd)/cairo/bin
@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          curl -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -L -o $RELEASE_ARCHIVE_NAME $RELEASE_ARCHIVE_LINK
+          curl -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -L -o $ARTIFACT_RELEASE_ARCHIVE_NAME $ARTIFACT_RELEASE_ARCHIVE_LINK
           unzip $ARTIFACT_RELEASE_ARCHIVE_NAME
           tar -xvf $RELEASE_ARCHIVE_NAME
           export PATH=$PATH:$(pwd)/cairo/bin
