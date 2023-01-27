@@ -18,7 +18,7 @@
 
 </div>
 
-<details open="open">
+<details>
 <summary>Table of Contents</summary>
 
 - [Report a Bug](#report-a-bug)
