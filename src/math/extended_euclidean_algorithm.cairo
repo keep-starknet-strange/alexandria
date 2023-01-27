@@ -36,7 +36,7 @@ fn loop(
     ref coeff_s: felt,
     ref old_t: felt,
     ref coeff_t: felt
-) implicits(RangeCheck, GasBuiltin) {
+) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match get_gas() {
