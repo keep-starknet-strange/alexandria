@@ -1,5 +1,11 @@
-// Calculate fibonnaci 
-fn fib(a: felt, b: felt, n: felt) -> felt implicits(RangeCheck, GasBuiltin) {
+// Calculate fibonnaci
+// # Arguments
+// * `a` - The first number in the sequence
+// * `b` - The second number in the sequence
+// * `n` - The number of times to iterate
+// # Returns
+// * `felt` - The nth number in the sequence
+fn fib(a: felt, b: felt, n: felt) -> felt {
     match get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
