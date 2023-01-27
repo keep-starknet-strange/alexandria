@@ -1,5 +1,4 @@
 use quaireaux::math::zellers_congruence;
-use quaireaux::tests::utils;
 use option::OptionTrait;
 
 // Define a test case function to avoid code duplication.

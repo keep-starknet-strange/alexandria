@@ -97,6 +97,7 @@ make format
 
 - [x] [Fibonacci](src/math/sequence/fibonacci.cairo)
 - [x] [Zeller's congruence](src/math/zellers_congruence.cairo)
+- [x] [Extended Euclidean Algorithm](src/math/extended_euclidean_algorithm.cairo)] 
 
 ## Roadmap
 

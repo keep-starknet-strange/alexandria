@@ -1,3 +1,3 @@
 mod fibonacci_test;
 mod zellers_congruence_test;
-mod utils;
+mod extended_euclidean_algorithm_test;
