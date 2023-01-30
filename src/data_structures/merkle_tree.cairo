@@ -24,17 +24,6 @@ impl MerkleTreeImpl of MerkleTreeTrait {
     /// # Returns
     /// The merkle root.
     fn compute_root(ref self: MerkleTree, current_node: felt, mut proof: Array::<felt>) -> felt {
-        // Check if out of gas. TODO: Remove when automatically handled.
-        // Check if out of gas.
-        // TODO: Remove when automatically handled by compiler.
-        match get_gas() {
-            Option::Some(_) => {},
-            Option::None(_) => {
-                let mut data = ArrayTrait::new();
-                data.append('OOG');
-                panic(data);
-            }
-        }
         let proof_len = u128_to_felt(ArrayTrait::len(ref proof));
         internal_compute_root(current_node, 0_u128, proof_len, proof)
     }
@@ -45,7 +34,7 @@ fn internal_compute_root(
 ) -> felt {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match get_gas() {
+    match get_gas_all(get_builtin_costs()) {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
@@ -60,20 +49,13 @@ fn internal_compute_root(
     let mut node = 0;
     // Get the next element of the proof.
     let proof_element = ArrayTrait::at(ref proof, proof_index);
-    match get_gas() {
-        Option::Some(_) => {},
-        Option::None(_) => {
-            let mut data = ArrayTrait::new();
-            data.append('OOG');
-            panic(data);
-        }
+
+    let h = LegacyHash::hash(current_node, proof_element);
+    if current_node < proof_element {
+        node = LegacyHash::hash(current_node, proof_element);
+    } else {
+        node = LegacyHash::hash(proof_element, current_node);
     }
-    //let h = LegacyHash::hash(current_node, proof_element);
-    //if current_node < proof_element {
-    //node = LegacyHash::hash(current_node, proof_element);
-    //} else {
-    //node = LegacyHash::hash(proof_element, current_node);
-    //}
     // Recursively compute the root.
     internal_compute_root(node, proof_index + 1_u128, proof_len - 1, proof)
 }

@@ -12,7 +12,8 @@ fn merkle_tree_test() {
     let mut proof = ArrayTrait::<felt>::new();
     proof.append(1);
     proof.append(2);
-    let leaf = 1234;
+    proof.append(3);
+    let leaf = 123456;
     let merkle_root = merkle_tree.compute_root(leaf, proof);
     debug::print_felt(merkle_root);
 }
