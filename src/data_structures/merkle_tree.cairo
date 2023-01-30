@@ -24,13 +24,13 @@ impl MerkleTreeImpl of MerkleTreeTrait {
     /// # Returns
     /// The merkle root.
     fn compute_root(ref self: MerkleTree, current_node: felt, mut proof: Array::<felt>) -> felt {
-        let proof_len = u128_to_felt(ArrayTrait::len(ref proof));
-        internal_compute_root(current_node, 0_u128, proof_len, proof)
+        let proof_len = ArrayTrait::len(ref proof);
+        internal_compute_root(current_node, 0_u64, proof_len, proof)
     }
 }
 
 fn internal_compute_root(
-    current_node: felt, proof_index: u128, proof_len: felt, mut proof: Array::<felt>
+    current_node: felt, proof_index: u64, proof_len: usize, mut proof: Array::<felt>
 ) -> felt {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
@@ -43,7 +43,7 @@ fn internal_compute_root(
         }
     }
     // Loop until we have reached the end of the proof.
-    if proof_len == 0 {
+    if proof_len == 0_u64 {
         return current_node;
     }
     let mut node = 0;
@@ -57,7 +57,7 @@ fn internal_compute_root(
         node = LegacyHash::hash(proof_element, current_node);
     }
     // Recursively compute the root.
-    internal_compute_root(node, proof_index + 1_u128, proof_len - 1, proof)
+    internal_compute_root(node, proof_index + 1_u64, proof_len - 1_u64, proof)
 }
 // Add traits for inner generic types if needed.
 //impl OptionFeltCopy of Copy::<Option::<felt>>;

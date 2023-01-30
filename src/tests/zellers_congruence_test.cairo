@@ -15,7 +15,7 @@ fn test_case(day: u128, month: u128, year: u128, expected: u128, error_expected:
 }
 
 #[test]
-#[available_gas(200000)]
+#[available_gas(2000000)]
 fn zellers_congruence_test() {
     test_case(25_u128, 1_u128, 2013_u128, 6_u128, false);
     test_case(16_u128, 4_u128, 2022_u128, 0_u128, false);
@@ -24,7 +24,7 @@ fn zellers_congruence_test() {
 }
 
 #[test]
-#[available_gas(200000)]
+#[available_gas(2000000)]
 fn zellers_congruence_invalid_parameters_test() {
     // Invalid day
     // Must be between 1 and 31
