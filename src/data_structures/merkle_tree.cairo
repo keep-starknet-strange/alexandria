@@ -43,10 +43,21 @@ impl MerkleTreeImpl of MerkleTreeTrait {
     }
 }
 
+/// Compute the merkle root of a given proof.
+/// This is an internal function that is used to recursively compute the merkle root.
+/// # Arguments
+/// * `current_node` - The current node of the proof.
+/// * `proof_index` - The current index of the proof.
+/// * `proof_len` - The length of the proof.
+/// * `proof` - The proof.
+/// # Returns
+/// The merkle root.
 fn internal_compute_root(
     current_node: felt, proof_index: u64, proof_len: usize, mut proof: Array::<felt>
 ) -> felt {
     // Check if out of gas.
+    // Note: we need to call `get_gas_all(get_builtin_costs())` because we need to call `LegacyHash::hash`
+    // which uses `Pedersen` builtin.
     // TODO: Remove when automatically handled by compiler.
     match get_gas_all(get_builtin_costs()) {
         Option::Some(_) => {},
@@ -64,7 +75,9 @@ fn internal_compute_root(
     // Get the next element of the proof.
     let proof_element = ArrayTrait::at(ref proof, proof_index);
 
-    let h = LegacyHash::hash(current_node, proof_element);
+    // Compute the hash of the current node and the current element of the proof.
+    // We need to check if the current node is smaller than the current element of the proof.
+    // If it is, we need to swap the order of the hash.
     if current_node < proof_element {
         node = LegacyHash::hash(current_node, proof_element);
     } else {
@@ -73,8 +86,4 @@ fn internal_compute_root(
     // Recursively compute the root.
     internal_compute_root(node, proof_index + 1_u64, proof_len - 1_u64, proof)
 }
-// Add traits for inner generic types if needed.
-//impl OptionFeltCopy of Copy::<Option::<felt>>;
-//impl OptionFeltDrop of Drop::<Option::<felt>>;
-
 
