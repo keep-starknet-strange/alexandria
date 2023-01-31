@@ -11,6 +11,8 @@ trait MerkleTreeTrait {
     fn new() -> MerkleTree;
     /// Compute the merkle root of a given proof.
     fn compute_root(ref self: MerkleTree, current_node: felt, proof: Array::<felt>) -> felt;
+    /// Verify a merkle proof.
+    fn verify(ref self: MerkleTree, root: felt, leaf: felt, proof: Array::<felt>) -> bool;
 }
 impl MerkleTreeImpl of MerkleTreeTrait {
     #[inline(always)]
@@ -24,8 +26,20 @@ impl MerkleTreeImpl of MerkleTreeTrait {
     /// # Returns
     /// The merkle root.
     fn compute_root(ref self: MerkleTree, current_node: felt, mut proof: Array::<felt>) -> felt {
-        let proof_len = ArrayTrait::len(ref proof);
+        let proof_len = proof.len();
         internal_compute_root(current_node, 0_u64, proof_len, proof)
+    }
+
+    /// Verify a merkle proof.
+    /// # Arguments
+    /// * `root` - The merkle root.
+    /// * `leaf` - The leaf to verify.
+    /// * `proof` - The proof.
+    /// # Returns
+    /// True if the proof is valid, false otherwise.
+    fn verify(ref self: MerkleTree, root: felt, leaf: felt, mut proof: Array::<felt>) -> bool {
+        let computed_root = self.compute_root(leaf, proof);
+        computed_root == root
     }
 }
 
