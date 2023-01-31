@@ -1,3 +1,17 @@
+//! MerkleTree implementation.
+//!
+//! # Example
+//! ```
+//! use quaireaux::data_structures::merkle_tree::MerkleTreeTrait;
+//!
+//! // Create a new merkle tree instance.
+//! let mut merkle_tree = MerkleTreeTrait::new();
+//! let mut proof = ArrayTrait::<felt>::new();
+//! proof.append(element_1);
+//! proof.append(element_2);
+//! // Compute the merkle root.
+//! let root = merkle_tree.compute_root(leaf, proof);
+
 // Core lib imports
 use array::ArrayTrait;
 use option::OptionTrait;
@@ -7,18 +21,24 @@ use hash::LegacyHash;
 #[derive(Drop)]
 struct MerkleTree {}
 
+/// MerkleTree trait.
 trait MerkleTreeTrait {
+    /// Create a new merkle tree instance.
     fn new() -> MerkleTree;
     /// Compute the merkle root of a given proof.
     fn compute_root(ref self: MerkleTree, current_node: felt, proof: Array::<felt>) -> felt;
     /// Verify a merkle proof.
     fn verify(ref self: MerkleTree, root: felt, leaf: felt, proof: Array::<felt>) -> bool;
 }
+
+/// MerkleTree implementation.
 impl MerkleTreeImpl of MerkleTreeTrait {
+    /// Create a new merkle tree instance.
     #[inline(always)]
     fn new() -> MerkleTree {
         MerkleTree {}
     }
+
     /// Compute the merkle root of a given proof.
     /// # Arguments
     /// * `current_node` - The current node of the proof.

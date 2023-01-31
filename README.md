@@ -25,6 +25,7 @@
 - [Request a Feature](#request-a-feature)
 - [About](#about)
 - [Features](#features)
+  - [Data Structures](#data-structures)
   - [Math](#math)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -54,6 +55,10 @@ Quaireaux is a community maintained standard library for Cairo 1.0.
 It is a collection of useful algorithms and data structures implemented in Cairo.
 
 ## Features
+
+### Data Structures
+
+- [x] [Merkle Tree](src/data_structures/merkle_tree.cairo)
 
 ### Math
 
