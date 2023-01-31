@@ -38,4 +38,3 @@ fn unsafe_euclidean_div_no_remainder(a: felt, b: felt) -> felt {
     let b_u128 = unsafe_felt_to_u128(b);
     u128_to_felt(a_u128 / b_u128)
 }
-
