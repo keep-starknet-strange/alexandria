@@ -87,6 +87,11 @@ fn _count_digits(num: felt, count: felt, divisor: felt) -> felt {
     return _count_digits(num, count + 1, divisor * 10);
 }
 
+// Raise a number to a power.
+/// * `base` - The number to raise.
+/// * `exp` - The exponent.
+/// # Returns
+/// * `felt` - The result of base raised to the power of exp.
 fn pow(base: felt, exp: felt) -> felt {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
