@@ -95,9 +95,8 @@ fn pow(base: felt, exp: felt) -> felt {
             panic(data);
         }
     }
-    if exp == 0 {
-        return 1;
+    match exp {
+        0 => 1,
+        _ => base * pow(base, exp - 1),
     }
-    let res = pow(base, exp - 1);
-    return res * base;
 }
