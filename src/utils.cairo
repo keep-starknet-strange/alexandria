@@ -39,11 +39,18 @@ fn unsafe_euclidean_div_no_remainder(a: felt, b: felt) -> felt {
     u128_to_felt(a_u128 / b_u128)
 }
 
-/// Perform euclidean division on `felt` types.
-fn unsafe_euclidean_div_with_remainder(a: felt, b: felt) -> (felt, felt) {
+fn unsafe_euclidean_div(a: felt, b: felt) -> (felt, felt) {
     let a_u128 = unsafe_felt_to_u128(a);
     let b_u128 = unsafe_felt_to_u128(b);
     (u128_to_felt(a_u128 / b_u128), u128_to_felt(a_u128 % b_u128))
+}
+
+fn max(a: felt, b: felt) -> felt {
+    if a > b {
+        return a;
+    } else {
+        return b;
+    }
 }
 
 // Function to count the number of digits in a number.
@@ -72,6 +79,7 @@ fn _count_digits(num: felt, count: felt, divisor: felt) -> felt {
             panic(data);
         }
     }
+
     let quotient = unsafe_euclidean_div_no_remainder(num, divisor);
     if quotient < 10 {
         return count + 1;
@@ -95,6 +103,7 @@ fn pow(base: felt, exp: felt) -> felt {
             panic(data);
         }
     }
+
     match exp {
         0 => 1,
         _ => base * pow(base, exp - 1),

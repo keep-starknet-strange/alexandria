@@ -59,12 +59,14 @@ It is a collection of useful algorithms and data structures implemented in Cairo
 ### Data Structures
 
 - [x] [Merkle Tree](src/data_structures/merkle_tree.cairo)
+- [x] [Queue](src/data_structures/queue.cairo)
 
 ### Math
 
 - [x] [Fibonacci](src/math/sequence/fibonacci.cairo)
 - [x] [Zeller's congruence](src/math/zellers_congruence.cairo)
-- [x] [Extended Euclidean Algorithm](src/math/extended_euclidean_algorithm.cairo)
+- [x] [Extended Euclidean Algorithm](src/math/extended_euclidean_algorithm.cairo) 
+- [x] [Karatsuba Multiplication Algorithm](src/math/karatsuba.cairo) 
 - [x] [Armstrong Number Algorithm](src/math/armstrong_number.cairo) 
 ## Getting Started
 
