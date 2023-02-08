@@ -38,3 +38,74 @@ fn unsafe_euclidean_div_no_remainder(a: felt, b: felt) -> felt {
     let b_u128 = unsafe_felt_to_u128(b);
     u128_to_felt(a_u128 / b_u128)
 }
+
+fn unsafe_euclidean_div(a: felt, b: felt) -> (felt, felt) {
+    let a_u128 = unsafe_felt_to_u128(a);
+    let b_u128 = unsafe_felt_to_u128(b);
+    (u128_to_felt(a_u128 / b_u128), u128_to_felt(a_u128 % b_u128))
+}
+
+fn max(a: felt, b: felt) -> felt {
+    if a > b {
+        return a;
+    } else {
+        return b;
+    }
+}
+
+// Function to count the number of digits in a number.
+/// # Arguments
+/// * `num` - The number to count the digits of.
+/// # Returns
+/// * `felt` - The number of digits in num.
+fn count_digits(num: felt) -> felt {
+    _count_digits(num, 0, 1)
+}
+
+// Recursive helper function for 'count_digits'.
+/// * `num` - The number to count the digits of.
+/// * `count` - The current count of digits.
+/// * `divisor` - The divisor used in the calculation to separate the digits.
+/// # Returns
+/// * `felt` - The number of digits in num.
+fn _count_digits(num: felt, count: felt, divisor: felt) -> felt {
+    // Check if out of gas.
+    // TODO: Remove when automatically handled by compiler.
+    match get_gas() {
+        Option::Some(_) => {},
+        Option::None(_) => {
+            let mut data = ArrayTrait::new();
+            data.append('OOG');
+            panic(data);
+        }
+    }
+
+    let quotient = unsafe_euclidean_div_no_remainder(num, divisor);
+    if quotient < 10 {
+        return count + 1;
+    }
+    return _count_digits(num, count + 1, divisor * 10);
+}
+
+// Raise a number to a power.
+/// * `base` - The number to raise.
+/// * `exp` - The exponent.
+/// # Returns
+/// * `felt` - The result of base raised to the power of exp.
+fn pow(base: felt, exp: felt) -> felt {
+    // Check if out of gas.
+    // TODO: Remove when automatically handled by compiler.
+    match get_gas() {
+        Option::Some(_) => {},
+        Option::None(_) => {
+            let mut data = ArrayTrait::new();
+            data.append('OOG');
+            panic(data);
+        }
+    }
+
+    match exp {
+        0 => 1,
+        _ => base * pow(base, exp - 1),
+    }
+}
