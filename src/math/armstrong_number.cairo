@@ -37,7 +37,7 @@ fn _is_armstrong_number(num: felt, original_num: felt, digits: felt) -> bool {
     if num == 0 {
         return original_num == 0;
     }
-    let (new_num, lastDigit) = utils::unsafe_euclidean_div_with_remainder(num, 10);
+    let (new_num, lastDigit) = utils::unsafe_euclidean_div(num, 10);
     let sum = utils::pow(lastDigit, digits);
     return _is_armstrong_number(new_num, original_num - sum, digits);
 }
