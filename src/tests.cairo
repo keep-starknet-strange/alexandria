@@ -4,3 +4,4 @@ mod extended_euclidean_algorithm_test;
 mod merkle_tree_test;
 mod karatsuba_test;
 mod queue_test;
+mod stack_test;
