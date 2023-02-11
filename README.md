@@ -67,6 +67,7 @@ It is a collection of useful algorithms and data structures implemented in Cairo
 - [x] [Zeller's congruence](src/math/zellers_congruence.cairo)
 - [x] [Extended Euclidean Algorithm](src/math/extended_euclidean_algorithm.cairo) 
 - [x] [Karatsuba Multiplication Algorithm](src/math/karatsuba.cairo) 
+- [x] [Amicable Numbers Algorithm](src/math/amicable_numbers.cairo) 
 ## Getting Started
 
 ### Prerequisites
