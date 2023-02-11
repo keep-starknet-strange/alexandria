@@ -36,7 +36,7 @@ fn _is_perfect_number(num: felt, index: felt, sum: felt) -> bool {
     }
 
     if num <= 1 {
-        return bool::False(());
+        return false;
     }
     if index == num - 1 {
         return num == sum;
