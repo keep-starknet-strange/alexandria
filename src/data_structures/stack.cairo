@@ -14,7 +14,7 @@ use dict::DictFeltToTrait;
 //! Stack module
 /// Stack representation.
 // #[derive(Drop, Copy)]
-struct Stack {
+struct Stack<T> {
     //TODO: Question, do we need "word_dict_start" in CairoV1?
     word_dict_start: DictFeltTo::<T>,
     word_dict: DictFeltTo::<T>,
@@ -22,34 +22,37 @@ struct Stack {
 }
 
 // #[derive(Drop, Copy)]
-struct Summary {
+struct Summary<T> {
     squashed_start: SquashedDictFeltTo::<T>,
     squashed_end: SquashedDictFeltTo::<T>,
     len: felt,
 }
 
 trait StackTrait<T> {
-    fn new() -> Stack;
-    fn push(ref self: Stack, value: T);
-    fn pop(ref self: Stack) -> Option::<T>;
-    fn peek(ref self: Stack, idx: u32) -> Option::<T>;
-    fn len(ref self: Stack) -> u128;
-    fn swap_i(ref self: Stack, i: felt);
-    fn finalize(ref self: Stack) -> Summary;
+    fn new() -> Stack::<T>;
+    fn push(ref self: Stack::<T>, value: T);
+    fn pop(ref self: Stack::<T>) -> Option::<T>;
+    fn peek(ref self: Stack::<T>, idx: u32) -> Option::<T>;
+    fn len(ref self: Stack::<T>) -> u128;
+    fn swap_i(ref self: Stack::<T>, i: felt);
+    fn finalize(ref self: Stack::<T>) -> Summary;
 }
 impl StackImpl<T> of StackTrait::<T> {
     // Stack New Function
-    fn new() -> Stack {
+    fn new() -> Stack::<T> {
         let new_word_dict = new::DictFeltTo < T > ();
         Stack { word_dict_start: new_word_dict, word_dict: new_word_dict, len: 0,  }
     }
 
     // Stack Push function
-    fn push(ref self: Stack, value: T) {
+    fn push(ref self: Stack::<T>, value: T) {
         // First Deconstruct? (Why do we need to deconstruct)?
         // Get initial word_dict and initial_len
-        let Stack{word_dict: mut word_dict, word_dict_start: mut word_dict_start, len: mut len } =
-            self;
+        // let Stack{word_dict: mut word_dict, word_dict_start: mut word_dict_start, len: mut len } =
+        //     self;
+        let mut word_dict_start = self.word_dict_start;
+        let mut word_dict = self.word_dict;
+        let mut len = self.len;        
         //TODO: Overflow check?
 
         //Insert new value to Stack
@@ -57,31 +60,37 @@ impl StackImpl<T> of StackTrait::<T> {
 
         //TODO: If we have a uint256 or any struct as "value", do we need to increment +2 or +n instead of +1?
         let new_len = len + 1;
-        self = Stack { word_dict_start, word_dict, new_len };
+        self = Stack { word_dict_start, word_dict, len:new_len };
     }
 
     //Stack Pop Function
-    fn pop(ref self: Stack) -> Option::<T> {
-        let Stack{word_dict: mut word_dict, word_dict_start: mut word_dict_start, len: mut len } =
-            self;
+    fn pop(ref self: Stack::<T>) -> Option::<T> {
+        // let Stack{word_dict: mut word_dict, word_dict_start: mut word_dict_start, len: mut len } =
+        //     self;
+        let mut word_dict_start = self.word_dict_start;
+        let mut word_dict = self.word_dict;
+        let mut len = self.len;        
 
         // Check if len > 0
-        if len <= 0 {
-            return Option::<T>::None(());
+        if len < 0 {
+            return Option::None();
         }
 
         // Get "value" at index "len"      
         let value = word_dict.get(len);
         let new_len = len - 1;
-        self = Stack { word_dict_start, word_dict, new_len };
+        self = Stack { word_dict_start, word_dict, len: new_len };
 
         //Return value
-        return Option::<T>::Some(value);
+        return Option::Some(value);
     }
 
-    fn peek(ref self: Stack, index: u32) -> Option::<T> {
-        let Stack{word_dict: mut word_dict, word_dict_start: mut word_dict_start, len: mut len } =
-            self;
+    fn peek(ref self: Stack::<T>, index: felt) -> Option::<T> {
+        // let Stack{word_dict: mut word_dict, word_dict_start: mut word_dict_start, len: mut len } =
+        //     self;
+        let mut word_dict_start = self.word_dict_start;
+        let mut word_dict = self.word_dict;
+        let mut len = self.len;        
 
         // Check if index is within len
         if len < index {
@@ -94,22 +103,24 @@ impl StackImpl<T> of StackTrait::<T> {
         self = Stack { word_dict_start, word_dict, new_len };
 
         // Return value
-        return Option::<T>::Some(value);
+        return Option::Some(value);
     }
 
-    fn len(ref self: Stack) -> felt {
-        let Stack{len: len } = self;
+    fn len(ref self: Stack::<T>) -> felt {
+        let len = self.len;
 
         return len;
     }
 
-    fn swap_i(ref self: Stack, i: felt) {
-        let Stack{word_dict_start: word_dict_start, word_dict: word_dict, len: len } = self;
-        len
-        i_index = len - i;
+    fn swap_i(ref self: Stack::<T>, i: felt) {
+        // let Stack{word_dict_start: mut word_dict_start, word_dict:mut word_dict, len: len } = self;
+        let mut word_dict_start = self.word_dict_start;
+        let mut word_dict = self.word_dict;
+        let mut len = self.len;
+        let i_index = len - i;
         // Check if i <= len
         if len < i {
-            return Option::<T>::None(());
+            return Option::None();
         }
         // Get "values" to "swap"
         let value_i = word_dict.get(i_index);
@@ -119,11 +130,14 @@ impl StackImpl<T> of StackTrait::<T> {
         word_dict.insert(i_index, value_len);
     }
 
-    fn finalize(ref self: Stack) -> Summary {
-        let Stack{word_dict_start: word_dict_start, word_dict: word_dict, len: len } = self;
+    fn finalize(ref self: Stack::<T>) -> Summary {
+        // let Stack{word_dict_start: mut word_dict_start, word_dict: mut word_dict, len: len } = self;
+        let mut word_dict_start = self.word_dict_start;
+        let mut word_dict = self.word_dict;
+        let mut len = self.len;
 
         // Finalize both dicts
-        let word_dict_start_finalized = word_start_dict.finalize();
+        let word_dict_start_finalized = word_dict_start.finalize();
         let word_dict_finalized = word_dict.finalize();
         // Create and return summary
         Summary {
