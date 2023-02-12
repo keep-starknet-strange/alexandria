@@ -33,11 +33,13 @@ fn _is_armstrong_number(num: felt, original_num: felt, digits: felt) -> bool {
             panic(data);
         }
     }
-    // Break if num is 0
-    if num == 0 {
-        return original_num == 0;
+
+    match num {
+        0 => original_num == 0,
+        _ => {
+            let (new_num, lastDigit) = utils::unsafe_euclidean_div(num, 10);
+            let sum = utils::pow(lastDigit, digits);
+            _is_armstrong_number(new_num, original_num - sum, digits)
+        }
     }
-    let (new_num, lastDigit) = utils::unsafe_euclidean_div(num, 10);
-    let sum = utils::pow(lastDigit, digits);
-    return _is_armstrong_number(new_num, original_num - sum, digits);
 }
