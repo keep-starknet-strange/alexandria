@@ -58,14 +58,14 @@ fn test_case_compute_root(
 ) {
     let mut merkle_tree = MerkleTreeTrait::new();
     let root = merkle_tree.compute_root(leaf, proof);
-    assert(root == expected_root, 'Root should be equal to expected root');
+    assert(root == expected_root, 'wrong result');
 }
 
 fn test_case_verify(
     ref merkle_tree: MerkleTree, root: felt, leaf: felt, proof: Array::<felt>, expected_result: bool
 ) {
     let result = merkle_tree.verify(root, leaf, proof);
-    assert(result == expected_result, 'Result should be equal to expected result');
+    assert(result == expected_result, 'wrong result');
 }
 
 fn generate_proof_2_elements(element_1: felt, element_2: felt) -> Array::<felt> {
