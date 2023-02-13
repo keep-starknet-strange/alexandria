@@ -7,7 +7,7 @@ use quaireaux::data_structures::stack::U256ArrayCopy;
 
 #[test]
 #[available_gas(2000000)]
-fn queue_new_test() {
+fn stack_new_test() {
     let mut stack = StackTrait::new();
     let result_len = stack.len();
 
@@ -16,7 +16,7 @@ fn queue_new_test() {
 
 #[test]
 #[available_gas(2000000)]
-fn queue_is_empty_test() {
+fn stack_is_empty_test() {
     let mut stack = StackTrait::new();
     let result = stack.is_empty();
 

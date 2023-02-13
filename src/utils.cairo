@@ -194,3 +194,35 @@ fn is_equal(ref a: Array::<u32>, ref b: Array::<u32>, index: u32) -> bool {
 
     is_equal(ref a, ref b, index + 1_u32)
 }
+
+/// Returns the slice of an array.
+/// * `arr` - The array to slice.
+/// * `begin` - The index to start the slice at.
+/// * `end` - The index to end the slice at (not included).
+/// # Returns
+/// * `Array::<Array::<u256>>` - The slice of the array.
+fn array_slice(
+    ref arr: Array::<Array::<u256>>, begin: usize, end: usize
+) -> Array::<Array::<u256>> {
+    let mut slice = ArrayTrait::<Array::<u256>>::new();
+    array_slice_loop(ref arr, ref slice, begin, end);
+    slice
+}
+
+/// Recursive helper function for 'array_slice'.
+/// * `arr` - The array to slice.
+/// * `slice` - The slice of the array.
+/// * `index` - The current index of the array.
+/// * `end` - The index to end the slice at (not included).
+fn array_slice_loop(
+    ref arr: Array::<Array::<u256>>, ref slice: Array::<Array::<u256>>, index: usize, end: usize
+) {
+    if index >= end {
+        return ();
+    }
+    if index >= arr.len() {
+        return ();
+    }
+    slice.append(arr.at(index));
+    array_slice_loop(ref arr, ref slice, index + 1_usize, end);
+}
