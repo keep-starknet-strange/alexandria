@@ -40,12 +40,14 @@ fn _is_perfect_number(num: felt, index: felt, sum: felt) -> bool {
     }
     if index == num - 1 {
         return num == sum;
-    } 
-    
+    }
+        
     let (_, r) = utils::unsafe_euclidean_div(num, index);
-    match r {
-        0 => _is_perfect_number(num, index + 1, sum + index),
-        _ => _is_perfect_number(num, index + 1, sum),
+    if r == 0 {
+        return _is_perfect_number(num, index + 1, sum + index);
+    }
+    else {
+        return _is_perfect_number(num, index + 1, sum);
     }
 }
 
