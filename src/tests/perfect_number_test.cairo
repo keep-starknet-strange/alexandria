@@ -39,22 +39,3 @@ fn perfect_numbers_test() {
     let mut res = perfect_number::perfect_numbers(ref max);
     assert(res.len() == 1_usize, 'invalid result');
 }
-
-// test case works but takes a long time to run
-// #[test]
-// #[available_gas(2000000000)]
-// fn perfect_numbers_1_test() {
-//     let mut max = 100;
-//     let mut res = perfect_number::perfect_numbers(ref max);
-//     assert(res.len() == 2_usize, 'invalid result');
-// }
-
-// test case works but takes a long time to run
-// #[test]
-// #[available_gas(20000000000000)]
-// fn perfect_numbers_2_test() {
-//     let mut max = 496;
-//     let mut res = perfect_number::perfect_numbers(ref max);
-//     assert(res.len() == 2_usize, 'invalid result');
-// }
-
