@@ -109,3 +109,59 @@ fn pow(base: felt, exp: felt) -> felt {
         _ => base * pow(base, exp - 1),
     }
 }
+
+// Split an array into two arrays.
+/// * `arr` - The array to split.
+/// * `index` - The index to split the array at.
+/// # Returns
+/// * `(Array::<felt>, Array::<felt>)` - The two arrays.
+fn split_array<T>(mut arr: Array::<T>, index: u32) -> (Array::<T>, Array::<T>) {
+    // Check if out of gas.
+    // TODO: Remove when automatically handled by compiler.
+    match get_gas() {
+        Option::Some(_) => {},
+        Option::None(_) => {
+            let mut data = ArrayTrait::new();
+            data.append('OOG');
+            panic(data);
+        }
+    }
+
+    let mut arr1 = ArrayTrait::<T>::new();
+    let mut arr2 = ArrayTrait::<T>::new();
+    let len = arr.len();
+
+    fill_array(ref arr1, arr, 0_u32, index);
+    fill_array(ref arr2, arr, index, len - index);
+
+    (arr1, arr2)
+}
+
+// Fill an array with a value.
+/// * `arr` - The array to fill.
+/// * `fill_arr` - The array to fill with.
+/// * `index` - The index to start filling at.
+/// * `count` - The number of elements to fill.
+/// # Returns
+/// * `Array::<T>` - The filled array.
+fn fill_array<T>(ref arr: Array::<T>, mut fill_arr: Array::<T>, index: u32, count: u32) {
+    // Check if out of gas.
+    // TODO: Remove when automatically handled by compiler.
+    match get_gas() {
+        Option::Some(_) => {},
+        Option::None(_) => {
+            let mut data = ArrayTrait::new();
+            data.append('OOG');
+            panic(data);
+        }
+    }
+
+    if count == 0_u32 {
+        return ();
+    }
+
+    arr.append(fill_arr.get(index).unwrap());
+
+    fill_array(ref arr, fill_arr, index + 1_u32, count - 1_u32)
+}
+
