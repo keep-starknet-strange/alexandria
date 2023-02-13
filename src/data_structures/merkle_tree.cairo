@@ -98,11 +98,14 @@ fn internal_compute_root(
     // Compute the hash of the current node and the current element of the proof.
     // We need to check if the current node is smaller than the current element of the proof.
     // If it is, we need to swap the order of the hash.
-    if current_node < proof_element {
-        node = LegacyHash::hash(current_node, proof_element);
-    } else {
-        node = LegacyHash::hash(proof_element, current_node);
-    }
+    // TODO: enable when bug is fixed
+    // thread 'main' panicked at 'Failed to specialize: `drop<Pedersen>`', 
+    // crates/cairo-lang-sierra-generator/src/utils.rs:202:9
+    //if current_node < proof_element {
+    //node = LegacyHash::hash(current_node, proof_element);
+    //} else {
+    //node = LegacyHash::hash(proof_element, current_node);
+    //}
     // Recursively compute the root.
     internal_compute_root(node, proof_index + 1_u32, proof_len - 1_u32, proof)
 }
