@@ -6,7 +6,13 @@ use array::ArrayTrait;
 // Internal imports.
 use quaireaux::utils;
 
+// Calculate the greatest common dividor for n numbers
+// # Arguments
+// * `n` - The array of numbers to calculate the gcd for
+// # Returns
+// * `felt` - The gcd of input numbers
 fn gcd(ref n: Array::<felt>) -> felt {
+    // Return empty input error
     if n.len() == 0_usize {
         let mut data = array_new::<felt>();
         array_append::<felt>(ref data, 'EI');
@@ -15,6 +21,11 @@ fn gcd(ref n: Array::<felt>) -> felt {
     _gcd(ref n)
 }
 
+// Internal function loop through all elements from the array
+// # Arguments
+// * `n` - The array of numbers to calculate the gcd for
+// # Returns
+// * `felt` - The gcd of input numbers
 fn _gcd(ref n: Array::<felt>) -> felt {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
@@ -34,6 +45,12 @@ fn _gcd(ref n: Array::<felt>) -> felt {
     gcd_two_numbers(a, b)
 }
 
+// Internal function to calculate the gcd between two numbers
+// # Arguments
+// * `a` - The first number for which to calculate the gcd
+// * `b` - The first number for which to calculate the gcd
+// # Returns
+// * `felt` - The gcd of a and b
 fn gcd_two_numbers(a: felt, b: felt) -> felt {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
