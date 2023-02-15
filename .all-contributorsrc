@@ -45,6 +45,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "mkaput",
+      "name": "Marek Kaput",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3450050?v=4",
+      "profile": "https://github.com/mkaput",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
