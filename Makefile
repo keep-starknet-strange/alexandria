@@ -7,7 +7,7 @@ TEST_ENTRYPOINT = .
 BUILD_DIR = build
 
 # Default target
-default: run
+default: test
 
 # All relevant targets
 all: build run test
@@ -23,7 +23,8 @@ build: FORCE
 # Run the project
 run:
 	@echo "Running..."
-	cairo-run -p $(ENTRYPOINT)
+	# TODO: enable when sample main is ready
+	#cairo-run -p $(ENTRYPOINT)
 
 # Test the project
 test:
