@@ -67,8 +67,9 @@ It is a collection of useful algorithms and data structures implemented in Cairo
 - [x] [Zeller's congruence](src/math/zellers_congruence.cairo)
 - [x] [Extended Euclidean Algorithm](src/math/extended_euclidean_algorithm.cairo) 
 - [x] [Karatsuba Multiplication Algorithm](src/math/karatsuba.cairo) 
-- [] 🚧 [Perfect Number Algorithm](src/math/perfect_number.cairo) (TODO: fix bugs)
-- [x] [Gcd of N Numbers](src/math/gcd_of_n_numbers.cairo) 
+- [x] [Perfect Number Algorithm](src/math/perfect_number.cairo)
+- [x] [Armstrong Number Algorithm](src/math/armstrong_number.cairo) 
+
 ## Getting Started
 
 ### Prerequisites

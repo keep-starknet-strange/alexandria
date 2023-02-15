@@ -9,6 +9,5 @@ mod gcd_of_n_numbers_test;
 mod karatsuba_test;
 mod queue_test;
 mod stack_test;
-//mod perfect_number_test;
-
-
+mod perfect_number_test;
+mod armstrong_number_test;
