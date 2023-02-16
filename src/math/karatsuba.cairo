@@ -32,7 +32,7 @@ fn multiply(x: felt, y: felt) -> felt {
         return x * y;
     }
 
-    let max_digit_counts = utils::max(utils::count_digits(x), utils::count_digits(y));
+    let max_digit_counts = utils::max(utils::count_digits_of_base(x, 10), utils::count_digits_of_base(y, 10));
     let middle_idx = _div_half_ceil(max_digit_counts);
     let (x1, x0) = _split_number(x, middle_idx);
     let (y1, y0) = _split_number(y, middle_idx);

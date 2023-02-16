@@ -12,7 +12,7 @@ use quaireaux::utils;
 /// # Returns
 /// * `bool` - A boolean value indicating is Armstrong Number.
 fn is_armstrong_number(num: felt) -> bool {
-    _is_armstrong_number(num, num, utils::count_digits(num))
+    _is_armstrong_number(num, num, utils::count_digits_of_base(num, 10))
 }
 
 /// Recursive helper function for 'is_armstrong_number'.
