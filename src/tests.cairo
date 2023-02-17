@@ -12,3 +12,4 @@ mod stack_test;
 mod perfect_number_test;
 mod armstrong_number_test;
 mod utils_test;
+mod collatz_sequence_test;

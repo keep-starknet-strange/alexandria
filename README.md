@@ -70,6 +70,7 @@ It is a collection of useful algorithms and data structures implemented in Cairo
 - [x] [Perfect Number Algorithm](src/math/perfect_number.cairo)
 - [x] [Armstrong Number Algorithm](src/math/armstrong_number.cairo) 
 - [x] [GCD of N numbers](src/math/gcd_of_n_numbers.cairo)
+- [x] [Collatz Sequence](src/math/collatz_sequence.cairo)
 
 ## Getting Started
 
