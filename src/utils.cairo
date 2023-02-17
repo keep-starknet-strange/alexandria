@@ -1,6 +1,8 @@
 //! Utilities for quaireaux standard library.
 use array::ArrayTrait;
 use option::OptionTrait;
+use integer::u128_try_from_felt;
+use integer::u128_to_felt;
 
 /// Panic with a custom message.
 /// # Arguments
