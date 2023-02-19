@@ -56,19 +56,10 @@ fn max(a: felt, b: felt) -> felt {
 // Function to count the number of digits in a number.
 /// # Arguments
 /// * `num` - The number to count the digits of.
+/// * `base` - Base in which to count the digits.
 /// # Returns
-/// * `felt` - The number of digits in num.
-fn count_digits(num: felt) -> felt {
-    _count_digits(num, 0, 1)
-}
-
-// Recursive helper function for 'count_digits'.
-/// * `num` - The number to count the digits of.
-/// * `count` - The current count of digits.
-/// * `divisor` - The divisor used in the calculation to separate the digits.
-/// # Returns
-/// * `felt` - The number of digits in num.
-fn _count_digits(num: felt, count: felt, divisor: felt) -> felt {
+/// * `felt` - The number of digits in num of base
+fn count_digits_of_base(num: felt, base: felt) -> felt {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match get_gas() {
@@ -80,11 +71,13 @@ fn _count_digits(num: felt, count: felt, divisor: felt) -> felt {
         }
     }
 
-    let quotient = unsafe_euclidean_div_no_remainder(num, divisor);
-    if quotient < 10 {
-        return count + 1;
+    match num {
+        0 => 0,
+        _ => {
+            let quotient = unsafe_euclidean_div_no_remainder(num, base);
+            count_digits_of_base(quotient, base) + 1
+        }
     }
-    return _count_digits(num, count + 1, divisor * 10);
 }
 
 // Raise a number to a power.

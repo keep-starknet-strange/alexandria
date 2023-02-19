@@ -36,6 +36,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "greged93",
+      "name": "greged93",
+      "avatar_url": "https://avatars.githubusercontent.com/u/82421016?v=4",
+      "profile": "https://github.com/greged93",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mkaput",
+      "name": "Marek Kaput",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3450050?v=4",
+      "profile": "https://github.com/mkaput",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "amanusk",
+      "name": "amanusk",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7280933?v=4",
+      "profile": "https://github.com/amanusk",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

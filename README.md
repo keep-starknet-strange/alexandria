@@ -67,7 +67,10 @@ It is a collection of useful algorithms and data structures implemented in Cairo
 - [x] [Zeller's congruence](src/math/zellers_congruence.cairo)
 - [x] [Extended Euclidean Algorithm](src/math/extended_euclidean_algorithm.cairo) 
 - [x] [Karatsuba Multiplication Algorithm](src/math/karatsuba.cairo) 
-- [] 🚧 [Perfect Number Algorithm](src/math/perfect_number.cairo) (TODO: fix bugs)
+- [x] [Perfect Number Algorithm](src/math/perfect_number.cairo)
+- [x] [Armstrong Number Algorithm](src/math/armstrong_number.cairo) 
+- [x] [GCD of N numbers](src/math/gcd_of_n_numbers.cairo)
+
 ## Getting Started
 
 ### Prerequisites
@@ -77,7 +80,20 @@ It is a collection of useful algorithms and data structures implemented in Cairo
 
 ### Installation
 
-> **[TODO]**
+<!-- TODO(mkaput): Use this when Scarb will support Git:
+Quaireaux is a Scarb package, which can be installed by adding following line to your `Scarb.toml`:
+```toml
+[dependencies]
+quaireaux = { git = "https://github.com/keep-starknet-strange/quaireaux.git" }
+```
+-->
+
+Quaireaux is a [Scarb] package. Clone this repository next to your project and add the following line to your `Scarb.toml`:
+
+```toml
+[dependencies]
+quaireaux = { path = "../quaireaux" }
+```
 
 ## Usage
 
@@ -171,6 +187,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/abdelhamidbakhta"><img src="https://avatars.githubusercontent.com/u/45264458?v=4?s=100" width="100px;" alt="Abdel @ StarkWare "/><br /><sub><b>Abdel @ StarkWare </b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=abdelhamidbakhta" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sdgalvan"><img src="https://avatars.githubusercontent.com/u/58611754?v=4?s=100" width="100px;" alt="Santiago Galván (Dub)"/><br /><sub><b>Santiago Galván (Dub)</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=sdgalvan" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/dpinones"><img src="https://avatars.githubusercontent.com/u/30808181?v=4?s=100" width="100px;" alt="Damián Piñones"/><br /><sub><b>Damián Piñones</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=dpinones" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/greged93"><img src="https://avatars.githubusercontent.com/u/82421016?v=4?s=100" width="100px;" alt="greged93"/><br /><sub><b>greged93</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=greged93" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mkaput"><img src="https://avatars.githubusercontent.com/u/3450050?v=4?s=100" width="100px;" alt="Marek Kaput"/><br /><sub><b>Marek Kaput</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=mkaput" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/amanusk"><img src="https://avatars.githubusercontent.com/u/7280933?v=4?s=100" width="100px;" alt="amanusk"/><br /><sub><b>amanusk</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=amanusk" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
@@ -190,3 +209,5 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+[scarb]: https://github.com/software-mansion/scarb
