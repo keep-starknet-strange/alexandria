@@ -8,6 +8,7 @@ mod extended_euclidean_algorithm_test;
 mod karatsuba_test;
 mod queue_test;
 mod stack_test;
+mod mergesort_test;
 //mod perfect_number_test;
 
 
