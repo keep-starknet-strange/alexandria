@@ -1,5 +1,8 @@
 // Core lib imports
 use array::ArrayTrait;
+use traits::Into;
+use traits::TryInto;
+use option::OptionTrait;
 use quaireaux::data_structures::stack::StackTrait;
 use quaireaux::data_structures::stack::U256ArrayDrop;
 use quaireaux::data_structures::stack::U256ArrayCopy;
@@ -26,12 +29,12 @@ fn stack_is_empty_test() {
 #[test]
 #[available_gas(2000000)]
 fn stack_push_test() {
-    let mut stack = StackTrait::new();
-    let mut first_array = ArrayTrait::<u256>::new();
-    let mut second_array = ArrayTrait::<u256>::new();
+     let mut stack = StackTrait::new();
+    let val_1: u256 = 1.into();
+    let val_2: u256 = 2.into();
 
-    stack.push(first_array);
-    stack.push(second_array);
+    stack.push(val_1);
+    stack.push(val_2);
 
     let result_len = stack.len();
     let result_is_empty = stack.is_empty();
@@ -43,20 +46,14 @@ fn stack_push_test() {
 #[available_gas(2000000)]
 fn stack_peek_test() {
     let mut stack = StackTrait::new();
-    let mut first_array = ArrayTrait::<u256>::new();
-    first_array.append(u256_from_felt(1));
-    first_array.append(u256_from_felt(2));
+    let val_1: u256 = 1.into();
+    let val_2: u256 = 2.into();
 
-    let mut second_array = ArrayTrait::<u256>::new();
-    second_array.append(u256_from_felt(3));
-    second_array.append(u256_from_felt(4));
-
-    stack.push(first_array);
-    stack.push(second_array);
+    stack.push(val_1);
+    stack.push(val_2);
     match stack.peek() {
         Option::Some(mut result) => {
-            assert(result.at(0_usize) == second_array.at(0_usize), 'wrong result');
-            assert(result.at(1_usize) == second_array.at(1_usize), 'wrong result');
+            assert(result == val_2, 'wrong result');
         },
         Option::None(_) => {
             assert(0 == 1, 'should return value');
@@ -71,20 +68,14 @@ fn stack_peek_test() {
 #[available_gas(2000000)]
 fn stack_pop_test() {
     let mut stack = StackTrait::new();
-    let mut first_array = ArrayTrait::<u256>::new();
-    first_array.append(u256_from_felt(1));
-    first_array.append(u256_from_felt(2));
+    let val_1: u256 = 1.into();
+    let val_2: u256 = 2.into();
 
-    let mut second_array = ArrayTrait::<u256>::new();
-    second_array.append(u256_from_felt(3));
-    second_array.append(u256_from_felt(4));
-
-    stack.push(first_array);
-    stack.push(second_array);
+    stack.push(val_1);
+    stack.push(val_2);
     match stack.pop() {
         Option::Some(mut result) => {
-            assert(result.at(0_usize) == second_array.at(0_usize), 'wrong result');
-            assert(result.at(1_usize) == second_array.at(1_usize), 'wrong result');
+            assert(result == val_2, 'wrong result');
         },
         Option::None(_) => {
             assert(0 == 1, 'should return a value');
