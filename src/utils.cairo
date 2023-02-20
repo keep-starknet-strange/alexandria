@@ -201,9 +201,9 @@ fn is_equal(ref a: Array::<u32>, ref b: Array::<u32>, index: u32) -> bool {
 /// * `end` - The index to end the slice at (not included).
 /// # Returns
 /// * `u256` - The slice of the array.
-fn array_slice(ref arr: Array::<u256>, begin: usize, end: usize) -> Array::<u256> {
+fn array_slice(arr: @Array::<u256>, begin: usize, end: usize) -> Array::<u256> {
     let mut slice = ArrayTrait::<u256>::new();
-    array_slice_loop(ref arr, ref slice, begin, end);
+    array_slice_loop(:arr, ref :slice, index: begin, :end);
     slice
 }
 
@@ -212,7 +212,7 @@ fn array_slice(ref arr: Array::<u256>, begin: usize, end: usize) -> Array::<u256
 /// * `slice` - The slice of the array.
 /// * `index` - The current index of the array.
 /// * `end` - The index to end the slice at (not included).
-fn array_slice_loop(ref arr: Array::<u256>, ref slice: Array::<u256>, index: usize, end: usize) {
+fn array_slice_loop(arr: @Array::<u256>, ref slice: Array::<u256>, index: usize, end: usize) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match get_gas() {
@@ -230,5 +230,5 @@ fn array_slice_loop(ref arr: Array::<u256>, ref slice: Array::<u256>, index: usi
         return ();
     }
     slice.append(*arr.at(index));
-    array_slice_loop(ref arr, ref slice, index + 1_usize, end);
+    array_slice_loop(:arr, ref :slice, index: index + 1_usize, :end);
 }
