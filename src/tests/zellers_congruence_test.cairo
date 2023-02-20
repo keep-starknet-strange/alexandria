@@ -1,6 +1,7 @@
 use quaireaux::math::zellers_congruence;
 use option::OptionTrait;
 
+
 // Define a test case function to avoid code duplication.
 fn test_case(day: u128, month: u128, year: u128, expected: u128, error_expected: bool) {
     let day = zellers_congruence::day_of_week(day, month, year);
@@ -38,4 +39,7 @@ fn zellers_congruence_invalid_parameters_test() {
     // Must be > 0
     test_case(25_u128, 1_u128, 0_u128, 0_u128, true);
 }
+
+// Required to use Option in the test case function
+impl OptionDrop of Drop::<Option::<u128>>;
 
