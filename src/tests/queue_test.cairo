@@ -46,7 +46,7 @@ fn queue_peek_front_test() {
 
     match queue.peek_front() {
         Option::Some(result) => {
-            assert(result == 1, 'wrong result');
+            assert(*result == 1, 'wrong result');
         },
         Option::None(_) => {
             assert(0 == 1, 'should return value');
