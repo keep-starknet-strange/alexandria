@@ -4,8 +4,6 @@ use traits::Into;
 use traits::TryInto;
 use option::OptionTrait;
 use quaireaux::data_structures::stack::StackTrait;
-use quaireaux::data_structures::stack::U256ArrayDrop;
-use quaireaux::data_structures::stack::U256ArrayCopy;
 // Internal imports
 
 #[test]
@@ -29,7 +27,7 @@ fn stack_is_empty_test() {
 #[test]
 #[available_gas(2000000)]
 fn stack_push_test() {
-     let mut stack = StackTrait::new();
+    let mut stack = StackTrait::new();
     let val_1: u256 = 1.into();
     let val_2: u256 = 2.into();
 
@@ -52,8 +50,8 @@ fn stack_peek_test() {
     stack.push(val_1);
     stack.push(val_2);
     match stack.peek() {
-        Option::Some(mut result) => {
-            assert(result == val_2, 'wrong result');
+        Option::Some(result) => {
+            assert(*result == val_2, 'wrong result');
         },
         Option::None(_) => {
             assert(0 == 1, 'should return value');
@@ -74,8 +72,8 @@ fn stack_pop_test() {
     stack.push(val_1);
     stack.push(val_2);
     match stack.pop() {
-        Option::Some(mut result) => {
-            assert(result == val_2, 'wrong result');
+        Option::Some(result) => {
+            assert(*result == val_2, 'wrong result');
         },
         Option::None(_) => {
             assert(0 == 1, 'should return a value');
