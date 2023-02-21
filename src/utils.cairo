@@ -109,7 +109,7 @@ fn pow(base: felt, exp: felt) -> felt {
 /// * `index` - The index to split the array at.
 /// # Returns
 /// * `(Array::<felt>, Array::<felt>)` - The two arrays.
-fn split_array<T>(mut arr: Array::<T>, index: u32) -> (Array::<T>, Array::<T>) {
+fn split_array(ref arr: Array::<u32>, index: u32) -> (Array::<u32>, Array::<u32>) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match get_gas() {
@@ -121,8 +121,8 @@ fn split_array<T>(mut arr: Array::<T>, index: u32) -> (Array::<T>, Array::<T>) {
         }
     }
 
-    let mut arr1 = ArrayTrait::<T>::new();
-    let mut arr2 = ArrayTrait::<T>::new();
+    let mut arr1 = array_new::<u32>();
+    let mut arr2 = array_new::<u32>();
     let len = arr.len();
 
     fill_array(ref arr1, arr, 0_u32, index);
@@ -138,7 +138,7 @@ fn split_array<T>(mut arr: Array::<T>, index: u32) -> (Array::<T>, Array::<T>) {
 /// * `count` - The number of elements to fill.
 /// # Returns
 /// * `Array::<T>` - The filled array.
-fn fill_array<T>(ref arr: Array::<T>, mut fill_arr: Array::<T>, index: u32, count: u32) {
+fn fill_array(ref arr: Array::<u32>, mut fill_arr: Array::<u32>, index: u32, count: u32) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match get_gas() {
@@ -153,8 +153,8 @@ fn fill_array<T>(ref arr: Array::<T>, mut fill_arr: Array::<T>, index: u32, coun
     if count == 0_u32 {
         return ();
     }
-
-    arr.append(fill_arr.get(index).unwrap());
+    let element = fill_arr.at(index);
+    arr.append(*element);
 
     fill_array(ref arr, fill_arr, index + 1_u32, count - 1_u32)
 }

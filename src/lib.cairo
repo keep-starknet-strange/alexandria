@@ -7,9 +7,6 @@ mod data_structures;
 // Sorting module
 mod sorting;
 
-// Demo module
-mod demo;
-
 // Utils module
 mod utils;
 

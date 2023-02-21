@@ -14,7 +14,7 @@ fn mergesort_elements(mut arr: Array::<u32>) -> Array::<u32> {
 
     // Create left and right arrays
     let middle = len / 2_u32;
-    let (mut left_arr, mut right_arr) = utils::split_array(arr, middle);
+    let (mut left_arr, mut right_arr) = utils::split_array(ref arr, middle);
 
     // Recursively sort the left and right arrays
     let mut sorted_left = mergesort_elements(left_arr);
@@ -39,24 +39,24 @@ fn _merge(
     }
 
     if left_arr_ix == left_arr.len() {
-        result_arr.append(right_arr.at(right_arr_ix));
+        result_arr.append(*right_arr.at(right_arr_ix));
         return _merge(left_arr, right_arr, result_arr, left_arr_ix, right_arr_ix + 1_u32);
     }
 
     if right_arr_ix == right_arr.len() {
-        result_arr.append(left_arr.at(left_arr_ix));
+        result_arr.append(*left_arr.at(left_arr_ix));
         return _merge(left_arr, right_arr, result_arr, left_arr_ix + 1_u32, right_arr_ix);
     }
 
-    if left_arr.at(
+    if *left_arr.at(
         left_arr_ix
-    ) < right_arr.at(
+    ) < *right_arr.at(
         right_arr_ix
     ) {
-        result_arr.append(left_arr.at(left_arr_ix));
+        result_arr.append(*left_arr.at(left_arr_ix));
         return _merge(left_arr, right_arr, result_arr, left_arr_ix + 1_u32, right_arr_ix);
     } else {
-        result_arr.append(right_arr.at(right_arr_ix));
+        result_arr.append(*right_arr.at(right_arr_ix));
         return _merge(left_arr, right_arr, result_arr, left_arr_ix, right_arr_ix + 1_u32);
     }
 }
