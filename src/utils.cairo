@@ -125,8 +125,8 @@ fn split_array(ref arr: Array::<u32>, index: u32) -> (Array::<u32>, Array::<u32>
     let mut arr2 = array_new::<u32>();
     let len = arr.len();
 
-    fill_array(ref arr1, arr, 0_u32, index);
-    fill_array(ref arr2, arr, index, len - index);
+    fill_array(ref arr1, ref arr, 0_u32, index);
+    fill_array(ref arr2, ref arr, index, len - index);
 
     (arr1, arr2)
 }
@@ -138,7 +138,7 @@ fn split_array(ref arr: Array::<u32>, index: u32) -> (Array::<u32>, Array::<u32>
 /// * `count` - The number of elements to fill.
 /// # Returns
 /// * `Array::<T>` - The filled array.
-fn fill_array(ref arr: Array::<u32>, mut fill_arr: Array::<u32>, index: u32, count: u32) {
+fn fill_array(ref arr: Array::<u32>, ref fill_arr: Array::<u32>, index: u32, count: u32) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match get_gas() {
@@ -156,7 +156,7 @@ fn fill_array(ref arr: Array::<u32>, mut fill_arr: Array::<u32>, index: u32, cou
     let element = fill_arr.at(index);
     arr.append(*element);
 
-    fill_array(ref arr, fill_arr, index + 1_u32, count - 1_u32)
+    fill_array(ref arr, ref fill_arr, index + 1_u32, count - 1_u32)
 }
 
 fn is_equal(ref a: Array::<u32>, ref b: Array::<u32>, index: u32) -> bool {

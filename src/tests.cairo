@@ -12,7 +12,6 @@ mod stack_test;
 mod mergesort_test;
 //mod perfect_number_test;
 
-
 mod perfect_number_test;
 mod armstrong_number_test;
 mod fast_power_test;

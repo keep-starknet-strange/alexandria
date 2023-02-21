@@ -3,21 +3,21 @@ use quaireaux::utils;
 use array::ArrayTrait;
 
 #[test]
-#[available_gas(200000)]
+#[available_gas(2000000)]
 fn mergesort_test() {
     let mut data = array_new::<u32>();
-    array_append(ref data, 2_u32);
-    array_append(ref data, 1_u32);
-    array_append(ref data, 3_u32);
-    array_append(ref data, 0_u32);
+    data.append(2_u32);
+    data.append(1_u32);
+    data.append(3_u32);
+    data.append(0_u32);
 
     let mut correct = array_new::<u32>();
-    array_append(ref correct, 0_u32);
-    array_append(ref correct, 1_u32);
-    array_append(ref correct, 2_u32);
-    array_append(ref correct, 3_u32);
+    correct.append(0_u32);
+    correct.append(1_u32);
+    correct.append(2_u32);
+    correct.append(3_u32);
 
     let mut sorted = merge_sort::mergesort_elements(data);
 
-    assert(utils::is_equal(ref sorted, ref correct, 0_u32), 'invalid result');
+    assert(utils::is_equal(ref sorted, ref correct, 0_u32) == true, 'invalid result');
 }
