@@ -1,4 +1,5 @@
 use quaireaux::sorting::merge_sort;
+use quaireaux::utils;
 use array::ArrayTrait;
 
 #[test]
@@ -16,5 +17,7 @@ fn mergesort_test() {
     array_append(ref correct, 2_u32);
     array_append(ref correct, 3_u32);
 
-    assert(merge_sort::mergesort_elements(data) == correct, 'invalid result');
+    let mut sorted = merge_sort::mergesort_elements(data);
+
+    assert(utils::is_equal(ref sorted, ref correct, 0_u32), 'invalid result');
 }

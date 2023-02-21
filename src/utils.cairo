@@ -159,3 +159,32 @@ fn fill_array(ref arr: Array::<u32>, mut fill_arr: Array::<u32>, index: u32, cou
     fill_array(ref arr, fill_arr, index + 1_u32, count - 1_u32)
 }
 
+fn is_equal(ref a: Array::<u32>, ref b: Array::<u32>, index: u32) -> bool {
+    // Check if out of gas.
+    // TODO: Remove when automatically handled by compiler.
+    match get_gas() {
+        Option::Some(_) => {},
+        Option::None(_) => {
+            let mut data = ArrayTrait::new();
+            data.append('OOG');
+            panic(data);
+        }
+    }
+
+    let len = a.len();
+    if len != b.len() {
+        return false;
+    }
+    let mut i = 0_u32;
+    if index == len {
+        return true;
+    }
+
+    let a_element = a.at(index);
+    let b_element = b.at(index);
+    if *a_element != *b_element {
+        return false;
+    }
+
+    is_equal(ref a, ref b, index + 1_u32)
+}
