@@ -63,19 +63,22 @@ impl StackImpl of StackTrait {
     /// Returns
     /// The item removed or None if the stack is empty.
     fn pop(ref self: Stack) -> Option::<@u256> {
+        if self.is_empty() {
+            return Option::None(());
+        }
         // Deconstruct the stack struct because we consume it
         let Stack{elements: mut elements } = self;
         let stack_len = elements.len();
 
         // Reconstruct the stack struct because next line can panic
         self = Stack { elements };
-        let popped_idx = stack_len - 1_usize;
+        let last_idx = stack_len - 1_usize;
 
         // Deconstruct the stack struct because we consume it
         let Stack{elements: mut elements } = self;
-        let sliced_elements = array_slice(@elements, begin:0_usize, end:popped_idx);
+        let sliced_elements = array_slice(@elements, begin: 0_usize, end: last_idx);
 
-        let value = elements.get(popped_idx);
+        let value = elements.get(last_idx);
 
         // Update the returned stack with the sliced array
         self = Stack { elements: sliced_elements };
@@ -87,6 +90,9 @@ impl StackImpl of StackTrait {
     /// Returns
     /// The last item or None if the stack is empty.
     fn peek(self: @Stack) -> Option::<@u256> {
+        if self.is_empty() {
+            return Option::None(());
+        }
         self.elements.get(self.elements.len() - 1_usize)
     }
 
