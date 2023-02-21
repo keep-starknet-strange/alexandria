@@ -7,6 +7,16 @@ use array::ArrayTrait;
 use quaireaux::utils;
 
 fn mergesort_elements(mut arr: Array::<u32>) -> Array::<u32> {
+
+    match get_gas() {
+        Option::Some(_) => {},
+        Option::None(_) => {
+            let mut data = ArrayTrait::new();
+            data.append('OOG');
+            panic(data);
+        }
+    }
+
     let len = arr.len();
     if len == 1_u32 {
         return arr;
@@ -34,6 +44,16 @@ fn _merge(
     left_arr_ix: u32,
     right_arr_ix: u32
 ) -> Array::<u32> {
+
+    match get_gas() {
+        Option::Some(_) => {},
+        Option::None(_) => {
+            let mut data = ArrayTrait::new();
+            data.append('OOG');
+            panic(data);
+        }
+    }
+
     if result_arr.len() == left_arr.len() + right_arr.len() {
         return result_arr;
     }
