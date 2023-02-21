@@ -200,7 +200,7 @@ fn is_equal(ref a: Array::<u32>, ref b: Array::<u32>, index: u32) -> bool {
 /// * `begin` - The index to start the slice at.
 /// * `end` - The index to end the slice at (not included).
 /// # Returns
-/// * `u256` - The slice of the array.
+/// * `Array::<u256>` - The slice of the array.
 fn array_slice(arr: @Array::<u256>, begin: usize, end: usize) -> Array::<u256> {
     let mut slice = ArrayTrait::<u256>::new();
     array_slice_loop(:arr, ref :slice, index: begin, :end);
