@@ -18,7 +18,7 @@ fn mergesort_elements(mut arr: Array::<u32>) -> Array::<u32> {
     }
 
     let len = arr.len();
-    if len == 1_u32 {
+    if len <= 1_u32 {
         return arr;
     }
 
