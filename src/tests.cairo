@@ -15,4 +15,5 @@ mod mergesort_test;
 
 mod perfect_number_test;
 mod armstrong_number_test;
+mod fast_power_test;
 mod utils_test;
