@@ -1,8 +1,8 @@
 //! Utilities for quaireaux standard library.
 use array::ArrayTrait;
 use option::OptionTrait;
-use integer::u128_try_from_felt;
-use integer::u128_to_felt;
+use traits::TryInto;
+use traits::Into;
 
 /// Panic with a custom message.
 /// # Arguments
@@ -30,21 +30,20 @@ fn to_non_zero(felt: felt) -> Option::<NonZero::<felt>> {
 
 /// Force conversion from `felt` to `u128`.
 fn unsafe_felt_to_u128(a: felt) -> u128 {
-    let res = u128_try_from_felt(a);
-    res.unwrap()
+    a.try_into().unwrap()
 }
 
 /// Perform euclidean division on `felt` types.
 fn unsafe_euclidean_div_no_remainder(a: felt, b: felt) -> felt {
     let a_u128 = unsafe_felt_to_u128(a);
     let b_u128 = unsafe_felt_to_u128(b);
-    u128_to_felt(a_u128 / b_u128)
+    (a_u128 / b_u128).into()
 }
 
 fn unsafe_euclidean_div(a: felt, b: felt) -> (felt, felt) {
     let a_u128 = unsafe_felt_to_u128(a);
     let b_u128 = unsafe_felt_to_u128(b);
-    (u128_to_felt(a_u128 / b_u128), u128_to_felt(a_u128 % b_u128))
+    ((a_u128 / b_u128).into(), (a_u128 % b_u128).into())
 }
 
 fn max(a: felt, b: felt) -> felt {
