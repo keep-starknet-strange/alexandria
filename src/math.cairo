@@ -6,3 +6,6 @@ mod gcd_of_n_numbers;
 mod perfect_number;
 mod armstrong_number;
 mod fast_power;
+//mod perfect_number;
+
+
