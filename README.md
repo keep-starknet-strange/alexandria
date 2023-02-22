@@ -71,6 +71,11 @@ It is a collection of useful algorithms and data structures implemented in Cairo
 - [x] [Armstrong Number Algorithm](src/math/armstrong_number.cairo) 
 - [x] [GCD of N numbers](src/math/gcd_of_n_numbers.cairo)
 
+### Sorting 
+
+- [x] [Merge Sort](src/sorting/merge_sort.cairo)
+- [x] [Bubble Sort](src/sorting/bubble_sort.cairo)
+
 ## Getting Started
 
 ### Prerequisites
