@@ -6,6 +6,11 @@ use array::ArrayTrait;
 // Internal Imports
 use quaireaux::utils;
 
+// Merge Sort
+/// # Arguments
+/// * `arr` - Array to sort
+/// # Returns
+/// * `Array::<u32>` - Sorted array
 fn mergesort_elements(mut arr: Array::<u32>) -> Array::<u32> {
 
     match get_gas() {
@@ -36,7 +41,15 @@ fn mergesort_elements(mut arr: Array::<u32>) -> Array::<u32> {
     sorted_arr
 }
 
-
+// Merge two sorted arrays
+/// # Arguments
+/// * `left_arr` - Left array
+/// * `right_arr` - Right array
+/// * `result_arr` - Result array
+/// * `left_arr_ix` - Left array index
+/// * `right_arr_ix` - Right array index
+/// # Returns
+/// * `Array::<u32>` - Sorted array
 fn _merge(
     mut left_arr: Array::<u32>,
     mut right_arr: Array::<u32>,

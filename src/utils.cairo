@@ -159,6 +159,12 @@ fn fill_array(ref arr: Array::<u32>, ref fill_arr: Array::<u32>, index: u32, cou
     fill_array(ref arr, ref fill_arr, index + 1_u32, count - 1_u32)
 }
 
+// Check if two arrays are equal.
+/// * `a` - The first array.
+/// * `b` - The second array.
+/// * `index` - The index used to loop through the arrays.
+/// # Returns
+/// * `bool` - True if the arrays are equal, false otherwise.
 fn is_equal(ref a: Array::<u32>, ref b: Array::<u32>, index: u32) -> bool {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
