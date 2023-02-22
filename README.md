@@ -87,19 +87,10 @@ It is a collection of useful algorithms and data structures implemented in Cairo
 
 ### Installation
 
-<!-- TODO(mkaput): Use this when Scarb will support Git:
 Quaireaux is a Scarb package, which can be installed by adding following line to your `Scarb.toml`:
 ```toml
 [dependencies]
 quaireaux = { git = "https://github.com/keep-starknet-strange/quaireaux.git" }
-```
--->
-
-Quaireaux is a [Scarb] package. Clone this repository next to your project and add the following line to your `Scarb.toml`:
-
-```toml
-[dependencies]
-quaireaux = { path = "../quaireaux" }
 ```
 
 ## Usage
