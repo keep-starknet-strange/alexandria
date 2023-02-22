@@ -60,6 +60,7 @@ It is a collection of useful algorithms and data structures implemented in Cairo
 
 - [x] [Merkle Tree](src/data_structures/merkle_tree.cairo)
 - [x] [Queue](src/data_structures/queue.cairo)
+- [x] [Trie](src/data_structures/trie.cairo)
 
 ### Math
 
