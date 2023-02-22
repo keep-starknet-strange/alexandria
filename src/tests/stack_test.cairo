@@ -51,7 +51,7 @@ fn stack_peek_test() {
     stack.push(val_2);
     match stack.peek() {
         Option::Some(result) => {
-            assert(*result == val_2, 'wrong result');
+            assert(result == val_2, 'wrong result');
         },
         Option::None(_) => {
             assert(0 == 1, 'should return value');
@@ -71,9 +71,11 @@ fn stack_pop_test() {
 
     stack.push(val_1);
     stack.push(val_2);
-    match stack.pop() {
+
+    let (mut stack, value) = stack.pop();
+    match value {
         Option::Some(result) => {
-            assert(*result == val_2, 'wrong result');
+            assert(result == val_2, 'wrong result');
         },
         Option::None(_) => {
             assert(0 == 1, 'should return a value');
@@ -83,4 +85,5 @@ fn stack_pop_test() {
     let result_len = stack.len();
     assert(result_len == 1_usize, 'should remove item');
 }
+
 

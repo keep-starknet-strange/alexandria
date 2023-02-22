@@ -10,7 +10,7 @@
 //! let mut item:u256 = 1.into();
 //! stack.push(item);
 //! Remove the item from the stack;
-//! stack.pop();
+//! let (stack, _) = stack.pop();
 //! ```
 
 // Core lib imports
@@ -31,9 +31,9 @@ trait StackTrait {
     /// Pushes a new value onto the stack.
     fn push(ref self: Stack, value: u256);
     /// Removes the last item from the stack and returns it, or None if the stack is empty.
-    fn pop(ref self: Stack) -> Option::<@u256>;
+    fn pop(self: Stack) -> (Stack, Option::<u256>);
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
-    fn peek(self: @Stack) -> Option::<@u256>;
+    fn peek(self: @Stack) -> Option::<u256>;
     /// Returns the number of items in the stack.
     fn len(self: @Stack) -> usize;
     /// Returns true if the stack is empty.
@@ -43,6 +43,8 @@ trait StackTrait {
 impl StackImpl of StackTrait {
     #[inline(always)]
     /// Creates a new Stack instance.
+    /// Returns
+    /// * Stack The new stack instance.
     fn new() -> Stack {
         let mut elements = ArrayTrait::<u256>::new();
         Stack { elements }
@@ -61,45 +63,40 @@ impl StackImpl of StackTrait {
     /// Removes the last item from the stack and returns it, or None if the stack is empty.
     /// * `self` - The stack to pop the item off of.
     /// Returns
-    /// The item removed or None if the stack is empty.
-    fn pop(ref self: Stack) -> Option::<@u256> {
+    /// * Stack The stack with the item removed.
+    /// * Option::<u256> The item removed or None if the stack is empty.
+    fn pop(mut self: Stack) -> (Stack, Option::<u256>) {
         if self.is_empty() {
-            return Option::None(());
+            return (self, Option::None(()));
         }
         // Deconstruct the stack struct because we consume it
         let Stack{elements: mut elements } = self;
         let stack_len = elements.len();
-
-        // Reconstruct the stack struct because next line can panic
-        self = Stack { elements };
         let last_idx = stack_len - 1_usize;
 
-        // Deconstruct the stack struct because we consume it
-        let Stack{elements: mut elements } = self;
         let sliced_elements = array_slice(@elements, begin: 0_usize, end: last_idx);
 
-        let value = elements.get(last_idx);
-
+        let value = elements.at(last_idx);
         // Update the returned stack with the sliced array
         self = Stack { elements: sliced_elements };
-        value
+        (self, Option::Some(*value))
     }
 
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
     /// * `self` - The stack to peek the item off of.
     /// Returns
-    /// The last item or None if the stack is empty.
-    fn peek(self: @Stack) -> Option::<@u256> {
+    /// * Option::<u256> The last item of the stack
+    fn peek(self: @Stack) -> Option::<u256> {
         if self.is_empty() {
             return Option::None(());
         }
-        self.elements.get(self.elements.len() - 1_usize)
+        Option::Some(*self.elements.at(self.elements.len() - 1_usize))
     }
 
     /// Returns the number of items in the stack.
     /// * `self` - The stack to get the length of.
     /// Returns
-    /// The number of items in the stack.
+    /// * usize The number of items in the stack.
     fn len(self: @Stack) -> usize {
         self.elements.len()
     }
@@ -107,7 +104,7 @@ impl StackImpl of StackTrait {
     /// Returns true if the stack is empty.
     /// * `self` - The stack to check if it is empty.
     /// Returns
-    /// True if the stack is empty, false otherwise.
+    /// * bool True if the stack is empty, false otherwise.
     fn is_empty(self: @Stack) -> bool {
         self.len() == ZERO_USIZE
     }
