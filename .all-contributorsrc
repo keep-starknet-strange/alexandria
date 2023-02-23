@@ -18,6 +18,69 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "sdgalvan",
+      "name": "Santiago Galván (Dub)",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58611754?v=4",
+      "profile": "https://github.com/sdgalvan",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "dpinones",
+      "name": "Damián Piñones",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30808181?v=4",
+      "profile": "https://github.com/dpinones",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "greged93",
+      "name": "greged93",
+      "avatar_url": "https://avatars.githubusercontent.com/u/82421016?v=4",
+      "profile": "https://github.com/greged93",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mkaput",
+      "name": "Marek Kaput",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3450050?v=4",
+      "profile": "https://github.com/mkaput",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "amanusk",
+      "name": "amanusk",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7280933?v=4",
+      "profile": "https://github.com/amanusk",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "msaug",
+      "name": "Mathieu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/60658558?v=4",
+      "profile": "https://github.com/msaug",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "EvolveArt",
+      "name": "0xevolve",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12902455?v=4",
+      "profile": "https://github.com/EvolveArt",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

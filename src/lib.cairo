@@ -4,8 +4,8 @@ mod math;
 // Data structures module
 mod data_structures;
 
-// Demo module
-mod demo;
+// Sorting module
+mod sorting;
 
 // Utils module
 mod utils;

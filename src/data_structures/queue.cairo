@@ -4,17 +4,17 @@ use option::OptionTrait;
 
 const ZERO_USIZE: usize = 0_usize;
 
-struct Queue<T> { 
-    elements: Array::<T>,
+struct Queue<T> {
+    elements: Array::<T>, 
 }
 
 trait QueueTrait<T> {
     fn new() -> Queue::<T>;
     fn enqueue(ref self: Queue::<T>, value: T);
     fn dequeue(ref self: Queue::<T>) -> Option::<T>;
-    fn peek_front(ref self: Queue::<T>) -> Option::<T>;
-    fn len(ref self: Queue::<T>) -> usize;
-    fn is_empty(ref self: Queue::<T>) -> bool;
+    fn peek_front(self: @Queue::<T>) -> Option::<@T>;
+    fn len(self: @Queue::<T>) -> usize;
+    fn is_empty(self: @Queue::<T>) -> bool;
 }
 
 impl QueueImpl<T> of QueueTrait::<T> {
@@ -22,7 +22,7 @@ impl QueueImpl<T> of QueueTrait::<T> {
     fn new() -> Queue::<T> {
         queue_new()
     }
-    
+
     fn enqueue(ref self: Queue::<T>, value: T) {
         let mut elements = self.elements;
         elements.append(value);
@@ -36,21 +36,15 @@ impl QueueImpl<T> of QueueTrait::<T> {
         first
     }
 
-    fn peek_front(ref self: Queue::<T>) -> Option::<T> {
-        let mut elements = self.elements;
-        let first = elements.get(ZERO_USIZE);
-        self = Queue { elements };
-        first
+    fn peek_front(self: @Queue::<T>) -> Option::<@T> {
+        self.elements.get(ZERO_USIZE)
     }
 
-    fn len(ref self: Queue::<T>) -> usize {
-        let mut elements = self.elements;
-        let queue_len = elements.len();
-        self = Queue { elements };
-        queue_len
+    fn len(self: @Queue::<T>) -> usize {
+        self.elements.len()
     }
 
-    fn is_empty(ref self: Queue::<T>) -> bool {
+    fn is_empty(self: @Queue::<T>) -> bool {
         self.len() == ZERO_USIZE
     }
 }

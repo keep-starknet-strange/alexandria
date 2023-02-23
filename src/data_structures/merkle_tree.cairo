@@ -47,7 +47,7 @@ impl MerkleTreeImpl of MerkleTreeTrait {
     /// The merkle root.
     fn compute_root(ref self: MerkleTree, current_node: felt, mut proof: Array::<felt>) -> felt {
         let proof_len = proof.len();
-        internal_compute_root(current_node, 0_u64, proof_len, proof)
+        internal_compute_root(current_node, 0_u32, proof_len, proof)
     }
 
     /// Verify a merkle proof.
@@ -73,7 +73,7 @@ impl MerkleTreeImpl of MerkleTreeTrait {
 /// # Returns
 /// The merkle root.
 fn internal_compute_root(
-    current_node: felt, proof_index: u64, proof_len: usize, mut proof: Array::<felt>
+    current_node: felt, proof_index: u32, proof_len: usize, mut proof: Array::<felt>
 ) -> felt {
     // Check if out of gas.
     // Note: we need to call `get_gas_all(get_builtin_costs())` because we need to call `LegacyHash::hash`
@@ -88,22 +88,24 @@ fn internal_compute_root(
         }
     }
     // Loop until we have reached the end of the proof.
-    if proof_len == 0_u64 {
+    if proof_len == 0_u32 {
         return current_node;
     }
     let mut node = 0;
     // Get the next element of the proof.
-    let proof_element = ArrayTrait::at(ref proof, proof_index);
+    let proof_element = proof.at(proof_index);
 
     // Compute the hash of the current node and the current element of the proof.
     // We need to check if the current node is smaller than the current element of the proof.
     // If it is, we need to swap the order of the hash.
-    if current_node < proof_element {
-        node = LegacyHash::hash(current_node, proof_element);
-    } else {
-        node = LegacyHash::hash(proof_element, current_node);
-    }
+    // TODO: enable when bug is fixed
+    // thread 'main' panicked at 'Failed to specialize: `drop<Pedersen>`', 
+    // crates/cairo-lang-sierra-generator/src/utils.rs:202:9
+    //if current_node < proof_element {
+    //node = LegacyHash::hash(current_node, proof_element);
+    //} else {
+    //node = LegacyHash::hash(proof_element, current_node);
+    //}
     // Recursively compute the root.
-    internal_compute_root(node, proof_index + 1_u64, proof_len - 1_u64, proof)
+    internal_compute_root(node, proof_index + 1_u32, proof_len - 1_u32, proof)
 }
-
