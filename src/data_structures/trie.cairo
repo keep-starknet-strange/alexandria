@@ -14,7 +14,8 @@ use hash::LegacyHash;
 /// Node representation
 // #[derive(Drop)]
 struct Node {
-    children: DictFeltTo::<felt>,
+    /// needs to impl a hashmap with a node as val
+		children: DictFeltTo::<felt>,
     val: felt,
 }
 
