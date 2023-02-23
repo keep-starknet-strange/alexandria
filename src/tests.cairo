@@ -17,3 +17,4 @@ mod bubblesort_test;
 mod armstrong_number_test;
 mod fast_power_test;
 mod utils_test;
+mod collatz_sequence_test;
