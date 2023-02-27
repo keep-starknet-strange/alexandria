@@ -15,7 +15,7 @@ use quaireaux::utils;
 fn multiply(x: felt, y: felt) -> felt {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match get_gas() {
+    match try_fetch_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
@@ -32,7 +32,9 @@ fn multiply(x: felt, y: felt) -> felt {
         return x * y;
     }
 
-    let max_digit_counts = utils::max(utils::count_digits_of_base(x, 10), utils::count_digits_of_base(y, 10));
+    let max_digit_counts = utils::max(
+        utils::count_digits_of_base(x, 10), utils::count_digits_of_base(y, 10)
+    );
     let middle_idx = _div_half_ceil(max_digit_counts);
     let (x1, x0) = _split_number(x, middle_idx);
     let (y1, y0) = _split_number(y, middle_idx);
@@ -52,7 +54,7 @@ fn multiply(x: felt, y: felt) -> felt {
 fn _div_half_ceil(num: felt) -> felt {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match get_gas() {
+    match try_fetch_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
@@ -63,7 +65,7 @@ fn _div_half_ceil(num: felt) -> felt {
 
     let (q, r) = utils::unsafe_euclidean_div(num, 2);
     if r != 0 {
-        let (q, _) = utils::unsafe_euclidean_div((num + 1),  2);
+        let (q, _) = utils::unsafe_euclidean_div((num + 1), 2);
     }
     return q;
 }
@@ -77,7 +79,7 @@ fn _div_half_ceil(num: felt) -> felt {
 fn _split_number(num: felt, split_idx: felt) -> (felt, felt) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match get_gas() {
+    match try_fetch_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();

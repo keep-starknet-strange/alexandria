@@ -29,7 +29,7 @@ fn gcd(ref n: Array::<felt>) -> felt {
 fn _gcd(ref n: Array::<felt>) -> felt {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match get_gas() {
+    match try_fetch_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
@@ -54,7 +54,7 @@ fn _gcd(ref n: Array::<felt>) -> felt {
 fn gcd_two_numbers(a: felt, b: felt) -> felt {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match get_gas() {
+    match try_fetch_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = array_new::<felt>();
