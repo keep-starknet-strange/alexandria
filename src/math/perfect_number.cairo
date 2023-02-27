@@ -26,7 +26,7 @@ fn is_perfect_number(num: felt) -> bool {
 fn _is_perfect_number(num: felt, index: felt, sum: felt) -> bool {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match get_gas() {
+    match try_fetch_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
@@ -41,12 +41,11 @@ fn _is_perfect_number(num: felt, index: felt, sum: felt) -> bool {
     if index == num - 1 {
         return num == sum;
     }
-        
+
     let (_, r) = utils::unsafe_euclidean_div(num, index);
     if r == 0 {
         return _is_perfect_number(num, index + 1, sum + index);
-    }
-    else {
+    } else {
         return _is_perfect_number(num, index + 1, sum);
     }
 }
@@ -73,7 +72,7 @@ fn perfect_numbers(ref max: felt) -> Array::<felt> {
 fn _perfect_numbers(ref max: felt, ref index: felt, ref arr: Array::<felt>) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match get_gas() {
+    match try_fetch_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();

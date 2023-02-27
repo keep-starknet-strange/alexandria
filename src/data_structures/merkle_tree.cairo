@@ -76,10 +76,10 @@ fn internal_compute_root(
     current_node: felt, proof_index: u32, proof_len: usize, mut proof: Array::<felt>
 ) -> felt {
     // Check if out of gas.
-    // Note: we need to call `get_gas_all(get_builtin_costs())` because we need to call `LegacyHash::hash`
+    // Note: we need to call `try_fetch_gas_all(get_builtin_costs())` because we need to call `LegacyHash::hash`
     // which uses `Pedersen` builtin.
     // TODO: Remove when automatically handled by compiler.
-    match get_gas_all(get_builtin_costs()) {
+    match try_fetch_gas_all(get_builtin_costs()) {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
