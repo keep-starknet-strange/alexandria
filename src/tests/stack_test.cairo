@@ -72,7 +72,7 @@ fn stack_pop_test() {
     stack.push(val_1);
     stack.push(val_2);
 
-    let (mut stack, value) = stack.pop();
+    let value = stack.pop();
     match value {
         Option::Some(result) => {
             assert(result == val_2, 'wrong result');
@@ -85,5 +85,4 @@ fn stack_pop_test() {
     let result_len = stack.len();
     assert(result_len == 1_usize, 'should remove item');
 }
-
 

@@ -10,7 +10,7 @@
 //! let mut item:u256 = 1.into();
 //! stack.push(item);
 //! Remove the item from the stack;
-//! let (stack, _) = stack.pop();
+//! let item = stack.pop();
 //! ```
 
 // Core lib imports
@@ -31,7 +31,7 @@ trait StackTrait {
     /// Pushes a new value onto the stack.
     fn push(ref self: Stack, value: u256);
     /// Removes the last item from the stack and returns it, or None if the stack is empty.
-    fn pop(self: Stack) -> (Stack, Option::<u256>);
+    fn pop(ref self: Stack) -> Option::<u256>;
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
     fn peek(self: @Stack) -> Option::<u256>;
     /// Returns the number of items in the stack.
@@ -65,9 +65,9 @@ impl StackImpl of StackTrait {
     /// Returns
     /// * Stack The stack with the item removed.
     /// * Option::<u256> The item removed or None if the stack is empty.
-    fn pop(mut self: Stack) -> (Stack, Option::<u256>) {
+    fn pop(ref self: Stack) -> Option::<u256> {
         if self.is_empty() {
-            return (self, Option::None(()));
+            return Option::None(());
         }
         // Deconstruct the stack struct because we consume it
         let Stack{elements: mut elements } = self;
@@ -79,7 +79,7 @@ impl StackImpl of StackTrait {
         let value = elements.at(last_idx);
         // Update the returned stack with the sliced array
         self = Stack { elements: sliced_elements };
-        (self, Option::Some(*value))
+        Option::Some(*value)
     }
 
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
