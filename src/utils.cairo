@@ -63,7 +63,7 @@ fn max(a: felt, b: felt) -> felt {
 fn count_digits_of_base(num: felt, base: felt) -> felt {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match try_fetch_gas() {
+    match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
@@ -89,7 +89,7 @@ fn count_digits_of_base(num: felt, base: felt) -> felt {
 fn pow(base: felt, exp: felt) -> felt {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match try_fetch_gas() {
+    match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
@@ -112,7 +112,7 @@ fn pow(base: felt, exp: felt) -> felt {
 fn split_array(ref arr: Array::<u32>, index: u32) -> (Array::<u32>, Array::<u32>) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match try_fetch_gas() {
+    match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
@@ -141,7 +141,7 @@ fn split_array(ref arr: Array::<u32>, index: u32) -> (Array::<u32>, Array::<u32>
 fn fill_array(ref arr: Array::<u32>, ref fill_arr: Array::<u32>, index: u32, count: u32) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match try_fetch_gas() {
+    match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
@@ -167,7 +167,7 @@ fn fill_array(ref arr: Array::<u32>, ref fill_arr: Array::<u32>, index: u32, cou
 fn fill_array_256(ref dst: Array::<u256>, src: @Array::<u256>, index: u32, count: u32) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match try_fetch_gas() {
+    match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
@@ -197,7 +197,7 @@ fn fill_array_256(ref dst: Array::<u256>, src: @Array::<u256>, index: u32, count
 fn is_equal(ref a: Array::<u32>, ref b: Array::<u32>, index: u32) -> bool {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match try_fetch_gas() {
+    match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();

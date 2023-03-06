@@ -31,7 +31,7 @@ fn aliquot_sum(number: felt) -> felt {
 fn _aliquot_sum(number: felt, limit: felt, index: felt, sum: felt) -> felt {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match try_fetch_gas() {
+    match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = array_new::<felt>();

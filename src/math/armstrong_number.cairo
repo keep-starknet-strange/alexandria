@@ -25,7 +25,7 @@ fn is_armstrong_number(num: felt) -> bool {
 fn _is_armstrong_number(num: felt, original_num: felt, digits: felt) -> bool {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match try_fetch_gas() {
+    match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();

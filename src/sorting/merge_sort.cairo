@@ -12,7 +12,7 @@ use quaireaux::utils;
 /// # Returns
 /// * `Array::<u32>` - Sorted array
 fn mergesort_elements(mut arr: Array::<u32>) -> Array::<u32> {
-    match try_fetch_gas() {
+    match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
@@ -56,7 +56,7 @@ fn _merge(
     left_arr_ix: u32,
     right_arr_ix: u32
 ) -> Array::<u32> {
-    match try_fetch_gas() {
+    match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();

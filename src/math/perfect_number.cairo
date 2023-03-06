@@ -26,7 +26,7 @@ fn is_perfect_number(num: felt) -> bool {
 fn _is_perfect_number(num: felt, index: felt, sum: felt) -> bool {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match try_fetch_gas() {
+    match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
@@ -72,7 +72,7 @@ fn perfect_numbers(ref max: felt) -> Array::<felt> {
 fn _perfect_numbers(ref max: felt, ref index: felt, ref arr: Array::<felt>) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match try_fetch_gas() {
+    match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
