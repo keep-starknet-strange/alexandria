@@ -71,6 +71,13 @@ It is a collection of useful algorithms and data structures implemented in Cairo
 - [x] [Perfect Number Algorithm](src/math/perfect_number.cairo)
 - [x] [Armstrong Number Algorithm](src/math/armstrong_number.cairo) 
 - [x] [GCD of N numbers](src/math/gcd_of_n_numbers.cairo)
+- [x] [Aliquot Sum](src/math/aliquot_sum.cairo)
+- [x] [Collatz Sequence](src/math/collatz_sequence.cairo)
+
+### Sorting 
+
+- [x] [Merge Sort](src/sorting/merge_sort.cairo)
+- [x] [Bubble Sort](src/sorting/bubble_sort.cairo)
 
 ## Getting Started
 
@@ -81,19 +88,10 @@ It is a collection of useful algorithms and data structures implemented in Cairo
 
 ### Installation
 
-<!-- TODO(mkaput): Use this when Scarb will support Git:
-Quaireaux is a Scarb package, which can be installed by adding following line to your `Scarb.toml`:
+Quaireaux is a [Scarb] package, which can be installed by adding following line to your `Scarb.toml`:
 ```toml
 [dependencies]
 quaireaux = { git = "https://github.com/keep-starknet-strange/quaireaux.git" }
-```
--->
-
-Quaireaux is a [Scarb] package. Clone this repository next to your project and add the following line to your `Scarb.toml`:
-
-```toml
-[dependencies]
-quaireaux = { path = "../quaireaux" }
 ```
 
 ## Usage
@@ -195,6 +193,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/EvolveArt"><img src="https://avatars.githubusercontent.com/u/12902455?v=4?s=100" width="100px;" alt="0xevolve"/><br /><sub><b>0xevolve</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=EvolveArt" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/JordyRo1"><img src="https://avatars.githubusercontent.com/u/87231934?v=4?s=100" width="100px;" alt="Jordy Romuald"/><br /><sub><b>Jordy Romuald</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=JordyRo1" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
