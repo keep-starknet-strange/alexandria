@@ -3,20 +3,20 @@
 //! # Example
 //! ```
 //! use quaireaux::data_structures::trie::TrieTrait;
-//! TODO: implement with generics
-//! TODO: implement use option::OptionTrait;
+//! IMPLEMENTATION CURRENTLY BROKEN
+//! TODO: blocked by nested types support in Cairo
+//! TODO: impl w/ dictionairy/hashmap
+//! TODO: dict squash
 
 // Core lib imports
-use array::ArrayTrait;
 use dict::DictFeltToTrait;
-use hash::LegacyHash;
+use option::OptionTrait;
 
 /// Node representation
-// #[derive(Drop)]
+#[derive(Drop)]
 struct Node {
-    /// needs to impl a hashmap with a node as val
-		children: DictFeltTo::<felt>,
-    val: felt,
+    children: DictFeltTo::<Node>,
+    value: felt,
 }
 
 trait NodeTrait {
@@ -24,17 +24,17 @@ trait NodeTrait {
 }
 
 impl NodeImpl of NodeTrait {
-    fn new() -> Node {
-        let children = DictFeltToTrait::new();
+    fn new(value: felt) -> Node {
+        let children = DictFeltToTrait::<Node>::new();
         Node {
             children: children,
-            val: 0,
+            value: value,
         }
     }
 }
 
 /// Trie representation
-// #[derive(Drop)]
+#[derive(Drop)]
 struct Trie {
     root: Node,
 }
@@ -44,52 +44,87 @@ trait TrieTrait {
     /// Create a new Trie instance
     fn new() -> Trie;
     /// Insert a key, value into the Trie
-    fn insert(ref self: Trie, key: Array::<felt>, value: felt) -> bool;
+    fn insert(ref self: Trie, key: Array::<felt>, value: felt);
     /// Get a value from the Trie at a given key
     fn get(ref self: Trie, key: Array::<felt>) -> felt;
 }
 
 /// Trie implementation
 impl TrieImpl of TrieTrait {
-    /// Create a new Trie instance
     fn new() -> Trie {
-        let root = NodeTrait::new();
+        let root = NodeTrait::new(0);
         Trie { root: root }
     }
 
-    /// Insert a key, value into the Trie
-    /// # Arguments
-    /// * `key` - The key at which to insert
-    /// * `value` - The value to insert
-    /// # Returns
-    /// True if insert successful
-    fn insert(ref self: Trie, key: Array::<felt>, value: felt) -> bool {
-        false
+    fn insert(ref self: Trie, key: Array::<felt>, value: felt) {
+        _insert(ref self.root, key, 0_u32, value)
     }
 
-    /// Get a value from the Trie at a given key
-    /// # Arguments
-    /// * `key` - The key at which to insert
-    /// # Returns
-    /// Value at given key
     fn get(ref self: Trie, key: Array::<felt>) -> felt {
-        let key_len = key.len();
-        internal_check(self.root.children, 0_u32, key_len, key)
+        _get(ref self.root, key, 0_u32)
     }
 }
 
-fn internal_check(mut children: DictFeltTo::<felt>, key_index: u32, key_len: usize, mut key: Array::<felt>) -> felt {
-    if key_len == 0_u32 {
-        return 0;
+fn _insert(ref node: Node, key: Array::<felt>, key_index: u32, value: felt) {
+    match get_gas() {
+        Option::Some(_) => {},
+        Option::None(_) => {
+            let mut data = ArrayTrait::new();
+            data.append('OOG');
+            panic(data);
+        }
     }
 
-    let key_element = key.at(key_index);
-
-    let val = children.get(*key_element);
-    let squashed_dict = children.squash();
-
-    if val != 0 {
-        return val;
+    if key_index == key.len() {
+        return ();
     }
-    internal_check(children, key_index + 1_u32, key_len - 1_u32, key)
+
+    let key_size = key.len() - 1_u32;
+    let prefix = key.at(key_index);
+    let child = node.children.get(*prefix);
+
+    // TODO: how to check that dict key is empty for non primative value
+    if child == 0 {
+        if key_index == key_size {
+            let mut n = NodeTrait::new(value);
+            node.children.insert(*prefix, n);
+            return ();
+        }
+        let mut new_node = NodeTrait::new(0);
+        node.children.insert(*prefix, new_node);
+        let mut n = node.children.get(*prefix);
+        _insert(ref n, key, key_index + 1_u32, value)
+    }
+
+    _insert(ref child, key, key_index + 1_32, value);
+}
+
+fn _get(ref node: Node, key: @Array::<felt>, key_index: u32) -> Option::<felt> {
+    match get_gas() {
+        Option::Some(_) => {},
+        Option::None(_) => {
+            let mut data = ArrayTrait::new();
+            data.append('OOG');
+            panic(data);
+        }
+    }
+
+    if key_index == key.len() {
+        return Option::None(());
+    }
+
+    let prefix = key.at(key_index);
+    let child = node.children.get(*prefix);
+
+    // TODO: how to check that dict key is empty for non primative value
+    if child == 0 {
+        return Option::None(());
+    }
+
+    let key_size = key.len() - 1_u32;
+    if key_index == key_size {
+        return Option::Some(child.value);
+    }
+
+    _get(ref child, key, key_index + 1_u32)
 }
