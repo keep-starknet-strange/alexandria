@@ -26,6 +26,7 @@ fn pow_test() {
     assert(utils::pow(2, 12) == 4096, 'invalid result');
 }
 
+impl U256Copy of Copy::<u256>;
 #[test]
 #[available_gas(2000000)]
 fn array_slice_test() {
@@ -34,8 +35,9 @@ fn array_slice_test() {
     arr.append(2.into());
     arr.append(3.into());
 
-    let slice = utils::array_slice(@arr, 0_usize, 2_usize);
+    let slice = utils::array_slice(ref arr, 0_usize, 2_usize);
     assert(slice.len() == 2_usize, 'invalid result');
     assert(*slice.at(0_usize) == 1.into(), 'invalid result');
     assert(*slice.at(1_usize) == 2.into(), 'invalid result');
 }
+

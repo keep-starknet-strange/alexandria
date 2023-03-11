@@ -6,6 +6,8 @@ use array::ArrayTrait;
 // Internal Imports
 use quaireaux::utils;
 
+impl U32Copy of Copy::<u32>;
+
 // Merge Sort
 /// # Arguments
 /// * `arr` - Array to sort

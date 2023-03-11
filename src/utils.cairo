@@ -46,13 +46,14 @@ fn unsafe_euclidean_div(a: felt, b: felt) -> (felt, felt) {
     ((a_u128 / b_u128).into(), (a_u128 % b_u128).into())
 }
 
-fn max(a: felt, b: felt) -> felt {
-    if a > b {
-        return a;
-    } else {
-        return b;
-    }
-}
+//TODO: fix by using generic integer types
+// fn max(a: felt, b: felt) -> felt {
+//     if a > b {
+//         return a;
+//     } else {
+//         return b;
+//     }
+// }
 
 // Function to count the number of digits in a number.
 /// # Arguments
@@ -108,8 +109,10 @@ fn pow(base: felt, exp: felt) -> felt {
 /// * `arr` - The array to split.
 /// * `index` - The index to split the array at.
 /// # Returns
-/// * `(Array::<felt>, Array::<felt>)` - The two arrays.
-fn split_array(ref arr: Array::<u32>, index: u32) -> (Array::<u32>, Array::<u32>) {
+/// * `(Array::<T>, Array::<T>)` - The two arrays.
+fn split_array<T, impl TCopy: Copy::<T>>(
+    ref arr: Array::<T>, index: u32
+) -> (Array::<T>, Array::<T>) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match gas::get_gas() {
@@ -121,8 +124,8 @@ fn split_array(ref arr: Array::<u32>, index: u32) -> (Array::<u32>, Array::<u32>
         }
     }
 
-    let mut arr1 = array_new::<u32>();
-    let mut arr2 = array_new::<u32>();
+    let mut arr1 = array_new::<T>();
+    let mut arr2 = array_new::<T>();
     let len = arr.len();
 
     fill_array(ref arr1, ref arr, 0_u32, index);
@@ -131,40 +134,13 @@ fn split_array(ref arr: Array::<u32>, index: u32) -> (Array::<u32>, Array::<u32>
     (arr1, arr2)
 }
 
-// Fill an array with a value.
-/// * `arr` - The array to fill.
-/// * `fill_arr` - The array to fill with.
-/// * `index` - The index to start filling at.
-/// * `count` - The number of elements to fill.
-/// # Returns
-/// * `Array::<T>` - The filled array.
-fn fill_array(ref arr: Array::<u32>, ref fill_arr: Array::<u32>, index: u32, count: u32) {
-    // Check if out of gas.
-    // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas() {
-        Option::Some(_) => {},
-        Option::None(_) => {
-            let mut data = ArrayTrait::new();
-            data.append('OOG');
-            panic(data);
-        }
-    }
-
-    if count == 0_u32 {
-        return ();
-    }
-    let element = fill_arr.at(index);
-    arr.append(*element);
-
-    fill_array(ref arr, ref fill_arr, index + 1_u32, count - 1_u32)
-}
-
-// Fill an array with a value.
 /// * `dst` - The array to fill.
 /// * `src` - The array to fill with.
 /// * `index` - The index to start filling at.
 /// * `count` - The number of elements to fill.
-fn fill_array_256(ref dst: Array::<u256>, src: @Array::<u256>, index: u32, count: u32) {
+fn fill_array<T, impl TCopy: Copy::<T>>(
+    ref dst: Array::<T>, ref src: Array::<T>, index: u32, count: u32
+) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match gas::get_gas() {
@@ -185,7 +161,7 @@ fn fill_array_256(ref dst: Array::<u256>, src: @Array::<u256>, index: u32, count
     let element = src.at(index);
     dst.append(*element);
 
-    fill_array_256(ref dst, src, index + 1_u32, count - 1_u32)
+    fill_array(ref dst, ref src, index + 1_u32, count - 1_u32)
 }
 
 // Check if two arrays are equal.
@@ -224,14 +200,17 @@ fn is_equal(ref a: Array::<u32>, ref b: Array::<u32>, index: u32) -> bool {
     is_equal(ref a, ref b, index + 1_u32)
 }
 
+//TODO use a snapshot here once bug fixed in the recursive function
 /// Returns the slice of an array.
 /// * `arr` - The array to slice.
 /// * `begin` - The index to start the slice at.
 /// * `end` - The index to end the slice at (not included).
 /// # Returns
 /// * `Array::<u256>` - The slice of the array.
-fn array_slice(src: @Array::<u256>, begin: usize, end: usize) -> Array::<u256> {
-    let mut slice = ArrayTrait::<u256>::new();
-    fill_array_256(ref dst: slice, :src, index: begin, count: end);
+fn array_slice<T, impl TCopy: Copy::<T>>(
+    ref src: Array::<T>, begin: usize, end: usize
+) -> Array::<T> {
+    let mut slice = ArrayTrait::<T>::new();
+    fill_array(ref dst: slice, ref :src, index: begin, count: end);
     slice
 }
