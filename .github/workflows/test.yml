@@ -1,6 +1,11 @@
 name: test
 
-on: [push, pull_request]
+on: 
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 8 * * *"
 
 env:
   CAIRO_COMPILER_VERSION: 1.0.0-alpha.3
