@@ -8,3 +8,4 @@ mod armstrong_number;
 mod aliquot_sum;
 mod collatz_sequence;
 mod fast_power;
+mod signed_integers;

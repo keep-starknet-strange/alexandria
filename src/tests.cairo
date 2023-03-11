@@ -19,3 +19,4 @@ mod fast_power_test;
 mod utils_test;
 mod aliquot_sum_test;
 mod collatz_sequence_test;
+mod signed_integers_test;
