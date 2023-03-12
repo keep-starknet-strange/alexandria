@@ -25,6 +25,7 @@ const ZERO_USIZE: usize = 0_usize;
 struct Stack<T> {
     elements: Array::<T>, 
 }
+
 impl StackDrop<T, impl TDrop: Drop::<T>> of Drop::<Stack::<T>>;
 
 trait StackTrait<T> {
@@ -33,16 +34,16 @@ trait StackTrait<T> {
     /// Pushes a new value onto the stack.
     fn push(ref self: Stack<T>, value: T);
     /// Removes the last item from the stack and returns it, or None if the stack is empty.
-    fn pop<impl TCopy: Copy::<T>, impl TDrop: Drop::<T>>(ref self: Stack<T>) -> Option::<T>;
+    fn pop(ref self: Stack<T>) -> Option::<T>;
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
-    fn peek<impl TCopy: Copy::<T>, impl TDrop: Drop::<T>>(self: @Stack<T>) -> Option::<T>;
+    fn peek(self: @Stack<T>) -> Option::<T>;
     /// Returns the number of items in the stack.
     fn len(self: @Stack<T>) -> usize;
     /// Returns true if the stack is empty.
     fn is_empty(self: @Stack<T>) -> bool;
 }
 
-impl StackImpl<T> of StackTrait::<T> {
+impl StackImpl<T, impl TCopy: Copy::<T>, impl TDrop: Drop::<T>> of StackTrait::<T> {
     /// Creates a new Stack instance.
     /// Returns
     /// * Stack The new stack instance.
@@ -66,7 +67,7 @@ impl StackImpl<T> of StackTrait::<T> {
     /// Returns
     /// * Stack The stack with the item removed.
     /// * Option::<T> The item removed or None if the stack is empty.
-    fn pop<impl TCopy: Copy::<T>, impl TDrop: Drop::<T>>(ref self: Stack<T>) -> Option::<T> {
+    fn pop(ref self: Stack<T>) -> Option::<T> {
         if self.is_empty() {
             return Option::None(());
         }
@@ -87,7 +88,7 @@ impl StackImpl<T> of StackTrait::<T> {
     /// * `self` - The stack to peek the item off of.
     /// Returns
     /// * Option::<T> The last item of the stack
-    fn peek<impl TCopy: Copy::<T>, impl TDrop: Drop::<T>>(self: @Stack<T>) -> Option::<T> {
+    fn peek(self: @Stack<T>) -> Option::<T> {
         if self.is_empty() {
             return Option::None(());
         }
