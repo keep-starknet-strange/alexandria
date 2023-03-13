@@ -1,7 +1,9 @@
-name: Rust CI
+name: Test-latest-cairo
 
-on: push
-
+on: 
+  push:
+  schedule:
+    - cron: "0 9 * * *"
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -24,10 +26,11 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-
-      - name: Step 4 - Install cairo
+      - name: Step 4 - Install cairo and run Tests
         run: |
-          mkdir cairo
-          git clone --depth 1 https://github.com/starkware-libs/cairo.git
-          cargo build
-      - name: Step 5 - Run all tests
-        run: cargo run --bin cairo-test -- --starknet --path ./src
+            rm -rf cairo
+            mkdir cairo
+            git clone --depth 1 https://github.com/starkware-libs/cairo.git
+            cd cairo
+            cargo build --release
+            ./target/release/cairo-test -p ..
