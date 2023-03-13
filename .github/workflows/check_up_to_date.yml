@@ -22,13 +22,19 @@ jobs:
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
-            target/
+            ./target/
+            ./cairo
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-
       - name: Step 4 - Install cairo and run Tests
         run: |
-            rm -rf cairo
+            if [[ -d cairo ]]; then
+              cd cairo 
+              git pull
+            else
+              git clone --depth 1 https://github.com/starkware-libs/cairo.git
+              cd cairo
+            fi
             git clone --depth 1 https://github.com/starkware-libs/cairo.git
-            cd cairo
             cargo build --release
             ./target/release/cairo-test -p ..
