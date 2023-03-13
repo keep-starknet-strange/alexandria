@@ -1,7 +1,6 @@
 name: Test-latest-cairo
 
-on: 
-  push:
+on:
   schedule:
     - cron: "0 9 * * *"
 jobs:
@@ -29,7 +28,6 @@ jobs:
       - name: Step 4 - Install cairo and run Tests
         run: |
             rm -rf cairo
-            mkdir cairo
             git clone --depth 1 https://github.com/starkware-libs/cairo.git
             cd cairo
             cargo build --release
