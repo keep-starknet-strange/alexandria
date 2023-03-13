@@ -1,0 +1,32 @@
+name: Rust CI
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step 1 - Check out main branch
+        uses: actions/checkout@v3
+      - name: Step 2 - Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
+      - name: Step 3 - Set up cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+      - name: Step 4 - Install cairo
+        run: |
+          git clone --depth 1 https://github.com/starkware-libs/cairo.git
+          cargo build
+      - name: Step 5 - Run all tests
+        run: cargo run --bin cairo-test -- --starknet --path ./src
