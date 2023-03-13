@@ -26,6 +26,7 @@ jobs:
           restore-keys: ${{ runner.os }}-cargo-
       - name: Step 4 - Install cairo
         run: |
+          mkdir cairo
           git clone --depth 1 https://github.com/starkware-libs/cairo.git
           cargo build
       - name: Step 5 - Run all tests
