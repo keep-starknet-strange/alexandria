@@ -1,6 +1,7 @@
 name: Test-latest-cairo
 
 on:
+  push:
   schedule:
     - cron: "0 9 * * *"
 jobs:
