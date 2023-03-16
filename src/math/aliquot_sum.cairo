@@ -34,8 +34,8 @@ fn _aliquot_sum(number: felt252, limit: felt252, index: felt252, sum: felt252) -
     match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
-            let mut data = array_new::<felt252>();
-            array_append::<felt252>(ref data, 'OOG');
+            let mut data = array::array_new::<felt252>();
+            array::array_append::<felt252>(ref data, 'OOG');
             panic(data);
         },
     }

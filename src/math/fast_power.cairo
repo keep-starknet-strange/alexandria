@@ -18,8 +18,8 @@ use quaireaux::utils;
 fn fast_power(base: felt252, power: felt252, modulus: felt252) -> felt252 {
     // Return invalid input error
     if base.into() < utils::as_u256(1_u128, 0_u128) {
-        let mut data = array_new::<felt252>();
-        array_append::<felt252>(ref data, 'II');
+        let mut data = array::array_new::<felt252>();
+        array::array_append::<felt252>(ref data, 'II');
         panic(data);
     }
     _fast_power(base, power, modulus, 1)
@@ -39,8 +39,8 @@ fn _fast_power(base: felt252, power: felt252, modulus: felt252, result: felt252)
     match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
-            let mut data = array_new::<felt252>();
-            array_append::<felt252>(ref data, 'OOG');
+            let mut data = array::array_new::<felt252>();
+            array::array_append::<felt252>(ref data, 'OOG');
             panic(data);
         },
     }

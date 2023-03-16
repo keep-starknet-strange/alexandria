@@ -31,8 +31,8 @@ fn _sequence(number: felt252, mut arr: Array::<felt252>) -> Array::<felt252> {
     match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
-            let mut data = array_new::<felt252>();
-            array_append::<felt252>(ref data, 'OOG');
+            let mut data = array::array_new::<felt252>();
+            array::array_append::<felt252>(ref data, 'OOG');
             panic(data);
         },
     }

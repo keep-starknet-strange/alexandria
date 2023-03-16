@@ -14,8 +14,8 @@ use quaireaux::utils;
 fn gcd(ref n: Array::<felt252>) -> felt252 {
     // Return empty input error
     if n.len() == 0_usize {
-        let mut data = array_new::<felt252>();
-        array_append::<felt252>(ref data, 'EI');
+        let mut data = array::array_new::<felt252>();
+        array::array_append::<felt252>(ref data, 'EI');
         panic(data);
     }
     _gcd(ref n)
@@ -57,8 +57,8 @@ fn gcd_two_numbers(a: felt252, b: felt252) -> felt252 {
     match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
-            let mut data = array_new::<felt252>();
-            array_append::<felt252>(ref data, 'OOG');
+            let mut data = array::array_new::<felt252>();
+            array::array_append::<felt252>(ref data, 'OOG');
             panic(data);
         },
     }

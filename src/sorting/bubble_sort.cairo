@@ -14,7 +14,7 @@ fn bubble_sort_elements(mut array: Array::<u32>) -> Array::<u32> {
     if (array_len <= 1_u32) {
         return array;
     }
-    let mut sorted_array = array_new();
+    let mut sorted_array = array::array_new();
     let result = bubble_sort_rec(array, sorted_array, 0_u32, 1_u32, 0_u32);
     result
 }
@@ -48,7 +48,7 @@ fn bubble_sort_rec(
         if (sorted_iteration == 0_u32) {
             return (sorted_array);
         }
-        let mut new_sorted_array = array_new();
+        let mut new_sorted_array = array::array_new();
         return bubble_sort_rec(sorted_array, new_sorted_array, 0_u32, 1_u32, 0_u32);
     }
 

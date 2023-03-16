@@ -121,8 +121,8 @@ fn split_array(ref arr: Array::<u32>, index: u32) -> (Array::<u32>, Array::<u32>
         }
     }
 
-    let mut arr1 = array_new::<u32>();
-    let mut arr2 = array_new::<u32>();
+    let mut arr1 = array::array_new::<u32>();
+    let mut arr2 = array::array_new::<u32>();
     let len = arr.len();
 
     fill_array(ref arr1, ref arr, 0_u32, index);
