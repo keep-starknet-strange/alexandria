@@ -1,6 +1,8 @@
 // Core lib imports
 use array::ArrayTrait;
 use option::OptionTrait;
+use box::BoxTrait;
+
 
 const ZERO_USIZE: usize = 0_usize;
 
@@ -37,7 +39,10 @@ impl QueueImpl<T> of QueueTrait::<T> {
     }
 
     fn peek_front(self: @Queue::<T>) -> Option::<@T> {
-        self.elements.get(ZERO_USIZE)
+        match self.elements.get(ZERO_USIZE) {
+            Option::Some(x) => Option::Some(x.unbox()),
+            Option::None(_) => Option::None(()),
+        }
     }
 
     fn len(self: @Queue::<T>) -> usize {
