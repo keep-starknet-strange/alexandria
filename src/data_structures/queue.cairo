@@ -54,4 +54,4 @@ fn queue_new<T>() -> Queue::<T> {
     Queue::<T> { elements: arr }
 }
 
-impl QueueFeltDrop of Drop::<Queue::<felt>>;
+impl Queuefelt252Drop of Drop::<Queue::<felt252>>;

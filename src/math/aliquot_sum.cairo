@@ -10,8 +10,8 @@ use quaireaux::utils;
 /// # Arguments
 /// * `number` - The number to calculate the aliquot sum for.
 /// # Returns
-/// * `felt` - The aliquot sum of the input number.
-fn aliquot_sum(number: felt) -> felt {
+/// * `felt252` - The aliquot sum of the input number.
+fn aliquot_sum(number: felt252) -> felt252 {
     if number == 1 | number == 0 {
         return 0;
     }
@@ -27,15 +27,15 @@ fn aliquot_sum(number: felt) -> felt {
 /// * `index` - The current divisor being evaluated in the recursive loop.
 /// * `sum` - The sum of divisors found so far.
 /// # Returns
-/// * `felt` - The final aliquot sum for the given number.
-fn _aliquot_sum(number: felt, limit: felt, index: felt, sum: felt) -> felt {
+/// * `felt252` - The final aliquot sum for the given number.
+fn _aliquot_sum(number: felt252, limit: felt252, index: felt252, sum: felt252) -> felt252 {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
-            let mut data = array_new::<felt>();
-            array_append::<felt>(ref data, 'OOG');
+            let mut data = array_new::<felt252>();
+            array_append::<felt252>(ref data, 'OOG');
             panic(data);
         },
     }

@@ -6,47 +6,47 @@ use traits::Into;
 
 /// Panic with a custom message.
 /// # Arguments
-/// * `msg` - The message to panic with. Must be a short string to fit in a felt.
-fn panic_with(err: felt) {
+/// * `msg` - The message to panic with. Must be a short string to fit in a felt252.
+fn panic_with(err: felt252) {
     let mut data = ArrayTrait::new();
     data.append(err);
     panic(data);
 }
 
-/// Convert a `felt` to a `NonZero` type.
+/// Convert a `felt252` to a `NonZero` type.
 /// # Arguments
-/// * `felt` - The `felt` to convert.
+/// * `felt252` - The `felt252` to convert.
 /// # Returns
-/// * `Option::<NonZero::<felt>>` - The `felt` as a `NonZero` type.
-/// * `Option::<NonZero::<felt>>::None` - If `felt` is 0.
-fn to_non_zero(felt: felt) -> Option::<NonZero::<felt>> {
-    let res = felt_is_zero(felt);
+/// * `Option::<NonZero::<felt252>>` - The `felt252` as a `NonZero` type.
+/// * `Option::<NonZero::<felt252>>::None` - If `felt252` is 0.
+fn to_non_zero(felt252: felt252) -> Option::<NonZero::<felt252>> {
+    let res = felt252_is_zero(felt252);
     match res {
-        IsZeroResult::Zero(()) => Option::<NonZero::<felt>>::None(()),
-        IsZeroResult::NonZero(val) => Option::<NonZero::<felt>>::Some(val),
+        IsZeroResult::Zero(()) => Option::<NonZero::<felt252>>::None(()),
+        IsZeroResult::NonZero(val) => Option::<NonZero::<felt252>>::Some(val),
     }
 }
 
 
-/// Force conversion from `felt` to `u128`.
-fn unsafe_felt_to_u128(a: felt) -> u128 {
+/// Force conversion from `felt252` to `u128`.
+fn unsafe_felt252_to_u128(a: felt252) -> u128 {
     a.try_into().unwrap()
 }
 
-/// Perform euclidean division on `felt` types.
-fn unsafe_euclidean_div_no_remainder(a: felt, b: felt) -> felt {
-    let a_u128 = unsafe_felt_to_u128(a);
-    let b_u128 = unsafe_felt_to_u128(b);
+/// Perform euclidean division on `felt252` types.
+fn unsafe_euclidean_div_no_remainder(a: felt252, b: felt252) -> felt252 {
+    let a_u128 = unsafe_felt252_to_u128(a);
+    let b_u128 = unsafe_felt252_to_u128(b);
     (a_u128 / b_u128).into()
 }
 
-fn unsafe_euclidean_div(a: felt, b: felt) -> (felt, felt) {
-    let a_u128 = unsafe_felt_to_u128(a);
-    let b_u128 = unsafe_felt_to_u128(b);
+fn unsafe_euclidean_div(a: felt252, b: felt252) -> (felt252, felt252) {
+    let a_u128 = unsafe_felt252_to_u128(a);
+    let b_u128 = unsafe_felt252_to_u128(b);
     ((a_u128 / b_u128).into(), (a_u128 % b_u128).into())
 }
 
-fn max(a: felt, b: felt) -> felt {
+fn max(a: felt252, b: felt252) -> felt252 {
     if a > b {
         return a;
     } else {
@@ -59,8 +59,8 @@ fn max(a: felt, b: felt) -> felt {
 /// * `num` - The number to count the digits of.
 /// * `base` - Base in which to count the digits.
 /// # Returns
-/// * `felt` - The number of digits in num of base
-fn count_digits_of_base(num: felt, base: felt) -> felt {
+/// * `felt252` - The number of digits in num of base
+fn count_digits_of_base(num: felt252, base: felt252) -> felt252 {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match gas::get_gas() {
@@ -85,8 +85,8 @@ fn count_digits_of_base(num: felt, base: felt) -> felt {
 /// * `base` - The number to raise.
 /// * `exp` - The exponent.
 /// # Returns
-/// * `felt` - The result of base raised to the power of exp.
-fn pow(base: felt, exp: felt) -> felt {
+/// * `felt252` - The result of base raised to the power of exp.
+fn pow(base: felt252, exp: felt252) -> felt252 {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match gas::get_gas() {
@@ -108,7 +108,7 @@ fn pow(base: felt, exp: felt) -> felt {
 /// * `arr` - The array to split.
 /// * `index` - The index to split the array at.
 /// # Returns
-/// * `(Array::<felt>, Array::<felt>)` - The two arrays.
+/// * `(Array::<felt252>, Array::<felt252>)` - The two arrays.
 fn split_array(ref arr: Array::<u32>, index: u32) -> (Array::<u32>, Array::<u32>) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.

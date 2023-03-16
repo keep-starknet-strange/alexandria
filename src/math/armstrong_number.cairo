@@ -11,7 +11,7 @@ use quaireaux::utils;
 /// * `num` - The number to be evaluated.
 /// # Returns
 /// * `bool` - A boolean value indicating is Armstrong Number.
-fn is_armstrong_number(num: felt) -> bool {
+fn is_armstrong_number(num: felt252) -> bool {
     _is_armstrong_number(num, num, utils::count_digits_of_base(num, 10))
 }
 
@@ -22,7 +22,7 @@ fn is_armstrong_number(num: felt) -> bool {
 /// * `digits` - The number of digits.
 /// # Returns
 /// * `bool` - A boolean value indicating is Armstrong Number.
-fn _is_armstrong_number(num: felt, original_num: felt, digits: felt) -> bool {
+fn _is_armstrong_number(num: felt252, original_num: felt252, digits: felt252) -> bool {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match gas::get_gas() {

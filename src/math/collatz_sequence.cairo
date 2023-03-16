@@ -10,8 +10,8 @@ use quaireaux::utils;
 /// # Arguments
 /// * `number` - The number to generate the Collatz sequence for.
 /// # Returns
-/// * `Array` - The Collatz sequence as an array of `felt` numbers.
-fn sequence(number: felt) -> Array::<felt> {
+/// * `Array` - The Collatz sequence as an array of `felt252` numbers.
+fn sequence(number: felt252) -> Array::<felt252> {
     let mut arr = ArrayTrait::new();
     if number == 0 {
         return arr;
@@ -25,14 +25,14 @@ fn sequence(number: felt) -> Array::<felt> {
 /// * `arr` - An array to store the Collatz sequence that have been found.
 /// # Returns
 /// * `None` - This function does not return a value, it updates the arr argument in place.
-fn _sequence(number: felt, mut arr: Array::<felt>) -> Array::<felt> {
+fn _sequence(number: felt252, mut arr: Array::<felt252>) -> Array::<felt252> {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
-            let mut data = array_new::<felt>();
-            array_append::<felt>(ref data, 'OOG');
+            let mut data = array_new::<felt252>();
+            array_append::<felt252>(ref data, 'OOG');
             panic(data);
         },
     }

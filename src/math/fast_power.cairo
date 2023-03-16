@@ -12,12 +12,12 @@ use quaireaux::utils;
 // * `power` - The power of the exponentiation
 // * `modulus` - The modulus used in the calculation
 // # Returns
-// * `felt` - The result of (base^power)mod modulus
-fn fast_power(base: felt, power: felt, modulus: felt) -> felt {
+// * `felt252` - The result of (base^power)mod modulus
+fn fast_power(base: felt252, power: felt252, modulus: felt252) -> felt252 {
     // Return invalid input error
     if base < 1 {
-        let mut data = array_new::<felt>();
-        array_append::<felt>(ref data, 'II');
+        let mut data = array_new::<felt252>();
+        array_append::<felt252>(ref data, 'II');
         panic(data);
     }
     _fast_power(base, power, modulus, 1)
@@ -30,15 +30,15 @@ fn fast_power(base: felt, power: felt, modulus: felt) -> felt {
 // * `modulus` - The modulus used in the calculation
 // * `result` - The result of the exponentiation
 // # Returns
-// * `felt` - The result of (base^power)mod modulus
-fn _fast_power(base: felt, power: felt, modulus: felt, result: felt) -> felt {
+// * `felt252` - The result of (base^power)mod modulus
+fn _fast_power(base: felt252, power: felt252, modulus: felt252, result: felt252) -> felt252 {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match gas::get_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
-            let mut data = array_new::<felt>();
-            array_append::<felt>(ref data, 'OOG');
+            let mut data = array_new::<felt252>();
+            array_append::<felt252>(ref data, 'OOG');
             panic(data);
         },
     }

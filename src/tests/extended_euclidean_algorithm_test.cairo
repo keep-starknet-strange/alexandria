@@ -1,7 +1,7 @@
 use quaireaux::math::extended_euclidean_algorithm::extended_euclidean_algorithm;
 
 // Define a test case function to avoid code duplication.
-fn test_case(a: felt, b: felt, expected: (felt, felt, felt)) {
+fn test_case(a: felt252, b: felt252, expected: (felt252, felt252, felt252)) {
     let (gcd, x, y) = extended_euclidean_algorithm(a, b);
     let (expected_gcd, expected_x, expected_y) = expected;
     assert(gcd == expected_gcd, 'gcd is incorrect');

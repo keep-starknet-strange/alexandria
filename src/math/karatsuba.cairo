@@ -11,8 +11,8 @@ use quaireaux::utils;
 /// * `x` - First number to multiply.
 /// * `y` - Second number to multiply.
 /// # Returns
-/// * `felt` - The product between x and y
-fn multiply(x: felt, y: felt) -> felt {
+/// * `felt252` - The product between x and y
+fn multiply(x: felt252, y: felt252) -> felt252 {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match gas::get_gas() {
@@ -50,8 +50,8 @@ fn multiply(x: felt, y: felt) -> felt {
 /// # Arguments
 /// * `num` - The current value to be divided.
 /// # Returns
-/// * `felt` - Half (rounded up) of num.
-fn _div_half_ceil(num: felt) -> felt {
+/// * `felt252` - Half (rounded up) of num.
+fn _div_half_ceil(num: felt252) -> felt252 {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match gas::get_gas() {
@@ -75,8 +75,8 @@ fn _div_half_ceil(num: felt) -> felt {
 /// * `num` - The current value to be splited.
 /// * `split_idx` - Index at which the number will be split
 /// # Returns
-/// * `(felt, felt)` -tuple representing the split number.
-fn _split_number(num: felt, split_idx: felt) -> (felt, felt) {
+/// * `(felt252, felt252)` -tuple representing the split number.
+fn _split_number(num: felt252, split_idx: felt252) -> (felt252, felt252) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
     match gas::get_gas() {
