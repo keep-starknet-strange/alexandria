@@ -3,6 +3,7 @@
 // Core library imports.
 use option::OptionTrait;
 use array::ArrayTrait;
+use core::traits::Into;
 // Internal imports.
 use quaireaux::utils;
 
@@ -24,11 +25,11 @@ fn multiply(x: felt252, y: felt252) -> felt252 {
         }
     }
 
-    if x < 10 {
+    if x.into() < utils::as_u256(10_u128, 0_u128) {
         return x * y;
     }
 
-    if y < 10 {
+    if y.into() < utils::as_u256(10_u128, 0_u128) {
         return x * y;
     }
 

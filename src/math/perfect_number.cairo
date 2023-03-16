@@ -3,6 +3,7 @@
 // Core library imports.
 use option::OptionTrait;
 use array::ArrayTrait;
+use core::traits::Into;
 
 // Internal imports.
 use quaireaux::utils;
@@ -35,7 +36,7 @@ fn _is_perfect_number(num: felt252, index: felt252, sum: felt252) -> bool {
         }
     }
 
-    if num <= 1 {
+    if num.into() <= utils::as_u256(1_u128, 0_u128) {
         return false;
     }
     if index == num - 1 {

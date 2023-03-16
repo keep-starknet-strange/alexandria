@@ -47,7 +47,7 @@ fn unsafe_euclidean_div(a: felt252, b: felt252) -> (felt252, felt252) {
 }
 
 fn max(a: felt252, b: felt252) -> felt252 {
-    if a > b {
+    if a.into() > b.into() {
         return a;
     } else {
         return b;
@@ -234,4 +234,9 @@ fn array_slice(src: @Array::<u256>, begin: usize, end: usize) -> Array::<u256> {
     let mut slice = ArrayTrait::<u256>::new();
     fill_array_256(ref dst: slice, :src, index: begin, count: end);
     slice
+}
+
+
+fn as_u256(high: u128, low: u128) -> u256 {
+    u256 { low, high }
 }

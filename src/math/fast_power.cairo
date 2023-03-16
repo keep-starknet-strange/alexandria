@@ -3,6 +3,8 @@
 // Core library imports.
 use option::OptionTrait;
 use array::ArrayTrait;
+use core::traits::Into;
+
 // Internal imports.
 use quaireaux::utils;
 
@@ -15,7 +17,7 @@ use quaireaux::utils;
 // * `felt252` - The result of (base^power)mod modulus
 fn fast_power(base: felt252, power: felt252, modulus: felt252) -> felt252 {
     // Return invalid input error
-    if base < 1 {
+    if base.into() < utils::as_u256(1_u128, 0_u128) {
         let mut data = array_new::<felt252>();
         array_append::<felt252>(ref data, 'II');
         panic(data);
