@@ -16,7 +16,7 @@ use quaireaux::utils;
 fn multiply(x: felt252, y: felt252) -> felt252 {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas() {
+    match gas::withdraw_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
@@ -55,7 +55,7 @@ fn multiply(x: felt252, y: felt252) -> felt252 {
 fn _div_half_ceil(num: felt252) -> felt252 {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas() {
+    match gas::withdraw_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();
@@ -80,7 +80,7 @@ fn _div_half_ceil(num: felt252) -> felt252 {
 fn _split_number(num: felt252, split_idx: felt252) -> (felt252, felt252) {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas() {
+    match gas::withdraw_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();

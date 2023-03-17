@@ -34,7 +34,7 @@ fn bubble_sort_rec(
     idx2: u32,
     sorted_iteration: u32
 ) -> Array::<u32> {
-    match gas::get_gas() {
+    match gas::withdraw_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();

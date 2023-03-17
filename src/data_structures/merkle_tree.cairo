@@ -79,7 +79,7 @@ fn internal_compute_root(
     // Note: we need to call `gas::get_gas_all(get_builtin_costs())` because we need to call `LegacyHash::hash`
     // which uses `Pedersen` builtin.
     // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas_all(get_builtin_costs()) {
+    match gas::withdraw_gas_all(get_builtin_costs()) {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = ArrayTrait::new();

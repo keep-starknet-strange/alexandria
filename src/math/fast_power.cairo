@@ -36,7 +36,7 @@ fn fast_power(base: felt252, power: felt252, modulus: felt252) -> felt252 {
 fn _fast_power(base: felt252, power: felt252, modulus: felt252, result: felt252) -> felt252 {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas() {
+    match gas::withdraw_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = array::array_new::<felt252>();

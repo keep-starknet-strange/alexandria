@@ -28,7 +28,7 @@ fn sequence(number: felt252) -> Array::<felt252> {
 fn _sequence(number: felt252, mut arr: Array::<felt252>) -> Array::<felt252> {
     // Check if out of gas.
     // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas() {
+    match gas::withdraw_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = array::array_new::<felt252>();

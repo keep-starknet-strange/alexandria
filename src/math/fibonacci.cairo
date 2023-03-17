@@ -6,7 +6,7 @@
 // # Returns
 // * `felt252` - The nth number in the sequence
 fn fib(a: felt252, b: felt252, n: felt252) -> felt252 {
-    match gas::get_gas() {
+    match gas::withdraw_gas() {
         Option::Some(_) => {},
         Option::None(_) => {
             let mut data = array::array_new::<felt252>();
