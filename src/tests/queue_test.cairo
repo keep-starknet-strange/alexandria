@@ -1,4 +1,5 @@
 use array::ArrayTrait;
+use box::BoxTrait;
 use option::OptionTrait;
 
 use quaireaux::data_structures::queue::Queue;
@@ -7,7 +8,7 @@ use quaireaux::data_structures::queue::QueueTrait;
 #[test]
 #[available_gas(2000000)]
 fn queue_new_test() {
-    let mut queue = QueueTrait::<felt>::new();
+    let mut queue = QueueTrait::<felt252>::new();
     let result_len = queue.len();
 
     assert(result_len == 0_usize, 'wrong length');
@@ -16,7 +17,7 @@ fn queue_new_test() {
 #[test]
 #[available_gas(2000000)]
 fn queue_is_empty_test() {
-    let mut queue = QueueTrait::<felt>::new();
+    let mut queue = QueueTrait::<felt252>::new();
     let result = queue.is_empty();
 
     assert(result == true, 'should be empty');
@@ -25,7 +26,7 @@ fn queue_is_empty_test() {
 #[test]
 #[available_gas(2000000)]
 fn queue_enqueue_test() {
-    let mut queue = QueueTrait::<felt>::new();
+    let mut queue = QueueTrait::<felt252>::new();
     queue.enqueue(1);
     queue.enqueue(2);
 
@@ -39,14 +40,14 @@ fn queue_enqueue_test() {
 #[test]
 #[available_gas(2000000)]
 fn queue_peek_front_test() {
-    let mut queue = QueueTrait::<felt>::new();
+    let mut queue = QueueTrait::<felt252>::new();
     queue.enqueue(1);
     queue.enqueue(2);
     queue.enqueue(3);
 
     match queue.peek_front() {
         Option::Some(result) => {
-            assert(*result == 1, 'wrong result');
+            assert(*(result.unbox()) == 1, 'wrong result');
         },
         Option::None(_) => {
             assert(0 == 1, 'should return value');
@@ -60,7 +61,7 @@ fn queue_peek_front_test() {
 #[test]
 #[available_gas(2000000)]
 fn queue_dequeue_test() {
-    let mut queue = QueueTrait::<felt>::new();
+    let mut queue = QueueTrait::<felt252>::new();
     queue.enqueue(1);
     queue.enqueue(2);
     queue.enqueue(3);

@@ -46,7 +46,7 @@ impl StackImpl of StackTrait {
     /// Returns
     /// * Stack The new stack instance.
     fn new() -> Stack {
-        let mut elements = ArrayTrait::<u256>::new();
+        let mut elements = ArrayTrait::new();
         Stack { elements }
     }
 

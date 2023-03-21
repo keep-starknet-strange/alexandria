@@ -54,7 +54,7 @@ fn merkle_tree_test() {
 }
 
 fn test_case_compute_root(
-    ref merkle_tree: MerkleTree, proof: Array::<felt>, leaf: felt, expected_root: felt
+    ref merkle_tree: MerkleTree, proof: Array::<felt252>, leaf: felt252, expected_root: felt252
 ) {
     let mut merkle_tree = MerkleTreeTrait::new();
     let root = merkle_tree.compute_root(leaf, proof);
@@ -62,14 +62,14 @@ fn test_case_compute_root(
 }
 
 fn test_case_verify(
-    ref merkle_tree: MerkleTree, root: felt, leaf: felt, proof: Array::<felt>, expected_result: bool
+    ref merkle_tree: MerkleTree, root: felt252, leaf: felt252, proof: Array::<felt252>, expected_result: bool
 ) {
     let result = merkle_tree.verify(root, leaf, proof);
     assert(result == expected_result, 'wrong result');
 }
 
-fn generate_proof_2_elements(element_1: felt, element_2: felt) -> Array::<felt> {
-    let mut proof = ArrayTrait::<felt>::new();
+fn generate_proof_2_elements(element_1: felt252, element_2: felt252) -> Array::<felt252> {
+    let mut proof = ArrayTrait::new();
     proof.append(element_1);
     proof.append(element_2);
     proof

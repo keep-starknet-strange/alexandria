@@ -10,12 +10,12 @@ use quaireaux::utils;
 // # Arguments
 // * `n` - The array of numbers to calculate the gcd for
 // # Returns
-// * `felt` - The gcd of input numbers
-fn gcd(ref n: Array::<felt>) -> felt {
+// * `felt252` - The gcd of input numbers
+fn gcd(ref n: Array::<felt252>) -> felt252 {
     // Return empty input error
     if n.len() == 0_usize {
-        let mut data = array_new::<felt>();
-        array_append::<felt>(ref data, 'EI');
+        let mut data = ArrayTrait::new();
+        data.append('EI');
         panic(data);
     }
     _gcd(ref n)
@@ -25,18 +25,9 @@ fn gcd(ref n: Array::<felt>) -> felt {
 // # Arguments
 // * `n` - The array of numbers to calculate the gcd for
 // # Returns
-// * `felt` - The gcd of input numbers
-fn _gcd(ref n: Array::<felt>) -> felt {
-    // Check if out of gas.
-    // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas() {
-        Option::Some(_) => {},
-        Option::None(_) => {
-            let mut data = ArrayTrait::new();
-            data.append('OOG');
-            panic(data);
-        }
-    }
+// * `felt252` - The gcd of input numbers
+fn _gcd(ref n: Array::<felt252>) -> felt252 {
+    utils::check_gas();
     if n.len() == 1_usize {
         return n.pop_front().unwrap();
     }
@@ -50,18 +41,10 @@ fn _gcd(ref n: Array::<felt>) -> felt {
 // * `a` - The first number for which to calculate the gcd
 // * `b` - The first number for which to calculate the gcd
 // # Returns
-// * `felt` - The gcd of a and b
-fn gcd_two_numbers(a: felt, b: felt) -> felt {
-    // Check if out of gas.
-    // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas() {
-        Option::Some(_) => {},
-        Option::None(_) => {
-            let mut data = array_new::<felt>();
-            array_append::<felt>(ref data, 'OOG');
-            panic(data);
-        },
-    }
+// * `felt252` - The gcd of a and b
+fn gcd_two_numbers(a: felt252, b: felt252) -> felt252 {
+    utils::check_gas();
+    
     match b {
         0 => a,
         _ => {
