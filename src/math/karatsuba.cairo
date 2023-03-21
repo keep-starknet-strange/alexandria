@@ -1,8 +1,9 @@
 //! # Karatsuba Multiplication.
 
 // Core library imports.
-use option::OptionTrait;
 use array::ArrayTrait;
+use option::OptionTrait;
+use traits::Into;
 // Internal imports.
 use quaireaux::utils;
 
@@ -11,20 +12,20 @@ use quaireaux::utils;
 /// * `x` - First number to multiply.
 /// * `y` - Second number to multiply.
 /// # Returns
-/// * `felt252` - The product between x and y
-fn multiply(x: felt252, y: felt252) -> felt252 {
+/// * `u128` - The product between x and y
+fn multiply(x: u128, y: u128) -> u128 {
     utils::check_gas();
 
-    if x < 10 {
+    if x < 10_u128 {
         return x * y;
     }
 
-    if y < 10 {
+    if y < 10_u128 {
         return x * y;
     }
 
-    let max_digit_counts = utils::max(
-        utils::count_digits_of_base(x, 10), utils::count_digits_of_base(y, 10)
+    let max_digit_counts = max(
+        utils::count_digits_of_base(x.into(), 10), utils::count_digits_of_base(y, 10)
     );
     let middle_idx = _div_half_ceil(max_digit_counts);
     let (x1, x0) = _split_number(x, middle_idx);
@@ -41,8 +42,8 @@ fn multiply(x: felt252, y: felt252) -> felt252 {
 /// # Arguments
 /// * `num` - The current value to be divided.
 /// # Returns
-/// * `felt252` - Half (rounded up) of num.
-fn _div_half_ceil(num: felt252) -> felt252 {
+/// * `u128` - Half (rounded up) of num.
+fn _div_half_ceil(num: u128) -> u128 {
     utils::check_gas();
 
     let (q, r) = utils::unsafe_euclidean_div(num, 2);
@@ -57,11 +58,19 @@ fn _div_half_ceil(num: felt252) -> felt252 {
 /// * `num` - The current value to be splited.
 /// * `split_idx` - Index at which the number will be split
 /// # Returns
-/// * `(felt252, felt252)` -tuple representing the split number.
-fn _split_number(num: felt252, split_idx: felt252) -> (felt252, felt252) {
+/// * `(u128, u128)` -tuple representing the split number.
+fn _split_number(num: u128, split_idx: u128) -> (u128, u128) {
     utils::check_gas();
 
     let divisor = utils::pow(10, split_idx);
     let (q, r) = utils::unsafe_euclidean_div(num, divisor);
     (q, r)
+}
+
+fn max(a: u128, b: u128) -> felt252 {
+    if a > b {
+        return a;
+    } else {
+        return b;
+    }
 }

@@ -46,14 +46,6 @@ fn unsafe_euclidean_div(a: felt252, b: felt252) -> (felt252, felt252) {
     ((a_u128 / b_u128).into(), (a_u128 % b_u128).into())
 }
 
-// fn max(a: felt252, b: felt252) -> felt252 {
-//     if a > b {
-//         return a;
-//     } else {
-//         return b;
-//     }
-// }
-
 // Function to count the number of digits in a number.
 /// # Arguments
 /// * `num` - The number to count the digits of.

@@ -10,6 +10,7 @@ mod extended_euclidean_algorithm_test;
 mod fast_power_test;
 mod fibonacci_test;
 mod gcd_of_n_numbers_test;
+mod perfect_number_test;
 mod signed_integers_test;
 mod zellers_congruence_test;
 
@@ -24,5 +25,4 @@ mod utils_test;
 // mod merkle_tree_test;
 
 // TODO
-// mod perfect_number_test;
 // mod karatsuba_test;

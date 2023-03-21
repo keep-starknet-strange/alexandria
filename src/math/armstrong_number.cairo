@@ -1,8 +1,8 @@
 //! # Armstrong Number Algorithm.
 
 // Core library imports.
-use option::OptionTrait;
 use array::ArrayTrait;
+use option::OptionTrait;
 // Internal imports.
 use quaireaux::utils;
 

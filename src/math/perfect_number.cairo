@@ -25,19 +25,24 @@ fn is_perfect_number(num: felt252) -> bool {
 /// * `bool` - A boolean value indicating whether num is a perfect number.
 fn _is_perfect_number(num: felt252, index: felt252, sum: felt252) -> bool {
     utils::check_gas();
-
-    if num <= 1 {
+    
+    if num == 0 {
         return false;
     }
+    
+    if num == 1 {
+        return false;
+    }
+
     if index == num - 1 {
         return num == sum;
     }
 
     let (_, r) = utils::unsafe_euclidean_div(num, index);
     if r == 0 {
-        return _is_perfect_number(num, index + 1, sum + index);
+        _is_perfect_number(num, index + 1, sum + index)
     } else {
-        return _is_perfect_number(num, index + 1, sum);
+        _is_perfect_number(num, index + 1, sum)
     }
 }
 
