@@ -14,7 +14,7 @@ use quaireaux::utils;
 /// * `gcd` - Greatest common divisor.
 /// * `x` - First Bezout coefficient.
 /// * `y` - Second Bezout coefficient.
-fn extended_euclidean_algorithm(a: felt, b: felt) -> (felt, felt, felt) {
+fn extended_euclidean_algorithm(a: felt252, b: felt252) -> (felt252, felt252, felt252) {
     // Initialize variables.
     let mut old_r = a;
     let mut rem = b;
@@ -30,23 +30,15 @@ fn extended_euclidean_algorithm(a: felt, b: felt) -> (felt, felt, felt) {
 
 
 fn loop(
-    ref old_r: felt,
-    ref rem: felt,
-    ref old_s: felt,
-    ref coeff_s: felt,
-    ref old_t: felt,
-    ref coeff_t: felt
+    ref old_r: felt252,
+    ref rem: felt252,
+    ref old_s: felt252,
+    ref coeff_s: felt252,
+    ref old_t: felt252,
+    ref coeff_t: felt252
 ) {
-    // Check if out of gas.
-    // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas() {
-        Option::Some(_) => {},
-        Option::None(_) => {
-            let mut data = ArrayTrait::new();
-            data.append('OOG');
-            panic(data);
-        }
-    }
+    utils::check_gas();
+    
     // Break if remainder is 0.
     if rem == 0 {
         return ();
@@ -63,7 +55,7 @@ fn loop(
 }
 
 /// Update the step of the extended Euclidean algorithm.
-fn update_step(ref a: felt, ref old_a: felt, quotient: felt) {
+fn update_step(ref a: felt252, ref old_a: felt252, quotient: felt252) {
     let temp = a;
     a = old_a - quotient * temp;
     old_a = temp;

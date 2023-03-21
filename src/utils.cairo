@@ -6,71 +6,62 @@ use traits::Into;
 
 /// Panic with a custom message.
 /// # Arguments
-/// * `msg` - The message to panic with. Must be a short string to fit in a felt.
-fn panic_with(err: felt) {
+/// * `msg` - The message to panic with. Must be a short string to fit in a felt252.
+fn panic_with(err: felt252) {
     let mut data = ArrayTrait::new();
     data.append(err);
     panic(data);
 }
 
-/// Convert a `felt` to a `NonZero` type.
+/// Convert a `felt252` to a `NonZero` type.
 /// # Arguments
-/// * `felt` - The `felt` to convert.
+/// * `felt252` - The `felt252` to convert.
 /// # Returns
-/// * `Option::<NonZero::<felt>>` - The `felt` as a `NonZero` type.
-/// * `Option::<NonZero::<felt>>::None` - If `felt` is 0.
-fn to_non_zero(felt: felt) -> Option::<NonZero::<felt>> {
-    let res = felt_is_zero(felt);
+/// * `Option::<NonZero::<felt252>>` - The `felt252` as a `NonZero` type.
+/// * `Option::<NonZero::<felt252>>::None` - If `felt252` is 0.
+fn to_non_zero(felt252: felt252) -> Option::<NonZero::<felt252>> {
+    let res = felt252_is_zero(felt252);
     match res {
-        IsZeroResult::Zero(()) => Option::<NonZero::<felt>>::None(()),
-        IsZeroResult::NonZero(val) => Option::<NonZero::<felt>>::Some(val),
+        IsZeroResult::Zero(()) => Option::<NonZero::<felt252>>::None(()),
+        IsZeroResult::NonZero(val) => Option::<NonZero::<felt252>>::Some(val),
     }
 }
 
 
-/// Force conversion from `felt` to `u128`.
-fn unsafe_felt_to_u128(a: felt) -> u128 {
+/// Force conversion from `felt252` to `u128`.
+fn unsafe_felt252_to_u128(a: felt252) -> u128 {
     a.try_into().unwrap()
 }
 
-/// Perform euclidean division on `felt` types.
-fn unsafe_euclidean_div_no_remainder(a: felt, b: felt) -> felt {
-    let a_u128 = unsafe_felt_to_u128(a);
-    let b_u128 = unsafe_felt_to_u128(b);
+/// Perform euclidean division on `felt252` types.
+fn unsafe_euclidean_div_no_remainder(a: felt252, b: felt252) -> felt252 {
+    let a_u128 = unsafe_felt252_to_u128(a);
+    let b_u128 = unsafe_felt252_to_u128(b);
     (a_u128 / b_u128).into()
 }
 
-fn unsafe_euclidean_div(a: felt, b: felt) -> (felt, felt) {
-    let a_u128 = unsafe_felt_to_u128(a);
-    let b_u128 = unsafe_felt_to_u128(b);
+fn unsafe_euclidean_div(a: felt252, b: felt252) -> (felt252, felt252) {
+    let a_u128 = unsafe_felt252_to_u128(a);
+    let b_u128 = unsafe_felt252_to_u128(b);
     ((a_u128 / b_u128).into(), (a_u128 % b_u128).into())
 }
 
-fn max(a: felt, b: felt) -> felt {
-    if a > b {
-        return a;
-    } else {
-        return b;
-    }
-}
+// fn max(a: felt252, b: felt252) -> felt252 {
+//     if a > b {
+//         return a;
+//     } else {
+//         return b;
+//     }
+// }
 
 // Function to count the number of digits in a number.
 /// # Arguments
 /// * `num` - The number to count the digits of.
 /// * `base` - Base in which to count the digits.
 /// # Returns
-/// * `felt` - The number of digits in num of base
-fn count_digits_of_base(num: felt, base: felt) -> felt {
-    // Check if out of gas.
-    // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas() {
-        Option::Some(_) => {},
-        Option::None(_) => {
-            let mut data = ArrayTrait::new();
-            data.append('OOG');
-            panic(data);
-        }
-    }
+/// * `felt252` - The number of digits in num of base
+fn count_digits_of_base(num: felt252, base: felt252) -> felt252 {
+    check_gas();
 
     match num {
         0 => 0,
@@ -85,18 +76,9 @@ fn count_digits_of_base(num: felt, base: felt) -> felt {
 /// * `base` - The number to raise.
 /// * `exp` - The exponent.
 /// # Returns
-/// * `felt` - The result of base raised to the power of exp.
-fn pow(base: felt, exp: felt) -> felt {
-    // Check if out of gas.
-    // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas() {
-        Option::Some(_) => {},
-        Option::None(_) => {
-            let mut data = ArrayTrait::new();
-            data.append('OOG');
-            panic(data);
-        }
-    }
+/// * `felt252` - The result of base raised to the power of exp.
+fn pow(base: felt252, exp: felt252) -> felt252 {
+    check_gas();
 
     match exp {
         0 => 1,
@@ -108,21 +90,12 @@ fn pow(base: felt, exp: felt) -> felt {
 /// * `arr` - The array to split.
 /// * `index` - The index to split the array at.
 /// # Returns
-/// * `(Array::<felt>, Array::<felt>)` - The two arrays.
+/// * `(Array::<felt252>, Array::<felt252>)` - The two arrays.
 fn split_array(ref arr: Array::<u32>, index: u32) -> (Array::<u32>, Array::<u32>) {
-    // Check if out of gas.
-    // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas() {
-        Option::Some(_) => {},
-        Option::None(_) => {
-            let mut data = ArrayTrait::new();
-            data.append('OOG');
-            panic(data);
-        }
-    }
+    check_gas();
 
-    let mut arr1 = array_new::<u32>();
-    let mut arr2 = array_new::<u32>();
+    let mut arr1 = ArrayTrait::new();
+    let mut arr2 = ArrayTrait::new();
     let len = arr.len();
 
     fill_array(ref arr1, ref arr, 0_u32, index);
@@ -139,16 +112,7 @@ fn split_array(ref arr: Array::<u32>, index: u32) -> (Array::<u32>, Array::<u32>
 /// # Returns
 /// * `Array::<T>` - The filled array.
 fn fill_array(ref arr: Array::<u32>, ref fill_arr: Array::<u32>, index: u32, count: u32) {
-    // Check if out of gas.
-    // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas() {
-        Option::Some(_) => {},
-        Option::None(_) => {
-            let mut data = ArrayTrait::new();
-            data.append('OOG');
-            panic(data);
-        }
-    }
+    check_gas();
 
     if count == 0_u32 {
         return ();
@@ -165,16 +129,7 @@ fn fill_array(ref arr: Array::<u32>, ref fill_arr: Array::<u32>, index: u32, cou
 /// * `index` - The index to start filling at.
 /// * `count` - The number of elements to fill.
 fn fill_array_256(ref dst: Array::<u256>, src: @Array::<u256>, index: u32, count: u32) {
-    // Check if out of gas.
-    // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas() {
-        Option::Some(_) => {},
-        Option::None(_) => {
-            let mut data = ArrayTrait::new();
-            data.append('OOG');
-            panic(data);
-        }
-    }
+    check_gas();
 
     if count == 0_u32 {
         return ();
@@ -195,16 +150,7 @@ fn fill_array_256(ref dst: Array::<u256>, src: @Array::<u256>, index: u32, count
 /// # Returns
 /// * `bool` - True if the arrays are equal, false otherwise.
 fn is_equal(ref a: Array::<u32>, ref b: Array::<u32>, index: u32) -> bool {
-    // Check if out of gas.
-    // TODO: Remove when automatically handled by compiler.
-    match gas::get_gas() {
-        Option::Some(_) => {},
-        Option::None(_) => {
-            let mut data = ArrayTrait::new();
-            data.append('OOG');
-            panic(data);
-        }
-    }
+    check_gas();
 
     let len = a.len();
     if len != b.len() {
@@ -231,7 +177,22 @@ fn is_equal(ref a: Array::<u32>, ref b: Array::<u32>, index: u32) -> bool {
 /// # Returns
 /// * `Array::<u256>` - The slice of the array.
 fn array_slice(src: @Array::<u256>, begin: usize, end: usize) -> Array::<u256> {
-    let mut slice = ArrayTrait::<u256>::new();
+    let mut slice = ArrayTrait::new();
     fill_array_256(ref dst: slice, :src, index: begin, count: end);
     slice
+}
+
+
+// TODO comment
+// TODO: Remove when automatically handled by compiler.
+#[inline(always)]
+fn check_gas() {
+    match gas::withdraw_gas_all(get_builtin_costs()) {
+        Option::Some(_) => {},
+        Option::None(_) => {
+            let mut data = ArrayTrait::new();
+            data.append('Out of gas');
+            panic(data);
+        }
+    }
 }

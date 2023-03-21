@@ -12,7 +12,7 @@ trait QueueTrait<T> {
     fn new() -> Queue::<T>;
     fn enqueue(ref self: Queue::<T>, value: T);
     fn dequeue(ref self: Queue::<T>) -> Option::<T>;
-    fn peek_front(self: @Queue::<T>) -> Option::<@T>;
+    fn peek_front(self: @Queue::<T>) -> Option::<Box<@T>>;
     fn len(self: @Queue::<T>) -> usize;
     fn is_empty(self: @Queue::<T>) -> bool;
 }
@@ -36,7 +36,7 @@ impl QueueImpl<T> of QueueTrait::<T> {
         first
     }
 
-    fn peek_front(self: @Queue::<T>) -> Option::<@T> {
+    fn peek_front(self: @Queue::<T>) ->  Option<Box<@T>> {
         self.elements.get(ZERO_USIZE)
     }
 
@@ -54,4 +54,4 @@ fn queue_new<T>() -> Queue::<T> {
     Queue::<T> { elements: arr }
 }
 
-impl QueueFeltDrop of Drop::<Queue::<felt>>;
+impl Queuefelt252Drop of Drop::<Queue::<felt252>>;

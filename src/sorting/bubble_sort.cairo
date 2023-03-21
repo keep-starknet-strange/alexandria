@@ -2,6 +2,7 @@
 
 use array::ArrayTrait;
 use option::OptionTrait;
+use quaireaux::utils;
 
 
 // Bubble sort 
@@ -14,7 +15,7 @@ fn bubble_sort_elements(mut array: Array::<u32>) -> Array::<u32> {
     if (array_len <= 1_u32) {
         return array;
     }
-    let mut sorted_array = array_new();
+    let mut sorted_array = ArrayTrait::new();
     let result = bubble_sort_rec(array, sorted_array, 0_u32, 1_u32, 0_u32);
     result
 }
@@ -34,21 +35,15 @@ fn bubble_sort_rec(
     idx2: u32,
     sorted_iteration: u32
 ) -> Array::<u32> {
-    match gas::get_gas() {
-        Option::Some(_) => {},
-        Option::None(_) => {
-            let mut data = ArrayTrait::new();
-            data.append('OOG');
-            panic(data);
-        }
-    }
+    utils::check_gas();
+    
     let array_len = array.len();
     if (idx2 == array_len) {
         sorted_array.append(*array.at(idx1));
         if (sorted_iteration == 0_u32) {
             return (sorted_array);
         }
-        let mut new_sorted_array = array_new();
+        let mut new_sorted_array = ArrayTrait::new();
         return bubble_sort_rec(sorted_array, new_sorted_array, 0_u32, 1_u32, 0_u32);
     }
 
