@@ -175,7 +175,7 @@ fn array_slice(src: @Array::<u256>, begin: usize, end: usize) -> Array::<u256> {
 }
 
 
-// TODO comment
+// Fake macro to compute gas left
 // TODO: Remove when automatically handled by compiler.
 #[inline(always)]
 fn check_gas() {
