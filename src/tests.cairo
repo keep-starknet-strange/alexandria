@@ -19,10 +19,10 @@ mod mergesort_test;
 
 // Utils
 mod utils_test;
+
 // TODO this test file fails
 // mod merkle_tree_test;
 
 // TODO
 // mod perfect_number_test;
 // mod karatsuba_test;
-
