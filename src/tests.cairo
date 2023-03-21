@@ -23,6 +23,6 @@ mod utils_test;
 // TODO this test file fails
 // mod merkle_tree_test;
 
-// TODO
+// TODO this file is outdated and should be updated
 // mod karatsuba_test;
 
