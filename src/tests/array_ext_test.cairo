@@ -5,7 +5,7 @@ use quaireaux::data_structures::array_ext::ArrayTraitExt;
 
 #[test]
 #[available_gas(2000000)]
-fn test_append_all() {
+fn append_all() {
     let mut destination = ArrayTrait::new();
     let mut source = ArrayTrait::new();
     destination.append(21);
@@ -20,7 +20,7 @@ fn test_append_all() {
 
 #[test]
 #[available_gas(2000000)]
-fn test_append_all_different_type() {
+fn append_all_different_type() {
     let mut destination = ArrayTrait::new();
     let mut source = ArrayTrait::new();
     destination.append(21_u128);
@@ -35,7 +35,7 @@ fn test_append_all_different_type() {
 
 #[test]
 #[available_gas(2000000)]
-fn test_append_all_destination_empty() {
+fn append_all_destination_empty() {
     let mut destination = ArrayTrait::new();
     let mut source = ArrayTrait::new();
     source.append(21);
@@ -50,7 +50,7 @@ fn test_append_all_destination_empty() {
 
 #[test]
 #[available_gas(2000000)]
-fn test_append_all_source_empty() {
+fn append_all_source_empty() {
     let mut destination = ArrayTrait::new();
     let mut source = ArrayTrait::new();
     destination.append(21);
@@ -65,7 +65,7 @@ fn test_append_all_source_empty() {
 
 #[test]
 #[available_gas(2000000)]
-fn test_append_all_both_empty() {
+fn append_all_both_empty() {
     let mut destination = ArrayTrait::<felt252>::new();
     let mut source = ArrayTrait::new();
     destination.append_all(ref source);
@@ -75,7 +75,7 @@ fn test_append_all_both_empty() {
 
 #[test]
 #[available_gas(2000000)]
-fn test_reverse() {
+fn reverse() {
     let mut arr = ArrayTrait::new();
     arr.append(21);
     arr.append(42);
@@ -89,7 +89,7 @@ fn test_reverse() {
 
 #[test]
 #[available_gas(2000000)]
-fn test_reverse_size_1() {
+fn reverse_size_1() {
     let mut arr = ArrayTrait::new();
     arr.append(21);
     let response = arr.reverse();
@@ -99,7 +99,7 @@ fn test_reverse_size_1() {
 
 #[test]
 #[available_gas(2000000)]
-fn test_reverse_empty() {
+fn reverse_empty() {
     let mut arr = ArrayTrait::<felt252>::new();
     let response = arr.reverse();
     assert(response.len() == 0_usize, 'Len should be 0');
@@ -107,7 +107,7 @@ fn test_reverse_empty() {
 
 #[test]
 #[available_gas(2000000)]
-fn test_reverse_different_type() {
+fn reverse_different_type() {
     let mut arr = ArrayTrait::new();
     arr.append(21_u128);
     arr.append(42_u128);
