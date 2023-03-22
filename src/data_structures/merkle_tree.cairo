@@ -27,7 +27,9 @@ trait MerkleTreeTrait {
     /// Create a new merkle tree instance.
     fn new() -> MerkleTree;
     /// Compute the merkle root of a given proof.
-    fn compute_root(ref self: MerkleTree, current_node: felt252, proof: Array::<felt252>) -> felt252;
+    fn compute_root(
+        ref self: MerkleTree, current_node: felt252, proof: Array::<felt252>
+    ) -> felt252;
     /// Verify a merkle proof.
     fn verify(ref self: MerkleTree, root: felt252, leaf: felt252, proof: Array::<felt252>) -> bool;
 }
@@ -46,7 +48,9 @@ impl MerkleTreeImpl of MerkleTreeTrait {
     /// * `proof` - The proof.
     /// # Returns
     /// The merkle root.
-    fn compute_root(ref self: MerkleTree, current_node: felt252, mut proof: Array::<felt252>) -> felt252 {
+    fn compute_root(
+        ref self: MerkleTree, current_node: felt252, mut proof: Array::<felt252>
+    ) -> felt252 {
         let proof_len = proof.len();
         internal_compute_root(current_node, 0_u32, proof_len, proof)
     }
@@ -58,7 +62,9 @@ impl MerkleTreeImpl of MerkleTreeTrait {
     /// * `proof` - The proof.
     /// # Returns
     /// True if the proof is valid, false otherwise.
-    fn verify(ref self: MerkleTree, root: felt252, leaf: felt252, mut proof: Array::<felt252>) -> bool {
+    fn verify(
+        ref self: MerkleTree, root: felt252, leaf: felt252, mut proof: Array::<felt252>
+    ) -> bool {
         let computed_root = self.compute_root(leaf, proof);
         computed_root == root
     }

@@ -25,11 +25,11 @@ fn is_perfect_number(num: felt252) -> bool {
 /// * `bool` - A boolean value indicating whether num is a perfect number.
 fn _is_perfect_number(num: felt252, index: felt252, sum: felt252) -> bool {
     utils::check_gas();
-    
+
     if num == 0 {
         return false;
     }
-    
+
     if num == 1 {
         return false;
     }

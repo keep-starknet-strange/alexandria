@@ -9,7 +9,7 @@ use quaireaux::utils;
 // * `felt252` - The nth number in the sequence
 fn fib(a: felt252, b: felt252, n: felt252) -> felt252 {
     utils::check_gas();
-    
+
     match n {
         0 => a,
         _ => fib(b, a + b, n - 1),

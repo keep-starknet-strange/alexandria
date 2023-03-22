@@ -38,7 +38,7 @@ fn loop(
     ref coeff_t: felt252
 ) {
     utils::check_gas();
-    
+
     // Break if remainder is 0.
     if rem == 0 {
         return ();

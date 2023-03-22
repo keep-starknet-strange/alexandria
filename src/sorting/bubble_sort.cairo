@@ -36,7 +36,7 @@ fn bubble_sort_rec(
     sorted_iteration: u32
 ) -> Array::<u32> {
     utils::check_gas();
-    
+
     let array_len = array.len();
     if (idx2 == array_len) {
         sorted_array.append(*array.at(idx1));

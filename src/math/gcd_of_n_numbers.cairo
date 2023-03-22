@@ -44,7 +44,7 @@ fn _gcd(ref n: Array::<felt252>) -> felt252 {
 // * `felt252` - The gcd of a and b
 fn gcd_two_numbers(a: felt252, b: felt252) -> felt252 {
     utils::check_gas();
-    
+
     match b {
         0 => a,
         _ => {
