@@ -62,7 +62,11 @@ fn test_case_compute_root(
 }
 
 fn test_case_verify(
-    ref merkle_tree: MerkleTree, root: felt252, leaf: felt252, proof: Array::<felt252>, expected_result: bool
+    ref merkle_tree: MerkleTree,
+    root: felt252,
+    leaf: felt252,
+    proof: Array::<felt252>,
+    expected_result: bool
 ) {
     let result = merkle_tree.verify(root, leaf, proof);
     assert(result == expected_result, 'wrong result');

@@ -5,9 +5,9 @@ fn test_case(a: felt252, b: felt252, expected: (felt252, felt252, felt252)) {
     let (gcd, x, y) = extended_euclidean_algorithm(a, b);
     let (expected_gcd, expected_x, expected_y) = expected;
     assert(gcd == expected_gcd, 'gcd is incorrect');
-    // TODO Dangling issue 
-    // assert(x == expected_x, 'x is incorrect');
-    // assert(y == expected_y, 'y is incorrect');
+// TODO Dangling issue 
+// assert(x == expected_x, 'x is incorrect');
+// assert(y == expected_y, 'y is incorrect');
 }
 
 #[test]

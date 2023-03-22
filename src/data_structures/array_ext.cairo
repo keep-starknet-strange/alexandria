@@ -9,7 +9,7 @@ trait ArrayTraitExt<T> {
     fn reverse(ref self: Array::<T>) -> Array::<T>;
 }
 
-impl ArrayImpl<T, impl TCopy: Copy::<T>> of ArrayTraitExt::<T>  {
+impl ArrayImpl<T, impl TCopy: Copy::<T>> of ArrayTraitExt::<T> {
     fn append_all(ref self: Array::<T>, ref arr: Array::<T>) {
         utils::check_gas();
 
@@ -22,7 +22,7 @@ impl ArrayImpl<T, impl TCopy: Copy::<T>> of ArrayTraitExt::<T>  {
         }
     }
 
-    fn reverse(ref self: Array::<T>) -> Array::<T>{
+    fn reverse(ref self: Array::<T>) -> Array::<T> {
         if self.len() == 0_usize {
             return ArrayTrait::<T>::new();
         }

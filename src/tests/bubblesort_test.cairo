@@ -73,6 +73,3 @@ fn bubblesort_test_pre_sorted() {
     assert(utils::is_equal(ref sorted, ref correct, 0_u32) == true, 'invalid result');
 }
 
-
-
-

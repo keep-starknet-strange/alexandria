@@ -13,7 +13,7 @@ fn test_contains() {
     assert(arr.contains(21), 'Should contain 21');
     assert(arr.contains(42), 'Should contain 42');
     assert(arr.contains(84), 'Should contain 84');
-    assert(arr.len() == 3_usize, 'arr should not be consummed'); 
+    assert(arr.len() == 3_usize, 'arr should not be consummed');
     assert(*arr.at(0_usize) == 21, 'Should be 21');
     assert(*arr.at(1_usize) == 42, 'Should be 42');
     assert(*arr.at(2_usize) == 84, 'Should be 84');
@@ -26,7 +26,7 @@ fn test_contains_different_type() {
     assert(arr.contains(21), 'Should contain 21');
     assert(arr.contains(42), 'Should contain 42');
     assert(arr.contains(84), 'Should contain 84');
-    assert(arr.len() == 3_usize, 'arr should not be consummed'); 
+    assert(arr.len() == 3_usize, 'arr should not be consummed');
     assert(*arr.at(0_usize) == 21, 'Should be 21');
     assert(*arr.at(1_usize) == 42, 'Should be 42');
     assert(*arr.at(2_usize) == 84, 'Should be 84');
@@ -45,7 +45,7 @@ fn test_contains_false() {
 // Utility fn
 
 fn get_felt252_array() -> Array<felt252> {
-let mut arr = ArrayTrait::new();
+    let mut arr = ArrayTrait::new();
     arr.append(21);
     arr.append(42);
     arr.append(84);

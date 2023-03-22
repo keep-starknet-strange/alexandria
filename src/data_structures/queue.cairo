@@ -5,7 +5,7 @@ use option::OptionTrait;
 const ZERO_USIZE: usize = 0_usize;
 
 struct Queue<T> {
-    elements: Array::<T>,
+    elements: Array::<T>, 
 }
 
 trait QueueTrait<T> {
@@ -36,7 +36,7 @@ impl QueueImpl<T> of QueueTrait::<T> {
         first
     }
 
-    fn peek_front(self: @Queue::<T>) ->  Option<Box<@T>> {
+    fn peek_front(self: @Queue::<T>) -> Option<Box<@T>> {
         self.elements.get(ZERO_USIZE)
     }
 
