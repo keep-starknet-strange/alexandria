@@ -58,9 +58,9 @@ fn append_all_source_empty() {
     destination.append(84);
     destination.append_all(ref source);
     assert(destination.len() == 3_usize, 'Len should be 3');
-    assert(*destination.at(0_usize) == 21, 'Should be 21');
-    assert(*destination.at(1_usize) == 42, 'Should be 42');
-    assert(*destination.at(2_usize) == 84, 'Should be 84');
+    assert(*destination.at(0_usize) == 21, 'Should be 0');
+    assert(*destination.at(1_usize) == 42, 'Should be 1');
+    assert(*destination.at(2_usize) == 84, 'Should be 2');
 }
 
 #[test]
@@ -93,7 +93,7 @@ fn reverse_size_1() {
     let mut arr = ArrayTrait::new();
     arr.append(21);
     let response = arr.reverse();
-    assert(response.len() == 1_usize, 'Len should be 3');
+    assert(response.len() == 1_usize, 'Len should be 1');
     assert(*response.at(0_usize) == 21, 'Should be 21');
 }
 
