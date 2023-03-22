@@ -1,5 +1,6 @@
 // Array extension
 mod array_ext;
+mod array_search;
 // Merkle Tree module
 mod merkle_tree;
 // Queue module

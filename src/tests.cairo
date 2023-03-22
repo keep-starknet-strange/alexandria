@@ -1,5 +1,6 @@
 // Data structures
 mod array_ext_test;
+mod array_search_test;
 mod stack_test;
 mod queue_test;
 

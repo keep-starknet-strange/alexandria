@@ -9,10 +9,6 @@ trait ArrayTraitExt<T> {
     fn reverse(ref self: Array::<T>) -> Array::<T>;
 }
 
-trait ArraySearchExt<T> {
-    fn contains(ref self:  Array::<T>, item: T) -> bool;
-}
-
 impl ArrayImpl<T, impl TCopy: Copy::<T>> of ArrayTraitExt::<T>  {
     fn append_all(ref self: Array::<T>, ref arr: Array::<T>) {
         utils::check_gas();
@@ -45,24 +41,3 @@ fn reverse_loop<T, impl TCopy: Copy::<T>>(ref arr: Array<T>, ref response: Array
     }
     reverse_loop(ref arr, ref response, index - 1_usize);
 }
-
-
-impl ArraySearchImpl<T, impl TCopy: Copy::<T>, impl TDrop: Drop::<T>, impl TPartialEq: PartialEq::<T>> of ArraySearchExt::<T> {
-    fn contains(ref self: Array::<T>, item: T) -> bool {
-        contains_loop(ref self, item, 0_usize)
-    }
-}
-
-fn contains_loop<T, impl TDrop: Drop::<T>, impl TPartialEq: PartialEq::<T>, impl TCopy: Copy::<T>>
-(ref arr: Array<T>, item: T, index: usize) -> bool{
-    utils::check_gas();
-
-    if index >= arr.len() {
-        false
-    } else if *arr.at(index) == item {
-        true
-    } else {
-        contains_loop(ref arr, item, index + 1_usize)
-    }
-}
-
