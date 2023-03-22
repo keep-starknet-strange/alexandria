@@ -5,10 +5,10 @@ use quaireaux::utils;
 trait ArrayTraitExt<T> {
     fn append_all(ref self: Array::<T>, ref arr: Array::<T>);
     fn reverse(ref self: Array::<T>) -> Array::<T>;
+    fn contains(ref self:  Array::<T>, item: T) -> bool;
 }
 
 trait ArraySearchExt<T> {
-    fn contains(ref self:  Array::<T>, item: T) -> bool;
 }
 
 impl ArrayImpl<T, impl TCopy: Copy::<T>> of ArrayTraitExt::<T>  {
@@ -32,6 +32,9 @@ impl ArrayImpl<T, impl TCopy: Copy::<T>> of ArrayTraitExt::<T>  {
         reverse_loop(ref self, ref response, self.len() - 1_usize);
         response
     }
+        fn contains(ref self: Array::<T>, item: T) -> bool {
+        contains_loop(ref self, item, 0_usize)
+    }
 }
 
 fn reverse_loop<T, impl TCopy: Copy::<T>>(ref arr: Array<T>, ref response: Array<T>, index: usize) {
@@ -46,9 +49,7 @@ fn reverse_loop<T, impl TCopy: Copy::<T>>(ref arr: Array<T>, ref response: Array
 
 
 impl ArraySearchImpl<T, impl TCopy: Copy::<T>, impl TDrop: Drop::<T>, impl TPartialEq: PartialEq::<T>> of ArraySearchExt::<T> {
-    fn contains(ref self: Array::<T>, item: T) -> bool {
-        contains_loop(ref self, item, 0_usize)
-    }
+
 }
 
 fn contains_loop<T, impl TDrop: Drop::<T>, impl TPartialEq: PartialEq::<T>, impl TCopy: Copy::<T>>
