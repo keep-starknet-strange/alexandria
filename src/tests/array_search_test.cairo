@@ -106,7 +106,7 @@ fn occurrences_of_not_in_array() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_empty_array() {
-    let mut arr =  ArrayTrait::new();
+    let mut arr = ArrayTrait::new();
     assert(arr.occurrences_of(12) == 0_usize, 'Should contain exactly 0');
     assert(arr.len() == 0_usize, 'arr should not be consummed');
 }

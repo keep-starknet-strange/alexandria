@@ -49,21 +49,28 @@ fn index_of_loop<T, impl TDrop: Drop::<T>, impl TPartialEq: PartialEq::<T>, impl
         let mut data = ArrayTrait::new();
         data.append('Item not in array');
         panic(data)
-    } else if *arr.at(index) == item {
+    } else if *arr.at(
+        index
+    ) == item {
         index
     } else {
         index_of_loop(ref arr, item, index + 1_usize)
     }
 }
 
-fn occurrences_of_loop<T, impl TDrop: Drop::<T>, impl TPartialEq: PartialEq::<T>, impl TCopy: Copy::<T>>(
+fn occurrences_of_loop<T,
+impl TDrop: Drop::<T>,
+impl TPartialEq: PartialEq::<T>,
+impl TCopy: Copy::<T>>(
     ref arr: Array<T>, item: T, index: usize, count: usize
 ) -> usize {
     utils::check_gas();
 
     if index >= arr.len() {
         count
-    } else if *arr.at(index) == item {
+    } else if *arr.at(
+        index
+    ) == item {
         occurrences_of_loop(ref arr, item, index + 1_usize, count + 1_usize)
     } else {
         occurrences_of_loop(ref arr, item, index + 1_usize, count)
