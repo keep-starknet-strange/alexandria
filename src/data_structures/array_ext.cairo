@@ -2,8 +2,6 @@ use array::ArrayTrait;
 use array::SpanTrait;
 use quaireaux::utils;
 
-// Split in 2 Traits because searching require more impl 
-
 trait ArrayTraitExt<T> {
     fn append_all(ref self: Array::<T>, ref arr: Array::<T>);
     fn reverse(ref self: Array::<T>) -> Array::<T>;

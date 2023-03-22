@@ -79,9 +79,9 @@ fn index_of_empty_array() {
 #[available_gas(2000000)]
 fn occurrences_of() {
     let mut arr = get_felt252_array();
-    assert(arr.occurrences_of(21) == 1_usize, 'Should contain exactly once');
-    assert(arr.occurrences_of(42) == 1_usize, 'Should contain exactly once');
-    assert(arr.occurrences_of(84) == 1_usize, 'Should contain exactly once');
+    assert(arr.occurrences_of(21) == 1_usize, 'Should contain 21 exactly once');
+    assert(arr.occurrences_of(42) == 1_usize, 'Should contain 42 exactly once');
+    assert(arr.occurrences_of(84) == 1_usize, 'Should contain 84 exactly once');
     assert(arr.len() == 3_usize, 'arr should not be consummed');
 }
 
@@ -89,9 +89,9 @@ fn occurrences_of() {
 #[available_gas(2000000)]
 fn occurrences_of_different_type() {
     let mut arr = get_u128_array();
-    assert(arr.occurrences_of(21_u128) == 1_usize, 'Should contain exactly once');
-    assert(arr.occurrences_of(42_u128) == 1_usize, 'Should contain exactly once');
-    assert(arr.occurrences_of(84_u128) == 1_usize, 'Should contain exactly once');
+    assert(arr.occurrences_of(21_u128) == 1_usize, 'Should contain 21 exactly once');
+    assert(arr.occurrences_of(42_u128) == 1_usize, 'Should contain 42 exactly once');
+    assert(arr.occurrences_of(84_u128) == 1_usize, 'Should contain 84 exactly once');
     assert(arr.len() == 3_usize, 'arr should not be consummed');
 }
 
