@@ -2,6 +2,7 @@ use array::ArrayTrait;
 use array::SpanTrait;
 
 use quaireaux::data_structures::array_search::ArraySearchExt;
+use quaireaux::data_structures::array_search::ArrayMinMaxExt;
 
 #[test]
 #[available_gas(2000000)]
@@ -131,6 +132,222 @@ fn occurrences_of_filled() {
     arr.append(21);
     arr.append(21);
     assert(arr.occurrences_of(21) == 3_usize, 'Should contain exactly 3');
+    assert(arr.len() == 3_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn min() {
+    let mut arr = get_u128_array();
+    assert(arr.min() == 21_u128, 'Min should be 21');
+    assert(arr.len() == 3_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn min_step_one() {
+    let mut arr = get_u128_array();
+    arr.append(20_u128);
+    assert(arr.min() == 20_u128, 'Min should be 20');
+    assert(arr.len() == 4_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn min_with_duplicate() {
+    let mut arr = get_u128_array();
+    arr.append(21_u128);
+    assert(arr.min() == 21_u128, 'Min should be 21');
+    assert(arr.len() == 4_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+#[should_panic(expected = ('Empty array', ))]
+fn min_empty_array() {
+    let mut arr: Array<u128> = ArrayTrait::new();
+    arr.min();
+}
+
+#[test]
+#[available_gas(2000000)]
+fn min_one_item() {
+    let mut arr = ArrayTrait::new();
+    arr.append(21_u128);
+    assert(arr.min() == 21_u128, 'Min should be 21');
+    assert(arr.len() == 1_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn min_last() {
+    let mut arr = ArrayTrait::new();
+    arr.append(84_u128);
+    arr.append(42_u128);
+    arr.append(21_u128);
+    assert(arr.min() == 21_u128, 'Min should be 21');
+    assert(arr.len() == 3_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn index_of_min() {
+    let mut arr = get_u128_array();
+    assert(arr.index_of_min() == 0_usize, 'index_of_min should be 0');
+    assert(arr.len() == 3_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn index_of_min_step_one() {
+    let mut arr = get_u128_array();
+    arr.append(20_u128);
+    assert(arr.index_of_min() == 3_usize, 'index_of_min should be 3');
+    assert(arr.len() == 4_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn index_of_min_with_duplicate() {
+    let mut arr = get_u128_array();
+    arr.append(21_u128);
+    assert(arr.index_of_min() == 0_usize, 'index_of_min should be 0');
+    assert(arr.len() == 4_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+#[should_panic(expected = ('Empty array', ))]
+fn index_of_min_empty_array() {
+    let mut arr: Array<u128> = ArrayTrait::new();
+    arr.index_of_min();
+}
+
+#[test]
+#[available_gas(2000000)]
+fn index_of_min_one_item() {
+    let mut arr = ArrayTrait::new();
+    arr.append(21_u128);
+    assert(arr.index_of_min() == 0_usize, 'index_of_min should be 0');
+    assert(arr.len() == 1_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn index_of_min_last() {
+    let mut arr = ArrayTrait::new();
+    arr.append(84_u128);
+    arr.append(42_u128);
+    arr.append(21_u128);
+    assert(arr.index_of_min() == 2_usize, 'index_of_min should be 2');
+    assert(arr.len() == 3_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn max() {
+    let mut arr = get_u128_array();
+    assert(arr.max() == 84_u128, 'Max should be 84');
+    assert(arr.len() == 3_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn max_step_one() {
+    let mut arr = get_u128_array();
+    arr.append(85_u128);
+    assert(arr.max() == 85_u128, 'Max should be 85');
+    assert(arr.len() == 4_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn max_with_duplicate() {
+    let mut arr = get_u128_array();
+    arr.append(84_u128);
+    assert(arr.max() == 84_u128, 'Max should be 84');
+    assert(arr.len() == 4_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+#[should_panic(expected = ('Empty array', ))]
+fn max_empty_array() {
+    let mut arr: Array<u128> = ArrayTrait::new();
+    arr.max();
+}
+
+#[test]
+#[available_gas(2000000)]
+fn max_one_item() {
+    let mut arr = ArrayTrait::new();
+    arr.append(21_u128);
+    assert(arr.max() == 21_u128, 'Max should be 21');
+    assert(arr.len() == 1_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn max_first() {
+    let mut arr = ArrayTrait::new();
+    arr.append(84_u128);
+    arr.append(42_u128);
+    arr.append(21_u128);
+    assert(arr.max() == 84_u128, 'Max should be 84');
+    assert(arr.len() == 3_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn index_of_max() {
+    let mut arr = get_u128_array();
+    assert(arr.index_of_max() == 2_usize, 'index_of_max should be 2');
+    assert(arr.len() == 3_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn index_of_max_step_one() {
+    let mut arr = get_u128_array();
+    arr.append(85_u128);
+    assert(arr.index_of_max() == 3_usize, 'index_of_max should be 3');
+    assert(arr.len() == 4_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn index_of_max_with_duplicate() {
+    let mut arr = get_u128_array();
+    arr.append(84_u128);
+    assert(arr.index_of_max() == 2_usize, 'index_of_max should be 2');
+    assert(arr.len() == 4_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+#[should_panic(expected = ('Empty array', ))]
+fn index_of_max_empty_array() {
+    let mut arr: Array<u128> = ArrayTrait::new();
+    arr.index_of_max();
+}
+
+#[test]
+#[available_gas(2000000)]
+fn index_of_max_one_item() {
+    let mut arr = ArrayTrait::new();
+    arr.append(21_u128);
+    assert(arr.index_of_max() == 0_usize, 'index_of_max should be 0');
+    assert(arr.len() == 1_usize, 'arr should not be consummed');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn index_of_max_last() {
+    let mut arr = ArrayTrait::new();
+    arr.append(84_u128);
+    arr.append(42_u128);
+    arr.append(21_u128);
+    assert(arr.index_of_max() == 0_usize, 'index_of_max should be 0');
     assert(arr.len() == 3_usize, 'arr should not be consummed');
 }
 
