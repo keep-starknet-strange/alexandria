@@ -27,7 +27,7 @@ fn mergesort_test() {
     correct.append(7_u32);
     correct.append(8_u32);
 
-    let mut sorted = merge_sort::mergesort_elements(data);
+    let mut sorted = merge_sort::merge(data);
 
     assert(utils::is_equal(ref sorted, ref correct, 0_u32) == true, 'invalid result');
 }
@@ -39,7 +39,7 @@ fn mergesort_test_empty() {
 
     let mut correct = ArrayTrait::new();
 
-    let mut sorted = merge_sort::mergesort_elements(data);
+    let mut sorted = merge_sort::merge(data);
 
     assert(utils::is_equal(ref sorted, ref correct, 0_u32) == true, 'invalid result');
 }
@@ -53,7 +53,7 @@ fn mergesort_test_one_element() {
     let mut correct = ArrayTrait::new();
     correct.append(2_u32);
 
-    let mut sorted = merge_sort::mergesort_elements(data);
+    let mut sorted = merge_sort::merge(data);
 
     assert(utils::is_equal(ref sorted, ref correct, 0_u32) == true, 'invalid result');
 }
@@ -73,7 +73,7 @@ fn mergesort_test_pre_sorted() {
     correct.append(3_u32);
     correct.append(4_u32);
 
-    let mut sorted = merge_sort::mergesort_elements(data);
+    let mut sorted = merge_sort::merge(data);
 
     assert(utils::is_equal(ref sorted, ref correct, 0_u32) == true, 'invalid result');
 }

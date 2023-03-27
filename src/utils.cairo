@@ -82,8 +82,8 @@ fn pow(base: felt252, exp: felt252) -> felt252 {
 /// * `arr` - The array to split.
 /// * `index` - The index to split the array at.
 /// # Returns
-/// * `(Array::<felt252>, Array::<felt252>)` - The two arrays.
-fn split_array(ref arr: Array::<u32>, index: u32) -> (Array::<u32>, Array::<u32>) {
+/// * `(Array::<T>, Array::<T>)` - The two arrays.
+fn split_array<T, impl TCopy: Copy::<T>>(ref arr: Array::<T>, index: usize) -> (Array::<T>, Array::<T>) {
     check_gas();
 
     let mut arr1 = ArrayTrait::new();
@@ -103,16 +103,16 @@ fn split_array(ref arr: Array::<u32>, index: u32) -> (Array::<u32>, Array::<u32>
 /// * `count` - The number of elements to fill.
 /// # Returns
 /// * `Array::<T>` - The filled array.
-fn fill_array(ref arr: Array::<u32>, ref fill_arr: Array::<u32>, index: u32, count: u32) {
+fn fill_array<T, impl TCopy: Copy::<T>>(ref arr: Array::<T>, ref fill_arr: Array::<T>, index: usize, count: usize) {
     check_gas();
 
-    if count == 0_u32 {
+    if count == 0_usize {
         return ();
     }
     let element = fill_arr.at(index);
     arr.append(*element);
 
-    fill_array(ref arr, ref fill_arr, index + 1_u32, count - 1_u32)
+    fill_array(ref arr, ref fill_arr, index + 1_usize, count - 1_usize)
 }
 
 // Fill an array with a value.
