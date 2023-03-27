@@ -18,7 +18,7 @@ mod zellers_congruence_test;
 
 // Sorting
 mod bubblesort_test;
-mod mergesort_test;
+mod merge_sort_test;
 
 // Utils
 mod utils_test;
