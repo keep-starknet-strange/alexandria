@@ -1,0 +1,5 @@
+[crate_roots]
+math = "src"
+utils = "../utils/src"
+
+tests = "tests"
