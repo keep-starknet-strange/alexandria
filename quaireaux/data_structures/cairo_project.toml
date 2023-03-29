@@ -1,0 +1,5 @@
+[crate_roots]
+data_structures = "src"
+utils = "../utils/src"
+
+tests = "tests"
