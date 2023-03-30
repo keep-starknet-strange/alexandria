@@ -9,3 +9,6 @@ mod perfect_number;
 mod signed_integers;
 mod zellers_congruence;
 // mod karatsuba;
+
+#[cfg(test)]
+mod tests;

@@ -1,4 +1,2 @@
 [crate_roots]
 utils = "src"
-
-tests = "tests"
