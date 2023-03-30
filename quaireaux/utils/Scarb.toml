@@ -1,0 +1,5 @@
+[package]
+name = "utils"
+version = "0.1.0"
+description = "Utils library used by other Quaireaux crates"
+homepage = "https://github.com/keep-starknet-strange/quaireaux/tree/main/data_structures"
