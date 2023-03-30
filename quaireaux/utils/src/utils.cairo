@@ -83,7 +83,9 @@ fn pow(base: felt252, exp: felt252) -> felt252 {
 /// * `index` - The index to split the array at.
 /// # Returns
 /// * `(Array::<T>, Array::<T>)` - The two arrays.
-fn split_array<T, impl TCopy: Copy::<T>>(ref arr: Array::<T>, index: usize) -> (Array::<T>, Array::<T>) {
+fn split_array<T, impl TCopy: Copy::<T>>(
+    ref arr: Array::<T>, index: usize
+) -> (Array::<T>, Array::<T>) {
     check_gas();
 
     let mut arr1 = ArrayTrait::new();
@@ -103,7 +105,9 @@ fn split_array<T, impl TCopy: Copy::<T>>(ref arr: Array::<T>, index: usize) -> (
 /// * `count` - The number of elements to fill.
 /// # Returns
 /// * `Array::<T>` - The filled array.
-fn fill_array<T, impl TCopy: Copy::<T>>(ref arr: Array::<T>, ref fill_arr: Array::<T>, index: usize, count: usize) {
+fn fill_array<T, impl TCopy: Copy::<T>>(
+    ref arr: Array::<T>, ref fill_arr: Array::<T>, index: usize, count: usize
+) {
     check_gas();
 
     if count == 0_usize {
