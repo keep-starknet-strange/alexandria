@@ -4,7 +4,7 @@
 use array::ArrayTrait;
 use option::OptionTrait;
 use utils::utils::check_gas;
-use utils::utils::unsafe_euclidean_div;
+use math::unsafe_euclidean_div;
 
 // Calculate the (base^power)mod modulus using the fast powering algorithm
 // # Arguments

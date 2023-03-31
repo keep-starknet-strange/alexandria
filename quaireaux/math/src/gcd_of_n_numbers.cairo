@@ -5,7 +5,7 @@ use option::OptionTrait;
 use array::ArrayTrait;
 
 use utils::utils::check_gas;
-use utils::utils::unsafe_euclidean_div;
+use math::unsafe_euclidean_div;
 
 // Calculate the greatest common dividor for n numbers
 // # Arguments

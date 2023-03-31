@@ -5,6 +5,7 @@ mod extended_euclidean_algorithm_test;
 mod fast_power_test;
 mod fibonacci_test;
 mod gcd_of_n_numbers_test;
+mod math_test;
 mod perfect_number_test;
 mod signed_integers_test;
 mod zellers_congruence_test;

@@ -1,3 +1,9 @@
+mod math;
+use math::pow;
+use math::count_digits_of_base;
+use math::unsafe_euclidean_div;
+use math::unsafe_euclidean_div_no_remainder;
+
 mod aliquot_sum;
 mod armstrong_number;
 mod collatz_sequence;
