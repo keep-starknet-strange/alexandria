@@ -3,7 +3,7 @@
 // Core library imports.
 use option::OptionTrait;
 use array::ArrayTrait;
-use utils::utils::unsafe_euclidean_div;
+use math::unsafe_euclidean_div;
 use utils::utils::check_gas;
 
 /// Generates the Collatz sequence for a given number.

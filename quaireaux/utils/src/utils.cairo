@@ -4,14 +4,6 @@ use option::OptionTrait;
 use traits::TryInto;
 use traits::Into;
 
-/// Panic with a custom message.
-/// # Arguments
-/// * `msg` - The message to panic with. Must be a short string to fit in a felt252.
-fn panic_with(err: felt252) {
-    let mut data = ArrayTrait::new();
-    data.append(err);
-    panic(data);
-}
 
 /// Convert a `felt252` to a `NonZero` type.
 /// # Arguments
@@ -25,98 +17,6 @@ fn to_non_zero(felt252: felt252) -> Option::<NonZero::<felt252>> {
         IsZeroResult::Zero(()) => Option::<NonZero::<felt252>>::None(()),
         IsZeroResult::NonZero(val) => Option::<NonZero::<felt252>>::Some(val),
     }
-}
-
-
-/// Force conversion from `felt252` to `u128`.
-fn unsafe_felt252_to_u128(a: felt252) -> u128 {
-    a.try_into().unwrap()
-}
-
-/// Perform euclidean division on `felt252` types.
-fn unsafe_euclidean_div_no_remainder(a: felt252, b: felt252) -> felt252 {
-    let a_u128 = unsafe_felt252_to_u128(a);
-    let b_u128 = unsafe_felt252_to_u128(b);
-    (a_u128 / b_u128).into()
-}
-
-fn unsafe_euclidean_div(a: felt252, b: felt252) -> (felt252, felt252) {
-    let a_u128 = unsafe_felt252_to_u128(a);
-    let b_u128 = unsafe_felt252_to_u128(b);
-    ((a_u128 / b_u128).into(), (a_u128 % b_u128).into())
-}
-
-// Function to count the number of digits in a number.
-/// # Arguments
-/// * `num` - The number to count the digits of.
-/// * `base` - Base in which to count the digits.
-/// # Returns
-/// * `felt252` - The number of digits in num of base
-fn count_digits_of_base(num: felt252, base: felt252) -> felt252 {
-    check_gas();
-
-    match num {
-        0 => 0,
-        _ => {
-            let quotient = unsafe_euclidean_div_no_remainder(num, base);
-            count_digits_of_base(quotient, base) + 1
-        }
-    }
-}
-
-// Raise a number to a power.
-/// * `base` - The number to raise.
-/// * `exp` - The exponent.
-/// # Returns
-/// * `felt252` - The result of base raised to the power of exp.
-fn pow(base: felt252, exp: felt252) -> felt252 {
-    check_gas();
-
-    match exp {
-        0 => 1,
-        _ => base * pow(base, exp - 1),
-    }
-}
-
-// Split an array into two arrays.
-/// * `arr` - The array to split.
-/// * `index` - The index to split the array at.
-/// # Returns
-/// * `(Array::<T>, Array::<T>)` - The two arrays.
-fn split_array<T, impl TCopy: Copy::<T>>(
-    ref arr: Array::<T>, index: usize
-) -> (Array::<T>, Array::<T>) {
-    check_gas();
-
-    let mut arr1 = ArrayTrait::new();
-    let mut arr2 = ArrayTrait::new();
-    let len = arr.len();
-
-    fill_array(ref arr1, ref arr, 0_u32, index);
-    fill_array(ref arr2, ref arr, index, len - index);
-
-    (arr1, arr2)
-}
-
-// Fill an array with a value.
-/// * `arr` - The array to fill.
-/// * `fill_arr` - The array to fill with.
-/// * `index` - The index to start filling at.
-/// * `count` - The number of elements to fill.
-/// # Returns
-/// * `Array::<T>` - The filled array.
-fn fill_array<T, impl TCopy: Copy::<T>>(
-    ref arr: Array::<T>, ref fill_arr: Array::<T>, index: usize, count: usize
-) {
-    check_gas();
-
-    if count == 0_usize {
-        return ();
-    }
-    let element = fill_arr.at(index);
-    arr.append(*element);
-
-    fill_array(ref arr, ref fill_arr, index + 1_usize, count - 1_usize)
 }
 
 // Fill an array with a value.

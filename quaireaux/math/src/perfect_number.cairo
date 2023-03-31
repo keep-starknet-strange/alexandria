@@ -5,7 +5,7 @@ use option::OptionTrait;
 use array::ArrayTrait;
 
 use utils::utils::check_gas;
-use utils::utils::unsafe_euclidean_div;
+use math::unsafe_euclidean_div;
 
 /// Algorithm to determine if a number is a perfect number
 /// # Arguments

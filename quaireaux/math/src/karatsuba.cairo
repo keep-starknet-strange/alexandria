@@ -5,6 +5,7 @@ use array::ArrayTrait;
 use option::OptionTrait;
 use traits::Into;
 // Internal imports.
+use math::pow;
 use quaireaux::utils;
 
 /// Algorithm to multiply two numbers in O(n^1.6) running time
@@ -35,7 +36,7 @@ fn multiply(x: u128, y: u128) -> u128 {
     let z1 = multiply(x1, y1);
     let z2 = multiply(x0 + x1, y0 + y1);
 
-    return z0 + (z2 - z0 - z1) * utils::pow(10, middle_idx) + z1 * utils::pow(10, 2 * middle_idx);
+    return z0 + (z2 - z0 - z1) * pow(10, middle_idx) + z1 * pow(10, 2 * middle_idx);
 }
 
 /// Helper function for 'multiply', divides an integer in half and rounds up strictly.
@@ -62,7 +63,7 @@ fn _div_half_ceil(num: u128) -> u128 {
 fn _split_number(num: u128, split_idx: u128) -> (u128, u128) {
     utils::check_gas();
 
-    let divisor = utils::pow(10, split_idx);
+    let divisor = pow(10, split_idx);
     let (q, r) = utils::unsafe_euclidean_div(num, divisor);
     (q, r)
 }
