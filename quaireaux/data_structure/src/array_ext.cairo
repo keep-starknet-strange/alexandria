@@ -1,5 +1,4 @@
 use array::ArrayTrait;
-use array::SpanTrait;
 
 use utils::check_gas;
 

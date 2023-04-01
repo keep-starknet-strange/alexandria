@@ -1,5 +1,4 @@
 use array::ArrayTrait;
-use array::SpanTrait;
 
 use data_structure::array_ext::ArrayTraitExt;
 

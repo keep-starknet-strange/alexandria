@@ -1,9 +1,4 @@
 //! # Extended Euclidean Algorithm.
-
-// Core library imports.
-use option::OptionTrait;
-use array::ArrayTrait;
-
 use utils::check_gas;
 
 use math::unsafe_euclidean_div_no_remainder;

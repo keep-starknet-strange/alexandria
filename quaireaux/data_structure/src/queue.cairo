@@ -1,6 +1,5 @@
 // Core lib imports
 use array::ArrayTrait;
-use option::OptionTrait;
 
 const ZERO_USIZE: usize = 0_usize;
 

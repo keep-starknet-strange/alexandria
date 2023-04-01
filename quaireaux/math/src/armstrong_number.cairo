@@ -1,9 +1,4 @@
 //! # Armstrong Number Algorithm.
-
-// Core library imports.
-use array::ArrayTrait;
-use option::OptionTrait;
-
 use utils::check_gas;
 
 use math::count_digits_of_base;

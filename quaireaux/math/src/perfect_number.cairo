@@ -1,7 +1,4 @@
 //! # Perfect Number.
-
-// Core library imports.
-use option::OptionTrait;
 use array::ArrayTrait;
 
 use utils::check_gas;

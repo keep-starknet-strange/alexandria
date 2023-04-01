@@ -1,8 +1,6 @@
 //! # GCD for N numbers
-
-// Core library imports.
-use option::OptionTrait;
 use array::ArrayTrait;
+use option::OptionTrait;
 
 use utils::check_gas;
 

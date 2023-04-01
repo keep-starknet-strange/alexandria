@@ -1,10 +1,9 @@
 // Core lib imports
-use array::ArrayTrait;
 use traits::Into;
-use traits::TryInto;
 use option::OptionTrait;
-use data_structure::stack::StackTrait;
+
 // Internal imports
+use data_structure::stack::StackTrait;
 
 #[test]
 #[available_gas(2000000)]

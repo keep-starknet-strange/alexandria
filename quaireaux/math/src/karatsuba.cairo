@@ -1,9 +1,6 @@
 //! # Karatsuba Multiplication.
-
-// Core library imports.
-use array::ArrayTrait;
-use option::OptionTrait;
 use traits::Into;
+
 // Internal imports.
 use math::pow;
 use quaireaux::utils;
