@@ -1,9 +1,6 @@
 //! Merge Sort
-
-// Core Library Imports
 use array::ArrayTrait;
 
-// Internal Imports
 use utils::check_gas;
 
 // Merge Sort

@@ -1,8 +1,5 @@
 //! # Collatz Sequence
-
-// Core library imports.
 use array::ArrayTrait;
-use option::OptionTrait;
 
 use utils::check_gas;
 
