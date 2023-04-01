@@ -25,12 +25,12 @@ fn extended_euclidean_algorithm(a: felt252, b: felt252) -> (felt252, felt252, fe
     let mut coeff_t = 1;
 
     // Loop until remainder is 0.
-    loop(ref old_r, ref rem, ref old_s, ref coeff_s, ref old_t, ref coeff_t);
+    loop_euclidian(ref old_r, ref rem, ref old_s, ref coeff_s, ref old_t, ref coeff_t);
     (old_r, old_s, old_t)
 }
 
 
-fn loop(
+fn loop_euclidian(
     ref old_r: felt252,
     ref rem: felt252,
     ref old_s: felt252,
@@ -52,7 +52,7 @@ fn loop(
     update_step(ref coeff_t, ref old_t, quotient);
 
     // Loop again.
-    loop(ref old_r, ref rem, ref old_s, ref coeff_s, ref old_t, ref coeff_t);
+    loop_euclidian(ref old_r, ref rem, ref old_s, ref coeff_s, ref old_t, ref coeff_t);
 }
 
 /// Update the step of the extended Euclidean algorithm.
