@@ -1,4 +1,4 @@
-use utils::utils::check_gas;
+use utils::check_gas;
 
 // Calculate fibonnaci
 // # Arguments

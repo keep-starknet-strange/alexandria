@@ -1,10 +1,12 @@
 //! # Collatz Sequence
 
 // Core library imports.
-use option::OptionTrait;
 use array::ArrayTrait;
+use option::OptionTrait;
+
+use utils::check_gas;
+
 use math::unsafe_euclidean_div;
-use utils::utils::check_gas;
 
 /// Generates the Collatz sequence for a given number.
 /// # Arguments

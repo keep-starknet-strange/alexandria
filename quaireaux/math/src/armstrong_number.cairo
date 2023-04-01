@@ -3,10 +3,12 @@
 // Core library imports.
 use array::ArrayTrait;
 use option::OptionTrait;
+
+use utils::check_gas;
+
 use math::count_digits_of_base;
 use math::pow;
 use math::unsafe_euclidean_div;
-use utils::utils::check_gas;
 
 /// Armstrong Number Algorithm.
 /// # Arguments

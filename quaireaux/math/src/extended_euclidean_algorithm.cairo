@@ -4,7 +4,8 @@
 use option::OptionTrait;
 use array::ArrayTrait;
 
-use utils::utils::check_gas;
+use utils::check_gas;
+
 use math::unsafe_euclidean_div_no_remainder;
 
 /// Extended Euclidean Algorithm.
