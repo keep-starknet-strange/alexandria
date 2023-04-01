@@ -3,9 +3,11 @@
 // Core library imports.
 use option::OptionTrait;
 use array::ArrayTrait;
+
+use utils::check_gas;
+
 use math::unsafe_euclidean_div;
 use math::unsafe_euclidean_div_no_remainder;
-use utils::utils::check_gas;
 
 /// Calculates the aliquot sum of a given number.
 /// # Arguments

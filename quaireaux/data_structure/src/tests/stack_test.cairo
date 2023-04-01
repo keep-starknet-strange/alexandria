@@ -3,7 +3,7 @@ use array::ArrayTrait;
 use traits::Into;
 use traits::TryInto;
 use option::OptionTrait;
-use data_structures::stack::StackTrait;
+use data_structure::stack::StackTrait;
 // Internal imports
 
 #[test]

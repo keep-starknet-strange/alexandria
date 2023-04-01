@@ -1,9 +1,8 @@
 // Core library imports.
-use option::OptionTrait;
 use array::ArrayTrait;
 use traits::Into;
 
-use utils::array_slice;
+use data_structure::array_slice;
 
 #[test]
 #[available_gas(2000000)]

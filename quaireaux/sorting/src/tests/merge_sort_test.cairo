@@ -1,6 +1,7 @@
-use sorting::merge_sort::merge;
-use utils::utils::is_equal;
 use array::ArrayTrait;
+
+use sorting::is_equal;
+use sorting::merge_sort::merge;
 
 #[test]
 #[available_gas(2000000000)]

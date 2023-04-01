@@ -1,7 +1,7 @@
 use array::ArrayTrait;
 use array::SpanTrait;
 
-use data_structures::array_ext::ArrayTraitExt;
+use data_structure::array_ext::ArrayTraitExt;
 
 // append_all
 

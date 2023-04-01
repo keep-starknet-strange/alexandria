@@ -2,7 +2,8 @@
 
 use array::ArrayTrait;
 use option::OptionTrait;
-use utils::utils::check_gas;
+
+use utils::check_gas;
 
 
 // Bubble sort 

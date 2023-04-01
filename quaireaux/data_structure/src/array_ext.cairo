@@ -1,6 +1,7 @@
 use array::ArrayTrait;
 use array::SpanTrait;
-use utils::utils::check_gas;
+
+use utils::check_gas;
 
 trait ArrayTraitExt<T> {
     fn append_all(ref self: Array::<T>, ref arr: Array::<T>);

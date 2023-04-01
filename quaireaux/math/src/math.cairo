@@ -2,7 +2,7 @@ use option::OptionTrait;
 use traits::Into;
 use traits::TryInto;
 
-use utils::utils::check_gas;
+use utils::check_gas;
 
 // Raise a number to a power.
 /// * `base` - The number to raise.

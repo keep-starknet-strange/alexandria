@@ -4,7 +4,7 @@
 use array::ArrayTrait;
 
 // Internal Imports
-use utils::utils::check_gas;
+use utils::check_gas;
 
 // Merge Sort
 /// # Arguments
