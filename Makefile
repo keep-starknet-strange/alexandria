@@ -31,9 +31,9 @@ test:
 	@echo "Testing everything..."
 	cairo-test -p $(TEST_ENTRYPOINT)
 
-test-data_structure:
+test-data_structures:
 	@echo "Testing data structures..."
-	cairo-test -p $(TEST_ENTRYPOINT)/quaireaux/data_structure
+	cairo-test -p $(TEST_ENTRYPOINT)/quaireaux/data_structures
 
 test-math:
 	@echo "Testing math"

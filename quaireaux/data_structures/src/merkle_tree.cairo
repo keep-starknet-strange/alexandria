@@ -2,7 +2,7 @@
 //!
 //! # Example
 //! ```
-//! use quaireaux::data_structure::merkle_tree::MerkleTreeTrait;
+//! use quaireaux::data_structures::merkle_tree::MerkleTreeTrait;
 //!
 //! // Create a new merkle tree instance.
 //! let mut merkle_tree = MerkleTreeTrait::new();

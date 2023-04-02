@@ -3,7 +3,7 @@ use traits::Into;
 use option::OptionTrait;
 
 // Internal imports
-use data_structure::stack::StackTrait;
+use data_structures::stack::StackTrait;
 
 #[test]
 #[available_gas(2000000)]
