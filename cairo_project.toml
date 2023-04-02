@@ -1,5 +1,5 @@
 [crate_roots]
-data_structure = "quaireaux/data_structure/src"
+data_structures = "quaireaux/data_structures/src"
 math = "quaireaux/math/src"
 sorting = "quaireaux/sorting/src"
 utils = "quaireaux/utils/src"

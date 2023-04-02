@@ -2,7 +2,7 @@
 //!
 //! # Example
 //! ```
-//! use quaireaux::data_structure::stack::StackTrait;
+//! use quaireaux::data_structures::stack::StackTrait;
 //!
 //! // Create a new stack instance.
 //! let mut stack = StackTrait::new();
@@ -16,7 +16,7 @@
 // Core lib imports
 use array::ArrayTrait;
 use option::OptionTrait;
-use data_structure::array_slice;
+use data_structures::array_slice;
 
 const ZERO_USIZE: usize = 0_usize;
 

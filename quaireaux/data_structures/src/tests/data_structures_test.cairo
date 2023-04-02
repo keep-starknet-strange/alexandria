@@ -2,7 +2,7 @@
 use array::ArrayTrait;
 use traits::Into;
 
-use data_structure::array_slice;
+use data_structures::array_slice;
 
 #[test]
 #[available_gas(2000000)]

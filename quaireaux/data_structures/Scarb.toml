@@ -1,5 +1,5 @@
 [package]
-name = "utils"
+name = "data_structures"
 version = "0.1.0"
-description = "Utils library used by other Quaireaux crates"
+description = "A set of data structures Cairo 1.0 libraries and algorithms"
 homepage = "https://github.com/keep-starknet-strange/quaireaux/tree/main/data_structures"

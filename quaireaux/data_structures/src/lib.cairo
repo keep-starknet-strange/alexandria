@@ -1,5 +1,5 @@
-mod data_structure;
-use data_structure::array_slice;
+mod data_structures;
+use data_structures::array_slice;
 
 mod array_ext;
 // mod merkle_tree; // Broken atm
