@@ -1,3 +1,4 @@
+# This crate is for tests purposes to avoid having tests running twice if we would be running them crate by crate.
 [crate_roots]
 quaireaux_data_structures = "quaireaux/data_structures/src"
 quaireaux_math = "quaireaux/math/src"
