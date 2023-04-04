@@ -1,6 +1,6 @@
 use array::ArrayTrait;
 
-use data_structures::array_ext::ArrayTraitExt;
+use quaireaux_data_structures::array_ext::ArrayTraitExt;
 
 // append_all
 

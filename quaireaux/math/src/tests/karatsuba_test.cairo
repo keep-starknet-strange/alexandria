@@ -1,4 +1,4 @@
-use math::karatsuba;
+use quaireaux_math::karatsuba;
 
 #[test]
 #[available_gas(10000000)]

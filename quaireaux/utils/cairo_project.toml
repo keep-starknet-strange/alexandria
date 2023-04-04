@@ -1,2 +1,2 @@
 [crate_roots]
-utils = "src"
+quaireaux_utils = "src"

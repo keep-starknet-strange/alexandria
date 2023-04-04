@@ -1,7 +1,7 @@
 use array::ArrayTrait;
 
-use sorting::is_equal;
-use sorting::bubble_sort;
+use quaireaux_sorting::is_equal;
+use quaireaux_sorting::bubble_sort;
 
 #[test]
 #[available_gas(20000000000000)]

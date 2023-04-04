@@ -1,4 +1,4 @@
-use math::fast_power;
+use quaireaux_math::fast_power;
 
 #[test]
 #[available_gas(1000000000)]

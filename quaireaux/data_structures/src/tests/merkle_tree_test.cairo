@@ -2,9 +2,9 @@
 use array::ArrayTrait;
 use hash::LegacyHash;
 // Internal imports
-use data_structures::merkle_tree::MerkleTree;
-use data_structures::merkle_tree::MerkleTreeTrait;
-use data_structures::merkle_tree::internal_compute_root;
+use quaireaux_data_structures::merkle_tree::MerkleTree;
+use quaireaux_data_structures::merkle_tree::MerkleTreeTrait;
+use quaireaux_data_structures::merkle_tree::internal_compute_root;
 
 #[test]
 #[available_gas(2000000)]

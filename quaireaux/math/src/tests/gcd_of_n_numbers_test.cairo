@@ -1,5 +1,5 @@
 use array::ArrayTrait;
-use math::gcd_of_n_numbers;
+use quaireaux_math::gcd_of_n_numbers;
 
 #[test]
 #[available_gas(1000000000)]

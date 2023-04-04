@@ -1,6 +1,6 @@
 use array::ArrayTrait;
 
-use utils::check_gas;
+use quaireaux_utils::check_gas;
 
 // Check if two arrays are equal.
 /// * `a` - The first array.

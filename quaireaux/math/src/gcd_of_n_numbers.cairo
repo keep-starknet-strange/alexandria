@@ -2,9 +2,9 @@
 use array::ArrayTrait;
 use option::OptionTrait;
 
-use utils::check_gas;
+use quaireaux_utils::check_gas;
 
-use math::unsafe_euclidean_div;
+use quaireaux_math::unsafe_euclidean_div;
 
 // Calculate the greatest common dividor for n numbers
 // # Arguments

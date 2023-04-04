@@ -1,4 +1,4 @@
-use math::aliquot_sum;
+use quaireaux_math::aliquot_sum;
 
 #[test]
 #[available_gas(200000)]

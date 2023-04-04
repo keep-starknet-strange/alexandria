@@ -1,6 +1,6 @@
 use array::ArrayTrait;
 
-use utils::check_gas;
+use quaireaux_utils::check_gas;
 
 // Fill an array with a value.
 /// * `dst` - The array to fill.

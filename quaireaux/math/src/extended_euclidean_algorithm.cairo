@@ -1,7 +1,7 @@
 //! # Extended Euclidean Algorithm.
-use utils::check_gas;
+use quaireaux_utils::check_gas;
 
-use math::unsafe_euclidean_div_no_remainder;
+use quaireaux_math::unsafe_euclidean_div_no_remainder;
 
 /// Extended Euclidean Algorithm.
 /// # Arguments

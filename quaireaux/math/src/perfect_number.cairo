@@ -1,9 +1,9 @@
 //! # Perfect Number.
 use array::ArrayTrait;
 
-use utils::check_gas;
+use quaireaux_utils::check_gas;
 
-use math::unsafe_euclidean_div;
+use quaireaux_math::unsafe_euclidean_div;
 
 /// Algorithm to determine if a number is a perfect number
 /// # Arguments
