@@ -1,4 +1,4 @@
-use math::armstrong_number;
+use quaireaux_math::armstrong_number;
 
 #[test]
 #[available_gas(200000)]

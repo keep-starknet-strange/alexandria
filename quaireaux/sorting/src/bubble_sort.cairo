@@ -1,8 +1,7 @@
 //! Bubble sort algorithm
 use array::ArrayTrait;
 
-use utils::check_gas;
-
+use quaireaux_utils::check_gas;
 
 // Bubble sort 
 /// # Arguments

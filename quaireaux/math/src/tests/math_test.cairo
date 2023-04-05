@@ -1,5 +1,5 @@
-use math::pow;
-use math::count_digits_of_base;
+use quaireaux_math::pow;
+use quaireaux_math::count_digits_of_base;
 
 // Test for power function
 #[test]

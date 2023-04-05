@@ -1,4 +1,4 @@
-use math::zellers_congruence;
+use quaireaux_math::zellers_congruence;
 use option::OptionTrait;
 
 

@@ -1,9 +1,9 @@
 //! # Armstrong Number Algorithm.
-use utils::check_gas;
+use quaireaux_utils::check_gas;
 
-use math::count_digits_of_base;
-use math::pow;
-use math::unsafe_euclidean_div;
+use quaireaux_math::count_digits_of_base;
+use quaireaux_math::pow;
+use quaireaux_math::unsafe_euclidean_div;
 
 /// Armstrong Number Algorithm.
 /// # Arguments

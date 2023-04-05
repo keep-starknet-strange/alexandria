@@ -1,7 +1,7 @@
 //! Merge Sort
 use array::ArrayTrait;
 
-use utils::check_gas;
+use quaireaux_utils::check_gas;
 
 // Merge Sort
 /// # Arguments

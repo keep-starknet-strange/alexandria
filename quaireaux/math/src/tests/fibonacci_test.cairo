@@ -1,4 +1,4 @@
-use math::fibonacci;
+use quaireaux_math::fibonacci;
 
 #[test]
 #[available_gas(200000)]

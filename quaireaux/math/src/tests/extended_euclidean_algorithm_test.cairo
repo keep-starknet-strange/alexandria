@@ -1,4 +1,4 @@
-use math::extended_euclidean_algorithm::extended_euclidean_algorithm;
+use quaireaux_math::extended_euclidean_algorithm::extended_euclidean_algorithm;
 
 // Define a test case function to avoid code duplication.
 fn test_case(a: felt252, b: felt252, expected: (felt252, felt252, felt252)) {

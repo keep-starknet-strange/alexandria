@@ -1,8 +1,8 @@
 //! # Aliquot Sum
-use utils::check_gas;
+use quaireaux_utils::check_gas;
 
-use math::unsafe_euclidean_div;
-use math::unsafe_euclidean_div_no_remainder;
+use quaireaux_math::unsafe_euclidean_div;
+use quaireaux_math::unsafe_euclidean_div_no_remainder;
 
 /// Calculates the aliquot sum of a given number.
 /// # Arguments

@@ -2,8 +2,8 @@ use array::ArrayTrait;
 use box::BoxTrait;
 use option::OptionTrait;
 
-use data_structures::queue::Queue;
-use data_structures::queue::QueueTrait;
+use quaireaux_data_structures::queue::Queue;
+use quaireaux_data_structures::queue::QueueTrait;
 
 #[test]
 #[available_gas(2000000)]

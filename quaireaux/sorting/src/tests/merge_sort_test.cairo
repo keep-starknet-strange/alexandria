@@ -1,7 +1,7 @@
 use array::ArrayTrait;
 
-use sorting::is_equal;
-use sorting::merge_sort::merge;
+use quaireaux_sorting::is_equal;
+use quaireaux_sorting::merge_sort::merge;
 
 #[test]
 #[available_gas(2000000000)]

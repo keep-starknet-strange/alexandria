@@ -2,7 +2,7 @@
 use traits::Into;
 
 // Internal imports.
-use math::pow;
+use quaireaux_math::pow;
 use quaireaux::utils;
 
 /// Algorithm to multiply two numbers in O(n^1.6) running time
@@ -12,7 +12,7 @@ use quaireaux::utils;
 /// # Returns
 /// * `u128` - The product between x and y
 fn multiply(x: u128, y: u128) -> u128 {
-    utils::check_gas();
+    quaireaux_utils::check_gas();
 
     if x < 10_u128 {
         return x * y;
@@ -23,7 +23,7 @@ fn multiply(x: u128, y: u128) -> u128 {
     }
 
     let max_digit_counts = max(
-        utils::count_digits_of_base(x.into(), 10), utils::count_digits_of_base(y, 10)
+        quaireaux_utils::count_digits_of_base(x.into(), 10), quaireaux_utils::count_digits_of_base(y, 10)
     );
     let middle_idx = _div_half_ceil(max_digit_counts);
     let (x1, x0) = _split_number(x, middle_idx);
@@ -42,11 +42,11 @@ fn multiply(x: u128, y: u128) -> u128 {
 /// # Returns
 /// * `u128` - Half (rounded up) of num.
 fn _div_half_ceil(num: u128) -> u128 {
-    utils::check_gas();
+    quaireaux_utils::check_gas();
 
-    let (q, r) = utils::unsafe_euclidean_div(num, 2);
+    let (q, r) = quaireaux_utils::unsafe_euclidean_div(num, 2);
     if r != 0 {
-        let (q, _) = utils::unsafe_euclidean_div((num + 1), 2);
+        let (q, _) = quaireaux_utils::unsafe_euclidean_div((num + 1), 2);
     }
     return q;
 }
@@ -58,10 +58,10 @@ fn _div_half_ceil(num: u128) -> u128 {
 /// # Returns
 /// * `(u128, u128)` -tuple representing the split number.
 fn _split_number(num: u128, split_idx: u128) -> (u128, u128) {
-    utils::check_gas();
+    quaireaux_utils::check_gas();
 
     let divisor = pow(10, split_idx);
-    let (q, r) = utils::unsafe_euclidean_div(num, divisor);
+    let (q, r) = quaireaux_utils::unsafe_euclidean_div(num, divisor);
     (q, r)
 }
 

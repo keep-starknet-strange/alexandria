@@ -1,3 +1,3 @@
 [crate_roots]
-data_structures = "src"
-utils = "../utils/src"
+quaireaux_data_structures = "src"
+quaireaux_utils = "../utils/src"

@@ -2,7 +2,7 @@
 use option::OptionTrait;
 use array::ArrayTrait;
 
-use math::collatz_sequence;
+use quaireaux_math::collatz_sequence;
 
 #[test]
 #[available_gas(2000000)]

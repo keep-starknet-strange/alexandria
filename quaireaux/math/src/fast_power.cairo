@@ -1,9 +1,9 @@
 //! # Fast power algorithm
 use array::ArrayTrait;
 
-use utils::check_gas;
+use quaireaux_utils::check_gas;
 
-use math::unsafe_euclidean_div;
+use quaireaux_math::unsafe_euclidean_div;
 
 // Calculate the (base^power)mod modulus using the fast powering algorithm
 // # Arguments

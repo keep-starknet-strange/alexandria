@@ -1,9 +1,9 @@
 //! # Collatz Sequence
 use array::ArrayTrait;
 
-use utils::check_gas;
+use quaireaux_utils::check_gas;
 
-use math::unsafe_euclidean_div;
+use quaireaux_math::unsafe_euclidean_div;
 
 /// Generates the Collatz sequence for a given number.
 /// # Arguments

@@ -2,7 +2,7 @@
 //!
 //! # Example
 //! ```
-//! use quaireaux::data_structures::merkle_tree::MerkleTreeTrait;
+//! use quaireaux_data_structures::merkle_tree::MerkleTreeTrait;
 //!
 //! // Create a new merkle tree instance.
 //! let mut merkle_tree = MerkleTreeTrait::new();
@@ -84,7 +84,7 @@ fn internal_compute_root(
     // Check if out of gas.
     // Note: we need to call `check_gas()` because we need to call `LegacyHash::hash`
     // which uses `Pedersen` builtin.
-    utils::check_gas();
+    quaireaux_utils::check_gas();
 
     // Loop until we have reached the end of the proof.
     if proof_len == 0_u32 {

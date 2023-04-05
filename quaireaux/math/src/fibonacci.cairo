@@ -1,4 +1,4 @@
-use utils::check_gas;
+use quaireaux_utils::check_gas;
 
 // Calculate fibonnaci
 // # Arguments

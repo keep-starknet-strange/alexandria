@@ -1,6 +1,6 @@
-use math::signed_integers;
-use math::signed_integers::i9;
-use math::signed_integers::i9_div_rem;
+use quaireaux_math::signed_integers;
+use quaireaux_math::signed_integers::i9;
+use quaireaux_math::signed_integers::i9_div_rem;
 
 
 #[test]
@@ -316,8 +316,8 @@ fn i9_test_check_sign_zero() {
 
 // ====================== INT 17 ======================
 
-use math::signed_integers::i17;
-use math::signed_integers::i17_div_rem;
+use quaireaux_math::signed_integers::i17;
+use quaireaux_math::signed_integers::i17_div_rem;
 
 #[test]
 fn i17_test_add() {
@@ -631,8 +631,8 @@ fn i17_test_check_sign_zero() {
 
 // ====================== INT 33 ======================
 
-use math::signed_integers::i33;
-use math::signed_integers::i33_div_rem;
+use quaireaux_math::signed_integers::i33;
+use quaireaux_math::signed_integers::i33_div_rem;
 
 #[test]
 fn i33_test_add() {
@@ -946,8 +946,8 @@ fn i33_test_check_sign_zero() {
 
 // ====================== INT 65 ======================
 
-use math::signed_integers::i65;
-use math::signed_integers::i65_div_rem;
+use quaireaux_math::signed_integers::i65;
+use quaireaux_math::signed_integers::i65_div_rem;
 
 #[test]
 fn i65_test_add() {
@@ -1262,8 +1262,8 @@ fn i65_test_check_sign_zero() {
 
 // ====================== INT 129 ======================
 
-use math::signed_integers::i129;
-use math::signed_integers::i129_div_rem;
+use quaireaux_math::signed_integers::i129;
+use quaireaux_math::signed_integers::i129_div_rem;
 
 #[test]
 fn i129_test_add() {
