@@ -3,7 +3,6 @@ use array::ArrayTrait;
 
 use quaireaux_utils::check_gas;
 
-
 // Bubble sort 
 /// # Arguments
 /// * `array` - Array to sort

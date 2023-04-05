@@ -16,6 +16,7 @@
 // Core lib imports
 use array::ArrayTrait;
 use option::OptionTrait;
+
 use quaireaux_data_structures::array_slice;
 
 const ZERO_USIZE: usize = 0_usize;
