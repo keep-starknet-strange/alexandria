@@ -30,12 +30,12 @@ fn _sequence(number: felt252, mut arr: Array::<felt252>) -> Array::<felt252> {
     arr.append(number);
     if number == 1 {
         return arr;
+    }
+
+    let (q, r) = unsafe_euclidean_div(number, 2);
+    if r == 0 {
+        _sequence(q, arr)
     } else {
-        let (q, r) = unsafe_euclidean_div(number, 2);
-        if r == 0 {
-            _sequence(q, arr)
-        } else {
-            _sequence(3 * number + 1, arr)
-        }
+        _sequence(3 * number + 1, arr)
     }
 }

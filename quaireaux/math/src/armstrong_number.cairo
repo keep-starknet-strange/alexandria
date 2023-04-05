@@ -25,10 +25,10 @@ fn _is_armstrong_number(num: felt252, original_num: felt252, digits: felt252) ->
     check_gas();
 
     if num == 0 {
-        return original_num == 0;
+        original_num == 0
     } else {
         let (new_num, lastDigit) = unsafe_euclidean_div(num, 10);
         let sum = pow(lastDigit, digits);
-        return _is_armstrong_number(new_num, original_num - sum, digits);
+        _is_armstrong_number(new_num, original_num - sum, digits)
     }
 }

@@ -26,13 +26,12 @@ fn pow(base: felt252, exp: felt252) -> felt252 {
 /// * `felt252` - The number of digits in num of base
 fn count_digits_of_base(num: felt252, base: felt252) -> felt252 {
     check_gas();
-
-    match num {
-        0 => 0,
-        _ => {
-            let quotient = unsafe_euclidean_div_no_remainder(num, base);
-            count_digits_of_base(quotient, base) + 1
-        }
+    
+    if num == 0 {
+        num
+    } else {
+        let quotient = unsafe_euclidean_div_no_remainder(num, base);
+        count_digits_of_base(quotient, base) + 1
     }
 }
 
