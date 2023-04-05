@@ -5,4 +5,4 @@ description = "A set of sorting algorithm Cairo 1.0"
 homepage = "https://github.com/keep-starknet-strange/quaireaux/tree/main/data_structures"
 
 [dependency]
-quaireaux_utils = "../utils/"
+quaireaux_utils = { path = "../utils/" }
