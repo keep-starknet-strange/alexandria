@@ -33,20 +33,17 @@ fn fast_power(base: felt252, power: felt252, modulus: felt252) -> felt252 {
 fn _fast_power(base: felt252, power: felt252, modulus: felt252, result: felt252) -> felt252 {
     check_gas();
 
-    match power {
-        0 => result,
-        _ => {
-            let (q, r) = unsafe_euclidean_div(power, 2);
-            let (_, b) = unsafe_euclidean_div(base * base, modulus);
-            match r {
-                0 => {
-                    _fast_power(b, q, modulus, result)
-                },
-                _ => {
-                    let (_, r) = unsafe_euclidean_div(result * base, modulus);
-                    _fast_power(b, q, modulus, r)
-                }
-            }
-        }
+    if power == 0 {
+        return result;
+    }
+    
+    let (q, r) = unsafe_euclidean_div(power, 2);
+    let (_, b) = unsafe_euclidean_div(base * base, modulus);
+
+    if r == 0 {
+        _fast_power(b, q, modulus, result)
+    } else {
+        let (_, r) = unsafe_euclidean_div(result * base, modulus);
+        _fast_power(b, q, modulus, r)
     }
 }

@@ -10,7 +10,10 @@ use quaireaux_math::unsafe_euclidean_div_no_remainder;
 /// # Returns
 /// * `felt252` - The aliquot sum of the input number.
 fn aliquot_sum(number: felt252) -> felt252 {
-    if number == 1 | number == 0 {
+    if number == 0 {
+        return 0;
+    }
+    if number == 1 {
         return 0;
     }
 
@@ -32,10 +35,11 @@ fn _aliquot_sum(number: felt252, limit: felt252, index: felt252, sum: felt252) -
     if index == limit {
         return 0;
     }
+    
     let (_, r) = unsafe_euclidean_div(number, index);
     if r == 0 {
-        return index + _aliquot_sum(number, limit, index + 1, sum);
+        index + _aliquot_sum(number, limit, index + 1, sum)
     } else {
-        return _aliquot_sum(number, limit, index + 1, sum);
+        _aliquot_sum(number, limit, index + 1, sum)
     }
 }
