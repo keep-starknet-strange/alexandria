@@ -11,36 +11,29 @@ use quaireaux_math::unsafe_euclidean_div;
 /// # Returns
 /// * `bool` - True if num is a perfect number, false otherwise.
 fn is_perfect_number(num: felt252) -> bool {
-    _is_perfect_number(num, 1, 0)
-}
+    let mut index = 1;
+    let mut sum = 0;
+    loop {
+        check_gas();
+        if num == 0 {
+            break false;
+        }
 
-/// Recursive helper function for is_perfect_number.
-/// # Arguments
-/// * `num` - The number to be evaluated as a perfect number.
-/// * `index` - The index value being evaluated in the recursive loop.
-/// * `sum` - The running sum of the divisors of num.
-/// # Returns
-/// * `bool` - A boolean value indicating whether num is a perfect number.
-fn _is_perfect_number(num: felt252, index: felt252, sum: felt252) -> bool {
-    check_gas();
+        if num == 1 {
+            break false;
+        }
 
-    if num == 0 {
-        return false;
-    }
+        if index == num - 1 {
+            break num == sum;
+        }
 
-    if num == 1 {
-        return false;
-    }
-
-    if index == num - 1 {
-        return num == sum;
-    }
-
-    let (_, r) = unsafe_euclidean_div(num, index);
-    if r == 0 {
-        _is_perfect_number(num, index + 1, sum + index)
-    } else {
-        _is_perfect_number(num, index + 1, sum)
+        let (_, r) = unsafe_euclidean_div(num, index);
+        if r == 0 {
+            sum = sum + index;
+            index = index + 1;
+        } else {
+            index = index + 1;
+        };
     }
 }
 
@@ -49,34 +42,20 @@ fn _is_perfect_number(num: felt252, index: felt252, sum: felt252) -> bool {
 /// * `max` - The maximum value to check for perfect numbers.
 /// # Returns
 /// * `Array` - An array of perfect numbers up to the max value.
-fn perfect_numbers(ref max: felt252) -> Array<felt252> {
+fn perfect_numbers(max: felt252) -> Array<felt252> {
     let mut res = ArrayTrait::new();
     let mut index = 1;
-    _perfect_numbers(ref max, ref index, ref res);
+
+    loop {
+        check_gas();
+
+        if index == max {
+            break ();
+        }
+        if is_perfect_number(index) {
+            res.append(index);
+        }
+        index = index + 1;
+    };
     res
-}
-
-/// Recursive helper function for perfect_numbers.
-/// # Arguments
-/// * `max - The maximum value to check for perfect numbers.
-/// * `index` - The index value being evaluated in the recursive loop.
-/// * `arr` - An array to store the perfect numbers that have been found.
-/// # Returns
-/// * `None` - This function does not return a value, it updates the arr argument in place.
-fn _perfect_numbers(ref max: felt252, ref index: felt252, ref arr: Array<felt252>) {
-    check_gas();
-
-    if index == max {
-        return ();
-    }
-    if is_perfect_number(index) {
-        arr.append(index);
-    }
-    update_step(ref index);
-    _perfect_numbers(ref max, ref index, ref arr);
-}
-
-/// Update the step of the function _perfect_numbers.
-fn update_step(ref index: felt252) {
-    index = index + 1;
 }
