@@ -26,7 +26,7 @@ fn pow(base: felt252, exp: felt252) -> felt252 {
 /// * `felt252` - The number of digits in num of base
 fn count_digits_of_base(num: felt252, base: felt252) -> felt252 {
     check_gas();
-    
+
     if num == 0 {
         num
     } else {

@@ -36,7 +36,7 @@ fn _fast_power(base: felt252, power: felt252, modulus: felt252, result: felt252)
     if power == 0 {
         return result;
     }
-    
+
     let (q, r) = unsafe_euclidean_div(power, 2);
     let (_, b) = unsafe_euclidean_div(base * base, modulus);
 

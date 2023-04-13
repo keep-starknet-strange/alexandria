@@ -16,7 +16,7 @@ trait QueueTrait<T> {
     fn is_empty(self: @Queue::<T>) -> bool;
 }
 
-impl QueueImpl<T> of QueueTrait::<T> {
+impl QueueImpl<T> of QueueTrait<T> {
     #[inline(always)]
     fn new() -> Queue::<T> {
         queue_new()
@@ -53,4 +53,4 @@ fn queue_new<T>() -> Queue::<T> {
     Queue::<T> { elements: arr }
 }
 
-impl Queuefelt252Drop of Drop::<Queue::<felt252>>;
+impl Queuefelt252Drop of Drop<Queue<felt252>>;

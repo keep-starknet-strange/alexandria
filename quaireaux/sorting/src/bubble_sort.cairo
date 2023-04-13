@@ -9,9 +9,9 @@ use quaireaux_utils::check_gas;
 /// # Returns
 /// * `Array::<usize>` - Sorted array
 fn bubble_sort_elements<T,
-impl TCopy: Copy::<T>,
-impl TDrop: Drop::<T>,
-impl TPartialOrd: PartialOrd::<T>>(
+impl TCopy: Copy<T>,
+impl TDrop: Drop<T>,
+impl TPartialOrd: PartialOrd<T>>(
     mut array: Array::<T>
 ) -> Array::<T> {
     if array.len() <= 1_usize {
@@ -29,10 +29,7 @@ impl TPartialOrd: PartialOrd::<T>>(
 /// * `sorted_iteration` - defines if a sort operation occured 
 /// # Returns
 /// * `Array::<usize>` - Final sorted array
-fn bubble_sort_rec<T,
-impl TPartialOrd: PartialOrd::<T>,
-impl TDrop: Drop::<T>,
-impl TCopy: Copy::<T>>(
+fn bubble_sort_rec<T, impl TPartialOrd: PartialOrd<T>, impl TDrop: Drop<T>, impl TCopy: Copy<T>>(
     mut array: Array::<T>,
     mut sorted_array: Array::<T>,
     idx1: usize,

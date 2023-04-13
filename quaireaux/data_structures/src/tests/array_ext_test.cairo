@@ -184,7 +184,7 @@ fn index_of_different_type() {
 
 #[test]
 #[available_gas(2000000)]
-#[should_panic(expected = ('Item not in array', ))]
+#[should_panic(expected: ('Item not in array', ))]
 fn index_of_panic() {
     let mut arr = get_felt252_array();
     arr.index_of(12);
@@ -192,7 +192,7 @@ fn index_of_panic() {
 
 #[test]
 #[available_gas(2000000)]
-#[should_panic(expected = ('Item not in array', ))]
+#[should_panic(expected: ('Item not in array', ))]
 fn index_of_empty_array() {
     let mut arr = ArrayTrait::new();
     arr.index_of(21);
@@ -289,7 +289,7 @@ fn min_with_duplicate() {
 
 #[test]
 #[available_gas(2000000)]
-#[should_panic(expected = ('Empty array', ))]
+#[should_panic(expected: ('Empty array', ))]
 fn min_empty_array() {
     let mut arr: Array<u128> = ArrayTrait::new();
     arr.min();
@@ -345,7 +345,7 @@ fn index_of_min_with_duplicate() {
 
 #[test]
 #[available_gas(2000000)]
-#[should_panic(expected = ('Empty array', ))]
+#[should_panic(expected: ('Empty array', ))]
 fn index_of_min_empty_array() {
     let mut arr: Array<u128> = ArrayTrait::new();
     arr.index_of_min();
@@ -401,7 +401,7 @@ fn max_with_duplicate() {
 
 #[test]
 #[available_gas(2000000)]
-#[should_panic(expected = ('Empty array', ))]
+#[should_panic(expected: ('Empty array', ))]
 fn max_empty_array() {
     let mut arr: Array<u128> = ArrayTrait::new();
     arr.max();
@@ -457,7 +457,7 @@ fn index_of_max_with_duplicate() {
 
 #[test]
 #[available_gas(2000000)]
-#[should_panic(expected = ('Empty array', ))]
+#[should_panic(expected: ('Empty array', ))]
 fn index_of_max_empty_array() {
     let mut arr: Array<u128> = ArrayTrait::new();
     arr.index_of_max();
