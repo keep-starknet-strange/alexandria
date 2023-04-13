@@ -15,9 +15,7 @@ use quaireaux_math::unsafe_euclidean_div;
 fn fast_power(base: felt252, power: felt252, modulus: felt252) -> felt252 {
     // Return invalid input error
     if base == 0 {
-        let mut data = ArrayTrait::new();
-        data.append('II');
-        panic(data);
+        panic_with_felt252('II')
     }
     _fast_power(base, power, modulus, 1)
 }

@@ -62,9 +62,7 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         ref self: Array<T>
     ) -> T {
         if self.len() == 0_usize {
-            let mut data = ArrayTrait::new();
-            data.append('Empty array');
-            panic(data)
+            panic_with_felt252('Empty array')
         }
         min_loop(ref self, *self.at(0_usize), 1_usize)
     }
@@ -74,9 +72,7 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         ref self: Array<T>
     ) -> usize {
         if self.len() == 0_usize {
-            let mut data = ArrayTrait::new();
-            data.append('Empty array');
-            panic(data)
+            panic_with_felt252('Empty array')
         }
         index_of_min_loop(ref self, *self.at(0_usize), 0_usize, 1_usize)
     }
@@ -86,9 +82,7 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         ref self: Array<T>
     ) -> T {
         if self.len() == 0_usize {
-            let mut data = ArrayTrait::new();
-            data.append('Empty array');
-            panic(data)
+            panic_with_felt252('Empty array')
         }
         max_loop(ref self, *self.at(0_usize), 1_usize)
     }
@@ -98,9 +92,7 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         ref self: Array<T>
     ) -> usize {
         if self.len() == 0_usize {
-            let mut data = ArrayTrait::new();
-            data.append('Empty array');
-            panic(data)
+            panic_with_felt252('Empty array')
         }
         index_of_max_loop(ref self, *self.at(0_usize), 0_usize, 1_usize)
     }
@@ -138,9 +130,7 @@ fn index_of_loop<T, impl TDrop: Drop<T>, impl TPartialEq: PartialEq<T>, impl TCo
     check_gas();
 
     if index >= arr.len() {
-        let mut data = ArrayTrait::new();
-        data.append('Item not in array');
-        panic(data)
+        panic_with_felt252('Item not in array')
     } else if *arr.at(
         index
     ) == item {

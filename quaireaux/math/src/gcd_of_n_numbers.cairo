@@ -14,9 +14,7 @@ use quaireaux_math::unsafe_euclidean_div;
 fn gcd(ref n: Array<felt252>) -> felt252 {
     // Return empty input error
     if n.len() == 0_usize {
-        let mut data = ArrayTrait::new();
-        data.append('EI');
-        panic(data);
+        panic_with_felt252('EI')
     }
     _gcd(ref n)
 }
