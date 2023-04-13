@@ -10,12 +10,27 @@ use quaireaux_math::unsafe_euclidean_div;
 /// * `number` - The number to generate the Collatz sequence for.
 /// # Returns
 /// * `Array` - The Collatz sequence as an array of `felt252` numbers.
-fn sequence(number: felt252) -> Array<felt252> {
+fn sequence(mut number: felt252) -> Array<felt252> {
     let mut arr = ArrayTrait::new();
     if number == 0 {
         return arr;
     }
-    _sequence(number, arr)
+    loop {
+        check_gas();
+
+        arr.append(number);
+        if number == 1 {
+            break arr;
+        }
+
+        let (q, r) = unsafe_euclidean_div(number, 2);
+        if r == 0 {
+            _sequence(q, arr)
+        } else {
+            _sequence(3 * number + 1, arr)
+        };
+    };
+    arr
 }
 
 /// Recursive helper function for sequence.
