@@ -27,10 +27,10 @@ trait MerkleTreeTrait {
     fn new() -> MerkleTree;
     /// Compute the merkle root of a given proof.
     fn compute_root(
-        ref self: MerkleTree, current_node: felt252, proof: Array::<felt252>
+        ref self: MerkleTree, current_node: felt252, proof: Array<felt252>
     ) -> felt252;
     /// Verify a merkle proof.
-    fn verify(ref self: MerkleTree, root: felt252, leaf: felt252, proof: Array::<felt252>) -> bool;
+    fn verify(ref self: MerkleTree, root: felt252, leaf: felt252, proof: Array<felt252>) -> bool;
 }
 
 /// MerkleTree implementation.
@@ -48,7 +48,7 @@ impl MerkleTreeImpl of MerkleTreeTrait {
     /// # Returns
     /// The merkle root.
     fn compute_root(
-        ref self: MerkleTree, current_node: felt252, mut proof: Array::<felt252>
+        ref self: MerkleTree, current_node: felt252, mut proof: Array<felt252>
     ) -> felt252 {
         let proof_len = proof.len();
         internal_compute_root(current_node, 0_u32, proof_len, proof)
@@ -62,7 +62,7 @@ impl MerkleTreeImpl of MerkleTreeTrait {
     /// # Returns
     /// True if the proof is valid, false otherwise.
     fn verify(
-        ref self: MerkleTree, root: felt252, leaf: felt252, mut proof: Array::<felt252>
+        ref self: MerkleTree, root: felt252, leaf: felt252, mut proof: Array<felt252>
     ) -> bool {
         let computed_root = self.compute_root(leaf, proof);
         computed_root == root
@@ -79,7 +79,7 @@ impl MerkleTreeImpl of MerkleTreeTrait {
 /// # Returns
 /// The merkle root.
 fn internal_compute_root(
-    current_node: felt252, proof_index: u32, proof_len: usize, mut proof: Array::<felt252>
+    current_node: felt252, proof_index: u32, proof_len: usize, mut proof: Array<felt252>
 ) -> felt252 {
     // Check if out of gas.
     // Note: we need to call `check_gas()` because we need to call `LegacyHash::hash`
