@@ -23,7 +23,7 @@ const ZERO_USIZE: usize = 0_usize;
 
 #[derive(Drop)]
 struct Stack {
-    elements: Array::<u256>, 
+    elements: Array<u256>, 
 }
 
 trait StackTrait {
@@ -32,9 +32,9 @@ trait StackTrait {
     /// Pushes a new value onto the stack.
     fn push(ref self: Stack, value: u256);
     /// Removes the last item from the stack and returns it, or None if the stack is empty.
-    fn pop(ref self: Stack) -> Option::<u256>;
+    fn pop(ref self: Stack) -> Option<u256>;
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
-    fn peek(self: @Stack) -> Option::<u256>;
+    fn peek(self: @Stack) -> Option<u256>;
     /// Returns the number of items in the stack.
     fn len(self: @Stack) -> usize;
     /// Returns true if the stack is empty.
@@ -65,8 +65,8 @@ impl StackImpl of StackTrait {
     /// * `self` - The stack to pop the item off of.
     /// Returns
     /// * Stack The stack with the item removed.
-    /// * Option::<u256> The item removed or None if the stack is empty.
-    fn pop(ref self: Stack) -> Option::<u256> {
+    /// * Option<u256> The item removed or None if the stack is empty.
+    fn pop(ref self: Stack) -> Option<u256> {
         if self.is_empty() {
             return Option::None(());
         }
@@ -86,8 +86,8 @@ impl StackImpl of StackTrait {
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
     /// * `self` - The stack to peek the item off of.
     /// Returns
-    /// * Option::<u256> The last item of the stack
-    fn peek(self: @Stack) -> Option::<u256> {
+    /// * Option<u256> The last item of the stack
+    fn peek(self: @Stack) -> Option<u256> {
         if self.is_empty() {
             return Option::None(());
         }
