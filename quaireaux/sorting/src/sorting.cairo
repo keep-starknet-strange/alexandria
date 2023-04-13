@@ -20,9 +20,7 @@ fn is_equal(ref a: Array<u32>, ref b: Array<u32>, index: u32) -> bool {
         return true;
     }
 
-    let a_element = a.at(index);
-    let b_element = b.at(index);
-    if *a_element != *b_element {
+    if *a[index] != *b[index] {
         return false;
     }
 

@@ -14,6 +14,6 @@ fn array_slice_test() {
 
     let slice = array_slice(@arr, 0_usize, 2_usize);
     assert(slice.len() == 2_usize, 'invalid result');
-    assert(*slice.at(0_usize) == 1.into(), 'invalid result');
-    assert(*slice.at(1_usize) == 2.into(), 'invalid result');
+    assert(*slice[0_usize] == 1.into(), 'invalid result');
+    assert(*slice[1_usize] == 2.into(), 'invalid result');
 }

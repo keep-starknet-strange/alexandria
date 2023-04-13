@@ -77,10 +77,9 @@ impl StackImpl of StackTrait {
 
         let sliced_elements = array_slice(@elements, begin: 0_usize, end: last_idx);
 
-        let value = elements.at(last_idx);
         // Update the returned stack with the sliced array
         self = Stack { elements: sliced_elements };
-        Option::Some(*value)
+        Option::Some(*elements[last_idx])
     }
 
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
@@ -91,7 +90,7 @@ impl StackImpl of StackTrait {
         if self.is_empty() {
             return Option::None(());
         }
-        Option::Some(*self.elements.at(self.elements.len() - 1_usize))
+        Option::Some(*self.elements[self.elements.len() - 1_usize])
     }
 
     /// Returns the number of items in the stack.
