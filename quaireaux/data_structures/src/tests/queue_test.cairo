@@ -26,7 +26,7 @@ fn queue_is_empty_test() {
 #[test]
 #[available_gas(2000000)]
 fn queue_enqueue_test() {
-    let mut queue = QueueTrait::<felt252>::new();
+    let mut queue = QueueTrait::new();
     queue.enqueue(1);
     queue.enqueue(2);
 
@@ -40,7 +40,7 @@ fn queue_enqueue_test() {
 #[test]
 #[available_gas(2000000)]
 fn queue_peek_front_test() {
-    let mut queue = QueueTrait::<felt252>::new();
+    let mut queue = QueueTrait::new();
     queue.enqueue(1);
     queue.enqueue(2);
     queue.enqueue(3);
@@ -61,7 +61,7 @@ fn queue_peek_front_test() {
 #[test]
 #[available_gas(2000000)]
 fn queue_dequeue_test() {
-    let mut queue = QueueTrait::<felt252>::new();
+    let mut queue = QueueTrait::new();
     queue.enqueue(1);
     queue.enqueue(2);
     queue.enqueue(3);
