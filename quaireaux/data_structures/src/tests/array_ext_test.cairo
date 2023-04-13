@@ -29,9 +29,9 @@ fn append_all_different_type() {
     source.append(84_u128);
     destination.append_all(ref source);
     assert(destination.len() == 3_usize, 'Len should be 3');
-    assert(*destination.at(0_usize) == 21_u128, 'Should be 21_u128');
-    assert(*destination.at(1_usize) == 42_u128, 'Should be 42_u128');
-    assert(*destination.at(2_usize) == 84_u128, 'Should be 84_u128');
+    assert(*destination[0_usize] == 21_u128, 'Should be 21_u128');
+    assert(*destination[1_usize] == 42_u128, 'Should be 42_u128');
+    assert(*destination[2_usize] == 84_u128, 'Should be 84_u128');
 }
 
 #[test]
@@ -117,9 +117,9 @@ fn reverse_different_type() {
     arr.append(84_u128);
     let response = arr.reverse();
     assert(response.len() == 3_usize, 'Len should be 3');
-    assert(*response.at(0_usize) == 84_u128, 'Should be 84_u128');
-    assert(*response.at(1_usize) == 42_u128, 'Should be 42_u128');
-    assert(*response.at(2_usize) == 21_u128, 'Should be 21_u128');
+    assert(*response[0_usize] == 84_u128, 'Should be 84_u128');
+    assert(*response[1_usize] == 42_u128, 'Should be 42_u128');
+    assert(*response[2_usize] == 21_u128, 'Should be 21_u128');
 }
 
 // contains
