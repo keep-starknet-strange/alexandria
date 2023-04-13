@@ -18,7 +18,6 @@ fn is_perfect_number(num: felt252) -> bool {
         if num == 0 {
             break false;
         }
-
         if num == 1 {
             break false;
         }
@@ -30,10 +29,8 @@ fn is_perfect_number(num: felt252) -> bool {
         let (_, r) = unsafe_euclidean_div(num, index);
         if r == 0 {
             sum = sum + index;
-            index = index + 1;
-        } else {
-            index = index + 1;
-        };
+        }
+        index = index + 1;
     }
 }
 
