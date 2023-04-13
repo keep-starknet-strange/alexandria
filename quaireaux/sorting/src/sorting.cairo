@@ -8,7 +8,7 @@ use quaireaux_utils::check_gas;
 /// * `index` - The index used to loop through the arrays.
 /// # Returns
 /// * `bool` - True if the arrays are equal, false otherwise.
-fn is_equal(ref a: Array::<u32>, ref b: Array::<u32>, index: u32) -> bool {
+fn is_equal(ref a: Array<u32>, ref b: Array<u32>, index: u32) -> bool {
     check_gas();
 
     let len = a.len();

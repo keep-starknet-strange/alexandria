@@ -39,7 +39,7 @@ fn merge<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd: PartialO
 /// * `left_arr_ix` - Left array index
 /// * `right_arr_ix` - Right array index
 /// # Returns
-/// * `Array::<usize>` - Sorted array
+/// * `Array<usize>` - Sorted array
 fn merge_recursive<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd: PartialOrd<T>>(
     mut left_arr: Array<T>,
     mut right_arr: Array<T>,

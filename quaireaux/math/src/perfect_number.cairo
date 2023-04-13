@@ -49,7 +49,7 @@ fn _is_perfect_number(num: felt252, index: felt252, sum: felt252) -> bool {
 /// * `max` - The maximum value to check for perfect numbers.
 /// # Returns
 /// * `Array` - An array of perfect numbers up to the max value.
-fn perfect_numbers(ref max: felt252) -> Array::<felt252> {
+fn perfect_numbers(ref max: felt252) -> Array<felt252> {
     let mut res = ArrayTrait::new();
     let mut index = 1;
     _perfect_numbers(ref max, ref index, ref res);
@@ -63,7 +63,7 @@ fn perfect_numbers(ref max: felt252) -> Array::<felt252> {
 /// * `arr` - An array to store the perfect numbers that have been found.
 /// # Returns
 /// * `None` - This function does not return a value, it updates the arr argument in place.
-fn _perfect_numbers(ref max: felt252, ref index: felt252, ref arr: Array::<felt252>) {
+fn _perfect_numbers(ref max: felt252, ref index: felt252, ref arr: Array<felt252>) {
     check_gas();
 
     if index == max {

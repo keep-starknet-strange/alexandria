@@ -9,8 +9,8 @@
 /// * `month` - The month of the year
 /// * `year` - The year
 /// # Returns
-/// * `Option::<u128>::None(())` - If the input parameters are invalid
-/// * `Option::<u128>::Some(day_of_week)` - The day of the week
+/// * `Option::None(())` - If the input parameters are invalid
+/// * `Option::Some(day_of_week)` - The day of the week
 /// # Examples
 /// ```
 /// use quaireaux::zellers_congruence::day_of_week;
@@ -18,10 +18,10 @@
 /// ```
 /// # TODO
 /// - Change the return type to `Result`
-fn day_of_week(date: u128, month: u128, year: u128) -> Option::<u128> {
+fn day_of_week(date: u128, month: u128, year: u128) -> Option<u128> {
     // Check input parameters
     if !check_input_parameters(date, month, year) {
-        return Option::<u128>::None(());
+        return Option::None(());
     }
     let q = date;
     let mut m = month;
@@ -38,7 +38,7 @@ fn day_of_week(date: u128, month: u128, year: u128) -> Option::<u128> {
         + ((y / 100_u128) / 4_u128)
         + 5_u128 * (y / 100_u128)) % 7_u128;
 
-    Option::<u128>::Some(day)
+    Option::Some(day)
 }
 
 /// Check the input parameters for the `day_of_week` function.

@@ -31,9 +31,9 @@ fn bubblesort_test() {
 #[test]
 #[available_gas(2000000)]
 fn bubblesort_test_empty() {
-    let mut data = ArrayTrait::<u32>::new();
+    let mut data = ArrayTrait::new();
 
-    let mut correct = ArrayTrait::<u32>::new();
+    let mut correct = ArrayTrait::new();
 
     let mut sorted = bubble_sort::bubble_sort_elements(data);
 
