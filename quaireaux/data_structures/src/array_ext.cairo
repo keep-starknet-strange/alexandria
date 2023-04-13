@@ -37,7 +37,7 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
 
     fn reverse(ref self: Array<T>) -> Array<T> {
         if self.len() == 0_usize {
-            return ArrayTrait::<T>::new();
+            return ArrayTrait::new();
         }
         let mut response = ArrayTrait::new();
         reverse_loop(ref self, ref response, self.len() - 1_usize);
