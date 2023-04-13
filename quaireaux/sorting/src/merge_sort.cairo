@@ -7,10 +7,10 @@ use quaireaux_utils::check_gas;
 /// # Arguments
 /// * `arr` - Array to sort
 /// # Returns
-/// * `Array::<T>` - Sorted array
+/// * `Array<T>` - Sorted array
 fn merge<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd: PartialOrd<T>>(
-    mut arr: Array::<T>
-) -> Array::<T> {
+    mut arr: Array<T>
+) -> Array<T> {
     check_gas();
 
     let len = arr.len();
@@ -41,9 +41,9 @@ fn merge<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd: PartialO
 /// # Returns
 /// * `Array::<usize>` - Sorted array
 fn merge_recursive<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd: PartialOrd<T>>(
-    mut left_arr: Array::<T>,
-    mut right_arr: Array::<T>,
-    ref result_arr: Array::<T>,
+    mut left_arr: Array<T>,
+    mut right_arr: Array<T>,
+    ref result_arr: Array<T>,
     left_arr_ix: usize,
     right_arr_ix: usize
 ) {
@@ -84,10 +84,10 @@ fn merge_recursive<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd
 /// * `arr` - The array to split.
 /// * `index` - The index to split the array at.
 /// # Returns
-/// * `(Array::<T>, Array::<T>)` - The two arrays.
+/// * `(Array<T>, Array<T>)` - The two arrays.
 fn split_array<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
-    ref arr: Array::<T>, index: usize
-) -> (Array::<T>, Array::<T>) {
+    ref arr: Array<T>, index: usize
+) -> (Array<T>, Array<T>) {
     check_gas();
 
     let mut arr1 = ArrayTrait::new();
@@ -106,9 +106,9 @@ fn split_array<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
 /// * `index` - The index to start filling at.
 /// * `count` - The number of elements to fill.
 /// # Returns
-/// * `Array::<T>` - The filled array.
+/// * `Array<T>` - The filled array.
 fn fill_array<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
-    ref arr: Array::<T>, ref fill_arr: Array::<T>, index: usize, count: usize
+    ref arr: Array<T>, ref fill_arr: Array<T>, index: usize, count: usize
 ) {
     check_gas();
 

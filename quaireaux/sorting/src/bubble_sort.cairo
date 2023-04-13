@@ -12,8 +12,8 @@ fn bubble_sort_elements<T,
 impl TCopy: Copy<T>,
 impl TDrop: Drop<T>,
 impl TPartialOrd: PartialOrd<T>>(
-    mut array: Array::<T>
-) -> Array::<T> {
+    mut array: Array<T>
+) -> Array<T> {
     if array.len() <= 1_usize {
         return array;
     }
@@ -30,12 +30,12 @@ impl TPartialOrd: PartialOrd<T>>(
 /// # Returns
 /// * `Array::<usize>` - Final sorted array
 fn bubble_sort_rec<T, impl TPartialOrd: PartialOrd<T>, impl TDrop: Drop<T>, impl TCopy: Copy<T>>(
-    mut array: Array::<T>,
-    mut sorted_array: Array::<T>,
+    mut array: Array<T>,
+    mut sorted_array: Array<T>,
     idx1: usize,
     idx2: usize,
     sorted_iteration: usize
-) -> Array::<T> {
+) -> Array<T> {
     check_gas();
 
     if idx2 == array.len() {

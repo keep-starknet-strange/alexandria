@@ -4,7 +4,7 @@ use array::ArrayTrait;
 const ZERO_USIZE: usize = 0_usize;
 
 struct Queue<T> {
-    elements: Array::<T>, 
+    elements: Array<T>, 
 }
 
 trait QueueTrait<T> {
