@@ -127,7 +127,7 @@ fn reverse_different_type() {
 #[test]
 #[available_gas(2000000)]
 fn contains() {
-    let mut arr = get_felt252_array();
+    let mut arr = @get_felt252_array();
     assert(arr.contains(21), 'Should contain 21');
     assert(arr.contains(42), 'Should contain 42');
     assert(arr.contains(84), 'Should contain 84');
@@ -137,7 +137,7 @@ fn contains() {
 #[test]
 #[available_gas(2000000)]
 fn contains_different_type() {
-    let mut arr = get_u128_array();
+    let mut arr = @get_u128_array();
     assert(arr.contains(21_u128), 'Should contain 21_u128');
     assert(arr.contains(42_u128), 'Should contain 42_u128');
     assert(arr.contains(84_u128), 'Should contain 84_u128');
@@ -147,7 +147,7 @@ fn contains_different_type() {
 #[test]
 #[available_gas(2000000)]
 fn contains_false() {
-    let mut arr = get_felt252_array();
+    let mut arr = @get_felt252_array();
     assert(arr.contains(85) == false, 'Should be false');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -155,7 +155,7 @@ fn contains_false() {
 #[test]
 #[available_gas(2000000)]
 fn contains_empty_array() {
-    let mut arr = ArrayTrait::new();
+    let mut arr = @ArrayTrait::new();
     assert(arr.contains(85) == false, 'Should be false');
     assert(arr.len() == 0, 'arr should not be consummed');
 }

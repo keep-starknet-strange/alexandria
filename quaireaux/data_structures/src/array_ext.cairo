@@ -5,7 +5,7 @@ use quaireaux_utils::check_gas;
 trait ArrayTraitExt<T> {
     fn append_all(ref self: Array<T>, ref arr: Array<T>);
     fn reverse(ref self: Array<T>) -> Array<T>;
-    fn contains<impl TPartialEq: PartialEq<T>>(ref self: Array<T>, item: T) -> bool;
+    fn contains<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> bool;
     fn index_of<impl TPartialEq: PartialEq<T>>(ref self: Array<T>, item: T) -> usize;
     fn occurrences_of<impl TPartialEq: PartialEq<T>>(ref self: Array<T>, item: T) -> usize;
     fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
@@ -44,8 +44,19 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         response
     }
 
-    fn contains<impl TPartialEq: PartialEq<T>>(ref self: Array<T>, item: T) -> bool {
-        contains_loop(ref self, item, 0)
+    fn contains<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> bool {
+        let mut index = 0_usize;
+        loop {
+            check_gas();
+
+            if index >= self.len() {
+                break false;
+            } else if *self[index] == item {
+                break true;
+            } else {
+                index = index + 1;
+            };
+        }
     }
 
     // Panic if doesn't contains
@@ -108,20 +119,6 @@ fn reverse_loop<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
         return ();
     }
     reverse_loop(ref arr, ref response, index - 1);
-}
-
-fn contains_loop<T, impl TDrop: Drop<T>, impl TPartialEq: PartialEq<T>, impl TCopy: Copy<T>>(
-    ref arr: Array<T>, item: T, index: usize
-) -> bool {
-    check_gas();
-
-    if index >= arr.len() {
-        false
-    } else if *arr[index] == item {
-        true
-    } else {
-        contains_loop(ref arr, item, index + 1)
-    }
 }
 
 fn index_of_loop<T, impl TDrop: Drop<T>, impl TPartialEq: PartialEq<T>, impl TCopy: Copy<T>>(
