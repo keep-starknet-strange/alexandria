@@ -19,7 +19,7 @@ use option::OptionTrait;
 
 use quaireaux_data_structures::array_slice;
 
-const ZERO_USIZE: usize = 0_usize;
+const ZERO_USIZE: usize = 0;
 
 #[derive(Drop)]
 struct Stack {
@@ -75,7 +75,7 @@ impl StackImpl of StackTrait {
         let stack_len = elements.len();
         let last_idx = stack_len - 1;
 
-        let sliced_elements = array_slice(@elements, begin: 0_usize, end: last_idx);
+        let sliced_elements = array_slice(@elements, begin: 0, end: last_idx);
 
         // Update the returned stack with the sliced array
         self = Stack { elements: sliced_elements };

@@ -13,7 +13,7 @@ use quaireaux_math::unsafe_euclidean_div;
 // * `felt252` - The gcd of input numbers
 fn gcd(ref n: Array<felt252>) -> felt252 {
     // Return empty input error
-    if n.len() == 0_usize {
+    if n.len() == 0 {
         panic_with_felt252('EI')
     }
     _gcd(ref n)
@@ -26,7 +26,7 @@ fn gcd(ref n: Array<felt252>) -> felt252 {
 // * `felt252` - The gcd of input numbers
 fn _gcd(ref n: Array<felt252>) -> felt252 {
     check_gas();
-    if n.len() == 1_usize {
+    if n.len() == 1 {
         return n.pop_front().unwrap();
     }
     let a = n.pop_front().unwrap();

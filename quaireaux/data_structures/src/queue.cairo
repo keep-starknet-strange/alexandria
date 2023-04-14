@@ -1,7 +1,7 @@
 // Core lib imports
 use array::ArrayTrait;
 
-const ZERO_USIZE: usize = 0_usize;
+const ZERO_USIZE: usize = 0;
 
 struct Queue<T> {
     elements: Array<T>, 

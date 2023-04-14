@@ -14,12 +14,12 @@ fn merge<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd: PartialO
     check_gas();
 
     let len = arr.len();
-    if len <= 1_usize {
+    if len <= 1 {
         return arr;
     }
 
     // Create left and right arrays
-    let middle = len / 2_usize;
+    let middle = len / 2;
     let (mut left_arr, mut right_arr) = split_array(ref arr, middle);
 
     // Recursively sort the left and right arrays
@@ -27,7 +27,7 @@ fn merge<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd: PartialO
     let mut sorted_right = merge(right_arr);
 
     let mut result_arr = ArrayTrait::new();
-    merge_recursive(sorted_left, sorted_right, ref result_arr, 0_usize, 0_usize);
+    merge_recursive(sorted_left, sorted_right, ref result_arr, 0, 0);
     result_arr
 }
 
@@ -108,7 +108,7 @@ fn fill_array<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
 ) {
     check_gas();
 
-    if count == 0_usize {
+    if count == 0 {
         return ();
     }
     

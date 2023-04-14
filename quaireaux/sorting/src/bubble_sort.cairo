@@ -14,12 +14,12 @@ impl TDrop: Drop<T>,
 impl TPartialOrd: PartialOrd<T>>(
     mut array: Array<T>
 ) -> Array<T> {
-    if array.len() <= 1_usize {
+    if array.len() <= 1 {
         return array;
     }
-    let mut idx1 = 0_usize;
-    let mut idx2 = 1_usize;
-    let mut sorted_iteration = 0_usize;
+    let mut idx1 = 0;
+    let mut idx2 = 1;
+    let mut sorted_iteration = 0;
     let mut sorted_array = ArrayTrait::new();
 
     loop {
@@ -27,14 +27,14 @@ impl TPartialOrd: PartialOrd<T>>(
 
         if idx2 == array.len() {
             sorted_array.append(*array[idx1]);
-            if (sorted_iteration == 0_usize) {
+            if (sorted_iteration == 0) {
                 break ();
             }
             array = sorted_array;
             sorted_array = ArrayTrait::new();
-            idx1 = 0_usize;
-            idx2 = 1_usize;
-            sorted_iteration = 0_usize;
+            idx1 = 0;
+            idx2 = 1;
+            sorted_iteration = 0;
         } else {
             if *array[idx1] < *array[idx2] {
                 sorted_array.append(*array[idx1]);

@@ -11,7 +11,7 @@ fn queue_new_test() {
     let mut queue = QueueTrait::<felt252>::new();
     let result_len = queue.len();
 
-    assert(result_len == 0_usize, 'wrong length');
+    assert(result_len == 0, 'wrong length');
 }
 
 #[test]
@@ -34,7 +34,7 @@ fn queue_enqueue_test() {
     let result_is_empty = queue.is_empty();
 
     assert(result_is_empty == false, 'must not be empty');
-    assert(result_len == 2_usize, 'len should be 2');
+    assert(result_len == 2, 'len should be 2');
 }
 
 #[test]
@@ -55,7 +55,7 @@ fn queue_peek_front_test() {
     };
 
     let result_len = queue.len();
-    assert(result_len == 3_usize, 'should not remove items');
+    assert(result_len == 3, 'should not remove items');
 }
 
 #[test]
@@ -76,5 +76,5 @@ fn queue_dequeue_test() {
     };
 
     let result_len = queue.len();
-    assert(result_len == 2_usize, 'should remove item');
+    assert(result_len == 2, 'should remove item');
 }
