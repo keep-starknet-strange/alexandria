@@ -23,7 +23,7 @@ fn sequence(mut number: felt252) -> Array<felt252> {
         if number == 1 {
             break ();
         }
-
+        
         let (q, r) = unsafe_euclidean_div(number, 2);
         if r == 0 {
             number = q;
