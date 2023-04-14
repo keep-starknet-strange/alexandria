@@ -18,11 +18,11 @@ fn is_armstrong_number(mut num: felt252) -> bool {
 
         if num == 0 {
             break ();
-        } 
+        }
         let (new_num, lastDigit) = unsafe_euclidean_div(num, 10);
         let sum = pow(lastDigit, digits);
         num = new_num;
-        original_num= original_num - sum;
+        original_num = original_num - sum;
     };
     original_num == 0
 }

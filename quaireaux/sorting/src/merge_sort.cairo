@@ -55,16 +55,12 @@ fn merge_recursive<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd
 
     if left_arr_ix == left_arr.len() {
         result_arr.append(*right_arr[right_arr_ix]);
-        return merge_recursive(
-            left_arr, right_arr, ref result_arr, left_arr_ix, right_arr_ix + 1
-        );
+        return merge_recursive(left_arr, right_arr, ref result_arr, left_arr_ix, right_arr_ix + 1);
     }
 
     if right_arr_ix == right_arr.len() {
         result_arr.append(*left_arr[left_arr_ix]);
-        return merge_recursive(
-            left_arr, right_arr, ref result_arr, left_arr_ix + 1, right_arr_ix
-        );
+        return merge_recursive(left_arr, right_arr, ref result_arr, left_arr_ix + 1, right_arr_ix);
     }
 
     if *left_arr[left_arr_ix] < *right_arr[right_arr_ix] {
@@ -111,7 +107,7 @@ fn fill_array<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
     if count == 0 {
         return ();
     }
-    
+
     arr.append(*fill_arr[index]);
 
     fill_array(ref arr, ref fill_arr, index + 1, count - 1)

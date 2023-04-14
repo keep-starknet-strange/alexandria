@@ -20,11 +20,10 @@ fn array_slice(src: @Array<u256>, mut begin: usize, end: usize) -> Array<u256> {
         if begin >= src.len() {
             break ();
         }
-        
+
         slice.append(*src[begin]);
         begin = begin + 1;
     };
     slice
 }
-
 

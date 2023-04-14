@@ -26,9 +26,7 @@ trait MerkleTreeTrait {
     /// Create a new merkle tree instance.
     fn new() -> MerkleTree;
     /// Compute the merkle root of a given proof.
-    fn compute_root(
-        ref self: MerkleTree, current_node: felt252, proof: Array<felt252>
-    ) -> felt252;
+    fn compute_root(ref self: MerkleTree, current_node: felt252, proof: Array<felt252>) -> felt252;
     /// Verify a merkle proof.
     fn verify(ref self: MerkleTree, root: felt252, leaf: felt252, proof: Array<felt252>) -> bool;
 }

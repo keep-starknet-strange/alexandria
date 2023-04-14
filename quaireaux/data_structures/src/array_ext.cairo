@@ -52,11 +52,14 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         loop {
             check_gas();
             match arr.pop_front() {
-                Option::Some(v) => { 
+                Option::Some(v) => {
                     if *v == item {
-                        break true; 
-                    }},
-                Option::None(_) => { break false; },
+                        break true;
+                    }
+                },
+                Option::None(_) => {
+                    break false;
+                },
             };
         }
     }
@@ -68,13 +71,15 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         loop {
             check_gas();
             match arr.pop_front() {
-                Option::Some(v) => { 
+                Option::Some(v) => {
                     if *v == item {
-                        break index; 
+                        break index;
                     }
                     index = index + 1;
-                    },
-                Option::None(_) => { panic_with_felt252('Item not in array'); },
+                },
+                Option::None(_) => {
+                    panic_with_felt252('Item not in array');
+                },
             };
         }
     }
@@ -85,11 +90,14 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         loop {
             check_gas();
             match arr.pop_front() {
-                Option::Some(v) => { 
+                Option::Some(v) => {
                     if *v == item {
-                        count = count +1;
-                    }},
-                Option::None(_) => { break count; },
+                        count = count + 1;
+                    }
+                },
+                Option::None(_) => {
+                    break count;
+                },
             };
         }
     }
@@ -105,7 +113,7 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         }
         let mut index = 0_usize;
         let mut min = *self[0];
-        
+
         loop {
             check_gas();
 
@@ -144,7 +152,7 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         }
         let mut index = 0_usize;
         let mut max = *self[0];
-        
+
         loop {
             check_gas();
 
