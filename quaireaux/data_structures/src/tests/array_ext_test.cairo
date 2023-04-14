@@ -165,7 +165,7 @@ fn contains_empty_array() {
 #[test]
 #[available_gas(2000000)]
 fn index_of() {
-    let mut arr = get_felt252_array();
+    let mut arr = @get_felt252_array();
     assert(arr.index_of(21) == 0, 'Index should be 0');
     assert(arr.index_of(42) == 1, 'Index should be 1');
     assert(arr.index_of(84) == 2, 'Index should be 2');
@@ -175,7 +175,7 @@ fn index_of() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_different_type() {
-    let mut arr = get_u128_array();
+    let mut arr = @get_u128_array();
     assert(arr.index_of(21_u128) == 0, 'Index should be 0');
     assert(arr.index_of(42_u128) == 1, 'Index should be 1');
     assert(arr.index_of(84_u128) == 2, 'Index should be 2');
@@ -186,7 +186,7 @@ fn index_of_different_type() {
 #[available_gas(2000000)]
 #[should_panic(expected: ('Item not in array', ))]
 fn index_of_panic() {
-    let mut arr = get_felt252_array();
+    let mut arr = @get_felt252_array();
     arr.index_of(12);
 }
 
@@ -194,7 +194,7 @@ fn index_of_panic() {
 #[available_gas(2000000)]
 #[should_panic(expected: ('Item not in array', ))]
 fn index_of_empty_array() {
-    let mut arr = ArrayTrait::new();
+    let mut arr = @ArrayTrait::new();
     arr.index_of(21);
 }
 

@@ -6,7 +6,7 @@ trait ArrayTraitExt<T> {
     fn append_all(ref self: Array<T>, ref arr: Array<T>);
     fn reverse(ref self: Array<T>) -> Array<T>;
     fn contains<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> bool;
-    fn index_of<impl TPartialEq: PartialEq<T>>(ref self: Array<T>, item: T) -> usize;
+    fn index_of<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> usize;
     fn occurrences_of<impl TPartialEq: PartialEq<T>>(ref self: Array<T>, item: T) -> usize;
     fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         ref self: Array<T>
@@ -60,8 +60,20 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
     }
 
     // Panic if doesn't contains
-    fn index_of<impl TPartialEq: PartialEq<T>>(ref self: Array<T>, item: T) -> usize {
-        index_of_loop(ref self, item, 0)
+    // Panic if doesn't contains
+    fn index_of<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> usize {
+        let mut index = 0_usize;
+        loop {
+            check_gas();
+
+            if index >= self.len() {
+                panic_with_felt252('Item not in array');
+            } else if *self[index] == item {
+                break index;
+            } else {
+                index = index + 1;
+            };
+        }
     }
 
     fn occurrences_of<impl TPartialEq: PartialEq<T>>(ref self: Array<T>, item: T) -> usize {
@@ -119,20 +131,6 @@ fn reverse_loop<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
         return ();
     }
     reverse_loop(ref arr, ref response, index - 1);
-}
-
-fn index_of_loop<T, impl TDrop: Drop<T>, impl TPartialEq: PartialEq<T>, impl TCopy: Copy<T>>(
-    ref arr: Array<T>, item: T, index: usize
-) -> usize {
-    check_gas();
-
-    if index >= arr.len() {
-        panic_with_felt252('Item not in array')
-    } else if *arr[index] == item {
-        index
-    } else {
-        index_of_loop(ref arr, item, index + 1)
-    }
 }
 
 fn occurrences_of_loop<T, impl TDrop: Drop<T>, impl TPartialEq: PartialEq<T>, impl TCopy: Copy<T>>(
