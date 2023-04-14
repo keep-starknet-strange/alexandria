@@ -20,7 +20,7 @@ jobs:
         run: tar -xvf $ARCHIVE_NAME
       - name: Step 4 - Make binaries available
         run: echo "./cairo/bin" >> $GITHUB_PATH
-      - name: Step 5 - Build
+      - name: Step 5 - Trying to build
         run: make build
 
   test:
@@ -35,5 +35,5 @@ jobs:
         run: tar -xvf $ARCHIVE_NAME
       - name: Step 4 - Make binaries available
         run: echo "./cairo/bin" >> $GITHUB_PATH
-      - name: Step 5 - Build
+      - name: Step 5 - Running tests
         run: make test
