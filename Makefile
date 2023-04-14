@@ -2,7 +2,7 @@
 
 # Configuration
 ROOT_PROJECT = .
-PROJECT_NAME = ./quaireaux/
+PROJECT_NAME = quaireaux
 BUILD_DIR = build
 
 # Default target
@@ -23,7 +23,7 @@ build: FORCE
 run:
 	@echo "Running..."
 	# TODO: enable when sample main is ready
-	#cairo-run -p $(PROJECT_NAME)
+	#cairo-run $(ROOT_PROJECT)
 
 # Test the project
 test:
