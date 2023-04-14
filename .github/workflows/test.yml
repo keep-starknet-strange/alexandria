@@ -4,32 +4,24 @@ on: [push, pull_request]
 
 env:
   CAIRO_COMPILER_VERSION: 1.0.0-alpha.7
-  ARTIFACT_RELEASE_ARCHIVE_LINK: https://github.com/starkware-libs/cairo/releases/download/v1.0.0-alpha.7/release-x86_64-unknown-linux-musl.tar.gz
-  ARTIFACT_RELEASE_ARCHIVE_NAME: cairo.zip
+  ARCHIVE_LINK: https://github.com/starkware-libs/cairo/releases/download/v1.0.0-alpha.7/release-x86_64-unknown-linux-musl.tar.gz
+  ARCHIVE_NAME: cairo.zip
 
 jobs:
   build:
     name: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - run: |
-          curl -L -o $ARTIFACT_RELEASE_ARCHIVE_NAME $ARTIFACT_RELEASE_ARCHIVE_LINK
-          tar -xvf $ARTIFACT_RELEASE_ARCHIVE_NAME
-          export PATH=$PATH:$(pwd)/cairo/bin
-          make build
-
-  run:
-    name: run
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - run: |
-          curl -L -o $ARTIFACT_RELEASE_ARCHIVE_NAME $ARTIFACT_RELEASE_ARCHIVE_LINK
-          tar -xvf $ARTIFACT_RELEASE_ARCHIVE_NAME
-          export PATH=$PATH:$(pwd)/cairo/bin
-          # TODO: uncomment when demo is ready
-          #make run
+      - name: Step 1 - Check out main branch
+        uses: actions/checkout@v3
+      - name: Step 2 - Downloading binaries
+        run: curl -L -o $ARCHIVE_NAME $ARCHIVE_LINK
+      - name: Step 3 - Unzipping binaries
+        run: tar -xvf $ARCHIVE_NAME
+      - name: Step 4 - Make binaries available
+        run: echo "./cairo/bin" >> $GITHUB_PATH
+      - name: Step 5 - Build
+        run: make build
 
   test:
     name: test
@@ -37,10 +29,11 @@ jobs:
     steps:
       - name: Step 1 - Check out main branch
         uses: actions/checkout@v3
-      - name: Step 2 - Install Cairo commands
-        run: |
-          curl -L -o $ARTIFACT_RELEASE_ARCHIVE_NAME $ARTIFACT_RELEASE_ARCHIVE_LINK
-          tar -xvf $ARTIFACT_RELEASE_ARCHIVE_NAME
-          export PATH=$PATH:$(pwd)/cairo/bin
-      - name: Step 3 - Run tests
+      - name: Step 2 - Downloading binaries
+        run: curl -L -o $ARCHIVE_NAME $ARCHIVE_LINK
+      - name: Step 3 - Unzipping binaries
+        run: tar -xvf $ARCHIVE_NAME
+      - name: Step 4 - Make binaries available
+        run: echo "./cairo/bin" >> $GITHUB_PATH
+      - name: Step 5 - Build
         run: make test
