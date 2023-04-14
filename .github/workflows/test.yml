@@ -3,7 +3,7 @@ name: test
 on: [push, pull_request]
 
 env:
-  CAIRO_COMPILER_VERSION: 1.0.0-alpha.3
+  CAIRO_COMPILER_VERSION: 1.0.0-alpha.7
   ARTIFACT_RELEASE_ARCHIVE_LINK: https://github.com/starkware-libs/cairo/releases/download/v1.0.0-alpha.7/release-x86_64-unknown-linux-musl.tar.gz
   ARTIFACT_RELEASE_ARCHIVE_NAME: cairo.zip
   RELEASE_ARCHIVE_NAME: x86_64-unknown-linux-musl.tar.gz
@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          curl -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -L -o $ARTIFACT_RELEASE_ARCHIVE_NAME $ARTIFACT_RELEASE_ARCHIVE_LINK
+          curl -L -o $ARTIFACT_RELEASE_ARCHIVE_NAME $ARTIFACT_RELEASE_ARCHIVE_LINK
           unzip $ARTIFACT_RELEASE_ARCHIVE_NAME
           tar -xvf $RELEASE_ARCHIVE_NAME
           export PATH=$PATH:$(pwd)/cairo/bin
@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          curl -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -L -o $ARTIFACT_RELEASE_ARCHIVE_NAME $ARTIFACT_RELEASE_ARCHIVE_LINK
+          curl -L -o $ARTIFACT_RELEASE_ARCHIVE_NAME $ARTIFACT_RELEASE_ARCHIVE_LINK
           unzip $ARTIFACT_RELEASE_ARCHIVE_NAME
           tar -xvf $RELEASE_ARCHIVE_NAME
           export PATH=$PATH:$(pwd)/cairo/bin
@@ -40,7 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          curl -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -L -o $ARTIFACT_RELEASE_ARCHIVE_NAME $ARTIFACT_RELEASE_ARCHIVE_LINK
+          curl -L -o $ARTIFACT_RELEASE_ARCHIVE_NAME $ARTIFACT_RELEASE_ARCHIVE_LINK
           unzip $ARTIFACT_RELEASE_ARCHIVE_NAME
           tar -xvf $RELEASE_ARCHIVE_NAME
           export PATH=$PATH:$(pwd)/cairo/bin
