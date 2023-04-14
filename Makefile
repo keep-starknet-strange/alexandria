@@ -2,8 +2,6 @@
 
 # Configuration
 PROJECT_NAME = quaireaux
-ENTRYPOINT = .
-TEST_ENTRYPOINT = .
 BUILD_DIR = build
 
 # Default target
@@ -24,40 +22,45 @@ build: FORCE
 run:
 	@echo "Running..."
 	# TODO: enable when sample main is ready
-	#cairo-run -p $(ENTRYPOINT)
+	#cairo-run -p $(PROJECT_NAME)
 
 # Test the project
 test:
 	@echo "Testing everything..."
-	cairo-test $(TEST_ENTRYPOINT)
+	cairo-test $(PROJECT_NAME)
 
 test-data_structures:
 	@echo "Testing data structures..."
-	cairo-test $(TEST_ENTRYPOINT)/quaireaux/data_structures
+	cairo-test $(PROJECT_NAME)/data_structures
 
 test-math:
 	@echo "Testing math"
-	cairo-test $(TEST_ENTRYPOINT)/quaireaux/math
+	cairo-test $(PROJECT_NAME)/math
 
 test-sorting:
 	@echo "Testing sorting..."
-	cairo-test $(TEST_ENTRYPOINT)/quaireaux/sorting
+	cairo-test $(PROJECT_NAME)/sorting
 
 test-utils:
 	@echo "Testing utils..."
-	cairo-test $(TEST_ENTRYPOINT)/quaireaux/utils
+	cairo-test $(PROJECT_NAME)/utils
 
 # Special filter tests targets
 
 # Run tests related to the stack
 test-stack:
 	@echo "Testing stack..."
-	cairo-test $(TEST_ENTRYPOINT) -f stack
+	cairo-test $(PROJECT_NAME) -f stack
 
 # Format the project
 format:
 	@echo "Formatting everything..."
-	cairo-format --recursive quaireaux
+	cairo-format --recursive --print-parsing-errors $(PROJECT_NAME)
+
+# Check the formatting of the project
+check-format:
+	@echo "Checking formatting..."
+	cairo-format --recursive --check $(PROJECT_NAME)
 
 # Clean the project
 clean:

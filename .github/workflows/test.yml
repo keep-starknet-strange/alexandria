@@ -37,3 +37,19 @@ jobs:
         run: echo "./cairo/bin" >> $GITHUB_PATH
       - name: Step 5 - Running tests
         run: make test
+
+  check-format:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step 1 - Check out main branch
+        uses: actions/checkout@v3
+      - name: Step 2 - Downloading binaries
+        run: curl -L -o $ARCHIVE_NAME $ARCHIVE_LINK
+      - name: Step 3 - Unzipping binaries
+        run: tar -xvf $ARCHIVE_NAME
+      - name: Step 4 - Make binaries available
+        run: echo "./cairo/bin" >> $GITHUB_PATH
+      - name: Step 5 - Checking formatting
+        run: make check-format
+      
