@@ -94,7 +94,7 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         if self.len() == 0 {
             panic_with_felt252('Empty array')
         }
-        index_of_max_loop(ref self, *self[0], 0, 1_usize)
+        index_of_max_loop(ref self, *self[0], 0, 1)
     }
 }
 
