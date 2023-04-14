@@ -1,5 +1,6 @@
 use array::ArrayTrait;
 use array::SpanTrait;
+use array::OptionTrait;
 
 use quaireaux_utils::check_gas;
 
@@ -8,9 +9,9 @@ trait ArrayTraitExt<T> {
     fn reverse(ref self: Array<T>) -> Array<T>;
     fn contains<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> bool;
     fn index_of<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> usize;
-    fn occurrences_of<impl TPartialEq: PartialEq<T>>(ref self: Array<T>, item: T) -> usize;
+    fn occurrences_of<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> usize;
     fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        ref self: Array<T>
+        ref self: @Array<T>
     ) -> T;
     fn index_of_min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         ref self: Array<T>
@@ -47,7 +48,6 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
 
     fn contains<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> bool {
         let mut arr = self.span();
-        let mut index = 0_usize;
         loop {
             check_gas();
             match arr.pop_front() {
@@ -62,32 +62,61 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
 
     // Panic if doesn't contains
     fn index_of<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> usize {
+        let mut arr = self.span();
         let mut index = 0_usize;
         loop {
             check_gas();
-
-            if index >= self.len() {
-                panic_with_felt252('Item not in array');
-            } else if *self[index] == item {
-                break index;
-            } else {
-                index = index + 1;
+            match arr.pop_front() {
+                Option::Some(v) => { 
+                    if *v == item {
+                        break index; 
+                    }
+                    index = index + 1;
+                    },
+                Option::None(_) => { panic_with_felt252('Item not in array'); },
             };
         }
     }
 
-    fn occurrences_of<impl TPartialEq: PartialEq<T>>(ref self: Array<T>, item: T) -> usize {
-        occurrences_of_loop(ref self, item, 0, 0)
+    fn occurrences_of<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> usize {
+        let mut arr = self.span();
+        let mut count = 0_usize;
+        loop {
+            check_gas();
+            match arr.pop_front() {
+                Option::Some(v) => { 
+                    if *v == item {
+                        count = count +1;
+                    }},
+                Option::None(_) => { break count; },
+            };
+        }
     }
 
     // Panic if empty array
+    // TODO atm there is a bug (failing setting up the runner) but this should be updated to use span and match
     fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        ref self: Array<T>
+        ref self: @Array<T>
     ) -> T {
         if self.len() == 0 {
             panic_with_felt252('Empty array')
         }
-        min_loop(ref self, *self[0], 1)
+        let mut index = 0_usize;
+        let mut min = *self[0];
+        
+        loop {
+            check_gas();
+
+            if index >= self.len() {
+                break min;
+            }
+
+            let item = *self[index];
+            if item < min {
+                min = item
+            }
+            index = index + 1;
+        }
     }
 
     // Panic if empty array
@@ -131,20 +160,6 @@ fn reverse_loop<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
         return ();
     }
     reverse_loop(ref arr, ref response, index - 1);
-}
-
-fn occurrences_of_loop<T, impl TDrop: Drop<T>, impl TPartialEq: PartialEq<T>, impl TCopy: Copy<T>>(
-    ref arr: Array<T>, item: T, index: usize, count: usize
-) -> usize {
-    check_gas();
-
-    if index >= arr.len() {
-        count
-    } else if *arr[index] == item {
-        occurrences_of_loop(ref arr, item, index + 1, count + 1)
-    } else {
-        occurrences_of_loop(ref arr, item, index + 1, count)
-    }
 }
 
 fn min_loop<T,

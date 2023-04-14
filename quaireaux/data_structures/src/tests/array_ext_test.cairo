@@ -203,7 +203,7 @@ fn index_of_empty_array() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of() {
-    let mut arr = get_felt252_array();
+    let mut arr = @get_felt252_array();
     assert(arr.occurrences_of(21) == 1, 'Should contain 21 exactly once');
     assert(arr.occurrences_of(42) == 1, 'Should contain 42 exactly once');
     assert(arr.occurrences_of(84) == 1, 'Should contain 84 exactly once');
@@ -213,7 +213,7 @@ fn occurrences_of() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_different_type() {
-    let mut arr = get_u128_array();
+    let mut arr = @get_u128_array();
     assert(arr.occurrences_of(21_u128) == 1, 'Should contain 21 exactly once');
     assert(arr.occurrences_of(42_u128) == 1, 'Should contain 42 exactly once');
     assert(arr.occurrences_of(84_u128) == 1, 'Should contain 84 exactly once');
@@ -223,7 +223,7 @@ fn occurrences_of_different_type() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_not_in_array() {
-    let mut arr = get_felt252_array();
+    let mut arr = @get_felt252_array();
     assert(arr.occurrences_of(12) == 0, 'Should contain exactly once');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -231,7 +231,7 @@ fn occurrences_of_not_in_array() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_empty_array() {
-    let mut arr = ArrayTrait::new();
+    let mut arr = @ArrayTrait::new();
     assert(arr.occurrences_of(12) == 0, 'Should contain exactly 0');
     assert(arr.len() == 0, 'arr should not be consummed');
 }
@@ -244,7 +244,8 @@ fn occurrences_of_double() {
     arr.append(21);
     arr.append(21);
     arr.append(84);
-    assert(arr.occurrences_of(21) == 2, 'Should contain exactly 2');
+    let mut ref_arr = @arr;
+    assert(ref_arr.occurrences_of(21) == 2, 'Should contain exactly 2');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
 
@@ -255,7 +256,8 @@ fn occurrences_of_filled() {
     arr.append(21);
     arr.append(21);
     arr.append(21);
-    assert(arr.occurrences_of(21) == 3, 'Should contain exactly 3');
+    let mut ref_arr = @arr;
+    assert(ref_arr.occurrences_of(21) == 3, 'Should contain exactly 3');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
 
@@ -265,7 +267,8 @@ fn occurrences_of_filled() {
 #[available_gas(2000000)]
 fn min() {
     let mut arr = get_u128_array();
-    assert(arr.min() == 21_u128, 'Min should be 21');
+    let mut ref_arr = @arr;
+    assert(ref_arr.min() == 21_u128, 'Min should be 21');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
 
@@ -274,7 +277,8 @@ fn min() {
 fn min_step_one() {
     let mut arr = get_u128_array();
     arr.append(20_u128);
-    assert(arr.min() == 20_u128, 'Min should be 20');
+    let mut ref_arr = @arr;
+    assert(ref_arr.min() == 20_u128, 'Min should be 20');
     assert(arr.len() == 4, 'arr should not be consummed');
 }
 
@@ -283,7 +287,8 @@ fn min_step_one() {
 fn min_with_duplicate() {
     let mut arr = get_u128_array();
     arr.append(21_u128);
-    assert(arr.min() == 21_u128, 'Min should be 21');
+    let mut ref_arr = @arr;
+    assert(ref_arr.min() == 21_u128, 'Min should be 21');
     assert(arr.len() == 4, 'arr should not be consummed');
 }
 
@@ -291,7 +296,7 @@ fn min_with_duplicate() {
 #[available_gas(2000000)]
 #[should_panic(expected: ('Empty array', ))]
 fn min_empty_array() {
-    let mut arr: Array<u128> = ArrayTrait::new();
+    let mut arr: @Array<u128> = @ArrayTrait::new();
     arr.min();
 }
 
@@ -300,7 +305,8 @@ fn min_empty_array() {
 fn min_one_item() {
     let mut arr = ArrayTrait::new();
     arr.append(21_u128);
-    assert(arr.min() == 21_u128, 'Min should be 21');
+    let mut ref_arr = @arr;
+    assert(ref_arr.min() == 21_u128, 'Min should be 21');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
 
@@ -311,7 +317,8 @@ fn min_last() {
     arr.append(84_u128);
     arr.append(42_u128);
     arr.append(21_u128);
-    assert(arr.min() == 21_u128, 'Min should be 21');
+    let mut ref_arr = @arr;
+    assert(ref_arr.min() == 21_u128, 'Min should be 21');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
 
