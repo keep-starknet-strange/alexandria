@@ -16,7 +16,6 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           curl -L -o $ARTIFACT_RELEASE_ARCHIVE_NAME $ARTIFACT_RELEASE_ARCHIVE_LINK
-          unzip $ARTIFACT_RELEASE_ARCHIVE_NAME
           tar -xvf $RELEASE_ARCHIVE_NAME
           export PATH=$PATH:$(pwd)/cairo/bin
           make build
@@ -28,7 +27,6 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           curl -L -o $ARTIFACT_RELEASE_ARCHIVE_NAME $ARTIFACT_RELEASE_ARCHIVE_LINK
-          unzip $ARTIFACT_RELEASE_ARCHIVE_NAME
           tar -xvf $RELEASE_ARCHIVE_NAME
           export PATH=$PATH:$(pwd)/cairo/bin
           # TODO: uncomment when demo is ready
@@ -41,7 +39,6 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           curl -L -o $ARTIFACT_RELEASE_ARCHIVE_NAME $ARTIFACT_RELEASE_ARCHIVE_LINK
-          unzip $ARTIFACT_RELEASE_ARCHIVE_NAME
           tar -xvf $RELEASE_ARCHIVE_NAME
           export PATH=$PATH:$(pwd)/cairo/bin
           make test
