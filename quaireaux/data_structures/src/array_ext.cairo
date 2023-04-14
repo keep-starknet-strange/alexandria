@@ -17,7 +17,7 @@ trait ArrayTraitExt<T> {
         ref self: Array<T>
     ) -> usize;
     fn max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        ref self: Array<T>
+        ref self: @Array<T>
     ) -> T;
     fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         ref self: Array<T>
@@ -94,7 +94,8 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
     }
 
     // Panic if empty array
-    // TODO atm there is a bug (failing setting up the runner) but this should be updated to use span and match
+    // TODO atm there is a bug (failing setting up the runner: #31139: [24] is undefined.)
+    // but this should be updated to use span and match
     fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         ref self: @Array<T>
     ) -> T {
@@ -120,6 +121,8 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
     }
 
     // Panic if empty array
+    // TODO atm there is a bug (failing setting up the runner: #33424: Inconsistent references annotations.
+    // but this should be updated to use span and match
     fn index_of_min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         ref self: Array<T>
     ) -> usize {
@@ -131,12 +134,27 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
 
     // Panic if empty array
     fn max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        ref self: Array<T>
+        ref self: @Array<T>
     ) -> T {
         if self.len() == 0 {
             panic_with_felt252('Empty array')
         }
-        max_loop(ref self, *self[0], 1)
+        let mut index = 0_usize;
+        let mut max = *self[0];
+        
+        loop {
+            check_gas();
+
+            if index >= self.len() {
+                break max;
+            }
+
+            let item = *self[index];
+            if item > max {
+                max = item
+            }
+            index = index + 1;
+        }
     }
 
     // Panic if empty array
