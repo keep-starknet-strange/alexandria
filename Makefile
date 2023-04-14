@@ -29,30 +29,30 @@ run:
 # Test the project
 test:
 	@echo "Testing everything..."
-	cairo-test -p $(TEST_ENTRYPOINT)
+	cairo-test $(TEST_ENTRYPOINT)
 
 test-data_structures:
 	@echo "Testing data structures..."
-	cairo-test -p $(TEST_ENTRYPOINT)/quaireaux/data_structures
+	cairo-test $(TEST_ENTRYPOINT)/quaireaux/data_structures
 
 test-math:
 	@echo "Testing math"
-	cairo-test -p $(TEST_ENTRYPOINT)/quaireaux/math
+	cairo-test $(TEST_ENTRYPOINT)/quaireaux/math
 
 test-sorting:
 	@echo "Testing sorting..."
-	cairo-test -p $(TEST_ENTRYPOINT)/quaireaux/sorting
+	cairo-test $(TEST_ENTRYPOINT)/quaireaux/sorting
 
 test-utils:
 	@echo "Testing utils..."
-	cairo-test -p $(TEST_ENTRYPOINT)/quaireaux/utils
+	cairo-test $(TEST_ENTRYPOINT)/quaireaux/utils
 
 # Special filter tests targets
 
 # Run tests related to the stack
 test-stack:
 	@echo "Testing stack..."
-	cairo-test -p $(TEST_ENTRYPOINT) -f stack
+	cairo-test $(TEST_ENTRYPOINT) -f stack
 
 # Format the project
 format:
