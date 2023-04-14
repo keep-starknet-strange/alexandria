@@ -37,6 +37,7 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         }
     }
 
+    // TODO Due to a loop bug with moved var, this can't use loop yet
     fn reverse(ref self: Array<T>) -> Array<T> {
         if self.len() == 0 {
             return ArrayTrait::new();
@@ -133,6 +134,8 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
     }
 
     // Panic if empty array
+    // TODO atm there is a bug (failing setting up the runner: #31139: [24] is undefined.)
+    // but this should be updated to use span and match
     fn max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         ref self: @Array<T>
     ) -> T {
@@ -158,6 +161,8 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
     }
 
     // Panic if empty array
+    // TODO atm there is a bug (failing setting up the runner: #33424: Inconsistent references annotations.
+    // but this should be updated to use span and match
     fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         ref self: Array<T>
     ) -> usize {
