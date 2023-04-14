@@ -1,4 +1,5 @@
 use array::ArrayTrait;
+use array::SpanTrait;
 
 use quaireaux_utils::check_gas;
 
@@ -45,21 +46,20 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
     }
 
     fn contains<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> bool {
+        let mut arr = self.span();
         let mut index = 0_usize;
         loop {
             check_gas();
-
-            if index >= self.len() {
-                break false;
-            } else if *self[index] == item {
-                break true;
-            } else {
-                index = index + 1;
+            match arr.pop_front() {
+                Option::Some(v) => { 
+                    if *v == item {
+                        break true; 
+                    }},
+                Option::None(_) => { break false; },
             };
         }
     }
 
-    // Panic if doesn't contains
     // Panic if doesn't contains
     fn index_of<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> usize {
         let mut index = 0_usize;
