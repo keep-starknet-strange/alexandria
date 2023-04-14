@@ -17,7 +17,7 @@ struct i9 {
 // # Panics
 // Panics if `x` is zero and has a sign that is not false.
 fn i9_check_sign_zero(x: i9) {
-    if x.inner == 0_u8 {
+    if x.inner == 0 {
         assert(x.sign == false, 'sign of 0 must be false');
     }
 }
@@ -75,7 +75,7 @@ fn i9_sub(a: i9, b: i9) -> i9 {
     i9_check_sign_zero(a);
     i9_check_sign_zero(b);
 
-    if (b.inner == 0_u8) {
+    if (b.inner == 0) {
         return a;
     }
 
@@ -144,7 +144,7 @@ impl i9MulEq of MulEq<i9> {
 fn i9_div(a: i9, b: i9) -> i9 {
     i9_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u8, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = a.sign ^ b.sign;
@@ -156,19 +156,19 @@ fn i9_div(a: i9, b: i9) -> i9 {
 
     // If the operands have different signs, rounding is necessary.
     // First, check if the quotient is an integer.
-    if (a.inner % b.inner == 0_u8) {
+    if (a.inner % b.inner == 0) {
         return i9 { inner: a.inner / b.inner, sign: sign };
     }
 
     // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
-    let quotient = (a.inner * 10_u8) / b.inner;
-    let last_digit = quotient % 10_u8;
+    let quotient = (a.inner * 10) / b.inner;
+    let last_digit = quotient % 10;
 
     // Check the last digit to determine rounding direction.
-    if (last_digit <= 5_u8) {
-        return i9 { inner: quotient / 10_u8, sign: sign };
+    if (last_digit <= 5) {
+        return i9 { inner: quotient / 10, sign: sign };
     } else {
-        return i9 { inner: (quotient / 10_u8) + 1, sign: sign };
+        return i9 { inner: (quotient / 10) + 1, sign: sign };
     }
 }
 
@@ -196,7 +196,7 @@ impl i9DivEq of DivEq<i9> {
 fn i9_rem(a: i9, b: i9) -> i9 {
     i9_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u8, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     return a - (b * (a / b));
 }
@@ -416,7 +416,7 @@ struct i17 {
 // # Panics
 // Panics if `x` is zero and has a sign that is not false.
 fn i17_check_sign_zero(x: i17) {
-    if x.inner == 0_u16 {
+    if x.inner == 0 {
         assert(x.sign == false, 'sign of 0 must be false');
     }
 }
@@ -474,7 +474,7 @@ fn i17_sub(a: i17, b: i17) -> i17 {
     i17_check_sign_zero(a);
     i17_check_sign_zero(b);
 
-    if (b.inner == 0_u16) {
+    if (b.inner == 0) {
         return a;
     }
 
@@ -543,7 +543,7 @@ impl i17MulEq of MulEq<i17> {
 fn i17_div(a: i17, b: i17) -> i17 {
     i17_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u16, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = a.sign ^ b.sign;
@@ -555,19 +555,19 @@ fn i17_div(a: i17, b: i17) -> i17 {
 
     // If the operands have different signs, rounding is necessary.
     // First, check if the quotient is an integer.
-    if (a.inner % b.inner == 0_u16) {
+    if (a.inner % b.inner == 0) {
         return i17 { inner: a.inner / b.inner, sign: sign };
     }
 
     // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
-    let quotient = (a.inner * 10_u16) / b.inner;
-    let last_digit = quotient % 10_u16;
+    let quotient = (a.inner * 10) / b.inner;
+    let last_digit = quotient % 10;
 
     // Check the last digit to determine rounding direction.
-    if (last_digit <= 5_u16) {
-        return i17 { inner: quotient / 10_u16, sign: sign };
+    if (last_digit <= 5) {
+        return i17 { inner: quotient / 10, sign: sign };
     } else {
-        return i17 { inner: (quotient / 10_u16) + 1, sign: sign };
+        return i17 { inner: (quotient / 10) + 1, sign: sign };
     }
 }
 
@@ -595,7 +595,7 @@ impl i17DivEq of DivEq<i17> {
 fn i17_rem(a: i17, b: i17) -> i17 {
     i17_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u16, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     return a - (b * (a / b));
 }
@@ -815,7 +815,7 @@ struct i33 {
 // # Panics
 // Panics if `x` is zero and has a sign that is not false.
 fn i33_check_sign_zero(x: i33) {
-    if x.inner == 0_u32 {
+    if x.inner == 0 {
         assert(x.sign == false, 'sign of 0 must be false');
     }
 }
@@ -873,7 +873,7 @@ fn i33_sub(a: i33, b: i33) -> i33 {
     i33_check_sign_zero(a);
     i33_check_sign_zero(b);
 
-    if (b.inner == 0_u32) {
+    if (b.inner == 0) {
         return a;
     }
 
@@ -942,7 +942,7 @@ impl i33MulEq of MulEq<i33> {
 fn i33_div(a: i33, b: i33) -> i33 {
     i33_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u32, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = a.sign ^ b.sign;
@@ -954,19 +954,19 @@ fn i33_div(a: i33, b: i33) -> i33 {
 
     // If the operands have different signs, rounding is necessary.
     // First, check if the quotient is an integer.
-    if (a.inner % b.inner == 0_u32) {
+    if (a.inner % b.inner == 0) {
         return i33 { inner: a.inner / b.inner, sign: sign };
     }
 
     // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
-    let quotient = (a.inner * 10_u32) / b.inner;
-    let last_digit = quotient % 10_u32;
+    let quotient = (a.inner * 10) / b.inner;
+    let last_digit = quotient % 10;
 
     // Check the last digit to determine rounding direction.
-    if (last_digit <= 5_u32) {
-        return i33 { inner: quotient / 10_u32, sign: sign };
+    if (last_digit <= 5) {
+        return i33 { inner: quotient / 10, sign: sign };
     } else {
-        return i33 { inner: (quotient / 10_u32) + 1, sign: sign };
+        return i33 { inner: (quotient / 10) + 1, sign: sign };
     }
 }
 
@@ -994,7 +994,7 @@ impl i33DivEq of DivEq<i33> {
 fn i33_rem(a: i33, b: i33) -> i33 {
     i33_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u32, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     return a - (b * (a / b));
 }
@@ -1214,7 +1214,7 @@ struct i65 {
 // # Panics
 // Panics if `x` is zero and has a sign that is not false.
 fn i65_check_sign_zero(x: i65) {
-    if x.inner == 0_u64 {
+    if x.inner == 0 {
         assert(x.sign == false, 'sign of 0 must be false');
     }
 }
@@ -1272,7 +1272,7 @@ fn i65_sub(a: i65, b: i65) -> i65 {
     i65_check_sign_zero(a);
     i65_check_sign_zero(b);
 
-    if (b.inner == 0_u64) {
+    if (b.inner == 0) {
         return a;
     }
 
@@ -1341,7 +1341,7 @@ impl i65MulEq of MulEq<i65> {
 fn i65_div(a: i65, b: i65) -> i65 {
     i65_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u64, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = a.sign ^ b.sign;
@@ -1353,19 +1353,19 @@ fn i65_div(a: i65, b: i65) -> i65 {
 
     // If the operands have different signs, rounding is necessary.
     // First, check if the quotient is an integer.
-    if (a.inner % b.inner == 0_u64) {
+    if (a.inner % b.inner == 0) {
         return i65 { inner: a.inner / b.inner, sign: sign };
     }
 
     // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
-    let quotient = (a.inner * 10_u64) / b.inner;
-    let last_digit = quotient % 10_u64;
+    let quotient = (a.inner * 10) / b.inner;
+    let last_digit = quotient % 10;
 
     // Check the last digit to determine rounding direction.
-    if (last_digit <= 5_u64) {
-        return i65 { inner: quotient / 10_u64, sign: sign };
+    if (last_digit <= 5) {
+        return i65 { inner: quotient / 10, sign: sign };
     } else {
-        return i65 { inner: (quotient / 10_u64) + 1, sign: sign };
+        return i65 { inner: (quotient / 10) + 1, sign: sign };
     }
 }
 
@@ -1393,7 +1393,7 @@ impl i65DivEq of DivEq<i65> {
 fn i65_rem(a: i65, b: i65) -> i65 {
     i65_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u64, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     return a - (b * (a / b));
 }
@@ -1613,7 +1613,7 @@ struct i129 {
 // # Panics
 // Panics if `x` is zero and has a sign that is not false.
 fn i129_check_sign_zero(x: i129) {
-    if x.inner == 0_u128 {
+    if x.inner == 0 {
         assert(x.sign == false, 'sign of 0 must be false');
     }
 }
@@ -1671,7 +1671,7 @@ fn i129_sub(a: i129, b: i129) -> i129 {
     i129_check_sign_zero(a);
     i129_check_sign_zero(b);
 
-    if (b.inner == 0_u128) {
+    if (b.inner == 0) {
         return a;
     }
 
@@ -1740,7 +1740,7 @@ impl i129MulEq of MulEq<i129> {
 fn i129_div(a: i129, b: i129) -> i129 {
     i129_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u128, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = a.sign ^ b.sign;
@@ -1752,19 +1752,19 @@ fn i129_div(a: i129, b: i129) -> i129 {
 
     // If the operands have different signs, rounding is necessary.
     // First, check if the quotient is an integer.
-    if (a.inner % b.inner == 0_u128) {
+    if (a.inner % b.inner == 0) {
         return i129 { inner: a.inner / b.inner, sign: sign };
     }
 
     // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
-    let quotient = (a.inner * 10_u128) / b.inner;
-    let last_digit = quotient % 10_u128;
+    let quotient = (a.inner * 10) / b.inner;
+    let last_digit = quotient % 10;
 
     // Check the last digit to determine rounding direction.
-    if (last_digit <= 5_u128) {
-        return i129 { inner: quotient / 10_u128, sign: sign };
+    if (last_digit <= 5) {
+        return i129 { inner: quotient / 10, sign: sign };
     } else {
-        return i129 { inner: (quotient / 10_u128) + 1, sign: sign };
+        return i129 { inner: (quotient / 10) + 1, sign: sign };
     }
 }
 
@@ -1792,7 +1792,7 @@ impl i129DivEq of DivEq<i129> {
 fn i129_rem(a: i129, b: i129) -> i129 {
     i129_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u128, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     return a - (b * (a / b));
 }

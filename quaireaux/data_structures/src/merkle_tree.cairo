@@ -51,7 +51,7 @@ impl MerkleTreeImpl of MerkleTreeTrait {
         ref self: MerkleTree, current_node: felt252, mut proof: Array<felt252>
     ) -> felt252 {
         let proof_len = proof.len();
-        internal_compute_root(current_node, 0_u32, proof_len, proof)
+        internal_compute_root(current_node, 0, proof_len, proof)
     }
 
     /// Verify a merkle proof.
@@ -87,7 +87,7 @@ fn internal_compute_root(
     quaireaux_utils::check_gas();
 
     // Loop until we have reached the end of the proof.
-    if proof_len == 0_u32 {
+    if proof_len == 0 {
         return current_node;
     }
     let mut node = 0;

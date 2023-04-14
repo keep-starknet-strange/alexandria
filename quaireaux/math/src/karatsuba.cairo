@@ -14,11 +14,11 @@ use quaireaux::utils;
 fn multiply(x: u128, y: u128) -> u128 {
     quaireaux_utils::check_gas();
 
-    if x < 10_u128 {
+    if x < 10 {
         return x * y;
     }
 
-    if y < 10_u128 {
+    if y < 10 {
         return x * y;
     }
 
