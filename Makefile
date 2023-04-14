@@ -1,7 +1,8 @@
 .PHONY: default
 
 # Configuration
-PROJECT_NAME = quaireaux
+ROOT_PROJECT = .
+PROJECT_NAME = ./quaireaux/
 BUILD_DIR = build
 
 # Default target
@@ -27,7 +28,7 @@ run:
 # Test the project
 test:
 	@echo "Testing everything..."
-	cairo-test $(PROJECT_NAME)
+	cairo-test $(ROOT_PROJECT)
 
 test-data_structures:
 	@echo "Testing data structures..."
@@ -55,12 +56,12 @@ test-stack:
 # Format the project
 format:
 	@echo "Formatting everything..."
-	cairo-format --recursive --print-parsing-errors $(PROJECT_NAME)
+	cairo-format --recursive --print-parsing-errors $(ROOT_PROJECT)
 
 # Check the formatting of the project
 check-format:
 	@echo "Checking formatting..."
-	cairo-format --recursive --check $(PROJECT_NAME)
+	cairo-format --recursive --check $(ROOT_PROJECT)
 
 # Clean the project
 clean:
