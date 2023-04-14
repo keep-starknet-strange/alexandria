@@ -39,7 +39,7 @@ jobs:
         run: make test
 
   check-format:
-    name: test
+    name: check-format
     runs-on: ubuntu-latest
     steps:
       - name: Step 1 - Check out main branch

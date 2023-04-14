@@ -35,7 +35,7 @@ fn _aliquot_sum(number: felt252, limit: felt252, index: felt252, sum: felt252) -
     if index == limit {
         return 0;
     }
-    
+
     let (_, r) = unsafe_euclidean_div(number, index);
     if r == 0 {
         index + _aliquot_sum(number, limit, index + 1, sum)
