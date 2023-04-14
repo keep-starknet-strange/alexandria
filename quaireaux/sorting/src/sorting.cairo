@@ -24,5 +24,5 @@ fn is_equal(ref a: Array<u32>, ref b: Array<u32>, index: u32) -> bool {
         return false;
     }
 
-    is_equal(ref a, ref b, index + 1_u32)
+    is_equal(ref a, ref b, index + 1)
 }

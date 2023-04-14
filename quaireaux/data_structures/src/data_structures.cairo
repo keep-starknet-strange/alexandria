@@ -8,13 +8,13 @@ use quaireaux_utils::check_gas;
 /// * `end` - The index to end the slice at (not included).
 /// # Returns
 /// * `Array<u256>` - The slice of the array.
-fn array_slice(src: @Array<u256>, mut begin: usize, mut end: usize) -> Array<u256> {
+fn array_slice(src: @Array<u256>, mut begin: usize, end: usize) -> Array<u256> {
     let mut slice = ArrayTrait::new();
-
+    let len = begin + end;
     loop {
         check_gas();
 
-        if end == 0_u32 {
+        if begin >= len {
             break ();
         }
         if begin >= src.len() {
@@ -22,8 +22,7 @@ fn array_slice(src: @Array<u256>, mut begin: usize, mut end: usize) -> Array<u25
         }
         
         slice.append(*src[begin]);
-        begin = begin + 1_usize;
-        end = end - 1_usize;
+        begin = begin + 1;
     };
     slice
 }

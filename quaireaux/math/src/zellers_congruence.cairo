@@ -28,11 +28,11 @@ fn day_of_week(date: u128, month: u128, year: u128) -> Option<u128> {
     let mut y = year;
     if month < 3_u128 {
         m = month + 12_u128;
-        y = year - 1_u128;
+        y = year - 1;
     }
 
     let day = (q
-        + (26_u128 * (m + 1_u128) / 10_u128)
+        + (26_u128 * (m + 1) / 10_u128)
         + (y % 100_u128)
         + ((y % 100_u128) / 4_u128)
         + ((y / 100_u128) / 4_u128)

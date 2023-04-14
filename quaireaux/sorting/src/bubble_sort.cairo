@@ -39,11 +39,11 @@ impl TPartialOrd: PartialOrd<T>>(
             if *array[idx1] < *array[idx2] {
                 sorted_array.append(*array[idx1]);
                 idx1 = idx2;
-                idx2 = idx2 + 1_usize;
+                idx2 = idx2 + 1;
             } else {
                 sorted_array.append(*array[idx2]);
-                idx2 = idx2 + 1_usize;
-                sorted_iteration = 1_usize;
+                idx2 = idx2 + 1;
+                sorted_iteration = 1;
             }
         };
     };

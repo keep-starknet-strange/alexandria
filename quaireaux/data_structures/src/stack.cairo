@@ -73,7 +73,7 @@ impl StackImpl of StackTrait {
         // Deconstruct the stack struct because we consume it
         let Stack{elements: mut elements } = self;
         let stack_len = elements.len();
-        let last_idx = stack_len - 1_usize;
+        let last_idx = stack_len - 1;
 
         let sliced_elements = array_slice(@elements, begin: 0_usize, end: last_idx);
 
@@ -90,7 +90,7 @@ impl StackImpl of StackTrait {
         if self.is_empty() {
             return Option::None(());
         }
-        Option::Some(*self.elements[self.elements.len() - 1_usize])
+        Option::Some(*self.elements[self.elements.len() - 1])
     }
 
     /// Returns the number of items in the stack.

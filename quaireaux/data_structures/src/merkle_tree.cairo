@@ -106,5 +106,5 @@ fn internal_compute_root(
     //node = LegacyHash::hash(proof_element, current_node);
     //}
     // Recursively compute the root.
-    internal_compute_root(node, proof_index + 1_u32, proof_len - 1_u32, proof)
+    internal_compute_root(node, proof_index + 1, proof_len - 1, proof)
 }

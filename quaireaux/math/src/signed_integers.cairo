@@ -168,7 +168,7 @@ fn i9_div(a: i9, b: i9) -> i9 {
     if (last_digit <= 5_u8) {
         return i9 { inner: quotient / 10_u8, sign: sign };
     } else {
-        return i9 { inner: (quotient / 10_u8) + 1_u8, sign: sign };
+        return i9 { inner: (quotient / 10_u8) + 1, sign: sign };
     }
 }
 
@@ -567,7 +567,7 @@ fn i17_div(a: i17, b: i17) -> i17 {
     if (last_digit <= 5_u16) {
         return i17 { inner: quotient / 10_u16, sign: sign };
     } else {
-        return i17 { inner: (quotient / 10_u16) + 1_u16, sign: sign };
+        return i17 { inner: (quotient / 10_u16) + 1, sign: sign };
     }
 }
 
@@ -966,7 +966,7 @@ fn i33_div(a: i33, b: i33) -> i33 {
     if (last_digit <= 5_u32) {
         return i33 { inner: quotient / 10_u32, sign: sign };
     } else {
-        return i33 { inner: (quotient / 10_u32) + 1_u32, sign: sign };
+        return i33 { inner: (quotient / 10_u32) + 1, sign: sign };
     }
 }
 
@@ -1365,7 +1365,7 @@ fn i65_div(a: i65, b: i65) -> i65 {
     if (last_digit <= 5_u64) {
         return i65 { inner: quotient / 10_u64, sign: sign };
     } else {
-        return i65 { inner: (quotient / 10_u64) + 1_u64, sign: sign };
+        return i65 { inner: (quotient / 10_u64) + 1, sign: sign };
     }
 }
 
@@ -1764,7 +1764,7 @@ fn i129_div(a: i129, b: i129) -> i129 {
     if (last_digit <= 5_u128) {
         return i129 { inner: quotient / 10_u128, sign: sign };
     } else {
-        return i129 { inner: (quotient / 10_u128) + 1_u128, sign: sign };
+        return i129 { inner: (quotient / 10_u128) + 1, sign: sign };
     }
 }
 

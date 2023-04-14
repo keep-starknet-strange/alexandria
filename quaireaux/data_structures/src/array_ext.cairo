@@ -36,65 +36,65 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
     }
 
     fn reverse(ref self: Array<T>) -> Array<T> {
-        if self.len() == 0_usize {
+        if self.len() == 0 {
             return ArrayTrait::new();
         }
         let mut response = ArrayTrait::new();
-        reverse_loop(ref self, ref response, self.len() - 1_usize);
+        reverse_loop(ref self, ref response, self.len() - 1);
         response
     }
 
     fn contains<impl TPartialEq: PartialEq<T>>(ref self: Array<T>, item: T) -> bool {
-        contains_loop(ref self, item, 0_usize)
+        contains_loop(ref self, item, 0)
     }
 
     // Panic if doesn't contains
     fn index_of<impl TPartialEq: PartialEq<T>>(ref self: Array<T>, item: T) -> usize {
-        index_of_loop(ref self, item, 0_usize)
+        index_of_loop(ref self, item, 0)
     }
 
     fn occurrences_of<impl TPartialEq: PartialEq<T>>(ref self: Array<T>, item: T) -> usize {
-        occurrences_of_loop(ref self, item, 0_usize, 0_usize)
+        occurrences_of_loop(ref self, item, 0, 0)
     }
 
     // Panic if empty array
     fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         ref self: Array<T>
     ) -> T {
-        if self.len() == 0_usize {
+        if self.len() == 0 {
             panic_with_felt252('Empty array')
         }
-        min_loop(ref self, *self[0_usize], 1_usize)
+        min_loop(ref self, *self[0], 1)
     }
 
     // Panic if empty array
     fn index_of_min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         ref self: Array<T>
     ) -> usize {
-        if self.len() == 0_usize {
+        if self.len() == 0 {
             panic_with_felt252('Empty array')
         }
-        index_of_min_loop(ref self, *self[0_usize], 0_usize, 1_usize)
+        index_of_min_loop(ref self, *self[0], 0, 1)
     }
 
     // Panic if empty array
     fn max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         ref self: Array<T>
     ) -> T {
-        if self.len() == 0_usize {
+        if self.len() == 0 {
             panic_with_felt252('Empty array')
         }
-        max_loop(ref self, *self[0_usize], 1_usize)
+        max_loop(ref self, *self[0], 1)
     }
 
     // Panic if empty array
     fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         ref self: Array<T>
     ) -> usize {
-        if self.len() == 0_usize {
+        if self.len() == 0 {
             panic_with_felt252('Empty array')
         }
-        index_of_max_loop(ref self, *self[0_usize], 0_usize, 1_usize)
+        index_of_max_loop(ref self, *self[0], 0, 1_usize)
     }
 }
 
@@ -104,10 +104,10 @@ fn reverse_loop<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
     check_gas();
 
     response.append(*arr[index]);
-    if index == 0_usize {
+    if index == 0 {
         return ();
     }
-    reverse_loop(ref arr, ref response, index - 1_usize);
+    reverse_loop(ref arr, ref response, index - 1);
 }
 
 fn contains_loop<T, impl TDrop: Drop<T>, impl TPartialEq: PartialEq<T>, impl TCopy: Copy<T>>(
@@ -120,7 +120,7 @@ fn contains_loop<T, impl TDrop: Drop<T>, impl TPartialEq: PartialEq<T>, impl TCo
     } else if *arr[index] == item {
         true
     } else {
-        contains_loop(ref arr, item, index + 1_usize)
+        contains_loop(ref arr, item, index + 1)
     }
 }
 
@@ -134,7 +134,7 @@ fn index_of_loop<T, impl TDrop: Drop<T>, impl TPartialEq: PartialEq<T>, impl TCo
     } else if *arr[index] == item {
         index
     } else {
-        index_of_loop(ref arr, item, index + 1_usize)
+        index_of_loop(ref arr, item, index + 1)
     }
 }
 
@@ -146,9 +146,9 @@ fn occurrences_of_loop<T, impl TDrop: Drop<T>, impl TPartialEq: PartialEq<T>, im
     if index >= arr.len() {
         count
     } else if *arr[index] == item {
-        occurrences_of_loop(ref arr, item, index + 1_usize, count + 1_usize)
+        occurrences_of_loop(ref arr, item, index + 1, count + 1)
     } else {
-        occurrences_of_loop(ref arr, item, index + 1_usize, count)
+        occurrences_of_loop(ref arr, item, index + 1, count)
     }
 }
 
@@ -167,9 +167,9 @@ impl TCopy: Copy<T>>(
 
     let item = *arr[index];
     if item < current_min {
-        min_loop(ref arr, item, index + 1_usize)
+        min_loop(ref arr, item, index + 1)
     } else {
-        min_loop(ref arr, current_min, index + 1_usize)
+        min_loop(ref arr, current_min, index + 1)
     }
 }
 
@@ -188,9 +188,9 @@ impl TCopy: Copy<T>>(
 
     let item = *arr[index];
     if item < current_min {
-        index_of_min_loop(ref arr, item, index, index + 1_usize)
+        index_of_min_loop(ref arr, item, index, index + 1)
     } else {
-        index_of_min_loop(ref arr, current_min, index_of_min, index + 1_usize)
+        index_of_min_loop(ref arr, current_min, index_of_min, index + 1)
     }
 }
 
@@ -209,9 +209,9 @@ impl TCopy: Copy<T>>(
 
     let item = *arr[index];
     if item > current_min {
-        max_loop(ref arr, item, index + 1_usize)
+        max_loop(ref arr, item, index + 1)
     } else {
-        max_loop(ref arr, current_min, index + 1_usize)
+        max_loop(ref arr, current_min, index + 1)
     }
 }
 
@@ -230,8 +230,8 @@ impl TCopy: Copy<T>>(
 
     let item = *arr[index];
     if item > current_min {
-        index_of_max_loop(ref arr, item, index, index + 1_usize)
+        index_of_max_loop(ref arr, item, index, index + 1)
     } else {
-        index_of_max_loop(ref arr, current_min, index_of_min, index + 1_usize)
+        index_of_max_loop(ref arr, current_min, index_of_min, index + 1)
     }
 }
