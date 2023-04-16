@@ -11,10 +11,12 @@ trait ArrayTraitExt<T> {
     fn index_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize;
     fn occurrences_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize;
     fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(self: @Array<T>) -> T;
+    // TODO Ref should be gone, but there is a bug ATM
     fn index_of_min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         ref self: Array<T>
     ) -> usize;
     fn max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(self: @Array<T>) -> T;
+    // TODO Ref should be gone, but there is a bug ATM
     fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         ref self: Array<T>
     ) -> usize;
