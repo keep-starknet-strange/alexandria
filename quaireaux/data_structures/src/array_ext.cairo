@@ -8,7 +8,7 @@ trait ArrayTraitExt<T> {
     fn append_all(ref self: Array<T>, ref arr: Array<T>);
     fn reverse(ref self: Array<T>) -> Array<T>;
     fn contains<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> bool;
-    fn index_of<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> usize;
+    fn index_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize;
     fn occurrences_of<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> usize;
     fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(self: @Array<T>) -> T;
     fn index_of_min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
@@ -61,7 +61,7 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
     }
 
     // Panic if doesn't contains
-    fn index_of<impl TPartialEq: PartialEq<T>>(ref self: @Array<T>, item: T) -> usize {
+    fn index_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize {
         let mut arr = self.span();
         let mut index = 0_usize;
         loop {
