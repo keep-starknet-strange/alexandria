@@ -266,9 +266,8 @@ fn occurrences_of_filled() {
 #[test]
 #[available_gas(2000000)]
 fn min() {
-    let mut arr = get_u128_array();
-    let mut ref_arr = @arr;
-    assert(ref_arr.min() == 21_u128, 'Min should be 21');
+    let mut arr = @get_u128_array();
+    assert(arr.min() == 21_u128, 'Min should be 21');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
 
@@ -277,8 +276,7 @@ fn min() {
 fn min_step_one() {
     let mut arr = get_u128_array();
     arr.append(20_u128);
-    let mut ref_arr = @arr;
-    assert(ref_arr.min() == 20_u128, 'Min should be 20');
+    assert(*@arr.min() == 20_u128, 'Min should be 20');
     assert(arr.len() == 4, 'arr should not be consummed');
 }
 
@@ -287,8 +285,7 @@ fn min_step_one() {
 fn min_with_duplicate() {
     let mut arr = get_u128_array();
     arr.append(21_u128);
-    let mut ref_arr = @arr;
-    assert(ref_arr.min() == 21_u128, 'Min should be 21');
+    assert(*@arr.min() == 21_u128, 'Min should be 21');
     assert(arr.len() == 4, 'arr should not be consummed');
 }
 
@@ -305,8 +302,7 @@ fn min_empty_array() {
 fn min_one_item() {
     let mut arr = ArrayTrait::new();
     arr.append(21_u128);
-    let mut ref_arr = @arr;
-    assert(ref_arr.min() == 21_u128, 'Min should be 21');
+    assert(*@arr.min() == 21_u128, 'Min should be 21');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
 
@@ -317,8 +313,7 @@ fn min_last() {
     arr.append(84_u128);
     arr.append(42_u128);
     arr.append(21_u128);
-    let mut ref_arr = @arr;
-    assert(ref_arr.min() == 21_u128, 'Min should be 21');
+    assert(*@arr.min() == 21_u128, 'Min should be 21');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
 
@@ -393,8 +388,7 @@ fn max() {
 fn max_step_one() {
     let mut arr = get_u128_array();
     arr.append(85_u128);
-    let mut ref_arr = @arr;
-    assert(ref_arr.max() == 85_u128, 'Max should be 85');
+    assert(*@arr.max() == 85_u128, 'Max should be 85');
     assert(arr.len() == 4, 'arr should not be consummed');
 }
 
@@ -403,8 +397,7 @@ fn max_step_one() {
 fn max_with_duplicate() {
     let mut arr = get_u128_array();
     arr.append(84_u128);
-    let mut ref_arr = @arr;
-    assert(ref_arr.max() == 84_u128, 'Max should be 84');
+    assert(*@arr.max() == 84_u128, 'Max should be 84');
     assert(arr.len() == 4, 'arr should not be consummed');
 }
 
@@ -412,9 +405,8 @@ fn max_with_duplicate() {
 #[available_gas(2000000)]
 #[should_panic(expected: ('Empty array', ))]
 fn max_empty_array() {
-    let mut arr: Array<u128> = ArrayTrait::new();
-    let mut ref_arr = @arr;
-    ref_arr.max();
+    let mut arr: @Array<u128> = @ArrayTrait::new();
+    arr.max();
 }
 
 #[test]
@@ -422,8 +414,7 @@ fn max_empty_array() {
 fn max_one_item() {
     let mut arr = ArrayTrait::new();
     arr.append(21_u128);
-    let mut ref_arr = @arr;
-    assert(ref_arr.max() == 21_u128, 'Max should be 21');
+    assert(*@arr.max() == 21_u128, 'Max should be 21');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
 
@@ -434,8 +425,7 @@ fn max_first() {
     arr.append(84_u128);
     arr.append(42_u128);
     arr.append(21_u128);
-    let mut ref_arr = @arr;
-    assert(ref_arr.max() == 84_u128, 'Max should be 84');
+    assert(*@arr.max() == 84_u128, 'Max should be 84');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
 
