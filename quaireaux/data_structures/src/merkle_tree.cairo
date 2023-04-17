@@ -16,6 +16,7 @@
 use array::ArrayTrait;
 use option::OptionTrait;
 use hash::LegacyHash;
+use traits::Into;
 
 /// MerkleTree representation.
 #[derive(Drop)]
@@ -98,11 +99,11 @@ fn internal_compute_root(
     // TODO: enable when bug is fixed
     // thread 'main' panicked at 'Failed to specialize: `drop<Pedersen>`', 
     // crates/cairo-lang-sierra-generator/src/utils.rs:202:9
-    //if current_node < proof_element {
-    //node = LegacyHash::hash(current_node, proof_element);
-    //} else {
-    //node = LegacyHash::hash(proof_element, current_node);
-    //}
+    if current_node.into() < proof_element.into() {
+        node = LegacyHash::hash(current_node, proof_element);
+    } else {
+        node = LegacyHash::hash(proof_element, current_node);
+    }
     // Recursively compute the root.
     internal_compute_root(node, proof_index + 1, proof_len - 1, proof)
 }
