@@ -91,7 +91,7 @@ fn internal_compute_root(
     }
     let mut node = 0;
     // Get the next element of the proof.
-    let proof_element = proof[proof_index];
+    let proof_element = *proof[proof_index];
 
     // Compute the hash of the current node and the current element of the proof.
     // We need to check if the current node is smaller than the current element of the proof.
