@@ -19,11 +19,11 @@ use option::OptionTrait;
 
 use quaireaux_data_structures::array_slice;
 
-const ZERO_USIZE: usize = 0_usize;
+const ZERO_USIZE: usize = 0;
 
 #[derive(Drop)]
 struct Stack {
-    elements: Array::<u256>, 
+    elements: Array<u256>, 
 }
 
 trait StackTrait {
@@ -32,9 +32,9 @@ trait StackTrait {
     /// Pushes a new value onto the stack.
     fn push(ref self: Stack, value: u256);
     /// Removes the last item from the stack and returns it, or None if the stack is empty.
-    fn pop(ref self: Stack) -> Option::<u256>;
+    fn pop(ref self: Stack) -> Option<u256>;
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
-    fn peek(self: @Stack) -> Option::<u256>;
+    fn peek(self: @Stack) -> Option<u256>;
     /// Returns the number of items in the stack.
     fn len(self: @Stack) -> usize;
     /// Returns true if the stack is empty.
@@ -65,33 +65,32 @@ impl StackImpl of StackTrait {
     /// * `self` - The stack to pop the item off of.
     /// Returns
     /// * Stack The stack with the item removed.
-    /// * Option::<u256> The item removed or None if the stack is empty.
-    fn pop(ref self: Stack) -> Option::<u256> {
+    /// * Option<u256> The item removed or None if the stack is empty.
+    fn pop(ref self: Stack) -> Option<u256> {
         if self.is_empty() {
             return Option::None(());
         }
         // Deconstruct the stack struct because we consume it
         let Stack{elements: mut elements } = self;
         let stack_len = elements.len();
-        let last_idx = stack_len - 1_usize;
+        let last_idx = stack_len - 1;
 
-        let sliced_elements = array_slice(@elements, begin: 0_usize, end: last_idx);
+        let sliced_elements = array_slice(@elements, begin: 0, end: last_idx);
 
-        let value = elements.at(last_idx);
         // Update the returned stack with the sliced array
         self = Stack { elements: sliced_elements };
-        Option::Some(*value)
+        Option::Some(*elements[last_idx])
     }
 
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
     /// * `self` - The stack to peek the item off of.
     /// Returns
-    /// * Option::<u256> The last item of the stack
-    fn peek(self: @Stack) -> Option::<u256> {
+    /// * Option<u256> The last item of the stack
+    fn peek(self: @Stack) -> Option<u256> {
         if self.is_empty() {
             return Option::None(());
         }
-        Option::Some(*self.elements.at(self.elements.len() - 1_usize))
+        Option::Some(*self.elements[self.elements.len() - 1])
     }
 
     /// Returns the number of items in the stack.

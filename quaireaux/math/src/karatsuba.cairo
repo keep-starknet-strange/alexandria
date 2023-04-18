@@ -14,16 +14,17 @@ use quaireaux::utils;
 fn multiply(x: u128, y: u128) -> u128 {
     quaireaux_utils::check_gas();
 
-    if x < 10_u128 {
+    if x < 10 {
         return x * y;
     }
 
-    if y < 10_u128 {
+    if y < 10 {
         return x * y;
     }
 
     let max_digit_counts = max(
-        quaireaux_utils::count_digits_of_base(x.into(), 10), quaireaux_utils::count_digits_of_base(y, 10)
+        quaireaux_utils::count_digits_of_base(x.into(), 10),
+        quaireaux_utils::count_digits_of_base(y, 10)
     );
     let middle_idx = _div_half_ceil(max_digit_counts);
     let (x1, x0) = _split_number(x, middle_idx);

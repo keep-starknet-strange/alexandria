@@ -17,7 +17,7 @@ struct i9 {
 // # Panics
 // Panics if `x` is zero and has a sign that is not false.
 fn i9_check_sign_zero(x: i9) {
-    if x.inner == 0_u8 {
+    if x.inner == 0 {
         assert(x.sign == false, 'sign of 0 must be false');
     }
 }
@@ -51,14 +51,14 @@ fn i9_add(a: i9, b: i9) -> i9 {
 }
 
 // Implements the Add trait for i9.
-impl i9Add of Add::<i9> {
+impl i9Add of Add<i9> {
     fn add(a: i9, b: i9) -> i9 {
         i9_add(a, b)
     }
 }
 
 // Implements the AddEq trait for i9.
-impl i9AddEq of AddEq::<i9> {
+impl i9AddEq of AddEq<i9> {
     #[inline(always)]
     fn add_eq(ref self: i9, other: i9) {
         self = Add::add(self, other);
@@ -75,7 +75,7 @@ fn i9_sub(a: i9, b: i9) -> i9 {
     i9_check_sign_zero(a);
     i9_check_sign_zero(b);
 
-    if (b.inner == 0_u8) {
+    if (b.inner == 0) {
         return a;
     }
 
@@ -85,14 +85,14 @@ fn i9_sub(a: i9, b: i9) -> i9 {
 }
 
 // Implements the Sub trait for i9.
-impl i9Sub of Sub::<i9> {
+impl i9Sub of Sub<i9> {
     fn sub(a: i9, b: i9) -> i9 {
         i9_sub(a, b)
     }
 }
 
 // Implements the SubEq trait for i9.
-impl i9SubEq of SubEq::<i9> {
+impl i9SubEq of SubEq<i9> {
     #[inline(always)]
     fn sub_eq(ref self: i9, other: i9) {
         self = Sub::sub(self, other);
@@ -121,14 +121,14 @@ fn i9_mul(a: i9, b: i9) -> i9 {
 }
 
 // Implements the Mul trait for i9.
-impl i9Mul of Mul::<i9> {
+impl i9Mul of Mul<i9> {
     fn mul(a: i9, b: i9) -> i9 {
         i9_mul(a, b)
     }
 }
 
 // Implements the MulEq trait for i9.
-impl i9MulEq of MulEq::<i9> {
+impl i9MulEq of MulEq<i9> {
     #[inline(always)]
     fn mul_eq(ref self: i9, other: i9) {
         self = Mul::mul(self, other);
@@ -144,7 +144,7 @@ impl i9MulEq of MulEq::<i9> {
 fn i9_div(a: i9, b: i9) -> i9 {
     i9_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u8, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = a.sign ^ b.sign;
@@ -156,31 +156,31 @@ fn i9_div(a: i9, b: i9) -> i9 {
 
     // If the operands have different signs, rounding is necessary.
     // First, check if the quotient is an integer.
-    if (a.inner % b.inner == 0_u8) {
+    if (a.inner % b.inner == 0) {
         return i9 { inner: a.inner / b.inner, sign: sign };
     }
 
     // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
-    let quotient = (a.inner * 10_u8) / b.inner;
-    let last_digit = quotient % 10_u8;
+    let quotient = (a.inner * 10) / b.inner;
+    let last_digit = quotient % 10;
 
     // Check the last digit to determine rounding direction.
-    if (last_digit <= 5_u8) {
-        return i9 { inner: quotient / 10_u8, sign: sign };
+    if (last_digit <= 5) {
+        return i9 { inner: quotient / 10, sign: sign };
     } else {
-        return i9 { inner: (quotient / 10_u8) + 1_u8, sign: sign };
+        return i9 { inner: (quotient / 10) + 1, sign: sign };
     }
 }
 
 // Implements the Div trait for i9.
-impl i9Div of Div::<i9> {
+impl i9Div of Div<i9> {
     fn div(a: i9, b: i9) -> i9 {
         i9_div(a, b)
     }
 }
 
 // Implements the DivEq trait for i9.
-impl i9DivEq of DivEq::<i9> {
+impl i9DivEq of DivEq<i9> {
     #[inline(always)]
     fn div_eq(ref self: i9, other: i9) {
         self = Div::div(self, other);
@@ -196,20 +196,20 @@ impl i9DivEq of DivEq::<i9> {
 fn i9_rem(a: i9, b: i9) -> i9 {
     i9_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u8, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     return a - (b * (a / b));
 }
 
 // Implements the Rem trait for i9.
-impl i9Rem of Rem::<i9> {
+impl i9Rem of Rem<i9> {
     fn rem(a: i9, b: i9) -> i9 {
         i9_rem(a, b)
     }
 }
 
 // Implements the RemEq trait for i9.
-impl i9RemEq of RemEq::<i9> {
+impl i9RemEq of RemEq<i9> {
     #[inline(always)]
     fn rem_eq(ref self: i9, other: i9) {
         self = Rem::rem(self, other);
@@ -256,7 +256,7 @@ fn i9_ne(a: i9, b: i9) -> bool {
 }
 
 // Implements the PartialEq trait for i9.
-impl i9PartialEq of PartialEq::<i9> {
+impl i9PartialEq of PartialEq<i9> {
     fn eq(a: i9, b: i9) -> bool {
         i9_eq(a, b)
     }
@@ -329,7 +329,7 @@ fn i9_ge(a: i9, b: i9) -> bool {
 }
 
 // Implements the PartialOrd trait for i9.
-impl i9PartialOrd of PartialOrd::<i9> {
+impl i9PartialOrd of PartialOrd<i9> {
     fn le(a: i9, b: i9) -> bool {
         i9_le(a, b)
     }
@@ -356,7 +356,7 @@ fn i9_neg(x: i9) -> i9 {
 }
 
 // Implements the Neg trait for i9.
-impl i9Neg of Neg::<i9> {
+impl i9Neg of Neg<i9> {
     fn neg(x: i9) -> i9 {
         i9_neg(x)
     }
@@ -416,7 +416,7 @@ struct i17 {
 // # Panics
 // Panics if `x` is zero and has a sign that is not false.
 fn i17_check_sign_zero(x: i17) {
-    if x.inner == 0_u16 {
+    if x.inner == 0 {
         assert(x.sign == false, 'sign of 0 must be false');
     }
 }
@@ -450,14 +450,14 @@ fn i17_add(a: i17, b: i17) -> i17 {
 }
 
 // Implements the Add trait for i17.
-impl i17Add of Add::<i17> {
+impl i17Add of Add<i17> {
     fn add(a: i17, b: i17) -> i17 {
         i17_add(a, b)
     }
 }
 
 // Implements the AddEq trait for i17.
-impl i17AddEq of AddEq::<i17> {
+impl i17AddEq of AddEq<i17> {
     #[inline(always)]
     fn add_eq(ref self: i17, other: i17) {
         self = Add::add(self, other);
@@ -474,7 +474,7 @@ fn i17_sub(a: i17, b: i17) -> i17 {
     i17_check_sign_zero(a);
     i17_check_sign_zero(b);
 
-    if (b.inner == 0_u16) {
+    if (b.inner == 0) {
         return a;
     }
 
@@ -484,14 +484,14 @@ fn i17_sub(a: i17, b: i17) -> i17 {
 }
 
 // Implements the Sub trait for i17.
-impl i17Sub of Sub::<i17> {
+impl i17Sub of Sub<i17> {
     fn sub(a: i17, b: i17) -> i17 {
         i17_sub(a, b)
     }
 }
 
 // Implements the SubEq trait for i17.
-impl i17SubEq of SubEq::<i17> {
+impl i17SubEq of SubEq<i17> {
     #[inline(always)]
     fn sub_eq(ref self: i17, other: i17) {
         self = Sub::sub(self, other);
@@ -520,14 +520,14 @@ fn i17_mul(a: i17, b: i17) -> i17 {
 }
 
 // Implements the Mul trait for i17.
-impl i17Mul of Mul::<i17> {
+impl i17Mul of Mul<i17> {
     fn mul(a: i17, b: i17) -> i17 {
         i17_mul(a, b)
     }
 }
 
 // Implements the MulEq trait for i17.
-impl i17MulEq of MulEq::<i17> {
+impl i17MulEq of MulEq<i17> {
     #[inline(always)]
     fn mul_eq(ref self: i17, other: i17) {
         self = Mul::mul(self, other);
@@ -543,7 +543,7 @@ impl i17MulEq of MulEq::<i17> {
 fn i17_div(a: i17, b: i17) -> i17 {
     i17_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u16, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = a.sign ^ b.sign;
@@ -555,31 +555,31 @@ fn i17_div(a: i17, b: i17) -> i17 {
 
     // If the operands have different signs, rounding is necessary.
     // First, check if the quotient is an integer.
-    if (a.inner % b.inner == 0_u16) {
+    if (a.inner % b.inner == 0) {
         return i17 { inner: a.inner / b.inner, sign: sign };
     }
 
     // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
-    let quotient = (a.inner * 10_u16) / b.inner;
-    let last_digit = quotient % 10_u16;
+    let quotient = (a.inner * 10) / b.inner;
+    let last_digit = quotient % 10;
 
     // Check the last digit to determine rounding direction.
-    if (last_digit <= 5_u16) {
-        return i17 { inner: quotient / 10_u16, sign: sign };
+    if (last_digit <= 5) {
+        return i17 { inner: quotient / 10, sign: sign };
     } else {
-        return i17 { inner: (quotient / 10_u16) + 1_u16, sign: sign };
+        return i17 { inner: (quotient / 10) + 1, sign: sign };
     }
 }
 
 // Implements the Div trait for i17.
-impl i17Div of Div::<i17> {
+impl i17Div of Div<i17> {
     fn div(a: i17, b: i17) -> i17 {
         i17_div(a, b)
     }
 }
 
 // Implements the DivEq trait for i17.
-impl i17DivEq of DivEq::<i17> {
+impl i17DivEq of DivEq<i17> {
     #[inline(always)]
     fn div_eq(ref self: i17, other: i17) {
         self = Div::div(self, other);
@@ -595,20 +595,20 @@ impl i17DivEq of DivEq::<i17> {
 fn i17_rem(a: i17, b: i17) -> i17 {
     i17_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u16, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     return a - (b * (a / b));
 }
 
 // Implements the Rem trait for i17.
-impl i17Rem of Rem::<i17> {
+impl i17Rem of Rem<i17> {
     fn rem(a: i17, b: i17) -> i17 {
         i17_rem(a, b)
     }
 }
 
 // Implements the RemEq trait for i17.
-impl i17RemEq of RemEq::<i17> {
+impl i17RemEq of RemEq<i17> {
     #[inline(always)]
     fn rem_eq(ref self: i17, other: i17) {
         self = Rem::rem(self, other);
@@ -655,7 +655,7 @@ fn i17_ne(a: i17, b: i17) -> bool {
 }
 
 // Implements the PartialEq trait for i17.
-impl i17PartialEq of PartialEq::<i17> {
+impl i17PartialEq of PartialEq<i17> {
     fn eq(a: i17, b: i17) -> bool {
         i17_eq(a, b)
     }
@@ -728,7 +728,7 @@ fn i17_ge(a: i17, b: i17) -> bool {
 }
 
 // Implements the PartialOrd trait for i17.
-impl i17PartialOrd of PartialOrd::<i17> {
+impl i17PartialOrd of PartialOrd<i17> {
     fn le(a: i17, b: i17) -> bool {
         i17_le(a, b)
     }
@@ -755,7 +755,7 @@ fn i17_neg(x: i17) -> i17 {
 }
 
 // Implements the Neg trait for i17.
-impl i17Neg of Neg::<i17> {
+impl i17Neg of Neg<i17> {
     fn neg(x: i17) -> i17 {
         i17_neg(x)
     }
@@ -815,7 +815,7 @@ struct i33 {
 // # Panics
 // Panics if `x` is zero and has a sign that is not false.
 fn i33_check_sign_zero(x: i33) {
-    if x.inner == 0_u32 {
+    if x.inner == 0 {
         assert(x.sign == false, 'sign of 0 must be false');
     }
 }
@@ -849,14 +849,14 @@ fn i33_add(a: i33, b: i33) -> i33 {
 }
 
 // Implements the Add trait for i33.
-impl i33Add of Add::<i33> {
+impl i33Add of Add<i33> {
     fn add(a: i33, b: i33) -> i33 {
         i33_add(a, b)
     }
 }
 
 // Implements the AddEq trait for i33.
-impl i33AddEq of AddEq::<i33> {
+impl i33AddEq of AddEq<i33> {
     #[inline(always)]
     fn add_eq(ref self: i33, other: i33) {
         self = Add::add(self, other);
@@ -873,7 +873,7 @@ fn i33_sub(a: i33, b: i33) -> i33 {
     i33_check_sign_zero(a);
     i33_check_sign_zero(b);
 
-    if (b.inner == 0_u32) {
+    if (b.inner == 0) {
         return a;
     }
 
@@ -883,14 +883,14 @@ fn i33_sub(a: i33, b: i33) -> i33 {
 }
 
 // Implements the Sub trait for i33.
-impl i33Sub of Sub::<i33> {
+impl i33Sub of Sub<i33> {
     fn sub(a: i33, b: i33) -> i33 {
         i33_sub(a, b)
     }
 }
 
 // Implements the SubEq trait for i33.
-impl i33SubEq of SubEq::<i33> {
+impl i33SubEq of SubEq<i33> {
     #[inline(always)]
     fn sub_eq(ref self: i33, other: i33) {
         self = Sub::sub(self, other);
@@ -919,14 +919,14 @@ fn i33_mul(a: i33, b: i33) -> i33 {
 }
 
 // Implements the Mul trait for i33.
-impl i33Mul of Mul::<i33> {
+impl i33Mul of Mul<i33> {
     fn mul(a: i33, b: i33) -> i33 {
         i33_mul(a, b)
     }
 }
 
 // Implements the MulEq trait for i33.
-impl i33MulEq of MulEq::<i33> {
+impl i33MulEq of MulEq<i33> {
     #[inline(always)]
     fn mul_eq(ref self: i33, other: i33) {
         self = Mul::mul(self, other);
@@ -942,7 +942,7 @@ impl i33MulEq of MulEq::<i33> {
 fn i33_div(a: i33, b: i33) -> i33 {
     i33_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u32, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = a.sign ^ b.sign;
@@ -954,31 +954,31 @@ fn i33_div(a: i33, b: i33) -> i33 {
 
     // If the operands have different signs, rounding is necessary.
     // First, check if the quotient is an integer.
-    if (a.inner % b.inner == 0_u32) {
+    if (a.inner % b.inner == 0) {
         return i33 { inner: a.inner / b.inner, sign: sign };
     }
 
     // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
-    let quotient = (a.inner * 10_u32) / b.inner;
-    let last_digit = quotient % 10_u32;
+    let quotient = (a.inner * 10) / b.inner;
+    let last_digit = quotient % 10;
 
     // Check the last digit to determine rounding direction.
-    if (last_digit <= 5_u32) {
-        return i33 { inner: quotient / 10_u32, sign: sign };
+    if (last_digit <= 5) {
+        return i33 { inner: quotient / 10, sign: sign };
     } else {
-        return i33 { inner: (quotient / 10_u32) + 1_u32, sign: sign };
+        return i33 { inner: (quotient / 10) + 1, sign: sign };
     }
 }
 
 // Implements the Div trait for i33.
-impl i33Div of Div::<i33> {
+impl i33Div of Div<i33> {
     fn div(a: i33, b: i33) -> i33 {
         i33_div(a, b)
     }
 }
 
 // Implements the DivEq trait for i33.
-impl i33DivEq of DivEq::<i33> {
+impl i33DivEq of DivEq<i33> {
     #[inline(always)]
     fn div_eq(ref self: i33, other: i33) {
         self = Div::div(self, other);
@@ -994,20 +994,20 @@ impl i33DivEq of DivEq::<i33> {
 fn i33_rem(a: i33, b: i33) -> i33 {
     i33_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u32, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     return a - (b * (a / b));
 }
 
 // Implements the Rem trait for i33.
-impl i33Rem of Rem::<i33> {
+impl i33Rem of Rem<i33> {
     fn rem(a: i33, b: i33) -> i33 {
         i33_rem(a, b)
     }
 }
 
 // Implements the RemEq trait for i33.
-impl i33RemEq of RemEq::<i33> {
+impl i33RemEq of RemEq<i33> {
     #[inline(always)]
     fn rem_eq(ref self: i33, other: i33) {
         self = Rem::rem(self, other);
@@ -1054,7 +1054,7 @@ fn i33_ne(a: i33, b: i33) -> bool {
 }
 
 // Implements the PartialEq trait for i33.
-impl i33PartialEq of PartialEq::<i33> {
+impl i33PartialEq of PartialEq<i33> {
     fn eq(a: i33, b: i33) -> bool {
         i33_eq(a, b)
     }
@@ -1127,7 +1127,7 @@ fn i33_ge(a: i33, b: i33) -> bool {
 }
 
 // Implements the PartialOrd trait for i33.
-impl i33PartialOrd of PartialOrd::<i33> {
+impl i33PartialOrd of PartialOrd<i33> {
     fn le(a: i33, b: i33) -> bool {
         i33_le(a, b)
     }
@@ -1154,7 +1154,7 @@ fn i33_neg(x: i33) -> i33 {
 }
 
 // Implements the Neg trait for i33.
-impl i33Neg of Neg::<i33> {
+impl i33Neg of Neg<i33> {
     fn neg(x: i33) -> i33 {
         i33_neg(x)
     }
@@ -1214,7 +1214,7 @@ struct i65 {
 // # Panics
 // Panics if `x` is zero and has a sign that is not false.
 fn i65_check_sign_zero(x: i65) {
-    if x.inner == 0_u64 {
+    if x.inner == 0 {
         assert(x.sign == false, 'sign of 0 must be false');
     }
 }
@@ -1248,14 +1248,14 @@ fn i65_add(a: i65, b: i65) -> i65 {
 }
 
 // Implements the Add trait for i65.
-impl i65Add of Add::<i65> {
+impl i65Add of Add<i65> {
     fn add(a: i65, b: i65) -> i65 {
         i65_add(a, b)
     }
 }
 
 // Implements the AddEq trait for i65.
-impl i65AddEq of AddEq::<i65> {
+impl i65AddEq of AddEq<i65> {
     #[inline(always)]
     fn add_eq(ref self: i65, other: i65) {
         self = Add::add(self, other);
@@ -1272,7 +1272,7 @@ fn i65_sub(a: i65, b: i65) -> i65 {
     i65_check_sign_zero(a);
     i65_check_sign_zero(b);
 
-    if (b.inner == 0_u64) {
+    if (b.inner == 0) {
         return a;
     }
 
@@ -1282,14 +1282,14 @@ fn i65_sub(a: i65, b: i65) -> i65 {
 }
 
 // Implements the Sub trait for i65.
-impl i65Sub of Sub::<i65> {
+impl i65Sub of Sub<i65> {
     fn sub(a: i65, b: i65) -> i65 {
         i65_sub(a, b)
     }
 }
 
 // Implements the SubEq trait for i65.
-impl i65SubEq of SubEq::<i65> {
+impl i65SubEq of SubEq<i65> {
     #[inline(always)]
     fn sub_eq(ref self: i65, other: i65) {
         self = Sub::sub(self, other);
@@ -1318,14 +1318,14 @@ fn i65_mul(a: i65, b: i65) -> i65 {
 }
 
 // Implements the Mul trait for i65.
-impl i65Mul of Mul::<i65> {
+impl i65Mul of Mul<i65> {
     fn mul(a: i65, b: i65) -> i65 {
         i65_mul(a, b)
     }
 }
 
 // Implements the MulEq trait for i65.
-impl i65MulEq of MulEq::<i65> {
+impl i65MulEq of MulEq<i65> {
     #[inline(always)]
     fn mul_eq(ref self: i65, other: i65) {
         self = Mul::mul(self, other);
@@ -1341,7 +1341,7 @@ impl i65MulEq of MulEq::<i65> {
 fn i65_div(a: i65, b: i65) -> i65 {
     i65_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u64, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = a.sign ^ b.sign;
@@ -1353,31 +1353,31 @@ fn i65_div(a: i65, b: i65) -> i65 {
 
     // If the operands have different signs, rounding is necessary.
     // First, check if the quotient is an integer.
-    if (a.inner % b.inner == 0_u64) {
+    if (a.inner % b.inner == 0) {
         return i65 { inner: a.inner / b.inner, sign: sign };
     }
 
     // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
-    let quotient = (a.inner * 10_u64) / b.inner;
-    let last_digit = quotient % 10_u64;
+    let quotient = (a.inner * 10) / b.inner;
+    let last_digit = quotient % 10;
 
     // Check the last digit to determine rounding direction.
-    if (last_digit <= 5_u64) {
-        return i65 { inner: quotient / 10_u64, sign: sign };
+    if (last_digit <= 5) {
+        return i65 { inner: quotient / 10, sign: sign };
     } else {
-        return i65 { inner: (quotient / 10_u64) + 1_u64, sign: sign };
+        return i65 { inner: (quotient / 10) + 1, sign: sign };
     }
 }
 
 // Implements the Div trait for i65.
-impl i65Div of Div::<i65> {
+impl i65Div of Div<i65> {
     fn div(a: i65, b: i65) -> i65 {
         i65_div(a, b)
     }
 }
 
 // Implements the DivEq trait for i65.
-impl i65DivEq of DivEq::<i65> {
+impl i65DivEq of DivEq<i65> {
     #[inline(always)]
     fn div_eq(ref self: i65, other: i65) {
         self = Div::div(self, other);
@@ -1393,20 +1393,20 @@ impl i65DivEq of DivEq::<i65> {
 fn i65_rem(a: i65, b: i65) -> i65 {
     i65_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u64, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     return a - (b * (a / b));
 }
 
 // Implements the Rem trait for i65.
-impl i65Rem of Rem::<i65> {
+impl i65Rem of Rem<i65> {
     fn rem(a: i65, b: i65) -> i65 {
         i65_rem(a, b)
     }
 }
 
 // Implements the RemEq trait for i65.
-impl i65RemEq of RemEq::<i65> {
+impl i65RemEq of RemEq<i65> {
     #[inline(always)]
     fn rem_eq(ref self: i65, other: i65) {
         self = Rem::rem(self, other);
@@ -1453,7 +1453,7 @@ fn i65_ne(a: i65, b: i65) -> bool {
 }
 
 // Implements the PartialEq trait for i65.
-impl i65PartialEq of PartialEq::<i65> {
+impl i65PartialEq of PartialEq<i65> {
     fn eq(a: i65, b: i65) -> bool {
         i65_eq(a, b)
     }
@@ -1526,7 +1526,7 @@ fn i65_ge(a: i65, b: i65) -> bool {
 }
 
 // Implements the PartialOrd trait for i65.
-impl i65PartialOrd of PartialOrd::<i65> {
+impl i65PartialOrd of PartialOrd<i65> {
     fn le(a: i65, b: i65) -> bool {
         i65_le(a, b)
     }
@@ -1553,7 +1553,7 @@ fn i65_neg(x: i65) -> i65 {
 }
 
 // Implements the Neg trait for i65.
-impl i65Neg of Neg::<i65> {
+impl i65Neg of Neg<i65> {
     fn neg(x: i65) -> i65 {
         i65_neg(x)
     }
@@ -1613,7 +1613,7 @@ struct i129 {
 // # Panics
 // Panics if `x` is zero and has a sign that is not false.
 fn i129_check_sign_zero(x: i129) {
-    if x.inner == 0_u128 {
+    if x.inner == 0 {
         assert(x.sign == false, 'sign of 0 must be false');
     }
 }
@@ -1647,14 +1647,14 @@ fn i129_add(a: i129, b: i129) -> i129 {
 }
 
 // Implements the Add trait for i129.
-impl i129Add of Add::<i129> {
+impl i129Add of Add<i129> {
     fn add(a: i129, b: i129) -> i129 {
         i129_add(a, b)
     }
 }
 
 // Implements the AddEq trait for i129.
-impl i129AddEq of AddEq::<i129> {
+impl i129AddEq of AddEq<i129> {
     #[inline(always)]
     fn add_eq(ref self: i129, other: i129) {
         self = Add::add(self, other);
@@ -1671,7 +1671,7 @@ fn i129_sub(a: i129, b: i129) -> i129 {
     i129_check_sign_zero(a);
     i129_check_sign_zero(b);
 
-    if (b.inner == 0_u128) {
+    if (b.inner == 0) {
         return a;
     }
 
@@ -1681,14 +1681,14 @@ fn i129_sub(a: i129, b: i129) -> i129 {
 }
 
 // Implements the Sub trait for i129.
-impl i129Sub of Sub::<i129> {
+impl i129Sub of Sub<i129> {
     fn sub(a: i129, b: i129) -> i129 {
         i129_sub(a, b)
     }
 }
 
 // Implements the SubEq trait for i129.
-impl i129SubEq of SubEq::<i129> {
+impl i129SubEq of SubEq<i129> {
     #[inline(always)]
     fn sub_eq(ref self: i129, other: i129) {
         self = Sub::sub(self, other);
@@ -1717,14 +1717,14 @@ fn i129_mul(a: i129, b: i129) -> i129 {
 }
 
 // Implements the Mul trait for i129.
-impl i129Mul of Mul::<i129> {
+impl i129Mul of Mul<i129> {
     fn mul(a: i129, b: i129) -> i129 {
         i129_mul(a, b)
     }
 }
 
 // Implements the MulEq trait for i129.
-impl i129MulEq of MulEq::<i129> {
+impl i129MulEq of MulEq<i129> {
     #[inline(always)]
     fn mul_eq(ref self: i129, other: i129) {
         self = Mul::mul(self, other);
@@ -1740,7 +1740,7 @@ impl i129MulEq of MulEq::<i129> {
 fn i129_div(a: i129, b: i129) -> i129 {
     i129_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u128, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = a.sign ^ b.sign;
@@ -1752,31 +1752,31 @@ fn i129_div(a: i129, b: i129) -> i129 {
 
     // If the operands have different signs, rounding is necessary.
     // First, check if the quotient is an integer.
-    if (a.inner % b.inner == 0_u128) {
+    if (a.inner % b.inner == 0) {
         return i129 { inner: a.inner / b.inner, sign: sign };
     }
 
     // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
-    let quotient = (a.inner * 10_u128) / b.inner;
-    let last_digit = quotient % 10_u128;
+    let quotient = (a.inner * 10) / b.inner;
+    let last_digit = quotient % 10;
 
     // Check the last digit to determine rounding direction.
-    if (last_digit <= 5_u128) {
-        return i129 { inner: quotient / 10_u128, sign: sign };
+    if (last_digit <= 5) {
+        return i129 { inner: quotient / 10, sign: sign };
     } else {
-        return i129 { inner: (quotient / 10_u128) + 1_u128, sign: sign };
+        return i129 { inner: (quotient / 10) + 1, sign: sign };
     }
 }
 
 // Implements the Div trait for i129.
-impl i129Div of Div::<i129> {
+impl i129Div of Div<i129> {
     fn div(a: i129, b: i129) -> i129 {
         i129_div(a, b)
     }
 }
 
 // Implements the DivEq trait for i129.
-impl i129DivEq of DivEq::<i129> {
+impl i129DivEq of DivEq<i129> {
     #[inline(always)]
     fn div_eq(ref self: i129, other: i129) {
         self = Div::div(self, other);
@@ -1792,20 +1792,20 @@ impl i129DivEq of DivEq::<i129> {
 fn i129_rem(a: i129, b: i129) -> i129 {
     i129_check_sign_zero(a);
     // Check that the divisor is not zero.
-    assert(b.inner != 0_u128, 'b can not be 0');
+    assert(b.inner != 0, 'b can not be 0');
 
     return a - (b * (a / b));
 }
 
 // Implements the Rem trait for i129.
-impl i129Rem of Rem::<i129> {
+impl i129Rem of Rem<i129> {
     fn rem(a: i129, b: i129) -> i129 {
         i129_rem(a, b)
     }
 }
 
 // Implements the RemEq trait for i129.
-impl i129RemEq of RemEq::<i129> {
+impl i129RemEq of RemEq<i129> {
     #[inline(always)]
     fn rem_eq(ref self: i129, other: i129) {
         self = Rem::rem(self, other);
@@ -1852,7 +1852,7 @@ fn i129_ne(a: i129, b: i129) -> bool {
 }
 
 // Implements the PartialEq trait for i129.
-impl i129PartialEq of PartialEq::<i129> {
+impl i129PartialEq of PartialEq<i129> {
     fn eq(a: i129, b: i129) -> bool {
         i129_eq(a, b)
     }
@@ -1925,7 +1925,7 @@ fn i129_ge(a: i129, b: i129) -> bool {
 }
 
 // Implements the PartialOrd trait for i129.
-impl i129PartialOrd of PartialOrd::<i129> {
+impl i129PartialOrd of PartialOrd<i129> {
     fn le(a: i129, b: i129) -> bool {
         i129_le(a, b)
     }
@@ -1952,7 +1952,7 @@ fn i129_neg(x: i129) -> i129 {
 }
 
 // Implements the Neg trait for i129.
-impl i129Neg of Neg::<i129> {
+impl i129Neg of Neg<i129> {
     fn neg(x: i129) -> i129 {
         i129_neg(x)
     }

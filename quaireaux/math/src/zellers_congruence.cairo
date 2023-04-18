@@ -9,8 +9,8 @@
 /// * `month` - The month of the year
 /// * `year` - The year
 /// # Returns
-/// * `Option::<u128>::None(())` - If the input parameters are invalid
-/// * `Option::<u128>::Some(day_of_week)` - The day of the week
+/// * `Option::None(())` - If the input parameters are invalid
+/// * `Option::Some(day_of_week)` - The day of the week
 /// # Examples
 /// ```
 /// use quaireaux::zellers_congruence::day_of_week;
@@ -18,27 +18,27 @@
 /// ```
 /// # TODO
 /// - Change the return type to `Result`
-fn day_of_week(date: u128, month: u128, year: u128) -> Option::<u128> {
+fn day_of_week(date: u128, month: u128, year: u128) -> Option<u128> {
     // Check input parameters
     if !check_input_parameters(date, month, year) {
-        return Option::<u128>::None(());
+        return Option::None(());
     }
     let q = date;
     let mut m = month;
     let mut y = year;
-    if month < 3_u128 {
-        m = month + 12_u128;
-        y = year - 1_u128;
+    if month < 3 {
+        m = month + 12;
+        y = year - 1;
     }
 
     let day = (q
-        + (26_u128 * (m + 1_u128) / 10_u128)
-        + (y % 100_u128)
-        + ((y % 100_u128) / 4_u128)
-        + ((y / 100_u128) / 4_u128)
-        + 5_u128 * (y / 100_u128)) % 7_u128;
+        + (26 * (m + 1) / 10)
+        + (y % 100)
+        + ((y % 100) / 4)
+        + ((y / 100) / 4)
+        + 5 * (y / 100)) % 7;
 
-    Option::<u128>::Some(day)
+    Option::Some(day)
 }
 
 /// Check the input parameters for the `day_of_week` function.
@@ -52,23 +52,23 @@ fn day_of_week(date: u128, month: u128, year: u128) -> Option::<u128> {
 fn check_input_parameters(date: u128, month: u128, year: u128) -> bool {
     // Check the date
     // Must be in the range 1 to 31
-    if date < 1_u128 {
+    if date < 1 {
         return false;
     }
-    if date > 31_u128 {
+    if date > 31 {
         return false;
     }
     // Check the month
     // Must be in the range 1 to 12
-    if month < 1_u128 {
+    if month < 1 {
         return false;
     }
-    if month > 12_u128 {
+    if month > 12 {
         return false;
     }
     // Check the year
     // Must be > 0
-    if year < 1_u128 {
+    if year < 1 {
         return false;
     }
     true

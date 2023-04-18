@@ -1,43 +1,29 @@
 use array::ArrayTrait;
+use array::SpanTrait;
+use array::OptionTrait;
 
 use quaireaux_utils::check_gas;
 
 trait ArrayTraitExt<T> {
-    fn append_all(ref self: Array::<T>, ref arr: Array::<T>);
-    fn reverse(ref self: Array::<T>) -> Array::<T>;
-    fn contains<impl TDrop: Drop::<T>, impl TPartialEq: PartialEq::<T>>(
-        ref self: Array::<T>, item: T
-    ) -> bool;
-    fn index_of<impl TDrop: Drop::<T>, impl TPartialEq: PartialEq::<T>>(
-        ref self: Array::<T>, item: T
+    fn append_all(ref self: Array<T>, ref arr: Array<T>);
+    fn reverse(ref self: Array<T>) -> Array<T>;
+    fn contains<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> bool;
+    fn index_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize;
+    fn occurrences_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize;
+    fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(self: @Array<T>) -> T;
+    // TODO Ref should be gone, but there is a bug ATM
+    fn index_of_min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
+        ref self: Array<T>
     ) -> usize;
-    fn occurrences_of<impl TDrop: Drop::<T>, impl TPartialEq: PartialEq::<T>>(
-        ref self: Array::<T>, item: T
-    ) -> usize;
-    fn min<impl TDrop: Drop::<T>,
-    impl TPartialEq: PartialEq::<T>,
-    impl TPartialOrd: PartialOrd::<T>>(
-        ref self: Array::<T>
-    ) -> T;
-    fn index_of_min<impl TDrop: Drop::<T>,
-    impl TPartialEq: PartialEq::<T>,
-    impl TPartialOrd: PartialOrd::<T>>(
-        ref self: Array::<T>
-    ) -> usize;
-    fn max<impl TDrop: Drop::<T>,
-    impl TPartialEq: PartialEq::<T>,
-    impl TPartialOrd: PartialOrd::<T>>(
-        ref self: Array::<T>
-    ) -> T;
-    fn index_of_max<impl TDrop: Drop::<T>,
-    impl TPartialEq: PartialEq::<T>,
-    impl TPartialOrd: PartialOrd::<T>>(
-        ref self: Array::<T>
+    fn max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(self: @Array<T>) -> T;
+    // TODO Ref should be gone, but there is a bug ATM
+    fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
+        ref self: Array<T>
     ) -> usize;
 }
 
-impl ArrayImpl<T, impl TCopy: Copy::<T>> of ArrayTraitExt::<T> {
-    fn append_all(ref self: Array::<T>, ref arr: Array::<T>) {
+impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> {
+    fn append_all(ref self: Array<T>, ref arr: Array<T>) {
         check_gas();
 
         match arr.pop_front() {
@@ -49,179 +35,164 @@ impl ArrayImpl<T, impl TCopy: Copy::<T>> of ArrayTraitExt::<T> {
         }
     }
 
-    fn reverse(ref self: Array::<T>) -> Array::<T> {
-        if self.len() == 0_usize {
-            return ArrayTrait::<T>::new();
+    // TODO Due to a loop bug with moved var, this can't use loop yet
+    fn reverse(ref self: Array<T>) -> Array<T> {
+        if self.len() == 0 {
+            return ArrayTrait::new();
         }
         let mut response = ArrayTrait::new();
-        reverse_loop(ref self, ref response, self.len() - 1_usize);
+        reverse_loop(ref self, ref response, self.len() - 1);
         response
     }
 
-    fn contains<impl TDrop: Drop::<T>, impl TPartialEq: PartialEq::<T>>(
-        ref self: Array::<T>, item: T
-    ) -> bool {
-        contains_loop(ref self, item, 0_usize)
+    fn contains<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> bool {
+        let mut arr = self.span();
+        loop {
+            check_gas();
+            match arr.pop_front() {
+                Option::Some(v) => {
+                    if *v == item {
+                        break true;
+                    }
+                },
+                Option::None(_) => {
+                    break false;
+                },
+            };
+        }
     }
 
     // Panic if doesn't contains
-    fn index_of<impl TDrop: Drop::<T>, impl TPartialEq: PartialEq::<T>>(
-        ref self: Array::<T>, item: T
-    ) -> usize {
-        index_of_loop(ref self, item, 0_usize)
+    fn index_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize {
+        let mut arr = self.span();
+        let mut index = 0_usize;
+        loop {
+            check_gas();
+            match arr.pop_front() {
+                Option::Some(v) => {
+                    if *v == item {
+                        break index;
+                    }
+                    index = index + 1;
+                },
+                Option::None(_) => {
+                    panic_with_felt252('Item not in array');
+                },
+            };
+        }
     }
 
-    fn occurrences_of<impl TDrop: Drop::<T>, impl TPartialEq: PartialEq::<T>>(
-        ref self: Array::<T>, item: T
-    ) -> usize {
-        occurrences_of_loop(ref self, item, 0_usize, 0_usize)
+    fn occurrences_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize {
+        let mut arr = self.span();
+        let mut count = 0_usize;
+        loop {
+            check_gas();
+            match arr.pop_front() {
+                Option::Some(v) => {
+                    if *v == item {
+                        count = count + 1;
+                    }
+                },
+                Option::None(_) => {
+                    break count;
+                },
+            };
+        }
     }
 
     // Panic if empty array
-    fn min<impl TDrop: Drop::<T>,
-    impl TPartialEq: PartialEq::<T>,
-    impl TPartialOrd: PartialOrd::<T>>(
-        ref self: Array::<T>
-    ) -> T {
-        if self.len() == 0_usize {
-            let mut data = ArrayTrait::new();
-            data.append('Empty array');
-            panic(data)
+    // TODO atm there is a bug (failing setting up the runner: #31139: [24] is undefined.)
+    // but this should be updated to use span and match
+    fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(self: @Array<T>) -> T {
+        if self.len() == 0 {
+            panic_with_felt252('Empty array')
         }
-        min_loop(ref self, *self.at(0_usize), 1_usize)
+        let mut index = 0_usize;
+        let mut min = *self[0];
+
+        loop {
+            check_gas();
+
+            if index >= self.len() {
+                break min;
+            }
+
+            let item = *self[index];
+            if item < min {
+                min = item
+            }
+            index = index + 1;
+        }
     }
 
     // Panic if empty array
-    fn index_of_min<impl TDrop: Drop::<T>,
-    impl TPartialEq: PartialEq::<T>,
-    impl TPartialOrd: PartialOrd::<T>>(
-        ref self: Array::<T>
+    // TODO atm there is a bug (failing setting up the runner: #33424: Inconsistent references annotations.
+    // but this should be updated to use span and match
+    fn index_of_min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
+        ref self: Array<T>
     ) -> usize {
-        if self.len() == 0_usize {
-            let mut data = ArrayTrait::new();
-            data.append('Empty array');
-            panic(data)
+        if self.len() == 0 {
+            panic_with_felt252('Empty array')
         }
-        index_of_min_loop(ref self, *self.at(0_usize), 0_usize, 1_usize)
+        index_of_min_loop(ref self, *self[0], 0, 1)
     }
 
     // Panic if empty array
-    fn max<impl TDrop: Drop::<T>,
-    impl TPartialEq: PartialEq::<T>,
-    impl TPartialOrd: PartialOrd::<T>>(
-        ref self: Array::<T>
-    ) -> T {
-        if self.len() == 0_usize {
-            let mut data = ArrayTrait::new();
-            data.append('Empty array');
-            panic(data)
+    // TODO atm there is a bug (failing setting up the runner: #31139: [24] is undefined.)
+    // but this should be updated to use span and match
+    fn max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(self: @Array<T>) -> T {
+        if self.len() == 0 {
+            panic_with_felt252('Empty array')
         }
-        max_loop(ref self, *self.at(0_usize), 1_usize)
+        let mut index = 0_usize;
+        let mut max = *self[0];
+
+        loop {
+            check_gas();
+
+            if index >= self.len() {
+                break max;
+            }
+
+            let item = *self[index];
+            if item > max {
+                max = item
+            }
+            index = index + 1;
+        }
     }
 
     // Panic if empty array
-    fn index_of_max<impl TDrop: Drop::<T>,
-    impl TPartialEq: PartialEq::<T>,
-    impl TPartialOrd: PartialOrd::<T>>(
-        ref self: Array::<T>
+    // TODO atm there is a bug (failing setting up the runner: #33424: Inconsistent references annotations.
+    // but this should be updated to use span and match
+    fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
+        ref self: Array<T>
     ) -> usize {
-        if self.len() == 0_usize {
-            let mut data = ArrayTrait::new();
-            data.append('Empty array');
-            panic(data)
+        if self.len() == 0 {
+            panic_with_felt252('Empty array')
         }
-        index_of_max_loop(ref self, *self.at(0_usize), 0_usize, 1_usize)
+        index_of_max_loop(ref self, *self[0], 0, 1)
     }
 }
 
-fn reverse_loop<T, impl TCopy: Copy::<T>>(ref arr: Array<T>, ref response: Array<T>, index: usize) {
+fn reverse_loop<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
+    ref arr: Array<T>, ref response: Array<T>, index: usize
+) {
     check_gas();
 
-    response.append(*arr.at(index));
-    if index == 0_usize {
+    response.append(*arr[index]);
+    if index == 0 {
         return ();
     }
-    reverse_loop(ref arr, ref response, index - 1_usize);
-}
-
-fn contains_loop<T, impl TDrop: Drop::<T>, impl TPartialEq: PartialEq::<T>, impl TCopy: Copy::<T>>(
-    ref arr: Array<T>, item: T, index: usize
-) -> bool {
-    check_gas();
-
-    if index >= arr.len() {
-        false
-    } else if *arr.at(index) == item {
-        true
-    } else {
-        contains_loop(ref arr, item, index + 1_usize)
-    }
-}
-
-fn index_of_loop<T, impl TDrop: Drop::<T>, impl TPartialEq: PartialEq::<T>, impl TCopy: Copy::<T>>(
-    ref arr: Array<T>, item: T, index: usize
-) -> usize {
-    check_gas();
-
-    if index >= arr.len() {
-        let mut data = ArrayTrait::new();
-        data.append('Item not in array');
-        panic(data)
-    } else if *arr.at(
-        index
-    ) == item {
-        index
-    } else {
-        index_of_loop(ref arr, item, index + 1_usize)
-    }
-}
-
-fn occurrences_of_loop<T,
-impl TDrop: Drop::<T>,
-impl TPartialEq: PartialEq::<T>,
-impl TCopy: Copy::<T>>(
-    ref arr: Array<T>, item: T, index: usize, count: usize
-) -> usize {
-    check_gas();
-
-    if index >= arr.len() {
-        count
-    } else if *arr.at(
-        index
-    ) == item {
-        occurrences_of_loop(ref arr, item, index + 1_usize, count + 1_usize)
-    } else {
-        occurrences_of_loop(ref arr, item, index + 1_usize, count)
-    }
-}
-
-fn min_loop<T,
-impl TDrop: Drop::<T>,
-impl TPartialEq: PartialEq::<T>,
-impl TPartialOrd: PartialOrd::<T>,
-impl TCopy: Copy::<T>>(
-    ref arr: Array::<T>, current_min: T, index: usize
-) -> T {
-    check_gas();
-
-    if index >= arr.len() {
-        return current_min;
-    }
-
-    let item = *arr.at(index);
-    if item < current_min {
-        min_loop(ref arr, item, index + 1_usize)
-    } else {
-        min_loop(ref arr, current_min, index + 1_usize)
-    }
+    reverse_loop(ref arr, ref response, index - 1);
 }
 
 fn index_of_min_loop<T,
-impl TDrop: Drop::<T>,
-impl TPartialEq: PartialEq::<T>,
-impl TPartialOrd: PartialOrd::<T>,
-impl TCopy: Copy::<T>>(
-    ref arr: Array::<T>, current_min: T, index_of_min: usize, index: usize
+impl TDrop: Drop<T>,
+impl TPartialEq: PartialEq<T>,
+impl TPartialOrd: PartialOrd<T>,
+impl TCopy: Copy<T>>(
+    ref arr: Array<T>, current_min: T, index_of_min: usize, index: usize
 ) -> usize {
     check_gas();
 
@@ -229,41 +200,20 @@ impl TCopy: Copy::<T>>(
         return index_of_min;
     }
 
-    let item = *arr.at(index);
+    let item = *arr[index];
     if item < current_min {
-        index_of_min_loop(ref arr, item, index, index + 1_usize)
+        index_of_min_loop(ref arr, item, index, index + 1)
     } else {
-        index_of_min_loop(ref arr, current_min, index_of_min, index + 1_usize)
-    }
-}
-
-fn max_loop<T,
-impl TDrop: Drop::<T>,
-impl TPartialEq: PartialEq::<T>,
-impl TPartialOrd: PartialOrd::<T>,
-impl TCopy: Copy::<T>>(
-    ref arr: Array::<T>, current_min: T, index: usize
-) -> T {
-    check_gas();
-
-    if index >= arr.len() {
-        return current_min;
-    }
-
-    let item = *arr.at(index);
-    if item > current_min {
-        max_loop(ref arr, item, index + 1_usize)
-    } else {
-        max_loop(ref arr, current_min, index + 1_usize)
+        index_of_min_loop(ref arr, current_min, index_of_min, index + 1)
     }
 }
 
 fn index_of_max_loop<T,
-impl TDrop: Drop::<T>,
-impl TPartialEq: PartialEq::<T>,
-impl TPartialOrd: PartialOrd::<T>,
-impl TCopy: Copy::<T>>(
-    ref arr: Array::<T>, current_min: T, index_of_min: usize, index: usize
+impl TDrop: Drop<T>,
+impl TPartialEq: PartialEq<T>,
+impl TPartialOrd: PartialOrd<T>,
+impl TCopy: Copy<T>>(
+    ref arr: Array<T>, current_min: T, index_of_min: usize, index: usize
 ) -> usize {
     check_gas();
 
@@ -271,10 +221,10 @@ impl TCopy: Copy::<T>>(
         return index_of_min;
     }
 
-    let item = *arr.at(index);
+    let item = *arr[index];
     if item > current_min {
-        index_of_max_loop(ref arr, item, index, index + 1_usize)
+        index_of_max_loop(ref arr, item, index, index + 1)
     } else {
-        index_of_max_loop(ref arr, current_min, index_of_min, index + 1_usize)
+        index_of_max_loop(ref arr, current_min, index_of_min, index + 1)
     }
 }

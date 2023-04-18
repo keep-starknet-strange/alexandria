@@ -35,7 +35,6 @@ fn not_perfect_big_number_test() {
 #[test]
 #[available_gas(2000000)]
 fn perfect_numbers_test() {
-    let mut max = 10;
-    let mut res = perfect_number::perfect_numbers(ref max);
-    assert(res.len() == 1_usize, 'invalid result');
+    let mut res = perfect_number::perfect_numbers(10);
+    assert(res.len() == 1, 'invalid result');
 }
