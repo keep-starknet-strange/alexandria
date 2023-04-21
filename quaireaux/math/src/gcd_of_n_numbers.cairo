@@ -16,7 +16,7 @@ fn gcd(mut n: Span<felt252>) -> felt252 {
     if n.is_empty() {
         panic_with_felt252('EI')
     }
-    let mut a =  *n.pop_front().unwrap();
+    let mut a = *n.pop_front().unwrap();
     loop {
         check_gas();
         match n.pop_front() {

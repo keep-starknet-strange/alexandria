@@ -37,7 +37,6 @@ fn gcd_test_3() {
 }
 
 
-
 #[test]
 #[available_gas(1000000000)]
 fn gcd_single_test() {
