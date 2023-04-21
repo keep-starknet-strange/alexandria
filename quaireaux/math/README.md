@@ -39,7 +39,22 @@ The perfect number algorithm is used to determine whether a given positive integ
 A perfect number is a positive integer that is equal to the sum of its proper divisors (excluding itself).  
 The purpose of the algorithm is to identify these special numbers and to study their properties. Perfect numbers have applications in various areas of mathematics, including number theory and algebraic geometry. They are also used in cryptography and coding theory. The perfect number algorithm is important for understanding the structure of numbers and their relationships to each other, and it has been studied for centuries by mathematicians.
 
+## [Signed integer](./src/signed_integers.cairo)
+Signed integers: 
+ - i9
+ - i17
+ - i33
+ - i65
+ - i129
+That you can use to perform standard operations such as Sum, Multiplication, etc.  
+Refer to the file for more information.
+
+## [Zeller's congruence](./src/zellers_congruence.cairo)
+Zeller's congruence algorithm is used to determine the day of the week for a given date.  
+The purpose of the algorithm is to provide a simple and efficient way to calculate the day of the week based on the date.  
+It is widely used in various applications, including calendar systems, scheduling, and time management.  
+The algorithm takes into account the year, month, and day of the given date and performs a series of mathematical calculations to determine the day of the week. By providing an easy-to-use method for calculating the day of the week, Zeller's congruence algorithm is an important tool for many industries and organizations that rely on accurate and efficient time management systems.
+
+
 ## TODO To be fixed:
 - [x] [Karatsuba Multiplication Algorithm](./src/karatsuba.cairo) 
-- [x] [Signer integer](./src/signed_integers.cairo
-- [x] [Zeller's congruence](./src/zellers_congruence.cairo)

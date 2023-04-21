@@ -18,25 +18,22 @@
 /// ```
 /// # TODO
 /// - Change the return type to `Result`
-fn day_of_week(date: u128, month: u128, year: u128) -> Option<u128> {
+fn day_of_week(mut date: u128, mut month: u128, mut year: u128) -> Option<u128> {
     // Check input parameters
     if !check_input_parameters(date, month, year) {
         return Option::None(());
     }
-    let q = date;
-    let mut m = month;
-    let mut y = year;
     if month < 3 {
-        m = month + 12;
-        y = year - 1;
+        month = month + 12;
+        year = year - 1;
     }
 
-    let day = (q
-        + (26 * (m + 1) / 10)
-        + (y % 100)
-        + ((y % 100) / 4)
-        + ((y / 100) / 4)
-        + 5 * (y / 100)) % 7;
+    let day = (date
+        + (26 * (month + 1) / 10)
+        + (year % 100)
+        + ((year % 100) / 4)
+        + ((year / 100) / 4)
+        + 5 * (year / 100)) % 7;
 
     Option::Some(day)
 }
