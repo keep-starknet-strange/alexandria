@@ -51,7 +51,7 @@ impl MerkleTreeImpl of MerkleTreeTrait {
         let mut proof_len = proof.len();
         let mut current_node = current_node;
         let mut proof_index = 0;
-        
+
         // TODO We could pop_front proof and get rid of proof_len and proof_index
         // But due to a bug it cannot atm. 
         loop {
@@ -71,8 +71,8 @@ impl MerkleTreeImpl of MerkleTreeTrait {
             } else {
                 current_node = LegacyHash::hash(proof_element, current_node);
             }
-            proof_index= proof_index + 1;
-            proof_len =  proof_len - 1;
+            proof_index = proof_index + 1;
+            proof_len = proof_len - 1;
         }
     }
 
