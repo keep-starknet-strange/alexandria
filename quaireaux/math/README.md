@@ -33,8 +33,13 @@ The purpose of the Fibonacci algorithm is to explore the properties and patterns
 ## [GCD of N numbers](./src/gcd_of_n_numbers.cairo)
 The GCD (Greatest Common Divisor) of n numbers algorithm is used to find the largest positive integer that divides each of the given n numbers without a remainder.  
 The purpose of this algorithm is to determine the highest common factor of the given set of numbers. It has applications in various areas of mathematics, including number theory, algebra, and cryptography. The GCD of n numbers algorithm is used in many real-world applications, such as finding the optimal solution to a problem that requires dividing resources among multiple agents. It is also used in computer science for designing efficient algorithms that require determining common factors or multiples of numbers.
+
+## [Perfect Number Algorithm](./src/perfect_number.cairo)
+The perfect number algorithm is used to determine whether a given positive integer is a perfect number or not.  
+A perfect number is a positive integer that is equal to the sum of its proper divisors (excluding itself).  
+The purpose of the algorithm is to identify these special numbers and to study their properties. Perfect numbers have applications in various areas of mathematics, including number theory and algebraic geometry. They are also used in cryptography and coding theory. The perfect number algorithm is important for understanding the structure of numbers and their relationships to each other, and it has been studied for centuries by mathematicians.
+
 ## TODO To be fixed:
 - [x] [Karatsuba Multiplication Algorithm](./src/karatsuba.cairo) 
-- [x] [Perfect Number Algorithm](./src/perfect_number.cairo)
 - [x] [Signer integer](./src/signed_integers.cairo
 - [x] [Zeller's congruence](./src/zellers_congruence.cairo)
