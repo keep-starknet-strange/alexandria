@@ -30,8 +30,12 @@ By reducing the number of operations required to calculate a power, the fast pow
 The Fibonacci algorithm is a mathematical algorithm used to generate the Fibonacci sequence, which is a sequence of numbers where each number is the sum of the previous two.  
 The purpose of the Fibonacci algorithm is to explore the properties and patterns of the Fibonacci sequence, which has applications in various areas of mathematics, including number theory, combinatorics, and geometry. The algorithm is also used in problem-solving and generating mathematical puzzles and games. Additionally, the Fibonacci sequence has applications in computer science and data structures, as it can be used to model recursive algorithms and to generate random numbers.
 
+## [GCD of N numbers](./src/gcd_of_n_numbers.cairo)
+The GCD (Greatest Common Divisor) of n numbers algorithm is used to find the largest positive integer that divides each of the given n numbers without a remainder.  
+The purpose of this algorithm is to determine the highest common factor of the given set of numbers. It has applications in various areas of mathematics, including number theory, algebra, and cryptography. The GCD of n numbers algorithm is used in many real-world applications, such as finding the optimal solution to a problem that requires dividing resources among multiple agents. It is also used in computer science for designing efficient algorithms that require determining common factors or multiples of numbers.
 ## TODO Doc
-- [x] [Zeller's congruence](./quaireaux/math/src/zellers_congruence.cairo)
-- [x] [Karatsuba Multiplication Algorithm](./quaireaux/math/src/karatsuba.cairo) 
-- [x] [Perfect Number Algorithm](./quaireaux/math/src/perfect_number.cairo)
-- [x] [GCD of N numbers](./quaireaux/math/src/gcd_of_n_numbers.cairo)
+- [x] 
+- [x] [Karatsuba Multiplication Algorithm](./src/karatsuba.cairo) 
+- [x] [Perfect Number Algorithm](./src/perfect_number.cairo)
+- [x] [Signer integer](./src/signed_integers.cairo
+- [x] [Zeller's congruence](./src/zellers_congruence.cairo)
