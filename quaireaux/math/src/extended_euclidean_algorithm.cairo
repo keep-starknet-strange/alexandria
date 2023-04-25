@@ -1,8 +1,6 @@
 //! # Extended Euclidean Algorithm.
 use quaireaux_utils::check_gas;
 
-use quaireaux_math::unsafe_euclidean_div_no_remainder;
-
 /// Extended Euclidean Algorithm.
 /// # Arguments
 /// * `a` - First number.
@@ -11,7 +9,7 @@ use quaireaux_math::unsafe_euclidean_div_no_remainder;
 /// * `gcd` - Greatest common divisor.
 /// * `x` - First Bezout coefficient.
 /// * `y` - Second Bezout coefficient.
-fn extended_euclidean_algorithm(a: felt252, b: felt252) -> (felt252, felt252, felt252) {
+fn extended_euclidean_algorithm(a: u128, b: u128) -> (u128, u128, u128) {
     // Initialize variables.
     let mut old_r = a;
     let mut rem = b;
@@ -27,12 +25,12 @@ fn extended_euclidean_algorithm(a: felt252, b: felt252) -> (felt252, felt252, fe
 
 
 fn loop_euclidian(
-    ref old_r: felt252,
-    ref rem: felt252,
-    ref old_s: felt252,
-    ref coeff_s: felt252,
-    ref old_t: felt252,
-    ref coeff_t: felt252
+    ref old_r: u128,
+    ref rem: u128,
+    ref old_s: u128,
+    ref coeff_s: u128,
+    ref old_t: u128,
+    ref coeff_t: u128
 ) {
     check_gas();
 
@@ -41,7 +39,7 @@ fn loop_euclidian(
         return ();
     }
 
-    let quotient = unsafe_euclidean_div_no_remainder(old_r, rem);
+    let quotient = old_r / rem;
 
     update_step(ref rem, ref old_r, quotient);
     update_step(ref coeff_s, ref old_s, quotient);
@@ -52,7 +50,7 @@ fn loop_euclidian(
 }
 
 /// Update the step of the extended Euclidean algorithm.
-fn update_step(ref a: felt252, ref old_a: felt252, quotient: felt252) {
+fn update_step(ref a: u128, ref old_a: u128, quotient: u128) {
     let temp = a;
     a = old_a - quotient * temp;
     old_a = temp;

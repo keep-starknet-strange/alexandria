@@ -3,14 +3,12 @@ use array::ArrayTrait;
 
 use quaireaux_utils::check_gas;
 
-use quaireaux_math::unsafe_euclidean_div;
-
 /// Generates the Collatz sequence for a given number.
 /// # Arguments
 /// * `number` - The number to generate the Collatz sequence for.
 /// # Returns
 /// * `Array` - The Collatz sequence as an array of `felt252` numbers.
-fn sequence(mut number: felt252) -> Array<felt252> {
+fn sequence(mut number: u128) -> Array<u128> {
     let mut arr = ArrayTrait::new();
     if number == 0 {
         return arr;
@@ -24,7 +22,8 @@ fn sequence(mut number: felt252) -> Array<felt252> {
             break ();
         }
 
-        let (q, r) = unsafe_euclidean_div(number, 2);
+        let q = number / 2;
+        let r = number % 2;
         if r == 0 {
             number = q;
         } else {

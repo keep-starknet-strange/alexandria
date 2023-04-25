@@ -45,11 +45,14 @@ fn multiply(x: u128, y: u128) -> u128 {
 fn _div_half_ceil(num: u128) -> u128 {
     quaireaux_utils::check_gas();
 
-    let (q, r) = quaireaux_utils::unsafe_euclidean_div(num, 2);
+    let q = num / 2;
+    let r = num % 2;
+    
     if r != 0 {
-        let (q, _) = quaireaux_utils::unsafe_euclidean_div((num + 1), 2);
+        (num + 1) % 2
+    }else {
+        q
     }
-    return q;
 }
 
 /// Helper function for 'multiply',splits a number at the indicated index and returns it in a tuple.
@@ -62,7 +65,8 @@ fn _split_number(num: u128, split_idx: u128) -> (u128, u128) {
     quaireaux_utils::check_gas();
 
     let divisor = pow(10, split_idx);
-    let (q, r) = quaireaux_utils::unsafe_euclidean_div(num, divisor);
+    let q = num / divisor;
+    let r = num % divisor;
     (q, r)
 }
 

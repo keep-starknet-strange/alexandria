@@ -1,15 +1,12 @@
 //! # Aliquot Sum
 use quaireaux_utils::check_gas;
 
-use quaireaux_math::unsafe_euclidean_div;
-use quaireaux_math::unsafe_euclidean_div_no_remainder;
-
 /// Calculates the aliquot sum of a given number.
 /// # Arguments
 /// * `number` - The number to calculate the aliquot sum for.
 /// # Returns
 /// * `felt252` - The aliquot sum of the input number.
-fn aliquot_sum(number: felt252) -> felt252 {
+fn aliquot_sum(number: u128) -> u128 {
     if number == 0 {
         return 0;
     }
@@ -17,8 +14,8 @@ fn aliquot_sum(number: felt252) -> felt252 {
         return 0;
     }
 
-    let limit = unsafe_euclidean_div_no_remainder(number, 2);
-    _aliquot_sum(number, limit + 1, 1, 0)
+    let limit = (number / 2) + 1;
+    _aliquot_sum(number, limit, 1, 0)
 }
 
 /// Recursive helper function for aliquot_sum.
@@ -29,14 +26,14 @@ fn aliquot_sum(number: felt252) -> felt252 {
 /// * `sum` - The sum of divisors found so far.
 /// # Returns
 /// * `felt252` - The final aliquot sum for the given number.
-fn _aliquot_sum(number: felt252, limit: felt252, index: felt252, sum: felt252) -> felt252 {
+fn _aliquot_sum(number: u128, limit: u128, index: u128, sum: u128) -> u128 {
     check_gas();
 
     if index == limit {
         return 0;
     }
 
-    let (_, r) = unsafe_euclidean_div(number, index);
+    let r = number % index;
     if r == 0 {
         index + _aliquot_sum(number, limit, index + 1, sum)
     } else {

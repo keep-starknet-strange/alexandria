@@ -2,14 +2,13 @@
 use array::ArrayTrait;
 
 use quaireaux_utils::check_gas;
-use quaireaux_math::unsafe_euclidean_div;
 
 /// Algorithm to determine if a number is a perfect number
 /// # Arguments
 /// * `num` - The number to be checked.
 /// # Returns
 /// * `bool` - True if num is a perfect number, false otherwise.
-fn is_perfect_number(num: felt252) -> bool {
+fn is_perfect_number(num: u128) -> bool {
     if num == 0 {
         return false;
     }
@@ -25,7 +24,7 @@ fn is_perfect_number(num: felt252) -> bool {
         if index == num - 1 {
             break num == sum;
         }
-        let (_, r) = unsafe_euclidean_div(num, index);
+        let r = num % index;
         if r == 0 {
             sum = sum + index;
         }
@@ -38,7 +37,7 @@ fn is_perfect_number(num: felt252) -> bool {
 /// * `max` - The maximum value to check for perfect numbers.
 /// # Returns
 /// * `Array` - An array of perfect numbers up to the max value.
-fn perfect_numbers(max: felt252) -> Array<felt252> {
+fn perfect_numbers(max: u128) -> Array<u128> {
     let mut res = ArrayTrait::new();
     let mut index = 1;
 

@@ -4,14 +4,12 @@ use option::OptionTrait;
 
 use quaireaux_utils::check_gas;
 
-use quaireaux_math::unsafe_euclidean_div;
-
 // Calculate the greatest common dividor for n numbers
 // # Arguments
 // * `n` - The array of numbers to calculate the gcd for
 // # Returns
 // * `felt252` - The gcd of input numbers
-fn gcd(mut n: Span<felt252>) -> felt252 {
+fn gcd(mut n: Span<u128>) -> u128 {
     // Return empty input error
     if n.is_empty() {
         panic_with_felt252('EI')
@@ -36,13 +34,13 @@ fn gcd(mut n: Span<felt252>) -> felt252 {
 // * `b` - The first number for which to calculate the gcd
 // # Returns
 // * `felt252` - The gcd of a and b
-fn gcd_two_numbers(mut a: felt252, mut b: felt252) -> felt252 {
+fn gcd_two_numbers(mut a: u128, mut b: u128) -> u128 {
     loop {
         check_gas();
         if b == 0 {
             break a;
         }
-        let (_, r) = unsafe_euclidean_div(a, b);
+        let r = a % b;
         a = b;
         b = r;
     }
