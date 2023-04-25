@@ -24,8 +24,8 @@ fn is_perfect_number(num: u128) -> bool {
         if index == num - 1 {
             break num == sum;
         }
-        let r = num % index;
-        if r == 0 {
+        
+        if num % index == 0 {
             sum = sum + index;
         }
         index = index + 1;
