@@ -13,56 +13,70 @@ use quaireaux_utils::check_gas;
 const U32_MAX: u128 = 0xFFFFFFFF;
 const U64_MAX: u128 = 0xFFFFFFFFFFFFFFFF;
 
-fn u32fpow(x: u32, n: u32) -> u32 {
+fn u32pow(x: u32, n: u32) -> u32 {
     quaireaux_utils::check_gas();
     let n: felt252 = n.into();
     let n: u128 = n.try_into().unwrap();
 
-    if n == 0 { return 1; }
-    else if (n & 1) == 1 {
+    if (n & 1) == 1 {
         let n: felt252 = n.into();
         let n: u32 = n.try_into().unwrap();
-        return x * u32fpow(x * x, n / 2);
+        if n / 2 == 0 {
+            return 1;
+        } else {
+            return x * u32pow(x * x, n / 2);
+        }
     }
     else {
         let n: felt252 = n.into();
         let n: u32 = n.try_into().unwrap();
-        return u32fpow(x * x, n / 2);
+        if n / 2 == 0 {
+            return 1;
+        } else {
+            return u32pow(x * x, n / 2);
+        }
     }
 }
 
-fn u64fpow(x: u64, n: u64) -> u64 {
+fn u64pow(x: u64, n: u64) -> u64 {
     quaireaux_utils::check_gas();
     let n: felt252 = n.into();
     let n: u128 = n.try_into().unwrap();
 
-    if n == 0 { return 1; }
-    else if (n & 1) == 1 {
+    if (n & 1) == 1 {
         let n: felt252 = n.into();
         let n: u128 = n.try_into().unwrap();
         let n = n & U64_MAX;
         let n: u64 = n.try_into().unwrap();
-        return x * u64fpow(x * x, n / 2);
+        if n / 2 == 0 {
+            return 1;
+        } else {
+            return x * u64pow(x * x, n / 2);
+        }
     }
     else {
         let n: felt252 = n.into();
         let n: u128 = n.try_into().unwrap();
         let n = n & U64_MAX;
         let n: u64 = n.try_into().unwrap();
-        return u64fpow(x * x, n / 2);
+        if n / 2 == 0 {
+            return 1;
+        } else {
+            return u64pow(x * x, n / 2);
+        }
     }
 }
 
 fn shl(x: u32, n: u32) -> u32 {
-    return x * u32fpow(2, n);
+    return x * u32pow(2, n);
 }
 
 fn u32shr(x: u32, n: u32) -> u32 {
-    return x / u32fpow(2, n);
+    return x / u32pow(2, n);
 }
 
 fn u64shr(x: u64, n: u64) -> u64 {
-    return x / u64fpow(2, n);
+    return x / u64pow(2, n);
 }
 
 fn rotl(x: u32, n: u32) -> u32 {
@@ -187,78 +201,78 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
     // add one
     data.append(0x80);
 
-    // add_padding(ref data);
+    add_padding(ref data);
 
     // add length to the end
     let result: felt252 = u64shr(u64_data_length, 56).into();
-    // let result: u128 = result.try_into().unwrap();
-    // let result: u128 = result & 0xFF;
-    // let result: felt252 = result.into();
-    // let result: u8 = result.try_into().unwrap();
-    // data.append(result);
+    let result: u128 = result.try_into().unwrap();
+    let result: u128 = result & 0xFF;
+    let result: felt252 = result.into();
+    let result: u8 = result.try_into().unwrap();
+    data.append(result);
 
-    // let result: felt252 = u64shr(u64_data_length, 48).into();
-    // let result: u128 = result.try_into().unwrap();
-    // let result: u128 = result & 0xFF;
-    // let result: felt252 = result.into();
-    // let result: u8 = result.try_into().unwrap();
-    // data.append(result);
+    let result: felt252 = u64shr(u64_data_length, 48).into();
+    let result: u128 = result.try_into().unwrap();
+    let result: u128 = result & 0xFF;
+    let result: felt252 = result.into();
+    let result: u8 = result.try_into().unwrap();
+    data.append(result);
 
-    // let result: felt252 = u64shr(u64_data_length, 40).into();
-    // let result: u128 = result.try_into().unwrap();
-    // let result: u128 = result & 0xFF;
-    // let result: felt252 = result.into();
-    // let result: u8 = result.try_into().unwrap();
-    // data.append(result);
+    let result: felt252 = u64shr(u64_data_length, 40).into();
+    let result: u128 = result.try_into().unwrap();
+    let result: u128 = result & 0xFF;
+    let result: felt252 = result.into();
+    let result: u8 = result.try_into().unwrap();
+    data.append(result);
 
-    // let result: felt252 = u64shr(u64_data_length, 32).into();
-    // let result: u128 = result.try_into().unwrap();
-    // let result: u128 = result & 0xFF;
-    // let result: felt252 = result.into();
-    // let result: u8 = result.try_into().unwrap();
-    // data.append(result);
+    let result: felt252 = u64shr(u64_data_length, 32).into();
+    let result: u128 = result.try_into().unwrap();
+    let result: u128 = result & 0xFF;
+    let result: felt252 = result.into();
+    let result: u8 = result.try_into().unwrap();
+    data.append(result);
 
-    // let result: felt252 = u64shr(u64_data_length, 24).into();
-    // let result: u128 = result.try_into().unwrap();
-    // let result: u128 = result & 0xFF;
-    // let result: felt252 = result.into();
-    // let result: u8 = result.try_into().unwrap();
-    // data.append(result);
+    let result: felt252 = u64shr(u64_data_length, 24).into();
+    let result: u128 = result.try_into().unwrap();
+    let result: u128 = result & 0xFF;
+    let result: felt252 = result.into();
+    let result: u8 = result.try_into().unwrap();
+    data.append(result);
 
-    // let result: felt252 = u64shr(u64_data_length, 16).into();
-    // let result: u128 = result.try_into().unwrap();
-    // let result: u128 = result & 0xFF;
-    // let result: felt252 = result.into();
-    // let result: u8 = result.try_into().unwrap();
-    // data.append(result);
+    let result: felt252 = u64shr(u64_data_length, 16).into();
+    let result: u128 = result.try_into().unwrap();
+    let result: u128 = result & 0xFF;
+    let result: felt252 = result.into();
+    let result: u8 = result.try_into().unwrap();
+    data.append(result);
 
-    // let result: felt252 = u64shr(u64_data_length, 8).into();
-    // let result: u128 = result.try_into().unwrap();
-    // let result: u128 = result & 0xFF;
-    // let result: felt252 = result.into();
-    // let result: u8 = result.try_into().unwrap();
-    // data.append(result);
+    let result: felt252 = u64shr(u64_data_length, 8).into();
+    let result: u128 = result.try_into().unwrap();
+    let result: u128 = result & 0xFF;
+    let result: felt252 = result.into();
+    let result: u8 = result.try_into().unwrap();
+    data.append(result);
 
-    // let result: felt252 = u64shr(u64_data_length, 0).into();
-    // let result: u128 = result.try_into().unwrap();
-    // let result: u128 = result & 0xFF;
-    // let result: felt252 = result.into();
-    // let result: u8 = result.try_into().unwrap();
-    // data.append(result);
+    let result: felt252 = u64shr(u64_data_length, 0).into();
+    let result: u128 = result.try_into().unwrap();
+    let result: u128 = result & 0xFF;
+    let result: felt252 = result.into();
+    let result: u8 = result.try_into().unwrap();
+    data.append(result);
 
     let u32_data_length = 16 * ((data.len() - 1) / 64 + 1);
-    // let mut data = from_u8vec_to_u32vec(ref data, u32_data_length);
+    let mut data = from_u8vec_to_u32vec(ref data, u32_data_length);
 
     let mut h = get_h();
     let mut k = get_k();
-    // sha256_inner(ref data, 0, ref k, ref h);
+    sha256_inner(ref data, 0, ref k, ref h);
 
-    // let result = from_u32vec_to_u8vec(ref h, 8);
-    let result = ArrayTrait::new();
+    let result = from_u32vec_to_u8vec(ref h, 8);
     return result;
 }
 
 fn from_u32vec_to_u8vec(ref data: Array<u32>, i: usize) -> Array<u8> {
+    quaireaux_utils::check_gas();
     if i <= 0 {
         return ArrayTrait::new();
     } else {
@@ -297,6 +311,7 @@ fn from_u32vec_to_u8vec(ref data: Array<u32>, i: usize) -> Array<u8> {
 }
 
 fn copy_array(ref from: Array<u32>, i: usize) -> Array<u32> {
+    quaireaux_utils::check_gas();
     if i > 0 {
         let mut result = copy_array(ref from, i - 1);
         result.append(*from[i - 1]);
@@ -307,6 +322,7 @@ fn copy_array(ref from: Array<u32>, i: usize) -> Array<u32> {
 }
 
 fn sha256_inner(ref data: Array<u32>, i: usize, ref k: Array<u32>, ref h: Array<u32>) {
+    quaireaux_utils::check_gas();
     if 16 * i < data.len() {
         let mut w = create_w(ref data, i, 16);
 
@@ -331,6 +347,7 @@ fn sha256_inner(ref data: Array<u32>, i: usize, ref k: Array<u32>, ref h: Array<
 }
 
 fn compression(ref w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>) -> Array<u32> {
+    quaireaux_utils::check_gas();
     if i < 64 {
         let s1 = bsig1(*h[4]);
         let ch = ch(*h[4], *h[5], *h[6]);
@@ -355,6 +372,7 @@ fn compression(ref w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>
 }
 
 fn create_message_schedule(ref w: Array<u32>, i: usize) {
+    quaireaux_utils::check_gas();
     if i < 64 {
         let s0 = ssig0(*w[i - 15]);
         let s1 = ssig1(*w[i - 2]);
@@ -364,6 +382,7 @@ fn create_message_schedule(ref w: Array<u32>, i: usize) {
 }
 
 fn create_w(ref data: Array<u32>, i: usize, j: usize) -> Array<u32> {
+    quaireaux_utils::check_gas();
     if j <= 0 {
         return ArrayTrait::new();
     } else {
@@ -374,6 +393,7 @@ fn create_w(ref data: Array<u32>, i: usize, j: usize) -> Array<u32> {
 }
 
 fn from_u8vec_to_u32vec(ref data: Array<u8>, i: usize) -> Array<u32> {
+    quaireaux_utils::check_gas();
     if i <= 0 {
         return ArrayTrait::new();
     } else {
@@ -416,6 +436,7 @@ fn from_u8vec_to_u32vec(ref data: Array<u8>, i: usize) -> Array<u32> {
 }
 
 fn add_padding(ref data: Array<u8>) {
+    quaireaux_utils::check_gas();
     if (64 * ((data.len() - 1) / 64 + 1)) - 8 != data.len() {
         data.append(0);
         add_padding(ref data);
