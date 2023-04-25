@@ -47,10 +47,10 @@ fn _div_half_ceil(num: u128) -> u128 {
 
     let q = num / 2;
     let r = num % 2;
-    
+
     if r != 0 {
         (num + 1) % 2
-    }else {
+    } else {
         q
     }
 }
