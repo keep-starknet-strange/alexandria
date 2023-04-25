@@ -68,7 +68,13 @@ fn u64pow(x: u64, n: u64) -> u64 {
 }
 
 fn shl(x: u32, n: u32) -> u32 {
-    return x * u32pow(2, n);
+    let x: felt252 = x.into();
+    let y: felt252 = u32pow(2, n).into();
+    let x = x * y;
+    let x: u128 = x.try_into().unwrap();
+    let x = x & U32_MAX;
+    let x: felt252 = x.into();
+    return x.try_into().unwrap();
 }
 
 fn u32shr(x: u32, n: u32) -> u32 {
