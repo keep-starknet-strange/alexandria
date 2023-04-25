@@ -15,6 +15,7 @@ fn fast_power(mut base: u128, mut power: u128, modulus: u128) -> u128 {
     if base == 0 {
         panic_with_felt252('II')
     }
+
     let mut result = 1;
     loop {
         check_gas();
@@ -23,14 +24,10 @@ fn fast_power(mut base: u128, mut power: u128, modulus: u128) -> u128 {
             break result;
         }
 
-        let q = power / 2;
-        let r = power % 2;
-        let b = (base * base) % modulus;
-
-        if r != 0 {
+        if power % 2 != 0 {
             result = (result * base) % modulus;
         }
-        base = b;
-        power = q;
+        base = (base * base) % modulus;
+        power = power / 2;
     }
 }

@@ -22,10 +22,8 @@ fn sequence(mut number: u128) -> Array<u128> {
             break ();
         }
 
-        let q = number / 2;
-        let r = number % 2;
-        if r == 0 {
-            number = q;
+        if number % 2 == 0 {
+            number = number / 2;
         } else {
             number = 3 * number + 1;
         };

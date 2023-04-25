@@ -24,8 +24,7 @@ fn aliquot_sum(number: u128) -> u128 {
             break res;
         }
 
-        let r = number % index;
-        if r == 0 {
+        if number % index == 0 {
             res = res + index;
         }
         index = index + 1;

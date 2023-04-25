@@ -37,9 +37,11 @@ fn gcd(mut n: Span<u128>) -> u128 {
 fn gcd_two_numbers(mut a: u128, mut b: u128) -> u128 {
     loop {
         check_gas();
+
         if b == 0 {
             break a;
         }
+
         let r = a % b;
         a = b;
         b = r;
