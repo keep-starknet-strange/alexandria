@@ -7,5 +7,6 @@ mod fibonacci_test;
 mod gcd_of_n_numbers_test;
 mod math_test;
 mod perfect_number_test;
+mod sha256_test;
 mod signed_integers_test;
 mod zellers_congruence_test;
