@@ -14,8 +14,8 @@ fn aliquot_sum(number: u128) -> u128 {
         return 0;
     }
 
-    let limit = (number / 2) + 1;
-    _aliquot_sum(number, limit, 1, 0)
+    let limit = (number / 2);
+    _aliquot_sum(number, limit + 1, 1, 0)
 }
 
 /// Recursive helper function for aliquot_sum.
