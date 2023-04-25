@@ -1,5 +1,8 @@
 //! # Extended Euclidean Algorithm.
+use integer::u128_overflowing_sub;
+use integer::u128_overflowing_mul;
 use quaireaux_utils::check_gas;
+
 
 /// Extended Euclidean Algorithm.
 /// # Arguments
@@ -52,6 +55,14 @@ fn loop_euclidian(
 /// Update the step of the extended Euclidean algorithm.
 fn update_step(ref a: u128, ref old_a: u128, quotient: u128) {
     let temp = a;
-    a = old_a - quotient * temp;
+    let (bottom, _) = u128_overflowing_mul(quotient, temp);
+    a = u128_wrapping_sub(old_a, bottom);
     old_a = temp;
+}
+
+fn u128_wrapping_sub(a: u128, b: u128) -> u128 implicits(RangeCheck) nopanic {
+    match u128_overflowing_sub(a, b) {
+        Result::Ok(x) => x,
+        Result::Err(x) => x,
+    }
 }
