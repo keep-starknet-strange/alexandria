@@ -56,27 +56,14 @@ It is a collection of useful algorithms and data structures implemented in Cairo
 
 ## Features
 
-### Data Structures
+This repository is divided in 3 main packages:
 
-- [x] [Merkle Tree](src/data_structures/merkle_tree.cairo)
-- [x] [Queue](src/data_structures/queue.cairo)
+ - [Data Structures](./quaireaux/data_structures/README.md)
+ - [Math](./quaireaux/math/README.md)
+ - [Sorting](./quaireaux/sorting/README.md)
 
-### Math
-
-- [x] [Fibonacci](src/math/sequence/fibonacci.cairo)
-- [x] [Zeller's congruence](src/math/zellers_congruence.cairo)
-- [x] [Extended Euclidean Algorithm](src/math/extended_euclidean_algorithm.cairo) 
-- [x] [Karatsuba Multiplication Algorithm](src/math/karatsuba.cairo) 
-- [x] [Perfect Number Algorithm](src/math/perfect_number.cairo)
-- [x] [Armstrong Number Algorithm](src/math/armstrong_number.cairo) 
-- [x] [GCD of N numbers](src/math/gcd_of_n_numbers.cairo)
-- [x] [Aliquot Sum](src/math/aliquot_sum.cairo)
-- [x] [Collatz Sequence](src/math/collatz_sequence.cairo)
-
-### Sorting 
-
-- [x] [Merge Sort](src/sorting/merge_sort.cairo)
-- [x] [Bubble Sort](src/sorting/bubble_sort.cairo)
+And 1 secondary package:
+ - [Utilitaries](./quaireaux/utils/README.md)
 
 ## Getting Started
 

@@ -4,7 +4,6 @@ use hash::LegacyHash;
 // Internal imports
 use quaireaux_data_structures::merkle_tree::MerkleTree;
 use quaireaux_data_structures::merkle_tree::MerkleTreeTrait;
-use quaireaux_data_structures::merkle_tree::internal_compute_root;
 
 #[test]
 #[available_gas(2000000)]
@@ -56,7 +55,7 @@ fn test_case_compute_root(
     ref merkle_tree: MerkleTree, proof: Array<felt252>, leaf: felt252, expected_root: felt252
 ) {
     let mut merkle_tree = MerkleTreeTrait::new();
-    let root = merkle_tree.compute_root(leaf, proof);
+    let root = merkle_tree.compute_root(leaf, proof.span());
     assert(root == expected_root, 'wrong result');
 }
 
@@ -67,7 +66,7 @@ fn test_case_verify(
     proof: Array<felt252>,
     expected_result: bool
 ) {
-    let result = merkle_tree.verify(root, leaf, proof);
+    let result = merkle_tree.verify(root, leaf, proof.span());
     assert(result == expected_result, 'wrong result');
 }
 
