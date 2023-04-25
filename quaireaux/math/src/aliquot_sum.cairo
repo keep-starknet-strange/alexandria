@@ -14,29 +14,20 @@ fn aliquot_sum(number: u128) -> u128 {
         return 0;
     }
 
-    let limit = (number / 2);
-    _aliquot_sum(number, limit + 1, 1, 0)
-}
+    let limit = (number / 2) + 1;
+    let mut index = 1;
+    let mut res = 0;
+    loop {
+        check_gas();
 
-/// Recursive helper function for aliquot_sum.
-/// # Arguments
-/// * `number` - The number to calculate the aliquot sum for.
-/// * `limit` - The maximum divisor to consider.
-/// * `index` - The current divisor being evaluated in the recursive loop.
-/// * `sum` - The sum of divisors found so far.
-/// # Returns
-/// * `felt252` - The final aliquot sum for the given number.
-fn _aliquot_sum(number: u128, limit: u128, index: u128, sum: u128) -> u128 {
-    check_gas();
+        if index == limit {
+            break res;
+        }
 
-    if index == limit {
-        return 0;
-    }
-
-    let r = number % index;
-    if r == 0 {
-        index + _aliquot_sum(number, limit, index + 1, sum)
-    } else {
-        _aliquot_sum(number, limit, index + 1, sum)
+        let r = number % index;
+        if r == 0 {
+            res = res + index;
+        }
+        index = index + 1;
     }
 }

@@ -2,6 +2,17 @@ use quaireaux_math::aliquot_sum::aliquot_sum;
 
 #[test]
 #[available_gas(200000)]
+fn zero_test() {
+    assert(aliquot_sum(0) == 0, 'invalid result');
+}
+
+#[test]
+#[available_gas(200000)]
+fn one_test() {
+    assert(aliquot_sum(1) == 0, 'invalid result');
+}
+#[test]
+#[available_gas(200000)]
 fn one_digit_number_test() {
     assert(aliquot_sum(6) == 6, 'invalid result');
 }
