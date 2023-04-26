@@ -10,111 +10,63 @@ use traits::Into;
 use traits::TryInto;
 use quaireaux_utils::check_gas;
 
+const U8_MAX: u128 = 0xFF;
 const U32_MAX: u128 = 0xFFFFFFFF;
 const U64_MAX: u128 = 0xFFFFFFFFFFFFFFFF;
 
-fn u32pow(x: u32, n: u32) -> u32 {
+fn from_u8Array_to_felt252Array(ref data: Array<u8>, i: usize) -> Array<felt252> {
     quaireaux_utils::check_gas();
-    let n: felt252 = n.into();
-    let n: u128 = n.try_into().unwrap();
-
-    if (n & 1) == 1 {
-        let n: felt252 = n.into();
-        let n: u32 = n.try_into().unwrap();
-        if n / 2 == 0 {
-            return 1;
-        } else {
-            return x * u32pow(x * x, n / 2);
-        }
-    }
-    else {
-        let n: felt252 = n.into();
-        let n: u32 = n.try_into().unwrap();
-        if n / 2 == 0 {
-            return 1;
-        } else {
-            return u32pow(x * x, n / 2);
-        }
+    if i <= 0 {
+        return ArrayTrait::new();
+    } else {
+        let mut result = from_u8Array_to_felt252Array(ref data, i - 1);
+        result.append((*data[i - 1]).into());
+        return result;
     }
 }
 
-fn u64pow(x: u64, n: u64) -> u64 {
+fn from_u32Array_to_felt252Array(ref data: Array<u32>, i: usize) -> Array<felt252> {
     quaireaux_utils::check_gas();
-    let n: felt252 = n.into();
-    let n: u128 = n.try_into().unwrap();
-
-    if (n & 1) == 1 {
-        let n: felt252 = n.into();
-        let n: u128 = n.try_into().unwrap();
-        let n = n & U64_MAX;
-        let n: u64 = n.try_into().unwrap();
-        if n / 2 == 0 {
-            return 1;
-        } else {
-            return x * u64pow(x * x, n / 2);
-        }
-    }
-    else {
-        let n: felt252 = n.into();
-        let n: u128 = n.try_into().unwrap();
-        let n = n & U64_MAX;
-        let n: u64 = n.try_into().unwrap();
-        if n / 2 == 0 {
-            return 1;
-        } else {
-            return u64pow(x * x, n / 2);
-        }
+    if i <= 0 {
+        return ArrayTrait::new();
+    } else {
+        let mut result = from_u32Array_to_felt252Array(ref data, i - 1);
+        result.append((*data[i - 1]).into());
+        return result;
     }
 }
 
-fn shl(x: u32, n: u32) -> u32 {
-    let x: felt252 = x.into();
-    let y: felt252 = u32pow(2, n).into();
-    let x = x * y;
-    let x: u128 = x.try_into().unwrap();
-    let x = x & U32_MAX;
-    let x: felt252 = x.into();
-    return x.try_into().unwrap();
+fn pow(x: u128, n: u128) -> u128 {
+    quaireaux_utils::check_gas();
+    if n == 0 {
+        return 1;
+    } else if (n & 1) == 1 {
+        return x * pow(x * x, n / 2);
+    } else {
+        return pow(x * x, n / 2);
+    }
 }
 
-fn u32shr(x: u32, n: u32) -> u32 {
-    return x / u32pow(2, n);
+fn shl(x: u128, n: u128) -> u128 {
+    return x * pow(2, n);
 }
 
-fn u64shr(x: u64, n: u64) -> u64 {
-    return x / u64pow(2, n);
-}
-
-fn rotl(x: u32, n: u32) -> u32 {
-    let x1: felt252 = shl(x, n).into();
-    let x1: u128 = x1.try_into().unwrap();
-    let x2: felt252 = u32shr(x, 32 - n).into();
-    let x2: u128 = x2.try_into().unwrap();
-    let result = x1 | x2;
-    let result: felt252 = result.into();
-    return result.try_into().unwrap();
-}
-
-fn rotr(x: u32, n: u32) -> u32 {
-    let x1: felt252 = u32shr(x, n).into();
-    let x1: u128 = x1.try_into().unwrap();
-    let x2: felt252 = shl(x, 32 - n).into();
-    let x2: u128 = x2.try_into().unwrap();
-    let result = x1 | x2;
-    let result: felt252 = result.into();
-    return result.try_into().unwrap();
+fn shr(x: u128, n: u128) -> u128 {
+    return x / pow(2, n);
 }
 
 fn ch(x: u32, y: u32, z: u32) -> u32 {
-    // x ^ U32_MAX is a bitwise NOT
     let x: felt252 = x.into();
     let x: u128 = x.try_into().unwrap();
+
     let y: felt252 = y.into();
     let y: u128 = y.try_into().unwrap();
+    
     let z: felt252 = z.into();
     let z: u128 = z.try_into().unwrap();
-    let result = (x & y) ^ ((x ^ U32_MAX) & z);
-    let result: u64 = result.try_into().unwrap();
+
+    let result: u128 = (x & y) ^ ((x ^ U32_MAX) & z);
+    let result: felt252 = result.into();
     return result.try_into().unwrap();
 }
 
@@ -124,85 +76,95 @@ fn maj(x: u32, y: u32, z: u32) -> u32 {
 
     let y: felt252 = y.into();
     let y: u128 = y.try_into().unwrap();
-
+    
     let z: felt252 = z.into();
     let z: u128 = z.try_into().unwrap();
 
     let result = (x & y) ^ (x & z) ^ (y & z);
-    let result: u64 = result.try_into().unwrap();
+    let result: felt252 = result.into();
     return result.try_into().unwrap();
 }
 
 fn bsig0(x: u32) -> u32 {
     // x.rotate_right(2) ^ x.rotate_right(13) ^ x.rotate_right(22)
-    let x1: felt252 = rotr(x, 2).into();
-    let x1: u128 = x1.try_into().unwrap();
+    let x: felt252 = x.into();
+    let x: u128 = x.try_into().unwrap();
 
-    let x2: felt252 = rotr(x, 13).into();
-    let x2: u128 = x2.try_into().unwrap();
+    let y: felt252 = x.into();
+    let y: u128 = y.try_into().unwrap();
+    
+    let z: felt252 = x.into();
+    let z: u128 = z.try_into().unwrap();
 
-    let x3: felt252 = rotr(x, 22).into();
-    let x3: u128 = x3.try_into().unwrap();
-
+    let x1 = (shr(x, 2) | shl(x, 32 - 2)) & U32_MAX;
+    let x2 = (shr(x, 13) | shl(x, 32 - 13)) & U32_MAX;
+    let x3 = (shr(x, 22) | shl(x, 32 - 22)) & U32_MAX;
     let result = x1 ^ x2 ^ x3;
-    let result: u64 = result.try_into().unwrap();
+    let result: felt252 = result.into();
     return result.try_into().unwrap();
 }
 
 fn bsig1(x: u32) -> u32 {
     // x.rotate_right(6) ^ x.rotate_right(11) ^ x.rotate_right(25)
-    let x1: felt252 = rotr(x, 6).into();
-    let x1: u128 = x1.try_into().unwrap();
+    let x: felt252 = x.into();
+    let x: u128 = x.try_into().unwrap();
 
-    let x2: felt252 = rotr(x, 11).into();
-    let x2: u128 = x2.try_into().unwrap();
+    let y: felt252 = x.into();
+    let y: u128 = y.try_into().unwrap();
+    
+    let z: felt252 = x.into();
+    let z: u128 = z.try_into().unwrap();
 
-    let x3: felt252 = rotr(x, 25).into();
-    let x3: u128 = x3.try_into().unwrap();
-
+    let x1 = (shr(x, 6) | shl(x, 32 - 6)) & U32_MAX;
+    let x2 = (shr(x, 11) | shl(x, 32 - 11)) & U32_MAX;
+    let x3 = (shr(x, 25) | shl(x, 32 - 25)) & U32_MAX;
     let result = x1 ^ x2 ^ x3;
-    let result: u64 = result.try_into().unwrap();
+    let result: felt252 = result.into();
     return result.try_into().unwrap();
 }
 
 fn ssig0(x: u32) -> u32 {
     // x.rotate_right(7) ^ x.rotate_right(18) ^ (x >> 3)
-    let x1: felt252 = rotr(x, 7).into();
-    let x1: u128 = x1.try_into().unwrap();
+    let x: felt252 = x.into();
+    let x: u128 = x.try_into().unwrap();
 
-    let x2: felt252 = rotr(x, 18).into();
-    let x2: u128 = x2.try_into().unwrap();
+    let y: felt252 = x.into();
+    let y: u128 = y.try_into().unwrap();
+    
+    let z: felt252 = x.into();
+    let z: u128 = z.try_into().unwrap();
 
-    let x3: felt252 = u32shr(x, 3).into();
-    let x3: u128 = x3.try_into().unwrap();
-
+    let x1 = (shr(x, 7) | shl(x, 32 - 7)) & U32_MAX;
+    let x2 = (shr(x, 18) | shl(x, 32 - 18)) & U32_MAX;
+    let x3 = (shr(x, 3)) & U32_MAX;
     let result = x1 ^ x2 ^ x3;
-    let result: u64 = result.try_into().unwrap();
+    let result: felt252 = result.into();
     return result.try_into().unwrap();
 }
 
 fn ssig1(x: u32) -> u32 {
     // x.rotate_right(17) ^ x.rotate_right(19) ^ (x >> 10)
-    let x1: felt252 = rotr(x, 17).into();
-    let x1: u128 = x1.try_into().unwrap();
+    let x: felt252 = x.into();
+    let x: u128 = x.try_into().unwrap();
 
-    let x2: felt252 = rotr(x, 19).into();
-    let x2: u128 = x2.try_into().unwrap();
+    let y: felt252 = x.into();
+    let y: u128 = y.try_into().unwrap();
+    
+    let z: felt252 = x.into();
+    let z: u128 = z.try_into().unwrap();
 
-    let x3: felt252 = u32shr(x, 10).into();
-    let x3: u128 = x3.try_into().unwrap();
-
+    let x1 = (shr(x, 17) | shl(x, 32 - 17)) & U32_MAX;
+    let x2 = (shr(x, 19) | shl(x, 32 - 19)) & U32_MAX;
+    let x3 = (shr(x, 10)) & U32_MAX;
     let result = x1 ^ x2 ^ x3;
-    let result: u64 = result.try_into().unwrap();
+    let result: felt252 = result.into();
     return result.try_into().unwrap();
 }
-
 
 fn sha256(mut data: Array<u8>) -> Array<u8> {
     let u64_data_length: felt252 = (data.len() * 8).into();
     let u64_data_length: u128 = u64_data_length.try_into().unwrap();
     let u64_data_length = u64_data_length & U64_MAX;
-    let u64_data_length: u64 = u64_data_length.try_into().unwrap();
 
     // add one
     data.append(0x80);
@@ -210,104 +172,100 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
     add_padding(ref data);
 
     // add length to the end
-    let result: felt252 = u64shr(u64_data_length, 56).into();
-    let result: u128 = result.try_into().unwrap();
-    let result: u128 = result & 0xFF;
+
+    let result = shr(u64_data_length, 56);
+    let result = result & U8_MAX;
     let result: felt252 = result.into();
     let result: u8 = result.try_into().unwrap();
     data.append(result);
 
-    let result: felt252 = u64shr(u64_data_length, 48).into();
-    let result: u128 = result.try_into().unwrap();
-    let result: u128 = result & 0xFF;
+    let result = shr(u64_data_length, 48);
+    let result = result & U8_MAX;
     let result: felt252 = result.into();
     let result: u8 = result.try_into().unwrap();
     data.append(result);
 
-    let result: felt252 = u64shr(u64_data_length, 40).into();
-    let result: u128 = result.try_into().unwrap();
-    let result: u128 = result & 0xFF;
+    let result = shr(u64_data_length, 40);
+    let result = result & U8_MAX;
     let result: felt252 = result.into();
     let result: u8 = result.try_into().unwrap();
     data.append(result);
 
-    let result: felt252 = u64shr(u64_data_length, 32).into();
-    let result: u128 = result.try_into().unwrap();
-    let result: u128 = result & 0xFF;
+    let result = shr(u64_data_length, 32);
+    let result = result & U8_MAX;
     let result: felt252 = result.into();
     let result: u8 = result.try_into().unwrap();
     data.append(result);
 
-    let result: felt252 = u64shr(u64_data_length, 24).into();
-    let result: u128 = result.try_into().unwrap();
-    let result: u128 = result & 0xFF;
+    let result = shr(u64_data_length, 24);
+    let result = result & U8_MAX;
     let result: felt252 = result.into();
     let result: u8 = result.try_into().unwrap();
     data.append(result);
 
-    let result: felt252 = u64shr(u64_data_length, 16).into();
-    let result: u128 = result.try_into().unwrap();
-    let result: u128 = result & 0xFF;
+    let result = shr(u64_data_length, 16);
+    let result = result & U8_MAX;
     let result: felt252 = result.into();
     let result: u8 = result.try_into().unwrap();
     data.append(result);
 
-    let result: felt252 = u64shr(u64_data_length, 8).into();
-    let result: u128 = result.try_into().unwrap();
-    let result: u128 = result & 0xFF;
+    let result = shr(u64_data_length, 8);
+    let result = result & U8_MAX;
     let result: felt252 = result.into();
     let result: u8 = result.try_into().unwrap();
     data.append(result);
 
-    let result: felt252 = u64shr(u64_data_length, 0).into();
-    let result: u128 = result.try_into().unwrap();
-    let result: u128 = result & 0xFF;
+    let result = shr(u64_data_length, 0);
+    let result = result & U8_MAX;
     let result: felt252 = result.into();
     let result: u8 = result.try_into().unwrap();
     data.append(result);
+
+    let datap = from_u8Array_to_felt252Array(ref data, data.len());
+    datap.print();
 
     let u32_data_length = 16 * ((data.len() - 1) / 64 + 1);
-    let mut data = from_u8vec_to_u32vec(ref data, u32_data_length);
+    let mut data = from_u8Array_to_u32Array(ref data, u32_data_length);
 
     let mut h = get_h();
     let mut k = get_k();
-    sha256_inner(ref data, 0, ref k, ref h);
+    h = sha256_inner(ref data, 0, ref k, h);
 
-    let result = from_u32vec_to_u8vec(ref h, 8);
+    let result = from_u32Array_to_u8Array(ref h, 8);
     return result;
 }
 
-fn from_u32vec_to_u8vec(ref data: Array<u32>, i: usize) -> Array<u8> {
+fn from_u32Array_to_u8Array(ref data: Array<u32>, i: usize) -> Array<u8> {
     quaireaux_utils::check_gas();
     if i <= 0 {
         return ArrayTrait::new();
     } else {
-        let mut result = from_u32vec_to_u8vec(ref data, i - 1);
+        let mut result = from_u32Array_to_u8Array(ref data, i - 1);
 
-        let x: felt252 = u32shr(*data[i - 1], 24).into();
-        let x: u128 = x.try_into().unwrap();
-        let x: u128 = x & 0xFF;
+        let x: felt252 = (*data[i - 1]).into();
+        let x = shr(x.try_into().unwrap(), 24);
+        let x = x & 0xFF;
         let x: felt252 = x.into();
         let x: u8 = x.try_into().unwrap();
         result.append(x);
 
-        let x: felt252 = u32shr(*data[i - 1], 16).into();
-        let x: u128 = x.try_into().unwrap();
-        let x: u128 = x & 0xFF;
+        let x: felt252 = (*data[i - 1]).into();
+        let x = shr(x.try_into().unwrap(), 16);
+        let x = x & 0xFF;
         let x: felt252 = x.into();
         let x: u8 = x.try_into().unwrap();
         result.append(x);
 
-        let x: felt252 = u32shr(*data[i - 1], 8).into();
-        let x: u128 = x.try_into().unwrap();
-        let x: u128 = x & 0xFF;
+        let x: felt252 = (*data[i - 1]).into();
+        let x = shr(x.try_into().unwrap(), 8);
+        let x = x & 0xFF;
         let x: felt252 = x.into();
         let x: u8 = x.try_into().unwrap();
         result.append(x);
 
-        let x: felt252 = u32shr(*data[i - 1], 0).into();
-        let x: u128 = x.try_into().unwrap();
-        let x: u128 = x & 0xFF;
+        let x: felt252 = (*data[i - 1]).into();
+        let x = shr(x.try_into().unwrap(), 0);
+        let x = x & 0xFF;
         let x: felt252 = x.into();
         let x: u8 = x.try_into().unwrap();
         result.append(x);
@@ -327,17 +285,17 @@ fn copy_array(ref from: Array<u32>, i: usize) -> Array<u32> {
     }
 }
 
-fn sha256_inner(ref data: Array<u32>, i: usize, ref k: Array<u32>, ref h: Array<u32>) {
+fn sha256_inner(ref data: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>) -> Array<u32> {
     quaireaux_utils::check_gas();
     if 16 * i < data.len() {
         let mut w = create_w(ref data, i, 16);
 
         create_message_schedule(ref w, 16);
 
-        let h2 = copy_array(ref h, h.len());
-        let h2 = compression(ref w, 0, ref k, h2);
+        let mut h2 = copy_array(ref h, h.len());
+        let mut h2 = compression(ref w, 0, ref k, h2);
 
-        let mut t = ArrayTrait::<u32>::new();
+        let mut t = ArrayTrait::new();
         t.append(u32_wrapping_add(*h[0], *h2[0]));
         t.append(u32_wrapping_add(*h[1], *h2[1]));
         t.append(u32_wrapping_add(*h[2], *h2[2]));
@@ -348,7 +306,9 @@ fn sha256_inner(ref data: Array<u32>, i: usize, ref k: Array<u32>, ref h: Array<
         t.append(u32_wrapping_add(*h[7], *h2[7]));
         h = t;
 
-        sha256_inner(ref data, i + 1, ref k, ref h);
+        return sha256_inner(ref data, i + 1, ref k, h);
+    } else {
+        return h;
     }
 }
 
@@ -357,12 +317,12 @@ fn compression(ref w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>
     if i < 64 {
         let s1 = bsig1(*h[4]);
         let ch = ch(*h[4], *h[5], *h[6]);
-        let temp1 = u32_wrapping_add(u32_wrapping_add(u32_wrapping_add(u32_wrapping_add(*h[7], s1), ch), *k[1]), *w[i]);
+        let temp1 = u32_wrapping_add(u32_wrapping_add(u32_wrapping_add(u32_wrapping_add(*h[7], s1), ch), *k[i]), *w[i]);
         let s0 = bsig0(*h[0]);
         let maj = maj(*h[0], *h[1], *h[2]);
         let temp2 = u32_wrapping_add(s0, maj);
 
-        let mut t = ArrayTrait::<u32>::new();
+        let mut t = ArrayTrait::new();
         t.append(u32_wrapping_add(temp1, temp2));
         t.append(*h[0]);
         t.append(*h[1]);
@@ -371,10 +331,12 @@ fn compression(ref w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>
         t.append(*h[4]);
         t.append(*h[5]);
         t.append(*h[6]);
-        let h = t;
-        let h = compression(ref w, i + 1, ref k, h);
+        h = t;
+        h = compression(ref w, i + 1, ref k, h);
+        return h;
+    } else {
+        return h;
     }
-    return h;
 }
 
 fn create_message_schedule(ref w: Array<u32>, i: usize) {
@@ -382,7 +344,7 @@ fn create_message_schedule(ref w: Array<u32>, i: usize) {
     if i < 64 {
         let s0 = ssig0(*w[i - 15]);
         let s1 = ssig1(*w[i - 2]);
-        w.append( u32_wrapping_add(u32_wrapping_add(u32_wrapping_add(*w[i - 16], s0), *w[i - 7]), s1) );
+        w.append(u32_wrapping_add(u32_wrapping_add(*w[i - 16], s0), u32_wrapping_add(*w[i - 7], s1)));
         create_message_schedule(ref w, i + 1);
     }
 }
@@ -398,43 +360,31 @@ fn create_w(ref data: Array<u32>, i: usize, j: usize) -> Array<u32> {
     }
 }
 
-fn from_u8vec_to_u32vec(ref data: Array<u8>, i: usize) -> Array<u32> {
+fn from_u8Array_to_u32Array(ref data: Array<u8>, i: usize) -> Array<u32> {
     quaireaux_utils::check_gas();
     if i <= 0 {
         return ArrayTrait::new();
     } else {
         let mut value = 0_u128;
 
-        let x: felt252 = (*data[4 * (i - 1) + 0]).into();
-        let x: u32 = x.try_into().unwrap();
-        let x = shl(x, 24);
-        let x: felt252 = x.into();
-        let x: u128 = x.try_into().unwrap();
+        let d: felt252 = (*data[4 * (i - 1) + 0]).into();
+        let x = shl(d.try_into().unwrap(), 24) & U32_MAX;
         value = value | x;
 
-        let x: felt252 = (*data[4 * (i - 1) + 0]).into();
-        let x: u32 = x.try_into().unwrap();
-        let x = shl(x, 24);
-        let x: felt252 = x.into();
-        let x: u128 = x.try_into().unwrap();
+        let d: felt252 = (*data[4 * (i - 1) + 1]).into();
+        let x = shl(d.try_into().unwrap(), 16) & U32_MAX;
         value = value | x;
 
-        let x: felt252 = (*data[4 * (i - 1) + 0]).into();
-        let x: u32 = x.try_into().unwrap();
-        let x = shl(x, 8);
-        let x: felt252 = x.into();
-        let x: u128 = x.try_into().unwrap();
+        let d: felt252 = (*data[4 * (i - 1) + 2]).into();
+        let x = shl(d.try_into().unwrap(), 8) & U32_MAX;
         value = value | x;
 
-        let x: felt252 = (*data[4 * (i - 1) + 0]).into();
-        let x: u32 = x.try_into().unwrap();
-        let x = shl(x, 0);
-        let x: felt252 = x.into();
-        let x: u128 = x.try_into().unwrap();
+        let d: felt252 = (*data[4 * (i - 1) + 3]).into();
+        let x = shl(d.try_into().unwrap(), 0) & U32_MAX;
         value = value | x;
+        let value: felt252 = value.into();
 
-        let mut result = from_u8vec_to_u32vec(ref data, i - 1);
-        let value: felt252 = x.into();
+        let mut result = from_u8Array_to_u32Array(ref data, i - 1);
         let value: u32 = value.try_into().unwrap();
         result.append(value);
         return result;
