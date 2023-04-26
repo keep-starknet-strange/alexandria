@@ -61,7 +61,7 @@ fn ch(x: u32, y: u32, z: u32) -> u32 {
 
     let y: felt252 = y.into();
     let y: u128 = y.try_into().unwrap();
-    
+
     let z: felt252 = z.into();
     let z: u128 = z.try_into().unwrap();
 
@@ -76,7 +76,7 @@ fn maj(x: u32, y: u32, z: u32) -> u32 {
 
     let y: felt252 = y.into();
     let y: u128 = y.try_into().unwrap();
-    
+
     let z: felt252 = z.into();
     let z: u128 = z.try_into().unwrap();
 
@@ -92,7 +92,7 @@ fn bsig0(x: u32) -> u32 {
 
     let y: felt252 = x.into();
     let y: u128 = y.try_into().unwrap();
-    
+
     let z: felt252 = x.into();
     let z: u128 = z.try_into().unwrap();
 
@@ -111,7 +111,7 @@ fn bsig1(x: u32) -> u32 {
 
     let y: felt252 = x.into();
     let y: u128 = y.try_into().unwrap();
-    
+
     let z: felt252 = x.into();
     let z: u128 = z.try_into().unwrap();
 
@@ -130,7 +130,7 @@ fn ssig0(x: u32) -> u32 {
 
     let y: felt252 = x.into();
     let y: u128 = y.try_into().unwrap();
-    
+
     let z: felt252 = x.into();
     let z: u128 = z.try_into().unwrap();
 
@@ -149,7 +149,7 @@ fn ssig1(x: u32) -> u32 {
 
     let y: felt252 = x.into();
     let y: u128 = y.try_into().unwrap();
-    
+
     let z: felt252 = x.into();
     let z: u128 = z.try_into().unwrap();
 
@@ -285,31 +285,34 @@ fn copy_array(ref from: Array<u32>, i: usize) -> Array<u32> {
     }
 }
 
-fn sha256_inner(ref data: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>) -> Array<u32> {
+fn sha256_inner(
+    ref data: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>
+) -> Array<u32> {
     quaireaux_utils::check_gas();
-    if 16 * i < data.len() {
-        let mut w = create_w(ref data, i, 16);
+    if 16
+        * i < data.len() {
+            let mut w = create_w(ref data, i, 16);
 
-        create_message_schedule(ref w, 16);
+            create_message_schedule(ref w, 16);
 
-        let mut h2 = copy_array(ref h, h.len());
-        let mut h2 = compression(ref w, 0, ref k, h2);
+            let mut h2 = copy_array(ref h, h.len());
+            let mut h2 = compression(ref w, 0, ref k, h2);
 
-        let mut t = ArrayTrait::new();
-        t.append(u32_wrapping_add(*h[0], *h2[0]));
-        t.append(u32_wrapping_add(*h[1], *h2[1]));
-        t.append(u32_wrapping_add(*h[2], *h2[2]));
-        t.append(u32_wrapping_add(*h[3], *h2[3]));
-        t.append(u32_wrapping_add(*h[4], *h2[4]));
-        t.append(u32_wrapping_add(*h[5], *h2[5]));
-        t.append(u32_wrapping_add(*h[6], *h2[6]));
-        t.append(u32_wrapping_add(*h[7], *h2[7]));
-        h = t;
+            let mut t = ArrayTrait::new();
+            t.append(u32_wrapping_add(*h[0], *h2[0]));
+            t.append(u32_wrapping_add(*h[1], *h2[1]));
+            t.append(u32_wrapping_add(*h[2], *h2[2]));
+            t.append(u32_wrapping_add(*h[3], *h2[3]));
+            t.append(u32_wrapping_add(*h[4], *h2[4]));
+            t.append(u32_wrapping_add(*h[5], *h2[5]));
+            t.append(u32_wrapping_add(*h[6], *h2[6]));
+            t.append(u32_wrapping_add(*h[7], *h2[7]));
+            h = t;
 
-        return sha256_inner(ref data, i + 1, ref k, h);
-    } else {
-        return h;
-    }
+            return sha256_inner(ref data, i + 1, ref k, h);
+        } else {
+            return h;
+        }
 }
 
 fn compression(ref w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>) -> Array<u32> {
@@ -317,7 +320,9 @@ fn compression(ref w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>
     if i < 64 {
         let s1 = bsig1(*h[4]);
         let ch = ch(*h[4], *h[5], *h[6]);
-        let temp1 = u32_wrapping_add(u32_wrapping_add(u32_wrapping_add(u32_wrapping_add(*h[7], s1), ch), *k[i]), *w[i]);
+        let temp1 = u32_wrapping_add(
+            u32_wrapping_add(u32_wrapping_add(u32_wrapping_add(*h[7], s1), ch), *k[i]), *w[i]
+        );
         let s0 = bsig0(*h[0]);
         let maj = maj(*h[0], *h[1], *h[2]);
         let temp2 = u32_wrapping_add(s0, maj);
@@ -344,7 +349,9 @@ fn create_message_schedule(ref w: Array<u32>, i: usize) {
     if i < 64 {
         let s0 = ssig0(*w[i - 15]);
         let s1 = ssig1(*w[i - 2]);
-        w.append(u32_wrapping_add(u32_wrapping_add(*w[i - 16], s0), u32_wrapping_add(*w[i - 7], s1)));
+        w.append(
+            u32_wrapping_add(u32_wrapping_add(*w[i - 16], s0), u32_wrapping_add(*w[i - 7], s1))
+        );
         create_message_schedule(ref w, i + 1);
     }
 }
@@ -393,10 +400,11 @@ fn from_u8Array_to_u32Array(ref data: Array<u8>, i: usize) -> Array<u32> {
 
 fn add_padding(ref data: Array<u8>) {
     quaireaux_utils::check_gas();
-    if (64 * ((data.len() - 1) / 64 + 1)) - 8 != data.len() {
-        data.append(0);
-        add_padding(ref data);
-    }
+    if (64 * ((data.len() - 1) / 64 + 1))
+        - 8 != data.len() {
+            data.append(0);
+            add_padding(ref data);
+        }
 }
 
 fn get_h() -> Array<u32> {
