@@ -14,28 +14,6 @@ const U8_MAX: u128 = 0xFF;
 const U32_MAX: u128 = 0xFFFFFFFF;
 const U64_MAX: u128 = 0xFFFFFFFFFFFFFFFF;
 
-fn from_u8Array_to_felt252Array(ref data: Array<u8>, i: usize) -> Array<felt252> {
-    quaireaux_utils::check_gas();
-    if i <= 0 {
-        return ArrayTrait::new();
-    } else {
-        let mut result = from_u8Array_to_felt252Array(ref data, i - 1);
-        result.append((*data[i - 1]).into());
-        return result;
-    }
-}
-
-fn from_u32Array_to_felt252Array(ref data: Array<u32>, i: usize) -> Array<felt252> {
-    quaireaux_utils::check_gas();
-    if i <= 0 {
-        return ArrayTrait::new();
-    } else {
-        let mut result = from_u32Array_to_felt252Array(ref data, i - 1);
-        result.append((*data[i - 1]).into());
-        return result;
-    }
-}
-
 fn pow(x: u128, n: u128) -> u128 {
     quaireaux_utils::check_gas();
     if n == 0 {
@@ -220,9 +198,6 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
     let result: felt252 = result.into();
     let result: u8 = result.try_into().unwrap();
     data.append(result);
-
-    let datap = from_u8Array_to_felt252Array(ref data, data.len());
-    datap.print();
 
     let u32_data_length = 16 * ((data.len() - 1) / 64 + 1);
     let mut data = from_u8Array_to_u32Array(ref data, u32_data_length);
