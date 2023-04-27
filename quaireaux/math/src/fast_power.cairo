@@ -3,8 +3,6 @@ use array::ArrayTrait;
 
 use quaireaux_utils::check_gas;
 
-use quaireaux_math::unsafe_euclidean_div;
-
 // Calculate the (base^power)mod modulus using the fast powering algorithm
 // # Arguments
 // * `base` - The base of the exponentiation
@@ -12,28 +10,24 @@ use quaireaux_math::unsafe_euclidean_div;
 // * `modulus` - The modulus used in the calculation
 // # Returns
 // * `felt252` - The result of (base^power)mod modulus
-fn fast_power(mut base: felt252, mut power: felt252, modulus: felt252) -> felt252 {
+fn fast_power(mut base: u128, mut power: u128, modulus: u128) -> u128 {
     // Return invalid input error
     if base == 0 {
         panic_with_felt252('II')
     }
+
     let mut result = 1;
     loop {
         check_gas();
 
         if power == 0 {
-            break ();
+            break result;
         }
 
-        let (q, r) = unsafe_euclidean_div(power, 2);
-        let (_, b) = unsafe_euclidean_div(base * base, modulus);
-
-        if r != 0 {
-            let (_, r) = unsafe_euclidean_div(result * base, modulus);
-            result = r;
+        if power % 2 != 0 {
+            result = (result * base) % modulus;
         }
-        base = b;
-        power = q;
-    };
-    result
+        base = (base * base) % modulus;
+        power = power / 2;
+    }
 }

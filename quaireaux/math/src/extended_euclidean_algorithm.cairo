@@ -1,7 +1,8 @@
 //! # Extended Euclidean Algorithm.
+use integer::u128_overflowing_sub;
+use integer::u128_overflowing_mul;
 use quaireaux_utils::check_gas;
 
-use quaireaux_math::unsafe_euclidean_div_no_remainder;
 
 /// Extended Euclidean Algorithm.
 /// # Arguments
@@ -11,7 +12,7 @@ use quaireaux_math::unsafe_euclidean_div_no_remainder;
 /// * `gcd` - Greatest common divisor.
 /// * `x` - First Bezout coefficient.
 /// * `y` - Second Bezout coefficient.
-fn extended_euclidean_algorithm(a: felt252, b: felt252) -> (felt252, felt252, felt252) {
+fn extended_euclidean_algorithm(a: u128, b: u128) -> (u128, u128, u128) {
     // Initialize variables.
     let mut old_r = a;
     let mut rem = b;
@@ -21,39 +22,30 @@ fn extended_euclidean_algorithm(a: felt252, b: felt252) -> (felt252, felt252, fe
     let mut coeff_t = 1;
 
     // Loop until remainder is 0.
-    loop_euclidian(ref old_r, ref rem, ref old_s, ref coeff_s, ref old_t, ref coeff_t);
-    (old_r, old_s, old_t)
-}
+    loop {
+        check_gas();
+        if rem == 0 {
+            break (old_r, old_s, old_t);
+        }
+        let quotient = old_r / rem;
 
-
-fn loop_euclidian(
-    ref old_r: felt252,
-    ref rem: felt252,
-    ref old_s: felt252,
-    ref coeff_s: felt252,
-    ref old_t: felt252,
-    ref coeff_t: felt252
-) {
-    check_gas();
-
-    // Break if remainder is 0.
-    if rem == 0 {
-        return ();
+        update_step(ref rem, ref old_r, quotient);
+        update_step(ref coeff_s, ref old_s, quotient);
+        update_step(ref coeff_t, ref old_t, quotient);
     }
-
-    let quotient = unsafe_euclidean_div_no_remainder(old_r, rem);
-
-    update_step(ref rem, ref old_r, quotient);
-    update_step(ref coeff_s, ref old_s, quotient);
-    update_step(ref coeff_t, ref old_t, quotient);
-
-    // Loop again.
-    loop_euclidian(ref old_r, ref rem, ref old_s, ref coeff_s, ref old_t, ref coeff_t);
 }
 
 /// Update the step of the extended Euclidean algorithm.
-fn update_step(ref a: felt252, ref old_a: felt252, quotient: felt252) {
+fn update_step(ref a: u128, ref old_a: u128, quotient: u128) {
     let temp = a;
-    a = old_a - quotient * temp;
+    let (bottom, _) = u128_overflowing_mul(quotient, temp);
+    a = u128_wrapping_sub(old_a, bottom);
     old_a = temp;
+}
+
+fn u128_wrapping_sub(a: u128, b: u128) -> u128 implicits(RangeCheck) nopanic {
+    match u128_overflowing_sub(a, b) {
+        Result::Ok(x) => x,
+        Result::Err(x) => x,
+    }
 }
