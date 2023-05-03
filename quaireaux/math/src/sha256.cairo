@@ -1,5 +1,7 @@
 use option::OptionTrait;
+use clone::Clone;
 use array::ArrayTrait;
+use array::ArrayTCloneImpl;
 use debug::PrintTrait;
 use integer::u32_wrapping_add;
 use integer::U128BitAnd;
@@ -88,9 +90,7 @@ fn ssig1(x: u32) -> u32 {
 }
 
 fn sha256(mut data: Array<u8>) -> Array<u8> {
-    let u64_data_length: felt252 = (data.len() * 8).into();
-    let u64_data_length: felt252 = (data.len() * 8).into();
-    let u64_data_length: u128 = u64_data_length.try_into().unwrap();
+    let u64_data_length: u128 = upcast(data.len() * 8);
     let u64_data_length = u64_data_length & U64_MAX;
 
     // add one
@@ -109,7 +109,7 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
     data.append(downcast(shr(u64_data_length, 0) & U8_MAX).unwrap());
 
     let u32_data_length = 16 * ((data.len() - 1) / 64 + 1);
-    let mut data = from_u8Array_to_u32Array(ref data, u32_data_length);
+    let mut data = from_u8Array_to_u32Array(data, u32_data_length);
     let mut h = get_h();
     let mut k = get_k();
     h = sha256_inner(ref data, 0, ref k, h);
@@ -130,16 +130,6 @@ fn from_u32Array_to_u8Array(ref data: Array<u32>, i: usize) -> Array<u8> {
     result
 }
 
-fn copy_array(ref from: Array<u32>, i: usize) -> Array<u32> {
-    quaireaux_utils::check_gas();
-    if i <= 0 {
-        return ArrayTrait::new();
-    }
-    let mut result = copy_array(ref from, i - 1);
-    result.append(*from[i - 1]);
-    result
-}
-
 fn sha256_inner(
     ref data: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>
 ) -> Array<u32> {
@@ -149,8 +139,8 @@ fn sha256_inner(
     }
     let mut w = create_w(ref data, i, 16);
     create_message_schedule(ref w, 16);
-    let mut h2 = copy_array(ref h, h.len());
-    let mut h2 = compression(ref w, 0, ref k, h2);
+    let mut h2 = h.clone();
+    let mut h2 = compression(w, 0, ref k, h2);
     let mut t = ArrayTrait::new();
     t.append(u32_wrapping_add(*h[0], *h2[0]));
     t.append(u32_wrapping_add(*h[1], *h2[1]));
@@ -164,7 +154,7 @@ fn sha256_inner(
     sha256_inner(ref data, i + 1, ref k, h)
 }
 
-fn compression(ref w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>) -> Array<u32> {
+fn compression(w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>) -> Array<u32> {
     quaireaux_utils::check_gas();
     if i >= 64 {
         return h;
@@ -187,8 +177,7 @@ fn compression(ref w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>
     t.append(*h[5]);
     t.append(*h[6]);
     h = t;
-    h = compression(ref w, i + 1, ref k, h);
-    h
+    compression(w, i + 1, ref k, h)
 }
 
 fn create_message_schedule(ref w: Array<u32>, i: usize) {
@@ -212,7 +201,7 @@ fn create_w(ref data: Array<u32>, i: usize, j: usize) -> Array<u32> {
     result
 }
 
-fn from_u8Array_to_u32Array(ref data: Array<u8>, i: usize) -> Array<u32> {
+fn from_u8Array_to_u32Array(data: Array<u8>, i: usize) -> Array<u32> {
     quaireaux_utils::check_gas();
     if i <= 0 {
         return ArrayTrait::new();
@@ -224,7 +213,7 @@ fn from_u8Array_to_u32Array(ref data: Array<u8>, i: usize) -> Array<u32> {
     value = value | (shl(upcast(*data[4 * (i - 1) + 2]), 8) & U32_MAX);
     value = value | (shl(upcast(*data[4 * (i - 1) + 3]), 0) & U32_MAX);
 
-    let mut result = from_u8Array_to_u32Array(ref data, i - 1);
+    let mut result = from_u8Array_to_u32Array(data, i - 1);
     result.append(downcast(value).unwrap());
     result
 }
