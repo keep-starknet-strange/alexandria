@@ -11,6 +11,7 @@ mod fibonacci;
 mod gcd_of_n_numbers;
 mod karatsuba;
 mod perfect_number;
+mod sha256;
 mod signed_integers;
 mod zellers_congruence;
 
