@@ -1,0 +1,8 @@
+[package]
+name = "quaireaux_string"
+version = "0.1.0"
+description = "A set of string and related algorithms for Cairo 1.0"
+homepage = "https://github.com/keep-starknet-strange/quaireaux/tree/main/string"
+
+[dependencies]
+quaireaux_utils = { path = "../utils/" }
