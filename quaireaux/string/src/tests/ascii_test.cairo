@@ -10,7 +10,7 @@ use debug::PrintTrait;
 #[test]
 #[available_gas(9999999999)]
 fn test_small_string() {
-    let tb = ascii::to_ascii_numbers(123456);
+    let tb = ascii::ascii_representation(123456);
     assert(*tb[0] == '1'.try_into().unwrap(), 'Bad conv 1');
     assert(*tb[1] == '2'.try_into().unwrap(), 'Bad conv 2');
     assert(*tb[2] == '3'.try_into().unwrap(), 'Bad conv 3');
@@ -22,7 +22,7 @@ fn test_small_string() {
 #[test]
 #[available_gas(9999999999)]
 fn test_small_string_hex() {
-    let tb = ascii::to_ascii_hex(0xcafe123fade);
+    let tb = ascii::ascii_representation_hex(0xcafe123fade);
     assert(*tb[0] == 'C'.try_into().unwrap(), 'Bad conv 0');
     assert(*tb[1] == 'A'.try_into().unwrap(), 'Bad conv 1');
     assert(*tb[2] == 'F'.try_into().unwrap(), 'Bad conv 2');
@@ -39,7 +39,7 @@ fn test_small_string_hex() {
 #[test]
 #[available_gas(9999999999)]
 fn test_big_string() {
-    let tb = ascii::to_ascii_numbers(0xCAFE0000000000000000000000000000000000000);
+    let tb = ascii::ascii_representation(0xCAFE0000000000000000000000000000000000000);
     //tb.print();
     // Matches 18542088399789477794768722172103116064316452765696
     assert(*tb[0] == '1', 'Bad conv 0'); // 8542088399789477794768722172103116064316452765696
