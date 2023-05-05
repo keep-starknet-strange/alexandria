@@ -48,29 +48,24 @@ impl MerkleTreeImpl of MerkleTreeTrait {
     fn compute_root(
         ref self: MerkleTree, mut current_node: felt252, mut proof: Span<felt252>
     ) -> felt252 {
-        let mut proof_len = proof.len();
         let mut current_node = current_node;
-        let mut proof_index = 0;
 
-        // TODO We could pop_front proof and get rid of proof_len and proof_index
-        // But due to a bug it cannot atm. 
         loop {
-            if proof_len == 0 {
-                break current_node;
-            }
-            // Get the next element of the proof.
-            let proof_element = *proof[proof_index];
-
-            // Compute the hash of the current node and the current element of the proof.
-            // We need to check if the current node is smaller than the current element of the proof.
-            // If it is, we need to swap the order of the hash.
-            if current_node.into() < proof_element.into() {
-                current_node = LegacyHash::hash(current_node, proof_element);
-            } else {
-                current_node = LegacyHash::hash(proof_element, current_node);
-            }
-            proof_index = proof_index + 1;
-            proof_len = proof_len - 1;
+            match proof.pop_front() {
+                Option::Some(proof_element) => {
+                    // Compute the hash of the current node and the current element of the proof.
+                    // We need to check if the current node is smaller than the current element of the proof.
+                    // If it is, we need to swap the order of the hash.
+                    if current_node.into() < (*proof_element).into() {
+                        current_node = LegacyHash::hash(current_node, *proof_element);
+                    } else {
+                        current_node = LegacyHash::hash(*proof_element, current_node);
+                    }
+                },
+                Option::None(()) => {
+                    break current_node;
+                },
+            };
         }
     }
 
