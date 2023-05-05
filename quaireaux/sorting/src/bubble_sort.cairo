@@ -1,8 +1,6 @@
 //! Bubble sort algorithm
 use array::ArrayTrait;
 
-use quaireaux_utils::check_gas;
-
 // Bubble sort 
 /// # Arguments
 /// * `array` - Array to sort
@@ -23,8 +21,6 @@ impl TPartialOrd: PartialOrd<T>>(
     let mut sorted_array = ArrayTrait::new();
 
     loop {
-        check_gas();
-
         if idx2 == array.len() {
             sorted_array.append(*array[idx1]);
             if (sorted_iteration == 0) {

@@ -1,7 +1,5 @@
 use array::ArrayTrait;
 
-use quaireaux_utils::check_gas;
-
 // Check if two arrays are equal.
 /// * `a` - The first array.
 /// * `b` - The second array.
@@ -9,8 +7,6 @@ use quaireaux_utils::check_gas;
 /// # Returns
 /// * `bool` - True if the arrays are equal, false otherwise.
 fn is_equal(ref a: Array<u32>, ref b: Array<u32>, index: u32) -> bool {
-    check_gas();
-
     let len = a.len();
     if len != b.len() {
         return false;

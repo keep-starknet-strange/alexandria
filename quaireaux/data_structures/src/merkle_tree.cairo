@@ -55,8 +55,6 @@ impl MerkleTreeImpl of MerkleTreeTrait {
         // TODO We could pop_front proof and get rid of proof_len and proof_index
         // But due to a bug it cannot atm. 
         loop {
-            quaireaux_utils::check_gas();
-
             if proof_len == 0 {
                 break current_node;
             }

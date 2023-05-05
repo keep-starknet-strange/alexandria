@@ -1,8 +1,6 @@
 //! Merge Sort
 use array::ArrayTrait;
 
-use quaireaux_utils::check_gas;
-
 // Merge Sort
 /// # Arguments
 /// * `arr` - Array to sort
@@ -11,8 +9,6 @@ use quaireaux_utils::check_gas;
 fn merge<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd: PartialOrd<T>>(
     mut arr: Array<T>
 ) -> Array<T> {
-    check_gas();
-
     let len = arr.len();
     if len <= 1 {
         return arr;
@@ -47,8 +43,6 @@ fn merge_recursive<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd
     left_arr_ix: usize,
     right_arr_ix: usize
 ) {
-    check_gas();
-
     if result_arr.len() == left_arr.len() + right_arr.len() {
         return ();
     }
@@ -80,8 +74,6 @@ fn merge_recursive<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd
 fn split_array<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
     ref arr: Array<T>, index: usize
 ) -> (Array<T>, Array<T>) {
-    check_gas();
-
     let mut arr1 = ArrayTrait::new();
     let mut arr2 = ArrayTrait::new();
     let len = arr.len();
@@ -102,8 +94,6 @@ fn split_array<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
 fn fill_array<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
     ref arr: Array<T>, ref fill_arr: Array<T>, index: usize, count: usize
 ) {
-    check_gas();
-
     if count == 0 {
         return ();
     }

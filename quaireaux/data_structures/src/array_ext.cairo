@@ -1,8 +1,4 @@
-use array::ArrayTrait;
-use array::SpanTrait;
-use array::OptionTrait;
-
-use quaireaux_utils::check_gas;
+use array::{ArrayTrait, SpanTrait, OptionTrait};
 
 trait ArrayTraitExt<T> {
     fn append_all(ref self: Array<T>, ref arr: Array<T>);
@@ -24,8 +20,6 @@ trait ArrayTraitExt<T> {
 
 impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> {
     fn append_all(ref self: Array<T>, ref arr: Array<T>) {
-        check_gas();
-
         match arr.pop_front() {
             Option::Some(v) => {
                 self.append(v);
@@ -48,7 +42,6 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
     fn contains<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> bool {
         let mut arr = self.span();
         loop {
-            check_gas();
             match arr.pop_front() {
                 Option::Some(v) => {
                     if *v == item {
@@ -67,7 +60,6 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         let mut arr = self.span();
         let mut index = 0_usize;
         loop {
-            check_gas();
             match arr.pop_front() {
                 Option::Some(v) => {
                     if *v == item {
@@ -86,7 +78,6 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         let mut arr = self.span();
         let mut count = 0_usize;
         loop {
-            check_gas();
             match arr.pop_front() {
                 Option::Some(v) => {
                     if *v == item {
@@ -111,8 +102,6 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         let mut min = *self[0];
 
         loop {
-            check_gas();
-
             if index >= self.len() {
                 break min;
             }
@@ -148,8 +137,6 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         let mut max = *self[0];
 
         loop {
-            check_gas();
-
             if index >= self.len() {
                 break max;
             }
@@ -178,8 +165,6 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
 fn reverse_loop<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
     ref arr: Array<T>, ref response: Array<T>, index: usize
 ) {
-    check_gas();
-
     response.append(*arr[index]);
     if index == 0 {
         return ();
@@ -194,8 +179,6 @@ impl TPartialOrd: PartialOrd<T>,
 impl TCopy: Copy<T>>(
     ref arr: Array<T>, current_min: T, index_of_min: usize, index: usize
 ) -> usize {
-    check_gas();
-
     if index >= arr.len() {
         return index_of_min;
     }
@@ -215,8 +198,6 @@ impl TPartialOrd: PartialOrd<T>,
 impl TCopy: Copy<T>>(
     ref arr: Array<T>, current_min: T, index_of_min: usize, index: usize
 ) -> usize {
-    check_gas();
-
     if index >= arr.len() {
         return index_of_min;
     }

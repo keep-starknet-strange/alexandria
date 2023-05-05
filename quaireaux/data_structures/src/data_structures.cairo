@@ -1,7 +1,5 @@
 use array::ArrayTrait;
 
-use quaireaux_utils::check_gas;
-
 /// Returns the slice of an array.
 /// * `arr` - The array to slice.
 /// * `begin` - The index to start the slice at.
@@ -12,8 +10,6 @@ fn array_slice(src: @Array<u256>, mut begin: usize, end: usize) -> Array<u256> {
     let mut slice = ArrayTrait::new();
     let len = begin + end;
     loop {
-        check_gas();
-
         if begin >= len {
             break ();
         }

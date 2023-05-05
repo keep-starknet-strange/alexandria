@@ -2,8 +2,6 @@
 use array::SpanTrait;
 use option::OptionTrait;
 
-use quaireaux_utils::check_gas;
-
 // Calculate the greatest common dividor for n numbers
 // # Arguments
 // * `n` - The array of numbers to calculate the gcd for
@@ -16,7 +14,6 @@ fn gcd(mut n: Span<u128>) -> u128 {
     }
     let mut a = *n.pop_front().unwrap();
     loop {
-        check_gas();
         match n.pop_front() {
             Option::Some(b) => {
                 a = gcd_two_numbers(a, *b);
@@ -36,8 +33,6 @@ fn gcd(mut n: Span<u128>) -> u128 {
 // * `felt252` - The gcd of a and b
 fn gcd_two_numbers(mut a: u128, mut b: u128) -> u128 {
     loop {
-        check_gas();
-
         if b == 0 {
             break a;
         }

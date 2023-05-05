@@ -3,6 +3,3 @@ name = "quaireaux_sorting"
 version = "0.1.0"
 description = "A set of sorting algorithm Cairo 1.0"
 homepage = "https://github.com/keep-starknet-strange/quaireaux/tree/main/data_structures"
-
-[dependencies]
-quaireaux_utils = { path = "../utils/" }
