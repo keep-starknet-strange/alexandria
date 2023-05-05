@@ -1,8 +1,5 @@
 //! # Extended Euclidean Algorithm.
-use integer::u128_overflowing_sub;
-use integer::u128_overflowing_mul;
-use quaireaux_utils::check_gas;
-
+use integer::{u128_overflowing_sub, u128_overflowing_mul};
 
 /// Extended Euclidean Algorithm.
 /// # Arguments
@@ -23,7 +20,6 @@ fn extended_euclidean_algorithm(a: u128, b: u128) -> (u128, u128, u128) {
 
     // Loop until remainder is 0.
     loop {
-        check_gas();
         if rem == 0 {
             break (old_r, old_s, old_t);
         }

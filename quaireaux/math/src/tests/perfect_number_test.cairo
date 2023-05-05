@@ -2,8 +2,7 @@
 use option::OptionTrait;
 use array::ArrayTrait;
 
-use quaireaux_math::perfect_number::is_perfect_number;
-use quaireaux_math::perfect_number::perfect_numbers;
+use quaireaux_math::perfect_number::{is_perfect_number, perfect_numbers};
 
 // is_perfect_number
 #[test]

@@ -1,8 +1,6 @@
 //! # Fast power algorithm
 use array::ArrayTrait;
 
-use quaireaux_utils::check_gas;
-
 // Calculate the (base^power)mod modulus using the fast powering algorithm
 // # Arguments
 // * `base` - The base of the exponentiation
@@ -18,8 +16,6 @@ fn fast_power(mut base: u128, mut power: u128, modulus: u128) -> u128 {
 
     let mut result = 1;
     loop {
-        check_gas();
-
         if power == 0 {
             break result;
         }

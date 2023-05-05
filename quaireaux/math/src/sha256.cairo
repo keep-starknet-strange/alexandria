@@ -1,25 +1,14 @@
-use option::OptionTrait;
+use array::{ArrayTrait, ArrayTCloneImpl};
 use clone::Clone;
-use array::ArrayTrait;
-use array::ArrayTCloneImpl;
-use debug::PrintTrait;
-use integer::u32_wrapping_add;
-use integer::U128BitAnd;
-use integer::U128BitOr;
-use integer::U128BitXor;
-use integer::upcast;
-use integer::downcast;
-use traits::Div;
-use traits::Into;
-use traits::TryInto;
-use quaireaux_utils::check_gas;
+use integer::{u32_wrapping_add, U128BitAnd, U128BitOr, U128BitXor, upcast, downcast};
+use option::OptionTrait;
+use traits::{Div, Into, TryInto};
 
 const U8_MAX: u128 = 0xFF;
 const U32_MAX: u128 = 0xFFFFFFFF;
 const U64_MAX: u128 = 0xFFFFFFFFFFFFFFFF;
 
 fn pow(x: u128, n: u128) -> u128 {
-    quaireaux_utils::check_gas();
     if n == 0 {
         1
     } else if (n & 1) == 1 {
@@ -118,7 +107,6 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
 }
 
 fn from_u32Array_to_u8Array(ref data: Array<u32>, i: usize) -> Array<u8> {
-    quaireaux_utils::check_gas();
     if i <= 0 {
         return ArrayTrait::new();
     }
@@ -133,7 +121,6 @@ fn from_u32Array_to_u8Array(ref data: Array<u32>, i: usize) -> Array<u8> {
 fn sha256_inner(
     ref data: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>
 ) -> Array<u32> {
-    quaireaux_utils::check_gas();
     if 16 * i >= data.len() {
         return h;
     }
@@ -155,7 +142,6 @@ fn sha256_inner(
 }
 
 fn compression(w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>) -> Array<u32> {
-    quaireaux_utils::check_gas();
     if i >= 64 {
         return h;
     }
@@ -181,7 +167,6 @@ fn compression(w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>) ->
 }
 
 fn create_message_schedule(ref w: Array<u32>, i: usize) {
-    quaireaux_utils::check_gas();
     if i >= 64 {
         return ();
     }
@@ -192,7 +177,6 @@ fn create_message_schedule(ref w: Array<u32>, i: usize) {
 }
 
 fn create_w(ref data: Array<u32>, i: usize, j: usize) -> Array<u32> {
-    quaireaux_utils::check_gas();
     if j <= 0 {
         return ArrayTrait::new();
     }
@@ -202,7 +186,6 @@ fn create_w(ref data: Array<u32>, i: usize, j: usize) -> Array<u32> {
 }
 
 fn from_u8Array_to_u32Array(data: Array<u8>, i: usize) -> Array<u32> {
-    quaireaux_utils::check_gas();
     if i <= 0 {
         return ArrayTrait::new();
     }
@@ -219,7 +202,6 @@ fn from_u8Array_to_u32Array(data: Array<u8>, i: usize) -> Array<u32> {
 }
 
 fn add_padding(ref data: Array<u8>) {
-    quaireaux_utils::check_gas();
     if (64 * ((data.len() - 1) / 64 + 1))
         - 8 != data.len() {
             data.append(0);

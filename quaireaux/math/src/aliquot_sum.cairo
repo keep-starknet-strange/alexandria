@@ -1,5 +1,4 @@
 //! # Aliquot Sum
-use quaireaux_utils::check_gas;
 
 /// Calculates the aliquot sum of a given number.
 /// # Arguments
@@ -18,8 +17,6 @@ fn aliquot_sum(number: u128) -> u128 {
     let mut index = 1;
     let mut res = 0;
     loop {
-        check_gas();
-
         if index == limit {
             break res;
         }

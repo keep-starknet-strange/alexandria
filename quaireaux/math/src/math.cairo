@@ -1,8 +1,5 @@
 use option::OptionTrait;
-use traits::Into;
-use traits::TryInto;
-
-use quaireaux_utils::check_gas;
+use traits::{Into, TryInto};
 
 // Raise a number to a power.
 /// * `base` - The number to raise.
@@ -12,7 +9,6 @@ use quaireaux_utils::check_gas;
 fn pow(base: u128, mut exp: u128) -> u128 {
     let mut res = 1;
     loop {
-        check_gas();
         if exp == 0 {
             break res;
         } else {
@@ -31,7 +27,6 @@ fn pow(base: u128, mut exp: u128) -> u128 {
 fn count_digits_of_base(mut num: u128, base: u128) -> u128 {
     let mut res = 0;
     loop {
-        check_gas();
         if num == 0 {
             break res;
         } else {

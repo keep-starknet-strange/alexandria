@@ -1,8 +1,6 @@
 //! # Collatz Sequence
 use array::ArrayTrait;
 
-use quaireaux_utils::check_gas;
-
 /// Generates the Collatz sequence for a given number.
 /// # Arguments
 /// * `number` - The number to generate the Collatz sequence for.
@@ -15,8 +13,6 @@ fn sequence(mut number: u128) -> Array<u128> {
     }
 
     loop {
-        check_gas();
-
         arr.append(number);
         if number == 1 {
             break ();

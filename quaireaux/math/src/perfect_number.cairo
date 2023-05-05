@@ -1,8 +1,6 @@
 //! # Perfect Number.
 use array::ArrayTrait;
 
-use quaireaux_utils::check_gas;
-
 /// Algorithm to determine if a number is a perfect number
 /// # Arguments
 /// * `num` - The number to be checked.
@@ -19,8 +17,6 @@ fn is_perfect_number(num: u128) -> bool {
     let mut index = 1;
     let mut sum = 0;
     loop {
-        check_gas();
-
         if index == num - 1 {
             break num == sum;
         }
@@ -42,8 +38,6 @@ fn perfect_numbers(max: u128) -> Array<u128> {
     let mut index = 1;
 
     loop {
-        check_gas();
-
         if index == max {
             break ();
         }

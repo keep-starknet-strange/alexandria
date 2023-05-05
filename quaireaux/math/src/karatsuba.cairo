@@ -2,9 +2,8 @@
 use traits::Into;
 
 // Internal imports.
-use quaireaux_math::pow;
-use quaireaux_math::count_digits_of_base;
-use quaireaux_utils::check_gas;
+use quaireaux_math::{pow, count_digits_of_base};
+use cmp::max;
 
 /// Algorithm to multiply two numbers in O(n^1.6) running time
 /// # Arguments
@@ -13,8 +12,6 @@ use quaireaux_utils::check_gas;
 /// # Returns
 /// * `u128` - The product between x and y
 fn multiply(x: u128, y: u128) -> u128 {
-    check_gas();
-
     if x < 10 {
         return x * y;
     }
@@ -37,8 +34,6 @@ fn multiply(x: u128, y: u128) -> u128 {
 /// # Returns
 /// * `u128` - Half (rounded up) of num.
 fn _div_half_ceil(num: u128) -> u128 {
-    check_gas();
-
     if num % 2 != 0 {
         (num + 1) % 2
     } else {
@@ -53,16 +48,6 @@ fn _div_half_ceil(num: u128) -> u128 {
 /// # Returns
 /// * `(u128, u128)` -tuple representing the split number.
 fn _split_number(num: u128, split_idx: u128) -> (u128, u128) {
-    check_gas();
-
     let divisor = pow(10, split_idx);
     (num / divisor, num % divisor)
-}
-
-fn max(a: u128, b: u128) -> u128 {
-    if a > b {
-        a
-    } else {
-        b
-    }
 }

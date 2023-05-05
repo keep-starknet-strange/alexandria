@@ -1,8 +1,5 @@
 //! # Armstrong Number Algorithm.
-use quaireaux_utils::check_gas;
-
-use quaireaux_math::count_digits_of_base;
-use quaireaux_math::pow;
+use quaireaux_math::{count_digits_of_base, pow};
 
 /// Armstrong Number Algorithm.
 /// # Arguments
@@ -13,8 +10,6 @@ fn is_armstrong_number(mut num: u128) -> bool {
     let mut original_num = num;
     let mut digits = count_digits_of_base(num, 10);
     loop {
-        check_gas();
-
         if num == 0 {
             break original_num == 0;
         }
