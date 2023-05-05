@@ -1,7 +1,4 @@
 # Data structures
-
-TODO Ongoing
-
 ## [Array extension](./src/array_ext.cairo)
 A collection of handy functions to help with array manipulation. 
 

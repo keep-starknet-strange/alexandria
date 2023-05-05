@@ -54,7 +54,3 @@ Zeller's congruence algorithm is used to determine the day of the week for a giv
 The purpose of the algorithm is to provide a simple and efficient way to calculate the day of the week based on the date.  
 It is widely used in various applications, including calendar systems, scheduling, and time management.  
 The algorithm takes into account the year, month, and day of the given date and performs a series of mathematical calculations to determine the day of the week. By providing an easy-to-use method for calculating the day of the week, Zeller's congruence algorithm is an important tool for many industries and organizations that rely on accurate and efficient time management systems.
-
-
-## TODO To be fixed:
-- [x] [Karatsuba Multiplication Algorithm](./src/karatsuba.cairo) 
