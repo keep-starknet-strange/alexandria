@@ -1,2 +1,2 @@
 mod ascii_test;
-mod string_test;
+mod short_string_test;
