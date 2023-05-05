@@ -1,5 +1,5 @@
 mod ascii;
-mod string;
+mod sequence;
 mod char_array_string;
 mod short_string;
 
