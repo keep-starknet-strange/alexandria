@@ -45,8 +45,8 @@ fn test_short_string_bounds() {
     let a = '123456789ABCDEFGHIJKLMNOPQRSTUV';
     let tb2: ShortString = a.into();
     assert(*tb2[23] == 'O', 'Bad conv 2');
-    // TODO: this triggers a range crash in u256 division
-    //assert(*tb2[0] == 'a', 'Bad conv 2');
+// TODO: this triggers a range crash in u256 division
+//assert(*tb2[0] == 'a', 'Bad conv 2');
 }
 
 #[test]

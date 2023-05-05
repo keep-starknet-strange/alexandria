@@ -52,7 +52,7 @@ impl ShortStringImpl of SequenceTrait<ShortString, u8> {
         let su: u256 = (*self.data).into();
         let sh: u256 = shift.into();
         let tt: u256 = (su & (sh * 0xFF.into())) / sh;
-       Option::Some(BoxTrait::<@u8>::new(@tt.low.try_into().unwrap()))
+        Option::Some(BoxTrait::<@u8>::new(@tt.low.try_into().unwrap()))
     }
 
     fn at(self: @ShortString, index: usize) -> @u8 {
