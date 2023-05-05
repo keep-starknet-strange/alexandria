@@ -1,7 +1,6 @@
 mod ascii;
-mod sequence;
-mod char_array_string;
 mod short_string;
+mod utils;
 
 #[cfg(test)]
 mod tests;

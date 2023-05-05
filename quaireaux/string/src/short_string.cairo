@@ -1,7 +1,8 @@
 use traits::Into;
 use traits::TryInto;
 use option::OptionTrait;
-use quaireaux_string::sequence::SequenceTrait;
+use quaireaux_string::utils::RandomAccessTrait;
+use quaireaux_string::utils::Collection;
 use quaireaux_string::ascii;
 
 use quaireaux_utils::check_gas;
@@ -29,7 +30,7 @@ impl ShortStringConstructor of Construct<ShortString> {
 use debug::PrintTrait;
 
 // Implement a 0-terminated (if size < 31) wrapper around the short-string native to Cairo 1.
-impl ShortStringImpl of SequenceTrait<ShortString, u8> {
+impl StringRA of RandomAccessTrait<ShortString, u8> {
     fn get(self: @ShortString, index: usize) -> Option<Box<@u8>> {
         // Not the most efficient implementation I'm afraid
         let len = self.len();
@@ -60,7 +61,9 @@ impl ShortStringImpl of SequenceTrait<ShortString, u8> {
         assert(v.is_some(), 'OOB index');
         v.unwrap().unbox()
     }
+}
 
+impl StringColl of Collection<ShortString> {
     fn len(self: @ShortString) -> usize {
         if *self.data == 0 {
             return 0;
