@@ -24,14 +24,18 @@ impl TOr: PartialOrd<T>>(
     if (*span[middle] > val) {
         return (binary_search(span.slice(0, middle), val));
     } else {
-        let mut len = middle;
         if (span.len() % 2 == 1) {
-            len += 1;
-        }
-        let val = binary_search(span.slice(middle, len), val);
-        match val {
-            Option::Some(v) => Option::Some(v + middle),
-            Option::None(()) => Option::None(())
+            let ret = binary_search(span.slice(middle, middle + 1), val);
+            match ret {
+                Option::Some(v) => Option::Some(v + middle),
+                Option::None(()) => Option::None(())
+            }
+        } else {
+            let ret = binary_search(span.slice(middle, middle), val);
+            match ret {
+                Option::Some(v) => Option::Some(v + middle),
+                Option::None(()) => Option::None(())
+            }
         }
     }
 }

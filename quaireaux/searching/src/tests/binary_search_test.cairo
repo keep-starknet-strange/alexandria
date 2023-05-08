@@ -1,10 +1,6 @@
 use quaireaux_searching::binary_search;
 use array::ArrayTrait;
-use traits::PartialEq;
 use option::OptionTrait;
-
-// Length of 1 
-// Length of 0
 
 #[test]
 #[available_gas(2000000)]
