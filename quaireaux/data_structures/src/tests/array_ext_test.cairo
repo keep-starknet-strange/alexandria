@@ -83,7 +83,7 @@ fn reverse() {
     arr.append(21);
     arr.append(42);
     arr.append(84);
-    let response = arr.reverse();
+    let response = @arr.reverse();
     assert(response.len() == 3, 'Len should be 3');
     assert(*response.at(0) == 84, 'Should be 84');
     assert(*response.at(1) == 42, 'Should be 42');
@@ -95,7 +95,7 @@ fn reverse() {
 fn reverse_size_1() {
     let mut arr = ArrayTrait::new();
     arr.append(21);
-    let response = arr.reverse();
+    let response = @arr.reverse();
     assert(response.len() == 1, 'Len should be 1');
     assert(*response.at(0) == 21, 'Should be 21');
 }
@@ -104,7 +104,7 @@ fn reverse_size_1() {
 #[available_gas(2000000)]
 fn reverse_empty() {
     let mut arr = ArrayTrait::<felt252>::new();
-    let response = arr.reverse();
+    let response = @arr.reverse();
     assert(response.len() == 0, 'Len should be 0');
 }
 
@@ -115,7 +115,7 @@ fn reverse_different_type() {
     arr.append(21_u128);
     arr.append(42_u128);
     arr.append(84_u128);
-    let response = arr.reverse();
+    let response = @arr.reverse();
     assert(response.len() == 3, 'Len should be 3');
     assert(*response[0] == 84_u128, 'Should be 84_u128');
     assert(*response[1] == 42_u128, 'Should be 42_u128');

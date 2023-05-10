@@ -2,7 +2,7 @@ use array::{ArrayTrait, SpanTrait, OptionTrait};
 
 trait ArrayTraitExt<T> {
     fn append_all(ref self: Array<T>, ref arr: Array<T>);
-    fn reverse(ref self: Array<T>) -> Array<T>;
+    fn reverse(self: @Array<T>) -> Array<T>;
     fn contains<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> bool;
     fn index_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize;
     fn occurrences_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize;
@@ -30,12 +30,19 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
     }
 
     // TODO Due to a loop bug with moved var, this can't use loop yet
-    fn reverse(ref self: Array<T>) -> Array<T> {
+    fn reverse(self: @Array<T>) -> Array<T> {
         if self.len() == 0 {
             return ArrayTrait::new();
         }
         let mut response = ArrayTrait::new();
-        reverse_loop(ref self, ref response, self.len() - 1);
+        let mut index = self.len() - 1;
+        loop {
+            response.append(*self[index]);
+            if index == 0 {
+                break ();
+            }
+            index -= 1;
+        };
         response
     }
 
@@ -160,16 +167,6 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         }
         index_of_max_loop(ref self, *self[0], 0, 1)
     }
-}
-
-fn reverse_loop<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
-    ref arr: Array<T>, ref response: Array<T>, index: usize
-) {
-    response.append(*arr[index]);
-    if index == 0 {
-        return ();
-    }
-    reverse_loop(ref arr, ref response, index - 1);
 }
 
 fn index_of_min_loop<T,
