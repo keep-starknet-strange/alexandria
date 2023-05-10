@@ -149,7 +149,7 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
                         // Have to order those 2 lines that way
                         // Error: Failed setting up runner.
                         // #27206: [44] is undefined.
-                        min_index = current_index + 1; 
+                        min_index = current_index + 1;
                         current_index += 1;
                     }
                 },
