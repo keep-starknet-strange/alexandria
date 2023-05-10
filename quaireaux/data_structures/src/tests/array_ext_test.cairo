@@ -548,16 +548,19 @@ fn min_last_span() {
 #[available_gas(2000000)]
 fn index_of_min() {
     let mut arr = get_u128_array();
-    assert(arr.index_of_min() == 0, 'index_of_min should be 0');
+    assert(arr.index_of_min().unwrap() == 0, 'index_of_min should be 0');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
+
+use debug::PrintTrait;
 
 #[test]
 #[available_gas(2000000)]
 fn index_of_min_step_one() {
     let mut arr = get_u128_array();
     arr.append(20_u128);
-    assert(arr.index_of_min() == 3, 'index_of_min should be 3');
+    arr.index_of_min().unwrap().print();
+    assert(arr.index_of_min().unwrap() == 3, 'index_of_min should be 3');
     assert(arr.len() == 4, 'arr should not be consummed');
 }
 
@@ -566,16 +569,15 @@ fn index_of_min_step_one() {
 fn index_of_min_with_duplicate() {
     let mut arr = get_u128_array();
     arr.append(21_u128);
-    assert(arr.index_of_min() == 0, 'index_of_min should be 0');
+    assert(arr.index_of_min().unwrap() == 0, 'index_of_min should be 0');
     assert(arr.len() == 4, 'arr should not be consummed');
 }
 
 #[test]
 #[available_gas(2000000)]
-#[should_panic(expected: ('Empty array', ))]
 fn index_of_min_empty_array() {
     let mut arr: Array<u128> = ArrayTrait::new();
-    arr.index_of_min();
+    assert(arr.index_of_min().is_none(), 'Should be None');
 }
 
 #[test]
@@ -583,7 +585,7 @@ fn index_of_min_empty_array() {
 fn index_of_min_one_item() {
     let mut arr = ArrayTrait::new();
     arr.append(21_u128);
-    assert(arr.index_of_min() == 0, 'index_of_min should be 0');
+    assert(arr.index_of_min().unwrap() == 0, 'index_of_min should be 0');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
 
@@ -594,7 +596,7 @@ fn index_of_min_last() {
     arr.append(84_u128);
     arr.append(42_u128);
     arr.append(21_u128);
-    assert(arr.index_of_min() == 2, 'index_of_min should be 2');
+    assert(arr.index_of_min().unwrap() == 2, 'index_of_min should be 2');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
 

@@ -22,9 +22,9 @@ fn is_perfect_number(num: u128) -> bool {
         }
 
         if num % index == 0 {
-            sum = sum + index;
+            sum += index;
         }
-        index = index + 1;
+        index += 1;
     }
 }
 
@@ -44,7 +44,7 @@ fn perfect_numbers(max: u128) -> Array<u128> {
         if is_perfect_number(index) {
             res.append(index);
         }
-        index = index + 1;
+        index += 1;
     };
     res
 }
