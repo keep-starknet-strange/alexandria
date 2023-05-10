@@ -32,6 +32,6 @@ fn count_digits_of_base(mut num: u128, base: u128) -> u128 {
         } else {
             num = num / base;
         }
-        res = res + 1;
+        res += 1;
     }
 }
