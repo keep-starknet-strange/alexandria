@@ -17,10 +17,9 @@ trait ArrayTraitExt<T> {
     fn max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         self: @Array<T>
     ) -> Option<T>;
-    // TODO Ref should be gone, but there is a bug ATM
     fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        ref self: Array<T>
-    ) -> usize;
+        self: @Array<T>
+    ) -> Option<usize>;
 }
 
 trait SpanTraitExt<T> {
@@ -37,9 +36,9 @@ trait SpanTraitExt<T> {
     fn max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         self: Span<T>
     ) -> Option<T>;
-// fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-//     self: Span<T>
-// ) -> Option<usize>;
+    fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
+        self: Span<T>
+    ) -> Option<usize>;
 }
 
 impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
@@ -133,9 +132,9 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
     fn index_of_min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         mut self: Span<T>
     ) -> Option<usize> {
-        let mut current_index = 0;
-        let mut min_index = 0;
-        let mut min = match self.pop_front() {
+        let mut index = 0;
+        let mut index_of_min = 0;
+        let mut min: T = match self.pop_front() {
             Option::Some(item) => *item,
             Option::None(_) => {
                 return Option::None(());
@@ -145,18 +144,15 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
             match self.pop_front() {
                 Option::Some(item) => {
                     if *item < min {
+                        index_of_min = index + 1;
                         min = *item;
-                        // Have to order those 2 lines that way
-                        // Error: Failed setting up runner.
-                        // #27206: [44] is undefined.
-                        min_index = current_index + 1;
-                        current_index += 1;
                     }
                 },
                 Option::None(_) => {
-                    break Option::Some(min_index);
+                    break Option::Some(index_of_min);
                 },
             };
+            index += 1;
         }
     }
 
@@ -182,7 +178,34 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
             };
         }
     }
+    fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
+        mut self: Span<T>
+    ) -> Option<usize> {
+        let mut index = 0;
+        let mut index_of_max = 0;
+        let mut max = match self.pop_front() {
+            Option::Some(item) => *item,
+            Option::None(_) => {
+                return Option::None(());
+            },
+        };
+        loop {
+            match self.pop_front() {
+                Option::Some(item) => {
+                    if *item > max {
+                        index_of_max = index + 1;
+                        max = *item
+                    }
+                },
+                Option::None(_) => {
+                    break Option::Some(index_of_max);
+                },
+            };
+            index += 1;
+        }
+    }
 }
+use debug::PrintTrait;
 
 impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> {
     fn append_all(ref self: Array<T>, ref arr: Array<T>) {
@@ -229,34 +252,9 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         self.span().max()
     }
 
-    // Panic if empty array
-    // TODO atm there is a bug (failing setting up the runner: #33424: Inconsistent references annotations.
-    // but this should be updated to use span and match
     fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        ref self: Array<T>
-    ) -> usize {
-        if self.len() == 0 {
-            panic_with_felt252('Empty array')
-        }
-        index_of_max_loop(ref self, *self[0], 0, 1)
-    }
-}
-
-fn index_of_max_loop<T,
-impl TDrop: Drop<T>,
-impl TPartialEq: PartialEq<T>,
-impl TPartialOrd: PartialOrd<T>,
-impl TCopy: Copy<T>>(
-    ref arr: Array<T>, current_min: T, index_of_min: usize, index: usize
-) -> usize {
-    if index >= arr.len() {
-        return index_of_min;
-    }
-
-    let item = *arr[index];
-    if item > current_min {
-        index_of_max_loop(ref arr, item, index, index + 1)
-    } else {
-        index_of_max_loop(ref arr, current_min, index_of_min, index + 1)
+        mut self: @Array<T>
+    ) -> Option<usize> {
+        self.span().index_of_max()
     }
 }
