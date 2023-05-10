@@ -25,6 +25,7 @@ trait ArrayTraitExt<T> {
 
 trait SpanTraitExt<T> {
     fn pop_front_n(ref self: Span<T>, n: usize);
+    fn pop_back_n(ref self: Span<T>, n: usize);
     fn reverse(self: Span<T>) -> Array<T>;
     fn contains<impl TPartialEq: PartialEq<T>>(self: Span<T>, item: T) -> bool;
     fn index_of<impl TPartialEq: PartialEq<T>>(self: Span<T>, item: T) -> Option<usize>;
@@ -113,6 +114,38 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
 }
 
 impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
+    fn pop_front_n(ref self: Span<T>, mut n: usize) {
+        loop {
+            if n == 0 {
+                break ();
+            }
+            match self.pop_front() {
+                Option::Some(v) => {
+                    n -= 1;
+                },
+                Option::None(_) => {
+                    break ();
+                },
+            };
+        };
+    }
+
+    fn pop_back_n(ref self: Span<T>, mut n: usize) {
+        loop {
+            if n == 0 {
+                break ();
+            }
+            match self.pop_back() {
+                Option::Some(v) => {
+                    n -= 1;
+                },
+                Option::None(_) => {
+                    break ();
+                },
+            };
+        };
+    }
+
     fn reverse(mut self: Span<T>) -> Array<T> {
         let mut response = ArrayTrait::new();
         loop {
@@ -141,22 +174,6 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
                 },
             };
         }
-    }
-
-    fn pop_front_n(ref self: Span<T>, mut n: usize) {
-        loop {
-            if n == 0 {
-                break ();
-            }
-            match self.pop_front() {
-                Option::Some(v) => {
-                    n -= 1;
-                },
-                Option::None(_) => {
-                    break ();
-                },
-            };
-        };
     }
 
     fn index_of<impl TPartialEq: PartialEq<T>>(mut self: Span<T>, item: T) -> Option<usize> {
