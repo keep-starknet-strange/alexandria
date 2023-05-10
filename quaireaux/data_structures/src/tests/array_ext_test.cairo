@@ -282,6 +282,61 @@ fn pop_front_n_more_then_len_span() {
     assert(arr.is_empty(), 'Should be empty');
 }
 
+// pop back n
+#[test]
+#[available_gas(2000000)]
+fn pop_back_n_span() {
+    let mut arr = get_felt252_array().span();
+    arr.pop_back_n(2);
+    assert(arr.len() == 1, 'Len should be 1');
+    assert(*arr.pop_back().unwrap() == 21, 'Should be 21');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn pop_back_n_different_type_span() {
+    let mut arr = get_u128_array().span();
+    arr.pop_back_n(2);
+    assert(arr.len() == 1, 'Len should be 1');
+    assert(*arr.pop_back().unwrap() == 21, 'Should be 21');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn pop_back_n_empty_array_span() {
+    let mut arr: Span<felt252> = ArrayTrait::new().span();
+    assert(arr.is_empty(), 'Should be empty');
+    arr.pop_back_n(2);
+    assert(arr.is_empty(), 'Should be empty');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn pop_back_n_zero_span() {
+    let mut arr = get_felt252_array().span();
+    arr.pop_back_n(0);
+    assert(arr.len() == 3, 'Len should be 1');
+    assert(*arr.pop_front().unwrap() == 21, 'Should be 21');
+    assert(*arr.pop_front().unwrap() == 42, 'Should be 42');
+    assert(*arr.pop_front().unwrap() == 84, 'Should be 84');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn pop_back_n_exact_len_span() {
+    let mut arr = get_felt252_array().span();
+    arr.pop_back_n(3);
+    assert(arr.is_empty(), 'Should be empty');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn pop_back_n_more_then_len_span() {
+    let mut arr = get_felt252_array().span();
+    arr.pop_back_n(4);
+    assert(arr.is_empty(), 'Should be empty');
+}
+
 
 // contains
 
