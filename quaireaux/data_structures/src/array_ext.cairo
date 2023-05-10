@@ -4,6 +4,7 @@ use option::OptionTrait;
 
 trait ArrayTraitExt<T> {
     fn append_all(ref self: Array<T>, ref arr: Array<T>);
+    fn pop_front_n(ref self: Array<T>, n: usize);
     fn reverse(self: @Array<T>) -> Array<T>;
     fn contains<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> bool;
     fn index_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> Option<usize>;
@@ -23,6 +24,7 @@ trait ArrayTraitExt<T> {
 }
 
 trait SpanTraitExt<T> {
+    fn pop_front_n(ref self: Span<T>, n: usize);
     fn reverse(self: Span<T>) -> Array<T>;
     fn contains<impl TPartialEq: PartialEq<T>>(self: Span<T>, item: T) -> bool;
     fn index_of<impl TPartialEq: PartialEq<T>>(self: Span<T>, item: T) -> Option<usize>;
@@ -50,6 +52,23 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
             },
             Option::None(()) => (),
         }
+    }
+
+    fn pop_front_n(ref self: Array<T>, mut n: usize) {
+        // Can't do self.span().pop_front_n();
+        loop {
+            if n == 0 {
+                break ();
+            }
+            match self.pop_front() {
+                Option::Some(v) => {
+                    n -= 1;
+                },
+                Option::None(_) => {
+                    break ();
+                },
+            };
+        };
     }
 
     fn reverse(self: @Array<T>) -> Array<T> {
@@ -122,6 +141,22 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
                 },
             };
         }
+    }
+
+    fn pop_front_n(ref self: Span<T>, mut n: usize) {
+        loop {
+            if n == 0 {
+                break ();
+            }
+            match self.pop_front() {
+                Option::Some(v) => {
+                    n -= 1;
+                },
+                Option::None(_) => {
+                    break ();
+                },
+            };
+        };
     }
 
     fn index_of<impl TPartialEq: PartialEq<T>>(mut self: Span<T>, item: T) -> Option<usize> {
