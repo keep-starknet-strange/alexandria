@@ -1,10 +1,12 @@
-use array::{ArrayTrait, SpanTrait, OptionTrait};
+use array::{ArrayTrait, SpanTrait};
+use option::Option;
+use option::OptionTrait;
 
 trait ArrayTraitExt<T> {
     fn append_all(ref self: Array<T>, ref arr: Array<T>);
     fn reverse(self: @Array<T>) -> Array<T>;
     fn contains<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> bool;
-    fn index_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize;
+    fn index_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> Option<usize>;
     fn occurrences_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize;
     fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(self: @Array<T>) -> T;
     // TODO Ref should be gone, but there is a bug ATM
@@ -18,38 +20,40 @@ trait ArrayTraitExt<T> {
     ) -> usize;
 }
 
-impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> {
-    fn append_all(ref self: Array<T>, ref arr: Array<T>) {
-        match arr.pop_front() {
-            Option::Some(v) => {
-                self.append(v);
-                self.append_all(ref arr);
-            },
-            Option::None(()) => (),
-        }
-    }
+trait SpanTraitExt<T> {
+    fn reverse(self: Span<T>) -> Array<T>;
+    fn contains<impl TPartialEq: PartialEq<T>>(self: Span<T>, item: T) -> bool;
+    fn index_of<impl TPartialEq: PartialEq<T>>(self: Span<T>, item: T) -> Option<usize>;
+    fn occurrences_of<impl TPartialEq: PartialEq<T>>(self: Span<T>, item: T) -> usize;
+// fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(self: Span<T>) -> T;
+// fn index_of_min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
+//     ref self: Span<T>
+// ) -> usize;
+// fn max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(self: Span<T>) -> T;
+// fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
+//     ref self: Span<T>
+// ) -> usize;
+}
 
-    // TODO Due to a loop bug with moved var, this can't use loop yet
-    fn reverse(self: @Array<T>) -> Array<T> {
-        if self.len() == 0 {
-            return ArrayTrait::new();
-        }
+impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
+    fn reverse(mut self: Span<T>) -> Array<T> {
         let mut response = ArrayTrait::new();
-        let mut index = self.len() - 1;
         loop {
-            response.append(*self[index]);
-            if index == 0 {
-                break ();
-            }
-            index -= 1;
+            match self.pop_back() {
+                Option::Some(v) => {
+                    response.append(*v);
+                },
+                Option::None(_) => {
+                    break (); // Can't `break response;` "Variable was previously moved"
+                },
+            };
         };
         response
     }
 
-    fn contains<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> bool {
-        let mut arr = self.span();
+    fn contains<impl TPartialEq: PartialEq<T>>(mut self: Span<T>, item: T) -> bool {
         loop {
-            match arr.pop_front() {
+            match self.pop_front() {
                 Option::Some(v) => {
                     if *v == item {
                         break true;
@@ -62,30 +66,28 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         }
     }
 
-    // Panic if doesn't contains
-    fn index_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize {
-        let mut arr = self.span();
+    fn index_of<impl TPartialEq: PartialEq<T>>(mut self: Span<T>, item: T) -> Option<usize> {
         let mut index = 0_usize;
         loop {
-            match arr.pop_front() {
+            match self.pop_front() {
                 Option::Some(v) => {
                     if *v == item {
-                        break index;
+                        break Option::Some(index);
                     }
                     index = index + 1;
                 },
                 Option::None(_) => {
-                    panic_with_felt252('Item not in array');
+                    break Option::None(());
                 },
             };
         }
     }
 
-    fn occurrences_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize {
-        let mut arr = self.span();
+
+    fn occurrences_of<impl TPartialEq: PartialEq<T>>(mut self: Span<T>, item: T) -> usize {
         let mut count = 0_usize;
         loop {
-            match arr.pop_front() {
+            match self.pop_front() {
                 Option::Some(v) => {
                     if *v == item {
                         count = count + 1;
@@ -96,6 +98,34 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
                 },
             };
         }
+    }
+}
+
+impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> {
+    fn append_all(ref self: Array<T>, ref arr: Array<T>) {
+        match arr.pop_front() {
+            Option::Some(v) => {
+                self.append(v);
+                self.append_all(ref arr);
+            },
+            Option::None(()) => (),
+        }
+    }
+
+    fn reverse(self: @Array<T>) -> Array<T> {
+        self.span().reverse()
+    }
+
+    fn contains<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> bool {
+        self.span().contains(item)
+    }
+
+    fn index_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> Option<usize> {
+        self.span().index_of(item)
+    }
+
+    fn occurrences_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize {
+        self.span().occurrences_of(item)
     }
 
     // Panic if empty array
