@@ -242,25 +242,6 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
     }
 }
 
-fn index_of_min_loop<T,
-impl TDrop: Drop<T>,
-impl TPartialEq: PartialEq<T>,
-impl TPartialOrd: PartialOrd<T>,
-impl TCopy: Copy<T>>(
-    ref arr: Array<T>, current_min: T, index_of_min: usize, index: usize
-) -> usize {
-    if index >= arr.len() {
-        return index_of_min;
-    }
-
-    let item = *arr[index];
-    if item < current_min {
-        index_of_min_loop(ref arr, item, index, index + 1)
-    } else {
-        index_of_min_loop(ref arr, current_min, index_of_min, index + 1)
-    }
-}
-
 fn index_of_max_loop<T,
 impl TDrop: Drop<T>,
 impl TPartialEq: PartialEq<T>,
