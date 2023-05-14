@@ -1,5 +1,4 @@
 use array::SpanTrait;
-use quaireaux_utils::check_gas;
 
 fn binary_search<T,
 impl TCopy: Copy<T>,
@@ -8,8 +7,6 @@ impl TEq: PartialEq<T>,
 impl TOr: PartialOrd<T>>(
     span: Span<T>, val: T
 ) -> Option<u32> {
-    check_gas();
-
     // Initial check
     if (span.len() == 0) {
         return Option::None(());
@@ -23,19 +20,15 @@ impl TOr: PartialOrd<T>>(
     }
     if (*span[middle] > val) {
         return (binary_search(span.slice(0, middle), val));
-    } else {
-        if (span.len() % 2 == 1) {
-            let ret = binary_search(span.slice(middle, middle + 1), val);
-            match ret {
-                Option::Some(v) => Option::Some(v + middle),
-                Option::None(()) => Option::None(())
-            }
-        } else {
-            let ret = binary_search(span.slice(middle, middle), val);
-            match ret {
-                Option::Some(v) => Option::Some(v + middle),
-                Option::None(()) => Option::None(())
-            }
-        }
+    }
+    
+    let mut len = middle;
+    if (span.len() % 2 == 1) {
+        len += 1;
+    }
+    let val = binary_search(span.slice(middle, len), val);
+    match val {
+        Option::Some(v) => Option::Some(v + middle),
+        Option::None(()) => Option::None(())
     }
 }
