@@ -17,18 +17,18 @@ fn value_found() {
     let mut span = arr.span();
 
     // Test with an even length
-    assert(binary_search(span, 100).unwrap() == 0, 'Incorrect index');
-    assert(binary_search(span, 200).unwrap() == 1, 'Incorrect index');
-    assert(binary_search(span, 300).unwrap() == 2, 'Incorrect index');
-    assert(binary_search(span, 400).unwrap() == 3, 'Incorrect index');
+    assert(binary_search(span, 100).unwrap() == 0, 'Should be index 0');
+    assert(binary_search(span, 200).unwrap() == 1, 'Should be index 1');
+    assert(binary_search(span, 300).unwrap() == 2, 'Should be index 2');
+    assert(binary_search(span, 400).unwrap() == 3, 'Should be index 3');
 
     // Odd length
     arr.append(700); // 5
     span = arr.span();
-    assert(binary_search(span, 100).unwrap() == 0, 'Incorrect index');
-    assert(binary_search(span, 200).unwrap() == 1, 'Incorrect index');
-    assert(binary_search(span, 300).unwrap() == 2, 'Incorrect index');
-    assert(binary_search(span, 400).unwrap() == 3, 'Incorrect index');
+    assert(binary_search(span, 100).unwrap() == 0, 'Should be index 0');
+    assert(binary_search(span, 200).unwrap() == 1, 'Should be index 1');
+    assert(binary_search(span, 300).unwrap() == 2, 'Should be index 2');
+    assert(binary_search(span, 400).unwrap() == 3, 'Should be index 3');
 }
 
 #[test]
