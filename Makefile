@@ -42,10 +42,6 @@ test-sorting:
 	@echo "Testing sorting..."
 	cairo-test $(PROJECT_NAME)/sorting
 
-test-utils:
-	@echo "Testing utils..."
-	cairo-test $(PROJECT_NAME)/utils
-
 test-searching: 
 	@echo "Testing searching..."
 	cairo-test $(PROJECT_NAME)/searching
