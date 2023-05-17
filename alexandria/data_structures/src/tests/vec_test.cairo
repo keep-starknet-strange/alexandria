@@ -1,7 +1,6 @@
 // Core lib imports
 use array::ArrayTrait;
-use traits::Into;
-use traits::TryInto;
+use traits::{Index, Into, TryInto};
 use option::OptionTrait;
 use result::ResultTrait;
 use dict::Felt252DictTrait;
@@ -88,3 +87,20 @@ fn vec_set_test_expect_error() {
     vec.set(1, 2)
 }
 
+#[test]
+#[available_gas(2000000)]
+fn vec_index_trait_test() {
+    let mut vec = VecTrait::<u128>::new();
+    vec.push(42);
+    vec.push(0x1337);
+    assert(vec[0] == 42, 'vec[0] != 42');
+    assert(vec[1] == 0x1337, 'vec[1] != 0x1337');
+}
+
+#[test]
+#[available_gas(2000000)]
+#[should_panic(expected: ('Index out of bounds', ))]
+fn vec_index_trait_out_of_bounds_test() {
+    let mut vec = VecTrait::<u128>::new();
+    vec[0];
+}
