@@ -48,8 +48,6 @@ impl MerkleTreeImpl of MerkleTreeTrait {
     fn compute_root(
         ref self: MerkleTree, mut current_node: felt252, mut proof: Span<felt252>
     ) -> felt252 {
-        let mut current_node = current_node;
-
         loop {
             match proof.pop_front() {
                 Option::Some(proof_element) => {
