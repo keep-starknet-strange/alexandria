@@ -1,6 +1,11 @@
 use option::OptionTrait;
 use traits::{Into, TryInto};
 
+const U6_MAX: u128 = 0x3F;
+const U8_MAX: u128 = 0xFF;
+const U32_MAX: u128 = 0xFFFFFFFF;
+const U64_MAX: u128 = 0xFFFFFFFFFFFFFFFF;
+
 // Raise a number to a power.
 /// * `base` - The number to raise.
 /// * `exp` - The exponent.
@@ -34,4 +39,22 @@ fn count_digits_of_base(mut num: u128, base: u128) -> u128 {
         }
         res += 1;
     }
+}
+
+fn fpow(x: u128, n: u128) -> u128 {
+    if n == 0 {
+        1
+    } else if (n & 1) == 1 {
+        x * fpow(x * x, n / 2)
+    } else {
+        fpow(x * x, n / 2)
+    }
+}
+
+fn shl(x: u128, n: u128) -> u128 {
+    x * pow(2, n)
+}
+
+fn shr(x: u128, n: u128) -> u128 {
+    x / pow(2, n)
 }

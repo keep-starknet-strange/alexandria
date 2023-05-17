@@ -3,28 +3,7 @@ use clone::Clone;
 use integer::{u32_wrapping_add, U128BitAnd, U128BitOr, U128BitXor, upcast, downcast};
 use option::OptionTrait;
 use traits::{Div, Into, TryInto};
-
-const U8_MAX: u128 = 0xFF;
-const U32_MAX: u128 = 0xFFFFFFFF;
-const U64_MAX: u128 = 0xFFFFFFFFFFFFFFFF;
-
-fn pow(x: u128, n: u128) -> u128 {
-    if n == 0 {
-        1
-    } else if (n & 1) == 1 {
-        x * pow(x * x, n / 2)
-    } else {
-        pow(x * x, n / 2)
-    }
-}
-
-fn shl(x: u128, n: u128) -> u128 {
-    x * pow(2, n)
-}
-
-fn shr(x: u128, n: u128) -> u128 {
-    x / pow(2, n)
-}
+use quaireaux_math::math::{shl, shr, U8_MAX, U32_MAX, U64_MAX};
 
 fn ch(x: u32, y: u32, z: u32) -> u32 {
     let x: u128 = upcast(x);
