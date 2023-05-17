@@ -4,6 +4,7 @@ use math::count_digits_of_base;
 
 mod aliquot_sum;
 mod armstrong_number;
+mod base64;
 mod collatz_sequence;
 mod extended_euclidean_algorithm;
 mod fast_power;

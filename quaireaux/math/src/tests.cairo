@@ -1,5 +1,6 @@
 mod aliquot_sum_test;
 mod armstrong_number_test;
+mod base64_test;
 mod collatz_sequence_test;
 mod extended_euclidean_algorithm_test;
 mod fast_power_test;
