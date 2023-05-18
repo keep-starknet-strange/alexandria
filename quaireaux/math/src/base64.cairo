@@ -24,16 +24,17 @@ mod Decoder {
         if (d >= data.len()) {
             return ();
         }
-        let x = 0_u128;
-        let x = x | shl(upcast(get_base64_value(*data[d])), 18);
-        let x = x | shl(upcast(get_base64_value(*data[d + 1])), 12);
-        let x = x | shl(upcast(get_base64_value(*data[d + 2])), 6);
-        let x = x | upcast(get_base64_value(*data[d + 3]));
+        let x: u128 = shl(
+            upcast(get_base64_value(*data[d])), 18
+        ) | shl(
+            upcast(get_base64_value(*data[d + 1])), 12
+        ) | shl(upcast(get_base64_value(*data[d + 2])), 6) | upcast(get_base64_value(*data[d + 3]));
 
         let i: u8 = downcast(shr(x, 16) & U8_MAX).unwrap();
         result.append(i);
         let i: u8 = downcast(shr(x, 8) & U8_MAX).unwrap();
-        if d + 4 >= data.len() {
+        if d
+            + 4 >= data.len() {
                 if p == 2 {
                     return ();
                 } else {
@@ -44,7 +45,8 @@ mod Decoder {
             }
 
         let i: u8 = downcast(x & U8_MAX).unwrap();
-        if d + 4 >= data.len() {
+        if d
+            + 4 >= data.len() {
                 if p == 1 {
                     return ();
                 } else {
@@ -119,7 +121,8 @@ mod Encoder {
         let i: u8 = downcast(shr(x, 12) & U6_MAX).unwrap();
         result.append(get_base64_char(i));
         let i: u8 = downcast(shr(x, 6) & U6_MAX).unwrap();
-        if upcast(d) + 3 >= data.len() {
+        if upcast(d)
+            + 3 >= data.len() {
                 if p == 2 {
                     result.append('=');
                 } else {
@@ -129,7 +132,8 @@ mod Encoder {
                 result.append(get_base64_char(i));
             }
         let i: u8 = downcast(x & U6_MAX).unwrap();
-        if upcast(d) + 3 >= data.len() {
+        if upcast(d)
+            + 3 >= data.len() {
                 if p >= 1 {
                     result.append('=');
                 } else {
@@ -187,7 +191,8 @@ mod Encoder {
         let i: u8 = downcast(shr(x, 12) & U6_MAX).unwrap();
         result.append(get_base64_url_char(i));
         let i: u8 = downcast(shr(x, 6) & U6_MAX).unwrap();
-        if upcast(d) + 3 >= data.len() {
+        if upcast(d)
+            + 3 >= data.len() {
                 if p == 2 {
                     result.append('=');
                 } else {
@@ -197,7 +202,8 @@ mod Encoder {
                 result.append(get_base64_url_char(i));
             }
         let i: u8 = downcast(x & U6_MAX).unwrap();
-        if upcast(d) + 3 >= data.len() {
+        if upcast(d)
+            + 3 >= data.len() {
                 if p >= 1 {
                     result.append('=');
                 } else {
