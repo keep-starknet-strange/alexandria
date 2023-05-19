@@ -21,7 +21,7 @@ impl TOr: PartialOrd<T>>(
     if (*span[middle] > val) {
         return (binary_search(span.slice(0, middle), val));
     }
-    
+
     let mut len = middle;
     if (span.len() % 2 == 1) {
         len += 1;
