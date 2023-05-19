@@ -1,20 +1,20 @@
 <div align="center">
-  <h1>Quaireaux</h1>
+  <h1>Alexandria</h1>
   <img src="docs/images/logo.png" height="400" width="400">
   <br />
-  <a href="https://github.com/stark-rocket/quaireaux/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
+  <a href="https://github.com/keep-starknet-strange/alexandria/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
   -
-  <a href="https://github.com/stark-rocket/quaireaux/issues/new?assignees=&labels=enhancement&template=02_FEATURE_REQUEST.md&title=feat%3A+">Request a Feature</a>
+  <a href="https://github.com/keep-starknet-strange/alexandria/issues/new?assignees=&labels=enhancement&template=02_FEATURE_REQUEST.md&title=feat%3A+">Request a Feature</a>
   -
-  <a href="https://github.com/stark-rocket/quaireaux/discussions">Ask a Question</a>
+  <a href="https://github.com/keep-starknet-strange/alexandria/discussions">Ask a Question</a>
 </div>
 
 <div align="center">
 <br />
 
-[![GitHub Workflow Status](https://github.com/stark-rocket/quaireaux/actions/workflows/test.yml/badge.svg)](https://github.com/stark-rocket/quaireaux/actions/workflows/test.yml)
-[![Project license](https://img.shields.io/github/license/stark-rocket/quaireaux.svg?style=flat-square)](LICENSE)
-[![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/stark-rocket/quaireaux/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+[![GitHub Workflow Status](https://github.com/keep-starknet-strange/alexandria/actions/workflows/test.yml/badge.svg)](https://github.com/keep-starknet-strange/alexandria/actions/workflows/test.yml)
+[![Project license](https://img.shields.io/github/license/keep-starknet-strange/alexandria.svg?style=flat-square)](LICENSE)
+[![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/keep-starknet-strange/alexandria/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 
 </div>
 
@@ -25,8 +25,6 @@
 - [Request a Feature](#request-a-feature)
 - [About](#about)
 - [Features](#features)
-  - [Data Structures](#data-structures)
-  - [Math](#math)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -51,7 +49,7 @@
 
 ## About
 
-Quaireaux is a community maintained standard library for Cairo 1.0.
+Alexandria is a community maintained standard library for Cairo 1.0.
 It is a collection of useful algorithms and data structures implemented in Cairo.  
 Current version: [1.0.0-rc0](https://github.com/starkware-libs/cairo/releases/tag/v1.0.0-rc0) 
 
@@ -59,12 +57,12 @@ Current version: [1.0.0-rc0](https://github.com/starkware-libs/cairo/releases/ta
 
 This repository is divided in 3 main packages:
 
- - [Data Structures](./quaireaux/data_structures/README.md)
- - [Math](./quaireaux/math/README.md)
- - [Sorting](./quaireaux/sorting/README.md)
+ - [Data Structures](./alexandria/data_structures/README.md)
+ - [Math](./alexandria/math/README.md)
+ - [Sorting](./alexandria/sorting/README.md)
 
 And 1 secondary package:
- - [Utilitaries](./quaireaux/utils/README.md)
+ - [Utilitaries](./alexandria/utils/README.md)
 
 ## Getting Started
 
@@ -75,10 +73,10 @@ And 1 secondary package:
 
 ### Installation
 
-Quaireaux is a [Scarb] package, which can be installed by adding following line to your `Scarb.toml`:
+Alexandria is a [Scarb] package, which can be installed by adding following line to your `Scarb.toml`:
 ```toml
 [dependencies]
-quaireaux = { git = "https://github.com/keep-starknet-strange/quaireaux.git" }
+alexandria = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
 ```
 
 ## Usage
@@ -110,28 +108,28 @@ make format
 
 ## Roadmap
 
-See the [open issues](https://github.com/stark-rocket/quaireaux/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/keep-starknet-strange/alexandria/issues) for a list of proposed features (and known issues).
 
-- [Top Feature Requests](https://github.com/stark-rocket/quaireaux/issues?q=label%3Aenhancement+is%3Aopen+sort%3Areactions-%2B1-desc) (Add your votes using the 👍 reaction)
-- [Top Bugs](https://github.com/stark-rocket/quaireaux/issues?q=is%3Aissue+is%3Aopen+label%3Abug+sort%3Areactions-%2B1-desc) (Add your votes using the 👍 reaction)
-- [Newest Bugs](https://github.com/stark-rocket/quaireaux/issues?q=is%3Aopen+is%3Aissue+label%3Abug)
+- [Top Feature Requests](https://github.com/keep-starknet-strange/alexandria/issues?q=label%3Aenhancement+is%3Aopen+sort%3Areactions-%2B1-desc) (Add your votes using the 👍 reaction)
+- [Top Bugs](https://github.com/keep-starknet-strange/alexandria/issues?q=is%3Aissue+is%3Aopen+label%3Abug+sort%3Areactions-%2B1-desc) (Add your votes using the 👍 reaction)
+- [Newest Bugs](https://github.com/keep-starknet-strange/alexandria/issues?q=is%3Aopen+is%3Aissue+label%3Abug)
 
 ## Support
 
 Reach out to the maintainer at one of the following places:
 
-- [GitHub Discussions](https://github.com/stark-rocket/quaireaux/discussions)
+- [GitHub Discussions](https://github.com/keep-starknet-strange/alexandria/discussions)
 - Contact options listed on [this GitHub profile](https://github.com/starknet-exploration)
 
 ## Project assistance
 
-If you want to say **thank you** or/and support active development of Quaireaux:
+If you want to say **thank you** or/and support active development of Alexandria:
 
-- Add a [GitHub Star](https://github.com/stark-rocket/quaireaux) to the project.
-- Tweet about the Quaireaux.
+- Add a [GitHub Star](https://github.com/keep-starknet-strange/alexandria) to the project.
+- Tweet about the Alexandria.
 - Write interesting articles about the project on [Dev.to](https://dev.to/), [Medium](https://medium.com/) or your personal blog.
 
-Together, we can make Quaireaux **better**!
+Together, we can make Alexandria **better**!
 
 ## Contributing
 
@@ -141,12 +139,12 @@ Please read [our contribution guidelines](docs/CONTRIBUTING.md), and thank you f
 
 ## Authors & contributors
 
-For a full list of all authors and contributors, see [the contributors page](https://github.com/stark-rocket/quaireaux/contributors).
+For a full list of all authors and contributors, see [the contributors page](https://github.com/keep-starknet-strange/alexandria/contributors).
 
 ## Security
 
-Quaireaux follows good practices of security, but 100% security cannot be assured.
-Quaireaux is provided **"as is"** without any **warranty**. Use at your own risk.
+Alexandria follows good practices of security, but 100% security cannot be assured.
+Alexandria is provided **"as is"** without any **warranty**. Use at your own risk.
 
 _For more information and to report security issues, please refer to our [security documentation](docs/SECURITY.md)._
 
@@ -170,18 +168,18 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/abdelhamidbakhta"><img src="https://avatars.githubusercontent.com/u/45264458?v=4?s=100" width="100px;" alt="Abdel @ StarkWare "/><br /><sub><b>Abdel @ StarkWare </b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=abdelhamidbakhta" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sdgalvan"><img src="https://avatars.githubusercontent.com/u/58611754?v=4?s=100" width="100px;" alt="Santiago Galván (Dub)"/><br /><sub><b>Santiago Galván (Dub)</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=sdgalvan" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/dpinones"><img src="https://avatars.githubusercontent.com/u/30808181?v=4?s=100" width="100px;" alt="Damián Piñones"/><br /><sub><b>Damián Piñones</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=dpinones" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/greged93"><img src="https://avatars.githubusercontent.com/u/82421016?v=4?s=100" width="100px;" alt="greged93"/><br /><sub><b>greged93</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=greged93" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mkaput"><img src="https://avatars.githubusercontent.com/u/3450050?v=4?s=100" width="100px;" alt="Marek Kaput"/><br /><sub><b>Marek Kaput</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=mkaput" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/amanusk"><img src="https://avatars.githubusercontent.com/u/7280933?v=4?s=100" width="100px;" alt="amanusk"/><br /><sub><b>amanusk</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=amanusk" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/msaug"><img src="https://avatars.githubusercontent.com/u/60658558?v=4?s=100" width="100px;" alt="Mathieu"/><br /><sub><b>Mathieu</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=msaug" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/abdelhamidbakhta"><img src="https://avatars.githubusercontent.com/u/45264458?v=4?s=100" width="100px;" alt="Abdel @ StarkWare "/><br /><sub><b>Abdel @ StarkWare </b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=abdelhamidbakhta" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sdgalvan"><img src="https://avatars.githubusercontent.com/u/58611754?v=4?s=100" width="100px;" alt="Santiago Galván (Dub)"/><br /><sub><b>Santiago Galván (Dub)</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=sdgalvan" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/dpinones"><img src="https://avatars.githubusercontent.com/u/30808181?v=4?s=100" width="100px;" alt="Damián Piñones"/><br /><sub><b>Damián Piñones</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=dpinones" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/greged93"><img src="https://avatars.githubusercontent.com/u/82421016?v=4?s=100" width="100px;" alt="greged93"/><br /><sub><b>greged93</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=greged93" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mkaput"><img src="https://avatars.githubusercontent.com/u/3450050?v=4?s=100" width="100px;" alt="Marek Kaput"/><br /><sub><b>Marek Kaput</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=mkaput" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/amanusk"><img src="https://avatars.githubusercontent.com/u/7280933?v=4?s=100" width="100px;" alt="amanusk"/><br /><sub><b>amanusk</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=amanusk" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/msaug"><img src="https://avatars.githubusercontent.com/u/60658558?v=4?s=100" width="100px;" alt="Mathieu"/><br /><sub><b>Mathieu</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=msaug" title="Code">💻</a></td>
     </tr>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/EvolveArt"><img src="https://avatars.githubusercontent.com/u/12902455?v=4?s=100" width="100px;" alt="0xevolve"/><br /><sub><b>0xevolve</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=EvolveArt" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/JordyRo1"><img src="https://avatars.githubusercontent.com/u/87231934?v=4?s=100" width="100px;" alt="Jordy Romuald"/><br /><sub><b>Jordy Romuald</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=JordyRo1" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/gaetbout"><img src="https://avatars.githubusercontent.com/u/16206518?v=4?s=100" width="100px;" alt="gaetbout"/><br /><sub><b>gaetbout</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/quaireaux/commits?author=gaetbout" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/EvolveArt"><img src="https://avatars.githubusercontent.com/u/12902455?v=4?s=100" width="100px;" alt="0xevolve"/><br /><sub><b>0xevolve</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=EvolveArt" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/JordyRo1"><img src="https://avatars.githubusercontent.com/u/87231934?v=4?s=100" width="100px;" alt="Jordy Romuald"/><br /><sub><b>Jordy Romuald</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=JordyRo1" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/gaetbout"><img src="https://avatars.githubusercontent.com/u/16206518?v=4?s=100" width="100px;" alt="gaetbout"/><br /><sub><b>gaetbout</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=gaetbout" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>

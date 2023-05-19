@@ -1,5 +1,5 @@
 # This crate is for tests purposes to avoid having tests running twice if we would be running them crate by crate.
 [crate_roots]
-quaireaux_data_structures = "quaireaux/data_structures/src"
-quaireaux_math = "quaireaux/math/src"
-quaireaux_sorting = "quaireaux/sorting/src"
+alexandria_data_structures = "alexandria/data_structures/src"
+alexandria_math = "alexandria/math/src"
+alexandria_sorting = "alexandria/sorting/src"

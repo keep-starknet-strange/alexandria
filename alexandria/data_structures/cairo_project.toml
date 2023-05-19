@@ -1,0 +1,2 @@
+[crate_roots]
+alexandria_data_structures = "src"

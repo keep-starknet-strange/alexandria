@@ -2,7 +2,7 @@
 
 # Configuration
 ROOT_PROJECT = .
-PROJECT_NAME = quaireaux
+PROJECT_NAME = alexandria
 BUILD_DIR = build
 
 # Default target

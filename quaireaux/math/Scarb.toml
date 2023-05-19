@@ -1,6 +1,0 @@
-[package]
-name = "quaireaux_math"
-version = "0.1.0"
-description = "A set of math Cairo 1.0 libraries and algorithms"
-homepage = "https://github.com/keep-starknet-strange/quaireaux/tree/main/data_structures"
-
