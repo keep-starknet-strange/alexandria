@@ -1,0 +1,5 @@
+[package]
+name = "alexandria_searching"
+version = "0.1.0"
+description = "A set of searching algorithm Cairo 1.0"
+homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/searching"

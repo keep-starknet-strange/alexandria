@@ -1,4 +1,4 @@
-use quaireaux_searching::binary_search::binary_search;
+use alexandria_searching::binary_search::binary_search;
 use array::ArrayTrait;
 use option::OptionTrait;
 
