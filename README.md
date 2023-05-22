@@ -182,6 +182,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/gaetbout"><img src="https://avatars.githubusercontent.com/u/16206518?v=4?s=100" width="100px;" alt="gaetbout"/><br /><sub><b>gaetbout</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=gaetbout" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/LucasLvy"><img src="https://avatars.githubusercontent.com/u/70894690?v=4?s=100" width="100px;" alt="Lucas @ StarkWare"/><br /><sub><b>Lucas @ StarkWare</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=LucasLvy" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://milancermak.com/"><img src="https://avatars.githubusercontent.com/u/184055?v=4?s=100" width="100px;" alt="Milan Cermak"/><br /><sub><b>Milan Cermak</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=milancermak" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/neotheprogramist"><img src="https://avatars.githubusercontent.com/u/128649481?v=4?s=100" width="100px;" alt="Paweł"/><br /><sub><b>Paweł</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=neotheprogramist" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
