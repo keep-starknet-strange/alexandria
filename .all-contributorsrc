@@ -108,6 +108,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "milancermak",
+      "name": "Milan Cermak",
+      "avatar_url": "https://avatars.githubusercontent.com/u/184055?v=4",
+      "profile": "https://milancermak.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
