@@ -126,6 +126,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "tensojka",
+      "name": "Ondřej Sojka",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8470346?v=4",
+      "profile": "https://github.com/tensojka",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
