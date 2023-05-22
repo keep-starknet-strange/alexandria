@@ -34,6 +34,10 @@ test-data_structures:
 	@echo "Testing data structures..."
 	cairo-test $(PROJECT_NAME)/data_structures
 
+test-encoding:
+	@echo "Testing encoding..."
+	cairo-test $(PROJECT_NAME)/encoding
+
 test-math:
 	@echo "Testing math"
 	cairo-test $(PROJECT_NAME)/math
