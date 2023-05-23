@@ -23,7 +23,7 @@ impl TPartialOrd: PartialOrd<T>>(
     loop {
         if idx2 == array.len() {
             sorted_array.append(*array[idx1]);
-            if (sorted_iteration == 0) {
+            if sorted_iteration == 0 {
                 break ();
             }
             array = sorted_array;
