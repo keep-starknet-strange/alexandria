@@ -777,7 +777,7 @@ fn i17_abs(x: i17) -> i17 {
 // # Returns
 // * `i17` - The maximum between `lhs` and `rhs`.
 fn i17_max(lhs: i17, rhs: i17) -> i17 {
-    if (lhs> rhs) {
+    if (lhs > rhs) {
         return lhs;
     } else {
         return rhs;
@@ -996,7 +996,7 @@ fn i33_rem(lhs: i33, rhs: i33) -> i33 {
     // Check that the divisor is not zero.
     assert(rhs.inner != 0, 'b can not be 0');
 
-    return lhs - (rhs * (lhs/ rhs));
+    return lhs - (rhs * (lhs / rhs));
 }
 
 // Implements the Rem trait for i33.
@@ -1176,7 +1176,7 @@ fn i33_abs(x: i33) -> i33 {
 // # Returns
 // * `i33` - The maximum between `lhs` and `rhs`.
 fn i33_max(lhs: i33, rhs: i33) -> i33 {
-    if (lhs> rhs) {
+    if (lhs > rhs) {
         return lhs;
     } else {
         return rhs;
@@ -1395,7 +1395,7 @@ fn i65_rem(lhs: i65, rhs: i65) -> i65 {
     // Check that the divisor is not zero.
     assert(rhs.inner != 0, 'b can not be 0');
 
-    return lhs - (rhs * (lhs/ rhs));
+    return lhs - (rhs * (lhs / rhs));
 }
 
 // Implements the Rem trait for i65.
@@ -1575,7 +1575,7 @@ fn i65_abs(x: i65) -> i65 {
 // # Returns
 // * `i65` - The maximum between `lhs` and `rhs`.
 fn i65_max(lhs: i65, rhs: i65) -> i65 {
-    if (lhs> rhs) {
+    if (lhs > rhs) {
         return lhs;
     } else {
         return rhs;
@@ -1794,7 +1794,7 @@ fn i129_rem(lhs: i129, rhs: i129) -> i129 {
     // Check that the divisor is not zero.
     assert(rhs.inner != 0, 'b can not be 0');
 
-    return lhs - (rhs * (lhs/ rhs));
+    return lhs - (rhs * (lhs / rhs));
 }
 
 // Implements the Rem trait for i129.
@@ -1974,7 +1974,7 @@ fn i129_abs(x: i129) -> i129 {
 // # Returns
 // * `i129` - The maximum between `lhs` and `rhs`.
 fn i129_max(lhs: i129, rhs: i129) -> i129 {
-    if (lhs> rhs) {
+    if (lhs > rhs) {
         return lhs;
     } else {
         return rhs;
