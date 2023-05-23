@@ -51,7 +51,7 @@
 
 Alexandria is a community maintained standard library for Cairo 1.0.
 It is a collection of useful algorithms and data structures implemented in Cairo.  
-Current version: [1.0.0-rc0](https://github.com/starkware-libs/cairo/releases/tag/v1.0.0-rc0) 
+Current version: [v1.0.0](https://github.com/starkware-libs/cairo/releases/tag/v1.0.0) 
 
 ## Features
 
@@ -73,10 +73,10 @@ And 1 secondary package:
 
 ### Installation
 
-Alexandria is a [Scarb] package, which can be installed by adding following line to your `Scarb.toml`:
+Alexandria is a collection of [Scarb] packages, which can be installed by adding the following line to your `Scarb.toml`:
 ```toml
 [dependencies]
-alexandria = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
+alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
 ```
 
 ## Usage

@@ -9,5 +9,5 @@ mod karatsuba_test;
 mod math_test;
 mod perfect_number_test;
 mod sha256_test;
-// mod signed_integers_test;
+mod signed_integers_test;
 mod zellers_congruence_test;
