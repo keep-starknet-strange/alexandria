@@ -5,18 +5,16 @@ use option::OptionTrait;
 use debug::PrintTrait;
 use alexandria_encoding::math::{shl, shr, U6_MAX, U8_MAX};
 
-trait Base64Encoder<T> {
-    fn encode_base64(data: Array<T>) -> Array<u8>;
-    fn encode_base64_url(data: Array<T>) -> Array<u8>;
+trait Encoder<T> {
+    fn encode(data: Array<T>) -> Array<u8>;
 }
 
-trait Base64Decoder<T> {
-    fn decode_base64(data: Array<T>) -> Array<u8>;
-    fn decode_base64_url(data: Array<T>) -> Array<u8>;
+trait Decoder<T> {
+    fn decode(data: Array<T>) -> Array<u8>;
 }
 
-impl u8Base64Encoder of Base64Encoder<u8> {
-    fn encode_base64(mut data: Array<u8>) -> Array<u8> {
+impl u8Base64Encoder of Encoder<u8> {
+    fn encode(mut data: Array<u8>) -> Array<u8> {
         let mut p = if (data.len() % 3 == 1) {
             data.append(0);
             data.append(0);
@@ -33,8 +31,10 @@ impl u8Base64Encoder of Base64Encoder<u8> {
         encode_loop(p, ref data, 0, ref char_set, ref result);
         result
     }
+}
 
-    fn encode_base64_url(mut data: Array<u8>) -> Array<u8> {
+impl u8Base64UrlEncoder of Encoder<u8> {
+    fn encode(mut data: Array<u8>) -> Array<u8> {
         let mut p = if (data.len() % 3 == 1) {
             data.append(0);
             data.append(0);
@@ -53,8 +53,8 @@ impl u8Base64Encoder of Base64Encoder<u8> {
     }
 }
 
-impl u8Base64Decoder of Base64Decoder<u8> {
-    fn decode_base64(mut data: Array<u8>) -> Array<u8> {
+impl u8Base64Decoder of Decoder<u8> {
+    fn decode(mut data: Array<u8>) -> Array<u8> {
         let mut result = ArrayTrait::new();
         let mut p = 0_u8;
         if data.len() > 0 {
@@ -68,8 +68,10 @@ impl u8Base64Decoder of Base64Decoder<u8> {
         }
         result
     }
+}
 
-    fn decode_base64_url(mut data: Array<u8>) -> Array<u8> {
+impl u8Base64UrlDecoder of Decoder<u8> {
+    fn decode(mut data: Array<u8>) -> Array<u8> {
         let mut result = ArrayTrait::new();
         let mut p = 0_u8;
         if data.len() > 0 {
