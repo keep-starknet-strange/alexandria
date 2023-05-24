@@ -15,7 +15,7 @@
 // Core lib imports
 use dict::Felt252DictTrait;
 use option::OptionTrait;
-use traits::Into;
+use traits::{Index, Into};
 
 struct Vec<T> {
     items: Felt252Dict<T>,
@@ -112,5 +112,12 @@ impl TFelt252DictValue: Felt252DictValue<T>> of VecTrait<T> {
     /// * usize The length of the vec.
     fn len(self: @Vec<T>) -> usize {
         *(self.len)
+    }
+}
+
+impl VecIndex<T, impl VecTraitImpl: VecTrait<T>> of Index<Vec<T>, usize, T> {
+    #[inline(always)]
+    fn index(ref self: Vec<T>, index: usize) -> T {
+        self.at(index)
     }
 }
