@@ -3,3 +3,4 @@
 alexandria_data_structures = "alexandria/data_structures/src"
 alexandria_math = "alexandria/math/src"
 alexandria_sorting = "alexandria/sorting/src"
+alexandria_searching = "alexandria/searching/src"

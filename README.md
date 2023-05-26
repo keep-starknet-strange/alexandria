@@ -61,9 +61,6 @@ This repository is divided in 3 main packages:
  - [Math](./alexandria/math/README.md)
  - [Sorting](./alexandria/sorting/README.md)
 
-And 1 secondary package:
- - [Utilitaries](./alexandria/utils/README.md)
-
 ## Getting Started
 
 ### Prerequisites
