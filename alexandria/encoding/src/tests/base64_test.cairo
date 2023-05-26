@@ -1,12 +1,12 @@
 use array::ArrayTrait;
 use debug::PrintTrait;
-use alexandria_encoding::base64::{u8Base64Encoder, u8Base64Decoder};
+use alexandria_encoding::base64::{Base64Encoder, Base64Decoder};
 
 #[test]
 #[available_gas(2000000000)]
 fn base64encode_empty_test() {
     let mut input = ArrayTrait::<u8>::new();
-    let result = u8Base64Encoder::encode(input);
+    let result = Base64Encoder::encode(input);
     assert(result.len() == 0, 'invalid result length');
 }
 
@@ -16,7 +16,7 @@ fn base64encode_simple_test() {
     let mut input = ArrayTrait::<u8>::new();
     input.append('a');
 
-    let result = u8Base64Encoder::encode(input);
+    let result = Base64Encoder::encode(input);
     assert(result.len() == 4, 'invalid result length');
     assert(*result[0] == 'Y', 'invalid result[0]');
     assert(*result[1] == 'Q', 'invalid result[1]');
@@ -40,7 +40,7 @@ fn base64encode_hello_world_test() {
     input.append('l');
     input.append('d');
 
-    let result = u8Base64Encoder::encode(input);
+    let result = Base64Encoder::encode(input);
     assert(result.len() == 16, 'invalid result length');
     assert(*result[0] == 'a', 'invalid result[0]');
     assert(*result[1] == 'G', 'invalid result[1]');
@@ -65,7 +65,7 @@ fn base64encode_hello_world_test() {
 fn base64decode_empty_test() {
     let mut input = ArrayTrait::<u8>::new();
 
-    let result = u8Base64Decoder::decode(input);
+    let result = Base64Decoder::decode(input);
     assert(result.len() == 0, 'invalid result length');
 }
 
@@ -78,7 +78,7 @@ fn base64decode_simple_test() {
     input.append('=');
     input.append('=');
 
-    let result = u8Base64Decoder::decode(input);
+    let result = Base64Decoder::decode(input);
     assert(result.len() == 1, 'invalid result length');
     assert(*result[0] == 'a', 'invalid result[0]');
 }
@@ -104,7 +104,7 @@ fn base64decode_hello_world_test() {
     input.append('Q');
     input.append('=');
 
-    let result = u8Base64Decoder::decode(input);
+    let result = Base64Decoder::decode(input);
     assert(result.len() == 11, 'invalid result length');
     assert(*result[0] == 'h', 'invalid result[0]');
     assert(*result[1] == 'e', 'invalid result[1]');

@@ -13,78 +13,69 @@ trait Decoder<T> {
     fn decode(data: Array<T>) -> Array<u8>;
 }
 
-impl u8Base64Encoder of Encoder<u8> {
+impl Base64Encoder of Encoder<u8> {
     fn encode(mut data: Array<u8>) -> Array<u8> {
-        let mut p = if (data.len() % 3 == 1) {
-            data.append(0);
-            data.append(0);
-            2
-        } else if (data.len() % 3 == 2) {
-            data.append(0);
-            1
-        } else {
-            0
-        };
-
         let mut char_set = get_base64_char_set();
-        let mut result = ArrayTrait::new();
-        encode_loop(p, ref data, 0, ref char_set, ref result);
-        result
+        char_set.append('+');
+        char_set.append('/');
+        inner_encode(ref data, ref char_set)
     }
 }
 
-impl u8Base64UrlEncoder of Encoder<u8> {
+impl Base64UrlEncoder of Encoder<u8> {
     fn encode(mut data: Array<u8>) -> Array<u8> {
-        let mut p = if (data.len() % 3 == 1) {
-            data.append(0);
-            data.append(0);
-            2
-        } else if (data.len() % 3 == 2) {
-            data.append(0);
-            1
-        } else {
-            0
-        };
-
-        let mut char_set = get_base64_url_char_set();
-        let mut result = ArrayTrait::new();
-        encode_loop(p, ref data, 0, ref char_set, ref result);
-        result
+        let mut char_set = get_base64_char_set();
+        char_set.append('-');
+        char_set.append('_');
+        inner_encode(ref data, ref char_set)
     }
 }
 
-impl u8Base64Decoder of Decoder<u8> {
+impl Base64Decoder of Decoder<u8> {
     fn decode(mut data: Array<u8>) -> Array<u8> {
-        let mut result = ArrayTrait::new();
-        let mut p = 0_u8;
-        if data.len() > 0 {
-            if *data[data.len() - 1] == '=' {
-                p += 1;
-            }
-            if *data[data.len() - 2] == '=' {
-                p += 1;
-            }
-            decode_loop(p, ref data, 0, ref result);
-        }
-        result
+        inner_decode(ref data)
     }
 }
 
-impl u8Base64UrlDecoder of Decoder<u8> {
+impl Base64UrlDecoder of Decoder<u8> {
     fn decode(mut data: Array<u8>) -> Array<u8> {
-        let mut result = ArrayTrait::new();
-        let mut p = 0_u8;
-        if data.len() > 0 {
-            if *data[data.len() - 1] == '=' {
-                p += 1;
-            }
-            if *data[data.len() - 2] == '=' {
-                p += 1;
-            }
-            decode_loop(p, ref data, 0, ref result);
-        }
-        result
+        inner_decode(ref data)
     }
+}
+
+fn inner_encode(ref data: Array<u8>, ref char_set: Array<u8>) -> Array<u8> {
+    let mut p = if (data.len() % 3 == 1) {
+        data.append(0);
+        data.append(0);
+        2
+    } else if (data.len() % 3 == 2) {
+        data.append(0);
+        1
+    } else {
+        0
+    };
+
+    let mut char_set = get_base64_char_set();
+    char_set.append('-');
+    char_set.append('_');
+    let mut result = ArrayTrait::new();
+    encode_loop(p, ref data, 0, ref char_set, ref result);
+    result
+}
+
+fn inner_decode(ref data: Array<u8>) -> Array<u8> {
+    let mut result = ArrayTrait::new();
+    let mut p = 0_u8;
+    if data.len() > 0 {
+        if *data[data.len() - 1] == '=' {
+            p += 1;
+        }
+        if *data[data.len() - 2] == '=' {
+            p += 1;
+        }
+        decode_loop(p, ref data, 0, ref result);
+    }
+    result
 }
 
 fn decode_loop(p: u8, ref data: Array<u8>, d: usize, ref result: Array<u8>) {
@@ -251,76 +242,5 @@ fn get_base64_char_set() -> Array<u8> {
     result.append('7');
     result.append('8');
     result.append('9');
-    result.append('+');
-    result.append('/');
-    result
-}
-
-fn get_base64_url_char_set() -> Array<u8> {
-    let mut result = ArrayTrait::new();
-    result.append('A');
-    result.append('B');
-    result.append('C');
-    result.append('D');
-    result.append('E');
-    result.append('F');
-    result.append('G');
-    result.append('H');
-    result.append('I');
-    result.append('J');
-    result.append('K');
-    result.append('L');
-    result.append('M');
-    result.append('N');
-    result.append('O');
-    result.append('P');
-    result.append('Q');
-    result.append('R');
-    result.append('S');
-    result.append('T');
-    result.append('U');
-    result.append('V');
-    result.append('W');
-    result.append('X');
-    result.append('Y');
-    result.append('Z');
-    result.append('a');
-    result.append('b');
-    result.append('c');
-    result.append('d');
-    result.append('e');
-    result.append('f');
-    result.append('g');
-    result.append('h');
-    result.append('i');
-    result.append('j');
-    result.append('k');
-    result.append('l');
-    result.append('m');
-    result.append('n');
-    result.append('o');
-    result.append('p');
-    result.append('q');
-    result.append('r');
-    result.append('s');
-    result.append('t');
-    result.append('u');
-    result.append('v');
-    result.append('w');
-    result.append('x');
-    result.append('y');
-    result.append('z');
-    result.append('0');
-    result.append('1');
-    result.append('2');
-    result.append('3');
-    result.append('4');
-    result.append('5');
-    result.append('6');
-    result.append('7');
-    result.append('8');
-    result.append('9');
-    result.append('-');
-    result.append('_');
     result
 }
