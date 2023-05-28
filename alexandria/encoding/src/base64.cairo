@@ -3,7 +3,7 @@ use array::ArrayTrait;
 use integer::{upcast, downcast};
 use option::OptionTrait;
 use debug::PrintTrait;
-use alexandria_encoding::math::{shl, shr, U6_MAX, U8_MAX};
+use alexandria_math::math::{shl, shr, U6_MAX, U8_MAX};
 
 trait Encoder<T> {
     fn encode(data: Array<T>) -> Array<u8>;
