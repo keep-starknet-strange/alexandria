@@ -6,14 +6,14 @@ use debug::PrintTrait;
 use alexandria_math::math::{shl, shr, U6_MAX, U8_MAX};
 
 trait Encoder<T> {
-    fn encode(data: Array<T>) -> Array<u8>;
+    fn encode(data: T) -> Array<u8>;
 }
 
 trait Decoder<T> {
-    fn decode(data: Array<T>) -> Array<u8>;
+    fn decode(data: T) -> Array<u8>;
 }
 
-impl Base64Encoder of Encoder<u8> {
+impl Base64Encoder of Encoder<Array<u8>> {
     fn encode(mut data: Array<u8>) -> Array<u8> {
         let mut char_set = get_base64_char_set();
         char_set.append('+');
@@ -22,7 +22,7 @@ impl Base64Encoder of Encoder<u8> {
     }
 }
 
-impl Base64UrlEncoder of Encoder<u8> {
+impl Base64UrlEncoder of Encoder<Array<u8>> {
     fn encode(mut data: Array<u8>) -> Array<u8> {
         let mut char_set = get_base64_char_set();
         char_set.append('-');
@@ -31,13 +31,13 @@ impl Base64UrlEncoder of Encoder<u8> {
     }
 }
 
-impl Base64Decoder of Decoder<u8> {
+impl Base64Decoder of Decoder<Array<u8>> {
     fn decode(mut data: Array<u8>) -> Array<u8> {
         inner_decode(ref data)
     }
 }
 
-impl Base64UrlDecoder of Decoder<u8> {
+impl Base64UrlDecoder of Decoder<Array<u8>> {
     fn decode(mut data: Array<u8>) -> Array<u8> {
         inner_decode(ref data)
     }

@@ -1,4 +1,5 @@
 use alexandria_math::pow;
+use alexandria_math::math::fpow;
 use alexandria_math::count_digits_of_base;
 
 // Test for power function
@@ -21,4 +22,11 @@ fn count_digits_of_base_test() {
     assert(count_digits_of_base(0x80, 16) == 2, 'invalid result');
     assert(count_digits_of_base(0x800, 16) == 3, 'invalid result');
     assert(count_digits_of_base(0x888888888888888888, 16) == 18, 'invalid result');
+}
+
+// Test fast power function
+#[test]
+#[available_gas(2000000)]
+fn fpow_test() {
+    assert(fpow(3, 8) == 6561, 'invalid result');
 }
