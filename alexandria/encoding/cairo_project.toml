@@ -1,0 +1,3 @@
+[crate_roots]
+alexandria_encoding = "src"
+alexandria_math = "../math/src"
