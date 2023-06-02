@@ -54,3 +54,9 @@ Zeller's congruence algorithm is used to determine the day of the week for a giv
 The purpose of the algorithm is to provide a simple and efficient way to calculate the day of the week based on the date.  
 It is widely used in various applications, including calendar systems, scheduling, and time management.  
 The algorithm takes into account the year, month, and day of the given date and performs a series of mathematical calculations to determine the day of the week. By providing an easy-to-use method for calculating the day of the week, Zeller's congruence algorithm is an important tool for many industries and organizations that rely on accurate and efficient time management systems.
+
+## [ed25519](./src/ed25519.cairo)
+In public-key cryptography, Edwards-curve Digital Signature Algorithm (EdDSA) is a digital signature scheme using a variant of Schnorr signature based on twisted Edwards curves. It is designed to be faster than existing digital signature schemes without sacrificing security.
+
+## [sha512](./src/sha512.cairo)
+SHA-512 is from the SHA-2 family (Secure Hash Algorithm 2) which is a set of cryptographic hash functions designed by the United States National Security Agency (NSA) and first published in 2001. They are built using the Merkle–Damgård construction, from a one-way compression function itself built using the Davies–Meyer structure from a specialized block cipher.

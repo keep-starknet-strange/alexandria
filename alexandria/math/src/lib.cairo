@@ -13,8 +13,10 @@ mod karatsuba;
 mod perfect_number;
 mod sha256;
 mod sha512;
+mod ed25519;
 mod signed_integers;
 mod zellers_congruence;
+mod mod_arithmetics;
 
 #[cfg(test)]
 mod tests;
