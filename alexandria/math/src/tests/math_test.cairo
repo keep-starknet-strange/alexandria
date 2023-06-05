@@ -1,6 +1,4 @@
-use alexandria_math::pow;
-use alexandria_math::math::fpow;
-use alexandria_math::count_digits_of_base;
+use alexandria_math::{pow, math::fpow, count_digits_of_base};
 
 // Test for power function
 #[test]

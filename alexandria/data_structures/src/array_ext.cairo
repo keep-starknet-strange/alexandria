@@ -1,6 +1,5 @@
 use array::{ArrayTrait, SpanTrait};
-use option::Option;
-use option::OptionTrait;
+use option::{Option, OptionTrait};
 
 trait ArrayTraitExt<T> {
     fn append_all(ref self: Array<T>, ref arr: Array<T>);
