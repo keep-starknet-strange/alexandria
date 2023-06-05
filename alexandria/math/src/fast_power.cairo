@@ -22,7 +22,7 @@ fn fast_power(mut base: u128, mut power: u128, modulus: u128) -> u128 {
     // TODO: Simplify thise conversions after https://github.com/starkware-libs/cairo/pull/3293 is merged and released.
     let mut base: u256 = u256 { low: base, high: 0 };
     let modulus: u256 = u256 { low: modulus, high: 0 };
-    let mut result: u256 = 1;
+    let mut result: u256 = u256 { low: 1, high: 0 };
 
     let res = loop {
         if power == 0 {
@@ -42,6 +42,6 @@ fn fast_power(mut base: u128, mut power: u128, modulus: u128) -> u128 {
     if high != 0 {
         panic_with_felt252('value cant be larger than u128')
     }
-    
+
     return low;
 }
