@@ -1,0 +1,8 @@
+[package]
+name = "alexandria_strings"
+version = "0.1.0"
+description = "A set of string Cairo 1.0 libraries and algorithms"
+homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/strings"
+
+[dependencies]
+alexandria_data_structures = { path = "../data-structures/" }
