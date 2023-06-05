@@ -22,9 +22,9 @@ struct Vec<T> {
     len: usize,
 }
 
-impl DestructVec<T,
-impl TDrop: Drop<T>,
-impl TFelt252DictValue: Felt252DictValue<T>> of Destruct<Vec<T>> {
+impl DestructVec<
+    T, impl TDrop: Drop<T>, impl TFelt252DictValue: Felt252DictValue<T>
+> of Destruct<Vec<T>> {
     fn destruct(self: Vec<T>) nopanic {
         self.items.squash();
     }
@@ -40,10 +40,9 @@ trait VecTrait<T> {
     fn len(self: @Vec<T>) -> usize;
 }
 
-impl VecImpl<T,
-impl TDrop: Drop<T>,
-impl TCopy: Copy<T>,
-impl TFelt252DictValue: Felt252DictValue<T>> of VecTrait<T> {
+impl VecImpl<
+    T, impl TDrop: Drop<T>, impl TCopy: Copy<T>, impl TFelt252DictValue: Felt252DictValue<T>
+> of VecTrait<T> {
     /// Creates a new Vec instance.
     /// Returns
     /// * Vec The new vec instance.

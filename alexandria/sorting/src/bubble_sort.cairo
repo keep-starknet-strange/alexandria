@@ -6,10 +6,9 @@ use array::ArrayTrait;
 /// * `array` - Array to sort
 /// # Returns
 /// * `Array<usize>` - Sorted array
-fn bubble_sort_elements<T,
-impl TCopy: Copy<T>,
-impl TDrop: Drop<T>,
-impl TPartialOrd: PartialOrd<T>>(
+fn bubble_sort_elements<
+    T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd: PartialOrd<T>
+>(
     mut array: Array<T>
 ) -> Array<T> {
     if array.len() <= 1 {
