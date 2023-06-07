@@ -22,31 +22,31 @@ use alexandria_data_structures::array_slice;
 const ZERO_USIZE: usize = 0;
 
 #[derive(Drop)]
-struct Stack {
-    elements: Array<u256>, 
+struct Stack<T> {
+    elements: Array<T>,
 }
 
-trait StackTrait {
+trait StackTrait<T> {
     /// Creates a new Stack instance.
-    fn new() -> Stack;
+    fn new() -> Stack<T>;
     /// Pushes a new value onto the stack.
-    fn push(ref self: Stack, value: u256);
+    fn push(ref self: Stack<T>, value: T);
     /// Removes the last item from the stack and returns it, or None if the stack is empty.
-    fn pop(ref self: Stack) -> Option<u256>;
+    fn pop(ref self: Stack<T>) -> Option<T>;
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
-    fn peek(self: @Stack) -> Option<u256>;
+    fn peek(self: @Stack<T>) -> Option<T>;
     /// Returns the number of items in the stack.
-    fn len(self: @Stack) -> usize;
+    fn len(self: @Stack<T>) -> usize;
     /// Returns true if the stack is empty.
-    fn is_empty(self: @Stack) -> bool;
+    fn is_empty(self: @Stack<T>) -> bool;
 }
 
-impl StackImpl of StackTrait {
+impl StackImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of StackTrait<T> {
     #[inline(always)]
     /// Creates a new Stack instance.
     /// Returns
     /// * Stack The new stack instance.
-    fn new() -> Stack {
+    fn new() -> Stack<T> {
         let mut elements = ArrayTrait::new();
         Stack { elements }
     }
@@ -54,7 +54,7 @@ impl StackImpl of StackTrait {
     /// Pushes a new value onto the stack.
     /// * `self` - The stack to push the value onto.
     /// * `value` - The value to push onto the stack.
-    fn push(ref self: Stack, value: u256) {
+    fn push(ref self: Stack<T>, value: T) {
         let Stack{mut elements } = self;
         elements.append(value);
         self = Stack { elements }
@@ -66,12 +66,12 @@ impl StackImpl of StackTrait {
     /// Returns
     /// * Stack The stack with the item removed.
     /// * Option<u256> The item removed or None if the stack is empty.
-    fn pop(ref self: Stack) -> Option<u256> {
+    fn pop(ref self: Stack<T>) -> Option<T> {
         if self.is_empty() {
             return Option::None(());
         }
         // Deconstruct the stack struct because we consume it
-        let Stack{elements: mut elements } = self;
+        let Stack{ elements: mut elements } = self;
         let stack_len = elements.len();
         let last_idx = stack_len - 1;
 
@@ -86,7 +86,7 @@ impl StackImpl of StackTrait {
     /// * `self` - The stack to peek the item off of.
     /// Returns
     /// * Option<u256> The last item of the stack
-    fn peek(self: @Stack) -> Option<u256> {
+    fn peek(self: @Stack<T>) -> Option<T> {
         if self.is_empty() {
             return Option::None(());
         }
@@ -97,7 +97,7 @@ impl StackImpl of StackTrait {
     /// * `self` - The stack to get the length of.
     /// Returns
     /// * usize The number of items in the stack.
-    fn len(self: @Stack) -> usize {
+    fn len(self: @Stack<T>) -> usize {
         self.elements.len()
     }
 
@@ -105,7 +105,7 @@ impl StackImpl of StackTrait {
     /// * `self` - The stack to check if it is empty.
     /// Returns
     /// * bool True if the stack is empty, false otherwise.
-    fn is_empty(self: @Stack) -> bool {
+    fn is_empty(self: @Stack<T>) -> bool {
         self.len() == ZERO_USIZE
     }
 }

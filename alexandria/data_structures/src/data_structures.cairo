@@ -6,8 +6,8 @@ use array::ArrayTrait;
 /// * `end` - The index to end the slice at (not included).
 /// # Returns
 /// * `Array<u256>` - The slice of the array.
-fn array_slice(src: @Array<u256>, mut begin: usize, end: usize) -> Array<u256> {
-    let mut slice = ArrayTrait::new();
+fn array_slice<T, impl TDrop: Drop<T>, impl TCopy: Copy<T>>(src: @Array<T>, mut begin: usize, end: usize) -> Array<T> {
+    let mut slice = ArrayTrait::<T>::new();
     let len = begin + end;
     loop {
         if begin >= len {
@@ -22,4 +22,3 @@ fn array_slice(src: @Array<u256>, mut begin: usize, end: usize) -> Array<u256> {
     };
     slice
 }
-
