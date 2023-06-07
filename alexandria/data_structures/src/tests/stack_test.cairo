@@ -8,7 +8,7 @@ use alexandria_data_structures::stack::StackTrait;
 #[test]
 #[available_gas(2000000)]
 fn stack_new_test() {
-    let mut stack = StackTrait::new();
+    let mut stack = StackTrait::<u256>::new();
     let result_len = stack.len();
 
     assert(result_len == 0, 'stack length should be 0');
@@ -17,7 +17,7 @@ fn stack_new_test() {
 #[test]
 #[available_gas(2000000)]
 fn stack_is_empty_test() {
-    let mut stack = StackTrait::new();
+    let mut stack = StackTrait::<u256>::new();
     let result = stack.is_empty();
 
     assert(result == true, 'stack should be empty');
@@ -26,7 +26,7 @@ fn stack_is_empty_test() {
 #[test]
 #[available_gas(2000000)]
 fn stack_push_test() {
-    let mut stack = StackTrait::new();
+    let mut stack = StackTrait::<u256>::new();
     let val_1: u256 = 1.into();
     let val_2: u256 = 2.into();
 
@@ -42,7 +42,7 @@ fn stack_push_test() {
 #[test]
 #[available_gas(2000000)]
 fn stack_peek_test() {
-    let mut stack = StackTrait::new();
+    let mut stack = StackTrait::<u256>::new();
     let val_1: u256 = 1.into();
     let val_2: u256 = 2.into();
 
@@ -64,7 +64,7 @@ fn stack_peek_test() {
 #[test]
 #[available_gas(2000000)]
 fn stack_pop_test() {
-    let mut stack = StackTrait::new();
+    let mut stack = StackTrait::<u256>::new();
     let val_1: u256 = 1.into();
     let val_2: u256 = 2.into();
 
@@ -84,4 +84,3 @@ fn stack_pop_test() {
 // let result_len = stack.len();
 // assert(result_len == 1, 'should remove item');
 }
-
