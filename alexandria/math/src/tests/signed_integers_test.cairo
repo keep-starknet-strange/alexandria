@@ -1,3 +1,4 @@
+use alexandria_math::signed_integers;
 use alexandria_math::signed_integers::{i9, i9_div_rem};
 
 #[test]
