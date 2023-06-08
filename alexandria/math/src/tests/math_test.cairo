@@ -1,15 +1,16 @@
 use alexandria_math::{pow, math::fpow, count_digits_of_base};
 
-// Test for power function
+// Test power function
 #[test]
 #[available_gas(2000000)]
 fn pow_test() {
     assert(pow(2, 0) == 1, 'invalid result');
     assert(pow(2, 1) == 2, 'invalid result');
     assert(pow(2, 12) == 4096, 'invalid result');
+    assert(pow(5, 9) == 1953125, 'invalid result');
 }
 
-// Test power function
+// Test counting of number of digits function
 #[test]
 #[available_gas(2000000)]
 fn count_digits_of_base_test() {
