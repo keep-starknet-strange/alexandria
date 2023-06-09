@@ -1,6 +1,6 @@
 use array::ArrayTrait;
 use debug::PrintTrait;
-use alexandria_encoding::base64::{Base64Encoder, Base64Decoder};
+use alexandria_encoding::base64::{Base64Encoder, Base64Decoder, Base64UrlEncoder, Base64UrlDecoder};
 
 #[test]
 #[available_gas(2000000000)]
@@ -117,4 +117,64 @@ fn base64decode_hello_world_test() {
     assert(*result[8] == 'r', 'invalid result[8]');
     assert(*result[9] == 'l', 'invalid result[9]');
     assert(*result[10] == 'd', 'invalid result[10]');
+}
+
+#[test]
+#[available_gas(2000000000)]
+fn base64encode_with_plus_and_slash() {
+    let mut input = ArrayTrait::<u8>::new();
+    input.append(255);
+    input.append(239);
+
+    let result = Base64Encoder::encode(input);
+    assert(result.len() == 4, 'invalid result length');
+    assert(*result[0] == '/', 'invalid result[0]');
+    assert(*result[1] == '+', 'invalid result[1]');
+    assert(*result[2] == '8', 'invalid result[2]');
+    assert(*result[3] == '=', 'invalid result[3]');
+}
+
+#[test]
+#[available_gas(2000000000)]
+fn base64urlencode_with_plus_and_slash() {
+    let mut input = ArrayTrait::<u8>::new();
+    input.append(255);
+    input.append(239);
+
+    let result = Base64UrlEncoder::encode(input);
+    assert(result.len() == 4, 'invalid result length');
+    assert(*result[0] == '_', 'invalid result[0]');
+    assert(*result[1] == '-', 'invalid result[1]');
+    assert(*result[2] == '8', 'invalid result[2]');
+    assert(*result[3] == '=', 'invalid result[3]');
+}
+
+#[test]
+#[available_gas(2000000000)]
+fn base64decode_with_plus_and_slash() {
+    let mut input = ArrayTrait::<u8>::new();
+    input.append('/');
+    input.append('+');
+    input.append('8');
+    input.append('=');
+
+    let result = Base64UrlDecoder::decode(input);
+    assert(result.len() == 2, 'invalid result length');
+    assert(*result[0] == 255, 'invalid result[0]');
+    assert(*result[1] == 239, 'invalid result[1]');
+}
+
+#[test]
+#[available_gas(2000000000)]
+fn base64urldecode_with_plus_and_slash() {
+    let mut input = ArrayTrait::<u8>::new();
+    input.append('_');
+    input.append('-');
+    input.append('8');
+    input.append('=');
+
+    let result = Base64UrlDecoder::decode(input);
+    assert(result.len() == 2, 'invalid result length');
+    assert(*result[0] == 255, 'invalid result[0]');
+    assert(*result[1] == 239, 'invalid result[1]');
 }

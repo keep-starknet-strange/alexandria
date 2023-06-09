@@ -55,9 +55,6 @@ fn inner_encode(ref data: Array<u8>, ref char_set: Array<u8>) -> Array<u8> {
         0
     };
 
-    let mut char_set = get_base64_char_set();
-    char_set.append('-');
-    char_set.append('_');
     let mut result = ArrayTrait::new();
     encode_loop(p, ref data, 0, ref char_set, ref result);
     result
