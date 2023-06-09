@@ -1,9 +1,7 @@
 use core::option::OptionTrait;
-use array::ArrayTrait;
-use array::SpanTrait;
+use array::{ArrayTrait, SpanTrait};
 
-use alexandria_data_structures::array_ext::ArrayTraitExt;
-use alexandria_data_structures::array_ext::SpanTraitExt;
+use alexandria_data_structures::array_ext::{ArrayTraitExt, SpanTraitExt};
 
 // append_all
 
