@@ -111,11 +111,7 @@ fn felt252_stack_is_empty_test() {
 #[available_gas(2000000)]
 fn felt252_stack_push_test() {
     let mut stack = StackTrait::<Felt252Stack, u128>::new();
-    stack_push_test(
-        ref stack,
-        1.try_into().unwrap(),
-        2.try_into().unwrap()
-    );
+    stack_push_test(ref stack, 1.try_into().unwrap(), 2.try_into().unwrap());
 }
 
 
@@ -123,22 +119,14 @@ fn felt252_stack_push_test() {
 #[available_gas(2000000)]
 fn felt252_stack_peek_test() {
     let mut stack = StackTrait::<Felt252Stack, u128>::new();
-    stack_peek_test(
-        ref stack,
-        1.try_into().unwrap(),
-        2.try_into().unwrap()
-    );
+    stack_peek_test(ref stack, 1.try_into().unwrap(), 2.try_into().unwrap());
 }
 
 #[test]
 #[available_gas(2000000)]
 fn felt252_stack_pop_test() {
     let mut stack = StackTrait::<Felt252Stack, u128>::new();
-    stack_pop_test(
-        ref stack,
-        1.try_into().unwrap(),
-        2.try_into().unwrap()
-    );
+    stack_pop_test(ref stack, 1.try_into().unwrap(), 2.try_into().unwrap());
 }
 
 #[test]
@@ -147,10 +135,8 @@ fn felt252_stack_push_pop_push_test() {
     let mut stack = StackTrait::<Felt252Stack, u128>::new();
 
     stack_push_pop_push_test(
-        ref stack,
-        1.try_into().unwrap(),
-        2.try_into().unwrap(),
-        3.try_into().unwrap());
+        ref stack, 1.try_into().unwrap(), 2.try_into().unwrap(), 3.try_into().unwrap()
+    );
 }
 
 
