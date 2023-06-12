@@ -1,51 +1,43 @@
+use core::traits::TryInto;
 // Core lib imports
 use traits::Into;
 use option::OptionTrait;
 
 // Internal imports
-use alexandria_data_structures::stack::StackTrait;
+use alexandria_data_structures::stack::{StackTrait, Felt252Stack, NullableStack};
 
-#[test]
-#[available_gas(2000000)]
-fn stack_new_test() {
-    let mut stack = StackTrait::<u256>::new();
-    let result_len = stack.len();
 
-    assert(result_len == 0, 'stack length should be 0');
+fn stack_new_test<S, T, impl Stack: StackTrait<S, T>>(stack: @S) {
+    assert(stack.len() == 0, 'stack length should be 0');
 }
 
-#[test]
-#[available_gas(2000000)]
-fn stack_is_empty_test() {
-    let mut stack = StackTrait::<u256>::new();
-    let result = stack.is_empty();
-
-    assert(result == true, 'stack should be empty');
+fn stack_is_empty_test<S, T, impl Stack: StackTrait<S, T>>(stack: @S) {
+    assert(stack.is_empty() == true, 'stack should be empty');
 }
 
-#[test]
-#[available_gas(2000000)]
-fn stack_push_test() {
-    let mut stack = StackTrait::<u256>::new();
-    let val_1: u256 = 1.into();
-    let val_2: u256 = 2.into();
-
+fn stack_push_test<S,
+T,
+impl Stack: StackTrait<S, T>,
+impl TDrop: Drop<T>,
+impl SDestruct: Destruct<S>>(
+    ref stack: S, val_1: T, val_2: T
+) {
     stack.push(val_1);
     stack.push(val_2);
 
-    let result_len = stack.len();
-    let result_is_empty = stack.is_empty();
-
-    assert(result_is_empty == false, 'must not be empty');
-    assert(result_len == 2, 'len should be 2');
+    assert(stack.is_empty() == false, 'must not be empty');
+    assert(stack.len() == 2, 'len should be 2');
 }
-#[test]
-#[available_gas(2000000)]
-fn stack_peek_test() {
-    let mut stack = StackTrait::<u256>::new();
-    let val_1: u256 = 1.into();
-    let val_2: u256 = 2.into();
 
+fn stack_peek_test<S,
+T,
+impl Stack: StackTrait<S, T>,
+impl TDrop: Drop<T>,
+impl TCopy: Copy<T>,
+impl TPartialEq: PartialEq<T>,
+impl SDestruct: Destruct<S>>(
+    ref stack: S, val_1: T, val_2: T
+) {
     stack.push(val_1);
     stack.push(val_2);
     match stack.peek() {
@@ -57,30 +49,149 @@ fn stack_peek_test() {
         },
     };
 
-    let result_len = stack.len();
-    assert(result_len == 2, 'should not remove items');
+    assert(stack.len() == 2, 'should not remove items');
+}
+
+fn stack_pop_test<S,
+T,
+impl Stack: StackTrait<S, T>,
+impl TDrop: Drop<T>,
+impl TCopy: Copy<T>,
+impl TPartialEq: PartialEq<T>,
+impl SDestruct: Destruct<S>>(
+    ref stack: S, val_1: T, val_2: T
+) {
+    stack.push(val_1);
+    stack.push(val_2);
+
+    let value = stack.pop();
+    match value {
+        Option::Some(result) => {
+            assert(result == val_2, 'wrong result');
+        },
+        Option::None(_) => {
+            assert(0 == 1, 'should return a value');
+        },
+    };
+
+    assert(stack.len() == 1, 'should remove item');
+}
+
+fn stack_push_pop_push_test<S,
+T,
+impl Stack: StackTrait<S, T>,
+impl TDrop: Drop<T>,
+impl TCopy: Copy<T>,
+impl TPartialEq: PartialEq<T>,
+impl SDestruct: Destruct<S>>(
+    ref stack: S, val_1: T, val_2: T, val_3: T
+) {
+    stack.push(val_1);
+    stack.push(val_2);
+    stack.pop();
+    stack.push(val_3);
+
+    assert(stack.peek().unwrap() == val_3, 'wrong result');
+    assert(stack.len() == 2, 'should update length');
 }
 
 #[test]
 #[available_gas(2000000)]
-fn stack_pop_test() {
-    let mut stack = StackTrait::<u256>::new();
-    let val_1: u256 = 1.into();
-    let val_2: u256 = 2.into();
+fn felt252_stack_new_test() {
+    stack_new_test(@StackTrait::<Felt252Stack, u128>::new());
+}
 
-    stack.push(val_1);
-    stack.push(val_2);
-// TODO Commented due to dangling issue
-// let value = stack.pop();
-// match value {
-//     Option::Some(result) => {
-//         assert(result == val_2, 'wrong result');
-//     },
-//     Option::None(_) => {
-//         assert(0 == 1, 'should return a value');
-//     },
-// };
+#[test]
+#[available_gas(2000000)]
+fn felt252_stack_is_empty_test() {
+    stack_is_empty_test(@StackTrait::<Felt252Stack, u128>::new());
+}
 
-// let result_len = stack.len();
-// assert(result_len == 1, 'should remove item');
+#[test]
+#[available_gas(2000000)]
+fn felt252_stack_push_test() {
+    let mut stack = StackTrait::<Felt252Stack, u128>::new();
+    stack_push_test(
+        ref stack,
+        1.try_into().unwrap(),
+        2.try_into().unwrap()
+    );
+}
+
+
+#[test]
+#[available_gas(2000000)]
+fn felt252_stack_peek_test() {
+    let mut stack = StackTrait::<Felt252Stack, u128>::new();
+    stack_peek_test(
+        ref stack,
+        1.try_into().unwrap(),
+        2.try_into().unwrap()
+    );
+}
+
+#[test]
+#[available_gas(2000000)]
+fn felt252_stack_pop_test() {
+    let mut stack = StackTrait::<Felt252Stack, u128>::new();
+    stack_pop_test(
+        ref stack,
+        1.try_into().unwrap(),
+        2.try_into().unwrap()
+    );
+}
+
+#[test]
+#[available_gas(2000000)]
+fn felt252_stack_push_pop_push_test() {
+    let mut stack = StackTrait::<Felt252Stack, u128>::new();
+
+    stack_push_pop_push_test(
+        ref stack,
+        1.try_into().unwrap(),
+        2.try_into().unwrap(),
+        3.try_into().unwrap());
+}
+
+
+#[test]
+#[available_gas(2000000)]
+fn nullable_stack_new_test() {
+    stack_new_test(@StackTrait::<NullableStack, u256>::new());
+}
+
+#[test]
+#[available_gas(2000000)]
+fn nullable_stack_is_empty_test() {
+    stack_is_empty_test(@StackTrait::<NullableStack, u256>::new());
+}
+
+#[test]
+#[available_gas(2000000)]
+fn nullable_stack_push_test() {
+    let mut stack = StackTrait::<NullableStack, u256>::new();
+    stack_push_test(ref stack, 1.into(), 2.into());
+}
+
+
+#[test]
+#[available_gas(2000000)]
+fn nullable_stack_peek_test() {
+    let mut stack = StackTrait::<NullableStack, u256>::new();
+    stack_peek_test(ref stack, 1.into(), 2.into());
+}
+
+#[test]
+#[available_gas(2000000)]
+fn nullable_stack_pop_test() {
+    let mut stack = StackTrait::<NullableStack, u256>::new();
+    stack_pop_test(ref stack, 1.into(), 2.into());
+}
+
+#[test]
+#[available_gas(2000000)]
+fn nullable_stack_push_pop_push_test() {
+    let mut stack = StackTrait::<NullableStack, u256>::new();
+
+    stack_push_pop_push_test(ref stack, 1.into(), 2.into(), 3.into());
 }
