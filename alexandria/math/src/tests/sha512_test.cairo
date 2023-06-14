@@ -2,7 +2,7 @@ use alexandria_math::sha512::{WordOperations, sha512};
 use alexandria_math::sha512::{Word64, Word64WordOperations};
 use array::{ArrayTrait};
 
-fn get_lorem_ipsum() -> Array<u8>{
+fn get_lorem_ipsum() -> Array<u8> {
     let mut input: Array<u8> = Default::default();
     input.append(0x4C);
     input.append(0x6F);
@@ -549,5 +549,4 @@ fn test_size_zero() {
     assert(*res[61] == 0x27, 'Incorrect hash len');
     assert(*res[62] == 0xda, 'Incorrect hash len');
     assert(*res[63] == 0x3e, 'Incorrect hash len');
-
 }
