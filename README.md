@@ -55,10 +55,12 @@ Current version: [v1.0.0](https://github.com/starkware-libs/cairo/releases/tag/v
 
 ## Features
 
-This repository is divided in 3 main packages:
+This repository is divided in 5 main packages:
 
  - [Data Structures](./alexandria/data_structures/README.md)
+ - [Encoding](./alexandria/encoding/README.md)
  - [Math](./alexandria/math/README.md)
+ - [Searching](./alexandria/searching/README.md)
  - [Sorting](./alexandria/sorting/README.md)
 
 ## Getting Started
