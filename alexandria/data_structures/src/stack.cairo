@@ -57,7 +57,7 @@ impl TFelt252DictValue: Felt252DictValue<T>,
     /// Returns
     /// * Stack The new stack instance.
     fn new() -> Felt252Stack<T> {
-        let elements = Felt252DictTrait::<T>::new();
+        let elements = Felt252DictTrait::new();
         Felt252Stack { elements, len: 0 }
     }
 

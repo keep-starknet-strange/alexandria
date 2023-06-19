@@ -1,7 +1,7 @@
-use core::traits::TryInto;
 // Core lib imports
-use traits::Into;
+use traits::{Into, TryInto};
 use option::OptionTrait;
+use integer::Felt252IntoU256;
 
 // Internal imports
 use alexandria_data_structures::stack::{StackTrait, Felt252Stack, NullableStack};
@@ -111,7 +111,7 @@ fn felt252_stack_is_empty_test() {
 #[available_gas(2000000)]
 fn felt252_stack_push_test() {
     let mut stack = StackTrait::<Felt252Stack, u128>::new();
-    stack_push_test(ref stack, 1.try_into().unwrap(), 2.try_into().unwrap());
+    stack_push_test(ref stack, 1, 2);
 }
 
 
@@ -119,14 +119,14 @@ fn felt252_stack_push_test() {
 #[available_gas(2000000)]
 fn felt252_stack_peek_test() {
     let mut stack = StackTrait::<Felt252Stack, u128>::new();
-    stack_peek_test(ref stack, 1.try_into().unwrap(), 2.try_into().unwrap());
+    stack_peek_test(ref stack, 1, 2);
 }
 
 #[test]
 #[available_gas(2000000)]
 fn felt252_stack_pop_test() {
     let mut stack = StackTrait::<Felt252Stack, u128>::new();
-    stack_pop_test(ref stack, 1.try_into().unwrap(), 2.try_into().unwrap());
+    stack_pop_test(ref stack, 1, 2);
 }
 
 #[test]
@@ -134,9 +134,7 @@ fn felt252_stack_pop_test() {
 fn felt252_stack_push_pop_push_test() {
     let mut stack = StackTrait::<Felt252Stack, u128>::new();
 
-    stack_push_pop_push_test(
-        ref stack, 1.try_into().unwrap(), 2.try_into().unwrap(), 3.try_into().unwrap()
-    );
+    stack_push_pop_push_test(ref stack, 1, 2, 3);
 }
 
 
@@ -177,7 +175,7 @@ fn nullable_stack_pop_test() {
 #[test]
 #[available_gas(2000000)]
 fn nullable_stack_push_pop_push_test() {
-    let mut stack = StackTrait::<NullableStack, u256>::new();
+    let mut stack = StackTrait::<NullableStack<u256>, u256>::new();
 
     stack_push_pop_push_test(ref stack, 1.into(), 2.into(), 3.into());
 }
