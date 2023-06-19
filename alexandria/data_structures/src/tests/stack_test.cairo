@@ -15,11 +15,9 @@ fn stack_is_empty_test<S, T, impl Stack: StackTrait<S, T>>(stack: @S) {
     assert(stack.is_empty() == true, 'stack should be empty');
 }
 
-fn stack_push_test<S,
-T,
-impl Stack: StackTrait<S, T>,
-impl TDrop: Drop<T>,
-impl SDestruct: Destruct<S>>(
+fn stack_push_test<
+    S, T, impl Stack: StackTrait<S, T>, impl TDrop: Drop<T>, impl SDestruct: Destruct<S>
+>(
     ref stack: S, val_1: T, val_2: T
 ) {
     stack.push(val_1);
@@ -29,13 +27,15 @@ impl SDestruct: Destruct<S>>(
     assert(stack.len() == 2, 'len should be 2');
 }
 
-fn stack_peek_test<S,
-T,
-impl Stack: StackTrait<S, T>,
-impl TDrop: Drop<T>,
-impl TCopy: Copy<T>,
-impl TPartialEq: PartialEq<T>,
-impl SDestruct: Destruct<S>>(
+fn stack_peek_test<
+    S,
+    T,
+    impl Stack: StackTrait<S, T>,
+    impl TDrop: Drop<T>,
+    impl TCopy: Copy<T>,
+    impl TPartialEq: PartialEq<T>,
+    impl SDestruct: Destruct<S>
+>(
     ref stack: S, val_1: T, val_2: T
 ) {
     stack.push(val_1);
@@ -52,13 +52,15 @@ impl SDestruct: Destruct<S>>(
     assert(stack.len() == 2, 'should not remove items');
 }
 
-fn stack_pop_test<S,
-T,
-impl Stack: StackTrait<S, T>,
-impl TDrop: Drop<T>,
-impl TCopy: Copy<T>,
-impl TPartialEq: PartialEq<T>,
-impl SDestruct: Destruct<S>>(
+fn stack_pop_test<
+    S,
+    T,
+    impl Stack: StackTrait<S, T>,
+    impl TDrop: Drop<T>,
+    impl TCopy: Copy<T>,
+    impl TPartialEq: PartialEq<T>,
+    impl SDestruct: Destruct<S>
+>(
     ref stack: S, val_1: T, val_2: T
 ) {
     stack.push(val_1);
@@ -77,13 +79,15 @@ impl SDestruct: Destruct<S>>(
     assert(stack.len() == 1, 'should remove item');
 }
 
-fn stack_push_pop_push_test<S,
-T,
-impl Stack: StackTrait<S, T>,
-impl TDrop: Drop<T>,
-impl TCopy: Copy<T>,
-impl TPartialEq: PartialEq<T>,
-impl SDestruct: Destruct<S>>(
+fn stack_push_pop_push_test<
+    S,
+    T,
+    impl Stack: StackTrait<S, T>,
+    impl TDrop: Drop<T>,
+    impl TCopy: Copy<T>,
+    impl TPartialEq: PartialEq<T>,
+    impl SDestruct: Destruct<S>
+>(
     ref stack: S, val_1: T, val_2: T, val_3: T
 ) {
     stack.push(val_1);

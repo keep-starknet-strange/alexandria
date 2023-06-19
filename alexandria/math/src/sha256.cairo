@@ -181,11 +181,10 @@ fn from_u8Array_to_u32Array(data: Array<u8>, i: usize) -> Array<u32> {
 }
 
 fn add_padding(ref data: Array<u8>) {
-    if (64 * ((data.len() - 1) / 64 + 1))
-        - 8 != data.len() {
-            data.append(0);
-            add_padding(ref data);
-        }
+    if (64 * ((data.len() - 1) / 64 + 1)) - 8 != data.len() {
+        data.append(0);
+        add_padding(ref data);
+    }
 }
 
 fn get_h() -> Array<u32> {

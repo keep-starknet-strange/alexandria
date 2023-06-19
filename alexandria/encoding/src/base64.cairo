@@ -79,37 +79,34 @@ fn decode_loop(p: u8, ref data: Array<u8>, d: usize, ref result: Array<u8>) {
     if (d >= data.len()) {
         return ();
     }
-    let x: u128 = shl(
-        upcast(get_base64_value(*data[d])), 18
-    ) | shl(
-        upcast(get_base64_value(*data[d + 1])), 12
-    ) | shl(upcast(get_base64_value(*data[d + 2])), 6) | upcast(get_base64_value(*data[d + 3]));
+    let x: u128 = shl(upcast(get_base64_value(*data[d])), 18)
+        | shl(upcast(get_base64_value(*data[d + 1])), 12)
+        | shl(upcast(get_base64_value(*data[d + 2])), 6)
+        | upcast(get_base64_value(*data[d + 3]));
 
     let i: u8 = downcast(shr(x, 16) & U8_MAX).unwrap();
     result.append(i);
     let i: u8 = downcast(shr(x, 8) & U8_MAX).unwrap();
-    if d
-        + 4 >= data.len() {
-            if p == 2 {
-                return ();
-            } else {
-                result.append(i);
-            }
+    if d + 4 >= data.len() {
+        if p == 2 {
+            return ();
         } else {
             result.append(i);
         }
+    } else {
+        result.append(i);
+    }
 
     let i: u8 = downcast(x & U8_MAX).unwrap();
-    if d
-        + 4 >= data.len() {
-            if p == 1 {
-                return ();
-            } else {
-                result.append(i);
-            }
+    if d + 4 >= data.len() {
+        if p == 1 {
+            return ();
         } else {
             result.append(i);
         }
+    } else {
+        result.append(i);
+    }
     decode_loop(p, ref data, d + 4, ref result);
 }
 
@@ -151,27 +148,25 @@ fn encode_loop(
     let i: u8 = downcast(shr(x, 12) & U6_MAX).unwrap();
     result.append(*char_set[upcast(i)]);
     let i: u8 = downcast(shr(x, 6) & U6_MAX).unwrap();
-    if upcast(d)
-        + 3 >= data.len() {
-            if p == 2 {
-                result.append('=');
-            } else {
-                result.append(*char_set[upcast(i)]);
-            }
+    if upcast(d) + 3 >= data.len() {
+        if p == 2 {
+            result.append('=');
         } else {
             result.append(*char_set[upcast(i)]);
         }
+    } else {
+        result.append(*char_set[upcast(i)]);
+    }
     let i: u8 = downcast(x & U6_MAX).unwrap();
-    if upcast(d)
-        + 3 >= data.len() {
-            if p >= 1 {
-                result.append('=');
-            } else {
-                result.append(*char_set[upcast(i)]);
-            }
+    if upcast(d) + 3 >= data.len() {
+        if p >= 1 {
+            result.append('=');
         } else {
             result.append(*char_set[upcast(i)]);
         }
+    } else {
+        result.append(*char_set[upcast(i)]);
+    }
     encode_loop(p, ref data, d + 3, ref char_set, ref result);
 }
 

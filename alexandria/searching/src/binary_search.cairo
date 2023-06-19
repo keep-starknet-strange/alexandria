@@ -1,10 +1,8 @@
 use array::SpanTrait;
 
-fn binary_search<T,
-impl TCopy: Copy<T>,
-impl TDrop: Drop<T>,
-impl TEq: PartialEq<T>,
-impl TOr: PartialOrd<T>>(
+fn binary_search<
+    T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TEq: PartialEq<T>, impl TOr: PartialOrd<T>
+>(
     span: Span<T>, val: T
 ) -> Option<u32> {
     // Initial check
