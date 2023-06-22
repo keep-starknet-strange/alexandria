@@ -158,6 +158,6 @@ impl NullableStackImpl<
     }
 
     fn is_empty(self: @NullableStack<T>) -> bool {
-        *self.len == 0_usize
+        *self.len == 0
     }
 }
