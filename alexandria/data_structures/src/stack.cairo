@@ -150,7 +150,7 @@ impl NullableStackImpl<
         if self.is_empty() {
             return Option::None(());
         }
-        Option::Some(self.elements.get((self.len - 1_usize).into()).deref())
+        Option::Some(self.elements.get((self.len - 1).into()).deref())
     }
 
     fn len(self: @NullableStack<T>) -> usize {
