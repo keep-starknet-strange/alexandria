@@ -106,7 +106,7 @@ impl Felt252StackImpl<
     /// Returns
     /// * bool True if the stack is empty, false otherwise.
     fn is_empty(self: @Felt252Stack<T>) -> bool {
-        *self.len == 0_usize
+        *self.len == 0
     }
 }
 
