@@ -64,7 +64,7 @@ impl Felt252StackImpl<
     /// * `value` - The value to push onto the stack.
     fn push(ref self: Felt252Stack<T>, value: T) {
         self.elements.insert(self.len.into(), value);
-        self.len += 1_usize;
+        self.len += 1;
     }
 
     /// Removes the last item from the stack and returns it, or None if the stack is empty.
