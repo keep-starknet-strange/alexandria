@@ -133,7 +133,7 @@ impl NullableStackImpl<
 
     fn push(ref self: NullableStack<T>, value: T) {
         self.elements.insert(self.len.into(), nullable_from_box(BoxTrait::new(value)));
-        self.len += 1_usize;
+        self.len += 1;
     }
 
     fn pop(ref self: NullableStack<T>) -> Option<T> {
