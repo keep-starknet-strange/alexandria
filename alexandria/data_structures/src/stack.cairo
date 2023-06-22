@@ -77,7 +77,7 @@ impl Felt252StackImpl<
             return Option::None(());
         }
 
-        self.len -= 1_usize;
+        self.len -= 1;
 
         Option::Some(self.elements.get(self.len.into()))
     }
