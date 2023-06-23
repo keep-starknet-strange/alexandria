@@ -1,5 +1,7 @@
 // Signed integers : i9, i17, i33, i65, i129
 
+use serde::{Serde, BoolSerde};
+
 // ====================== INT 9 ======================
 
 // i9 represents a 9-bit integer.
@@ -800,6 +802,8 @@ fn i17_min(lhs: i17, rhs: i17) -> i17 {
 
 // ====================== INT 33 ======================
 
+use serde::U32Serde;
+
 // i33 represents a 33-bit integer.
 // The inner field holds the absolute value of the integer.
 // The sign field is true for negative integers, and false for non-negative integers.
@@ -1194,6 +1198,21 @@ fn i33_min(lhs: i33, rhs: i33) -> i33 {
         return lhs;
     } else {
         return rhs;
+    }
+}
+
+impl I33Serde of Serde<i33> {
+    fn serialize(self: @i33, ref output: Array<felt252>) {
+        self.inner.serialize(ref output);
+        self.sign.serialize(ref output)
+    }
+    fn deserialize(ref serialized: Span<felt252>) -> Option<i33> {
+        Option::Some(
+            i33 {
+                inner: U32Serde::deserialize(ref serialized)?,
+                sign: BoolSerde::deserialize(ref serialized)?,
+            },
+        )
     }
 }
 

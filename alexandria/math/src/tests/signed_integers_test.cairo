@@ -1,3 +1,6 @@
+use serde::Serde;
+use option::OptionTrait;
+use array::ArrayTrait;
 use alexandria_math::signed_integers;
 use alexandria_math::signed_integers::{i9, i9_div_rem};
 
@@ -629,7 +632,7 @@ fn i17_test_check_sign_zero() {
 
 // ====================== INT 33 ======================
 
-use alexandria_math::signed_integers::i33;
+use alexandria_math::signed_integers::{i33, I33Serde};
 use alexandria_math::signed_integers::i33_div_rem;
 
 #[test]
@@ -940,6 +943,21 @@ fn i33_test_equality() {
 fn i33_test_check_sign_zero() {
     let x = i33 { inner: 0_u32, sign: true };
     signed_integers::i33_check_sign_zero(x);
+}
+
+#[test]
+#[available_gas(2000000)]
+fn i33_test_serde() {
+    let a = i33 { inner: 42_u32, sign: false };
+    let mut serilized: Array<felt252> = ArrayTrait::new();
+    a.serialize(ref serilized);
+    assert(42 == *serilized.at(0), 'i33 serialization failed');
+    assert(0 == *serilized.at(1), 'i33 serialization failed');
+
+    let mut serialized_span = serilized.span();
+    let a_deserialized = I33Serde::deserialize(ref serialized_span).unwrap();
+    assert(42 == a_deserialized.inner, 'i33 deserialization failed');
+    assert(false == a_deserialized.sign, 'i33 deserialization failed');
 }
 
 // ====================== INT 65 ======================
