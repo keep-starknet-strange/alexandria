@@ -6,8 +6,7 @@ use array::{ArrayTrait, SpanTrait};
 
 // Variable naming is compliant to RFC-6234 (https://datatracker.ietf.org/doc/html/rfc6234)
 
-const U64_BIT_NUM: u128 = 64;
-const U64_BIT_NUM_U64: u64 = 64;
+const U64_BIT_NUM: u64 = 64;
 
 #[derive(Drop, Copy)]
 struct Word64 {
@@ -64,13 +63,13 @@ impl Word64WordOperations of WordOperations<Word64> {
     fn rotr(self: Word64, n: u64) -> Word64 {
         Word64 {
             data: (math_shr_u64(self.data.into(), n.into())
-                | (math_shl_u64(self.data.into(), (U64_BIT_NUM_U64 - n.into()))))
+                | (math_shl_u64(self.data.into(), (U64_BIT_NUM - n.into()))))
         }
     }
     fn rotl(self: Word64, n: u64) -> Word64 {
         Word64 {
             data: (math_shl_u64(self.data.into(), n.into())
-                | (math_shr_u64(self.data.into(), (U64_BIT_NUM_U64 - n.into()))))
+                | (math_shr_u64(self.data.into(), (U64_BIT_NUM - n.into()))))
         }
     }
 }
