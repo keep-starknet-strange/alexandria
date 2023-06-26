@@ -1,0 +1,8 @@
+[package]
+name = "alexandria_numerical"
+version = "0.1.0"
+description = "A set of numerical analysis Cairo 1.0 libraries and algorithms"
+homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/alexandria/numerical"
+
+
+
