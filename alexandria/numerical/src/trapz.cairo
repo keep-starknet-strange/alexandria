@@ -6,7 +6,7 @@ use array::ArrayTrait;
 // * `xs` - The sorted abscissa sequence of len L.
 // * `ys` - The ordinate sequence of len L.
 // # Returns
-// * `u128` - The approximate integral.
+// * `usize` - The approximate integral.
 fn trapz(mut xs: Array<usize>, mut ys: Array<usize>) -> usize {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');

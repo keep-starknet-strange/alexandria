@@ -6,7 +6,7 @@ use array::ArrayTrait;
 // * `xs` - The first sequence of len L.
 // * `ys` - The second sequence of len L.
 // # Returns
-// * `u128` - The dot product.
+// * `usize` - The dot product.
 fn dot(mut xs: Array<usize>, mut ys: Array<usize>) -> usize {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');
