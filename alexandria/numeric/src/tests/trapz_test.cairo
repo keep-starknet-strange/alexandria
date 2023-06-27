@@ -1,7 +1,7 @@
 // Core library imports.
 use array::ArrayTrait;
 
-use alexandria_numerical::trapz::trapz;
+use alexandria_numeric::trapz::trapz;
 
 #[test]
 #[available_gas(2000000)]
