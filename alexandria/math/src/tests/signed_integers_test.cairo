@@ -182,36 +182,36 @@ fn i9_test_div_rem() {
     let a = i9 { inner: 13_u8, sign: false };
     let b = i9 { inner: 5_u8, sign: false };
     let (q, r) = i9_div_rem(a, b);
-    assert(q.inner == 2_u8 & r.inner == 3_u8, '13 // 5 = 2 r 3');
-    assert(q.sign == false & r.sign == false, '13 // 5 -> positive');
+    assert(q.inner == 2_u8 && r.inner == 3_u8, '13 // 5 = 2 r 3');
+    assert(q.sign == false && r.sign == false, '13 // 5 -> positive');
 
     // Test division and remainder of negative integers
     let a = i9 { inner: 13_u8, sign: true };
     let b = i9 { inner: 5_u8, sign: true };
     let (q, r) = i9_div_rem(a, b);
-    assert(q.inner == 2_u8 & r.inner == 3_u8, '-13 // -5 = 2 r -3');
-    assert(q.sign == false & r.sign == true, '-13 // -5 -> positive');
+    assert(q.inner == 2_u8 && r.inner == 3_u8, '-13 // -5 = 2 r -3');
+    assert(q.sign == false && r.sign == true, '-13 // -5 -> positive');
 
     // Test division and remainder of positive and negative integers
     let a = i9 { inner: 13_u8, sign: false };
     let b = i9 { inner: 5_u8, sign: true };
     let (q, r) = i9_div_rem(a, b);
-    assert(q.inner == 3_u8 & r.inner == 2_u8, '13 // -5 = -3 r -2');
-    assert(q.sign == true & r.sign == true, '13 // -5 -> negative');
+    assert(q.inner == 3_u8 && r.inner == 2_u8, '13 // -5 = -3 r -2');
+    assert(q.sign == true && r.sign == true, '13 // -5 -> negative');
 
     // Test division with a = zero
     let a = i9 { inner: 0_u8, sign: false };
     let b = i9 { inner: 10_u8, sign: false };
     let (q, r) = i9_div_rem(a, b);
-    assert(q.inner == 0_u8 & r.inner == 0_u8, '0 // 10 = 0 r 0');
-    assert(q.sign == false & r.sign == false, '0 // 10 -> positive');
+    assert(q.inner == 0_u8 && r.inner == 0_u8, '0 // 10 = 0 r 0');
+    assert(q.sign == false && r.sign == false, '0 // 10 -> positive');
 
     // Test division and remainder with a negative dividend and positive divisor
     let a = i9 { inner: 13_u8, sign: true };
     let b = i9 { inner: 5_u8, sign: false };
     let (q, r) = i9_div_rem(a, b);
-    assert(q.inner == 3_u8 & r.inner == 2_u8, '-13 // 5 = -3 r 2');
-    assert(q.sign == true & r.sign == false, '-13 // 5 -> negative');
+    assert(q.inner == 3_u8 && r.inner == 2_u8, '-13 // 5 = -3 r 2');
+    assert(q.sign == true && r.sign == false, '-13 // 5 -> negative');
 }
 
 #[test]
@@ -497,36 +497,36 @@ fn i17_test_div_rem() {
     let a = i17 { inner: 13_u16, sign: false };
     let b = i17 { inner: 5_u16, sign: false };
     let (q, r) = i17_div_rem(a, b);
-    assert(q.inner == 2_u16 & r.inner == 3_u16, '13 // 5 = 2 r 3');
-    assert(q.sign == false & r.sign == false, '13 // 5 -> positive');
+    assert(q.inner == 2_u16 && r.inner == 3_u16, '13 // 5 = 2 r 3');
+    assert(q.sign == false && r.sign == false, '13 // 5 -> positive');
 
     // Test division and remainder of negative integers
     let a = i17 { inner: 13_u16, sign: true };
     let b = i17 { inner: 5_u16, sign: true };
     let (q, r) = i17_div_rem(a, b);
-    assert(q.inner == 2_u16 & r.inner == 3_u16, '-13 // -5 = 2 r -3');
-    assert(q.sign == false & r.sign == true, '-13 // -5 -> positive');
+    assert(q.inner == 2_u16 && r.inner == 3_u16, '-13 // -5 = 2 r -3');
+    assert(q.sign == false && r.sign == true, '-13 // -5 -> positive');
 
     // Test division and remainder of positive and negative integers
     let a = i17 { inner: 13_u16, sign: false };
     let b = i17 { inner: 5_u16, sign: true };
     let (q, r) = i17_div_rem(a, b);
-    assert(q.inner == 3_u16 & r.inner == 2_u16, '13 // -5 = -3 r -2');
-    assert(q.sign == true & r.sign == true, '13 // -5 -> negative');
+    assert(q.inner == 3_u16 && r.inner == 2_u16, '13 // -5 = -3 r -2');
+    assert(q.sign == true && r.sign == true, '13 // -5 -> negative');
 
     // Test division with a = zero
     let a = i17 { inner: 0_u16, sign: false };
     let b = i17 { inner: 10_u16, sign: false };
     let (q, r) = i17_div_rem(a, b);
-    assert(q.inner == 0_u16 & r.inner == 0_u16, '0 // 10 = 0 r 0');
-    assert(q.sign == false & r.sign == false, '0 // 10 -> positive');
+    assert(q.inner == 0_u16 && r.inner == 0_u16, '0 // 10 = 0 r 0');
+    assert(q.sign == false && r.sign == false, '0 // 10 -> positive');
 
     // Test division and remainder with a negative dividend and positive divisor
     let a = i17 { inner: 13_u16, sign: true };
     let b = i17 { inner: 5_u16, sign: false };
     let (q, r) = i17_div_rem(a, b);
-    assert(q.inner == 3_u16 & r.inner == 2_u16, '-13 // 5 = -3 r 2');
-    assert(q.sign == true & r.sign == false, '-13 // 5 -> negative');
+    assert(q.inner == 3_u16 && r.inner == 2_u16, '-13 // 5 = -3 r 2');
+    assert(q.sign == true && r.sign == false, '-13 // 5 -> negative');
 }
 
 #[test]
@@ -812,36 +812,36 @@ fn i33_test_div_rem() {
     let a = i33 { inner: 13_u32, sign: false };
     let b = i33 { inner: 5_u32, sign: false };
     let (q, r) = i33_div_rem(a, b);
-    assert(q.inner == 2_u32 & r.inner == 3_u32, '13 // 5 = 2 r 3');
-    assert(q.sign == false & r.sign == false, '13 // 5 -> positive');
+    assert(q.inner == 2_u32 && r.inner == 3_u32, '13 // 5 = 2 r 3');
+    assert(q.sign == false && r.sign == false, '13 // 5 -> positive');
 
     // Test division and remainder of negative integers
     let a = i33 { inner: 13_u32, sign: true };
     let b = i33 { inner: 5_u32, sign: true };
     let (q, r) = i33_div_rem(a, b);
-    assert(q.inner == 2_u32 & r.inner == 3_u32, '-13 // -5 = 2 r -3');
-    assert(q.sign == false & r.sign == true, '-13 // -5 -> positive');
+    assert(q.inner == 2_u32 && r.inner == 3_u32, '-13 // -5 = 2 r -3');
+    assert(q.sign == false && r.sign == true, '-13 // -5 -> positive');
 
     // Test division and remainder of positive and negative integers
     let a = i33 { inner: 13_u32, sign: false };
     let b = i33 { inner: 5_u32, sign: true };
     let (q, r) = i33_div_rem(a, b);
-    assert(q.inner == 3_u32 & r.inner == 2_u32, '13 // -5 = -3 r -2');
-    assert(q.sign == true & r.sign == true, '13 // -5 -> negative');
+    assert(q.inner == 3_u32 && r.inner == 2_u32, '13 // -5 = -3 r -2');
+    assert(q.sign == true && r.sign == true, '13 // -5 -> negative');
 
     // Test division with a = zero
     let a = i33 { inner: 0_u32, sign: false };
     let b = i33 { inner: 10_u32, sign: false };
     let (q, r) = i33_div_rem(a, b);
-    assert(q.inner == 0_u32 & r.inner == 0_u32, '0 // 10 = 0 r 0');
-    assert(q.sign == false & r.sign == false, '0 // 10 -> positive');
+    assert(q.inner == 0_u32 && r.inner == 0_u32, '0 // 10 = 0 r 0');
+    assert(q.sign == false && r.sign == false, '0 // 10 -> positive');
 
     // Test division and remainder with a negative dividend and positive divisor
     let a = i33 { inner: 13_u32, sign: true };
     let b = i33 { inner: 5_u32, sign: false };
     let (q, r) = i33_div_rem(a, b);
-    assert(q.inner == 3_u32 & r.inner == 2_u32, '-13 // 5 = -3 r 2');
-    assert(q.sign == true & r.sign == false, '-13 // 5 -> negative');
+    assert(q.inner == 3_u32 && r.inner == 2_u32, '-13 // 5 = -3 r 2');
+    assert(q.sign == true && r.sign == false, '-13 // 5 -> negative');
 }
 
 #[test]
@@ -1128,36 +1128,36 @@ fn i65_test_div_rem() {
     let a = i65 { inner: 13_u64, sign: false };
     let b = i65 { inner: 5_u64, sign: false };
     let (q, r) = i65_div_rem(a, b);
-    assert(q.inner == 2_u64 & r.inner == 3_u64, '13 // 5 = 2 r 3');
-    assert(q.sign == false & r.sign == false, '13 // 5 -> positive');
+    assert(q.inner == 2_u64 && r.inner == 3_u64, '13 // 5 = 2 r 3');
+    assert(q.sign == false && r.sign == false, '13 // 5 -> positive');
 
     // Test division and remainder of negative integers
     let a = i65 { inner: 13_u64, sign: true };
     let b = i65 { inner: 5_u64, sign: true };
     let (q, r) = i65_div_rem(a, b);
-    assert(q.inner == 2_u64 & r.inner == 3_u64, '-13 // -5 = 2 r -3');
-    assert(q.sign == false & r.sign == true, '-13 // -5 -> positive');
+    assert(q.inner == 2_u64 && r.inner == 3_u64, '-13 // -5 = 2 r -3');
+    assert(q.sign == false && r.sign == true, '-13 // -5 -> positive');
 
     // Test division and remainder of positive and negative integers
     let a = i65 { inner: 13_u64, sign: false };
     let b = i65 { inner: 5_u64, sign: true };
     let (q, r) = i65_div_rem(a, b);
-    assert(q.inner == 3_u64 & r.inner == 2_u64, '13 // -5 = -3 r -2');
-    assert(q.sign == true & r.sign == true, '13 // -5 -> negative');
+    assert(q.inner == 3_u64 && r.inner == 2_u64, '13 // -5 = -3 r -2');
+    assert(q.sign == true && r.sign == true, '13 // -5 -> negative');
 
     // Test division with a = zero
     let a = i65 { inner: 0_u64, sign: false };
     let b = i65 { inner: 10_u64, sign: false };
     let (q, r) = i65_div_rem(a, b);
-    assert(q.inner == 0_u64 & r.inner == 0_u64, '0 // 10 = 0 r 0');
-    assert(q.sign == false & r.sign == false, '0 // 10 -> positive');
+    assert(q.inner == 0_u64 && r.inner == 0_u64, '0 // 10 = 0 r 0');
+    assert(q.sign == false && r.sign == false, '0 // 10 -> positive');
 
     // Test division and remainder with a negative dividend and positive divisor
     let a = i65 { inner: 13_u64, sign: true };
     let b = i65 { inner: 5_u64, sign: false };
     let (q, r) = i65_div_rem(a, b);
-    assert(q.inner == 3_u64 & r.inner == 2_u64, '-13 // 5 = -3 r 2');
-    assert(q.sign == true & r.sign == false, '-13 // 5 -> negative');
+    assert(q.inner == 3_u64 && r.inner == 2_u64, '-13 // 5 = -3 r 2');
+    assert(q.sign == true && r.sign == false, '-13 // 5 -> negative');
 }
 
 #[test]
@@ -1444,36 +1444,36 @@ fn i129_test_div_rem() {
     let a = i129 { inner: 13_u128, sign: false };
     let b = i129 { inner: 5_u128, sign: false };
     let (q, r) = i129_div_rem(a, b);
-    assert(q.inner == 2_u128 & r.inner == 3_u128, '13 // 5 = 2 r 3');
-    assert(q.sign == false & r.sign == false, '13 // 5 -> positive');
+    assert(q.inner == 2_u128 && r.inner == 3_u128, '13 // 5 = 2 r 3');
+    assert(q.sign == false && r.sign == false, '13 // 5 -> positive');
 
     // Test division and remainder of negative integers
     let a = i129 { inner: 13_u128, sign: true };
     let b = i129 { inner: 5_u128, sign: true };
     let (q, r) = i129_div_rem(a, b);
-    assert(q.inner == 2_u128 & r.inner == 3_u128, '-13 // -5 = 2 r -3');
-    assert(q.sign == false & r.sign == true, '-13 // -5 -> positive');
+    assert(q.inner == 2_u128 && r.inner == 3_u128, '-13 // -5 = 2 r -3');
+    assert(q.sign == false && r.sign == true, '-13 // -5 -> positive');
 
     // Test division and remainder of positive and negative integers
     let a = i129 { inner: 13_u128, sign: false };
     let b = i129 { inner: 5_u128, sign: true };
     let (q, r) = i129_div_rem(a, b);
-    assert(q.inner == 3_u128 & r.inner == 2_u128, '13 // -5 = -3 r -2');
-    assert(q.sign == true & r.sign == true, '13 // -5 -> negative');
+    assert(q.inner == 3_u128 && r.inner == 2_u128, '13 // -5 = -3 r -2');
+    assert(q.sign == true && r.sign == true, '13 // -5 -> negative');
 
     // Test division with a = zero
     let a = i129 { inner: 0_u128, sign: false };
     let b = i129 { inner: 10_u128, sign: false };
     let (q, r) = i129_div_rem(a, b);
-    assert(q.inner == 0_u128 & r.inner == 0_u128, '0 // 10 = 0 r 0');
-    assert(q.sign == false & r.sign == false, '0 // 10 -> positive');
+    assert(q.inner == 0_u128 && r.inner == 0_u128, '0 // 10 = 0 r 0');
+    assert(q.sign == false && r.sign == false, '0 // 10 -> positive');
 
     // Test division and remainder with a negative dividend and positive divisor
     let a = i129 { inner: 13_u128, sign: true };
     let b = i129 { inner: 5_u128, sign: false };
     let (q, r) = i129_div_rem(a, b);
-    assert(q.inner == 3_u128 & r.inner == 2_u128, '-13 // 5 = -3 r 2');
-    assert(q.sign == true & r.sign == false, '-13 // 5 -> negative');
+    assert(q.inner == 3_u128 && r.inner == 2_u128, '-13 // 5 = -3 r 2');
+    assert(q.sign == true && r.sign == false, '-13 // 5 -> negative');
 }
 
 #[test]

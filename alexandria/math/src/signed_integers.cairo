@@ -235,9 +235,9 @@ fn i9_div_rem(lhs: i9, rhs: i9) -> (i9, i9) {
 // * `rhs` - The second i9 integer to compare.
 // # Returns
 // * `bool` - `true` if the two integers are equal, `false` otherwise.
-fn i9_eq(lhs: i9, rhs: i9) -> bool {
+fn i9_eq(lhs: @i9, rhs: @i9) -> bool {
     // Check if the two integers have the same sign and the same absolute value.
-    if lhs.sign == rhs.sign & lhs.inner == rhs.inner {
+    if *lhs.sign == *rhs.sign && *lhs.inner == *rhs.inner {
         return true;
     }
 
@@ -250,18 +250,18 @@ fn i9_eq(lhs: i9, rhs: i9) -> bool {
 // * `rhs` - The second i9 integer to compare.
 // # Returns
 // * `bool` - `true` if the two integers are not equal, `false` otherwise.
-fn i9_ne(lhs: i9, rhs: i9) -> bool {
+fn i9_ne(lhs: @i9, rhs: @i9) -> bool {
     // The result is the inverse of the equal function.
     return !i9_eq(lhs, rhs);
 }
 
 // Implements the PartialEq trait for i9.
 impl i9PartialEq of PartialEq<i9> {
-    fn eq(lhs: i9, rhs: i9) -> bool {
+    fn eq(lhs: @i9, rhs: @i9) -> bool {
         i9_eq(lhs, rhs)
     }
 
-    fn ne(lhs: i9, rhs: i9) -> bool {
+    fn ne(lhs: @i9, rhs: @i9) -> bool {
         i9_ne(lhs, rhs)
     }
 }
@@ -307,7 +307,7 @@ fn i9_lt(lhs: i9, rhs: i9) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
 fn i9_le(lhs: i9, rhs: i9) -> bool {
-    if (lhs == rhs | i9_lt(lhs, rhs) == true) {
+    if (lhs == rhs || i9_lt(lhs, rhs) == true) {
         return true;
     } else {
         return false;
@@ -321,7 +321,7 @@ fn i9_le(lhs: i9, rhs: i9) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i9_ge(lhs: i9, rhs: i9) -> bool {
-    if (lhs == rhs | i9_gt(lhs, rhs) == true) {
+    if ((lhs == rhs) | i9_gt(lhs, rhs) == true) {
         return true;
     } else {
         return false;
@@ -634,9 +634,9 @@ fn i17_div_rem(lhs: i17, rhs: i17) -> (i17, i17) {
 // * `rhs` - The second i17 integer to compare.
 // # Returns
 // * `bool` - `true` if the two integers are equal, `false` otherwise.
-fn i17_eq(lhs: i17, rhs: i17) -> bool {
+fn i17_eq(lhs: @i17, rhs: @i17) -> bool {
     // Check if the two integers have the same sign and the same absolute value.
-    if lhs.sign == rhs.sign & lhs.inner == rhs.inner {
+    if *lhs.sign == *rhs.sign && *lhs.inner == *rhs.inner {
         return true;
     }
 
@@ -649,18 +649,18 @@ fn i17_eq(lhs: i17, rhs: i17) -> bool {
 // * `rhs` - The second i17 integer to compare.
 // # Returns
 // * `bool` - `true` if the two integers are not equal, `false` otherwise.
-fn i17_ne(lhs: i17, rhs: i17) -> bool {
+fn i17_ne(lhs: @i17, rhs: @i17) -> bool {
     // The result is the inverse of the equal function.
     return !i17_eq(lhs, rhs);
 }
 
 // Implements the PartialEq trait for i17.
 impl i17PartialEq of PartialEq<i17> {
-    fn eq(lhs: i17, rhs: i17) -> bool {
+    fn eq(lhs: @i17, rhs: @i17) -> bool {
         i17_eq(lhs, rhs)
     }
 
-    fn ne(lhs: i17, rhs: i17) -> bool {
+    fn ne(lhs: @i17, rhs: @i17) -> bool {
         i17_ne(lhs, rhs)
     }
 }
@@ -706,7 +706,7 @@ fn i17_lt(lhs: i17, rhs: i17) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
 fn i17_le(lhs: i17, rhs: i17) -> bool {
-    if (lhs == rhs | i17_lt(lhs, rhs) == true) {
+    if (lhs == rhs || i17_lt(lhs, rhs) == true) {
         return true;
     } else {
         return false;
@@ -720,7 +720,7 @@ fn i17_le(lhs: i17, rhs: i17) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i17_ge(lhs: i17, rhs: i17) -> bool {
-    if (lhs == rhs | i17_gt(lhs, rhs) == true) {
+    if ((lhs == rhs) | i17_gt(lhs, rhs) == true) {
         return true;
     } else {
         return false;
@@ -1033,9 +1033,9 @@ fn i33_div_rem(lhs: i33, rhs: i33) -> (i33, i33) {
 // * `rhs` - The second i33 integer to compare.
 // # Returns
 // * `bool` - `true` if the two integers are equal, `false` otherwise.
-fn i33_eq(lhs: i33, rhs: i33) -> bool {
+fn i33_eq(lhs: @i33, rhs: @i33) -> bool {
     // Check if the two integers have the same sign and the same absolute value.
-    if lhs.sign == rhs.sign & lhs.inner == rhs.inner {
+    if *lhs.sign == *rhs.sign && *lhs.inner == *rhs.inner {
         return true;
     }
 
@@ -1048,18 +1048,18 @@ fn i33_eq(lhs: i33, rhs: i33) -> bool {
 // * `rhs` - The second i33 integer to compare.
 // # Returns
 // * `bool` - `true` if the two integers are not equal, `false` otherwise.
-fn i33_ne(lhs: i33, rhs: i33) -> bool {
+fn i33_ne(lhs: @i33, rhs: @i33) -> bool {
     // The result is the inverse of the equal function.
     return !i33_eq(lhs, rhs);
 }
 
 // Implements the PartialEq trait for i33.
 impl i33PartialEq of PartialEq<i33> {
-    fn eq(lhs: i33, rhs: i33) -> bool {
+    fn eq(lhs: @i33, rhs: @i33) -> bool {
         i33_eq(lhs, rhs)
     }
 
-    fn ne(lhs: i33, rhs: i33) -> bool {
+    fn ne(lhs: @i33, rhs: @i33) -> bool {
         i33_ne(lhs, rhs)
     }
 }
@@ -1105,7 +1105,7 @@ fn i33_lt(lhs: i33, rhs: i33) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
 fn i33_le(lhs: i33, rhs: i33) -> bool {
-    if (lhs == rhs | i33_lt(lhs, rhs) == true) {
+    if (lhs == rhs || i33_lt(lhs, rhs) == true) {
         return true;
     } else {
         return false;
@@ -1119,7 +1119,7 @@ fn i33_le(lhs: i33, rhs: i33) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i33_ge(lhs: i33, rhs: i33) -> bool {
-    if (lhs == rhs | i33_gt(lhs, rhs) == true) {
+    if ((lhs == rhs) | i33_gt(lhs, rhs) == true) {
         return true;
     } else {
         return false;
@@ -1432,9 +1432,9 @@ fn i65_div_rem(lhs: i65, rhs: i65) -> (i65, i65) {
 // * `rhs` - The second i65 integer to compare.
 // # Returns
 // * `bool` - `true` if the two integers are equal, `false` otherwise.
-fn i65_eq(lhs: i65, rhs: i65) -> bool {
+fn i65_eq(lhs: @i65, rhs: @i65) -> bool {
     // Check if the two integers have the same sign and the same absolute value.
-    if lhs.sign == rhs.sign & lhs.inner == rhs.inner {
+    if *lhs.sign == *rhs.sign && *lhs.inner == *rhs.inner {
         return true;
     }
 
@@ -1447,18 +1447,18 @@ fn i65_eq(lhs: i65, rhs: i65) -> bool {
 // * `rhs` - The second i65 integer to compare.
 // # Returns
 // * `bool` - `true` if the two integers are not equal, `false` otherwise.
-fn i65_ne(lhs: i65, rhs: i65) -> bool {
+fn i65_ne(lhs: @i65, rhs: @i65) -> bool {
     // The result is the inverse of the equal function.
     return !i65_eq(lhs, rhs);
 }
 
 // Implements the PartialEq trait for i65.
 impl i65PartialEq of PartialEq<i65> {
-    fn eq(lhs: i65, rhs: i65) -> bool {
+    fn eq(lhs: @i65, rhs: @i65) -> bool {
         i65_eq(lhs, rhs)
     }
 
-    fn ne(lhs: i65, rhs: i65) -> bool {
+    fn ne(lhs: @i65, rhs: @i65) -> bool {
         i65_ne(lhs, rhs)
     }
 }
@@ -1504,7 +1504,7 @@ fn i65_lt(lhs: i65, rhs: i65) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
 fn i65_le(lhs: i65, rhs: i65) -> bool {
-    if (lhs == rhs | i65_lt(lhs, rhs) == true) {
+    if (lhs == rhs || i65_lt(lhs, rhs) == true) {
         return true;
     } else {
         return false;
@@ -1518,7 +1518,7 @@ fn i65_le(lhs: i65, rhs: i65) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i65_ge(lhs: i65, rhs: i65) -> bool {
-    if (lhs == rhs | i65_gt(lhs, rhs) == true) {
+    if (lhs == rhs || i65_gt(lhs, rhs) == true) {
         return true;
     } else {
         return false;
@@ -1831,9 +1831,9 @@ fn i129_div_rem(lhs: i129, rhs: i129) -> (i129, i129) {
 // * `rhs` - The second i129 integer to compare.
 // # Returns
 // * `bool` - `true` if the two integers are equal, `false` otherwise.
-fn i129_eq(lhs: i129, rhs: i129) -> bool {
+fn i129_eq(lhs: @i129, rhs: @i129) -> bool {
     // Check if the two integers have the same sign and the same absolute value.
-    if lhs.sign == rhs.sign & lhs.inner == rhs.inner {
+    if *lhs.sign == *rhs.sign && *lhs.inner == *rhs.inner {
         return true;
     }
 
@@ -1846,18 +1846,18 @@ fn i129_eq(lhs: i129, rhs: i129) -> bool {
 // * `rhs` - The second i129 integer to compare.
 // # Returns
 // * `bool` - `true` if the two integers are not equal, `false` otherwise.
-fn i129_ne(lhs: i129, rhs: i129) -> bool {
+fn i129_ne(lhs: @i129, rhs: @i129) -> bool {
     // The result is the inverse of the equal function.
     return !i129_eq(lhs, rhs);
 }
 
 // Implements the PartialEq trait for i129.
 impl i129PartialEq of PartialEq<i129> {
-    fn eq(lhs: i129, rhs: i129) -> bool {
+    fn eq(lhs: @i129, rhs: @i129) -> bool {
         i129_eq(lhs, rhs)
     }
 
-    fn ne(lhs: i129, rhs: i129) -> bool {
+    fn ne(lhs: @i129, rhs: @i129) -> bool {
         i129_ne(lhs, rhs)
     }
 }
@@ -1903,7 +1903,7 @@ fn i129_lt(lhs: i129, rhs: i129) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
 fn i129_le(lhs: i129, rhs: i129) -> bool {
-    if (lhs == rhs | i129_lt(lhs, rhs) == true) {
+    if (lhs == rhs || i129_lt(lhs, rhs) == true) {
         return true;
     } else {
         return false;
@@ -1917,7 +1917,7 @@ fn i129_le(lhs: i129, rhs: i129) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i129_ge(lhs: i129, rhs: i129) -> bool {
-    if (lhs == rhs | i129_gt(lhs, rhs) == true) {
+    if (lhs == rhs || i129_gt(lhs, rhs) == true) {
         return true;
     } else {
         return false;
