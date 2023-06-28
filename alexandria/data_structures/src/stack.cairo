@@ -55,7 +55,7 @@ impl Felt252StackImpl<
     /// Returns
     /// * Stack The new stack instance.
     fn new() -> Felt252Stack<T> {
-        let elements = Felt252DictTrait::new();
+        let elements: Felt252Dict<T> = Default::default();
         Felt252Stack { elements, len: 0 }
     }
 
@@ -127,7 +127,7 @@ impl NullableStackImpl<
 > of StackTrait<NullableStack<T>, T> {
     #[inline(always)]
     fn new() -> NullableStack<T> {
-        let elements = Felt252DictTrait::<Nullable<T>>::new();
+        let elements: Felt252Dict<Nullable<T>>  = Default::default();
         NullableStack { elements, len: 0 }
     }
 
