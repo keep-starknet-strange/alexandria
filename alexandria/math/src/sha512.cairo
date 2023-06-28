@@ -61,16 +61,18 @@ impl Word64WordOperations of WordOperations<Word64> {
         Word64 { data: math_shl_u64(self.data.into(), n.into()) }
     }
     fn rotr(self: Word64, n: u64) -> Word64 {
-        Word64 {
-            data: (math_shr_u64(self.data.into(), n.into())
-                | (math_shl_u64(self.data.into(), (U64_BIT_NUM - n.into()))))
-        }
+        let (_, _, or) = bitwise(
+            math_shr_u64(self.data.into(), n.into()).into(),
+            math_shl_u64(self.data.into(), (U64_BIT_NUM - n.into())).into()
+        );
+        Word64 { data: or.try_into().unwrap() }
     }
     fn rotl(self: Word64, n: u64) -> Word64 {
-        Word64 {
-            data: (math_shl_u64(self.data.into(), n.into())
-                | (math_shr_u64(self.data.into(), (U64_BIT_NUM - n.into()))))
-        }
+        let (_, _, or) = bitwise(
+            math_shl_u64(self.data.into(), n.into()).into(),
+            math_shr_u64(self.data.into(), (U64_BIT_NUM - n.into())).into()
+        );
+        Word64 { data: or.try_into().unwrap() }
     }
 }
 
