@@ -14,98 +14,150 @@
 //! ```
 
 // Core lib imports
-use array::ArrayTrait;
+use dict::Felt252DictTrait;
 use option::OptionTrait;
+use traits::Into;
+use nullable::NullableTrait;
 
-use alexandria_data_structures::array_slice;
-
-const ZERO_USIZE: usize = 0;
-
-#[derive(Drop)]
-struct Stack {
-    elements: Array<u256>, 
-}
-
-trait StackTrait {
+trait StackTrait<S, T> {
     /// Creates a new Stack instance.
-    fn new() -> Stack;
+    fn new() -> S;
     /// Pushes a new value onto the stack.
-    fn push(ref self: Stack, value: u256);
+    fn push(ref self: S, value: T);
     /// Removes the last item from the stack and returns it, or None if the stack is empty.
-    fn pop(ref self: Stack) -> Option<u256>;
+    fn pop(ref self: S) -> Option<T>;
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
-    fn peek(self: @Stack) -> Option<u256>;
+    fn peek(ref self: S) -> Option<T>;
     /// Returns the number of items in the stack.
-    fn len(self: @Stack) -> usize;
+    fn len(self: @S) -> usize;
     /// Returns true if the stack is empty.
-    fn is_empty(self: @Stack) -> bool;
+    fn is_empty(self: @S) -> bool;
 }
 
-impl StackImpl of StackTrait {
+struct Felt252Stack<T> {
+    elements: Felt252Dict<T>,
+    len: usize,
+}
+
+impl DestructFeltStack<
+    T, impl TDrop: Drop<T>, impl TFelt252DictValue: Felt252DictValue<T>
+> of Destruct<Felt252Stack<T>> {
+    fn destruct(self: Felt252Stack<T>) nopanic {
+        self.elements.squash();
+    }
+}
+
+impl Felt252StackImpl<
+    T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TFelt252DictValue: Felt252DictValue<T>, 
+> of StackTrait<Felt252Stack<T>, T> {
     #[inline(always)]
     /// Creates a new Stack instance.
     /// Returns
     /// * Stack The new stack instance.
-    fn new() -> Stack {
-        let mut elements = ArrayTrait::new();
-        Stack { elements }
+    fn new() -> Felt252Stack<T> {
+        let elements = Felt252DictTrait::new();
+        Felt252Stack { elements, len: 0 }
     }
 
     /// Pushes a new value onto the stack.
     /// * `self` - The stack to push the value onto.
     /// * `value` - The value to push onto the stack.
-    fn push(ref self: Stack, value: u256) {
-        let Stack{mut elements } = self;
-        elements.append(value);
-        self = Stack { elements }
+    fn push(ref self: Felt252Stack<T>, value: T) {
+        self.elements.insert(self.len.into(), value);
+        self.len += 1;
     }
-
 
     /// Removes the last item from the stack and returns it, or None if the stack is empty.
     /// * `self` - The stack to pop the item off of.
     /// Returns
     /// * Stack The stack with the item removed.
     /// * Option<u256> The item removed or None if the stack is empty.
-    fn pop(ref self: Stack) -> Option<u256> {
+    fn pop(ref self: Felt252Stack<T>) -> Option<T> {
         if self.is_empty() {
             return Option::None(());
         }
-        // Deconstruct the stack struct because we consume it
-        let Stack{elements: mut elements } = self;
-        let stack_len = elements.len();
-        let last_idx = stack_len - 1;
 
-        let sliced_elements = array_slice(@elements, begin: 0, end: last_idx);
+        self.len -= 1;
 
-        // Update the returned stack with the sliced array
-        self = Stack { elements: sliced_elements };
-        Option::Some(*elements[last_idx])
+        Option::Some(self.elements.get(self.len.into()))
     }
 
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
     /// * `self` - The stack to peek the item off of.
     /// Returns
     /// * Option<u256> The last item of the stack
-    fn peek(self: @Stack) -> Option<u256> {
+    fn peek(ref self: Felt252Stack<T>) -> Option<T> {
         if self.is_empty() {
             return Option::None(());
         }
-        Option::Some(*self.elements[self.elements.len() - 1])
+        Option::Some(self.elements.get((self.len - 1).into()))
     }
 
     /// Returns the number of items in the stack.
     /// * `self` - The stack to get the length of.
     /// Returns
     /// * usize The number of items in the stack.
-    fn len(self: @Stack) -> usize {
-        self.elements.len()
+    fn len(self: @Felt252Stack<T>) -> usize {
+        *self.len
     }
 
     /// Returns true if the stack is empty.
     /// * `self` - The stack to check if it is empty.
     /// Returns
     /// * bool True if the stack is empty, false otherwise.
-    fn is_empty(self: @Stack) -> bool {
-        self.len() == ZERO_USIZE
+    fn is_empty(self: @Felt252Stack<T>) -> bool {
+        *self.len == 0
+    }
+}
+
+
+struct NullableStack<T> {
+    elements: Felt252Dict<Nullable<T>>,
+    len: usize,
+}
+
+impl DestructNullableStack<T, impl TDrop: Drop<T>> of Destruct<NullableStack<T>> {
+    fn destruct(self: NullableStack<T>) nopanic {
+        self.elements.squash();
+    }
+}
+
+impl NullableStackImpl<
+    T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, 
+> of StackTrait<NullableStack<T>, T> {
+    #[inline(always)]
+    fn new() -> NullableStack<T> {
+        let elements = Felt252DictTrait::<Nullable<T>>::new();
+        NullableStack { elements, len: 0 }
+    }
+
+    fn push(ref self: NullableStack<T>, value: T) {
+        self.elements.insert(self.len.into(), nullable_from_box(BoxTrait::new(value)));
+        self.len += 1;
+    }
+
+    fn pop(ref self: NullableStack<T>) -> Option<T> {
+        if self.is_empty() {
+            return Option::None(());
+        }
+
+        self.len -= 1;
+
+        Option::Some(self.elements.get(self.len.into()).deref())
+    }
+
+    fn peek(ref self: NullableStack<T>) -> Option<T> {
+        if self.is_empty() {
+            return Option::None(());
+        }
+        Option::Some(self.elements.get((self.len - 1).into()).deref())
+    }
+
+    fn len(self: @NullableStack<T>) -> usize {
+        *self.len
+    }
+
+    fn is_empty(self: @NullableStack<T>) -> bool {
+        *self.len == 0
     }
 }
