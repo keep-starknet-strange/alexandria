@@ -127,7 +127,7 @@ impl NullableStackImpl<
 > of StackTrait<NullableStack<T>, T> {
     #[inline(always)]
     fn new() -> NullableStack<T> {
-        let elements: Felt252Dict<Nullable<T>>  = Default::default();
+        let elements: Felt252Dict<Nullable<T>> = Default::default();
         NullableStack { elements, len: 0 }
     }
 
