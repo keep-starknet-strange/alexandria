@@ -47,7 +47,7 @@ impl VecImpl<
     /// Returns
     /// * Vec The new vec instance.
     fn new() -> Vec<T> {
-        let items = Felt252DictTrait::<T>::new();
+        let items: Felt252Dict<T> = Default::default();
         Vec { items, len: 0 }
     }
 
