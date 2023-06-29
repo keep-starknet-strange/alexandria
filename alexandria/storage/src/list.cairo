@@ -2,7 +2,10 @@ use hash::LegacyHash;
 use integer::U32DivRem;
 use option::OptionTrait;
 use starknet::{storage_read_syscall, storage_write_syscall, SyscallResult, SyscallResultTrait};
-use starknet::storage_access::{StorageAccess, StorageBaseAddress, storage_address_to_felt252, storage_address_from_base, storage_address_from_base_and_offset, storage_base_address_from_felt252};
+use starknet::storage_access::{
+    StorageAccess, StorageBaseAddress, storage_address_to_felt252, storage_address_from_base,
+    storage_address_from_base_and_offset, storage_base_address_from_felt252
+};
 use traits::{Default, DivRem, IndexView, Into, TryInto};
 
 const POW2_8: u32 = 256; // 2^8
@@ -54,13 +57,13 @@ impl StorageSizeU256<T, impl TInto: Into<T, u256>> of StorageSize<T> {
     }
 }
 
-impl ListImpl<T,
+impl ListImpl<
+    T,
     impl TCopy: Copy<T>,
     impl TDrop: Drop<T>,
     impl TStorageAccess: StorageAccess<T>,
-    impl TStorageSize: StorageSize<T>>
-    of ListTrait<T>
-{
+    impl TStorageSize: StorageSize<T>
+> of ListTrait<T> {
     fn len(self: @List<T>) -> u32 {
         *self.len
     }
@@ -70,13 +73,11 @@ impl ListImpl<T,
     }
 
     fn append(ref self: List<T>, value: T) -> u32 {
-        let (base, offset) = calculate_base_and_offset_for_index(self.base, self.len, self.storage_size);
-        StorageAccess::write_at_offset_internal(
-            self.address_domain,
-            base,
-            offset,
-            value
-        ).unwrap_syscall();
+        let (base, offset) = calculate_base_and_offset_for_index(
+            self.base, self.len, self.storage_size
+        );
+        StorageAccess::write_at_offset_internal(self.address_domain, base, offset, value)
+            .unwrap_syscall();
 
         let append_at = self.len;
         self.len += 1;
@@ -87,33 +88,29 @@ impl ListImpl<T,
 
     fn get(self: @List<T>, index: u32) -> T {
         assert(index < *self.len, 'index out of bounds');
-        let (base, offset) = calculate_base_and_offset_for_index(*self.base, index, *self.storage_size);
-        StorageAccess::read_at_offset_internal(
-            *self.address_domain,
-            base,
-            offset
-        ).unwrap_syscall()
+        let (base, offset) = calculate_base_and_offset_for_index(
+            *self.base, index, *self.storage_size
+        );
+        StorageAccess::read_at_offset_internal(*self.address_domain, base, offset).unwrap_syscall()
     }
 
     fn set(ref self: List<T>, index: u32, value: T) {
         assert(index < self.len, 'index out of bounds');
-        let (base, offset) = calculate_base_and_offset_for_index(self.base, index, self.storage_size);
-        StorageAccess::write_at_offset_internal(
-            self.address_domain,
-            base,
-            offset,
-            value
-        ).unwrap_syscall();
+        let (base, offset) = calculate_base_and_offset_for_index(
+            self.base, index, self.storage_size
+        );
+        StorageAccess::write_at_offset_internal(self.address_domain, base, offset, value)
+            .unwrap_syscall();
     }
 }
 
-impl AListIndexViewImpl<T,
+impl AListIndexViewImpl<
+    T,
     impl TCopy: Copy<T>,
     impl TDrop: Drop<T>,
     impl TStorageAccess: StorageAccess<T>,
-    impl TStorageSize: StorageSize<T>>
-    of IndexView<List<T>, u32, T>
-{
+    impl TStorageSize: StorageSize<T>
+> of IndexView<List<T>, u32, T> {
     fn index(self: @List<T>, index: u32) -> T {
         self.get(index)
     }
@@ -152,19 +149,15 @@ impl AListIndexViewImpl<T,
 //
 // so for getting a Foo at index 90 this function would return address of segment2 and offset of 26
 
-fn calculate_base_and_offset_for_index(list_base: StorageBaseAddress, index: u32, storage_size: u8) -> (StorageBaseAddress, u8) {
+fn calculate_base_and_offset_for_index(
+    list_base: StorageBaseAddress, index: u32, storage_size: u8
+) -> (StorageBaseAddress, u8) {
     let max_elements = POW2_8 / storage_size.into();
     let (key, offset) = U32DivRem::div_rem(index, max_elements.try_into().unwrap());
 
     let segment_base = storage_base_address_from_felt252(
-        LegacyHash::hash(
-            storage_address_to_felt252(
-                storage_address_from_base(
-                    list_base
-                )
-            ),
-            key
-    ));
+        LegacyHash::hash(storage_address_to_felt252(storage_address_from_base(list_base)), key)
+    );
 
     (segment_base, offset.try_into().unwrap() * storage_size)
 }
@@ -183,7 +176,8 @@ impl ListStorageAccess<T, impl TStorageSize: StorageSize<T>> of StorageAccess<Li
     fn read_at_offset_internal(
         address_domain: u32, base: StorageBaseAddress, offset: u8
     ) -> SyscallResult<List<T>> {
-        let len: u32 = StorageAccess::read_at_offset_internal(address_domain, base, offset).unwrap_syscall();
+        let len: u32 = StorageAccess::read_at_offset_internal(address_domain, base, offset)
+            .unwrap_syscall();
         let storage_size: u8 = StorageSize::<T>::storage_size();
         Result::Ok(List { address_domain, base, len, storage_size })
     }

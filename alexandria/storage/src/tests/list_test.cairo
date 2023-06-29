@@ -4,10 +4,14 @@ use starknet::ContractAddress;
 trait IAListHolder<TContractState> {
     fn do_get_len(self: @TContractState) -> (u32, u32);
     fn do_is_empty(self: @TContractState) -> (bool, bool);
-    fn do_append(ref self: TContractState, addrs_value: ContractAddress, numbers_value: u256) -> (u32, u32);
+    fn do_append(
+        ref self: TContractState, addrs_value: ContractAddress, numbers_value: u256
+    ) -> (u32, u32);
     fn do_get(self: @TContractState, index: u32) -> (ContractAddress, u256);
     fn do_get_index(self: @TContractState, index: u32) -> (ContractAddress, u256);
-    fn do_set(ref self: TContractState, index: u32, addrs_value: ContractAddress, numbers_value: u256);
+    fn do_set(
+        ref self: TContractState, index: u32, addrs_value: ContractAddress, numbers_value: u256
+    );
 }
 
 #[starknet::contract]
@@ -20,7 +24,6 @@ mod AListHolder {
         // to test a corelib type that has StorageAccess and
         // Into<ContractAddress, felt252>
         addrs: List<ContractAddress>,
-
         // to test a corelib compound struct
         numbers: List<u256>
     }
@@ -35,7 +38,9 @@ mod AListHolder {
             (self.addrs.read().is_empty(), self.numbers.read().is_empty())
         }
 
-        fn do_append(ref self: ContractState, addrs_value: ContractAddress, numbers_value: u256) -> (u32, u32) {
+        fn do_append(
+            ref self: ContractState, addrs_value: ContractAddress, numbers_value: u256
+        ) -> (u32, u32) {
             let mut a = self.addrs.read();
             let mut n = self.numbers.read();
             (a.append(addrs_value), n.append(numbers_value))
@@ -49,7 +54,9 @@ mod AListHolder {
             (self.addrs.read()[index], self.numbers.read()[index])
         }
 
-        fn do_set(ref self: ContractState, index: u32, addrs_value: ContractAddress, numbers_value: u256) {
+        fn do_set(
+            ref self: ContractState, index: u32, addrs_value: ContractAddress, numbers_value: u256
+        ) {
             let mut a = self.addrs.read();
             let mut n = self.numbers.read();
             a.set(index, addrs_value);
@@ -70,9 +77,8 @@ mod tests {
 
     // so that we're able to compare 2-tuples in the test code
     impl TupleSize2PartialEq<
-        E0, E1, impl E0PartialEq: PartialEq<E0>, impl E1PartialEq: PartialEq<E1>>
-    of PartialEq<(E0, E1)>
-    {
+        E0, E1, impl E0PartialEq: PartialEq<E0>, impl E1PartialEq: PartialEq<E1>
+    > of PartialEq<(E0, E1)> {
         #[inline(always)]
         fn eq(lhs: @(E0, E1), rhs: @(E0, E1)) -> bool {
             let (lhs0, lhs1) = lhs;
@@ -89,8 +95,7 @@ mod tests {
     fn deploy_mock() -> IAListHolderDispatcher {
         let class_hash: ClassHash = AListHolder::TEST_CLASS_HASH.try_into().unwrap();
         let ctor_data: Array<felt252> = Default::default();
-        let (addr, _) = deploy_syscall(class_hash, 0, ctor_data.span(), false)
-            .unwrap_syscall();
+        let (addr, _) = deploy_syscall(class_hash, 0, ctor_data.span(), false).unwrap_syscall();
         IAListHolderDispatcher { contract_address: addr }
     }
 
