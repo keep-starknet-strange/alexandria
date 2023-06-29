@@ -1,0 +1,5 @@
+[package]
+name = "alexandria_storage"
+version = "0.1.0"
+description = "Starknet storage utilities"
+homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/storage"
