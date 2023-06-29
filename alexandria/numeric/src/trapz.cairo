@@ -20,7 +20,8 @@ fn trapz(mut xs: Array<usize>, mut ys: Array<usize>) -> usize {
             break ();
         }
         assert(*xs.at(index + 1_usize) > *xs.at(index), 'Abscissa must be sorted');
-        value += (*xs.at(index + 1_usize) - *xs.at(index)) * (*ys.at(index) + *ys.at(index + 1_usize));
+        value += (*xs.at(index + 1_usize) - *xs.at(index))
+            * (*ys.at(index) + *ys.at(index + 1_usize));
         index += 1_usize;
     };
     value / 2_usize

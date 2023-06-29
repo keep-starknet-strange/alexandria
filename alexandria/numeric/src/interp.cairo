@@ -24,7 +24,13 @@ enum Extrapolation {
 // * `extrapolation` - The extrapolation method to use.
 // # Returns
 // * `usize` - The interpolated y at x.
-fn interp(x: usize, xs: @Array<usize>, ys: @Array<usize>, interpolation: Interpolation, extrapolation: Extrapolation) -> usize {
+fn interp(
+    x: usize,
+    xs: @Array<usize>,
+    ys: @Array<usize>,
+    interpolation: Interpolation,
+    extrapolation: Extrapolation
+) -> usize {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');
     assert(xs.len() >= 2_usize, 'Array must have at least 2 elts');
@@ -77,7 +83,7 @@ fn interp(x: usize, xs: @Array<usize>, ys: @Array<usize>, interpolation: Interpo
                 Interpolation::ConstantRight(()) => *ys.at(index),
             };
         }
-        
+
         index += 1_usize;
     }
 }
