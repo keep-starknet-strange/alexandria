@@ -1,4 +1,4 @@
-use alexandria_math::math::{U128_MAX, U64_MAX, U8_MAX, shr, shl};
+use alexandria_math::math::{shr, shl};
 use integer::{u64_wrapping_add, bitwise, downcast, upcast, BoundedInt};
 use traits::{Into, TryInto};
 use option::OptionTrait;
@@ -125,19 +125,19 @@ fn fpow(mut base: u128, mut power: u128) -> u128 {
 }
 
 fn math_shl(x: u128, n: u128) -> u128 {
-    x * fpow(2, n) % U128_MAX
+    x * fpow(2, n) % BoundedInt::max()
 }
 
 fn math_shr(x: u128, n: u128) -> u128 {
-    x / fpow(2, n) % U128_MAX
+    x / fpow(2, n) % BoundedInt::max()
 }
 
 fn math_shl_u64(x: u64, n: u64) -> u64 {
-    (math_shl(x.into(), n.into()) % U64_MAX).try_into().unwrap()
+    (math_shl(x.into(), n.into()) % BoundedInt::<u64>::max().into()).try_into().unwrap()
 }
 
 fn math_shr_u64(x: u64, n: u64) -> u64 {
-    (math_shr(x.into(), n.into()) % U64_MAX).try_into().unwrap()
+    (math_shr(x.into(), n.into()) % BoundedInt::<u64>::max().into()).try_into().unwrap()
 }
 
 
@@ -189,14 +189,54 @@ fn from_WordArray_to_u8array(data: Span<Word64>) -> Array<u8> {
         if (i == data.len()) {
             break ();
         }
-        arr.append((shr((*data.at(i).data).into(), 56) & U8_MAX).try_into().unwrap());
-        arr.append((shr((*data.at(i).data).into(), 48) & U8_MAX).try_into().unwrap());
-        arr.append((shr((*data.at(i).data).into(), 40) & U8_MAX).try_into().unwrap());
-        arr.append((shr((*data.at(i).data).into(), 32) & U8_MAX).try_into().unwrap());
-        arr.append((shr((*data.at(i).data).into(), 24) & U8_MAX).try_into().unwrap());
-        arr.append((shr((*data.at(i).data).into(), 16) & U8_MAX).try_into().unwrap());
-        arr.append((shr((*data.at(i).data).into(), 8) & U8_MAX).try_into().unwrap());
-        arr.append((shr((*data.at(i).data).into(), 0) & U8_MAX).try_into().unwrap());
+        arr
+            .append(
+                (shr((*data.at(i).data).into(), 56) & BoundedInt::<u8>::max().into())
+                    .try_into()
+                    .unwrap()
+            );
+        arr
+            .append(
+                (shr((*data.at(i).data).into(), 48) & BoundedInt::<u8>::max().into())
+                    .try_into()
+                    .unwrap()
+            );
+        arr
+            .append(
+                (shr((*data.at(i).data).into(), 40) & BoundedInt::<u8>::max().into())
+                    .try_into()
+                    .unwrap()
+            );
+        arr
+            .append(
+                (shr((*data.at(i).data).into(), 32) & BoundedInt::<u8>::max().into())
+                    .try_into()
+                    .unwrap()
+            );
+        arr
+            .append(
+                (shr((*data.at(i).data).into(), 24) & BoundedInt::<u8>::max().into())
+                    .try_into()
+                    .unwrap()
+            );
+        arr
+            .append(
+                (shr((*data.at(i).data).into(), 16) & BoundedInt::<u8>::max().into())
+                    .try_into()
+                    .unwrap()
+            );
+        arr
+            .append(
+                (shr((*data.at(i).data).into(), 8) & BoundedInt::<u8>::max().into())
+                    .try_into()
+                    .unwrap()
+            );
+        arr
+            .append(
+                (shr((*data.at(i).data).into(), 0) & BoundedInt::<u8>::max().into())
+                    .try_into()
+                    .unwrap()
+            );
         i += 1;
     };
     arr
@@ -293,7 +333,7 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
 
 fn sha512(mut data: Array<u8>) -> Array<u8> {
     let bit_numbers: u128 = upcast(data.len() * 8);
-    let bit_numbers = bit_numbers & U64_MAX;
+    let bit_numbers = bit_numbers & BoundedInt::<u64>::max().into();
 
     let mut msg_len = data.len();
 
@@ -303,14 +343,62 @@ fn sha512(mut data: Array<u8>) -> Array<u8> {
     add_trailing_zeroes(ref data, msg_len);
 
     // add length to the end
-    data.append(downcast(math_shr(bit_numbers, 56).into() & U8_MAX).unwrap());
-    data.append(downcast(math_shr(bit_numbers, 48).into() & U8_MAX).unwrap());
-    data.append(downcast(math_shr(bit_numbers, 40).into() & U8_MAX).unwrap());
-    data.append(downcast(math_shr(bit_numbers, 32).into() & U8_MAX).unwrap());
-    data.append(downcast(math_shr(bit_numbers, 24).into() & U8_MAX).unwrap());
-    data.append(downcast(math_shr(bit_numbers, 16).into() & U8_MAX).unwrap());
-    data.append(downcast(math_shr(bit_numbers, 8).into() & U8_MAX).unwrap());
-    data.append(downcast(math_shr(bit_numbers, 0).into() & U8_MAX).unwrap());
+    data
+        .append(
+            downcast(
+                math_shr(bit_numbers, 56).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
+            )
+                .unwrap()
+        );
+    data
+        .append(
+            downcast(
+                math_shr(bit_numbers, 48).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
+            )
+                .unwrap()
+        );
+    data
+        .append(
+            downcast(
+                math_shr(bit_numbers, 40).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
+            )
+                .unwrap()
+        );
+    data
+        .append(
+            downcast(
+                math_shr(bit_numbers, 32).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
+            )
+                .unwrap()
+        );
+    data
+        .append(
+            downcast(
+                math_shr(bit_numbers, 24).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
+            )
+                .unwrap()
+        );
+    data
+        .append(
+            downcast(
+                math_shr(bit_numbers, 16).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
+            )
+                .unwrap()
+        );
+    data
+        .append(
+            downcast(
+                math_shr(bit_numbers, 8).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
+            )
+                .unwrap()
+        );
+    data
+        .append(
+            downcast(
+                math_shr(bit_numbers, 0).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
+            )
+                .unwrap()
+        );
 
     msg_len = data.len();
 

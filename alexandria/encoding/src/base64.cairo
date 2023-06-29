@@ -1,9 +1,12 @@
 use core::clone::Clone;
 use array::ArrayTrait;
-use integer::{upcast, downcast};
+use integer::{upcast, downcast, BoundedInt};
 use option::OptionTrait;
 use debug::PrintTrait;
-use alexandria_math::math::{shl, shr, U6_MAX, U8_MAX};
+use alexandria_math::math::{shl, shr};
+use traits::Into;
+
+const U6_MAX: u128 = 0x3F;
 
 trait Encoder<T> {
     fn encode(data: T) -> Array<u8>;
@@ -84,9 +87,9 @@ fn decode_loop(p: u8, ref data: Array<u8>, d: usize, ref result: Array<u8>) {
         | shl(upcast(get_base64_value(*data[d + 2])), 6)
         | upcast(get_base64_value(*data[d + 3]));
 
-    let i: u8 = downcast(shr(x, 16) & U8_MAX).unwrap();
+    let i: u8 = downcast(shr(x, 16) & BoundedInt::<u8>::max().into()).unwrap();
     result.append(i);
-    let i: u8 = downcast(shr(x, 8) & U8_MAX).unwrap();
+    let i: u8 = downcast(shr(x, 8) & BoundedInt::<u8>::max().into()).unwrap();
     if d + 4 >= data.len() {
         if p == 2 {
             return ();
@@ -97,7 +100,7 @@ fn decode_loop(p: u8, ref data: Array<u8>, d: usize, ref result: Array<u8>) {
         result.append(i);
     }
 
-    let i: u8 = downcast(x & U8_MAX).unwrap();
+    let i: u8 = downcast(x & BoundedInt::<u8>::max().into()).unwrap();
     if d + 4 >= data.len() {
         if p == 1 {
             return ();
