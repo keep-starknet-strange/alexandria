@@ -16,3 +16,7 @@ Several interpolation methods are supported as follow:
 ## [Cumsum](./src/cumsum.cairo)
 
 Return the cumulative sum of the elements ([see also](https://numpy.org/doc/stable/reference/generated/numpy.cumsum.html#numpy-cumsum)).
+
+## [Diff](./src/diff.cairo)
+
+Return the discrete difference of the elements ([see also](https://numpy.org/doc/stable/reference/generated/numpy.diff.html#numpy.diff)).
