@@ -20,7 +20,7 @@ fn trapz_test() {
 #[test]
 #[should_panic]
 #[available_gas(2000000)]
-fn trapz_test_check_len() {
+fn trapz_test_revert_len_mismatch() {
     let mut xs = ArrayTrait::new();
     xs.append(3);
     let mut ys = ArrayTrait::new();
@@ -30,7 +30,7 @@ fn trapz_test_check_len() {
 #[test]
 #[should_panic]
 #[available_gas(2000000)]
-fn trapz_test_check_size() {
+fn trapz_test_revert_len_too_short() {
     let mut xs = ArrayTrait::new();
     xs.append(3);
     let mut ys = ArrayTrait::new();
@@ -41,7 +41,7 @@ fn trapz_test_check_size() {
 #[test]
 #[should_panic]
 #[available_gas(2000000)]
-fn trapz_test_check_sorted() {
+fn trapz_test_revert_not_sorted() {
     let mut xs = ArrayTrait::new();
     xs.append(5);
     xs.append(3);

@@ -27,13 +27,13 @@ enum Extrapolation {
 fn interp(x: usize, xs: @Array<usize>, ys: @Array<usize>, interpolation: Interpolation, extrapolation: Extrapolation) -> usize {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');
-    assert(xs.len() >= 2, 'Array must have at least 2 elts');
+    assert(xs.len() >= 2_usize, 'Array must have at least 2 elts');
 
     // [Check] Extrapolation
     if x < *xs.at(0) {
         let y = match extrapolation {
             Extrapolation::Null(()) => 0_usize,
-            Extrapolation::Constant(()) => *ys.at(0),
+            Extrapolation::Constant(()) => *ys.at(0_usize),
         };
         return y;
     }

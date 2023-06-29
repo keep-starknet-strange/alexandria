@@ -82,3 +82,26 @@ fn interp_constant_right_test() {
     assert(interp(6, @xs, @ys, Interpolation::ConstantRight(()), Extrapolation::Constant(())) == 13, 'invalid interpolation');
     assert(interp(7, @xs, @ys, Interpolation::ConstantRight(()), Extrapolation::Constant(())) == 13, 'invalid interpolation');
 }
+
+#[test]
+#[should_panic]
+#[available_gas(2000000)]
+fn interp_revert_len_mismatch() {
+    let mut xs = ArrayTrait::new();
+    xs.append(3);
+    xs.append(5);
+    let mut ys = ArrayTrait::new();
+    ys.append(11);
+    interp(4, @xs, @ys, Interpolation::Linear(()), Extrapolation::Constant(()));
+}
+
+#[test]
+#[should_panic]
+#[available_gas(2000000)]
+fn interp_revert_len_too_short() {
+    let mut xs = ArrayTrait::new();
+    xs.append(3);
+    let mut ys = ArrayTrait::new();
+    ys.append(11);
+    interp(4, @xs, @ys, Interpolation::Linear(()), Extrapolation::Constant(()));
+}
