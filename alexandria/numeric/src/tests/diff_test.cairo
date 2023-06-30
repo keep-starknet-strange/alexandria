@@ -1,6 +1,4 @@
-// Core library imports.
 use array::ArrayTrait;
-
 use alexandria_numeric::diff::diff;
 
 #[test]
@@ -11,9 +9,9 @@ fn diff_test() {
     xs.append(5);
     xs.append(7);
     let ys = diff(@xs);
-    assert(*ys.at(0) == 0_usize, 'wrong value at index 0');
-    assert(*ys.at(1) == *xs.at(1) - *xs.at(0), 'wrong value at index 1');
-    assert(*ys.at(2) == *xs.at(2) - *xs.at(1), 'wrong value at index 2');
+    assert(*ys[0] == 0_usize, 'wrong value at index 0');
+    assert(*ys[1] == *xs[1] - *xs[0], 'wrong value at index 1');
+    assert(*ys[2] == *xs[2] - *xs[1], 'wrong value at index 2');
 }
 
 #[test]

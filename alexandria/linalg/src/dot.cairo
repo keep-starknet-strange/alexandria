@@ -1,12 +1,12 @@
-// Dot product of two arrays
+//! Dot product of two arrays
 use array::ArrayTrait;
 
-// Compute the dot product for 2 given arrays.
-// # Arguments
-// * `xs` - The first sequence of len L.
-// * `ys` - The second sequence of len L.
-// # Returns
-// * `usize` - The dot product.
+/// Compute the dot product for 2 given arrays.
+/// # Arguments
+/// * `xs` - The first sequence of len L.
+/// * `ys` - The second sequence of len L.
+/// # Returns
+/// * `usize` - The dot product.
 fn dot(mut xs: Array<usize>, mut ys: Array<usize>) -> usize {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');

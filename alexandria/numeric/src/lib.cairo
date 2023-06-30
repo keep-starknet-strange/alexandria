@@ -1,5 +1,5 @@
-mod trapz;
-mod interp;
+mod trapezoidal_rule;
+mod interpolate;
 mod cumsum;
 mod diff;
 

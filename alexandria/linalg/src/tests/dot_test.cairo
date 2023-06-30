@@ -1,6 +1,4 @@
-// Core library imports.
 use array::ArrayTrait;
-
 use alexandria_linalg::dot::dot;
 
 #[test]

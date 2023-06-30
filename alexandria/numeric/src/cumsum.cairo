@@ -1,11 +1,11 @@
-// The cumulative sum of the elements.
+//! The cumulative sum of the elements.
 use array::ArrayTrait;
 
-// Compute the cumulative sum of a sequence.
-// # Arguments
-// * `sequence` - The sequence to operate.
-// # Returns
-// * `Array<usize>` - The cumulative sum of sequence.
+/// Compute the cumulative sum of a sequence.
+/// # Arguments
+/// * `sequence` - The sequence to operate.
+/// # Returns
+/// * `Array<usize>` - The cumulative sum of sequence.
 fn cumsum(mut sequence: @Array<usize>) -> Array<usize> {
     // [Check] Inputs
     assert(sequence.len() >= 1_u32, 'Array must have at least 1 elt');
@@ -18,9 +18,9 @@ fn cumsum(mut sequence: @Array<usize>) -> Array<usize> {
             break ();
         }
         if index == 0_u32 {
-            array.append(*sequence.at(index));
+            array.append(*sequence[index]);
         } else {
-            array.append(*sequence.at(index) + *array.at(index - 1_u32));
+            array.append(*sequence[index] + *array[index - 1_u32]);
         }
         index += 1_u32;
     };
