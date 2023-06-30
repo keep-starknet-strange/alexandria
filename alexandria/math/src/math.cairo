@@ -1,11 +1,6 @@
 use option::OptionTrait;
 use traits::{Into, TryInto};
 
-const U6_MAX: u128 = 0x3F;
-const U8_MAX: u128 = 0xFF;
-const U32_MAX: u128 = 0xFFFFFFFF;
-const U64_MAX: u128 = 0xFFFFFFFFFFFFFFFF;
-
 // Raise a number to a power.
 /// * `base` - The number to raise.
 /// * `exp` - The exponent.

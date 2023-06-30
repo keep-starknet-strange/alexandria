@@ -11,3 +11,4 @@ mod perfect_number_test;
 mod sha256_test;
 mod signed_integers_test;
 mod zellers_congruence_test;
+mod sha512_test;
