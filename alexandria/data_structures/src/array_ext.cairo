@@ -6,6 +6,7 @@ trait ArrayTraitExt<T> {
     fn pop_front_n(ref self: Array<T>, n: usize);
     fn reverse(self: @Array<T>) -> Array<T>;
     fn contains<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> bool;
+    fn concat(self: @Array<T>, a: @Array<T>) -> Array<T>;
     fn index_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> Option<usize>;
     fn occurrences_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize;
     fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
@@ -27,6 +28,7 @@ trait SpanTraitExt<T> {
     fn pop_back_n(ref self: Span<T>, n: usize);
     fn reverse(self: Span<T>) -> Array<T>;
     fn contains<impl TPartialEq: PartialEq<T>>(self: Span<T>, item: T) -> bool;
+    fn concat(self: Span<T>, a: Span<T>) -> Span<T>;
     fn index_of<impl TPartialEq: PartialEq<T>>(self: Span<T>, item: T) -> Option<usize>;
     fn occurrences_of<impl TPartialEq: PartialEq<T>>(self: Span<T>, item: T) -> usize;
     fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
@@ -77,6 +79,29 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
 
     fn contains<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> bool {
         self.span().contains(item)
+    }
+
+    fn concat(self: @Array<T>, a: @Array<T>) -> Array<T> {
+        // Can't do self.span().concat(a);
+        let mut ret: Array<T> = Default::default();
+        let mut i = 0;
+
+        loop {
+            if (i == self.len()) {
+                break;
+            }
+            ret.append(*self[i]);
+            i += 1;
+        };
+        i = 0;
+        loop {
+            if (i == a.len()) {
+                break;
+            }
+            ret.append(*a[i]);
+            i += 1;
+        };
+        ret
     }
 
     fn index_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> Option<usize> {
@@ -173,6 +198,28 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
                 },
             };
         }
+    }
+
+    fn concat(self: Span<T>, a: Span<T>) -> Span<T> {
+        let mut ret: Array<T> = Default::default();
+        let mut i = 0;
+
+        loop {
+            if (i == self.len()) {
+                break;
+            }
+            ret.append(*self[i]);
+            i += 1;
+        };
+        i = 0;
+        loop {
+            if (i == a.len()) {
+                break;
+            }
+            ret.append(*a[i]);
+            i += 1;
+        };
+        ret.span()
     }
 
     fn index_of<impl TPartialEq: PartialEq<T>>(mut self: Span<T>, item: T) -> Option<usize> {

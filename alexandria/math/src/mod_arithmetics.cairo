@@ -2,6 +2,13 @@ use option::OptionTrait;
 use traits::{Into, TryInto};
 use integer::u512;
 
+// Function that performs modular addition.
+/// # Arguments
+/// * `a` - Left hand side of addition.
+/// * `b` - Right hand side of addition.
+/// * `modulo` - modulo.
+/// # Returns
+/// * `u256` - result of modular addition
 fn add_mod(a: u256, b: u256, modulo: u256) -> u256 {
     let mod_non_zero: NonZero<u256> = integer::u256_try_as_non_zero(modulo).unwrap();
     let low: u256 = a.low.into() + b.low.into();
@@ -14,14 +21,33 @@ fn add_mod(a: u256, b: u256, modulo: u256) -> u256 {
     res
 }
 
+// Function that return the modular multiplicative inverse.
+/// # Arguments
+/// * `b` - Number of which to find the multiplicative inverse of.
+/// * `modulo` - modulo.
+/// # Returns
+/// * `u256` - modular multiplicative inverse
 fn mult_inverse(b: u256, modulo: u256) -> u256 {
     pow_mod(b, modulo - 2, modulo)
 }
 
+// Function that return the modular additive inverse.
+/// # Arguments
+/// * `b` - Number of which to find the additive inverse of.
+/// * `modulo` - modulo.
+/// # Returns
+/// * `u256` - modular additive inverse
 fn add_inverse_mod(b: u256, modulo: u256) -> u256 {
     modulo - b
 }
 
+// Function that performs modular substraction.
+/// # Arguments
+/// * `a` - Left hand side of substraction.
+/// * `b` - Right hand side of substraction.
+/// * `modulo` - modulo.
+/// # Returns
+/// * `u256` - result of modular substraction
 fn sub_mod(mut a: u256, mut b: u256, modulo: u256) -> u256 {
     // reduce values
     a = a % modulo;
@@ -32,6 +58,13 @@ fn sub_mod(mut a: u256, mut b: u256, modulo: u256) -> u256 {
     (a + add_inverse_mod(b, modulo)) % modulo
 }
 
+// Function that performs modular multiplication.
+/// # Arguments
+/// * `a` - Left hand side of multiplication.
+/// * `b` - Right hand side of multiplication.
+/// * `modulo` - modulo.
+/// # Returns
+/// * `u256` - result of modular multiplication
 fn mult_mod(a: u256, b: u256, modulo: u256) -> u256 {
     let mult: u512 = integer::u256_wide_mul(a, b);
     let mod_non_zero: NonZero<u256> = integer::u256_try_as_non_zero(modulo).unwrap();
@@ -39,10 +72,24 @@ fn mult_mod(a: u256, b: u256, modulo: u256) -> u256 {
     rem_u256
 }
 
+// Function that performs modular division.
+/// # Arguments
+/// * `a` - Left hand side of division.
+/// * `b` - Right hand side of division.
+/// * `modulo` - modulo.
+/// # Returns
+/// * `u256` - result of modular division
 fn div_mod(a: u256, b: u256, modulo: u256) -> u256 {
     mult_mod(a, mult_inverse(b, modulo), modulo)
 }
 
+// Function that performs modular exponentiation.
+/// # Arguments
+/// * `base` - Base of exponentiation.
+/// * `pow` - Power of exponentiation.
+/// * `modulo` - modulo.
+/// # Returns
+/// * `u256` - result of modular exponentiation
 fn pow_mod(mut base: u256, mut pow: u256, modulo: u256) -> u256 {
     let mut result: u256 = 1;
     let mod_non_zero: NonZero<u256> = integer::u256_try_as_non_zero(modulo).unwrap();

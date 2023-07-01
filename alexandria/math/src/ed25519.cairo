@@ -2,12 +2,11 @@ use array::{ArrayTrait, SpanTrait};
 use traits::{Into, TryInto};
 use option::OptionTrait;
 use integer::u512;
-use debug::PrintTrait;
-use zeroable::IsZeroResult;
-use alexandria_math::sha512::sha512;
+use alexandria_math::sha512::{sha512, SHA512_LEN};
 use alexandria_math::mod_arithmetics::{
     add_mod, sub_mod, mult_mod, div_mod, pow_mod, add_inverse_mod
 };
+use alexandria_data_structures::array_ext::{ArrayTraitExt};
 
 // As per RFC-8032: https://datatracker.ietf.org/doc/html/rfc8032#section-5.1.7
 // Variable namings in this function refer to naming in the RFC
@@ -23,8 +22,6 @@ const l: u256 =
 const PUB_KEY_LEN: usize = 32;
 
 const SIG_LEN: usize = 64;
-
-const SHA512_LEN: usize = 64;
 
 #[derive(Drop, Copy)]
 struct Point {
@@ -225,6 +222,12 @@ impl PointIntoExtendedHomogeneousPoint of Into<Point, ExtendedHomogeneousPoint> 
     }
 }
 
+// Function that performs point multiplication for an Elliptic Curve point using the double and add method.
+/// # Arguments
+/// * `scalar` - Scalar such that scalar * P = P + P + P + ... + P.
+/// * `P` - Elliptic Curve point in the Extended Homogeneous form.
+/// # Returns
+/// * `u256` - Resulting point in the Extended Homogeneous form.
 fn point_mult(mut scalar: u256, mut P: ExtendedHomogeneousPoint) -> ExtendedHomogeneousPoint {
     let mut Q = ExtendedHomogeneousPoint { X: 0, Y: 1, Z: 1, T: 0 };
     let zero_u512 = Default::default();
@@ -243,28 +246,6 @@ fn point_mult(mut scalar: u256, mut P: ExtendedHomogeneousPoint) -> ExtendedHomo
         scalar = scalar / 2;
     };
     Q
-}
-
-fn concat_spans(a: Span<u8>, b: Span<u8>) -> Array<u8> {
-    let mut ret: Array<u8> = Default::default();
-    let mut i = 0;
-
-    loop {
-        if (i == a.len()) {
-            break;
-        }
-        ret.append(*a[i]);
-        i += 1;
-    };
-    i = 0;
-    loop {
-        if (i == b.len()) {
-            break;
-        }
-        ret.append(*b[i]);
-        i += 1;
-    };
-    ret
 }
 
 fn check_group_equation(
@@ -313,7 +294,7 @@ fn verify_signature(msg: Span<u8>, signature: Span<u8>, pub_key: Span<u8>) -> bo
     let A_prime_ex: ExtendedHomogeneousPoint = A_prime.into();
 
     // k = SHA512(dom2(F, C) -> empty string || R -> half of sig || A -> pub_key || PH(M) -> identity function for msg)
-    let k: Array<u8> = sha512(concat_spans(concat_spans(r_string, pub_key).span(), msg));
+    let k: Array<u8> = sha512(r_string.snapshot.concat(pub_key.snapshot).concat(msg.snapshot));
     let k_u512: u512 = k.span().into();
 
     let l_non_zero: NonZero<u256> = integer::u256_try_as_non_zero(l).unwrap();
