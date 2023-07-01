@@ -22,8 +22,9 @@ trait ListTrait<T> {
     fn len(self: @List<T>) -> u32;
     fn is_empty(self: @List<T>) -> bool;
     fn append(ref self: List<T>, value: T) -> u32;
-    fn get(self: @List<T>, index: u32) -> T;
+    fn get(self: @List<T>, index: u32) -> Option<T>;
     fn set(ref self: List<T>, index: u32, value: T);
+    fn pop_front(ref self: List<T>) -> Option<T>;
 }
 
 // when writing elements in storage, we need to know how many storage slots
@@ -86,21 +87,41 @@ impl ListImpl<
         append_at
     }
 
-    fn get(self: @List<T>, index: u32) -> T {
-        assert(index < *self.len, 'index out of bounds');
+    fn get(self: @List<T>, index: u32) -> Option<T> {
+        if (index >= *self.len) {
+            return Option::None(());
+        }
+
         let (base, offset) = calculate_base_and_offset_for_index(
             *self.base, index, *self.storage_size
         );
-        StorageAccess::read_at_offset_internal(*self.address_domain, base, offset).unwrap_syscall()
+        let t = StorageAccess::read_at_offset_internal(*self.address_domain, base, offset)
+            .unwrap_syscall();
+        Option::Some(t)
     }
 
     fn set(ref self: List<T>, index: u32, value: T) {
-        assert(index < self.len, 'index out of bounds');
+        assert(index < self.len, 'List index out of bounds');
         let (base, offset) = calculate_base_and_offset_for_index(
             self.base, index, self.storage_size
         );
         StorageAccess::write_at_offset_internal(self.address_domain, base, offset, value)
             .unwrap_syscall();
+    }
+
+    fn pop_front(ref self: List<T>) -> Option<T> {
+        if self.len == 0 {
+            return Option::None(());
+        }
+
+        let popped = self.get(self.len - 1);
+        // not clearing the popped value to save a storage write,
+        // only decrementing the len - makes it unaccessible through
+        // the interfaces, next append will overwrite the values
+        self.len -= 1;
+        StorageAccess::write(self.address_domain, self.base, self.len);
+
+        popped
     }
 }
 
@@ -112,7 +133,7 @@ impl AListIndexViewImpl<
     impl TStorageSize: StorageSize<T>
 > of IndexView<List<T>, u32, T> {
     fn index(self: @List<T>, index: u32) -> T {
-        self.get(index)
+        self.get(index).expect('List index out of bounds')
     }
 }
 

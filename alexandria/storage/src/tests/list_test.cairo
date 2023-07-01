@@ -1,3 +1,4 @@
+use option::OptionTrait;
 use starknet::ContractAddress;
 
 #[starknet::interface]
@@ -7,16 +8,18 @@ trait IAListHolder<TContractState> {
     fn do_append(
         ref self: TContractState, addrs_value: ContractAddress, numbers_value: u256
     ) -> (u32, u32);
-    fn do_get(self: @TContractState, index: u32) -> (ContractAddress, u256);
+    fn do_get(self: @TContractState, index: u32) -> (Option<ContractAddress>, Option<u256>);
     fn do_get_index(self: @TContractState, index: u32) -> (ContractAddress, u256);
     fn do_set(
         ref self: TContractState, index: u32, addrs_value: ContractAddress, numbers_value: u256
     );
+    fn do_pop_front(ref self: TContractState) -> (Option<ContractAddress>, Option<u256>);
 }
 
 #[starknet::contract]
 mod AListHolder {
     use alexandria_storage::list::{List, ListTrait};
+    use option::OptionTrait;
     use starknet::ContractAddress;
 
     #[storage]
@@ -46,7 +49,7 @@ mod AListHolder {
             (a.append(addrs_value), n.append(numbers_value))
         }
 
-        fn do_get(self: @ContractState, index: u32) -> (ContractAddress, u256) {
+        fn do_get(self: @ContractState, index: u32) -> (Option<ContractAddress>, Option<u256>) {
             (self.addrs.read().get(index), self.numbers.read().get(index))
         }
 
@@ -61,6 +64,12 @@ mod AListHolder {
             let mut n = self.numbers.read();
             a.set(index, addrs_value);
             n.set(index, numbers_value);
+        }
+
+        fn do_pop_front(ref self: ContractState) -> (Option<ContractAddress>, Option<u256>) {
+            let mut a = self.addrs.read();
+            let mut n = self.numbers.read();
+            (a.pop_front(), n.pop_front())
         }
     }
 }
@@ -90,7 +99,6 @@ mod tests {
             !(rhs == lhs)
         }
     }
-
 
     fn deploy_mock() -> IAListHolderDispatcher {
         let class_hash: ClassHash = AListHolder::TEST_CLASS_HASH.try_into().unwrap();
@@ -158,7 +166,13 @@ mod tests {
             if index == max {
                 break;
             }
-            assert(contract.do_get(index) == (mock_addr, index.into()), index.into());
+
+            let (some_addr, some_number) = contract.do_get(index);
+            assert(some_addr.is_some(), 'addr is some');
+            assert(some_addr.unwrap() == mock_addr, 'addr');
+            assert(some_number.is_some(), 'number is some');
+            assert(some_number.unwrap() == index.into(), 'number');
+
             index += 1;
         }
     }
@@ -173,9 +187,42 @@ mod tests {
         contract.do_append(mock_addr, 200); // idx 1
         contract.do_append(mock_addr, 300); // idx 2
 
-        assert(contract.do_get(0) == (mock_addr, 100), 'idx 0');
-        assert(contract.do_get(1) == (mock_addr, 200), 'idx 1');
-        assert(contract.do_get(2) == (mock_addr, 300), 'idx 2');
+        let (some_addr0, some_number0) = contract.do_get(0);
+        assert(some_addr0.is_some(), 'addr0 is some');
+        assert(some_addr0.unwrap() == mock_addr, 'addr0');
+        assert(some_number0.is_some(), 'number0 is some');
+        assert(some_number0.unwrap() == 100, 'number0');
+
+        let (some_addr1, some_number1) = contract.do_get(1);
+        assert(some_addr1.is_some(), 'addr1 is some');
+        assert(some_addr1.unwrap() == mock_addr, 'addr1');
+        assert(some_number1.is_some(), 'number1 is some');
+        assert(some_number1.unwrap() == 200, 'number1');
+
+        let (some_addr2, some_number2) = contract.do_get(2);
+        assert(some_addr2.is_some(), 'addr2 is some');
+        assert(some_addr2.unwrap() == mock_addr, 'addr2');
+        assert(some_number2.is_some(), 'number2 is some');
+        assert(some_number2.unwrap() == 300, 'number2');
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_get_empty() {
+        let contract = deploy_mock();
+        let (addr, number) = contract.do_get(0);
+        assert(addr.is_none(), 'addr is none');
+        assert(number.is_none(), 'number is none');
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_get_out_of_bounds() {
+        let contract = deploy_mock();
+        contract.do_append(mock_addr(), 10);
+        let (addr, number) = contract.do_get(42);
+        assert(addr.is_none(), 'addr is none');
+        assert(number.is_none(), 'number is none');
     }
 
     #[test]
@@ -195,16 +242,7 @@ mod tests {
 
     #[test]
     #[available_gas(100000000)]
-    #[should_panic(expected: ('index out of bounds', 'ENTRYPOINT_FAILED'))]
-    fn test_get_out_of_bounds() {
-        let contract = deploy_mock();
-        contract.do_append(mock_addr(), 10);
-        contract.do_get(10);
-    }
-
-    #[test]
-    #[available_gas(100000000)]
-    #[should_panic(expected: ('index out of bounds', 'ENTRYPOINT_FAILED'))]
+    #[should_panic(expected: ('List index out of bounds', 'ENTRYPOINT_FAILED'))]
     fn test_get_index_out_of_bounds() {
         let contract = deploy_mock();
         contract.do_append(mock_addr(), 10);
@@ -225,17 +263,82 @@ mod tests {
         contract.do_set(0, diff_addr, 100);
         contract.do_set(2, diff_addr, 300);
 
-        assert(contract.do_get(0) == (diff_addr, 100), 'new at 0');
-        assert(contract.do_get(1) == (mock_addr, 20), 'old at 1');
-        assert(contract.do_get(2) == (diff_addr, 300), 'new at 2');
+        assert(contract.do_get_index(0) == (diff_addr, 100), 'new at 0');
+        assert(contract.do_get_index(1) == (mock_addr, 20), 'old at 1');
+        assert(contract.do_get_index(2) == (diff_addr, 300), 'new at 2');
         assert(contract.do_get_len() == (3, 3), 'len');
     }
 
     #[test]
     #[available_gas(100000000)]
-    #[should_panic(expected: ('index out of bounds', 'ENTRYPOINT_FAILED'))]
+    #[should_panic(expected: ('List index out of bounds', 'ENTRYPOINT_FAILED'))]
     fn test_set_out_of_bounds() {
         let contract = deploy_mock();
         contract.do_set(2, mock_addr(), 20);
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_pop_front_pass() {
+        let contract = deploy_mock();
+        let mock_addr = mock_addr();
+
+        contract.do_append(mock_addr, 100); // idx 0
+        contract.do_append(mock_addr, 200); // idx 1
+        contract.do_append(mock_addr, 300); // idx 2
+
+        assert(contract.do_get_len() == (3, 3), 'len');
+
+        let (pop_addr, pop_number) = contract.do_pop_front();
+        assert(pop_addr.is_some(), 'pop addr 2 is some');
+        assert(pop_addr.unwrap() == mock_addr, 'addr 2');
+        assert(pop_number.is_some(), 'pop number 2 is some');
+        assert(pop_number.unwrap() == 300, 'number 2');
+        assert(contract.do_get_len() == (2, 2), 'len');
+
+        let (pop_addr, pop_number) = contract.do_pop_front();
+        assert(pop_addr.is_some(), 'pop addr 1 is some');
+        assert(pop_addr.unwrap() == mock_addr, 'addr 1');
+        assert(pop_number.is_some(), 'pop number 1 is some');
+        assert(pop_number.unwrap() == 200, 'number 1');
+        assert(contract.do_get_len() == (1, 1), 'len');
+
+        let (pop_addr, pop_number) = contract.do_pop_front();
+        assert(pop_addr.is_some(), 'pop addr 0 is some');
+        assert(pop_addr.unwrap() == mock_addr, 'addr 0');
+        assert(pop_number.is_some(), 'pop number 0 is some');
+        assert(pop_number.unwrap() == 100, 'number 0');
+        assert(contract.do_get_len() == (0, 0), 'len');
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_pop_front_empty() {
+        let contract = deploy_mock();
+
+        let (pop_addr, pop_number) = contract.do_pop_front();
+        assert(pop_addr.is_none(), 'pop addr none');
+        assert(pop_number.is_none(), 'pop number none');
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_pop_append() {
+        let contract = deploy_mock();
+        // write something
+        contract.do_append(mock_addr(), 10);
+        assert(contract.do_get_len() == (1, 1), 'len 1');
+
+        // pop it
+        contract.do_pop_front();
+        assert(contract.do_get_len() == (0, 0), 'len 2');
+
+        let diff_addr = starknet::contract_address_const::<'bye'>();
+        // append again and check if it overwrites
+        contract.do_append(diff_addr, 9000);
+        assert(contract.do_get_len() == (1, 1), 'len 3');
+        let (addr, number) = contract.do_get_index(0);
+        assert(addr == diff_addr, 'addr');
+        assert(number == 9000, 'number');
     }
 }
