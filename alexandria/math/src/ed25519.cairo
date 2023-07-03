@@ -248,15 +248,27 @@ fn point_mult(mut scalar: u256, mut P: ExtendedHomogeneousPoint) -> ExtendedHomo
     Q
 }
 
+// Function that checks the equality [S]B = R + [k]A'
+/// # Arguments
+/// * `S` - Scalar coming from the second half of the signature.
+/// * `R` - Result of point decoding of the first half of the signature in Extended Homogeneous form.
+/// * `k` - SHA512(dom2(F, C) || R || A || PH(M)) interpreted as a scalar.
+/// * `A_prime` - Result of point decoding of the public key in Extended Homogeneous form.
+/// # Returns
+/// * `bool` - true if the signature fits to the message and the public key, false otherwise.
 fn check_group_equation(
-    mut B: ExtendedHomogeneousPoint,
-    S: u256,
-    R: ExtendedHomogeneousPoint,
-    k: u256,
-    mut A_prime: ExtendedHomogeneousPoint
+    S: u256, R: ExtendedHomogeneousPoint, k: u256, mut A_prime: ExtendedHomogeneousPoint
 ) -> bool {
+    // (X(P),Y(P)) of edwards25519 in https://datatracker.ietf.org/doc/html/rfc7748
+    let B: Point = Point {
+        x: 15112221349535400772501151409588531511454012693041857206046113283949847762202,
+        y: 46316835694926478169428394003475163141307993866256225615783033603165251855960
+    };
+
+    let B_extended: ExtendedHomogeneousPoint = B.into();
+
     // Check group equation [S]B = R + [k]A'
-    let lhs: ExtendedHomogeneousPoint = point_mult(S.into(), B);
+    let lhs: ExtendedHomogeneousPoint = point_mult(S, B_extended);
     let rhs: ExtendedHomogeneousPoint = R + point_mult(k, A_prime);
     lhs == rhs
 }
@@ -284,12 +296,6 @@ fn verify_signature(msg: Span<u8>, signature: Span<u8>, pub_key: Span<u8>) -> bo
     let S: u256 = s_string.into();
     let A_prime: Point = A_prime_opt.unwrap();
 
-    let B: Point = Point {
-        x: 15112221349535400772501151409588531511454012693041857206046113283949847762202,
-        y: 46316835694926478169428394003475163141307993866256225615783033603165251855960
-    };
-
-    let B_extended: ExtendedHomogeneousPoint = B.into();
     let R_extended: ExtendedHomogeneousPoint = R.into();
     let A_prime_ex: ExtendedHomogeneousPoint = A_prime.into();
 
@@ -300,5 +306,5 @@ fn verify_signature(msg: Span<u8>, signature: Span<u8>, pub_key: Span<u8>) -> bo
     let l_non_zero: NonZero<u256> = integer::u256_try_as_non_zero(l).unwrap();
     let (_, k_reduced) = integer::u512_safe_div_rem_by_u256(k_u512, l_non_zero);
 
-    check_group_equation(B_extended, S, R_extended, k_reduced, A_prime_ex)
+    check_group_equation(S, R_extended, k_reduced, A_prime_ex)
 }

@@ -21,9 +21,11 @@ fn add_mod(a: u256, b: u256, modulo: u256) -> u256 {
     res
 }
 
-// Function that return the modular multiplicative inverse.
+// Function that return the modular multiplicative inverse. Disclaimer: this function should only be used with a prime modulo. 
+// From Fermat's little theorem, a ^ (p - 1) = 1 when p is prime and a != 0. Since a ^ (p -1 ) = a · a (p - 2) we have that 
+// a ^ (p - 2) is the multiplicative inverse of a modulo p.
 /// # Arguments
-/// * `b` - Number of which to find the multiplicative inverse of.
+/// * `b` - Number of which to find the multiplicative inverse of. 
 /// * `modulo` - modulo.
 /// # Returns
 /// * `u256` - modular multiplicative inverse
