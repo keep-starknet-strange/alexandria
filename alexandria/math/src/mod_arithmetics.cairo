@@ -2,7 +2,7 @@ use option::OptionTrait;
 use traits::{Into, TryInto};
 use integer::u512;
 
-// Function that performs modular addition.
+/// Function that performs modular addition.
 /// # Arguments
 /// * `a` - Left hand side of addition.
 /// * `b` - Right hand side of addition.
@@ -21,19 +21,19 @@ fn add_mod(a: u256, b: u256, modulo: u256) -> u256 {
     res
 }
 
-// Function that return the modular multiplicative inverse. Disclaimer: this function should only be used with a prime modulo. 
-// From Fermat's little theorem, a ^ (p - 1) = 1 when p is prime and a != 0. Since a ^ (p -1 ) = a · a (p - 2) we have that 
-// a ^ (p - 2) is the multiplicative inverse of a modulo p.
+/// Function that return the modular multiplicative inverse. Disclaimer: this function should only be used with a prime modulo.
 /// # Arguments
 /// * `b` - Number of which to find the multiplicative inverse of. 
 /// * `modulo` - modulo.
 /// # Returns
 /// * `u256` - modular multiplicative inverse
 fn mult_inverse(b: u256, modulo: u256) -> u256 {
+    // From Fermat's little theorem, a ^ (p - 1) = 1 when p is prime and a != 0. Since a ^ (p - 1) = a · a ^ (p - 2) we have that 
+    // a ^ (p - 2) is the multiplicative inverse of a modulo p.
     pow_mod(b, modulo - 2, modulo)
 }
 
-// Function that return the modular additive inverse.
+/// Function that return the modular additive inverse.
 /// # Arguments
 /// * `b` - Number of which to find the additive inverse of.
 /// * `modulo` - modulo.
@@ -43,7 +43,7 @@ fn add_inverse_mod(b: u256, modulo: u256) -> u256 {
     modulo - b
 }
 
-// Function that performs modular substraction.
+/// Function that performs modular substraction.
 /// # Arguments
 /// * `a` - Left hand side of substraction.
 /// * `b` - Right hand side of substraction.
@@ -60,7 +60,7 @@ fn sub_mod(mut a: u256, mut b: u256, modulo: u256) -> u256 {
     (a + add_inverse_mod(b, modulo)) % modulo
 }
 
-// Function that performs modular multiplication.
+/// Function that performs modular multiplication.
 /// # Arguments
 /// * `a` - Left hand side of multiplication.
 /// * `b` - Right hand side of multiplication.
@@ -74,7 +74,7 @@ fn mult_mod(a: u256, b: u256, modulo: u256) -> u256 {
     rem_u256
 }
 
-// Function that performs modular division.
+/// Function that performs modular division.
 /// # Arguments
 /// * `a` - Left hand side of division.
 /// * `b` - Right hand side of division.
@@ -85,7 +85,7 @@ fn div_mod(a: u256, b: u256, modulo: u256) -> u256 {
     mult_mod(a, mult_inverse(b, modulo), modulo)
 }
 
-// Function that performs modular exponentiation.
+/// Function that performs modular exponentiation.
 /// # Arguments
 /// * `base` - Base of exponentiation.
 /// * `pow` - Power of exponentiation.

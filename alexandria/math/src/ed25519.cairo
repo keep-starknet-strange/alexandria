@@ -222,7 +222,7 @@ impl PointIntoExtendedHomogeneousPoint of Into<Point, ExtendedHomogeneousPoint> 
     }
 }
 
-// Function that performs point multiplication for an Elliptic Curve point using the double and add method.
+/// Function that performs point multiplication for an Elliptic Curve point using the double and add method.
 /// # Arguments
 /// * `scalar` - Scalar such that scalar * P = P + P + P + ... + P.
 /// * `P` - Elliptic Curve point in the Extended Homogeneous form.
@@ -248,7 +248,7 @@ fn point_mult(mut scalar: u256, mut P: ExtendedHomogeneousPoint) -> ExtendedHomo
     Q
 }
 
-// Function that checks the equality [S]B = R + [k]A'
+/// Function that checks the equality [S]B = R + [k]A'
 /// # Arguments
 /// * `S` - Scalar coming from the second half of the signature.
 /// * `R` - Result of point decoding of the first half of the signature in Extended Homogeneous form.
