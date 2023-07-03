@@ -37,13 +37,6 @@ trait StorageSize<T> {
     fn storage_size() -> u8;
 }
 
-// any type that can Into to u128 has a size of 1
-impl StorageSizeU128<T, impl TInto: Into<T, u128>> of StorageSize<T> {
-    fn storage_size() -> u8 {
-        1
-    }
-}
-
 // any type that can Into to felt252 has a size of 1
 impl StorageSizeFelt252<T, impl TInto: Into<T, felt252>> of StorageSize<T> {
     fn storage_size() -> u8 {
@@ -51,8 +44,8 @@ impl StorageSizeFelt252<T, impl TInto: Into<T, felt252>> of StorageSize<T> {
     }
 }
 
-// any type that can Into to u256 has a size of 2
-impl StorageSizeU256<T, impl TInto: Into<T, u256>> of StorageSize<T> {
+// u256 needs 2 storage slots
+impl StorageSizeU256 of StorageSize<u256> {
     fn storage_size() -> u8 {
         2
     }
