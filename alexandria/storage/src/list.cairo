@@ -51,7 +51,7 @@ impl StorageSizeFelt252<T, impl TInto: Into<T, felt252>> of StorageSize<T> {
     }
 }
 
-// any type that can Into to u258 has a size of 2
+// any type that can Into to u256 has a size of 2
 impl StorageSizeU256<T, impl TInto: Into<T, u256>> of StorageSize<T> {
     fn storage_size() -> u8 {
         2
