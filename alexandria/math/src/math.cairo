@@ -1,7 +1,7 @@
 use option::OptionTrait;
 use traits::{Into, TryInto};
 
-// Raise a number to a power.
+/// Raise a number to a power.
 /// * `base` - The number to raise.
 /// * `exp` - The exponent.
 /// # Returns
@@ -14,7 +14,7 @@ fn pow(base: u128, mut exp: u128) -> u128 {
     }
 }
 
-// Function to count the number of digits in a number.
+/// Function to count the number of digits in a number.
 /// # Arguments
 /// * `num` - The number to count the digits of.
 /// * `base` - Base in which to count the digits.

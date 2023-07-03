@@ -32,30 +32,30 @@ test:
 
 test-data_structures:
 	@echo "Testing data structures..."
-	cairo-test $(PROJECT_NAME)/data_structures
+	cairo-test $(ROOT_PROJECT) --filter alexandria_data_structures
 
 test-encoding:
 	@echo "Testing encoding..."
-	cairo-test $(PROJECT_NAME)/encoding
+	cairo-test $(ROOT_PROJECT) --filter alexandria_encoding
 
 test-math:
 	@echo "Testing math"
-	cairo-test $(PROJECT_NAME)/math
+	cairo-test $(ROOT_PROJECT) --filter alexandria_math
 
 test-sorting:
 	@echo "Testing sorting..."
-	cairo-test $(PROJECT_NAME)/sorting
+	cairo-test $(ROOT_PROJECT) --filter alexandria_sorting
 
 test-searching: 
 	@echo "Testing searching..."
-	cairo-test $(PROJECT_NAME)/searching
+	cairo-test $(ROOT_PROJECT) --filter alexandria_searching
 
 # Special filter tests targets
 
 # Run tests related to the stack
 test-stack:
 	@echo "Testing stack..."
-	cairo-test $(PROJECT_NAME) -f stack
+	cairo-test $(ROOT_PROJECT) -f stack
 
 # Format the project
 format:

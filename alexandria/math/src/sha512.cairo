@@ -6,6 +6,8 @@ use array::{ArrayTrait, SpanTrait};
 
 // Variable naming is compliant to RFC-6234 (https://datatracker.ietf.org/doc/html/rfc6234)
 
+const SHA512_LEN: usize = 64;
+
 const U64_BIT_NUM: u64 = 64;
 
 #[derive(Drop, Copy)]
