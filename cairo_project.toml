@@ -2,6 +2,8 @@
 [crate_roots]
 alexandria_data_structures = "alexandria/data_structures/src"
 alexandria_encoding = "alexandria/encoding/src"
+alexandria_linalg = "alexandria/linalg/src"
 alexandria_math = "alexandria/math/src"
+alexandria_numeric = "alexandria/numeric/src"
 alexandria_sorting = "alexandria/sorting/src"
 alexandria_searching = "alexandria/searching/src"

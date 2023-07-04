@@ -38,9 +38,17 @@ test-encoding:
 	@echo "Testing encoding..."
 	cairo-test $(ROOT_PROJECT) --filter alexandria_encoding
 
+test-linalg:
+	@echo "Testing linalg"
+	cairo-test $(PROJECT_NAME)/linalg
+
 test-math:
 	@echo "Testing math"
 	cairo-test $(ROOT_PROJECT) --filter alexandria_math
+
+test-numeric:
+	@echo "Testing numeric"
+	cairo-test $(PROJECT_NAME)/numeric
 
 test-sorting:
 	@echo "Testing sorting..."
