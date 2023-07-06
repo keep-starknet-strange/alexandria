@@ -74,7 +74,9 @@ struct Felt252Vec<T> {
     len: usize,
 }
 
-impl DestructFeltVec<T, impl TDrop: Drop<T>, impl TFelt252DictValue: Felt252DictValue<T>> of Destruct<Felt252Vec<T>> {
+impl DestructFeltVec<
+    T, impl TDrop: Drop<T>, impl TFelt252DictValue: Felt252DictValue<T>
+> of Destruct<Felt252Vec<T>> {
     fn destruct(self: Felt252Vec<T>) nopanic {
         self.items.squash();
     }
@@ -135,8 +137,7 @@ impl DestructNullableVec<T, impl TDrop: Drop<T>> of Destruct<NullableVec<T>> {
     }
 }
 
-impl NullableVecImpl<
-    T, impl TDrop: Drop<T>, impl TCopy: Copy<T>> of VecTrait<NullableVec<T>, T> {
+impl NullableVecImpl<T, impl TDrop: Drop<T>, impl TCopy: Copy<T>> of VecTrait<NullableVec<T>, T> {
     fn new() -> NullableVec<T> {
         NullableVec { items: Default::default(), len: 0 }
     }

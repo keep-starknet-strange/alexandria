@@ -13,75 +13,93 @@ fn vec_new_test<V, T, impl Vec: VecTrait<V, T>>(vec: @V) {
 }
 
 fn vec_len_test<
-    V, T,
+    V,
+    T,
     impl Vec: VecTrait<V, T>,
     impl TDrop: Drop<T>,
     impl TCopy: Copy<T>,
     impl TPartialEq: PartialEq<T>,
     impl SDestruct: Destruct<V>
->(ref vec: V, val_1: T) {
+>(
+    ref vec: V, val_1: T
+) {
     vec.push(val_1);
     assert(vec.len() == 1, 'vec length should be 1');
 }
 
 fn vec_get_test<
-    V, T,
+    V,
+    T,
     impl Vec: VecTrait<V, T>,
     impl TDrop: Drop<T>,
     impl TCopy: Copy<T>,
     impl TPartialEq: PartialEq<T>,
     impl SDestruct: Destruct<V>
->(ref vec: V, val_1: T) {
+>(
+    ref vec: V, val_1: T
+) {
     vec.push(val_1);
     assert(vec.get(0).unwrap() == val_1, 'vec get should return val_1');
     assert(vec.get(1).is_none(), 'vec get should return none');
 }
 
 fn vec_at_test<
-    V, T,
+    V,
+    T,
     impl Vec: VecTrait<V, T>,
     impl TDrop: Drop<T>,
     impl TCopy: Copy<T>,
     impl TPartialEq: PartialEq<T>,
     impl SDestruct: Destruct<V>
->(ref vec: V, val_1: T) {
+>(
+    ref vec: V, val_1: T
+) {
     vec.push(val_1);
     let result = vec.at(0);
     assert(vec.at(0) == val_1, 'vec at should return val_1');
 }
 
 fn vec_at_out_of_bounds_test<
-    V, T,
+    V,
+    T,
     impl Vec: VecTrait<V, T>,
     impl TDrop: Drop<T>,
     impl TCopy: Copy<T>,
     impl TPartialEq: PartialEq<T>,
     impl SDestruct: Destruct<V>
->(ref vec: V) {
+>(
+    ref vec: V
+) {
     let result = vec.at(0);
 }
 
 fn vec_push_test<
-    V, T,
+    V,
+    T,
     impl Vec: VecTrait<V, T>,
     impl TDrop: Drop<T>,
     impl TCopy: Copy<T>,
     impl TPartialEq: PartialEq<T>,
     impl SDestruct: Destruct<V>
->(ref vec: V, val_1: T) {
+>(
+    ref vec: V, val_1: T
+) {
     vec.push(val_1);
     assert(vec.len() == 1, 'vec length should be 1');
     assert(vec.at(0) == val_1, 'vec get should return val_1');
 }
 
 fn vec_set_test<
-    V, T,
+    V,
+    T,
     impl Vec: VecTrait<V, T>,
     impl TDrop: Drop<T>,
     impl TCopy: Copy<T>,
     impl TPartialEq: PartialEq<T>,
     impl SDestruct: Destruct<V>
->(ref vec: V, val_1: T, val_2: T) {
+>(
+    ref vec: V, val_1: T, val_2: T
+) {
     vec.push(val_1);
     vec.set(0, val_2);
     let result = vec.get(0);
@@ -89,26 +107,32 @@ fn vec_set_test<
 }
 
 fn vec_set_test_expect_error<
-    V, T,
+    V,
+    T,
     impl Vec: VecTrait<V, T>,
     impl TDrop: Drop<T>,
     impl TCopy: Copy<T>,
     impl TPartialEq: PartialEq<T>,
     impl SDestruct: Destruct<V>
->(ref vec: V, val_1: T, val_2: T) {
+>(
+    ref vec: V, val_1: T, val_2: T
+) {
     vec.push(val_1);
     vec.set(1, val_2);
 }
 
 fn vec_index_trait_test<
-    V, T,
+    V,
+    T,
     impl Vec: VecTrait<V, T>,
     impl TDrop: Drop<T>,
     impl TCopy: Copy<T>,
     impl TPartialEq: PartialEq<T>,
     impl SDestruct: Destruct<V>,
     impl VIndex: Index<V, usize, T>
->(ref vec: V, val_1: T, val_2: T) {
+>(
+    ref vec: V, val_1: T, val_2: T
+) {
     vec.push(val_1);
     vec.push(val_2);
     assert(vec[0] == val_1, 'vec[0] != val_1');
@@ -116,14 +140,17 @@ fn vec_index_trait_test<
 }
 
 fn vec_index_trait_out_of_bounds_test<
-    V, T,
+    V,
+    T,
     impl Vec: VecTrait<V, T>,
     impl TDrop: Drop<T>,
     impl TCopy: Copy<T>,
     impl TPartialEq: PartialEq<T>,
     impl SDestruct: Destruct<V>,
     impl VIndex: Index<V, usize, T>
->(ref vec: V, val_1: T) {
+>(
+    ref vec: V, val_1: T
+) {
     vec[0];
 }
 
