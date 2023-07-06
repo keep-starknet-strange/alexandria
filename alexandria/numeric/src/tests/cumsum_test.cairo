@@ -4,7 +4,7 @@ use alexandria_numeric::cumsum::cumsum;
 #[test]
 #[available_gas(2000000)]
 fn cumsum_test() {
-    let mut xs = ArrayTrait::new();
+    let mut xs = ArrayTrait::<u64>::new();
     xs.append(3);
     xs.append(5);
     xs.append(7);
@@ -18,6 +18,6 @@ fn cumsum_test() {
 #[should_panic]
 #[available_gas(2000000)]
 fn cumsum_test_revert_empty() {
-    let mut xs = ArrayTrait::new();
+    let mut xs = ArrayTrait::<u64>::new();
     let ys = cumsum(@xs);
 }
