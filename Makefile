@@ -28,7 +28,12 @@ run:
 # Test the project
 test:
 	@echo "Testing everything..."
-	cairo-test $(ROOT_PROJECT)
+	$(MAKE) test-cairo
+	$(MAKE) test-starknet
+
+test-cairo: test-data_structures test-encoding test-math test-sorting test-searching
+
+test-starknet: test-storage
 
 test-data_structures:
 	@echo "Testing data structures..."
@@ -50,11 +55,15 @@ test-numeric:
 	@echo "Testing numeric"
 	cairo-test $(PROJECT_NAME)/numeric
 
+test-storage:
+	@echo "Testing storage"
+	cairo-test --starknet $(PROJECT_NAME)/storage
+
 test-sorting:
 	@echo "Testing sorting..."
 	cairo-test $(ROOT_PROJECT) --filter alexandria_sorting
 
-test-searching: 
+test-searching:
 	@echo "Testing searching..."
 	cairo-test $(ROOT_PROJECT) --filter alexandria_searching
 
