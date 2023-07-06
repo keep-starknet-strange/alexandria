@@ -1,6 +1,6 @@
 use option::OptionTrait;
 use traits::{Into, TryInto};
-use alexandria::data_structures::vec;
+
 /// Raise a number to a power.
 /// * `base` - The number to raise.
 /// * `exp` - The exponent.

@@ -13,7 +13,7 @@
 /// * `Option::Some(day_of_week)` - The day of the week
 /// # Examples
 /// ```
-/// use alexandria::zellers_congruence::day_of_week;
+/// use alexandria::math::zellers_congruence::day_of_week;
 /// let day_of_week = day_of_week(1, 1, 2020);
 /// ```
 /// # TODO

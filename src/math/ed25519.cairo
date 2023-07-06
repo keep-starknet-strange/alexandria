@@ -6,7 +6,6 @@ use alexandria::math::sha512::{sha512, SHA512_LEN};
 use alexandria::math::mod_arithmetics::{
     add_mod, sub_mod, mult_mod, div_mod, pow_mod, add_inverse_mod
 };
-use alexandria::data_structures::array_ext::{ArrayTraitExt};
 
 // As per RFC-8032: https://datatracker.ietf.org/doc/html/rfc8032#section-5.1.7
 // Variable namings in this function refer to naming in the RFC
@@ -222,6 +221,35 @@ impl PointIntoExtendedHomogeneousPoint of Into<Point, ExtendedHomogeneousPoint> 
     }
 }
 
+/// Function that concats two arrays together
+/// # Arguments
+/// * `a` - First array.
+/// * `b` - Second array.
+/// # Returns
+/// * `Array<u8>` - true if the signature fits to the message and the public key, false otherwise.
+fn concat(a: @Array<u8>, b: @Array<u8>) -> Array<u8> {
+    let mut ret: Array<u8> = Default::default();
+    let mut i = 0;
+
+    loop {
+        if (i == a.len()) {
+            break;
+        }
+        ret.append(*a[i]);
+        i += 1;
+    };
+    i = 0;
+    loop {
+        if (i == b.len()) {
+            break;
+        }
+        ret.append(*b[i]);
+        i += 1;
+    };
+    ret
+}
+
+
 /// Function that performs point multiplication for an Elliptic Curve point using the double and add method.
 /// # Arguments
 /// * `scalar` - Scalar such that scalar * P = P + P + P + ... + P.
@@ -300,7 +328,7 @@ fn verify_signature(msg: Span<u8>, signature: Span<u8>, pub_key: Span<u8>) -> bo
     let A_prime_ex: ExtendedHomogeneousPoint = A_prime.into();
 
     // k = SHA512(dom2(F, C) -> empty string || R -> half of sig || A -> pub_key || PH(M) -> identity function for msg)
-    let k: Array<u8> = sha512(r_string.snapshot.concat(pub_key.snapshot).concat(msg.snapshot));
+    let k: Array<u8> = sha512(concat(@concat(r_string.snapshot, pub_key.snapshot), msg.snapshot));
     let k_u512: u512 = k.span().into();
 
     let l_non_zero: NonZero<u256> = integer::u256_try_as_non_zero(l).unwrap();
