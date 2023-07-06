@@ -1,5 +1,7 @@
 //! One-dimensional linear interpolation for monotonically increasing sample points.
 use array::ArrayTrait;
+use traits::Into;
+use zeroable::Zeroable;
 
 #[derive(Serde, Copy, Drop, PartialEq)]
 enum Interpolation {
@@ -23,64 +25,75 @@ enum Extrapolation {
 /// * `interpolation` - The interpolation method to use.
 /// * `extrapolation` - The extrapolation method to use.
 /// # Returns
-/// * `usize` - The interpolated y at x.
-fn interpolate(
-    x: usize,
-    xs: @Array<usize>,
-    ys: @Array<usize>,
+/// * `T` - The interpolated y at x.
+fn interpolate<
+    T,
+    impl TPartialOrd:PartialOrd<T>,
+    impl TNumericLiteral:NumericLiteral<T>,
+    impl TAdd:Add<T>,
+    impl TSub:Sub<T>,
+    impl TMul:Mul<T>,
+    impl TDiv:Div<T>,
+    impl TZeroable:Zeroable<T>,
+    impl TCopy:Copy<T>,
+    impl TDrop:Drop<T>,
+>(
+    x: T,
+    xs: @Array<T>,
+    ys: @Array<T>,
     interpolation: Interpolation,
     extrapolation: Extrapolation
-) -> usize {
+) -> T {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');
-    assert(xs.len() >= 2_usize, 'Array must have at least 2 elts');
+    assert(xs.len() >= 2, 'Array must have at least 2 elts');
 
     // [Check] Extrapolation
     if x <= *xs[0] {
         let y = match extrapolation {
-            Extrapolation::Null(()) => 0_usize,
-            Extrapolation::Constant(()) => *ys[0_usize],
+            Extrapolation::Null(()) => Zeroable::zero(),
+            Extrapolation::Constant(()) => *ys[0],
         };
         return y;
     }
-    if x >= *xs[xs.len() - 1_usize] {
+    if x >= *xs[xs.len() - 1] {
         let y = match extrapolation {
-            Extrapolation::Null(()) => 0_usize,
-            Extrapolation::Constant(()) => *ys[xs.len() - 1_usize],
+            Extrapolation::Null(()) => Zeroable::zero(),
+            Extrapolation::Constant(()) => *ys[xs.len() - 1],
         };
         return y;
     }
 
     // [Compute] Interpolation, could be optimized with binary search
-    let mut index = 0_usize;
+    let mut index = 0;
     loop {
-        assert(*xs[index + 1_usize] > *xs[index], 'Abscissa must be sorted');
+        assert(*xs[index + 1] > *xs[index], 'Abscissa must be sorted');
 
-        if x < *xs[index + 1_usize] {
+        if x < *xs[index + 1] {
             break match interpolation {
                 Interpolation::Linear(()) => {
                     // y = [(xb - x) * ya + (x - xa) * yb] / (xb - xa)
                     // y = [alpha * ya + beta * yb] / den
-                    let den = *xs[index + 1_usize] - *xs[index];
-                    let alpha = *xs[index + 1_usize] - x;
+                    let den = *xs[index + 1] - *xs[index];
+                    let alpha = *xs[index + 1] - x;
                     let beta = x - *xs[index];
-                    (alpha * *ys[index] + beta * *ys[index + 1_usize]) / den
+                    (alpha * *ys[index] + beta * *ys[index + 1]) / den
                 },
                 Interpolation::Nearest(()) => {
                     // y = ya or yb
-                    let alpha = *xs[index + 1_usize] - x;
+                    let alpha = *xs[index + 1] - x;
                     let beta = x - *xs[index];
                     if alpha >= beta {
                         *ys[index]
                     } else {
-                        *ys[index + 1_usize]
+                        *ys[index + 1]
                     }
                 },
-                Interpolation::ConstantLeft(()) => *ys[index + 1_usize],
+                Interpolation::ConstantLeft(()) => *ys[index + 1],
                 Interpolation::ConstantRight(()) => *ys[index],
             };
         }
 
-        index += 1_usize;
+        index += 1;
     }
 }
