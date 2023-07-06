@@ -52,10 +52,6 @@ test-numeric:
 	@echo "Testing numeric"
 	$(TEST) $(ROOT_PROJECT) --filter numeric
 
-test-storage:
-	@echo "Testing storage"
-	cairo-test --starknet $(PROJECT_NAME)/storage
-
 test-sorting:
 	@echo "Testing sorting..."
 	$(TEST) $(ROOT_PROJECT) --filter sorting
