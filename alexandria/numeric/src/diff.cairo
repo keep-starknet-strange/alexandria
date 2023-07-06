@@ -9,11 +9,11 @@ use zeroable::Zeroable;
 /// * `Array<T>` - The discrete difference of sorted sequence.
 fn diff<
     T,
-    impl TPartialOrd:PartialOrd<T>,
-    impl TSub:Sub<T>,
-    impl TCopy:Copy<T>,
-    impl TDrop:Drop<T>,
-    impl TZeroable:Zeroable<T>,
+    impl TPartialOrd: PartialOrd<T>,
+    impl TSub: Sub<T>,
+    impl TCopy: Copy<T>,
+    impl TDrop: Drop<T>,
+    impl TZeroable: Zeroable<T>,
 >(
     mut sequence: @Array<T>
 ) -> Array<T> {

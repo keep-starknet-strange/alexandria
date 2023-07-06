@@ -11,20 +11,19 @@ use traits::Into;
 /// * `T` - The approximate integral.
 fn trapezoidal_rule<
     T,
-    impl TPartialOrd:PartialOrd<T>,
-    impl TNumericLiteral:NumericLiteral<T>,
-    impl TAdd:Add<T>,
-    impl TAddEq:AddEq<T>,
-    impl TSub:Sub<T>,
-    impl TMul:Mul<T>,
-    impl TDiv:Div<T>,
-    impl TCopy:Copy<T>,
-    impl TDrop:Drop<T>,
-    impl TZeroable:Zeroable<T>,
+    impl TPartialOrd: PartialOrd<T>,
+    impl TNumericLiteral: NumericLiteral<T>,
+    impl TAdd: Add<T>,
+    impl TAddEq: AddEq<T>,
+    impl TSub: Sub<T>,
+    impl TMul: Mul<T>,
+    impl TDiv: Div<T>,
+    impl TCopy: Copy<T>,
+    impl TDrop: Drop<T>,
+    impl TZeroable: Zeroable<T>,
     impl TInto: Into<u8, T>,
 >(
-    mut xs: Array<T>,
-    mut ys: Array<T>
+    mut xs: Array<T>, mut ys: Array<T>
 ) -> T {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');

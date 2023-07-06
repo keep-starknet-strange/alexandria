@@ -9,14 +9,13 @@ use array::ArrayTrait;
 /// * `T` - The dot product.
 fn dot<
     T,
-    impl TMul:Mul<T>,
-    impl TAddEq:AddEq<T>,
-    impl TZeroable:Zeroable<T>,
-    impl TCopy:Copy<T>,
-    impl TDrop:Drop<T>,
+    impl TMul: Mul<T>,
+    impl TAddEq: AddEq<T>,
+    impl TZeroable: Zeroable<T>,
+    impl TCopy: Copy<T>,
+    impl TDrop: Drop<T>,
 >(
-    mut xs: Array<T>,
-    mut ys: Array<T>
+    mut xs: Array<T>, mut ys: Array<T>
 ) -> T {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');

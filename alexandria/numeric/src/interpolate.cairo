@@ -28,21 +28,17 @@ enum Extrapolation {
 /// * `T` - The interpolated y at x.
 fn interpolate<
     T,
-    impl TPartialOrd:PartialOrd<T>,
-    impl TNumericLiteral:NumericLiteral<T>,
-    impl TAdd:Add<T>,
-    impl TSub:Sub<T>,
-    impl TMul:Mul<T>,
-    impl TDiv:Div<T>,
-    impl TZeroable:Zeroable<T>,
-    impl TCopy:Copy<T>,
-    impl TDrop:Drop<T>,
+    impl TPartialOrd: PartialOrd<T>,
+    impl TNumericLiteral: NumericLiteral<T>,
+    impl TAdd: Add<T>,
+    impl TSub: Sub<T>,
+    impl TMul: Mul<T>,
+    impl TDiv: Div<T>,
+    impl TZeroable: Zeroable<T>,
+    impl TCopy: Copy<T>,
+    impl TDrop: Drop<T>,
 >(
-    x: T,
-    xs: @Array<T>,
-    ys: @Array<T>,
-    interpolation: Interpolation,
-    extrapolation: Extrapolation
+    x: T, xs: @Array<T>, ys: @Array<T>, interpolation: Interpolation, extrapolation: Extrapolation
 ) -> T {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');
