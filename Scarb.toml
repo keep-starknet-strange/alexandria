@@ -1,0 +1,5 @@
+[package]
+name = "alexandria"
+version = "0.1.0"
+description = "Starknet utilities"
+homepage = "https://github.com/keep-starknet-strange/alexandria/"

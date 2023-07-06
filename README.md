@@ -57,11 +57,12 @@ Current version: [v2.0.0](https://github.com/starkware-libs/cairo/releases/tag/v
 
 This repository is divided in 5 main packages:
 
- - [Data Structures](./alexandria/data_structures/README.md)
- - [Encoding](./alexandria/encoding/README.md)
- - [Math](./alexandria/math/README.md)
- - [Searching](./alexandria/searching/README.md)
- - [Sorting](./alexandria/sorting/README.md)
+ - [Data Structures](./src/data_structures/README.md)
+ - [Encoding](./src/encoding/README.md)
+ - [Math](./src/math/README.md)
+ - [Searching](./src/searching/README.md)
+ - [Sorting](./src/sorting/README.md)
+ - [Storage](./src/sorting/README.md)
 
 ## Getting Started
 
@@ -72,10 +73,10 @@ This repository is divided in 5 main packages:
 
 ### Installation
 
-Alexandria is a collection of [Scarb] packages, which can be installed by adding the following line to your `Scarb.toml`:
+Alexandria is a collection of cairo utilities, which can be installed by adding the following line to your `Scarb.toml`:
 ```toml
 [dependencies]
-alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
+alexandria = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
 ```
 
 ## Usage
