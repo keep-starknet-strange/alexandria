@@ -4,11 +4,11 @@ use alexandria_numeric::trapezoidal_rule::trapezoidal_rule;
 #[test]
 #[available_gas(2000000)]
 fn trapezoidal_rule_test() {
-    let mut xs = ArrayTrait::new();
+    let mut xs = ArrayTrait::<u64>::new();
     xs.append(3);
     xs.append(5);
     xs.append(7);
-    let mut ys = ArrayTrait::new();
+    let mut ys = ArrayTrait::<u64>::new();
     ys.append(11);
     ys.append(13);
     ys.append(17);
@@ -19,9 +19,9 @@ fn trapezoidal_rule_test() {
 #[should_panic]
 #[available_gas(2000000)]
 fn trapezoidal_rule_test_revert_len_mismatch() {
-    let mut xs = ArrayTrait::new();
+    let mut xs = ArrayTrait::<u64>::new();
     xs.append(3);
-    let mut ys = ArrayTrait::new();
+    let mut ys = ArrayTrait::<u64>::new();
     trapezoidal_rule(xs, ys);
 }
 
@@ -29,9 +29,9 @@ fn trapezoidal_rule_test_revert_len_mismatch() {
 #[should_panic]
 #[available_gas(2000000)]
 fn trapezoidal_rule_test_revert_len_too_short() {
-    let mut xs = ArrayTrait::new();
+    let mut xs = ArrayTrait::<u64>::new();
     xs.append(3);
-    let mut ys = ArrayTrait::new();
+    let mut ys = ArrayTrait::<u64>::new();
     ys.append(11);
     trapezoidal_rule(xs, ys);
 }
@@ -40,10 +40,10 @@ fn trapezoidal_rule_test_revert_len_too_short() {
 #[should_panic]
 #[available_gas(2000000)]
 fn trapezoidal_rule_test_revert_not_sorted() {
-    let mut xs = ArrayTrait::new();
+    let mut xs = ArrayTrait::<u64>::new();
     xs.append(5);
     xs.append(3);
-    let mut ys = ArrayTrait::new();
+    let mut ys = ArrayTrait::<u64>::new();
     ys.append(11);
     ys.append(13);
     trapezoidal_rule(xs, ys);

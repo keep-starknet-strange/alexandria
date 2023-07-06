@@ -1,29 +1,39 @@
 //! The discrete difference of the elements.
 use array::ArrayTrait;
+use zeroable::Zeroable;
 
 /// Compute the discrete difference of a sorted sequence.
 /// # Arguments
 /// * `sequence` - The sorted sequence to operate.
 /// # Returns
-/// * `Array<usize>` - The discrete difference of sorted sequence.
-fn diff(mut sequence: @Array<usize>) -> Array<usize> {
+/// * `Array<T>` - The discrete difference of sorted sequence.
+fn diff<
+    T,
+    impl TPartialOrd: PartialOrd<T>,
+    impl TSub: Sub<T>,
+    impl TCopy: Copy<T>,
+    impl TDrop: Drop<T>,
+    impl TZeroable: Zeroable<T>,
+>(
+    mut sequence: @Array<T>
+) -> Array<T> {
     // [Check] Inputs
-    assert(sequence.len() >= 1_usize, 'Array must have at least 1 elt');
+    assert(sequence.len() >= 1, 'Array must have at least 1 elt');
 
     // [Compute] Interpolation
-    let mut index = 0_usize;
-    let mut array = ArrayTrait::new();
+    let mut index = 0;
+    let mut array = ArrayTrait::<T>::new();
     loop {
         if index == sequence.len() {
             break ();
         }
-        if index == 0_usize {
-            array.append(0_usize);
+        if index == 0 {
+            array.append(Zeroable::zero());
         } else {
-            assert(*sequence[index] >= *sequence[index - 1_usize], 'Sequence must be sorted');
-            array.append(*sequence[index] - *sequence[index - 1_usize]);
+            assert(*sequence[index] >= *sequence[index - 1], 'Sequence must be sorted');
+            array.append(*sequence[index] - *sequence[index - 1]);
         }
-        index += 1_usize;
+        index += 1;
     };
     array
 }
