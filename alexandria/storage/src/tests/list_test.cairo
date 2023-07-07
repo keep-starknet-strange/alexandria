@@ -14,6 +14,7 @@ trait IAListHolder<TContractState> {
         ref self: TContractState, index: u32, addrs_value: ContractAddress, numbers_value: u256
     );
     fn do_pop_front(ref self: TContractState) -> (Option<ContractAddress>, Option<u256>);
+    fn do_array(ref self: TContractState) -> (Array<ContractAddress>, Array<u256>);
 }
 
 #[starknet::contract]
@@ -70,6 +71,12 @@ mod AListHolder {
             let mut a = self.addrs.read();
             let mut n = self.numbers.read();
             (a.pop_front(), n.pop_front())
+        }
+
+        fn do_array(ref self: ContractState) -> (Array<ContractAddress>, Array<u256>) {
+            let mut a = self.addrs.read();
+            let mut n = self.numbers.read();
+            (a.array(), n.array())
         }
     }
 }
@@ -340,5 +347,32 @@ mod tests {
         let (addr, number) = contract.do_get_index(0);
         assert(addr == diff_addr, 'addr');
         assert(number == 9000, 'number');
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_array_pass() {
+        let contract = deploy_mock();
+        let mock_addr = mock_addr();
+
+        contract.do_append(mock_addr, 100); // idx 0
+        contract.do_append(mock_addr, 200); // idx 1
+        contract.do_append(mock_addr, 300); // idx 2
+
+        let (array_addr, array_number) = contract.do_array();
+
+        assert((array_addr.len(), array_number.len()) == contract.do_get_len(), 'lens mismatch');
+        assert((*array_addr.at(0), *array_number.at(0)) == contract.do_get_index(0), 'idx 0');
+        assert((*array_addr.at(1), *array_number.at(1)) == contract.do_get_index(1), 'idx 1');
+        assert((*array_addr.at(2), *array_number.at(2)) == contract.do_get_index(2), 'idx 2');
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_array_empty() {
+        let contract = deploy_mock();
+
+        let (array_addr, array_number) = contract.do_array();
+        assert((array_addr.len(), array_number.len()) == (0, 0), 'lens must be null');
     }
 }
