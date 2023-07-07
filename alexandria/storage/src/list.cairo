@@ -11,7 +11,7 @@ use traits::{Default, DivRem, IndexView, Into, TryInto};
 
 const POW2_8: u32 = 256; // 2^8
 
-#[derive(Drop, Copy)]
+#[derive(Drop)]
 struct List<T> {
     address_domain: u32,
     base: StorageBaseAddress,
@@ -26,7 +26,7 @@ trait ListTrait<T> {
     fn get(self: @List<T>, index: u32) -> Option<T>;
     fn set(ref self: List<T>, index: u32, value: T);
     fn pop_front(ref self: List<T>) -> Option<T>;
-    fn array(ref self: List<T>) -> Array<T>;
+    fn array(self: @List<T>) -> Array<T>;
 }
 
 // when writing elements in storage, we need to know how many storage slots
@@ -119,11 +119,11 @@ impl ListImpl<
         popped
     }
 
-    fn array(ref self: List<T>) -> Array<T> {
+    fn array(self: @List<T>) -> Array<T> {
         let mut array = ArrayTrait::<T>::new();
         let mut index = 0;
         loop {
-            if index == self.len {
+            if index == *self.len {
                 break ();
             }
             array.append(self.get(index).expect('List index out of bounds'));
