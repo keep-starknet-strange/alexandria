@@ -14,7 +14,7 @@ trait IAListHolder<TContractState> {
         ref self: TContractState, index: u32, addrs_value: ContractAddress, numbers_value: u256
     );
     fn do_pop_front(ref self: TContractState) -> (Option<ContractAddress>, Option<u256>);
-    fn do_array(ref self: TContractState) -> (Array<ContractAddress>, Array<u256>);
+    fn do_array(self: @TContractState) -> (Array<ContractAddress>, Array<u256>);
 }
 
 #[starknet::contract]
@@ -73,7 +73,7 @@ mod AListHolder {
             (a.pop_front(), n.pop_front())
         }
 
-        fn do_array(ref self: ContractState) -> (Array<ContractAddress>, Array<u256>) {
+        fn do_array(self: @ContractState) -> (Array<ContractAddress>, Array<u256>) {
             let mut a = self.addrs.read();
             let mut n = self.numbers.read();
             (a.array(), n.array())
