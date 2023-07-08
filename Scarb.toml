@@ -7,4 +7,4 @@ homepage = "https://github.com/keep-starknet-strange/alexandria/"
 [[target.starknet-contract]]
 
 [dependencies]
-starknet = ">=2.0.0-rc0"
+starknet = ">=2.0.1"
