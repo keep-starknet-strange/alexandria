@@ -4,7 +4,5 @@ version = "0.1.0"
 description = "Starknet utilities"
 homepage = "https://github.com/keep-starknet-strange/alexandria/"
 
-[[target.starknet-contract]]
-
 [dependencies]
 starknet = ">=2.0.1"
