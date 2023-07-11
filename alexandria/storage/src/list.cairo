@@ -1,6 +1,7 @@
 use hash::LegacyHash;
 use integer::U32DivRem;
 use option::OptionTrait;
+use array::ArrayTrait;
 use starknet::{storage_read_syscall, storage_write_syscall, SyscallResult, SyscallResultTrait};
 use starknet::storage_access::{
     StorageAccess, StorageBaseAddress, storage_address_to_felt252, storage_address_from_base,
@@ -25,6 +26,7 @@ trait ListTrait<T> {
     fn get(self: @List<T>, index: u32) -> Option<T>;
     fn set(ref self: List<T>, index: u32, value: T);
     fn pop_front(ref self: List<T>) -> Option<T>;
+    fn array(self: @List<T>) -> Array<T>;
 }
 
 // when writing elements in storage, we need to know how many storage slots
@@ -115,6 +117,19 @@ impl ListImpl<
         StorageAccess::write(self.address_domain, self.base, self.len);
 
         popped
+    }
+
+    fn array(self: @List<T>) -> Array<T> {
+        let mut array = ArrayTrait::<T>::new();
+        let mut index = 0;
+        loop {
+            if index == *self.len {
+                break ();
+            }
+            array.append(self.get(index).expect('List index out of bounds'));
+            index += 1;
+        };
+        array
     }
 }
 
