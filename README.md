@@ -85,7 +85,7 @@ alexandria = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
 then add the following line in your `.cairo` file
 
 ```rust
-use alexandria::math::sha512::{sha512};
+use alexandria::math::sha512::sha512;
 ```
 
 ## Usage
