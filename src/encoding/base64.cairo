@@ -4,6 +4,7 @@ use integer::{upcast, downcast, BoundedInt};
 use option::OptionTrait;
 use debug::PrintTrait;
 use traits::Into;
+use alexandria::math::math::{shr, shl};
 
 const U6_MAX: u128 = 0x3F;
 
@@ -43,24 +44,6 @@ impl Base64UrlDecoder of Decoder<Array<u8>> {
     fn decode(mut data: Array<u8>) -> Array<u8> {
         inner_decode(ref data)
     }
-}
-
-fn fpow(x: u128, n: u128) -> u128 {
-    if n == 0 {
-        1
-    } else if (n & 1) == 1 {
-        x * fpow(x * x, n / 2)
-    } else {
-        fpow(x * x, n / 2)
-    }
-}
-
-fn shl(x: u128, n: u128) -> u128 {
-    x * fpow(2, n)
-}
-
-fn shr(x: u128, n: u128) -> u128 {
-    x / fpow(2, n)
 }
 
 fn inner_encode(ref data: Array<u8>, ref char_set: Array<u8>) -> Array<u8> {
