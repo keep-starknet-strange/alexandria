@@ -11,6 +11,8 @@ default: test
 # All relevant targets
 all: build run test
 
+TEST = cairo-test --starknet
+
 # Targets
 
 # Compile the project
@@ -28,44 +30,39 @@ run:
 # Test the project
 test:
 	@echo "Testing everything..."
-	$(MAKE) test-cairo
-	$(MAKE) test-starknet
-
-test-cairo: test-data_structures test-encoding test-math test-sorting test-searching
-
-test-starknet: test-storage
+	$(TEST) $(ROOT_PROJECT)
 
 test-data_structures:
 	@echo "Testing data structures..."
-	cairo-test $(ROOT_PROJECT) --filter alexandria_data_structures
+	$(TEST) $(ROOT_PROJECT) --filter data_structures
 
 test-encoding:
 	@echo "Testing encoding..."
-	cairo-test $(ROOT_PROJECT) --filter alexandria_encoding
+	$(TEST) $(ROOT_PROJECT) --filter encoding
 
 test-linalg:
 	@echo "Testing linalg"
-	cairo-test $(PROJECT_NAME)/linalg
+	$(TEST) $(ROOT_PROJECT) --filter linalg
 
 test-math:
 	@echo "Testing math"
-	cairo-test $(ROOT_PROJECT) --filter alexandria_math
+	$(TEST) $(ROOT_PROJECT) --filter math
 
 test-numeric:
 	@echo "Testing numeric"
-	cairo-test $(PROJECT_NAME)/numeric
-
-test-storage:
-	@echo "Testing storage"
-	cairo-test --starknet $(PROJECT_NAME)/storage
+	$(TEST) $(ROOT_PROJECT) --filter numeric
 
 test-sorting:
 	@echo "Testing sorting..."
-	cairo-test $(ROOT_PROJECT) --filter alexandria_sorting
+	$(TEST) $(ROOT_PROJECT) --filter sorting
 
 test-searching:
 	@echo "Testing searching..."
-	cairo-test $(ROOT_PROJECT) --filter alexandria_searching
+	$(TEST) $(ROOT_PROJECT) --filter searching
+
+test-storage: 
+	@echo "Testing storage..."
+	$(TEST) $(ROOT_PROJECT) --filter storage
 
 # Special filter tests targets
 
