@@ -1,5 +1,0 @@
-[package]
-name = "alexandria_linalg"
-version = "0.1.0"
-description = "A set of linear algebra Cairo 1.0 libraries and algorithms"
-homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/alexandria/linalg"
