@@ -1,5 +1,6 @@
+use core::option::OptionTrait;
 //! Dot product of two arrays
-use array::ArrayTrait;
+use array::SpanTrait;
 
 /// Compute the dot product for 2 given arrays.
 /// # Arguments
@@ -15,7 +16,7 @@ fn dot<
     impl TCopy: Copy<T>,
     impl TDrop: Drop<T>,
 >(
-    mut xs: Array<T>, mut ys: Array<T>
+    mut xs: Span<T>, mut ys: Span<T>
 ) -> T {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');
@@ -24,11 +25,14 @@ fn dot<
     let mut index = 0;
     let mut value = Zeroable::zero();
     loop {
-        if index == xs.len() {
-            break ();
-        }
-        value += *xs[index] * *ys[index];
-        index += 1;
-    };
-    value
+        match xs.pop_front() {
+            Option::Some(x_value) => {
+                let y_value = ys.pop_front().unwrap();
+                value += *x_value * *y_value;
+            },
+            Option::None(_) => {
+                break value;
+            },
+        };
+    }
 }
