@@ -51,17 +51,20 @@
 
 Alexandria is a community maintained standard library for Cairo 1.0.
 It is a collection of useful algorithms and data structures implemented in Cairo.  
-Current version: [v2.0.0-rc5](https://github.com/starkware-libs/cairo/releases/tag/v2.0.0-rc5) 
+Current version: [v2.0.0](https://github.com/starkware-libs/cairo/releases/tag/v2.0.0)
 
 ## Features
 
-This repository is divided in 5 main packages:
+This repository is divided in 8 modules:
 
- - [Data Structures](./alexandria/data_structures/README.md)
- - [Encoding](./alexandria/encoding/README.md)
- - [Math](./alexandria/math/README.md)
- - [Searching](./alexandria/searching/README.md)
- - [Sorting](./alexandria/sorting/README.md)
+- [Data Structures](./src/data_structures/README.md)
+- [Encoding](./src/encoding/README.md)
+- [Linalg](./src/linalg/README.md)
+- [Math](./src/math/README.md)
+- [Numeric](./src/numeric/README.md)
+- [Searching](./src/searching/README.md)
+- [Sorting](./src/sorting/README.md)
+- [Storage](./src/storage/README.md)
 
 ## Getting Started
 
@@ -72,14 +75,20 @@ This repository is divided in 5 main packages:
 
 ### Installation
 
-Alexandria is a collection of [Scarb] packages, which can be installed by adding the following line to your `Scarb.toml`:
+Alexandria is a collection of cairo utilities, which can be installed by adding the following line to your `Scarb.toml`:
+
 ```toml
 [dependencies]
-alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
+alexandria = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
+```
+
+then add the following line in your `.cairo` file
+
+```rust
+use alexandria::math::sha512::sha512;
 ```
 
 ## Usage
-
 
 ### Build
 

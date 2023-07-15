@@ -1,8 +1,0 @@
-[package]
-name = "alexandria_encoding"
-version = "0.1.0"
-description = "A set of encoding Cairo 1.0 libraries and algorithms"
-homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/data_structures"
-
-[dependencies]
-alexandria_math = { path = "../math/" }
