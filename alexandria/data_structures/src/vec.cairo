@@ -100,12 +100,9 @@ impl Felt252VecImpl<
     }
 
     fn at(ref self: Felt252Vec<T>, index: usize) -> T {
-        if index < self.len() {
-            let item = self.items.get(index.into());
-            item
-        } else {
-            panic_with_felt252('Index out of bounds')
-        }
+        assert(index < self.len(), 'Index out of bounds');
+        let item = self.items.get(index.into());
+        item
     }
 
     fn push(ref self: Felt252Vec<T>, value: T) -> () {
@@ -114,15 +111,12 @@ impl Felt252VecImpl<
     }
 
     fn set(ref self: Felt252Vec<T>, index: usize, value: T) {
-        if index < self.len() {
-            self.items.insert(index.into(), value);
-        } else {
-            panic_with_felt252('Index out of bounds')
-        }
+        assert(index < self.len(), 'Index out of bounds');
+        self.items.insert(index.into(), value);
     }
 
     fn len(self: @Felt252Vec<T>) -> usize {
-        *(self.len)
+        *self.len
     }
 }
 
@@ -151,11 +145,8 @@ impl NullableVecImpl<T, impl TDrop: Drop<T>, impl TCopy: Copy<T>> of VecTrait<Nu
     }
 
     fn at(ref self: NullableVec<T>, index: usize) -> T {
-        if index < self.len() {
-            return self.items.get(index.into()).deref();
-        } else {
-            panic_with_felt252('Index out of bounds')
-        }
+        assert(index < self.len(), 'Index out of bounds');
+        self.items.get(index.into()).deref()
     }
 
     fn push(ref self: NullableVec<T>, value: T) -> () {
@@ -164,14 +155,11 @@ impl NullableVecImpl<T, impl TDrop: Drop<T>, impl TCopy: Copy<T>> of VecTrait<Nu
     }
 
     fn set(ref self: NullableVec<T>, index: usize, value: T) {
-        if index < self.len() {
-            self.items.insert(index.into(), nullable_from_box(BoxTrait::new(value)));
-        } else {
-            panic_with_felt252('Index out of bounds')
-        }
+        assert(index < self.len(), 'Index out of bounds');
+        self.items.insert(index.into(), nullable_from_box(BoxTrait::new(value)));
     }
 
     fn len(self: @NullableVec<T>) -> usize {
-        *(self.len)
+        *self.len
     }
 }
