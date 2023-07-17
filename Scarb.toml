@@ -8,4 +8,4 @@ homepage = "https://github.com/keep-starknet-strange/alexandria/"
 starknet = ">=2.0.1"
 
 [scripts]
-format = "scarb fmt && yarn format"
+all = "scarb build && scarb test"
