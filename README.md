@@ -51,7 +51,7 @@
 
 Alexandria is a community maintained standard library for Cairo 1.0.
 It is a collection of useful algorithms and data structures implemented in Cairo.  
-Current version: [v2.0.0](https://github.com/starkware-libs/cairo/releases/tag/v2.0.0)
+Current version: [v2.0.1](https://github.com/starkware-libs/cairo/releases/tag/v2.0.0)
 
 ## Features
 
@@ -71,6 +71,7 @@ This repository is divided in 8 modules:
 ### Prerequisites
 
 - [Cairo](https://github.com/starkware-libs/cairo)
+- [Scarb](https://docs.swmansion.com/scarb)
 - [Rust](https://www.rust-lang.org/tools/install)
 
 ### Installation
@@ -93,25 +94,23 @@ use alexandria::math::sha512::sha512;
 ### Build
 
 ```bash
-make build
-```
-
-### Run
-
-```bash
-make run
+scarb build
 ```
 
 ### Test
 
 ```bash
-make test
+scarb test
+```
+Running a specific subset of tests 
+```bash
+scarb test -f math
 ```
 
 ### Format
 
 ```bash
-make format
+scarb format
 ```
 
 ## Roadmap
