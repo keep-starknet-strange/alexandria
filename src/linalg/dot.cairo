@@ -18,7 +18,7 @@ fn dot<
     mut xs: Array<T>, mut ys: Array<T>
 ) -> T {
     // [Check] Inputs
-    assert(xs.len() == ys.len(), 'Arrays must have the same len');
+        assert(xs.len() == ys.len(), 'Arrays must have the same len');
 
     // [Compute] Dot product in a loop
     let mut index = 0;
