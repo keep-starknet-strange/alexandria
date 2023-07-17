@@ -13,14 +13,12 @@ jobs:
     steps:
       - name: Step 1 - Check out main branch
         uses: actions/checkout@v3
-      - name: Step 2 - Downloading binaries
-        run: curl -L -o $ARCHIVE_NAME $ARCHIVE_LINK
-      - name: Step 3 - Unzipping binaries
-        run: tar -xvf $ARCHIVE_NAME
-      - name: Step 4 - Make binaries available
-        run: echo "./cairo/bin" >> $GITHUB_PATH
-      - name: Step 5 - Trying to build
-        run: make build
+      - name: Step 2 - Getting scarb
+        uses: software-mansion/setup-scarb@v1
+        with:
+          scarb-version: "0.5.1"
+      - name: Step 3 - Trying to build
+        run: scarb build
 
   test:
     name: test
@@ -28,14 +26,12 @@ jobs:
     steps:
       - name: Step 1 - Check out main branch
         uses: actions/checkout@v3
-      - name: Step 2 - Downloading binaries
-        run: curl -L -o $ARCHIVE_NAME $ARCHIVE_LINK
-      - name: Step 3 - Unzipping binaries
-        run: tar -xvf $ARCHIVE_NAME
-      - name: Step 4 - Make binaries available
-        run: echo "./cairo/bin" >> $GITHUB_PATH
-      - name: Step 5 - Running tests
-        run: make test
+      - name: Step 2 - Getting scarb
+        uses: software-mansion/setup-scarb@v1
+        with:
+          scarb-version: "0.5.1"
+      - name: Step 3 - Running tests
+        run: scarb test
 
   check-format:
     name: check-format
@@ -43,12 +39,10 @@ jobs:
     steps:
       - name: Step 1 - Check out main branch
         uses: actions/checkout@v3
-      - name: Step 2 - Downloading binaries
-        run: curl -L -o $ARCHIVE_NAME $ARCHIVE_LINK
-      - name: Step 3 - Unzipping binaries
-        run: tar -xvf $ARCHIVE_NAME
-      - name: Step 4 - Make binaries available
-        run: echo "./cairo/bin" >> $GITHUB_PATH
-      - name: Step 5 - Checking formatting
-        run: make check-format
+      - name: Step 2 - Getting scarb
+        uses: software-mansion/setup-scarb@v1
+        with:
+          scarb-version: "0.5.1"
+      - name: Step 3 - Checking formatting
+        run: scarb fmt --check
       
