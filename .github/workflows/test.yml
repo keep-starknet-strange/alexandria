@@ -2,10 +2,6 @@ name: test
 
 on: [push, pull_request]
 
-env:
-  ARCHIVE_LINK: https://github.com/starkware-libs/cairo/releases/download/v2.0.0/release-x86_64-unknown-linux-musl.tar.gz
-  ARCHIVE_NAME: cairo.zip
-
 jobs:
   build:
     name: build
