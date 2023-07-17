@@ -51,7 +51,7 @@
 
 Alexandria is a community maintained standard library for Cairo 1.0.
 It is a collection of useful algorithms and data structures implemented in Cairo.  
-Current version: [v2.0.1](https://github.com/starkware-libs/cairo/releases/tag/v2.0.0)
+Current version: [v2.0.1](https://github.com/starkware-libs/cairo/releases/tag/v2.0.1)
 
 ## Features
 
