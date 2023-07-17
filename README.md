@@ -110,7 +110,7 @@ scarb test -f math
 ### Format
 
 ```bash
-scarb format
+scarb fmt
 ```
 
 ## Roadmap
