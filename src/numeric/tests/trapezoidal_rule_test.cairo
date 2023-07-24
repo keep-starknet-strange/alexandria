@@ -12,7 +12,7 @@ fn trapezoidal_rule_test() {
     ys.append(11);
     ys.append(13);
     ys.append(17);
-    assert(trapezoidal_rule(xs, ys) == 54, 'invalid integral');
+    assert(trapezoidal_rule(xs.span(), ys.span()) == 54, 'invalid integral');
 }
 
 #[test]
@@ -22,7 +22,7 @@ fn trapezoidal_rule_test_revert_len_mismatch() {
     let mut xs = ArrayTrait::<u64>::new();
     xs.append(3);
     let mut ys = ArrayTrait::<u64>::new();
-    trapezoidal_rule(xs, ys);
+    trapezoidal_rule(xs.span(), ys.span());
 }
 
 #[test]
@@ -33,7 +33,7 @@ fn trapezoidal_rule_test_revert_len_too_short() {
     xs.append(3);
     let mut ys = ArrayTrait::<u64>::new();
     ys.append(11);
-    trapezoidal_rule(xs, ys);
+    trapezoidal_rule(xs.span(), ys.span());
 }
 
 #[test]
@@ -46,5 +46,5 @@ fn trapezoidal_rule_test_revert_not_sorted() {
     let mut ys = ArrayTrait::<u64>::new();
     ys.append(11);
     ys.append(13);
-    trapezoidal_rule(xs, ys);
+    trapezoidal_rule(xs.span(), ys.span());
 }

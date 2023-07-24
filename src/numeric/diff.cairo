@@ -1,5 +1,6 @@
+use core::option::OptionTrait;
 //! The discrete difference of the elements.
-use array::ArrayTrait;
+use array::{ArrayTrait, SpanTrait};
 use zeroable::Zeroable;
 
 /// Compute the discrete difference of a sorted sequence.
@@ -15,25 +16,26 @@ fn diff<
     impl TDrop: Drop<T>,
     impl TZeroable: Zeroable<T>,
 >(
-    mut sequence: @Array<T>
+    mut sequence: Span<T>
 ) -> Array<T> {
     // [Check] Inputs
     assert(sequence.len() >= 1, 'Array must have at least 1 elt');
 
     // [Compute] Interpolation
-    let mut index = 0;
     let mut array = ArrayTrait::<T>::new();
+    array.append(Zeroable::zero());
+    let mut prev_value = *sequence.pop_front().unwrap();
     loop {
-        if index == sequence.len() {
-            break ();
-        }
-        if index == 0 {
-            array.append(Zeroable::zero());
-        } else {
-            assert(*sequence[index] >= *sequence[index - 1], 'Sequence must be sorted');
-            array.append(*sequence[index] - *sequence[index - 1]);
-        }
-        index += 1;
+        match sequence.pop_front() {
+            Option::Some(current_value) => {
+                assert(*current_value >= prev_value, 'Sequence must be sorted');
+                array.append(*current_value - prev_value);
+                prev_value = *current_value;
+            },
+            Option::None(_) => {
+                break ();
+            },
+        };
     };
     array
 }

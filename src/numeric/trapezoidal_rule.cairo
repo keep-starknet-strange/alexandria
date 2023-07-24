@@ -1,5 +1,5 @@
 //! Integrate using the composite trapezoidal rule
-use array::ArrayTrait;
+use array::SpanTrait;
 use zeroable::Zeroable;
 use traits::Into;
 
@@ -23,7 +23,7 @@ fn trapezoidal_rule<
     impl TZeroable: Zeroable<T>,
     impl TInto: Into<u8, T>,
 >(
-    mut xs: Array<T>, mut ys: Array<T>
+    mut xs: Span<T>, mut ys: Span<T>
 ) -> T {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');
