@@ -23,7 +23,7 @@ fn bubblesort_test() {
 
     let mut sorted = bubble_sort::bubble_sort_elements(data);
 
-    assert(is_equal(ref sorted, ref correct, 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span(), 0_u32) == true, 'invalid result');
 }
 
 
@@ -36,7 +36,7 @@ fn bubblesort_test_empty() {
 
     let mut sorted = bubble_sort::bubble_sort_elements(data);
 
-    assert(is_equal(ref sorted, ref correct, 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span(), 0_u32) == true, 'invalid result');
 }
 
 #[test]
@@ -50,7 +50,7 @@ fn bubblesort_test_one_element() {
 
     let mut sorted = bubble_sort::bubble_sort_elements(data);
 
-    assert(is_equal(ref sorted, ref correct, 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span(), 0_u32) == true, 'invalid result');
 }
 
 #[test]
@@ -70,6 +70,6 @@ fn bubblesort_test_pre_sorted() {
 
     let mut sorted = bubble_sort::bubble_sort_elements(data);
 
-    assert(is_equal(ref sorted, ref correct, 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span(), 0_u32) == true, 'invalid result');
 }
 

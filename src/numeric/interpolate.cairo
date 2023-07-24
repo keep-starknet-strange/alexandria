@@ -1,5 +1,5 @@
 //! One-dimensional linear interpolation for monotonically increasing sample points.
-use array::ArrayTrait;
+use array::SpanTrait;
 use traits::Into;
 use zeroable::Zeroable;
 
@@ -38,7 +38,7 @@ fn interpolate<
     impl TCopy: Copy<T>,
     impl TDrop: Drop<T>,
 >(
-    x: T, xs: @Array<T>, ys: @Array<T>, interpolation: Interpolation, extrapolation: Extrapolation
+    x: T, xs: Span<T>, ys: Span<T>, interpolation: Interpolation, extrapolation: Extrapolation
 ) -> T {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');
