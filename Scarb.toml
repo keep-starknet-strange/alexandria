@@ -6,3 +6,6 @@ homepage = "https://github.com/keep-starknet-strange/alexandria/"
 
 [dependencies]
 starknet = ">=2.0.1"
+
+[scripts]
+all = "scarb build && scarb test"
