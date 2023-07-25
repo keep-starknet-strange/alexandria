@@ -20,7 +20,7 @@ impl Base64Encoder of Encoder<Array<u8>> {
         let mut char_set = get_base64_char_set();
         char_set.append('+');
         char_set.append('/');
-        inner_encode(ref data, ref char_set)
+        inner_encode(data, char_set)
     }
 }
 
@@ -29,23 +29,23 @@ impl Base64UrlEncoder of Encoder<Array<u8>> {
         let mut char_set = get_base64_char_set();
         char_set.append('-');
         char_set.append('_');
-        inner_encode(ref data, ref char_set)
+        inner_encode(data, char_set)
     }
 }
 
 impl Base64Decoder of Decoder<Array<u8>> {
     fn decode(mut data: Array<u8>) -> Array<u8> {
-        inner_decode(ref data)
+        inner_decode(data)
     }
 }
 
 impl Base64UrlDecoder of Decoder<Array<u8>> {
     fn decode(mut data: Array<u8>) -> Array<u8> {
-        inner_decode(ref data)
+        inner_decode(data)
     }
 }
 
-fn inner_encode(ref data: Array<u8>, ref char_set: Array<u8>) -> Array<u8> {
+fn inner_encode(mut data: Array<u8>, char_set: Array<u8>) -> Array<u8> {
     let mut p = if (data.len() % 3 == 1) {
         data.append(0);
         data.append(0);
@@ -58,11 +58,11 @@ fn inner_encode(ref data: Array<u8>, ref char_set: Array<u8>) -> Array<u8> {
     };
 
     let mut result = ArrayTrait::new();
-    encode_loop(p, ref data, 0, ref char_set, ref result);
+    encode_loop(p, data, 0, char_set, ref result);
     result
 }
 
-fn inner_decode(ref data: Array<u8>) -> Array<u8> {
+fn inner_decode(data: Array<u8>) -> Array<u8> {
     let mut result = ArrayTrait::new();
     let mut p = 0_u8;
     if data.len() > 0 {
@@ -72,12 +72,12 @@ fn inner_decode(ref data: Array<u8>) -> Array<u8> {
         if *data[data.len() - 2] == '=' {
             p += 1;
         }
-        decode_loop(p, ref data, 0, ref result);
+        decode_loop(p, data, 0, ref result);
     }
     result
 }
 
-fn decode_loop(p: u8, ref data: Array<u8>, d: usize, ref result: Array<u8>) {
+fn decode_loop(p: u8, data: Array<u8>, d: usize, ref result: Array<u8>) {
     if (d >= data.len()) {
         return;
     }
@@ -103,7 +103,7 @@ fn decode_loop(p: u8, ref data: Array<u8>, d: usize, ref result: Array<u8>) {
         }
     }
     result.append(i);
-    decode_loop(p, ref data, d + 4, ref result);
+    decode_loop(p, data, d + 4, ref result);
 }
 
 fn get_base64_value(x: u8) -> u8 {
@@ -128,16 +128,13 @@ fn get_base64_value(x: u8) -> u8 {
     }
 }
 
-fn encode_loop(
-    p: u8, ref data: Array<u8>, d: usize, ref char_set: Array<u8>, ref result: Array<u8>
-) {
+fn encode_loop(p: u8, data: Array<u8>, d: usize, char_set: Array<u8>, ref result: Array<u8>) {
     if (d >= data.len()) {
         return;
     }
-    let x = 0_u128;
-    let x = x | BitShift::shl((*data[d]).into(), 16);
-    let x = x | BitShift::shl((*data[d + 1]).into(), 8);
-    let x = x | (*data[d + 2]).into();
+    let mut x: u128 = BitShift::shl((*data[d]).into(), 16);
+    x = x | BitShift::shl((*data[d + 1]).into(), 8);
+    x = x | (*data[d + 2]).into();
 
     let mut i: u8 = (BitShift::shr(x, 18) & U6_MAX).try_into().unwrap();
     result.append(*char_set[i.into()]);
@@ -155,7 +152,7 @@ fn encode_loop(
     } else {
         result.append(*char_set[i.into()]);
     }
-    encode_loop(p, ref data, d + 3, ref char_set, ref result);
+    encode_loop(p, data, d + 3, char_set, ref result);
 }
 
 fn get_base64_char_set() -> Array<u8> {
