@@ -27,5 +27,5 @@ fn count_digits_of_base_test() {
 #[test]
 #[available_gas(2000000)]
 fn fpow_test() {
-    assert(fpow(3, 8) == 6561, 'invalid result');
+    assert(fpow(3_u128, 8) == 6561, 'invalid result');
 }

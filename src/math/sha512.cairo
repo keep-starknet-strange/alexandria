@@ -169,7 +169,7 @@ fn from_u8Array_to_WordArray(data: Array<u8>) -> Array<Word64> {
         if (i >= data.len()) {
             break ();
         }
-        let new_word = (shl((*data[i + 0]).into(), 56)
+        let new_word: u128 = (shl((*data[i + 0]).into(), 56)
             + shl((*data[i + 1]).into(), 48)
             + shl((*data[i + 2]).into(), 40)
             + shl((*data[i + 3]).into(), 32)
@@ -191,54 +191,22 @@ fn from_WordArray_to_u8array(data: Span<Word64>) -> Array<u8> {
         if (i == data.len()) {
             break ();
         }
-        arr
-            .append(
-                (shr((*data.at(i).data).into(), 56) & BoundedInt::<u8>::max().into())
-                    .try_into()
-                    .unwrap()
-            );
-        arr
-            .append(
-                (shr((*data.at(i).data).into(), 48) & BoundedInt::<u8>::max().into())
-                    .try_into()
-                    .unwrap()
-            );
-        arr
-            .append(
-                (shr((*data.at(i).data).into(), 40) & BoundedInt::<u8>::max().into())
-                    .try_into()
-                    .unwrap()
-            );
-        arr
-            .append(
-                (shr((*data.at(i).data).into(), 32) & BoundedInt::<u8>::max().into())
-                    .try_into()
-                    .unwrap()
-            );
-        arr
-            .append(
-                (shr((*data.at(i).data).into(), 24) & BoundedInt::<u8>::max().into())
-                    .try_into()
-                    .unwrap()
-            );
-        arr
-            .append(
-                (shr((*data.at(i).data).into(), 16) & BoundedInt::<u8>::max().into())
-                    .try_into()
-                    .unwrap()
-            );
-        arr
-            .append(
-                (shr((*data.at(i).data).into(), 8) & BoundedInt::<u8>::max().into())
-                    .try_into()
-                    .unwrap()
-            );
-        arr
-            .append(
-                (shr((*data.at(i).data).into(), 0) & BoundedInt::<u8>::max().into())
-                    .try_into()
-                    .unwrap()
-            );
+        let mut res: u128 = shr((*data.at(i).data).into(), 56) & BoundedInt::<u8>::max().into();
+        arr.append(res.try_into().unwrap());
+        res = shr((*data.at(i).data).into(), 48) & BoundedInt::<u8>::max().into();
+        arr.append(res.try_into().unwrap());
+        res = shr((*data.at(i).data).into(), 40) & BoundedInt::<u8>::max().into();
+        arr.append(res.try_into().unwrap());
+        res = shr((*data.at(i).data).into(), 32) & BoundedInt::<u8>::max().into();
+        arr.append(res.try_into().unwrap());
+        res = shr((*data.at(i).data).into(), 24) & BoundedInt::<u8>::max().into();
+        arr.append(res.try_into().unwrap());
+        res = shr((*data.at(i).data).into(), 16) & BoundedInt::<u8>::max().into();
+        arr.append(res.try_into().unwrap());
+        res = shr((*data.at(i).data).into(), 8) & BoundedInt::<u8>::max().into();
+        arr.append(res.try_into().unwrap());
+        res = shr((*data.at(i).data).into(), 0) & BoundedInt::<u8>::max().into();
+        arr.append(res.try_into().unwrap());
         i += 1;
     };
     arr

@@ -90,12 +90,14 @@ fn from_u32Array_to_u8Array(ref data: Array<u32>, i: usize) -> Array<u8> {
         return ArrayTrait::new();
     }
     let mut result = from_u32Array_to_u8Array(ref data, i - 1);
-    result
-        .append(downcast(shr(upcast(*data[i - 1]), 24) & BoundedInt::<u8>::max().into()).unwrap());
-    result
-        .append(downcast(shr(upcast(*data[i - 1]), 16) & BoundedInt::<u8>::max().into()).unwrap());
-    result.append(downcast(shr(upcast(*data[i - 1]), 8) & BoundedInt::<u8>::max().into()).unwrap());
-    result.append(downcast(shr(upcast(*data[i - 1]), 0) & BoundedInt::<u8>::max().into()).unwrap());
+    let mut res: u128 = shr(upcast(*data[i - 1]), 24) & BoundedInt::<u8>::max().into();
+    result.append(downcast(res).unwrap());
+    res = shr(upcast(*data[i - 1]), 16) & BoundedInt::<u8>::max().into();
+    result.append(downcast(res).unwrap());
+    res = shr(upcast(*data[i - 1]), 8) & BoundedInt::<u8>::max().into();
+    result.append(downcast(res).unwrap());
+    res = shr(upcast(*data[i - 1]), 0) & BoundedInt::<u8>::max().into();
+    result.append(downcast(res).unwrap());
     result
 }
 
