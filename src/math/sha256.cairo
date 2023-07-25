@@ -68,14 +68,38 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
     add_padding(ref data);
 
     // add length to the end
-    data.append(downcast(BitShift::shr(u64_data_length, 56) & BoundedInt::<u8>::max().into()).unwrap());
-    data.append(downcast(BitShift::shr(u64_data_length, 48) & BoundedInt::<u8>::max().into()).unwrap());
-    data.append(downcast(BitShift::shr(u64_data_length, 40) & BoundedInt::<u8>::max().into()).unwrap());
-    data.append(downcast(BitShift::shr(u64_data_length, 32) & BoundedInt::<u8>::max().into()).unwrap());
-    data.append(downcast(BitShift::shr(u64_data_length, 24) & BoundedInt::<u8>::max().into()).unwrap());
-    data.append(downcast(BitShift::shr(u64_data_length, 16) & BoundedInt::<u8>::max().into()).unwrap());
-    data.append(downcast(BitShift::shr(u64_data_length, 8) & BoundedInt::<u8>::max().into()).unwrap());
-    data.append(downcast(BitShift::shr(u64_data_length, 0) & BoundedInt::<u8>::max().into()).unwrap());
+    data
+        .append(
+            downcast(BitShift::shr(u64_data_length, 56) & BoundedInt::<u8>::max().into()).unwrap()
+        );
+    data
+        .append(
+            downcast(BitShift::shr(u64_data_length, 48) & BoundedInt::<u8>::max().into()).unwrap()
+        );
+    data
+        .append(
+            downcast(BitShift::shr(u64_data_length, 40) & BoundedInt::<u8>::max().into()).unwrap()
+        );
+    data
+        .append(
+            downcast(BitShift::shr(u64_data_length, 32) & BoundedInt::<u8>::max().into()).unwrap()
+        );
+    data
+        .append(
+            downcast(BitShift::shr(u64_data_length, 24) & BoundedInt::<u8>::max().into()).unwrap()
+        );
+    data
+        .append(
+            downcast(BitShift::shr(u64_data_length, 16) & BoundedInt::<u8>::max().into()).unwrap()
+        );
+    data
+        .append(
+            downcast(BitShift::shr(u64_data_length, 8) & BoundedInt::<u8>::max().into()).unwrap()
+        );
+    data
+        .append(
+            downcast(BitShift::shr(u64_data_length, 0) & BoundedInt::<u8>::max().into()).unwrap()
+        );
 
     let u32_data_length = 16 * ((data.len() - 1) / 64 + 1);
     let mut data = from_u8Array_to_u32Array(data, u32_data_length);
@@ -175,10 +199,14 @@ fn from_u8Array_to_u32Array(data: Array<u8>, i: usize) -> Array<u32> {
     }
     let mut value = 0_u128;
 
-    value = value | (BitShift::shl(upcast(*data[4 * (i - 1) + 0]), 24) & BoundedInt::<u32>::max().into());
-    value = value | (BitShift::shl(upcast(*data[4 * (i - 1) + 1]), 16) & BoundedInt::<u32>::max().into());
-    value = value | (BitShift::shl(upcast(*data[4 * (i - 1) + 2]), 8) & BoundedInt::<u32>::max().into());
-    value = value | (BitShift::shl(upcast(*data[4 * (i - 1) + 3]), 0) & BoundedInt::<u32>::max().into());
+    value = value
+        | (BitShift::shl(upcast(*data[4 * (i - 1) + 0]), 24) & BoundedInt::<u32>::max().into());
+    value = value
+        | (BitShift::shl(upcast(*data[4 * (i - 1) + 1]), 16) & BoundedInt::<u32>::max().into());
+    value = value
+        | (BitShift::shl(upcast(*data[4 * (i - 1) + 2]), 8) & BoundedInt::<u32>::max().into());
+    value = value
+        | (BitShift::shl(upcast(*data[4 * (i - 1) + 3]), 0) & BoundedInt::<u32>::max().into());
 
     let mut result = from_u8Array_to_u32Array(data, i - 1);
     result.append(downcast(value).unwrap());

@@ -1,6 +1,5 @@
-// mod list;
+mod list;
 
-// #[cfg(test)]
-// mod tests;
-
+#[cfg(test)]
+mod tests;
 

@@ -192,7 +192,8 @@ fn from_WordArray_to_u8array(data: Span<Word64>) -> Array<u8> {
         if (i == data.len()) {
             break ();
         }
-        let mut res: u128 = BitShift::shr((*data.at(i).data).into(), 56) & BoundedInt::<u8>::max().into();
+        let mut res: u128 = BitShift::shr((*data.at(i).data).into(), 56)
+            & BoundedInt::<u8>::max().into();
         arr.append(res.try_into().unwrap());
         res = BitShift::shr((*data.at(i).data).into(), 48) & BoundedInt::<u8>::max().into();
         arr.append(res.try_into().unwrap());
