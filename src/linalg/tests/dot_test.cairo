@@ -12,7 +12,7 @@ fn dot_product_test() {
     ys.append(11);
     ys.append(13);
     ys.append(17);
-    assert(dot(xs, ys) == 217, 'invalid dot product');
+    assert(dot(xs.span(), ys.span()) == 217, 'invalid dot product');
 }
 
 #[test]
@@ -22,5 +22,5 @@ fn dot_product_test_check_len() {
     let mut xs = ArrayTrait::<u64>::new();
     xs.append(1);
     let mut ys = ArrayTrait::<u64>::new();
-    dot(xs, ys);
+    dot(xs.span(), ys.span());
 }

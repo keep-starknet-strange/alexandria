@@ -2,8 +2,8 @@ use core::clone::Clone;
 use array::ArrayTrait;
 use integer::{upcast, downcast, BoundedInt};
 use option::OptionTrait;
-use debug::PrintTrait;
 use traits::Into;
+
 use alexandria::math::math::{shr, shl};
 
 const U6_MAX: u128 = 0x3F;
