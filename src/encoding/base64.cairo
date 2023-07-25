@@ -79,27 +79,27 @@ fn inner_decode(ref data: Array<u8>) -> Array<u8> {
 
 fn decode_loop(p: u8, ref data: Array<u8>, d: usize, ref result: Array<u8>) {
     if (d >= data.len()) {
-        return ();
+        return;
     }
     let x: u128 = BitShift::shl((get_base64_value(*data[d]).into()), 18)
         | BitShift::shl((get_base64_value(*data[d + 1])).into(), 12)
         | BitShift::shl((get_base64_value(*data[d + 2])).into(), 6)
         | (get_base64_value(*data[d + 3])).into();
 
-    let i: u8 = (BitShift::shr(x, 16) & BoundedInt::<u8>::max().into()).try_into().unwrap();
+    let mut i: u8 = (BitShift::shr(x, 16) & BoundedInt::<u8>::max().into()).try_into().unwrap();
     result.append(i);
-    let i: u8 = (BitShift::shr(x, 8) & BoundedInt::<u8>::max().into()).try_into().unwrap();
+    i = (BitShift::shr(x, 8) & BoundedInt::<u8>::max().into()).try_into().unwrap();
     if d + 4 >= data.len() {
         if p == 2 {
-            return ();
+            return;
         }
     }
     result.append(i);
 
-    let i: u8 = (x & BoundedInt::<u8>::max().into()).try_into().unwrap();
+    i = (x & BoundedInt::<u8>::max().into()).try_into().unwrap();
     if d + 4 >= data.len() {
         if p == 1 {
-            return ();
+            return;
         }
     }
     result.append(i);
@@ -132,24 +132,24 @@ fn encode_loop(
     p: u8, ref data: Array<u8>, d: usize, ref char_set: Array<u8>, ref result: Array<u8>
 ) {
     if (d >= data.len()) {
-        return ();
+        return;
     }
     let x = 0_u128;
     let x = x | BitShift::shl((*data[d]).into(), 16);
     let x = x | BitShift::shl((*data[d + 1]).into(), 8);
     let x = x | (*data[d + 2]).into();
 
-    let i: u8 = (BitShift::shr(x, 18) & U6_MAX).try_into().unwrap();
+    let mut i: u8 = (BitShift::shr(x, 18) & U6_MAX).try_into().unwrap();
     result.append(*char_set[i.into()]);
-    let i: u8 = (BitShift::shr(x, 12) & U6_MAX).try_into().unwrap();
+    i = (BitShift::shr(x, 12) & U6_MAX).try_into().unwrap();
     result.append(*char_set[(i.into())]);
-    let i: u8 = (BitShift::shr(x, 6) & U6_MAX).try_into().unwrap();
+    i = (BitShift::shr(x, 6) & U6_MAX).try_into().unwrap();
     if d.into() + 3 >= data.len() && p == 2 {
         result.append('=');
     } else {
         result.append(*char_set[i.into()]);
     }
-    let i: u8 = (x & U6_MAX).try_into().unwrap();
+    i = (x & U6_MAX).try_into().unwrap();
     if d.into() + 3 >= data.len() && p >= 1 {
         result.append('=');
     } else {

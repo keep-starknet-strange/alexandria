@@ -161,7 +161,7 @@ fn compression(w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>) ->
 
 fn create_message_schedule(ref w: Array<u32>, i: usize) {
     if i >= 64 {
-        return ();
+        return;
     }
     let s0 = ssig0(*w[i - 15]);
     let s1 = ssig1(*w[i - 2]);
