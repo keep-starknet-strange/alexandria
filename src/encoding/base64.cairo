@@ -89,18 +89,14 @@ fn decode_loop(p: u8, data: Array<u8>, d: usize, ref result: Array<u8>) {
     let mut i: u8 = (BitShift::shr(x, 16) & BoundedInt::<u8>::max().into()).try_into().unwrap();
     result.append(i);
     i = (BitShift::shr(x, 8) & BoundedInt::<u8>::max().into()).try_into().unwrap();
-    if d + 4 >= data.len() {
-        if p == 2 {
-            return;
-        }
+    if d + 4 >= data.len() && p == 2 {
+        return;
     }
     result.append(i);
 
     i = (x & BoundedInt::<u8>::max().into()).try_into().unwrap();
-    if d + 4 >= data.len() {
-        if p == 1 {
-            return;
-        }
+    if d + 4 >= data.len() && p == 1 {
+        return;
     }
     result.append(i);
     decode_loop(p, data, d + 4, ref result);
