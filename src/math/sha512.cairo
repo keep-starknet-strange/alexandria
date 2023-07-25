@@ -1,4 +1,4 @@
-use integer::{u64_wrapping_add, bitwise, downcast, upcast, BoundedInt};
+use integer::{u64_wrapping_add, bitwise, BoundedInt};
 use traits::{Into, TryInto};
 use option::OptionTrait;
 use array::{ArrayTrait, SpanTrait};
@@ -124,7 +124,7 @@ fn fpow(mut base: u128, mut power: u128) -> u128 {
         power = power / 2;
     };
 
-    TryInto::<u256, u128>::try_into(result).unwrap()
+    result.try_into().unwrap()
 }
 
 fn math_shl(x: u128, n: u128) -> u128 {
@@ -304,7 +304,7 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
 }
 
 fn sha512(mut data: Array<u8>) -> Array<u8> {
-    let bit_numbers: u128 = upcast(data.len() * 8);
+    let bit_numbers: u128 = (data.len() * 8).into();
     let bit_numbers = bit_numbers & BoundedInt::<u64>::max().into();
 
     let mut msg_len = data.len();
@@ -315,62 +315,22 @@ fn sha512(mut data: Array<u8>) -> Array<u8> {
     add_trailing_zeroes(ref data, msg_len);
 
     // add length to the end
-    data
-        .append(
-            downcast(
-                math_shr(bit_numbers, 56).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
-            )
-                .unwrap()
-        );
-    data
-        .append(
-            downcast(
-                math_shr(bit_numbers, 48).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
-            )
-                .unwrap()
-        );
-    data
-        .append(
-            downcast(
-                math_shr(bit_numbers, 40).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
-            )
-                .unwrap()
-        );
-    data
-        .append(
-            downcast(
-                math_shr(bit_numbers, 32).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
-            )
-                .unwrap()
-        );
-    data
-        .append(
-            downcast(
-                math_shr(bit_numbers, 24).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
-            )
-                .unwrap()
-        );
-    data
-        .append(
-            downcast(
-                math_shr(bit_numbers, 16).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
-            )
-                .unwrap()
-        );
-    data
-        .append(
-            downcast(
-                math_shr(bit_numbers, 8).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
-            )
-                .unwrap()
-        );
-    data
-        .append(
-            downcast(
-                math_shr(bit_numbers, 0).into() & Into::<u8, u128>::into(BoundedInt::<u8>::max())
-            )
-                .unwrap()
-        );
+    let mut res: u128 = math_shr(bit_numbers, 56).into() & BoundedInt::<u8>::max().into();
+    data.append(res.try_into().unwrap());
+    res = math_shr(bit_numbers, 48).into() & BoundedInt::<u8>::max().into();
+    data.append(res.try_into().unwrap());
+    res = math_shr(bit_numbers, 40).into() & BoundedInt::<u8>::max().into();
+    data.append(res.try_into().unwrap());
+    res = math_shr(bit_numbers, 32).into() & BoundedInt::<u8>::max().into();
+    data.append(res.try_into().unwrap());
+    res = math_shr(bit_numbers, 24).into() & BoundedInt::<u8>::max().into();
+    data.append(res.try_into().unwrap());
+    res = math_shr(bit_numbers, 16).into() & BoundedInt::<u8>::max().into();
+    data.append(res.try_into().unwrap());
+    res = math_shr(bit_numbers, 8).into() & BoundedInt::<u8>::max().into();
+    data.append(res.try_into().unwrap());
+    res = math_shr(bit_numbers, 0).into() & BoundedInt::<u8>::max().into();
+    data.append(res.try_into().unwrap());
 
     msg_len = data.len();
 

@@ -1,7 +1,7 @@
 use array::ArrayTrait;
-use integer::{upcast, downcast, BoundedInt};
+use integer::BoundedInt;
 use option::OptionTrait;
-use traits::Into;
+use traits::{Into, TryInto};
 
 use alexandria::math::math::BitShift;
 
@@ -81,14 +81,14 @@ fn decode_loop(p: u8, ref data: Array<u8>, d: usize, ref result: Array<u8>) {
     if (d >= data.len()) {
         return ();
     }
-    let x: u128 = BitShift::shl(upcast(get_base64_value(*data[d])), 18)
-        | BitShift::shl(upcast(get_base64_value(*data[d + 1])), 12)
-        | BitShift::shl(upcast(get_base64_value(*data[d + 2])), 6)
-        | upcast(get_base64_value(*data[d + 3]));
+    let x: u128 = BitShift::shl((get_base64_value(*data[d]).into()), 18)
+        | BitShift::shl((get_base64_value(*data[d + 1])).into(), 12)
+        | BitShift::shl((get_base64_value(*data[d + 2])).into(), 6)
+        | (get_base64_value(*data[d + 3])).into();
 
-    let i: u8 = downcast(BitShift::shr(x, 16) & BoundedInt::<u8>::max().into()).unwrap();
+    let i: u8 = (BitShift::shr(x, 16) & BoundedInt::<u8>::max().into()).try_into().unwrap();
     result.append(i);
-    let i: u8 = downcast(BitShift::shr(x, 8) & BoundedInt::<u8>::max().into()).unwrap();
+    let i: u8 = (BitShift::shr(x, 8) & BoundedInt::<u8>::max().into()).try_into().unwrap();
     if d + 4 >= data.len() {
         if p == 2 {
             return ();
@@ -99,7 +99,7 @@ fn decode_loop(p: u8, ref data: Array<u8>, d: usize, ref result: Array<u8>) {
         result.append(i);
     }
 
-    let i: u8 = downcast(x & BoundedInt::<u8>::max().into()).unwrap();
+    let i: u8 = (x & BoundedInt::<u8>::max().into()).try_into().unwrap();
     if d + 4 >= data.len() {
         if p == 1 {
             return ();
@@ -141,33 +141,33 @@ fn encode_loop(
         return ();
     }
     let x = 0_u128;
-    let x = x | BitShift::shl(upcast(*data[d]), 16);
-    let x = x | BitShift::shl(upcast(*data[d + 1]), 8);
-    let x = x | upcast(*data[d + 2]);
+    let x = x | BitShift::shl((*data[d]).into(), 16);
+    let x = x | BitShift::shl((*data[d + 1]).into(), 8);
+    let x = x | (*data[d + 2]).into();
 
-    let i: u8 = downcast(BitShift::shr(x, 18) & U6_MAX).unwrap();
-    result.append(*char_set[upcast(i)]);
-    let i: u8 = downcast(BitShift::shr(x, 12) & U6_MAX).unwrap();
-    result.append(*char_set[upcast(i)]);
-    let i: u8 = downcast(BitShift::shr(x, 6) & U6_MAX).unwrap();
-    if upcast(d) + 3 >= data.len() {
+    let i: u8 = (BitShift::shr(x, 18) & U6_MAX).try_into().unwrap();
+    result.append(*char_set[i.into()]);
+    let i: u8 = (BitShift::shr(x, 12) & U6_MAX).try_into().unwrap();
+    result.append(*char_set[(i.into())]);
+    let i: u8 = (BitShift::shr(x, 6) & U6_MAX).try_into().unwrap();
+    if d.into() + 3 >= data.len() {
         if p == 2 {
             result.append('=');
         } else {
-            result.append(*char_set[upcast(i)]);
+            result.append(*char_set[i.into()]);
         }
     } else {
-        result.append(*char_set[upcast(i)]);
+        result.append(*char_set[i.into()]);
     }
-    let i: u8 = downcast(x & U6_MAX).unwrap();
-    if upcast(d) + 3 >= data.len() {
+    let i: u8 = (x & U6_MAX).try_into().unwrap();
+    if d.into() + 3 >= data.len() {
         if p >= 1 {
             result.append('=');
         } else {
-            result.append(*char_set[upcast(i)]);
+            result.append(*char_set[i.into()]);
         }
     } else {
-        result.append(*char_set[upcast(i)]);
+        result.append(*char_set[i.into()]);
     }
     encode_loop(p, ref data, d + 3, ref char_set, ref result);
 }
