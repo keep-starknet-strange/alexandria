@@ -92,23 +92,17 @@ fn decode_loop(p: u8, ref data: Array<u8>, d: usize, ref result: Array<u8>) {
     if d + 4 >= data.len() {
         if p == 2 {
             return ();
-        } else {
-            result.append(i);
         }
-    } else {
-        result.append(i);
     }
+    result.append(i);
 
     let i: u8 = (x & BoundedInt::<u8>::max().into()).try_into().unwrap();
     if d + 4 >= data.len() {
         if p == 1 {
             return ();
-        } else {
-            result.append(i);
         }
-    } else {
-        result.append(i);
     }
+    result.append(i);
     decode_loop(p, ref data, d + 4, ref result);
 }
 
@@ -150,22 +144,14 @@ fn encode_loop(
     let i: u8 = (BitShift::shr(x, 12) & U6_MAX).try_into().unwrap();
     result.append(*char_set[(i.into())]);
     let i: u8 = (BitShift::shr(x, 6) & U6_MAX).try_into().unwrap();
-    if d.into() + 3 >= data.len() {
-        if p == 2 {
-            result.append('=');
-        } else {
-            result.append(*char_set[i.into()]);
-        }
+    if d.into() + 3 >= data.len() && p == 2 {
+        result.append('=');
     } else {
         result.append(*char_set[i.into()]);
     }
     let i: u8 = (x & U6_MAX).try_into().unwrap();
-    if d.into() + 3 >= data.len() {
-        if p >= 1 {
-            result.append('=');
-        } else {
-            result.append(*char_set[i.into()]);
-        }
+    if d.into() + 3 >= data.len() && p >= 1 {
+        result.append('=');
     } else {
         result.append(*char_set[i.into()]);
     }
