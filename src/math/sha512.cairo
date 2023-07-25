@@ -1,8 +1,9 @@
-use alexandria::math::math::{shr, shl};
 use integer::{u64_wrapping_add, bitwise, downcast, upcast, BoundedInt};
 use traits::{Into, TryInto};
 use option::OptionTrait;
 use array::{ArrayTrait, SpanTrait};
+
+use alexandria::math::math::BitShift;
 
 // Variable naming is compliant to RFC-6234 (https://datatracker.ietf.org/doc/html/rfc6234)
 
@@ -169,14 +170,14 @@ fn from_u8Array_to_WordArray(data: Array<u8>) -> Array<Word64> {
         if (i >= data.len()) {
             break ();
         }
-        let new_word: u128 = (shl((*data[i + 0]).into(), 56)
-            + shl((*data[i + 1]).into(), 48)
-            + shl((*data[i + 2]).into(), 40)
-            + shl((*data[i + 3]).into(), 32)
-            + shl((*data[i + 4]).into(), 24)
-            + shl((*data[i + 5]).into(), 16)
-            + shl((*data[i + 6]).into(), 8)
-            + shl((*data[i + 7]).into(), 0));
+        let new_word: u128 = (BitShift::shl((*data[i + 0]).into(), 56)
+            + BitShift::shl((*data[i + 1]).into(), 48)
+            + BitShift::shl((*data[i + 2]).into(), 40)
+            + BitShift::shl((*data[i + 3]).into(), 32)
+            + BitShift::shl((*data[i + 4]).into(), 24)
+            + BitShift::shl((*data[i + 5]).into(), 16)
+            + BitShift::shl((*data[i + 6]).into(), 8)
+            + BitShift::shl((*data[i + 7]).into(), 0));
         new_arr.append(Word64 { data: new_word.try_into().unwrap() });
         i += 8;
     };
@@ -191,21 +192,21 @@ fn from_WordArray_to_u8array(data: Span<Word64>) -> Array<u8> {
         if (i == data.len()) {
             break ();
         }
-        let mut res: u128 = shr((*data.at(i).data).into(), 56) & BoundedInt::<u8>::max().into();
+        let mut res: u128 = BitShift::shr((*data.at(i).data).into(), 56) & BoundedInt::<u8>::max().into();
         arr.append(res.try_into().unwrap());
-        res = shr((*data.at(i).data).into(), 48) & BoundedInt::<u8>::max().into();
+        res = BitShift::shr((*data.at(i).data).into(), 48) & BoundedInt::<u8>::max().into();
         arr.append(res.try_into().unwrap());
-        res = shr((*data.at(i).data).into(), 40) & BoundedInt::<u8>::max().into();
+        res = BitShift::shr((*data.at(i).data).into(), 40) & BoundedInt::<u8>::max().into();
         arr.append(res.try_into().unwrap());
-        res = shr((*data.at(i).data).into(), 32) & BoundedInt::<u8>::max().into();
+        res = BitShift::shr((*data.at(i).data).into(), 32) & BoundedInt::<u8>::max().into();
         arr.append(res.try_into().unwrap());
-        res = shr((*data.at(i).data).into(), 24) & BoundedInt::<u8>::max().into();
+        res = BitShift::shr((*data.at(i).data).into(), 24) & BoundedInt::<u8>::max().into();
         arr.append(res.try_into().unwrap());
-        res = shr((*data.at(i).data).into(), 16) & BoundedInt::<u8>::max().into();
+        res = BitShift::shr((*data.at(i).data).into(), 16) & BoundedInt::<u8>::max().into();
         arr.append(res.try_into().unwrap());
-        res = shr((*data.at(i).data).into(), 8) & BoundedInt::<u8>::max().into();
+        res = BitShift::shr((*data.at(i).data).into(), 8) & BoundedInt::<u8>::max().into();
         arr.append(res.try_into().unwrap());
-        res = shr((*data.at(i).data).into(), 0) & BoundedInt::<u8>::max().into();
+        res = BitShift::shr((*data.at(i).data).into(), 0) & BoundedInt::<u8>::max().into();
         arr.append(res.try_into().unwrap());
         i += 1;
     };

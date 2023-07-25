@@ -1,10 +1,9 @@
-use core::clone::Clone;
 use array::ArrayTrait;
 use integer::{upcast, downcast, BoundedInt};
 use option::OptionTrait;
 use traits::Into;
 
-use alexandria::math::math::{shr, shl};
+use alexandria::math::math::BitShift;
 
 const U6_MAX: u128 = 0x3F;
 
@@ -82,14 +81,14 @@ fn decode_loop(p: u8, ref data: Array<u8>, d: usize, ref result: Array<u8>) {
     if (d >= data.len()) {
         return ();
     }
-    let x: u128 = shl(upcast(get_base64_value(*data[d])), 18)
-        | shl(upcast(get_base64_value(*data[d + 1])), 12)
-        | shl(upcast(get_base64_value(*data[d + 2])), 6)
+    let x: u128 = BitShift::shl(upcast(get_base64_value(*data[d])), 18)
+        | BitShift::shl(upcast(get_base64_value(*data[d + 1])), 12)
+        | BitShift::shl(upcast(get_base64_value(*data[d + 2])), 6)
         | upcast(get_base64_value(*data[d + 3]));
 
-    let i: u8 = downcast(shr(x, 16) & BoundedInt::<u8>::max().into()).unwrap();
+    let i: u8 = downcast(BitShift::shr(x, 16) & BoundedInt::<u8>::max().into()).unwrap();
     result.append(i);
-    let i: u8 = downcast(shr(x, 8) & BoundedInt::<u8>::max().into()).unwrap();
+    let i: u8 = downcast(BitShift::shr(x, 8) & BoundedInt::<u8>::max().into()).unwrap();
     if d + 4 >= data.len() {
         if p == 2 {
             return ();
@@ -142,15 +141,15 @@ fn encode_loop(
         return ();
     }
     let x = 0_u128;
-    let x = x | shl(upcast(*data[d]), 16);
-    let x = x | shl(upcast(*data[d + 1]), 8);
+    let x = x | BitShift::shl(upcast(*data[d]), 16);
+    let x = x | BitShift::shl(upcast(*data[d + 1]), 8);
     let x = x | upcast(*data[d + 2]);
 
-    let i: u8 = downcast(shr(x, 18) & U6_MAX).unwrap();
+    let i: u8 = downcast(BitShift::shr(x, 18) & U6_MAX).unwrap();
     result.append(*char_set[upcast(i)]);
-    let i: u8 = downcast(shr(x, 12) & U6_MAX).unwrap();
+    let i: u8 = downcast(BitShift::shr(x, 12) & U6_MAX).unwrap();
     result.append(*char_set[upcast(i)]);
-    let i: u8 = downcast(shr(x, 6) & U6_MAX).unwrap();
+    let i: u8 = downcast(BitShift::shr(x, 6) & U6_MAX).unwrap();
     if upcast(d) + 3 >= data.len() {
         if p == 2 {
             result.append('=');

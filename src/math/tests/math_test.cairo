@@ -1,4 +1,4 @@
-use alexandria::math::{pow, math::fpow, count_digits_of_base};
+use alexandria::math::{pow, math::BitShift, count_digits_of_base};
 
 // Test power function
 #[test]
@@ -27,11 +27,11 @@ fn count_digits_of_base_test() {
 #[test]
 #[available_gas(2000000)]
 fn fpow_test() {
-    assert(fpow(3_u128, 8) == 6561, 'invalid result');
+    assert(BitShift::fpow(3_u128, 8) == 6561, 'invalid result');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn fpow_test_u2156() {
-    assert(fpow(3_u256, 8) == 6561, 'invalid result');
+    assert(BitShift::fpow(3_u256, 8) == 6561, 'invalid result');
 }
