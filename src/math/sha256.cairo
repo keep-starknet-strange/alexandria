@@ -61,8 +61,13 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
 
     // add one
     data.append(0x80);
-
-    add_padding(ref data);
+    // add padding
+    loop {
+        if (64 * ((data.len() - 1) / 64 + 1)) - 8 == data.len() {
+            break;
+        }
+        data.append(0);
+    };
 
     // add length to the end
     let mut res = BitShift::shr(u64_data_length, 56) & BoundedInt::<u8>::max().into();
@@ -202,13 +207,6 @@ fn from_u8Array_to_u32Array(mut data: Span<u8>) -> Array<u32> {
         };
     };
     result
-}
-
-fn add_padding(ref data: Array<u8>) {
-    if (64 * ((data.len() - 1) / 64 + 1)) - 8 != data.len() {
-        data.append(0);
-        add_padding(ref data);
-    }
 }
 
 fn get_h() -> Array<u32> {
