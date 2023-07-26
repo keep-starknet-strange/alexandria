@@ -85,7 +85,7 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
     let mut data = from_u8Array_to_u32Array(data.span());
     let mut h = get_h();
     let mut k = get_k();
-    h = sha256_inner(ref data, 0, ref k, h);
+    h = sha256_inner(data.span(), 0, ref k, h);
 
     from_u32Array_to_u8Array(h.span())
 }
@@ -112,14 +112,11 @@ fn from_u32Array_to_u8Array(mut data: Span<u32>) -> Array<u8> {
     result
 }
 
-fn sha256_inner(
-    ref data: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>
-) -> Array<u32> {
+fn sha256_inner(mut data: Span<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>) -> Array<u32> {
     if 16 * i >= data.len() {
         return h;
     }
-    let mut w = create_w(data.span(), i);
-    create_message_schedule(ref w, 16);
+    let w = create_message_schedule(data, i);
     let h2 = compression(w, 0, ref k, h.span());
     let mut t = ArrayTrait::new();
     t.append(u32_wrapping_add(*h[0], *h2[0]));
@@ -131,7 +128,7 @@ fn sha256_inner(
     t.append(u32_wrapping_add(*h[6], *h2[6]));
     t.append(u32_wrapping_add(*h[7], *h2[7]));
     h = t;
-    sha256_inner(ref data, i + 1, ref k, h)
+    sha256_inner(data, i + 1, ref k, h)
 }
 
 fn compression(w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Span<u32>) -> Span<u32> {
@@ -159,17 +156,7 @@ fn compression(w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Span<u32>) -> 
     compression(w, i + 1, ref k, h)
 }
 
-fn create_message_schedule(ref w: Array<u32>, i: usize) {
-    if i >= 64 {
-        return;
-    }
-    let s0 = ssig0(*w[i - 15]);
-    let s1 = ssig1(*w[i - 2]);
-    w.append(u32_wrapping_add(u32_wrapping_add(u32_wrapping_add(*w[i - 16], s0), *w[i - 7]), s1));
-    create_message_schedule(ref w, i + 1)
-}
-
-fn create_w(data: Span<u32>, i: usize) -> Array<u32> {
+fn create_message_schedule(data: Span<u32>, i: usize) -> Array<u32> {
     let mut j = 0;
     let mut result = ArrayTrait::new();
     loop {
@@ -178,6 +165,19 @@ fn create_w(data: Span<u32>, i: usize) -> Array<u32> {
         }
         result.append(*data[i * 16 + j]);
         j += 1;
+    };
+    let mut i = 16;
+    loop {
+        if i >= 64 {
+            break;
+        }
+        let s0 = ssig0(*result[i - 15]);
+        let s1 = ssig1(*result[i - 2]);
+        let res = u32_wrapping_add(
+            u32_wrapping_add(u32_wrapping_add(*result[i - 16], s0), *result[i - 7]), s1
+        );
+        result.append(res);
+        i += 1;
     };
     result
 }
