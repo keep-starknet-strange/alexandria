@@ -1,5 +1,5 @@
 use core::traits::TryInto;
-use array::ArrayTrait;
+use array::{ArrayTrait, SpanTrait};
 use clone::Clone;
 use integer::{u32_wrapping_add, BoundedInt};
 use option::OptionTrait;
@@ -17,26 +17,29 @@ fn maj(x: u32, y: u32, z: u32) -> u32 {
 
 fn bsig0(x: u32) -> u32 {
     let x: u128 = x.into();
-    let x1 = (BitShift::shr(x, 2) | BitShift::shl(x, 32 - 2));
-    let x2 = (BitShift::shr(x, 13) | BitShift::shl(x, 32 - 13));
-    let x3 = (BitShift::shr(x, 22) | BitShift::shl(x, 32 - 22));
+    // Last part is 32 - first shift, for the first line 32 - 2 = 30
+    let x1 = (BitShift::shr(x, 2) | BitShift::shl(x, 30));
+    let x2 = (BitShift::shr(x, 13) | BitShift::shl(x, 19));
+    let x3 = (BitShift::shr(x, 22) | BitShift::shl(x, 10));
     let result = (x1 ^ x2 ^ x3) & BoundedInt::<u32>::max().into();
     result.try_into().unwrap()
 }
 
 fn bsig1(x: u32) -> u32 {
     let x: u128 = x.into();
-    let x1 = (BitShift::shr(x, 6) | BitShift::shl(x, 32 - 6));
-    let x2 = (BitShift::shr(x, 11) | BitShift::shl(x, 32 - 11));
-    let x3 = (BitShift::shr(x, 25) | BitShift::shl(x, 32 - 25));
+    // Last part is 32 - first shift, for the first line 32 - 6 = 26
+    let x1 = (BitShift::shr(x, 6) | BitShift::shl(x, 26));
+    let x2 = (BitShift::shr(x, 11) | BitShift::shl(x, 21));
+    let x3 = (BitShift::shr(x, 25) | BitShift::shl(x, 7));
     let result = (x1 ^ x2 ^ x3) & BoundedInt::<u32>::max().into();
     result.try_into().unwrap()
 }
 
 fn ssig0(x: u32) -> u32 {
     let x: u128 = x.into();
-    let x1 = (BitShift::shr(x, 7) | BitShift::shl(x, 32 - 7));
-    let x2 = (BitShift::shr(x, 18) | BitShift::shl(x, 32 - 18));
+    // Last part is 32 - first shift, for the first line 32 - 7 = 25
+    let x1 = (BitShift::shr(x, 7) | BitShift::shl(x, 25));
+    let x2 = (BitShift::shr(x, 18) | BitShift::shl(x, 14));
     let x3 = (BitShift::shr(x, 3));
     let result = (x1 ^ x2 ^ x3) & BoundedInt::<u32>::max().into();
     result.try_into().unwrap()
@@ -44,8 +47,9 @@ fn ssig0(x: u32) -> u32 {
 
 fn ssig1(x: u32) -> u32 {
     let x: u128 = x.into();
-    let x1 = (BitShift::shr(x, 17) | BitShift::shl(x, 32 - 17));
-    let x2 = (BitShift::shr(x, 19) | BitShift::shl(x, 32 - 19));
+    // Last part is 32 - first shift, for the first line 32 - 17 = 15
+    let x1 = (BitShift::shr(x, 17) | BitShift::shl(x, 15));
+    let x2 = (BitShift::shr(x, 19) | BitShift::shl(x, 13));
     let x3 = (BitShift::shr(x, 10));
     let result = (x1 ^ x2 ^ x3) & BoundedInt::<u32>::max().into();
     result.try_into().unwrap()
@@ -78,28 +82,33 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
     res = u64_data_length.into() & BoundedInt::<u8>::max().into();
     data.append(res.try_into().unwrap());
 
-    let u32_data_length = 16 * ((data.len() - 1) / 64 + 1);
-    let mut data = from_u8Array_to_u32Array(data, u32_data_length);
+    let mut data = from_u8Array_to_u32Array(data.span());
     let mut h = get_h();
     let mut k = get_k();
     h = sha256_inner(ref data, 0, ref k, h);
 
-    from_u32Array_to_u8Array(ref h, 8)
+    from_u32Array_to_u8Array(h.span())
 }
 
-fn from_u32Array_to_u8Array(ref data: Array<u32>, i: usize) -> Array<u8> {
-    if i <= 0 {
-        return ArrayTrait::new();
-    }
-    let mut result = from_u32Array_to_u8Array(ref data, i - 1);
-    let mut res: u128 = BitShift::shr((*data[i - 1]).into(), 24) & BoundedInt::<u8>::max().into();
-    result.append(res.try_into().unwrap());
-    res = BitShift::shr((*data[i - 1]).into(), 16) & BoundedInt::<u8>::max().into();
-    result.append(res.try_into().unwrap());
-    res = BitShift::shr((*data[i - 1]).into(), 8) & BoundedInt::<u8>::max().into();
-    result.append(res.try_into().unwrap());
-    res = (*data[i - 1]).into() & BoundedInt::<u8>::max().into();
-    result.append(res.try_into().unwrap());
+fn from_u32Array_to_u8Array(mut data: Span<u32>) -> Array<u8> {
+    let mut result = ArrayTrait::new();
+    loop {
+        match data.pop_front() {
+            Option::Some(val) => {
+                let mut res: u128 = BitShift::shr((*val).into(), 24);
+                result.append(res.try_into().unwrap());
+                res = BitShift::shr((*val).into(), 16) & BoundedInt::<u8>::max().into();
+                result.append(res.try_into().unwrap());
+                res = BitShift::shr((*val).into(), 8) & BoundedInt::<u8>::max().into();
+                result.append(res.try_into().unwrap());
+                res = (*val).into() & BoundedInt::<u8>::max().into();
+                result.append(res.try_into().unwrap());
+            },
+            Option::None => {
+                break;
+            },
+        };
+    };
     result
 }
 
@@ -109,10 +118,9 @@ fn sha256_inner(
     if 16 * i >= data.len() {
         return h;
     }
-    let mut w = create_w(ref data, i, 16);
+    let mut w = create_w(data.span(), i);
     create_message_schedule(ref w, 16);
-    let mut h2 = h.clone();
-    let mut h2 = compression(w, 0, ref k, h2);
+    let h2 = compression(w, 0, ref k, h.span());
     let mut t = ArrayTrait::new();
     t.append(u32_wrapping_add(*h[0], *h2[0]));
     t.append(u32_wrapping_add(*h[1], *h2[1]));
@@ -126,7 +134,7 @@ fn sha256_inner(
     sha256_inner(ref data, i + 1, ref k, h)
 }
 
-fn compression(w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>) -> Array<u32> {
+fn compression(w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Span<u32>) -> Span<u32> {
     if i >= 64 {
         return h;
     }
@@ -147,7 +155,7 @@ fn compression(w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>) ->
     t.append(*h[4]);
     t.append(*h[5]);
     t.append(*h[6]);
-    h = t;
+    h = t.span();
     compression(w, i + 1, ref k, h)
 }
 
@@ -161,27 +169,38 @@ fn create_message_schedule(ref w: Array<u32>, i: usize) {
     create_message_schedule(ref w, i + 1)
 }
 
-fn create_w(ref data: Array<u32>, i: usize, j: usize) -> Array<u32> {
-    if j <= 0 {
-        return ArrayTrait::new();
-    }
-    let mut result = create_w(ref data, i, j - 1);
-    result.append(*data[i * 16 + j - 1]);
+fn create_w(data: Span<u32>, i: usize) -> Array<u32> {
+    let mut j = 0;
+    let mut result = ArrayTrait::new();
+    loop {
+        if j >= 16 {
+            break;
+        }
+        result.append(*data[i * 16 + j]);
+        j += 1;
+    };
     result
 }
 
-fn from_u8Array_to_u32Array(data: Array<u8>, i: usize) -> Array<u32> {
-    if i <= 0 {
-        return ArrayTrait::new();
-    }
-
-    let mut value: u128 = (BitShift::shl((*data[4 * (i - 1) + 0]).into(), 24));
-    value = value + (BitShift::shl((*data[4 * (i - 1) + 1]).into(), 16));
-    value = value + (BitShift::shl((*data[4 * (i - 1) + 2]).into(), 8));
-    value = value + (*data[4 * (i - 1) + 3]).into();
-
-    let mut result = from_u8Array_to_u32Array(data, i - 1);
-    result.append(value.try_into().unwrap());
+fn from_u8Array_to_u32Array(mut data: Span<u8>) -> Array<u32> {
+    let mut result = ArrayTrait::new();
+    loop {
+        match data.pop_front() {
+            Option::Some(val1) => {
+                let val2 = data.pop_front().unwrap();
+                let val3 = data.pop_front().unwrap();
+                let val4 = data.pop_front().unwrap();
+                let mut value: u128 = (BitShift::shl((*val1).into(), 24));
+                value = value + (BitShift::shl((*val2).into(), 16));
+                value = value + (BitShift::shl((*val3).into(), 8));
+                value = value + (*val4).into();
+                result.append(value.try_into().unwrap());
+            },
+            Option::None => {
+                break;
+            },
+        };
+    };
     result
 }
 
