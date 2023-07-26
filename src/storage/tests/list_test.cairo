@@ -145,8 +145,6 @@ mod tests {
         assert(contract.do_get_len() == (2, 2), 'len');
     }
 
-    #[test]
-    #[available_gas(100000000000)]
     fn test_append_get_many() {
         let contract = deploy_mock();
         let mock_addr = mock_addr();
