@@ -85,9 +85,9 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
     let mut data = from_u8Array_to_u32Array(data.span());
     let mut h = get_h();
     let mut k = get_k();
-    h = sha256_inner(data.span(), 0, ref k, h);
+    let res = sha256_inner(data.span(), 0, k.span(), h.span());
 
-    from_u32Array_to_u8Array(h.span())
+    from_u32Array_to_u8Array(res)
 }
 
 fn from_u32Array_to_u8Array(mut data: Span<u32>) -> Array<u8> {
@@ -112,12 +112,12 @@ fn from_u32Array_to_u8Array(mut data: Span<u32>) -> Array<u8> {
     result
 }
 
-fn sha256_inner(mut data: Span<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>) -> Array<u32> {
+fn sha256_inner(mut data: Span<u32>, i: usize, k: Span<u32>, mut h: Span<u32>) -> Span<u32> {
     if 16 * i >= data.len() {
         return h;
     }
     let w = create_message_schedule(data, i);
-    let h2 = compression(w, 0, ref k, h.span());
+    let h2 = compression(w, 0, k, h);
     let mut t = ArrayTrait::new();
     t.append(u32_wrapping_add(*h[0], *h2[0]));
     t.append(u32_wrapping_add(*h[1], *h2[1]));
@@ -127,11 +127,11 @@ fn sha256_inner(mut data: Span<u32>, i: usize, ref k: Array<u32>, mut h: Array<u
     t.append(u32_wrapping_add(*h[5], *h2[5]));
     t.append(u32_wrapping_add(*h[6], *h2[6]));
     t.append(u32_wrapping_add(*h[7], *h2[7]));
-    h = t;
-    sha256_inner(data, i + 1, ref k, h)
+    h = t.span();
+    sha256_inner(data, i + 1, k, h)
 }
 
-fn compression(w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Span<u32>) -> Span<u32> {
+fn compression(w: Span<u32>, i: usize, k: Span<u32>, mut h: Span<u32>) -> Span<u32> {
     if i >= 64 {
         return h;
     }
@@ -153,10 +153,10 @@ fn compression(w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Span<u32>) -> 
     t.append(*h[5]);
     t.append(*h[6]);
     h = t.span();
-    compression(w, i + 1, ref k, h)
+    compression(w, i + 1, k, h)
 }
 
-fn create_message_schedule(data: Span<u32>, i: usize) -> Array<u32> {
+fn create_message_schedule(data: Span<u32>, i: usize) -> Span<u32> {
     let mut j = 0;
     let mut result = ArrayTrait::new();
     loop {
@@ -179,7 +179,7 @@ fn create_message_schedule(data: Span<u32>, i: usize) -> Array<u32> {
         result.append(res);
         i += 1;
     };
-    result
+    result.span()
 }
 
 fn from_u8Array_to_u32Array(mut data: Span<u8>) -> Array<u32> {
