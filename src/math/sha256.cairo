@@ -8,19 +8,11 @@ use traits::Into;
 use alexandria::math::math::BitShift;
 
 fn ch(x: u32, y: u32, z: u32) -> u32 {
-    let x: u128 = x.into();
-    let y: u128 = y.into();
-    let z: u128 = z.into();
-    let result = (x & y) ^ ((x ^ BoundedInt::<u32>::max().into()) & z);
-    result.try_into().unwrap()
+    (x & y) ^ ((x ^ BoundedInt::<u32>::max().into()) & z)
 }
 
 fn maj(x: u32, y: u32, z: u32) -> u32 {
-    let x: u128 = x.into();
-    let y: u128 = y.into();
-    let z: u128 = z.into();
-    let result = (x & y) ^ (x & z) ^ (y & z);
-    result.try_into().unwrap()
+    (x & y) ^ (x & z) ^ (y & z)
 }
 
 fn bsig0(x: u32) -> u32 {
@@ -184,9 +176,9 @@ fn from_u8Array_to_u32Array(data: Array<u8>, i: usize) -> Array<u32> {
     }
 
     let mut value: u128 = (BitShift::shl((*data[4 * (i - 1) + 0]).into(), 24));
-    value = value | (BitShift::shl((*data[4 * (i - 1) + 1]).into(), 16));
-    value = value | (BitShift::shl((*data[4 * (i - 1) + 2]).into(), 8));
-    value = value | (*data[4 * (i - 1) + 3]).into();
+    value = value + (BitShift::shl((*data[4 * (i - 1) + 1]).into(), 16));
+    value = value + (BitShift::shl((*data[4 * (i - 1) + 2]).into(), 8));
+    value = value + (*data[4 * (i - 1) + 3]).into();
 
     let mut result = from_u8Array_to_u32Array(data, i - 1);
     result.append(value.try_into().unwrap());
@@ -201,83 +193,83 @@ fn add_padding(ref data: Array<u8>) {
 }
 
 fn get_h() -> Array<u32> {
-    let mut h = ArrayTrait::new();
-    h.append(0x6a09e667);
-    h.append(0xbb67ae85);
-    h.append(0x3c6ef372);
-    h.append(0xa54ff53a);
-    h.append(0x510e527f);
-    h.append(0x9b05688c);
-    h.append(0x1f83d9ab);
-    h.append(0x5be0cd19);
-    h
+    array![
+        0x6a09e667,
+        0xbb67ae85,
+        0x3c6ef372,
+        0xa54ff53a,
+        0x510e527f,
+        0x9b05688c,
+        0x1f83d9ab,
+        0x5be0cd19
+    ]
 }
 
 fn get_k() -> Array<u32> {
-    let mut k = ArrayTrait::new();
-    k.append(0x428a2f98);
-    k.append(0x71374491);
-    k.append(0xb5c0fbcf);
-    k.append(0xe9b5dba5);
-    k.append(0x3956c25b);
-    k.append(0x59f111f1);
-    k.append(0x923f82a4);
-    k.append(0xab1c5ed5);
-    k.append(0xd807aa98);
-    k.append(0x12835b01);
-    k.append(0x243185be);
-    k.append(0x550c7dc3);
-    k.append(0x72be5d74);
-    k.append(0x80deb1fe);
-    k.append(0x9bdc06a7);
-    k.append(0xc19bf174);
-    k.append(0xe49b69c1);
-    k.append(0xefbe4786);
-    k.append(0x0fc19dc6);
-    k.append(0x240ca1cc);
-    k.append(0x2de92c6f);
-    k.append(0x4a7484aa);
-    k.append(0x5cb0a9dc);
-    k.append(0x76f988da);
-    k.append(0x983e5152);
-    k.append(0xa831c66d);
-    k.append(0xb00327c8);
-    k.append(0xbf597fc7);
-    k.append(0xc6e00bf3);
-    k.append(0xd5a79147);
-    k.append(0x06ca6351);
-    k.append(0x14292967);
-    k.append(0x27b70a85);
-    k.append(0x2e1b2138);
-    k.append(0x4d2c6dfc);
-    k.append(0x53380d13);
-    k.append(0x650a7354);
-    k.append(0x766a0abb);
-    k.append(0x81c2c92e);
-    k.append(0x92722c85);
-    k.append(0xa2bfe8a1);
-    k.append(0xa81a664b);
-    k.append(0xc24b8b70);
-    k.append(0xc76c51a3);
-    k.append(0xd192e819);
-    k.append(0xd6990624);
-    k.append(0xf40e3585);
-    k.append(0x106aa070);
-    k.append(0x19a4c116);
-    k.append(0x1e376c08);
-    k.append(0x2748774c);
-    k.append(0x34b0bcb5);
-    k.append(0x391c0cb3);
-    k.append(0x4ed8aa4a);
-    k.append(0x5b9cca4f);
-    k.append(0x682e6ff3);
-    k.append(0x748f82ee);
-    k.append(0x78a5636f);
-    k.append(0x84c87814);
-    k.append(0x8cc70208);
-    k.append(0x90befffa);
-    k.append(0xa4506ceb);
-    k.append(0xbef9a3f7);
-    k.append(0xc67178f2);
-    k
+    array![
+        0x428a2f98,
+        0x71374491,
+        0xb5c0fbcf,
+        0xe9b5dba5,
+        0x3956c25b,
+        0x59f111f1,
+        0x923f82a4,
+        0xab1c5ed5,
+        0xd807aa98,
+        0x12835b01,
+        0x243185be,
+        0x550c7dc3,
+        0x72be5d74,
+        0x80deb1fe,
+        0x9bdc06a7,
+        0xc19bf174,
+        0xe49b69c1,
+        0xefbe4786,
+        0x0fc19dc6,
+        0x240ca1cc,
+        0x2de92c6f,
+        0x4a7484aa,
+        0x5cb0a9dc,
+        0x76f988da,
+        0x983e5152,
+        0xa831c66d,
+        0xb00327c8,
+        0xbf597fc7,
+        0xc6e00bf3,
+        0xd5a79147,
+        0x06ca6351,
+        0x14292967,
+        0x27b70a85,
+        0x2e1b2138,
+        0x4d2c6dfc,
+        0x53380d13,
+        0x650a7354,
+        0x766a0abb,
+        0x81c2c92e,
+        0x92722c85,
+        0xa2bfe8a1,
+        0xa81a664b,
+        0xc24b8b70,
+        0xc76c51a3,
+        0xd192e819,
+        0xd6990624,
+        0xf40e3585,
+        0x106aa070,
+        0x19a4c116,
+        0x1e376c08,
+        0x2748774c,
+        0x34b0bcb5,
+        0x391c0cb3,
+        0x4ed8aa4a,
+        0x5b9cca4f,
+        0x682e6ff3,
+        0x748f82ee,
+        0x78a5636f,
+        0x84c87814,
+        0x8cc70208,
+        0x90befffa,
+        0xa4506ceb,
+        0xbef9a3f7,
+        0xc67178f2
+    ]
 }
