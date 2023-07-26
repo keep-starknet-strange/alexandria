@@ -87,9 +87,9 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
     res = u64_data_length.into() & BoundedInt::<u8>::max().into();
     data.append(res.try_into().unwrap());
 
-    let mut data = from_u8Array_to_u32Array(data.span());
-    let mut h = get_h();
-    let mut k = get_k();
+    let data = from_u8Array_to_u32Array(data.span());
+    let h = get_h();
+    let k = get_k();
     let res = sha256_inner(data.span(), 0, k.span(), h.span());
 
     from_u32Array_to_u8Array(res)
