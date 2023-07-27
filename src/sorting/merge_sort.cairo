@@ -44,7 +44,7 @@ fn merge_recursive<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd
     right_arr_ix: usize
 ) {
     if result_arr.len() == left_arr.len() + right_arr.len() {
-        return ();
+        return;
     }
 
     if left_arr_ix == left_arr.len() {
@@ -95,7 +95,7 @@ fn fill_array<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
     ref arr: Array<T>, ref fill_arr: Array<T>, index: usize, count: usize
 ) {
     if count == 0 {
-        return ();
+        return;
     }
 
     arr.append(*fill_arr[index]);

@@ -1,5 +1,5 @@
 use option::OptionTrait;
-use traits::{Into, TryInto};
+use traits::Into;
 
 /// Raise a number to a power.
 /// * `base` - The number to raise.
@@ -32,20 +32,46 @@ fn count_digits_of_base(mut num: u128, base: u128) -> u128 {
     }
 }
 
-fn fpow(x: u128, n: u128) -> u128 {
-    if n == 0 {
-        1
-    } else if (n & 1) == 1 {
-        x * fpow(x * x, n / 2)
-    } else {
-        fpow(x * x, n / 2)
+trait BitShift<T> {
+    fn fpow(x: T, n: T) -> T;
+    fn shl(x: T, n: T) -> T;
+    fn shr(x: T, n: T) -> T;
+}
+
+impl U128BitShift of BitShift<u128> {
+    fn fpow(x: u128, n: u128) -> u128 {
+        if n == 0 {
+            1
+        } else if (n & 1) == 1 {
+            x * BitShift::fpow(x * x, n / 2)
+        } else {
+            BitShift::fpow(x * x, n / 2)
+        }
+    }
+    fn shl(x: u128, n: u128) -> u128 {
+        x * BitShift::fpow(2, n)
+    }
+
+    fn shr(x: u128, n: u128) -> u128 {
+        x / BitShift::fpow(2, n)
     }
 }
 
-fn shl(x: u128, n: u128) -> u128 {
-    x * fpow(2, n)
-}
+impl U256BitShift of BitShift<u256> {
+    fn fpow(x: u256, n: u256) -> u256 {
+        if n == 0 {
+            1
+        } else if (n & 1) == 1 {
+            x * BitShift::fpow(x * x, n / 2)
+        } else {
+            BitShift::fpow(x * x, n / 2)
+        }
+    }
+    fn shl(x: u256, n: u256) -> u256 {
+        x * BitShift::fpow(2, n)
+    }
 
-fn shr(x: u128, n: u128) -> u128 {
-    x / fpow(2, n)
+    fn shr(x: u256, n: u256) -> u256 {
+        x / BitShift::fpow(2, n)
+    }
 }
