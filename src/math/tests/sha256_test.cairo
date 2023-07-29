@@ -43,12 +43,6 @@ fn sha256_empty_test() {
     assert(*result[31] == 0x55, 'invalid result');
 }
 
-use testing::get_available_gas;
-use debug::PrintTrait;
-use integer::{u32_wrapping_add, BoundedInt};
-use traits::Into;
-use alexandria::math::math::BitShift;
-
 #[test]
 #[available_gas(2000000000)]
 fn sha256_lorem_ipsum_test() {
@@ -378,9 +372,7 @@ fn sha256_lorem_ipsum_test() {
     input.append(0x74);
     input.append(0x68);
 
-    let a = get_available_gas();
     let result = sha256::sha256(input);
-    (a - get_available_gas()).print();
 
     // result should be 0xD35BF81DDF990122F8B96C7BF88C0737D5080E0C9BC3F7ABF68E6FF0D5F9EA44
     assert(result.len() == 32, 'invalid result length');
