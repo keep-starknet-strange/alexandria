@@ -57,6 +57,25 @@ impl U128BitShift of BitShift<u128> {
     }
 }
 
+impl U64BitShift of BitShift<u64> {
+    fn fpow(x: u64, n: u64) -> u64 {
+        if n == 0 {
+            1
+        } else if (n & 1) == 1 {
+            x * BitShift::fpow(x * x, n / 2)
+        } else {
+            BitShift::fpow(x * x, n / 2)
+        }
+    }
+    fn shl(x: u64, n: u64) -> u64 {
+        x * BitShift::fpow(2, n)
+    }
+
+    fn shr(x: u64, n: u64) -> u64 {
+        x / BitShift::fpow(2, n)
+    }
+}
+
 impl U256BitShift of BitShift<u256> {
     fn fpow(x: u256, n: u256) -> u256 {
         if n == 0 {

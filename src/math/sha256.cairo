@@ -16,7 +16,7 @@ fn maj(x: u32, y: u32, z: u32) -> u32 {
 }
 
 fn bsig0(x: u32) -> u32 {
-    let x: u128 = x.into();
+    let x: u64 = x.into();
     let x1 = (x / 0x4) | (x * 0x40000000);
     let x2 = (x / 0x2000) | (x * 0x80000);
     let x3 = (x / 0x400000) | (x * 0x400);
@@ -25,7 +25,7 @@ fn bsig0(x: u32) -> u32 {
 }
 
 fn bsig1(x: u32) -> u32 {
-    let x: u128 = x.into();
+    let x: u64 = x.into();
     let x1 = (x / 0x40) | (x * 0x4000000);
     let x2 = (x / 0x800) | (x * 0x200000);
     let x3 = (x / 0x2000000) | (x * 0x80);
@@ -34,7 +34,7 @@ fn bsig1(x: u32) -> u32 {
 }
 
 fn ssig0(x: u32) -> u32 {
-    let x: u128 = x.into();
+    let x: u64 = x.into();
     let x1 = (x / 0x80) | (x * 0x2000000);
     let x2 = (x / 0x40000) | (x * 0x4000);
     let x3 = (x / 0x8);
@@ -43,7 +43,7 @@ fn ssig0(x: u32) -> u32 {
 }
 
 fn ssig1(x: u32) -> u32 {
-    let x: u128 = x.into();
+    let x: u64 = x.into();
     let x1 = (x / 0x20000) | (x * 0x8000);
     let x2 = (x / 0x80000) | (x * 0x2000);
     let x3 = (x / 0x400);
@@ -191,7 +191,7 @@ fn from_u8Array_to_u32Array(mut data: Span<u8>) -> Array<u32> {
                 let val2 = data.pop_front().unwrap();
                 let val3 = data.pop_front().unwrap();
                 let val4 = data.pop_front().unwrap();
-                let mut value: u128 = (BitShift::shl((*val1).into(), 24));
+                let mut value: u64 = (BitShift::shl((*val1).into(), 24));
                 value = value + (BitShift::shl((*val2).into(), 16));
                 value = value + (BitShift::shl((*val3).into(), 8));
                 value = value + (*val4).into();

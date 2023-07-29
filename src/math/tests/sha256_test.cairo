@@ -409,4 +409,3 @@ fn sha256_lorem_ipsum_test() {
     assert(*result[30] == 0xEA, 'invalid result');
     assert(*result[31] == 0x44, 'invalid result');
 }
-
