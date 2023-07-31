@@ -50,12 +50,12 @@ fn sha256_lorem_ipsum_test() {
     // The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of
     // Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with
     let mut input = ArrayTrait::<u8>::new();
-    input.append(0x4C);
-    input.append(0x6F);
-    input.append(0x72);
-    input.append(0x65);
-    input.append(0x6D);
-    input.append(0x20);
+    input.append('L');
+    input.append('o');
+    input.append('r');
+    input.append('e');
+    input.append('m');
+    input.append(' ');
     input.append(0x69);
     input.append(0x70);
     input.append(0x73);

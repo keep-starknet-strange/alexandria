@@ -50,8 +50,7 @@ fn ssig1(x: u32) -> u32 {
 }
 
 fn sha256(mut data: Array<u8>) -> Array<u8> {
-    let u64_data_length: u64 = (data.len() * 8).into();
-    let u64_data_length = u64_data_length & BoundedInt::<u64>::max();
+    let data_len: u64 = (data.len() * 8).into();
 
     // add one
     data.append(0x80);
@@ -64,21 +63,21 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
     };
 
     // add length to the end
-    let mut res = (u64_data_length & 0xff00000000000000) / 0xff000000000000;
+    let mut res = (data_len & 0xff00000000000000) / 0xff000000000000;
     data.append(res.try_into().unwrap());
-    res = (u64_data_length.into() & 0xff000000000000) / 0xff0000000000;
+    res = (data_len.into() & 0xff000000000000) / 0xff0000000000;
     data.append(res.try_into().unwrap());
-    res = (u64_data_length.into() & 0xff0000000000) / 0xff00000000;
+    res = (data_len.into() & 0xff0000000000) / 0xff00000000;
     data.append(res.try_into().unwrap());
-    res = (u64_data_length.into() & 0xff00000000) / 0xff000000;
+    res = (data_len.into() & 0xff00000000) / 0xff000000;
     data.append(res.try_into().unwrap());
-    res = (u64_data_length.into() & 0xff000000) / 0xff0000;
+    res = (data_len.into() & 0xff000000) / 0xff0000;
     data.append(res.try_into().unwrap());
-    res = (u64_data_length.into() & 0xff0000) / 0xff00;
+    res = (data_len.into() & 0xff0000) / 0xff00;
     data.append(res.try_into().unwrap());
-    res = (u64_data_length.into() & 0xff00) / 0xff;
+    res = (data_len.into() & 0xff00) / 0xff;
     data.append(res.try_into().unwrap());
-    res = u64_data_length.into() & 0xff;
+    res = data_len.into() & 0xff;
     data.append(res.try_into().unwrap());
 
     let data = from_u8Array_to_u32Array(data.span());
@@ -189,11 +188,11 @@ fn from_u8Array_to_u32Array(mut data: Span<u8>) -> Array<u32> {
                 let val2 = data.pop_front().unwrap();
                 let val3 = data.pop_front().unwrap();
                 let val4 = data.pop_front().unwrap();
-                let mut value: u64 = (*val1).into() * 0x1000000;
+                let mut value = (*val1).into() * 0x1000000;
                 value = value + (*val2).into() * 0x10000;
                 value = value + (*val3).into() * 0x100;
                 value = value + (*val4).into();
-                result.append(value.try_into().unwrap());
+                result.append(value);
             },
             Option::None => {
                 break;
