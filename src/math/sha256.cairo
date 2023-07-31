@@ -90,7 +90,7 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
 
 use alexandria::math::math::BitShift;
 fn from_u32Array_to_u8Array(mut data: Span<u32>) -> Array<u8> {
-    let mut result = ArrayTrait::new();
+    let mut result = array![];
     loop {
         match data.pop_front() {
             Option::Some(val) => {
@@ -117,7 +117,7 @@ fn sha256_inner(mut data: Span<u32>, i: usize, k: Span<u32>, mut h: Span<u32>) -
     }
     let w = create_message_schedule(data, i);
     let h2 = compression(w, 0, k, h);
-    let mut t = ArrayTrait::new();
+    let mut t = array![];
     t.append(u32_wrapping_add(*h[0], *h2[0]));
     t.append(u32_wrapping_add(*h[1], *h2[1]));
     t.append(u32_wrapping_add(*h[2], *h2[2]));
@@ -142,7 +142,7 @@ fn compression(w: Span<u32>, i: usize, k: Span<u32>, mut h: Span<u32>) -> Span<u
     let s0 = bsig0(*h[0]);
     let maj = maj(*h[0], *h[1], *h[2]);
     let temp2 = u32_wrapping_add(s0, maj);
-    let mut t = ArrayTrait::new();
+    let mut t = array![];
     t.append(u32_wrapping_add(temp1, temp2));
     t.append(*h[0]);
     t.append(*h[1]);
@@ -157,7 +157,7 @@ fn compression(w: Span<u32>, i: usize, k: Span<u32>, mut h: Span<u32>) -> Span<u
 
 fn create_message_schedule(data: Span<u32>, i: usize) -> Span<u32> {
     let mut j = 0;
-    let mut result = ArrayTrait::new();
+    let mut result = array![];
     loop {
         if j >= 16 {
             break;
@@ -182,7 +182,7 @@ fn create_message_schedule(data: Span<u32>, i: usize) -> Span<u32> {
 }
 
 fn from_u8Array_to_u32Array(mut data: Span<u8>) -> Array<u32> {
-    let mut result = ArrayTrait::new();
+    let mut result = array![];
     loop {
         match data.pop_front() {
             Option::Some(val1) => {
