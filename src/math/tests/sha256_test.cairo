@@ -625,5 +625,40 @@ fn sha256_url() {
         '"',
         '}'
     ];
-    sha256::sha256(data);
+    let result = sha256::sha256(data);
+
+    // result should be 0xe5ddd0d703d54d024a1e49cdb614d1f4e9dfa81fff119ca01554ec22d1a45f59
+    assert(result.len() == 32, 'invalid result length');
+    assert(*result[0] == 0xE5, 'invalid result');
+    assert(*result[1] == 0xDD, 'invalid result');
+    assert(*result[2] == 0xD0, 'invalid result');
+    assert(*result[3] == 0xD7, 'invalid result');
+    assert(*result[4] == 0x03, 'invalid result');
+    assert(*result[5] == 0xD5, 'invalid result');
+    assert(*result[6] == 0x4D, 'invalid result');
+    assert(*result[7] == 0x02, 'invalid result');
+    assert(*result[8] == 0x4A, 'invalid result');
+    assert(*result[9] == 0x1E, 'invalid result');
+    assert(*result[10] == 0x49, 'invalid result');
+    assert(*result[11] == 0xCD, 'invalid result');
+    assert(*result[12] == 0xB6, 'invalid result');
+    assert(*result[13] == 0x14, 'invalid result');
+    assert(*result[14] == 0xD1, 'invalid result');
+    assert(*result[15] == 0xF4, 'invalid result');
+    assert(*result[16] == 0xE9, 'invalid result');
+    assert(*result[17] == 0xDF, 'invalid result');
+    assert(*result[18] == 0xA8, 'invalid result');
+    assert(*result[19] == 0x1F, 'invalid result');
+    assert(*result[20] == 0xFF, 'invalid result');
+    assert(*result[21] == 0x11, 'invalid result');
+    assert(*result[22] == 0x9C, 'invalid result');
+    assert(*result[23] == 0xA0, 'invalid result');
+    assert(*result[24] == 0x15, 'invalid result');
+    assert(*result[25] == 0x54, 'invalid result');
+    assert(*result[26] == 0xEC, 'invalid result');
+    assert(*result[27] == 0x22, 'invalid result');
+    assert(*result[28] == 0xD1, 'invalid result');
+    assert(*result[29] == 0xA4, 'invalid result');
+    assert(*result[30] == 0x5F, 'invalid result');
+    assert(*result[31] == 0x59, 'invalid result');
 }
