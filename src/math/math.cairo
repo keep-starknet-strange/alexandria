@@ -38,25 +38,6 @@ trait BitShift<T> {
     fn shr(x: T, n: T) -> T;
 }
 
-impl U64BitShift of BitShift<u64> {
-    fn fpow(x: u64, n: u64) -> u64 {
-        if n == 0 {
-            1
-        } else if (n & 1) == 1 {
-            x * BitShift::fpow(x * x, n / 2)
-        } else {
-            BitShift::fpow(x * x, n / 2)
-        }
-    }
-    fn shl(x: u64, n: u64) -> u64 {
-        x * BitShift::fpow(2, n)
-    }
-
-    fn shr(x: u64, n: u64) -> u64 {
-        x / BitShift::fpow(2, n)
-    }
-}
-
 impl U128BitShift of BitShift<u128> {
     fn fpow(x: u128, n: u128) -> u128 {
         if n == 0 {
