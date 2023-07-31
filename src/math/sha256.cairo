@@ -64,7 +64,7 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
     };
 
     // add length to the end
-    let mut res: u64 = (u64_data_length.into() & 0xff00000000000000) / 0xff000000000000;
+    let mut res = (u64_data_length & 0xff00000000000000) / 0xff000000000000;
     data.append(res.try_into().unwrap());
     res = (u64_data_length.into() & 0xff000000000000) / 0xff0000000000;
     data.append(res.try_into().unwrap());

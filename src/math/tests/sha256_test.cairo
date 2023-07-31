@@ -415,8 +415,6 @@ use debug::PrintTrait;
 #[test]
 #[available_gas(10_000_000_000)]
 fn sha256_url() {
-    let a: u128 = BitShift::fpow(2_u128, 16);
-    (a).print();
     let data = array![
         '{',
         '"',
