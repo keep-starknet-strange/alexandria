@@ -57,13 +57,13 @@ fn inner_encode(mut data: Array<u8>, char_set: Array<u8>) -> Array<u8> {
         0
     };
 
-    let mut result = ArrayTrait::new();
+    let mut result = array![];
     encode_loop(p, data, 0, char_set, ref result);
     result
 }
 
 fn inner_decode(data: Array<u8>) -> Array<u8> {
-    let mut result = ArrayTrait::new();
+    let mut result = array![];
     let mut p = 0_u8;
     if data.len() > 0 {
         if *data[data.len() - 1] == '=' {

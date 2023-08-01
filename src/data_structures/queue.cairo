@@ -49,7 +49,7 @@ impl QueueImpl<T> of QueueTrait<T> {
 }
 
 fn queue_new<T>() -> Queue<T> {
-    let mut arr = ArrayTrait::new();
+    let mut arr = array![];
     Queue { elements: arr }
 }
 

@@ -171,7 +171,7 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
     }
 
     fn reverse(mut self: Span<T>) -> Array<T> {
-        let mut response = ArrayTrait::new();
+        let mut response = array![];
         loop {
             match self.pop_back() {
                 Option::Some(v) => {

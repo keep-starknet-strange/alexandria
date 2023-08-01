@@ -120,7 +120,7 @@ impl ListImpl<
     }
 
     fn array(self: @List<T>) -> Array<T> {
-        let mut array = ArrayTrait::<T>::new();
+        let mut array = array![];
         let mut index = 0;
         loop {
             if index == *self.len {

@@ -56,7 +56,7 @@ fn append_all_source_empty() {
 #[test]
 #[available_gas(2000000)]
 fn append_all_both_empty() {
-    let mut destination = ArrayTrait::<felt252>::new();
+    let mut destination: Array<felt252> = array![];
     let mut source = array![];
     destination.append_all(ref source);
     assert(source.len() == 0, 'Len should be 0');
@@ -88,7 +88,7 @@ fn reverse_size_1() {
 #[test]
 #[available_gas(2000000)]
 fn reverse_empty() {
-    let mut arr = ArrayTrait::<felt252>::new();
+    let mut arr: Array<felt252> = array![];
     let response = arr.reverse();
     assert(response.len() == 0, 'Len should be 0');
 }
@@ -127,7 +127,7 @@ fn reverse_size_1_span() {
 #[test]
 #[available_gas(2000000)]
 fn reverse_empty_span() {
-    let mut arr = ArrayTrait::<felt252>::new();
+    let mut arr: Array<felt252> = array![];
     let response = arr.span().reverse();
     assert(response.len() == 0, 'Len should be 0');
 }
@@ -221,7 +221,7 @@ fn pop_front_n_different_type_span() {
 #[test]
 #[available_gas(2000000)]
 fn pop_front_n_empty_array_span() {
-    let mut arr: Span<felt252> = ArrayTrait::new().span();
+    let mut arr: Span<felt252> = array![].span();
     assert(arr.is_empty(), 'Should be empty');
     arr.pop_front_n(2);
     assert(arr.is_empty(), 'Should be empty');
@@ -276,7 +276,7 @@ fn pop_back_n_different_type_span() {
 #[test]
 #[available_gas(2000000)]
 fn pop_back_n_empty_array_span() {
-    let mut arr: Span<felt252> = ArrayTrait::new().span();
+    let mut arr: Span<felt252> = array![].span();
     assert(arr.is_empty(), 'Should be empty');
     arr.pop_back_n(2);
     assert(arr.is_empty(), 'Should be empty');
@@ -380,7 +380,7 @@ fn contains_false_span() {
 #[test]
 #[available_gas(2000000)]
 fn contains_empty_array_span() {
-    let mut arr = (ArrayTrait::new()).span();
+    let mut arr = (array![]).span();
     assert(arr.contains(85) == false, 'Should be false');
     assert(arr.len() == 0, 'arr should not be consummed');
 }
@@ -451,7 +451,7 @@ fn index_of_panic_span() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_empty_array_span() {
-    let mut arr = (ArrayTrait::new()).span();
+    let mut arr = (array![]).span();
     assert(arr.index_of(21).is_none(), 'Should NOT contain 21');
 }
 
@@ -540,7 +540,7 @@ fn occurrences_of_not_in_array_span() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_empty_array_span() {
-    let mut arr = ArrayTrait::new().span();
+    let mut arr = array![].span();
     assert(arr.occurrences_of(12) == 0, 'Should contain exactly 0');
     assert(arr.len() == 0, 'arr should not be consummed');
 }
@@ -641,7 +641,7 @@ fn min_with_duplicate_span() {
 #[test]
 #[available_gas(2000000)]
 fn min_empty_array_span() {
-    let mut arr: Span<u128> = ArrayTrait::new().span();
+    let mut arr: Span<u128> = array![].span();
     assert(arr.index_of(12).is_none(), 'Should be None');
 }
 
@@ -842,7 +842,7 @@ fn max_with_duplicate_span() {
 #[test]
 #[available_gas(2000000)]
 fn max_empty_array_span() {
-    let mut arr: Span<u128> = ArrayTrait::new().span();
+    let mut arr: Span<u128> = array![].span();
     assert(arr.index_of(12).is_none(), 'Should be None');
 }
 

@@ -14,7 +14,7 @@ fn cumsum<T, impl TAdd: Add<T>, impl TCopy: Copy<T>, impl TDrop: Drop<T>, >(
     assert(sequence.len() >= 1, 'Array must have at least 1 elt');
 
     // [Compute] Interpolation
-    let mut array = ArrayTrait::new();
+    let mut array = array![];
     let mut prev_value = *sequence.pop_front().unwrap();
     array.append(prev_value);
     loop {

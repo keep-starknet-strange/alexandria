@@ -7,7 +7,7 @@ use array::ArrayTrait;
 /// # Returns
 /// * `Array` - The Collatz sequence as an array of `felt252` numbers.
 fn sequence(mut number: u128) -> Array<u128> {
-    let mut arr = ArrayTrait::new();
+    let mut arr = array![];
     if number == 0 {
         return arr;
     }
