@@ -4,14 +4,8 @@ use alexandria::numeric::interpolate::{interpolate, Interpolation, Extrapolation
 #[test]
 #[available_gas(2000000)]
 fn interp_extrapolation_test() {
-    let mut xs = ArrayTrait::<u64>::new();
-    xs.append(3);
-    xs.append(5);
-    xs.append(7);
-    let mut ys = ArrayTrait::new();
-    ys.append(11);
-    ys.append(13);
-    ys.append(17);
+    let xs: Array::<u64> = array![3, 5, 7];
+    let ys = array![11, 13, 17];
     assert(
         interpolate(
             0, xs.span(), ys.span(), Interpolation::Linear(()), Extrapolation::Constant(())
@@ -41,14 +35,8 @@ fn interp_extrapolation_test() {
 #[test]
 #[available_gas(2000000)]
 fn interp_linear_test() {
-    let mut xs = ArrayTrait::<u64>::new();
-    xs.append(3);
-    xs.append(5);
-    xs.append(7);
-    let mut ys = ArrayTrait::<u64>::new();
-    ys.append(11);
-    ys.append(13);
-    ys.append(17);
+    let xs: Array::<u64> = array![3, 5, 7];
+    let ys = array![11, 13, 17];
     assert(
         interpolate(
             4, xs.span(), ys.span(), Interpolation::Linear(()), Extrapolation::Constant(())
@@ -66,14 +54,8 @@ fn interp_linear_test() {
 #[test]
 #[available_gas(2000000)]
 fn interp_nearest_test() {
-    let mut xs = ArrayTrait::<u64>::new();
-    xs.append(3);
-    xs.append(5);
-    xs.append(8);
-    let mut ys = ArrayTrait::<u64>::new();
-    ys.append(11);
-    ys.append(13);
-    ys.append(17);
+    let xs: Array::<u64> = array![3, 5, 7];
+    let ys = array![11, 13, 17];
     assert(
         interpolate(
             4, xs.span(), ys.span(), Interpolation::Nearest(()), Extrapolation::Constant(())
@@ -97,14 +79,8 @@ fn interp_nearest_test() {
 #[test]
 #[available_gas(2000000)]
 fn interp_constant_left_test() {
-    let mut xs = ArrayTrait::<u64>::new();
-    xs.append(3);
-    xs.append(5);
-    xs.append(8);
-    let mut ys = ArrayTrait::<u64>::new();
-    ys.append(11);
-    ys.append(13);
-    ys.append(17);
+    let xs: Array::<u64> = array![3, 5, 7];
+    let ys = array![11, 13, 17];
     assert(
         interpolate(
             4, xs.span(), ys.span(), Interpolation::ConstantLeft(()), Extrapolation::Constant(())
@@ -128,14 +104,8 @@ fn interp_constant_left_test() {
 #[test]
 #[available_gas(2000000)]
 fn interp_constant_right_test() {
-    let mut xs = ArrayTrait::<u64>::new();
-    xs.append(3);
-    xs.append(5);
-    xs.append(8);
-    let mut ys = ArrayTrait::<u64>::new();
-    ys.append(11);
-    ys.append(13);
-    ys.append(17);
+    let xs: Array::<u64> = array![3, 5, 8];
+    let ys = array![11, 13, 17];
     assert(
         interpolate(
             4, xs.span(), ys.span(), Interpolation::ConstantRight(()), Extrapolation::Constant(())
@@ -160,11 +130,8 @@ fn interp_constant_right_test() {
 #[should_panic]
 #[available_gas(2000000)]
 fn interp_revert_len_mismatch() {
-    let mut xs = ArrayTrait::<u64>::new();
-    xs.append(3);
-    xs.append(5);
-    let mut ys = ArrayTrait::<u64>::new();
-    ys.append(11);
+    let xs: Array::<u64> = array![3, 5];
+    let ys = array![11];
     interpolate(4, xs.span(), ys.span(), Interpolation::Linear(()), Extrapolation::Constant(()));
 }
 
@@ -172,9 +139,7 @@ fn interp_revert_len_mismatch() {
 #[should_panic]
 #[available_gas(2000000)]
 fn interp_revert_len_too_short() {
-    let mut xs = ArrayTrait::<u64>::new();
-    xs.append(3);
-    let mut ys = ArrayTrait::<u64>::new();
-    ys.append(11);
+    let xs: Array::<u64> = array![3];
+    let ys = array![11];
     interpolate(4, xs.span(), ys.span(), Interpolation::Linear(()), Extrapolation::Constant(()));
 }

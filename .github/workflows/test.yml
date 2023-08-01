@@ -3,7 +3,7 @@ name: test
 on: [push, pull_request]
 
 env:
-  SCARB_VERSION: 0.5.1
+  SCARB_VERSION: 0.6.0-alpha.2
 jobs:
   build:
     name: build
