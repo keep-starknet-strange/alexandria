@@ -163,7 +163,7 @@ fn add_trailing_zeroes(ref data: Array<u8>, msg_len: usize) {
 }
 
 fn from_u8Array_to_WordArray(data: Array<u8>) -> Array<Word64> {
-    let mut new_arr: Array<Word64> = Default::default();
+    let mut new_arr: Array<Word64> = array![];
     let mut i = 0;
 
     loop {
@@ -185,7 +185,7 @@ fn from_u8Array_to_WordArray(data: Array<u8>) -> Array<Word64> {
 }
 
 fn from_WordArray_to_u8array(data: Span<Word64>) -> Array<u8> {
-    let mut arr: Array<u8> = Default::default();
+    let mut arr: Array<u8> = array![];
 
     let mut i: usize = 0;
     loop {
@@ -238,7 +238,7 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
         // Prepare message schedule
         let mut t: usize = 0;
 
-        let mut W: Array<Word64> = Default::default();
+        let mut W: Array<Word64> = array![];
         loop {
             if t == 80 {
                 break ();
@@ -291,16 +291,7 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
         i += 1;
     };
 
-    let mut ret: Array<Word64> = Default::default();
-    ret.append(h_0);
-    ret.append(h_1);
-    ret.append(h_2);
-    ret.append(h_3);
-    ret.append(h_4);
-    ret.append(h_5);
-    ret.append(h_6);
-    ret.append(h_7);
-    ret
+    array![h_0, h_1, h_2, h_3, h_4, h_5, h_6, h_7]
 }
 
 fn sha512(mut data: Array<u8>) -> Array<u8> {
@@ -344,7 +335,7 @@ fn sha512(mut data: Array<u8>) -> Array<u8> {
 }
 
 fn get_h() -> Array<Word64> {
-    let mut h: Array<Word64> = Default::default();
+    let mut h: Array<Word64> = array![];
     h.append(Word64 { data: 0x6a09e667f3bcc908 });
     h.append(Word64 { data: 0xbb67ae8584caa73b });
     h.append(Word64 { data: 0x3c6ef372fe94f82b });
@@ -357,7 +348,7 @@ fn get_h() -> Array<Word64> {
 }
 
 fn get_k() -> Array<Word64> {
-    let mut k: Array<Word64> = Default::default();
+    let mut k: Array<Word64> = array![];
     k.append(Word64 { data: 0x428a2f98d728ae22 });
     k.append(Word64 { data: 0x7137449123ef65cd });
     k.append(Word64 { data: 0xb5c0fbcfec4d3b2f });

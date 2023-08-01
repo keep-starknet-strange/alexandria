@@ -70,8 +70,5 @@ fn test_case_verify(
 }
 
 fn generate_proof_2_elements(element_1: felt252, element_2: felt252) -> Array<felt252> {
-    let mut proof = ArrayTrait::new();
-    proof.append(element_1);
-    proof.append(element_2);
-    proof
+    array![element_1, element_2]
 }
