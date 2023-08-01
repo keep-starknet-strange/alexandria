@@ -152,7 +152,7 @@ fn verify_wrong_signature_test() {
 #[available_gas(3200000000)]
 fn verify_signature_empty_sig_test() {
     let empty_msg: Span<u8> = gen_msg();
-    let sig: Span<u8> = Default::default().span();
+    let sig = array![].span();
     let pub_key: Span<u8> = gen_pub_key();
 
     assert(verify_signature(empty_msg, sig, pub_key) == false, 'Signature should be invalid');
@@ -163,7 +163,7 @@ fn verify_signature_empty_sig_test() {
 fn verify_signature_empty_pub_key_test() {
     let empty_msg: Span<u8> = gen_msg();
     let sig: Span<u8> = gen_sig();
-    let pub_key: Span<u8> = Default::default().span();
+    let pub_key = array![].span();
 
     assert(verify_signature(empty_msg, sig, pub_key) == false, 'Signature should be invalid');
 }

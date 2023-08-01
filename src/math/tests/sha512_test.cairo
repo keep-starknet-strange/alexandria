@@ -479,7 +479,7 @@ fn test_sha512_size_one() {
 #[test]
 #[available_gas(20000000000)]
 fn test_size_zero() {
-    let msg: Array<u8> = Default::default();
+    let msg = array![];
 
     let res = sha512(msg);
 
