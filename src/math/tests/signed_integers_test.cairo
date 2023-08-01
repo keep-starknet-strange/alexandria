@@ -306,7 +306,7 @@ fn i9_test_equality() {
 }
 
 #[test]
-#[should_panic]
+#[should_panic(expected: ('sign of 0 must be false', ))]
 fn i9_test_check_sign_zero() {
     let x = i9 { inner: 0_u8, sign: true };
     signed_integers::i9_check_sign_zero(x);
@@ -621,7 +621,7 @@ fn i17_test_equality() {
 }
 
 #[test]
-#[should_panic]
+#[should_panic(expected: ('sign of 0 must be false', ))]
 fn i17_test_check_sign_zero() {
     let x = i17 { inner: 0_u16, sign: true };
     signed_integers::i17_check_sign_zero(x);
@@ -936,7 +936,7 @@ fn i33_test_equality() {
 }
 
 #[test]
-#[should_panic]
+#[should_panic(expected: ('sign of 0 must be false', ))]
 fn i33_test_check_sign_zero() {
     let x = i33 { inner: 0_u32, sign: true };
     signed_integers::i33_check_sign_zero(x);
@@ -1252,7 +1252,7 @@ fn i65_test_equality() {
 }
 
 #[test]
-#[should_panic]
+#[should_panic(expected: ('sign of 0 must be false', ))]
 fn i65_test_check_sign_zero() {
     let x = i65 { inner: 0_u64, sign: true };
     signed_integers::i65_check_sign_zero(x);
@@ -1568,7 +1568,7 @@ fn i129_test_equality() {
 }
 
 #[test]
-#[should_panic]
+#[should_panic(expected: ('sign of 0 must be false', ))]
 fn i129_test_check_sign_zero() {
     let x = i129 { inner: 0_u128, sign: true };
     signed_integers::i129_check_sign_zero(x);
