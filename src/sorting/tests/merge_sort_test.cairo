@@ -29,7 +29,7 @@ fn mergesort_test() {
 
     let mut sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span(), 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span()) == true, 'invalid result');
 }
 
 #[test]
@@ -41,7 +41,7 @@ fn mergesort_test_empty() {
 
     let mut sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span(), 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span()) == true, 'invalid result');
 }
 
 #[test]
@@ -55,7 +55,7 @@ fn mergesort_test_one_element() {
 
     let mut sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span(), 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span()) == true, 'invalid result');
 }
 
 #[test]
@@ -75,5 +75,5 @@ fn mergesort_test_pre_sorted() {
 
     let mut sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span(), 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span()) == true, 'invalid result');
 }
