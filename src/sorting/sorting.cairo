@@ -1,4 +1,5 @@
 use array::SpanTrait;
+use option::OptionTrait;
 
 // Check if two arrays are equal.
 /// * `a` - The first array.
@@ -6,18 +7,21 @@ use array::SpanTrait;
 /// * `index` - The index used to loop through the arrays.
 /// # Returns
 /// * `bool` - True if the arrays are equal, false otherwise.
-fn is_equal(a: Span<u32>, b: Span<u32>, index: u32) -> bool {
-    let len = a.len();
-    if len != b.len() {
+fn is_equal(mut a: Span<u32>, mut b: Span<u32>, index: u32) -> bool {
+    if a.len() != b.len() {
         return false;
     }
-    if index == len {
-        return true;
+    loop {
+        match a.pop_front() {
+            Option::Some(val1) => {
+                let val2 = b.pop_front().unwrap();
+                if *val1 != *val2 {
+                    break false;
+                }
+            },
+            Option::None(_) => {
+                break true;
+            },
+        };
     }
-
-    if *a[index] != *b[index] {
-        return false;
-    }
-
-    is_equal(a, b, index + 1)
 }
