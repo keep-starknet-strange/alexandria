@@ -16,7 +16,7 @@ trait Decoder<T> {
 }
 
 impl Base64Encoder of Encoder<Array<u8>> {
-    fn encode(mut data: Array<u8>) -> Array<u8> {
+    fn encode(data: Array<u8>) -> Array<u8> {
         let mut char_set = get_base64_char_set();
         char_set.append('+');
         char_set.append('/');
@@ -25,7 +25,7 @@ impl Base64Encoder of Encoder<Array<u8>> {
 }
 
 impl Base64UrlEncoder of Encoder<Array<u8>> {
-    fn encode(mut data: Array<u8>) -> Array<u8> {
+    fn encode(data: Array<u8>) -> Array<u8> {
         let mut char_set = get_base64_char_set();
         char_set.append('-');
         char_set.append('_');
@@ -34,7 +34,7 @@ impl Base64UrlEncoder of Encoder<Array<u8>> {
 }
 
 impl Base64Decoder of Decoder<Array<u8>> {
-    fn decode(mut data: Array<u8>) -> Array<u8> {
+    fn decode(data: Array<u8>) -> Array<u8> {
         inner_decode(data)
     }
 }
@@ -45,7 +45,8 @@ impl Base64UrlDecoder of Decoder<Array<u8>> {
     }
 }
 
-fn inner_encode(mut data: Array<u8>, char_set: Array<u8>) -> Array<u8> {
+fn inner_encode(data: Array<u8>, char_set: Array<u8>) -> Array<u8> {
+    let mut data = data;
     let mut p = if (data.len() % 3 == 1) {
         data.append(0);
         data.append(0);

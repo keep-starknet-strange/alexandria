@@ -228,7 +228,9 @@ impl PointIntoExtendedHomogeneousPoint of Into<Point, ExtendedHomogeneousPoint> 
 /// * `P` - Elliptic Curve point in the Extended Homogeneous form.
 /// # Returns
 /// * `u256` - Resulting point in the Extended Homogeneous form.
-fn point_mult(mut scalar: u256, mut P: ExtendedHomogeneousPoint) -> ExtendedHomogeneousPoint {
+fn point_mult(scalar: u256, P: ExtendedHomogeneousPoint) -> ExtendedHomogeneousPoint {
+    let mut scalar = scalar;
+    let mut P = P;
     let mut Q = ExtendedHomogeneousPoint { X: 0, Y: 1, Z: 1, T: 0 };
     let zero_u512 = Default::default();
     let one_u512 = u512 { limb0: 1, limb1: 0, limb2: 0, limb3: 0 };
@@ -257,7 +259,7 @@ fn point_mult(mut scalar: u256, mut P: ExtendedHomogeneousPoint) -> ExtendedHomo
 /// # Returns
 /// * `bool` - true if the signature fits to the message and the public key, false otherwise.
 fn check_group_equation(
-    S: u256, R: ExtendedHomogeneousPoint, k: u256, mut A_prime: ExtendedHomogeneousPoint
+    S: u256, R: ExtendedHomogeneousPoint, k: u256, A_prime: ExtendedHomogeneousPoint
 ) -> bool {
     // (X(P),Y(P)) of edwards25519 in https://datatracker.ietf.org/doc/html/rfc7748
     let B: Point = Point {

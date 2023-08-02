@@ -16,11 +16,12 @@ fn dot<
     impl TCopy: Copy<T>,
     impl TDrop: Drop<T>,
 >(
-    mut xs: Span<T>, mut ys: Span<T>
+    xs: Span<T>, ys: Span<T>
 ) -> T {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');
-
+    let mut xs = xs;
+    let mut ys = ys;
     // [Compute] Dot product in a loop
     let mut index = 0;
     let mut value = Zeroable::zero();

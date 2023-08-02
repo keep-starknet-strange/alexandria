@@ -10,7 +10,8 @@ use core::traits::TryInto;
 // * ` modulus ` - The modulus used in the calculation # Returns
 // * ` u128 ` - The result of ( base ^ power ) mod modulus
 
-fn fast_power(mut base: u128, mut power: u128, modulus: u128) -> u128 {
+fn fast_power(base: u128, power: u128, modulus: u128) -> u128 {
+    let mut power = power;
     // Return invalid input error
     if base == 0 {
         panic_with_felt252('II')

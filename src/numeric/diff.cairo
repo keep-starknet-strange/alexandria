@@ -16,11 +16,11 @@ fn diff<
     impl TDrop: Drop<T>,
     impl TZeroable: Zeroable<T>,
 >(
-    mut sequence: Span<T>
+    sequence: Span<T>
 ) -> Array<T> {
     // [Check] Inputs
     assert(sequence.len() >= 1, 'Array must have at least 1 elt');
-
+    let mut sequence = sequence;
     // [Compute] Interpolation
     let mut array = ArrayTrait::<T>::new();
     array.append(Zeroable::zero());

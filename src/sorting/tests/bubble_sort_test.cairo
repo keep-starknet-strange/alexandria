@@ -21,7 +21,7 @@ fn bubblesort_test() {
     correct.append(4_u32);
     correct.append(5_u32);
 
-    let mut sorted = bubble_sort::bubble_sort_elements(data);
+    let sorted = bubble_sort::bubble_sort_elements(data);
 
     assert(is_equal(sorted.span(), correct.span()) == true, 'invalid result');
 }
@@ -30,11 +30,11 @@ fn bubblesort_test() {
 #[test]
 #[available_gas(2000000)]
 fn bubblesort_test_empty() {
-    let mut data = ArrayTrait::new();
+    let data = ArrayTrait::new();
 
-    let mut correct = ArrayTrait::new();
+    let correct = ArrayTrait::new();
 
-    let mut sorted = bubble_sort::bubble_sort_elements(data);
+    let sorted = bubble_sort::bubble_sort_elements(data);
 
     assert(is_equal(sorted.span(), correct.span()) == true, 'invalid result');
 }
@@ -48,7 +48,7 @@ fn bubblesort_test_one_element() {
     let mut correct = ArrayTrait::new();
     correct.append(2_u32);
 
-    let mut sorted = bubble_sort::bubble_sort_elements(data);
+    let sorted = bubble_sort::bubble_sort_elements(data);
 
     assert(is_equal(sorted.span(), correct.span()) == true, 'invalid result');
 }
@@ -68,7 +68,7 @@ fn bubblesort_test_pre_sorted() {
     correct.append(3_u32);
     correct.append(4_u32);
 
-    let mut sorted = bubble_sort::bubble_sort_elements(data);
+    let sorted = bubble_sort::bubble_sort_elements(data);
 
     assert(is_equal(sorted.span(), correct.span()) == true, 'invalid result');
 }

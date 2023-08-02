@@ -6,7 +6,8 @@ use array::ArrayTrait;
 /// * `number` - The number to generate the Collatz sequence for.
 /// # Returns
 /// * `Array` - The Collatz sequence as an array of `felt252` numbers.
-fn sequence(mut number: u128) -> Array<u128> {
+fn sequence(number: u128) -> Array<u128> {
+    let mut number = number;
     let mut arr = ArrayTrait::new();
     if number == 0 {
         return arr;

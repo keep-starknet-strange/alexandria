@@ -7,7 +7,9 @@ use option::OptionTrait;
 /// * `index` - The index used to loop through the arrays.
 /// # Returns
 /// * `bool` - True if the arrays are equal, false otherwise.
-fn is_equal(mut a: Span<u32>, mut b: Span<u32>) -> bool {
+fn is_equal(a: Span<u32>, b: Span<u32>) -> bool {
+    let mut a = a;
+    let mut b = b;
     if a.len() != b.len() {
         return false;
     }
