@@ -45,8 +45,7 @@ impl Base64UrlDecoder of Decoder<Array<u8>> {
     }
 }
 
-fn inner_encode(data: Array<u8>, char_set: Array<u8>) -> Array<u8> {
-    let mut data = data;
+fn inner_encode(mut data: Array<u8>, char_set: Array<u8>) -> Array<u8> {
     let mut p = if (data.len() % 3 == 1) {
         data.append(0);
         data.append(0);

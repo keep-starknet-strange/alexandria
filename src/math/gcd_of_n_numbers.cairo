@@ -7,8 +7,7 @@ use option::OptionTrait;
 // * `n` - The array of numbers to calculate the gcd for
 // # Returns
 // * `felt252` - The gcd of input numbers
-fn gcd(n: Span<u128>) -> u128 {
-    let mut n = n;
+fn gcd(mut n: Span<u128>) -> u128 {
     // Return empty input error
     if n.is_empty() {
         panic_with_felt252('EI')
@@ -32,9 +31,7 @@ fn gcd(n: Span<u128>) -> u128 {
 // * `b` - The first number for which to calculate the gcd
 // # Returns
 // * `felt252` - The gcd of a and b
-fn gcd_two_numbers(a: u128, b: u128) -> u128 {
-    let mut a = a;
-    let mut b = b;
+fn gcd_two_numbers(mut a: u128, mut b: u128) -> u128 {
     loop {
         if b == 0 {
             break a;

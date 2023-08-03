@@ -40,5 +40,5 @@ fn trapezoidal_rule<
         value += (*xs.at(index + 1) - *xs[index]) * (*ys[index] + *ys[index + 1]);
         index += 1;
     };
-    TDiv::div(value, TInto::into(2))
+    value / TInto::into(2)
 }

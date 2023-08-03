@@ -8,11 +8,11 @@ use option::OptionTrait;
 /// # Returns
 /// * `Array<T>` - The cumulative sum of sequence.
 fn cumsum<T, impl TAdd: Add<T>, impl TCopy: Copy<T>, impl TDrop: Drop<T>, >(
-    sequence: Span<T>
+    mut sequence: Span<T>
 ) -> Array<T> {
     // [Check] Inputs
     assert(sequence.len() >= 1, 'Array must have at least 1 elt');
-    let mut sequence = sequence;
+
     // [Compute] Interpolation
     let mut array = ArrayTrait::new();
     let mut prev_value = *sequence.pop_front().unwrap();
