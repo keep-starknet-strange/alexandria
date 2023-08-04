@@ -50,7 +50,7 @@ fn bubblesort_test_one_element() {
 
     let sorted = bubble_sort::bubble_sort_elements(data);
 
-    assert(is_equal(sorted.span(), correct.span()) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
 }
 
 #[test]
