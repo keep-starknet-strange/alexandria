@@ -720,7 +720,7 @@ fn i17_le(lhs: i17, rhs: i17) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i17_ge(lhs: i17, rhs: i17) -> bool {
-    if (lhs == rhs) | i17_gt(lhs, rhs){
+    if (lhs == rhs) | i17_gt(lhs, rhs) {
         return true;
     } else {
         return false;
