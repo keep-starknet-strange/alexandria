@@ -85,10 +85,7 @@ impl PartialEqExtendedHomogeneousPoint of PartialEq<ExtendedHomogeneousPoint> {
             return false;
         }
         // lhs.Y * rhs.Z - rhs.Y * lhs.Z
-        if (sub_mod(mult_mod(*lhs.Y, *rhs.Z, p), mult_mod(*rhs.Y, *lhs.Z, p), p) != 0) {
-            return false;
-        }
-        return true;
+        sub_mod(mult_mod(*lhs.Y, *rhs.Z, p), mult_mod(*rhs.Y, *lhs.Z, p), p) == 0
     }
     fn ne(lhs: @ExtendedHomogeneousPoint, rhs: @ExtendedHomogeneousPoint) -> bool {
         !(lhs == rhs)
