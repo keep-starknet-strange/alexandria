@@ -36,7 +36,7 @@ fn bubblesort_test_empty() {
 
     let sorted = bubble_sort::bubble_sort_elements(data);
 
-    assert(is_equal(sorted.span(), correct.span()) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
 }
 
 #[test]
