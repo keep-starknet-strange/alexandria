@@ -23,7 +23,7 @@ fn stack_push_test<
     stack.push(val_1);
     stack.push(val_2);
 
-    assert(stack.is_empty() == false, 'must not be empty');
+    assert(!stack.is_empty(), 'must not be empty');
     assert(stack.len() == 2, 'len should be 2');
 }
 

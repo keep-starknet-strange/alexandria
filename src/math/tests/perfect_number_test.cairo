@@ -21,14 +21,14 @@ fn perfect_big_number_test() {
 #[test]
 #[available_gas(20000000)]
 fn not_perfect_small_number_test() {
-    assert(is_perfect_number(5) == false, 'invalid result');
-    assert(is_perfect_number(86) == false, 'invalid result');
+    assert(!is_perfect_number(5), 'invalid result');
+    assert(!is_perfect_number(86), 'invalid result');
 }
 
 #[test]
 #[available_gas(20000000)]
 fn not_perfect_big_number_test() {
-    assert(is_perfect_number(497) == false, 'invalid result');
+    assert(!is_perfect_number(497), 'invalid result');
 }
 
 // perfect_numbers

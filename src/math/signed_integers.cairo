@@ -18,7 +18,7 @@ struct i9 {
 // Panics if `x` is zero and has a sign that is not false.
 fn i9_check_sign_zero(x: i9) {
     if x.inner == 0 {
-        assert(x.sign == false, 'sign of 0 must be false');
+        assert(!x.sign, 'sign of 0 must be false');
     }
 }
 
@@ -149,7 +149,7 @@ fn i9_div(lhs: i9, rhs: i9) -> i9 {
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = lhs.sign ^ rhs.sign;
 
-    if (sign == false) {
+    if (!sign) {
         // If the operands are positive, the quotient is simply their absolute value quotient.
         return i9 { inner: lhs.inner / rhs.inner, sign: sign };
     }
@@ -405,7 +405,7 @@ struct i17 {
 // Panics if `x` is zero and has a sign that is not false.
 fn i17_check_sign_zero(x: i17) {
     if x.inner == 0 {
-        assert(x.sign == false, 'sign of 0 must be false');
+        assert(!x.sign, 'sign of 0 must be false');
     }
 }
 
@@ -536,7 +536,7 @@ fn i17_div(lhs: i17, rhs: i17) -> i17 {
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = lhs.sign ^ rhs.sign;
 
-    if (sign == false) {
+    if (!sign) {
         // If the operands are positive, the quotient is simply their absolute value quotient.
         return i17 { inner: lhs.inner / rhs.inner, sign: sign };
     }
@@ -792,7 +792,7 @@ struct i33 {
 // Panics if `x` is zero and has a sign that is not false.
 fn i33_check_sign_zero(x: i33) {
     if x.inner == 0 {
-        assert(x.sign == false, 'sign of 0 must be false');
+        assert(!x.sign, 'sign of 0 must be false');
     }
 }
 
@@ -923,7 +923,7 @@ fn i33_div(lhs: i33, rhs: i33) -> i33 {
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = lhs.sign ^ rhs.sign;
 
-    if (sign == false) {
+    if (!sign) {
         // If the operands are positive, the quotient is simply their absolute value quotient.
         return i33 { inner: lhs.inner / rhs.inner, sign: sign };
     }
@@ -1179,7 +1179,7 @@ struct i65 {
 // Panics if `x` is zero and has a sign that is not false.
 fn i65_check_sign_zero(x: i65) {
     if x.inner == 0 {
-        assert(x.sign == false, 'sign of 0 must be false');
+        assert(!x.sign, 'sign of 0 must be false');
     }
 }
 
@@ -1310,7 +1310,7 @@ fn i65_div(lhs: i65, rhs: i65) -> i65 {
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = lhs.sign ^ rhs.sign;
 
-    if (sign == false) {
+    if (!sign) {
         // If the operands are positive, the quotient is simply their absolute value quotient.
         return i65 { inner: lhs.inner / rhs.inner, sign: sign };
     }
@@ -1566,7 +1566,7 @@ struct i129 {
 // Panics if `x` is zero and has a sign that is not false.
 fn i129_check_sign_zero(x: i129) {
     if x.inner == 0 {
-        assert(x.sign == false, 'sign of 0 must be false');
+        assert(!x.sign, 'sign of 0 must be false');
     }
 }
 
@@ -1697,7 +1697,7 @@ fn i129_div(lhs: i129, rhs: i129) -> i129 {
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = lhs.sign ^ rhs.sign;
 
-    if (sign == false) {
+    if (!sign) {
         // If the operands are positive, the quotient is simply their absolute value quotient.
         return i129 { inner: lhs.inner / rhs.inner, sign: sign };
     }
