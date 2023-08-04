@@ -6,3 +6,4 @@ mod numeric;
 mod sorting;
 mod searching;
 mod storage;
+mod ascii;
