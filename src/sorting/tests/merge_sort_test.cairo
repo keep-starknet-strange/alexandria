@@ -27,21 +27,21 @@ fn mergesort_test() {
     correct.append(7_u32);
     correct.append(8_u32);
 
-    let mut sorted = merge(data);
+    let sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span(), 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn mergesort_test_empty() {
-    let mut data = ArrayTrait::new();
+    let data = ArrayTrait::new();
 
-    let mut correct = ArrayTrait::new();
+    let correct = ArrayTrait::new();
 
-    let mut sorted = merge(data);
+    let sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span(), 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
 }
 
 #[test]
@@ -55,7 +55,7 @@ fn mergesort_test_one_element() {
 
     let mut sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span(), 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
 }
 
 #[test]
@@ -73,7 +73,7 @@ fn mergesort_test_pre_sorted() {
     correct.append(3_u32);
     correct.append(4_u32);
 
-    let mut sorted = merge(data);
+    let sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span(), 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
 }
