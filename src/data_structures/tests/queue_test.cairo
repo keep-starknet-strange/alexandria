@@ -19,7 +19,7 @@ fn queue_is_empty_test() {
     let mut queue = QueueTrait::<felt252>::new();
     let result = queue.is_empty();
 
-    assert(result == true, 'should be empty');
+    assert(result, 'should be empty');
 }
 
 #[test]

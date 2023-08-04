@@ -12,7 +12,7 @@ fn stack_new_test<S, T, impl Stack: StackTrait<S, T>>(stack: @S) {
 }
 
 fn stack_is_empty_test<S, T, impl Stack: StackTrait<S, T>>(stack: @S) {
-    assert(stack.is_empty() == true, 'stack should be empty');
+    assert(stack.is_empty(), 'stack should be empty');
 }
 
 fn stack_push_test<

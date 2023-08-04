@@ -307,7 +307,7 @@ fn i9_lt(lhs: i9, rhs: i9) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
 fn i9_le(lhs: i9, rhs: i9) -> bool {
-    if (lhs == rhs || i9_lt(lhs, rhs) == true) {
+    if lhs == rhs || i9_lt(lhs, rhs) {
         return true;
     } else {
         return false;
@@ -321,7 +321,7 @@ fn i9_le(lhs: i9, rhs: i9) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i9_ge(lhs: i9, rhs: i9) -> bool {
-    if ((lhs == rhs) | i9_gt(lhs, rhs) == true) {
+    if (lhs == rhs) | i9_gt(lhs, rhs) {
         return true;
     } else {
         return false;
@@ -706,7 +706,7 @@ fn i17_lt(lhs: i17, rhs: i17) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
 fn i17_le(lhs: i17, rhs: i17) -> bool {
-    if (lhs == rhs || i17_lt(lhs, rhs) == true) {
+    if lhs == rhs || i17_lt(lhs, rhs) {
         return true;
     } else {
         return false;
@@ -720,7 +720,7 @@ fn i17_le(lhs: i17, rhs: i17) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i17_ge(lhs: i17, rhs: i17) -> bool {
-    if ((lhs == rhs) | i17_gt(lhs, rhs) == true) {
+    if (lhs == rhs) | i17_gt(lhs, rhs){
         return true;
     } else {
         return false;
@@ -1105,7 +1105,7 @@ fn i33_lt(lhs: i33, rhs: i33) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
 fn i33_le(lhs: i33, rhs: i33) -> bool {
-    if (lhs == rhs || i33_lt(lhs, rhs) == true) {
+    if lhs == rhs || i33_lt(lhs, rhs) {
         return true;
     } else {
         return false;
@@ -1119,7 +1119,7 @@ fn i33_le(lhs: i33, rhs: i33) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i33_ge(lhs: i33, rhs: i33) -> bool {
-    if ((lhs == rhs) | i33_gt(lhs, rhs) == true) {
+    if (lhs == rhs) | i33_gt(lhs, rhs) {
         return true;
     } else {
         return false;
@@ -1504,7 +1504,7 @@ fn i65_lt(lhs: i65, rhs: i65) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
 fn i65_le(lhs: i65, rhs: i65) -> bool {
-    if (lhs == rhs || i65_lt(lhs, rhs) == true) {
+    if lhs == rhs || i65_lt(lhs, rhs) {
         return true;
     } else {
         return false;
@@ -1518,7 +1518,7 @@ fn i65_le(lhs: i65, rhs: i65) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i65_ge(lhs: i65, rhs: i65) -> bool {
-    if (lhs == rhs || i65_gt(lhs, rhs) == true) {
+    if lhs == rhs || i65_gt(lhs, rhs) {
         return true;
     } else {
         return false;
@@ -1903,7 +1903,7 @@ fn i129_lt(lhs: i129, rhs: i129) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
 fn i129_le(lhs: i129, rhs: i129) -> bool {
-    if (lhs == rhs || i129_lt(lhs, rhs) == true) {
+    if lhs == rhs || i129_lt(lhs, rhs) {
         return true;
     } else {
         return false;
@@ -1917,7 +1917,7 @@ fn i129_le(lhs: i129, rhs: i129) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i129_ge(lhs: i129, rhs: i129) -> bool {
-    if (lhs == rhs || i129_gt(lhs, rhs) == true) {
+    if lhs == rhs || i129_gt(lhs, rhs) {
         return true;
     } else {
         return false;

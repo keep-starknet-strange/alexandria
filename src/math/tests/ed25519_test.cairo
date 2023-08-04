@@ -153,7 +153,7 @@ fn verify_signature_test() {
     let sig: Span<u8> = gen_sig();
     let pub_key: Span<u8> = gen_pub_key();
 
-    assert(verify_signature(msg, sig, pub_key) == true, 'Invalid signature');
+    assert(verify_signature(msg, sig, pub_key), 'Invalid signature');
 }
 
 #[test]
