@@ -35,15 +35,15 @@ impl IntergerToAsciiArrayTraitImpl<
     }
 
     fn to_inverse_ascii_array(self: T) -> Array<felt252> {
-        let mut new_arr = ArrayTrait::<felt252>::new();
-        if self <= TryInto::<felt252, T>::try_into(9).unwrap() {
+        let mut new_arr = ArrayTrait::new();
+        if self <= 9.try_into().unwrap() {
             new_arr.append(self.into() + 48);
             return new_arr;
         }
 
         let mut num = self;
         loop {
-            if num <= Zeroable::<T>::zero() {
+            if num.is_zero() {
                 break ();
             }
             let (quotient, remainder) = DivRem::div_rem(
@@ -72,7 +72,7 @@ impl SmallIntergerToAsciiTraitImpl<
     impl TCopy: Copy<T>,
 > of IntergerToAsciiTrait<T,felt252> {
     fn to_ascii(self: T) -> felt252 {
-        if self <= TryInto::<felt252, T>::try_into(9).unwrap() {
+        if self <= 9.try_into().unwrap() {
             return self.into() + 48;
         }
 
@@ -109,8 +109,8 @@ impl BigIntergerToAsciiTraitImpl<
     impl TCopy: Copy<T>,
 > of IntergerToAsciiTrait<T,Array<felt252>> {
     fn to_ascii(self: T) -> Array<felt252> {
-        let mut data = ArrayTrait::<felt252>::new();
-        if self <= TryInto::<felt252, T>::try_into(9).unwrap() {
+        let mut data = ArrayTrait::new();
+        if self <= 9.try_into().unwrap() {
             data.append(self.into() + 48);
             return data;
         }
@@ -159,14 +159,14 @@ impl U256ToAsciiArrayTraitImpl of IntergerToAsciiArrayTrait<u256> {
     }
 
     fn to_inverse_ascii_array(self: u256) -> Array<felt252> {
-        let mut new_arr = ArrayTrait::<felt252>::new();
+        let mut new_arr = ArrayTrait::new();
         if self <= 9 {
             new_arr.append(self.try_into().expect('number overflow felt252') + 48);
             return new_arr;
         }
         let mut num = self;
         loop {
-            if num <= 0 {
+            if num.is_zero() {
                 break ();
             }
             let (quotient, remainder) = DivRem::div_rem(
@@ -182,7 +182,7 @@ impl U256ToAsciiArrayTraitImpl of IntergerToAsciiArrayTrait<u256> {
 impl U256ToAsciiTraitImpl of IntergerToAsciiTrait<u256, Array<felt252>> {
 
     fn to_ascii(self: u256) -> Array<felt252> {
-        let mut data = ArrayTrait::<felt252>::new();
+        let mut data = ArrayTrait::new();
         if self <= 9 {
             data.append(self.try_into().expect('number overflow felt252') + 48);
             return data;
