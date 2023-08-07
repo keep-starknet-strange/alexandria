@@ -10,7 +10,7 @@ fn mergesort_test() {
 
     let mut sorted = merge(data).span();
 
-    assert(is_equal(sorted, correct, 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted, correct), 'invalid result');
 }
 
 #[test]
@@ -20,9 +20,9 @@ fn mergesort_test_empty() {
 
     let mut correct = array![];
 
-    let mut sorted = merge(data);
+    let sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span(), 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
 }
 
 #[test]
@@ -33,7 +33,7 @@ fn mergesort_test_one_element() {
 
     let mut sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span(), 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
 }
 
 #[test]
@@ -42,7 +42,7 @@ fn mergesort_test_pre_sorted() {
     let mut data = array![1_u32, 2_u32, 3_u32, 4_u32];
     let mut correct = array![1_u32, 2_u32, 3_u32, 4_u32];
 
-    let mut sorted = merge(data);
+    let sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span(), 0_u32) == true, 'invalid result');
+    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
 }

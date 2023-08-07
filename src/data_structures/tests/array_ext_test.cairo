@@ -336,7 +336,7 @@ fn contains_different_type() {
 #[available_gas(2000000)]
 fn contains_false() {
     let mut arr = get_felt252_array();
-    assert(arr.contains(85) == false, 'Should be false');
+    assert(!arr.contains(85), 'Should be false');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
 
@@ -344,7 +344,7 @@ fn contains_false() {
 #[available_gas(2000000)]
 fn contains_empty_array() {
     let mut arr = array![];
-    assert(arr.contains(85) == false, 'Should be false');
+    assert(!arr.contains(85), 'Should be false');
     assert(arr.len() == 0, 'arr should not be consummed');
 }
 
@@ -373,7 +373,7 @@ fn contains_different_type_span() {
 #[available_gas(2000000)]
 fn contains_false_span() {
     let mut arr = get_felt252_array().span();
-    assert(arr.contains(85) == false, 'Should be false');
+    assert(!arr.contains(85), 'Should be false');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
 
@@ -381,7 +381,7 @@ fn contains_false_span() {
 #[available_gas(2000000)]
 fn contains_empty_array_span() {
     let mut arr = (array![]).span();
-    assert(arr.contains(85) == false, 'Should be false');
+    assert(!arr.contains(85), 'Should be false');
     assert(arr.len() == 0, 'arr should not be consummed');
 }
 

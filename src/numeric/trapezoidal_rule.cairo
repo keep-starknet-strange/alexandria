@@ -23,7 +23,7 @@ fn trapezoidal_rule<
     impl TZeroable: Zeroable<T>,
     impl TInto: Into<u8, T>,
 >(
-    mut xs: Span<T>, mut ys: Span<T>
+    xs: Span<T>, ys: Span<T>
 ) -> T {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');
@@ -40,5 +40,5 @@ fn trapezoidal_rule<
         value += (*xs.at(index + 1) - *xs[index]) * (*ys[index] + *ys[index + 1]);
         index += 1;
     };
-    TDiv::div(value, TInto::into(2))
+    value / TInto::into(2)
 }

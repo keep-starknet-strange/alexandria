@@ -135,7 +135,7 @@ fn verify_signature_test() {
     let sig: Span<u8> = gen_sig();
     let pub_key: Span<u8> = gen_pub_key();
 
-    assert(verify_signature(msg, sig, pub_key) == true, 'Invalid signature');
+    assert(verify_signature(msg, sig, pub_key), 'Invalid signature');
 }
 
 #[test]
@@ -145,7 +145,7 @@ fn verify_wrong_signature_test() {
     let sig: Span<u8> = gen_sig();
     let pub_key: Span<u8> = gen_pub_key();
 
-    assert(verify_signature(wrong_msg, sig, pub_key) == false, 'Signature should be invalid');
+    assert(!verify_signature(wrong_msg, sig, pub_key), 'Signature should be invalid');
 }
 
 #[test]
@@ -155,7 +155,7 @@ fn verify_signature_empty_sig_test() {
     let sig = array![].span();
     let pub_key: Span<u8> = gen_pub_key();
 
-    assert(verify_signature(empty_msg, sig, pub_key) == false, 'Signature should be invalid');
+    assert(!verify_signature(empty_msg, sig, pub_key), 'Signature should be invalid');
 }
 
 #[test]
@@ -165,6 +165,6 @@ fn verify_signature_empty_pub_key_test() {
     let sig: Span<u8> = gen_sig();
     let pub_key = array![].span();
 
-    assert(verify_signature(empty_msg, sig, pub_key) == false, 'Signature should be invalid');
+    assert(!verify_signature(empty_msg, sig, pub_key), 'Signature should be invalid');
 }
 

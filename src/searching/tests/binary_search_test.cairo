@@ -36,16 +36,16 @@ fn value_not_found() {
 
     // Test with an even length
     let mut span = arr.span();
-    assert(binary_search(span, 20).is_none() == true, 'value was found');
-    assert(binary_search(span, 42000).is_none() == true, 'value was found');
-    assert(binary_search(span, 760).is_none() == true, 'value was found');
+    assert(binary_search(span, 20).is_none(), 'value was found');
+    assert(binary_search(span, 42000).is_none(), 'value was found');
+    assert(binary_search(span, 760).is_none(), 'value was found');
 
     // Odd length
     arr.append(700); // 6
     span = arr.span();
-    assert(binary_search(span, 20).is_none() == true, 'value was found');
-    assert(binary_search(span, 42000).is_none() == true, 'value was found');
-    assert(binary_search(span, 760).is_none() == true, 'value was found');
+    assert(binary_search(span, 20).is_none(), 'value was found');
+    assert(binary_search(span, 42000).is_none(), 'value was found');
+    assert(binary_search(span, 760).is_none(), 'value was found');
 }
 
 #[test]
@@ -61,7 +61,7 @@ fn value_found_length_one() {
 fn value_not_found_length_one() {
     let span: Span<u128> = array![100].span();
 
-    assert(binary_search(span, 50).is_none() == true, 'value was found')
+    assert(binary_search(span, 50).is_none(), 'value was found')
 }
 
 #[test]
@@ -69,5 +69,5 @@ fn value_not_found_length_one() {
 fn zero_length_span() {
     let span: Span<u128> = array![].span();
 
-    assert(binary_search(span, 100).is_none() == true, 'value was found')
+    assert(binary_search(span, 100).is_none(), 'value was found')
 }
