@@ -18,7 +18,7 @@ struct i9 {
 // Panics if `x` is zero and has a sign that is not false.
 fn i9_check_sign_zero(x: i9) {
     if x.inner == 0 {
-        assert(x.sign == false, 'sign of 0 must be false');
+        assert(!x.sign, 'sign of 0 must be false');
     }
 }
 
@@ -149,7 +149,7 @@ fn i9_div(lhs: i9, rhs: i9) -> i9 {
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = lhs.sign ^ rhs.sign;
 
-    if (sign == false) {
+    if (!sign) {
         // If the operands are positive, the quotient is simply their absolute value quotient.
         return i9 { inner: lhs.inner / rhs.inner, sign: sign };
     }
@@ -237,11 +237,7 @@ fn i9_div_rem(lhs: i9, rhs: i9) -> (i9, i9) {
 // * `bool` - `true` if the two integers are equal, `false` otherwise.
 fn i9_eq(lhs: @i9, rhs: @i9) -> bool {
     // Check if the two integers have the same sign and the same absolute value.
-    if *lhs.sign == *rhs.sign && *lhs.inner == *rhs.inner {
-        return true;
-    }
-
-    return false;
+    *lhs.sign == *rhs.sign && *lhs.inner == *rhs.inner
 }
 
 // Compares two i9 integers for inequality.
@@ -307,11 +303,7 @@ fn i9_lt(lhs: i9, rhs: i9) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
 fn i9_le(lhs: i9, rhs: i9) -> bool {
-    if (lhs == rhs || i9_lt(lhs, rhs) == true) {
-        return true;
-    } else {
-        return false;
-    }
+    lhs == rhs || i9_lt(lhs, rhs)
 }
 
 // Checks if the first i9 integer is greater than or equal to the second.
@@ -321,11 +313,7 @@ fn i9_le(lhs: i9, rhs: i9) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i9_ge(lhs: i9, rhs: i9) -> bool {
-    if ((lhs == rhs) | i9_gt(lhs, rhs) == true) {
-        return true;
-    } else {
-        return false;
-    }
+    lhs == rhs || i9_gt(lhs, rhs)
 }
 
 // Implements the PartialOrd trait for i9.
@@ -417,7 +405,7 @@ struct i17 {
 // Panics if `x` is zero and has a sign that is not false.
 fn i17_check_sign_zero(x: i17) {
     if x.inner == 0 {
-        assert(x.sign == false, 'sign of 0 must be false');
+        assert(!x.sign, 'sign of 0 must be false');
     }
 }
 
@@ -548,7 +536,7 @@ fn i17_div(lhs: i17, rhs: i17) -> i17 {
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = lhs.sign ^ rhs.sign;
 
-    if (sign == false) {
+    if (!sign) {
         // If the operands are positive, the quotient is simply their absolute value quotient.
         return i17 { inner: lhs.inner / rhs.inner, sign: sign };
     }
@@ -636,11 +624,7 @@ fn i17_div_rem(lhs: i17, rhs: i17) -> (i17, i17) {
 // * `bool` - `true` if the two integers are equal, `false` otherwise.
 fn i17_eq(lhs: @i17, rhs: @i17) -> bool {
     // Check if the two integers have the same sign and the same absolute value.
-    if *lhs.sign == *rhs.sign && *lhs.inner == *rhs.inner {
-        return true;
-    }
-
-    return false;
+    *lhs.sign == *rhs.sign && *lhs.inner == *rhs.inner
 }
 
 // Compares two i17 integers for inequality.
@@ -706,11 +690,7 @@ fn i17_lt(lhs: i17, rhs: i17) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
 fn i17_le(lhs: i17, rhs: i17) -> bool {
-    if (lhs == rhs || i17_lt(lhs, rhs) == true) {
-        return true;
-    } else {
-        return false;
-    }
+    lhs == rhs || i17_lt(lhs, rhs)
 }
 
 // Checks if the first i17 integer is greater than or equal to the second.
@@ -720,11 +700,7 @@ fn i17_le(lhs: i17, rhs: i17) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i17_ge(lhs: i17, rhs: i17) -> bool {
-    if ((lhs == rhs) | i17_gt(lhs, rhs) == true) {
-        return true;
-    } else {
-        return false;
-    }
+    lhs == rhs || i17_gt(lhs, rhs)
 }
 
 // Implements the PartialOrd trait for i17.
@@ -816,7 +792,7 @@ struct i33 {
 // Panics if `x` is zero and has a sign that is not false.
 fn i33_check_sign_zero(x: i33) {
     if x.inner == 0 {
-        assert(x.sign == false, 'sign of 0 must be false');
+        assert(!x.sign, 'sign of 0 must be false');
     }
 }
 
@@ -947,7 +923,7 @@ fn i33_div(lhs: i33, rhs: i33) -> i33 {
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = lhs.sign ^ rhs.sign;
 
-    if (sign == false) {
+    if (!sign) {
         // If the operands are positive, the quotient is simply their absolute value quotient.
         return i33 { inner: lhs.inner / rhs.inner, sign: sign };
     }
@@ -1035,11 +1011,7 @@ fn i33_div_rem(lhs: i33, rhs: i33) -> (i33, i33) {
 // * `bool` - `true` if the two integers are equal, `false` otherwise.
 fn i33_eq(lhs: @i33, rhs: @i33) -> bool {
     // Check if the two integers have the same sign and the same absolute value.
-    if *lhs.sign == *rhs.sign && *lhs.inner == *rhs.inner {
-        return true;
-    }
-
-    return false;
+    *lhs.sign == *rhs.sign && *lhs.inner == *rhs.inner
 }
 
 // Compares two i33 integers for inequality.
@@ -1105,11 +1077,7 @@ fn i33_lt(lhs: i33, rhs: i33) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
 fn i33_le(lhs: i33, rhs: i33) -> bool {
-    if (lhs == rhs || i33_lt(lhs, rhs) == true) {
-        return true;
-    } else {
-        return false;
-    }
+    lhs == rhs || i33_lt(lhs, rhs)
 }
 
 // Checks if the first i33 integer is greater than or equal to the second.
@@ -1119,11 +1087,7 @@ fn i33_le(lhs: i33, rhs: i33) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i33_ge(lhs: i33, rhs: i33) -> bool {
-    if ((lhs == rhs) | i33_gt(lhs, rhs) == true) {
-        return true;
-    } else {
-        return false;
-    }
+    lhs == rhs || i33_gt(lhs, rhs)
 }
 
 // Implements the PartialOrd trait for i33.
@@ -1215,7 +1179,7 @@ struct i65 {
 // Panics if `x` is zero and has a sign that is not false.
 fn i65_check_sign_zero(x: i65) {
     if x.inner == 0 {
-        assert(x.sign == false, 'sign of 0 must be false');
+        assert(!x.sign, 'sign of 0 must be false');
     }
 }
 
@@ -1346,7 +1310,7 @@ fn i65_div(lhs: i65, rhs: i65) -> i65 {
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = lhs.sign ^ rhs.sign;
 
-    if (sign == false) {
+    if (!sign) {
         // If the operands are positive, the quotient is simply their absolute value quotient.
         return i65 { inner: lhs.inner / rhs.inner, sign: sign };
     }
@@ -1434,11 +1398,7 @@ fn i65_div_rem(lhs: i65, rhs: i65) -> (i65, i65) {
 // * `bool` - `true` if the two integers are equal, `false` otherwise.
 fn i65_eq(lhs: @i65, rhs: @i65) -> bool {
     // Check if the two integers have the same sign and the same absolute value.
-    if *lhs.sign == *rhs.sign && *lhs.inner == *rhs.inner {
-        return true;
-    }
-
-    return false;
+    *lhs.sign == *rhs.sign && *lhs.inner == *rhs.inner
 }
 
 // Compares two i65 integers for inequality.
@@ -1504,11 +1464,7 @@ fn i65_lt(lhs: i65, rhs: i65) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
 fn i65_le(lhs: i65, rhs: i65) -> bool {
-    if (lhs == rhs || i65_lt(lhs, rhs) == true) {
-        return true;
-    } else {
-        return false;
-    }
+    lhs == rhs || i65_lt(lhs, rhs)
 }
 
 // Checks if the first i65 integer is greater than or equal to the second.
@@ -1518,11 +1474,7 @@ fn i65_le(lhs: i65, rhs: i65) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i65_ge(lhs: i65, rhs: i65) -> bool {
-    if (lhs == rhs || i65_gt(lhs, rhs) == true) {
-        return true;
-    } else {
-        return false;
-    }
+    lhs == rhs || i65_gt(lhs, rhs)
 }
 
 // Implements the PartialOrd trait for i65.
@@ -1614,7 +1566,7 @@ struct i129 {
 // Panics if `x` is zero and has a sign that is not false.
 fn i129_check_sign_zero(x: i129) {
     if x.inner == 0 {
-        assert(x.sign == false, 'sign of 0 must be false');
+        assert(!x.sign, 'sign of 0 must be false');
     }
 }
 
@@ -1745,7 +1697,7 @@ fn i129_div(lhs: i129, rhs: i129) -> i129 {
     // The sign of the quotient is the XOR of the signs of the operands.
     let sign = lhs.sign ^ rhs.sign;
 
-    if (sign == false) {
+    if (!sign) {
         // If the operands are positive, the quotient is simply their absolute value quotient.
         return i129 { inner: lhs.inner / rhs.inner, sign: sign };
     }
@@ -1833,11 +1785,7 @@ fn i129_div_rem(lhs: i129, rhs: i129) -> (i129, i129) {
 // * `bool` - `true` if the two integers are equal, `false` otherwise.
 fn i129_eq(lhs: @i129, rhs: @i129) -> bool {
     // Check if the two integers have the same sign and the same absolute value.
-    if *lhs.sign == *rhs.sign && *lhs.inner == *rhs.inner {
-        return true;
-    }
-
-    return false;
+    *lhs.sign == *rhs.sign && *lhs.inner == *rhs.inner
 }
 
 // Compares two i129 integers for inequality.
@@ -1903,11 +1851,7 @@ fn i129_lt(lhs: i129, rhs: i129) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
 fn i129_le(lhs: i129, rhs: i129) -> bool {
-    if (lhs == rhs || i129_lt(lhs, rhs) == true) {
-        return true;
-    } else {
-        return false;
-    }
+    lhs == rhs || i129_lt(lhs, rhs)
 }
 
 // Checks if the first i129 integer is greater than or equal to the second.
@@ -1917,11 +1861,7 @@ fn i129_le(lhs: i129, rhs: i129) -> bool {
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
 fn i129_ge(lhs: i129, rhs: i129) -> bool {
-    if (lhs == rhs || i129_gt(lhs, rhs) == true) {
-        return true;
-    } else {
-        return false;
-    }
+    lhs == rhs || i129_gt(lhs, rhs)
 }
 
 // Implements the PartialOrd trait for i129.

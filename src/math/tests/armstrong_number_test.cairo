@@ -9,7 +9,7 @@ fn one_digit_armstrong_number_test() {
 #[test]
 #[available_gas(200000)]
 fn two_digit_numbers_are_not_armstrong_numbers_test() {
-    assert(is_armstrong_number(15) == false, 'invalid result');
+    assert(!is_armstrong_number(15), 'invalid result');
 }
 
 #[test]
@@ -21,5 +21,5 @@ fn three_digit_armstrong_number_test() {
 #[test]
 #[available_gas(2000000)]
 fn three_digit_non_armstrong_number_test() {
-    assert(is_armstrong_number(105) == false, 'invalid result');
+    assert(!is_armstrong_number(105), 'invalid result');
 }

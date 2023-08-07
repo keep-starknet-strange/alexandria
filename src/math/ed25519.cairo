@@ -85,10 +85,7 @@ impl PartialEqExtendedHomogeneousPoint of PartialEq<ExtendedHomogeneousPoint> {
             return false;
         }
         // lhs.Y * rhs.Z - rhs.Y * lhs.Z
-        if (sub_mod(mult_mod(*lhs.Y, *rhs.Z, p), mult_mod(*rhs.Y, *lhs.Z, p), p) != 0) {
-            return false;
-        }
-        return true;
+        sub_mod(mult_mod(*lhs.Y, *rhs.Z, p), mult_mod(*rhs.Y, *lhs.Z, p), p) == 0
     }
     fn ne(lhs: @ExtendedHomogeneousPoint, rhs: @ExtendedHomogeneousPoint) -> bool {
         !(lhs == rhs)
@@ -257,7 +254,7 @@ fn point_mult(mut scalar: u256, mut P: ExtendedHomogeneousPoint) -> ExtendedHomo
 /// # Returns
 /// * `bool` - true if the signature fits to the message and the public key, false otherwise.
 fn check_group_equation(
-    S: u256, R: ExtendedHomogeneousPoint, k: u256, mut A_prime: ExtendedHomogeneousPoint
+    S: u256, R: ExtendedHomogeneousPoint, k: u256, A_prime: ExtendedHomogeneousPoint
 ) -> bool {
     // (X(P),Y(P)) of edwards25519 in https://datatracker.ietf.org/doc/html/rfc7748
     let B: Point = Point {
