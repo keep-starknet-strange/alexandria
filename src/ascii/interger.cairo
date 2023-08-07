@@ -123,10 +123,10 @@ impl BigIntergerToAsciiTraitImpl<
             if index >= len {
                 // if ascii is 0 it means we have already appended the first ascii
                 // and theres no need to append it again
-                match ascii {
-                    0 => (),
-                    _ => data.append(ascii),
+                if ascii.is_non_zero() {
+                    data.append(ascii);
                 }
+
                 break ();
             }
             // recursively keep getting the index from the end of the array
@@ -196,9 +196,8 @@ impl U256ToAsciiTraitImpl of IntergerToAsciiTrait<u256, Array<felt252>> {
             if index >= len {
                 // if ascii is 0 it means we have already appended the first ascii
                 // and theres no need to append it again
-                match ascii {
-                    0 => (),
-                    _ => data.append(ascii),
+                if ascii.is_non_zero() {
+                    data.append(ascii);
                 }
                 break ();
             }
