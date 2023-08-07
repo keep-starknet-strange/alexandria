@@ -4,7 +4,7 @@ use array::ArrayTrait;
 #[test]
 #[available_gas(2000000000)]
 fn sha256_empty_test() {
-    let mut input = ArrayTrait::<u8>::new();
+    let mut input: Array<u8> = array![];
     let result = sha256::sha256(input);
 
     // result should be 0xE3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855

@@ -8,11 +8,8 @@ use alexandria::data_structures::array_ext::{ArrayTraitExt, SpanTraitExt};
 #[test]
 #[available_gas(2000000)]
 fn append_all() {
-    let mut destination = ArrayTrait::new();
-    let mut source = ArrayTrait::new();
-    destination.append(21);
-    source.append(42);
-    source.append(84);
+    let mut destination = array![21];
+    let mut source = array![42, 84];
     destination.append_all(ref source);
     assert(destination.len() == 3, 'Len should be 3');
     assert(*destination.at(0) == 21, 'Should be 21');
@@ -23,11 +20,8 @@ fn append_all() {
 #[test]
 #[available_gas(2000000)]
 fn append_all_different_type() {
-    let mut destination = ArrayTrait::new();
-    let mut source = ArrayTrait::new();
-    destination.append(21_u128);
-    source.append(42_u128);
-    source.append(84_u128);
+    let mut destination = array![21_u128];
+    let mut source = array![42_u128, 84_u128];
     destination.append_all(ref source);
     assert(destination.len() == 3, 'Len should be 3');
     assert(*destination[0] == 21_u128, 'Should be 21_u128');
@@ -38,11 +32,8 @@ fn append_all_different_type() {
 #[test]
 #[available_gas(2000000)]
 fn append_all_destination_empty() {
-    let mut destination = ArrayTrait::new();
-    let mut source = ArrayTrait::new();
-    source.append(21);
-    source.append(42);
-    source.append(84);
+    let mut destination = array![];
+    let mut source = array![21, 42, 84];
     destination.append_all(ref source);
     assert(destination.len() == 3, 'Len should be 3');
     assert(*destination.at(0) == 21, 'Should be 21');
@@ -53,11 +44,8 @@ fn append_all_destination_empty() {
 #[test]
 #[available_gas(2000000)]
 fn append_all_source_empty() {
-    let mut destination = ArrayTrait::new();
-    let mut source = ArrayTrait::new();
-    destination.append(21);
-    destination.append(42);
-    destination.append(84);
+    let mut destination = array![];
+    let mut source = array![21, 42, 84];
     destination.append_all(ref source);
     assert(destination.len() == 3, 'Len should be 3');
     assert(*destination.at(0) == 21, 'Should be 0');
@@ -68,8 +56,8 @@ fn append_all_source_empty() {
 #[test]
 #[available_gas(2000000)]
 fn append_all_both_empty() {
-    let mut destination = ArrayTrait::<felt252>::new();
-    let mut source = ArrayTrait::new();
+    let mut destination: Array<felt252> = array![];
+    let mut source = array![];
     destination.append_all(ref source);
     assert(source.len() == 0, 'Len should be 0');
     assert(destination.len() == 0, 'Len should be 0');
@@ -80,10 +68,7 @@ fn append_all_both_empty() {
 #[test]
 #[available_gas(2000000)]
 fn reverse() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21);
-    arr.append(42);
-    arr.append(84);
+    let mut arr = array![21, 42, 84];
     let response = arr.reverse();
     assert(response.len() == 3, 'Len should be 3');
     assert(*response.at(0) == 84, 'Should be 84');
@@ -94,8 +79,7 @@ fn reverse() {
 #[test]
 #[available_gas(2000000)]
 fn reverse_size_1() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21);
+    let mut arr = array![21];
     let response = arr.reverse();
     assert(response.len() == 1, 'Len should be 1');
     assert(*response.at(0) == 21, 'Should be 21');
@@ -104,7 +88,7 @@ fn reverse_size_1() {
 #[test]
 #[available_gas(2000000)]
 fn reverse_empty() {
-    let mut arr = ArrayTrait::<felt252>::new();
+    let mut arr: Array<felt252> = array![];
     let response = arr.reverse();
     assert(response.len() == 0, 'Len should be 0');
 }
@@ -112,10 +96,7 @@ fn reverse_empty() {
 #[test]
 #[available_gas(2000000)]
 fn reverse_different_type() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21_u128);
-    arr.append(42_u128);
-    arr.append(84_u128);
+    let mut arr = array![21_u128, 42_u128, 84_u128];
     let response = arr.reverse();
     assert(response.len() == 3, 'Len should be 3');
     assert(*response[0] == 84_u128, 'Should be 84_u128');
@@ -126,10 +107,7 @@ fn reverse_different_type() {
 #[test]
 #[available_gas(2000000)]
 fn reverse_span() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21);
-    arr.append(42);
-    arr.append(84);
+    let mut arr = array![21, 42, 84];
     let response = arr.span().reverse();
     assert(response.len() == 3, 'Len should be 3');
     assert(*response.at(0) == 84, 'Should be 84');
@@ -140,8 +118,7 @@ fn reverse_span() {
 #[test]
 #[available_gas(2000000)]
 fn reverse_size_1_span() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21);
+    let mut arr = array![21];
     let response = arr.span().reverse();
     assert(response.len() == 1, 'Len should be 1');
     assert(*response.at(0) == 21, 'Should be 21');
@@ -150,7 +127,7 @@ fn reverse_size_1_span() {
 #[test]
 #[available_gas(2000000)]
 fn reverse_empty_span() {
-    let mut arr = ArrayTrait::<felt252>::new();
+    let mut arr: Array<felt252> = array![];
     let response = arr.span().reverse();
     assert(response.len() == 0, 'Len should be 0');
 }
@@ -158,10 +135,7 @@ fn reverse_empty_span() {
 #[test]
 #[available_gas(2000000)]
 fn reverse_different_type_span() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21_u128);
-    arr.append(42_u128);
-    arr.append(84_u128);
+    let mut arr = array![21_u128, 42_u128, 84_u128];
     let response = arr.span().reverse();
     assert(response.len() == 3, 'Len should be 3');
     assert(*response[0] == 84_u128, 'Should be 84_u128');
@@ -193,7 +167,7 @@ fn pop_front_n_different_type() {
 #[test]
 #[available_gas(2000000)]
 fn pop_front_n_empty_array() {
-    let mut arr: Array<felt252> = ArrayTrait::new();
+    let mut arr: Array<felt252> = array![];
     assert(arr.is_empty(), 'Should be empty');
     arr.pop_front_n(2);
     assert(arr.is_empty(), 'Should be empty');
@@ -247,7 +221,7 @@ fn pop_front_n_different_type_span() {
 #[test]
 #[available_gas(2000000)]
 fn pop_front_n_empty_array_span() {
-    let mut arr: Span<felt252> = ArrayTrait::new().span();
+    let mut arr: Span<felt252> = array![].span();
     assert(arr.is_empty(), 'Should be empty');
     arr.pop_front_n(2);
     assert(arr.is_empty(), 'Should be empty');
@@ -302,7 +276,7 @@ fn pop_back_n_different_type_span() {
 #[test]
 #[available_gas(2000000)]
 fn pop_back_n_empty_array_span() {
-    let mut arr: Span<felt252> = ArrayTrait::new().span();
+    let mut arr: Span<felt252> = array![].span();
     assert(arr.is_empty(), 'Should be empty');
     arr.pop_back_n(2);
     assert(arr.is_empty(), 'Should be empty');
@@ -369,7 +343,7 @@ fn contains_false() {
 #[test]
 #[available_gas(2000000)]
 fn contains_empty_array() {
-    let mut arr = ArrayTrait::new();
+    let mut arr = array![];
     assert(!arr.contains(85), 'Should be false');
     assert(arr.len() == 0, 'arr should not be consummed');
 }
@@ -406,7 +380,7 @@ fn contains_false_span() {
 #[test]
 #[available_gas(2000000)]
 fn contains_empty_array_span() {
-    let mut arr = (ArrayTrait::new()).span();
+    let mut arr = (array![]).span();
     assert(!arr.contains(85), 'Should be false');
     assert(arr.len() == 0, 'arr should not be consummed');
 }
@@ -443,7 +417,7 @@ fn index_of_panic() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_empty_array() {
-    let mut arr = ArrayTrait::new();
+    let mut arr = array![];
     assert(arr.index_of(21).is_none(), 'Should NOT contain 21');
 }
 
@@ -477,7 +451,7 @@ fn index_of_panic_span() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_empty_array_span() {
-    let mut arr = (ArrayTrait::new()).span();
+    let mut arr = (array![]).span();
     assert(arr.index_of(21).is_none(), 'Should NOT contain 21');
 }
 
@@ -514,7 +488,7 @@ fn occurrences_of_not_in_array() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_empty_array() {
-    let mut arr = ArrayTrait::new();
+    let mut arr = array![];
     assert(arr.occurrences_of(12) == 0, 'Should contain exactly 0');
     assert(arr.len() == 0, 'arr should not be consummed');
 }
@@ -522,10 +496,7 @@ fn occurrences_of_empty_array() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_double() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21);
-    arr.append(21);
-    arr.append(84);
+    let mut arr = array![21, 21, 84];
     assert(arr.occurrences_of(21) == 2, 'Should contain exactly 2');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -533,10 +504,7 @@ fn occurrences_of_double() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_filled() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21);
-    arr.append(21);
-    arr.append(21);
+    let mut arr = array![21, 21, 21];
     assert(arr.occurrences_of(21) == 3, 'Should contain exactly 3');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -572,7 +540,7 @@ fn occurrences_of_not_in_array_span() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_empty_array_span() {
-    let mut arr = ArrayTrait::new().span();
+    let mut arr = array![].span();
     assert(arr.occurrences_of(12) == 0, 'Should contain exactly 0');
     assert(arr.len() == 0, 'arr should not be consummed');
 }
@@ -580,10 +548,7 @@ fn occurrences_of_empty_array_span() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_double_span() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21);
-    arr.append(21);
-    arr.append(84);
+    let mut arr = array![21, 21, 84];
     assert(arr.span().occurrences_of(21) == 2, 'Should contain exactly 2');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -591,10 +556,7 @@ fn occurrences_of_double_span() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_filled_span() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21);
-    arr.append(21);
-    arr.append(21);
+    let mut arr = array![21, 21, 21];
     assert(arr.span().occurrences_of(21) == 3, 'Should contain exactly 3');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -630,15 +592,14 @@ fn min_with_duplicate() {
 #[test]
 #[available_gas(2000000)]
 fn min_empty_array() {
-    let mut arr: @Array<u128> = @ArrayTrait::new();
+    let mut arr: @Array<u128> = @array![];
     assert(arr.index_of(12).is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn min_one_item() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21_u128);
+    let mut arr = array![21_u128];
     assert(arr.min().unwrap() == 21_u128, 'Min should be 21');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -646,10 +607,7 @@ fn min_one_item() {
 #[test]
 #[available_gas(2000000)]
 fn min_last() {
-    let mut arr = ArrayTrait::new();
-    arr.append(84_u128);
-    arr.append(42_u128);
-    arr.append(21_u128);
+    let mut arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.min().unwrap() == 21_u128, 'Min should be 21');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -683,15 +641,14 @@ fn min_with_duplicate_span() {
 #[test]
 #[available_gas(2000000)]
 fn min_empty_array_span() {
-    let mut arr: Span<u128> = ArrayTrait::new().span();
+    let mut arr: Span<u128> = array![].span();
     assert(arr.index_of(12).is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn min_one_item_span() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21_u128);
+    let mut arr = array![21_u128];
     assert(arr.span().min().unwrap() == 21_u128, 'Min should be 21');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -699,10 +656,7 @@ fn min_one_item_span() {
 #[test]
 #[available_gas(2000000)]
 fn min_last_span() {
-    let mut arr = ArrayTrait::new();
-    arr.append(84_u128);
-    arr.append(42_u128);
-    arr.append(21_u128);
+    let mut arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.span().min().unwrap() == 21_u128, 'Min should be 21');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -738,15 +692,14 @@ fn index_of_min_with_duplicate() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_min_empty_array() {
-    let mut arr: Array<u128> = ArrayTrait::new();
+    let mut arr: Array<u128> = array![];
     assert(arr.index_of_min().is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn index_of_min_one_item() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21_u128);
+    let mut arr = array![21_u128];
     assert(arr.index_of_min().unwrap() == 0, 'index_of_min should be 0');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -754,10 +707,7 @@ fn index_of_min_one_item() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_min_last() {
-    let mut arr = ArrayTrait::new();
-    arr.append(84_u128);
-    arr.append(42_u128);
-    arr.append(21_u128);
+    let mut arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.index_of_min().unwrap() == 2, 'index_of_min should be 2');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -792,15 +742,14 @@ fn index_of_min_with_duplicate_span() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_min_empty_array_span() {
-    let mut arr: Array<u128> = ArrayTrait::new();
+    let mut arr: Array<u128> = array![];
     assert(arr.span().index_of_min().is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn index_of_min_one_item_span() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21_u128);
+    let mut arr = array![21_u128];
     assert(arr.span().index_of_min().unwrap() == 0, 'index_of_min should be 0');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -808,10 +757,7 @@ fn index_of_min_one_item_span() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_min_last_span() {
-    let mut arr = ArrayTrait::new();
-    arr.append(84_u128);
-    arr.append(42_u128);
-    arr.append(21_u128);
+    let mut arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.span().index_of_min().unwrap() == 2, 'index_of_min should be 2');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -847,15 +793,14 @@ fn max_with_duplicate() {
 #[test]
 #[available_gas(2000000)]
 fn max_empty_array() {
-    let mut arr: @Array<u128> = @ArrayTrait::new();
+    let mut arr: @Array<u128> = @array![];
     assert(arr.index_of(12).is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn max_one_item() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21_u128);
+    let mut arr = array![21_u128];
     assert(arr.max().unwrap() == 21_u128, 'Max should be 21');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -863,10 +808,7 @@ fn max_one_item() {
 #[test]
 #[available_gas(2000000)]
 fn max_first() {
-    let mut arr = ArrayTrait::new();
-    arr.append(84_u128);
-    arr.append(42_u128);
-    arr.append(21_u128);
+    let mut arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.max().unwrap() == 84_u128, 'Max should be 84');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -900,15 +842,14 @@ fn max_with_duplicate_span() {
 #[test]
 #[available_gas(2000000)]
 fn max_empty_array_span() {
-    let mut arr: Span<u128> = ArrayTrait::new().span();
+    let mut arr: Span<u128> = array![].span();
     assert(arr.index_of(12).is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn max_one_item_span() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21_u128);
+    let mut arr = array![21_u128];
     assert(arr.span().max().unwrap() == 21_u128, 'Max should be 21');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -916,10 +857,7 @@ fn max_one_item_span() {
 #[test]
 #[available_gas(2000000)]
 fn max_first_span() {
-    let mut arr = ArrayTrait::new();
-    arr.append(84_u128);
-    arr.append(42_u128);
-    arr.append(21_u128);
+    let mut arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.span().max().unwrap() == 84_u128, 'Max should be 84');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -955,15 +893,14 @@ fn index_of_max_with_duplicate() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_max_empty_array() {
-    let mut arr: Array<u128> = ArrayTrait::new();
+    let mut arr: Array<u128> = array![];
     assert(arr.index_of_max().is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn index_of_max_one_item() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21_u128);
+    let mut arr = array![21_u128];
     assert(arr.index_of_max().unwrap() == 0, 'index_of_max should be 0');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -971,10 +908,7 @@ fn index_of_max_one_item() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_max_last() {
-    let mut arr = ArrayTrait::new();
-    arr.append(84_u128);
-    arr.append(42_u128);
-    arr.append(21_u128);
+    let mut arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.index_of_max().unwrap() == 0, 'index_of_max should be 0');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -1009,15 +943,14 @@ fn index_of_max_with_duplicate_span() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_max_empty_array_span() {
-    let mut arr: Array<u128> = ArrayTrait::new();
+    let mut arr: Array<u128> = array![];
     assert(arr.span().index_of_max().is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn index_of_max_one_item_span() {
-    let mut arr = ArrayTrait::new();
-    arr.append(21_u128);
+    let mut arr = array![21_u128];
     assert(arr.span().index_of_max().unwrap() == 0, 'index_of_max should be 0');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -1025,10 +958,7 @@ fn index_of_max_one_item_span() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_max_last_span() {
-    let mut arr = ArrayTrait::new();
-    arr.append(84_u128);
-    arr.append(42_u128);
-    arr.append(21_u128);
+    let mut arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.span().index_of_max().unwrap() == 0, 'index_of_max should be 0');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -1037,17 +967,11 @@ fn index_of_max_last_span() {
 // Utility fn
 
 fn get_felt252_array() -> Array<felt252> {
-    let mut arr = ArrayTrait::new();
-    arr.append(21);
-    arr.append(42);
-    arr.append(84);
+    let mut arr = array![21, 42, 84];
     arr
 }
 
 fn get_u128_array() -> Array<u128> {
-    let mut arr = ArrayTrait::new();
-    arr.append(21_u128);
-    arr.append(42_u128);
-    arr.append(84_u128);
+    let mut arr = array![21_u128, 42_u128, 84_u128];
     arr
 }

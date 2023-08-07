@@ -6,7 +6,7 @@
 //!
 //! // Create a new merkle tree instance.
 //! let mut merkle_tree = MerkleTreeTrait::new();
-//! let mut proof = ArrayTrait::new();
+//! let mut proof = array![];
 //! proof.append(element_1);
 //! proof.append(element_2);
 //! // Compute the merkle root.

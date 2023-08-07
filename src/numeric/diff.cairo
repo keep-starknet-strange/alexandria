@@ -22,7 +22,7 @@ fn diff<
     assert(sequence.len() >= 1, 'Array must have at least 1 elt');
 
     // [Compute] Interpolation
-    let mut array = ArrayTrait::<T>::new();
+    let mut array = array![];
     array.append(Zeroable::zero());
     let mut prev_value = *sequence.pop_front().unwrap();
     loop {

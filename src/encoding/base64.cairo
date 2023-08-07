@@ -57,13 +57,13 @@ fn inner_encode(mut data: Array<u8>, char_set: Array<u8>) -> Array<u8> {
         0
     };
 
-    let mut result = ArrayTrait::new();
+    let mut result = array![];
     encode_loop(p, data, 0, char_set, ref result);
     result
 }
 
 fn inner_decode(data: Array<u8>) -> Array<u8> {
-    let mut result = ArrayTrait::new();
+    let mut result = array![];
     let mut p = 0_u8;
     if data.len() > 0 {
         if *data[data.len() - 1] == '=' {
@@ -152,68 +152,69 @@ fn encode_loop(p: u8, data: Array<u8>, d: usize, char_set: Array<u8>, ref result
 }
 
 fn get_base64_char_set() -> Array<u8> {
-    let mut result = ArrayTrait::new();
-    result.append('A');
-    result.append('B');
-    result.append('C');
-    result.append('D');
-    result.append('E');
-    result.append('F');
-    result.append('G');
-    result.append('H');
-    result.append('I');
-    result.append('J');
-    result.append('K');
-    result.append('L');
-    result.append('M');
-    result.append('N');
-    result.append('O');
-    result.append('P');
-    result.append('Q');
-    result.append('R');
-    result.append('S');
-    result.append('T');
-    result.append('U');
-    result.append('V');
-    result.append('W');
-    result.append('X');
-    result.append('Y');
-    result.append('Z');
-    result.append('a');
-    result.append('b');
-    result.append('c');
-    result.append('d');
-    result.append('e');
-    result.append('f');
-    result.append('g');
-    result.append('h');
-    result.append('i');
-    result.append('j');
-    result.append('k');
-    result.append('l');
-    result.append('m');
-    result.append('n');
-    result.append('o');
-    result.append('p');
-    result.append('q');
-    result.append('r');
-    result.append('s');
-    result.append('t');
-    result.append('u');
-    result.append('v');
-    result.append('w');
-    result.append('x');
-    result.append('y');
-    result.append('z');
-    result.append('0');
-    result.append('1');
-    result.append('2');
-    result.append('3');
-    result.append('4');
-    result.append('5');
-    result.append('6');
-    result.append('7');
-    result.append('8');
-    result.append('9');
+    let mut result = array![
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'K',
+        'L',
+        'M',
+        'N',
+        'O',
+        'P',
+        'Q',
+        'R',
+        'S',
+        'T',
+        'U',
+        'V',
+        'W',
+        'X',
+        'Y',
+        'Z',
+        'a',
+        'b',
+        'c',
+        'd',
+        'e',
+        'f',
+        'g',
+        'h',
+        'i',
+        'j',
+        'k',
+        'l',
+        'm',
+        'n',
+        'o',
+        'p',
+        'q',
+        'r',
+        's',
+        't',
+        'u',
+        'v',
+        'w',
+        'x',
+        'y',
+        'z',
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9'
+    ];
     result
 }
