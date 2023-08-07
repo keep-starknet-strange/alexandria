@@ -5,7 +5,7 @@ description = "Starknet utilities"
 homepage = "https://github.com/keep-starknet-strange/alexandria/"
 
 [dependencies]
-starknet = ">=2.1.0-rc2"
+starknet = ">=2.1.0"
 
 [scripts]
 all = "scarb build && scarb test"
