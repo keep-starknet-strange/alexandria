@@ -34,7 +34,7 @@ fn trapezoidal_rule<
     let mut value = Zeroable::zero();
     loop {
         if index + 1 == xs.len() {
-            break ();
+            break;
         }
         assert(*xs[index + 1] > *xs[index], 'Abscissa must be sorted');
         value += (*xs[index + 1] - *xs[index]) * (*ys[index] + *ys[index + 1]);

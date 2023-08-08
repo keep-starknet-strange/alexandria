@@ -95,7 +95,7 @@ impl Felt252VecImpl<
             let item = self.items.get(index.into());
             Option::Some(item)
         } else {
-            Option::None(())
+            Option::None
         }
     }
 
@@ -140,7 +140,7 @@ impl NullableVecImpl<T, impl TDrop: Drop<T>, impl TCopy: Copy<T>> of VecTrait<Nu
         if index < self.len() {
             Option::Some(self.items.get(index.into()).deref())
         } else {
-            Option::None(())
+            Option::None
         }
     }
 

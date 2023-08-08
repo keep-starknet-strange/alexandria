@@ -32,8 +32,8 @@ fn diff<
                 array.append(*current_value - prev_value);
                 prev_value = *current_value;
             },
-            Option::None(_) => {
-                break ();
+            Option::None => {
+                break;
             },
         };
     };

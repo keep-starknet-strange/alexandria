@@ -15,7 +15,7 @@ fn sequence(mut number: u128) -> Array<u128> {
     loop {
         arr.append(number);
         if number == 1 {
-            break ();
+            break;
         }
 
         if number % 2 == 0 {

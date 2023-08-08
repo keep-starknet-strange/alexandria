@@ -9,7 +9,7 @@
 /// * `month` - The month of the year
 /// * `year` - The year
 /// # Returns
-/// * `Option::None(())` - If the input parameters are invalid
+/// * `Option::None` - If the input parameters are invalid
 /// * `Option::Some(day_of_week)` - The day of the week
 /// # Examples
 /// ```
@@ -21,7 +21,7 @@
 fn day_of_week(mut date: u128, mut month: u128, mut year: u128) -> Option<u128> {
     // Check input parameters
     if !check_input_parameters(date, month, year) {
-        return Option::None(());
+        return Option::None;
     }
     if month < 3 {
         month = month + 12;

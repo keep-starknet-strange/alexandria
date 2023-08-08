@@ -7,14 +7,14 @@ fn binary_search<
 ) -> Option<u32> {
     // Initial check
     if (span.len() == 0) {
-        return Option::None(());
+        return Option::None;
     }
     let middle = span.len() / 2;
     if (*span[middle] == val) {
         return Option::Some(middle);
     }
     if (span.len() == 1) {
-        return Option::None(());
+        return Option::None;
     }
     if (*span[middle] > val) {
         return (binary_search(span.slice(0, middle), val));
@@ -27,6 +27,6 @@ fn binary_search<
     let val = binary_search(span.slice(middle, len), val);
     match val {
         Option::Some(v) => Option::Some(v + middle),
-        Option::None(()) => Option::None(())
+        Option::None => Option::None
     }
 }
