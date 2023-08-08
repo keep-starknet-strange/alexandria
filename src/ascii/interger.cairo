@@ -70,7 +70,7 @@ impl SmallIntergerToAsciiTraitImpl<
     impl TZeroable: Zeroable<T>,
     impl TDrop: Drop<T>,
     impl TCopy: Copy<T>,
-> of IntergerToAsciiTrait<T,felt252> {
+> of IntergerToAsciiTrait<T, felt252> {
     fn to_ascii(self: T) -> felt252 {
         if self <= 9.try_into().unwrap() {
             return self.into() + 48;
@@ -107,7 +107,7 @@ impl BigIntergerToAsciiTraitImpl<
     impl TZeroable: Zeroable<T>,
     impl TDrop: Drop<T>,
     impl TCopy: Copy<T>,
-> of IntergerToAsciiTrait<T,Array<felt252>> {
+> of IntergerToAsciiTrait<T, Array<felt252>> {
     fn to_ascii(self: T) -> Array<felt252> {
         let mut data = ArrayTrait::new();
         if self <= 9.try_into().unwrap() {
@@ -180,7 +180,6 @@ impl U256ToAsciiArrayTraitImpl of IntergerToAsciiArrayTrait<u256> {
 }
 
 impl U256ToAsciiTraitImpl of IntergerToAsciiTrait<u256, Array<felt252>> {
-
     fn to_ascii(self: u256) -> Array<felt252> {
         let mut data = ArrayTrait::new();
         if self <= 9 {

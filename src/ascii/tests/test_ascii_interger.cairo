@@ -26,7 +26,8 @@ fn u256_to_ascii() {
     assert(ascii.len() == 1, 'u256 31 char wrong len');
     assert(*ascii.at(0) == '1157920892373161954235709850086', '31 char u256 wrong felt');
     // ---------------------------- 62 cahr u256 test --------------------------- //
-    let ascii: Array<felt252> = 11579208923731619542357098500868790785326998466564056403945758_u256.to_ascii();
+    let ascii: Array<felt252> = 11579208923731619542357098500868790785326998466564056403945758_u256
+        .to_ascii();
     assert(ascii.len() == 2, 'u256 31 char wrong len');
     assert(*ascii.at(0) == '1157920892373161954235709850086', '31 char u256 wrong felt');
     assert(*ascii.at(1) == '8790785326998466564056403945758', '62 char u256 wrong felt');
