@@ -346,9 +346,9 @@ mod tests {
         let (array_addr, array_number) = contract.do_array();
 
         assert((array_addr.len(), array_number.len()) == contract.do_get_len(), 'lens mismatch');
-        assert((*array_addr.at(0), *array_number.at(0)) == contract.do_get_index(0), 'idx 0');
-        assert((*array_addr.at(1), *array_number.at(1)) == contract.do_get_index(1), 'idx 1');
-        assert((*array_addr.at(2), *array_number.at(2)) == contract.do_get_index(2), 'idx 2');
+        assert((*array_addr[0], *array_number[0]) == contract.do_get_index(0), 'idx 0');
+        assert((*array_addr[1], *array_number[1]) == contract.do_get_index(1), 'idx 1');
+        assert((*array_addr[2], *array_number[2]) == contract.do_get_index(2), 'idx 2');
     }
 
     #[test]

@@ -12,9 +12,9 @@ fn append_all() {
     let mut source = array![42, 84];
     destination.append_all(ref source);
     assert(destination.len() == 3, 'Len should be 3');
-    assert(*destination.at(0) == 21, 'Should be 21');
-    assert(*destination.at(1) == 42, 'Should be 42');
-    assert(*destination.at(2) == 84, 'Should be 84');
+    assert(*destination[0] == 21, 'Should be 21');
+    assert(*destination[1] == 42, 'Should be 42');
+    assert(*destination[2] == 84, 'Should be 84');
 }
 
 #[test]
@@ -36,9 +36,9 @@ fn append_all_destination_empty() {
     let mut source = array![21, 42, 84];
     destination.append_all(ref source);
     assert(destination.len() == 3, 'Len should be 3');
-    assert(*destination.at(0) == 21, 'Should be 21');
-    assert(*destination.at(1) == 42, 'Should be 42');
-    assert(*destination.at(2) == 84, 'Should be 84');
+    assert(*destination[0] == 21, 'Should be 21');
+    assert(*destination[1] == 42, 'Should be 42');
+    assert(*destination[2] == 84, 'Should be 84');
 }
 
 #[test]
@@ -48,9 +48,9 @@ fn append_all_source_empty() {
     let mut source = array![21, 42, 84];
     destination.append_all(ref source);
     assert(destination.len() == 3, 'Len should be 3');
-    assert(*destination.at(0) == 21, 'Should be 0');
-    assert(*destination.at(1) == 42, 'Should be 1');
-    assert(*destination.at(2) == 84, 'Should be 2');
+    assert(*destination[0] == 21, 'Should be 0');
+    assert(*destination[1] == 42, 'Should be 1');
+    assert(*destination[2] == 84, 'Should be 2');
 }
 
 #[test]
@@ -71,9 +71,9 @@ fn reverse() {
     let mut arr = array![21, 42, 84];
     let response = arr.reverse();
     assert(response.len() == 3, 'Len should be 3');
-    assert(*response.at(0) == 84, 'Should be 84');
-    assert(*response.at(1) == 42, 'Should be 42');
-    assert(*response.at(2) == 21, 'Should be 21');
+    assert(*response[0] == 84, 'Should be 84');
+    assert(*response[1] == 42, 'Should be 42');
+    assert(*response[2] == 21, 'Should be 21');
 }
 
 #[test]
@@ -82,7 +82,7 @@ fn reverse_size_1() {
     let mut arr = array![21];
     let response = arr.reverse();
     assert(response.len() == 1, 'Len should be 1');
-    assert(*response.at(0) == 21, 'Should be 21');
+    assert(*response[0] == 21, 'Should be 21');
 }
 
 #[test]
@@ -110,9 +110,9 @@ fn reverse_span() {
     let mut arr = array![21, 42, 84];
     let response = arr.span().reverse();
     assert(response.len() == 3, 'Len should be 3');
-    assert(*response.at(0) == 84, 'Should be 84');
-    assert(*response.at(1) == 42, 'Should be 42');
-    assert(*response.at(2) == 21, 'Should be 21');
+    assert(*response[0] == 84, 'Should be 84');
+    assert(*response[1] == 42, 'Should be 42');
+    assert(*response[2] == 21, 'Should be 21');
 }
 
 #[test]
@@ -121,7 +121,7 @@ fn reverse_size_1_span() {
     let mut arr = array![21];
     let response = arr.span().reverse();
     assert(response.len() == 1, 'Len should be 1');
-    assert(*response.at(0) == 21, 'Should be 21');
+    assert(*response[0] == 21, 'Should be 21');
 }
 
 #[test]

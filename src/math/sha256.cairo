@@ -117,6 +117,7 @@ fn sha256_inner(mut data: Span<u32>, i: usize, k: Span<u32>, mut h: Span<u32>) -
     }
     let w = create_message_schedule(data, i);
     let h2 = compression(w, 0, k, h);
+
     let mut t = array![];
     t.append(u32_wrapping_add(*h[0], *h2[0]));
     t.append(u32_wrapping_add(*h[1], *h2[1]));

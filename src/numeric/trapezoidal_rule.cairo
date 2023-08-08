@@ -37,7 +37,7 @@ fn trapezoidal_rule<
             break ();
         }
         assert(*xs[index + 1] > *xs[index], 'Abscissa must be sorted');
-        value += (*xs.at(index + 1) - *xs[index]) * (*ys[index] + *ys[index + 1]);
+        value += (*xs[index + 1] - *xs[index]) * (*ys[index] + *ys[index + 1]);
         index += 1;
     };
     value / TInto::into(2)
