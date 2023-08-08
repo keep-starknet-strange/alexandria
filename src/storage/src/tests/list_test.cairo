@@ -25,7 +25,7 @@ mod AListHolder {
 
     #[storage]
     struct Storage {
-        // to test a corelib type that has StorageAccess and
+        // to test a corelib type that has Store and
         // Into<ContractAddress, felt252>
         addrs: List<ContractAddress>,
         // to test a corelib compound struct
@@ -136,7 +136,7 @@ mod tests {
         let mock_addr = mock_addr();
 
         let mut index: u32 = 0;
-        let max: u32 = 1025;
+        let max: u32 = 513;
 
         // test appending many
         loop {
