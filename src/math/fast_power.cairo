@@ -1,7 +1,7 @@
 //! # Fast power algorithm
 use array::ArrayTrait;
-use core::option::OptionTrait;
-use core::traits::TryInto;
+use option::OptionTrait;
+use traits::{Into, TryInto};
 
 // Calculate the ( base ^ power ) mod modulus
 // using the fast powering algorithm # Arguments
@@ -20,10 +20,9 @@ fn fast_power(base: u128, mut power: u128, modulus: u128) -> u128 {
         return 0;
     }
 
-    // TODO: Simplify thise conversions after https://github.com/starkware-libs/cairo/pull/3293 is merged and released.
-    let mut base: u256 = u256 { low: base, high: 0 };
-    let modulus: u256 = u256 { low: modulus, high: 0 };
-    let mut result: u256 = u256 { low: 1, high: 0 };
+    let mut base: u256 = base.into();
+    let modulus: u256 = modulus.into();
+    let mut result: u256 = 1;
 
     let res = loop {
         if power == 0 {
@@ -38,11 +37,5 @@ fn fast_power(base: u128, mut power: u128, modulus: u128) -> u128 {
         power = power / 2;
     };
 
-    let u256{low: low, high: high } = res;
-
-    if high != 0 {
-        panic_with_felt252('value cant be larger than u128')
-    }
-
-    return low;
+    res.try_into().expect('value cant be larger than u128')
 }
