@@ -4,7 +4,6 @@ use option::OptionTrait;
 // Check if two arrays are equal.
 /// * `a` - The first array.
 /// * `b` - The second array.
-/// * `index` - The index used to loop through the arrays.
 /// # Returns
 /// * `bool` - True if the arrays are equal, false otherwise.
 fn is_equal(mut a: Span<u32>, mut b: Span<u32>) -> bool {
