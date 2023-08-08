@@ -1,0 +1,16 @@
+mod aliquot_sum_test;
+mod armstrong_number_test;
+mod collatz_sequence_test;
+mod ed25519_test;
+mod extended_euclidean_algorithm_test;
+mod fast_power_test;
+mod fibonacci_test;
+mod gcd_of_n_numbers_test;
+mod karatsuba_test;
+mod math_test;
+mod mod_arithmetics_test;
+mod perfect_number_test;
+mod sha256_test;
+mod sha512_test;
+mod signed_integers_test;
+mod zellers_congruence_test;
