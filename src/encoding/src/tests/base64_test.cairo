@@ -1,8 +1,6 @@
 use array::ArrayTrait;
 use debug::PrintTrait;
-use alexandria_encoding::base64::{
-    Base64Encoder, Base64Decoder, Base64UrlEncoder, Base64UrlDecoder
-};
+use alexandria_encoding::base64::{Base64Encoder, Base64Decoder, Base64UrlEncoder, Base64UrlDecoder};
 
 #[test]
 #[available_gas(2000000000)]

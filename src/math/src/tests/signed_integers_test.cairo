@@ -1,5 +1,7 @@
 use alexandria_math::signed_integers;
-use alexandria_math::signed_integers::{i9, i9_div_rem, i17, i17_div_rem, i33, i33_div_rem, i65, i65_div_rem, i129, i129_div_rem};
+use alexandria_math::signed_integers::{
+    i9, i9_div_rem, i17, i17_div_rem, i33, i33_div_rem, i65, i65_div_rem, i129, i129_div_rem
+};
 
 #[test]
 fn i9_test_add() {

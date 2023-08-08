@@ -13,7 +13,7 @@ const U64_BIT_NUM: u64 = 64;
 
 #[derive(Drop, Copy)]
 struct Word64 {
-    data: u64,
+    data: u64, 
 }
 
 impl WordBitAnd of BitAnd<Word64> {
