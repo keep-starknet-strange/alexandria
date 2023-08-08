@@ -201,7 +201,7 @@ impl SpanU8TryIntoPoint of TryInto<Span<u8>, Point> {
         }
 
         if (x == 0) {
-            if (x_0 == 1) {
+            if (x_false) {
                 return Option::None;
             }
         }

@@ -46,7 +46,7 @@ fn queue_peek_front_test() {
             assert(*(result.unbox()) == 1, 'wrong result');
         },
         Option::None => {
-            assert(0 == 1, 'should return value');
+            assert(false, 'should return value');
         },
     };
 
@@ -67,7 +67,7 @@ fn queue_dequeue_test() {
             assert(result == 1, 'wrong result');
         },
         Option::None => {
-            assert(0 == 1, 'should return a value');
+            assert(false, 'should return a value');
         },
     };
 
