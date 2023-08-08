@@ -83,7 +83,7 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
 
     fn concat(self: @Array<T>, a: @Array<T>) -> Array<T> {
         // Can't do self.span().concat(a);
-        let mut ret: Array<T> = Default::default();
+        let mut ret = array![];
         let mut i = 0;
 
         loop {
@@ -171,7 +171,7 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
     }
 
     fn reverse(mut self: Span<T>) -> Array<T> {
-        let mut response = ArrayTrait::new();
+        let mut response = array![];
         loop {
             match self.pop_back() {
                 Option::Some(v) => {
@@ -201,7 +201,7 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
     }
 
     fn concat(self: Span<T>, a: Span<T>) -> Span<T> {
-        let mut ret: Array<T> = Default::default();
+        let mut ret = array![];
         let mut i = 0;
 
         loop {

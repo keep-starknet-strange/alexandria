@@ -34,7 +34,7 @@ fn is_perfect_number(num: u128) -> bool {
 /// # Returns
 /// * `Array` - An array of perfect numbers up to the max value.
 fn perfect_numbers(max: u128) -> Array<u128> {
-    let mut res = ArrayTrait::new();
+    let mut res = array![];
     let mut index = 1;
 
     loop {

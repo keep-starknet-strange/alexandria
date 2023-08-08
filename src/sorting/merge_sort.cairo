@@ -22,7 +22,7 @@ fn merge<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd: PartialO
     let mut sorted_left = merge(left_arr);
     let mut sorted_right = merge(right_arr);
 
-    let mut result_arr = ArrayTrait::new();
+    let mut result_arr = array![];
     merge_recursive(sorted_left, sorted_right, ref result_arr, 0, 0);
     result_arr
 }
@@ -74,8 +74,8 @@ fn merge_recursive<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TPartialOrd
 fn split_array<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>>(
     ref arr: Array<T>, index: usize
 ) -> (Array<T>, Array<T>) {
-    let mut arr1 = ArrayTrait::new();
-    let mut arr2 = ArrayTrait::new();
+    let mut arr1 = array![];
+    let mut arr2 = array![];
     let len = arr.len();
 
     fill_array(ref arr1, ref arr, 0_u32, index);

@@ -97,7 +97,7 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
 
 fn from_u32Array_to_u8Array(ref data: Array<u32>, i: usize) -> Array<u8> {
     if i <= 0 {
-        return ArrayTrait::new();
+        return array![];
     }
     let mut result = from_u32Array_to_u8Array(ref data, i - 1);
     let mut res: u128 = BitShift::shr((*data[i - 1]).into(), 24) & BoundedInt::<u8>::max().into();
@@ -121,7 +121,7 @@ fn sha256_inner(
     create_message_schedule(ref w, 16);
     let mut h2 = h.clone();
     let mut h2 = compression(w, 0, ref k, h2);
-    let mut t = ArrayTrait::new();
+    let mut t = array![];
     t.append(u32_wrapping_add(*h[0], *h2[0]));
     t.append(u32_wrapping_add(*h[1], *h2[1]));
     t.append(u32_wrapping_add(*h[2], *h2[2]));
@@ -146,7 +146,7 @@ fn compression(w: Array<u32>, i: usize, ref k: Array<u32>, mut h: Array<u32>) ->
     let s0 = bsig0(*h[0]);
     let maj = maj(*h[0], *h[1], *h[2]);
     let temp2 = u32_wrapping_add(s0, maj);
-    let mut t = ArrayTrait::new();
+    let mut t = array![];
     t.append(u32_wrapping_add(temp1, temp2));
     t.append(*h[0]);
     t.append(*h[1]);
@@ -171,7 +171,7 @@ fn create_message_schedule(ref w: Array<u32>, i: usize) {
 
 fn create_w(ref data: Array<u32>, i: usize, j: usize) -> Array<u32> {
     if j <= 0 {
-        return ArrayTrait::new();
+        return array![];
     }
     let mut result = create_w(ref data, i, j - 1);
     result.append(*data[i * 16 + j - 1]);
@@ -180,7 +180,7 @@ fn create_w(ref data: Array<u32>, i: usize, j: usize) -> Array<u32> {
 
 fn from_u8Array_to_u32Array(data: Array<u8>, i: usize) -> Array<u32> {
     if i <= 0 {
-        return ArrayTrait::new();
+        return array![];
     }
     let mut value = 0_u128;
 
@@ -206,7 +206,7 @@ fn add_padding(ref data: Array<u8>) {
 }
 
 fn get_h() -> Array<u32> {
-    let mut h = ArrayTrait::new();
+    let mut h = array![];
     h.append(0x6a09e667);
     h.append(0xbb67ae85);
     h.append(0x3c6ef372);
@@ -219,7 +219,7 @@ fn get_h() -> Array<u32> {
 }
 
 fn get_k() -> Array<u32> {
-    let mut k = ArrayTrait::new();
+    let mut k = array![];
     k.append(0x428a2f98);
     k.append(0x71374491);
     k.append(0xb5c0fbcf);

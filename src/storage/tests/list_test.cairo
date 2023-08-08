@@ -91,22 +91,6 @@ mod tests {
 
     use super::{AListHolder, IAListHolderDispatcher, IAListHolderDispatcherTrait};
 
-    // so that we're able to compare 2-tuples in the test code
-    impl TupleSize2PartialEq<
-        E0, E1, impl E0PartialEq: PartialEq<E0>, impl E1PartialEq: PartialEq<E1>
-    > of PartialEq<(E0, E1)> {
-        #[inline(always)]
-        fn eq(lhs: @(E0, E1), rhs: @(E0, E1)) -> bool {
-            let (lhs0, lhs1) = lhs;
-            let (rhs0, rhs1) = rhs;
-            (lhs0 == rhs0) & (lhs1 == rhs1)
-        }
-        #[inline(always)]
-        fn ne(lhs: @(E0, E1), rhs: @(E0, E1)) -> bool {
-            !(rhs == lhs)
-        }
-    }
-
     fn deploy_mock() -> IAListHolderDispatcher {
         let class_hash: ClassHash = AListHolder::TEST_CLASS_HASH.try_into().unwrap();
         let ctor_data: Array<felt252> = Default::default();
@@ -362,9 +346,9 @@ mod tests {
         let (array_addr, array_number) = contract.do_array();
 
         assert((array_addr.len(), array_number.len()) == contract.do_get_len(), 'lens mismatch');
-        assert((*array_addr.at(0), *array_number.at(0)) == contract.do_get_index(0), 'idx 0');
-        assert((*array_addr.at(1), *array_number.at(1)) == contract.do_get_index(1), 'idx 1');
-        assert((*array_addr.at(2), *array_number.at(2)) == contract.do_get_index(2), 'idx 2');
+        assert((*array_addr[0], *array_number[0]) == contract.do_get_index(0), 'idx 0');
+        assert((*array_addr[1], *array_number[1]) == contract.do_get_index(1), 'idx 1');
+        assert((*array_addr[2], *array_number[2]) == contract.do_get_index(2), 'idx 2');
     }
 
     #[test]

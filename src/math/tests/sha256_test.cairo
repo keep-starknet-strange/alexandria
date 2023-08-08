@@ -4,7 +4,7 @@ use array::ArrayTrait;
 #[test]
 #[available_gas(2000000000)]
 fn sha256_empty_test() {
-    let mut input = ArrayTrait::<u8>::new();
+    let mut input: Array<u8> = array![];
     let result = sha256::sha256(input);
 
     // result should be 0xE3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
@@ -49,7 +49,7 @@ fn sha256_lorem_ipsum_test() {
     // Lorem ipsum, or lsipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs.
     // The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of
     // Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with
-    let mut input = ArrayTrait::<u8>::new();
+    let mut input: Array<u8> = array![];
     input.append(0x4C);
     input.append(0x6F);
     input.append(0x72);

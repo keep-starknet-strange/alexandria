@@ -17,7 +17,7 @@ fn bubble_sort_elements<
     let mut idx1 = 0;
     let mut idx2 = 1;
     let mut sorted_iteration = 0;
-    let mut sorted_array = ArrayTrait::new();
+    let mut sorted_array = array![];
 
     loop {
         if idx2 == array.len() {
@@ -26,7 +26,7 @@ fn bubble_sort_elements<
                 break ();
             }
             array = sorted_array;
-            sorted_array = ArrayTrait::new();
+            sorted_array = array![];
             idx1 = 0;
             idx2 = 1;
             sorted_iteration = 0;
