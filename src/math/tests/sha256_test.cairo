@@ -49,13 +49,13 @@ fn sha256_lorem_ipsum_test() {
     // Lorem ipsum, or lsipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs.
     // The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of
     // Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with
-    let mut input: Array<u8> = array![];
-    input.append(0x4C);
-    input.append(0x6F);
-    input.append(0x72);
-    input.append(0x65);
-    input.append(0x6D);
-    input.append(0x20);
+    let mut input = ArrayTrait::<u8>::new();
+    input.append('L');
+    input.append('o');
+    input.append('r');
+    input.append('e');
+    input.append('m');
+    input.append(' ');
     input.append(0x69);
     input.append(0x70);
     input.append(0x73);
@@ -408,4 +408,257 @@ fn sha256_lorem_ipsum_test() {
     assert(*result[29] == 0xF9, 'invalid result');
     assert(*result[30] == 0xEA, 'invalid result');
     assert(*result[31] == 0x44, 'invalid result');
+}
+
+use alexandria::math::math::BitShift;
+use debug::PrintTrait;
+#[test]
+#[available_gas(10_000_000_000)]
+fn sha256_url() {
+    let data = array![
+        '{',
+        '"',
+        't',
+        'y',
+        'p',
+        'e',
+        '"',
+        ':',
+        '"',
+        'w',
+        'e',
+        'b',
+        'a',
+        'u',
+        't',
+        'h',
+        'n',
+        '.',
+        'g',
+        'e',
+        't',
+        '"',
+        ',',
+        '"',
+        'c',
+        'h',
+        'a',
+        'l',
+        'l',
+        'e',
+        'n',
+        'g',
+        'e',
+        '"',
+        ':',
+        '"',
+        '3',
+        'q',
+        '2',
+        '-',
+        '7',
+        '_',
+        '-',
+        'q',
+        '"',
+        ',',
+        '"',
+        'o',
+        'r',
+        'i',
+        'g',
+        'i',
+        'n',
+        '"',
+        ':',
+        '"',
+        'h',
+        't',
+        't',
+        'p',
+        ':',
+        '/',
+        '/',
+        'l',
+        'o',
+        'c',
+        'a',
+        'l',
+        'h',
+        'o',
+        's',
+        't',
+        ':',
+        '5',
+        '1',
+        '7',
+        '3',
+        '"',
+        ',',
+        '"',
+        'c',
+        'r',
+        'o',
+        's',
+        's',
+        'O',
+        'r',
+        'i',
+        'g',
+        'i',
+        'n',
+        '"',
+        ':',
+        'f',
+        'a',
+        'l',
+        's',
+        'e',
+        ',',
+        '"',
+        'o',
+        't',
+        'h',
+        'e',
+        'r',
+        '_',
+        'k',
+        'e',
+        'y',
+        's',
+        '_',
+        'c',
+        'a',
+        'n',
+        '_',
+        'b',
+        'e',
+        '_',
+        'a',
+        'd',
+        'd',
+        'e',
+        'd',
+        '_',
+        'h',
+        'e',
+        'r',
+        'e',
+        '"',
+        ':',
+        '"',
+        'd',
+        'o',
+        ' ',
+        'n',
+        'o',
+        't',
+        ' ',
+        'c',
+        'o',
+        'm',
+        'p',
+        'a',
+        'r',
+        'e',
+        ' ',
+        'c',
+        'l',
+        'i',
+        'e',
+        'n',
+        't',
+        'D',
+        'a',
+        't',
+        'a',
+        'J',
+        'S',
+        'O',
+        'N',
+        ' ',
+        'a',
+        'g',
+        'a',
+        'i',
+        'n',
+        's',
+        't',
+        ' ',
+        'a',
+        ' ',
+        't',
+        'e',
+        'm',
+        'p',
+        'l',
+        'a',
+        't',
+        'e',
+        '.',
+        ' ',
+        'S',
+        'e',
+        'e',
+        ' ',
+        'h',
+        't',
+        't',
+        'p',
+        's',
+        ':',
+        '/',
+        '/',
+        'g',
+        'o',
+        'o',
+        '.',
+        'g',
+        'l',
+        '/',
+        'y',
+        'a',
+        'b',
+        'P',
+        'e',
+        'x',
+        '"',
+        '}'
+    ];
+    let result = sha256::sha256(data);
+
+    // result should be 0xe5ddd0d703d54d024a1e49cdb614d1f4e9dfa81fff119ca01554ec22d1a45f59
+    assert(result.len() == 32, 'invalid result length');
+    assert(*result[0] == 0xE5, 'invalid result');
+    assert(*result[1] == 0xDD, 'invalid result');
+    assert(*result[2] == 0xD0, 'invalid result');
+    assert(*result[3] == 0xD7, 'invalid result');
+    assert(*result[4] == 0x03, 'invalid result');
+    assert(*result[5] == 0xD5, 'invalid result');
+    assert(*result[6] == 0x4D, 'invalid result');
+    assert(*result[7] == 0x02, 'invalid result');
+    assert(*result[8] == 0x4A, 'invalid result');
+    assert(*result[9] == 0x1E, 'invalid result');
+    assert(*result[10] == 0x49, 'invalid result');
+    assert(*result[11] == 0xCD, 'invalid result');
+    assert(*result[12] == 0xB6, 'invalid result');
+    assert(*result[13] == 0x14, 'invalid result');
+    assert(*result[14] == 0xD1, 'invalid result');
+    assert(*result[15] == 0xF4, 'invalid result');
+    assert(*result[16] == 0xE9, 'invalid result');
+    assert(*result[17] == 0xDF, 'invalid result');
+    assert(*result[18] == 0xA8, 'invalid result');
+    assert(*result[19] == 0x1F, 'invalid result');
+    assert(*result[20] == 0xFF, 'invalid result');
+    assert(*result[21] == 0x11, 'invalid result');
+    assert(*result[22] == 0x9C, 'invalid result');
+    assert(*result[23] == 0xA0, 'invalid result');
+    assert(*result[24] == 0x15, 'invalid result');
+    assert(*result[25] == 0x54, 'invalid result');
+    assert(*result[26] == 0xEC, 'invalid result');
+    assert(*result[27] == 0x22, 'invalid result');
+    assert(*result[28] == 0xD1, 'invalid result');
+    assert(*result[29] == 0xA4, 'invalid result');
+    assert(*result[30] == 0x5F, 'invalid result');
+    assert(*result[31] == 0x59, 'invalid result');
 }
