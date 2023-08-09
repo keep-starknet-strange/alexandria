@@ -50,7 +50,7 @@
 ## About
 
 Alexandria is a community maintained standard library for Cairo 1.0.
-It is a collection of useful algorithms and data structures implemented in Cairo.  
+It is a collection of useful algorithms and data structures implemented in Cairo.
 Current version: [v2.0.1](https://github.com/starkware-libs/cairo/releases/tag/v2.0.1)
 
 ## Features
@@ -86,7 +86,7 @@ alexandria = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
 then add the following line in your `.cairo` file
 
 ```rust
-use alexandria::math::sha512::sha512;
+use alexandria_math::sha512::sha512;
 ```
 
 ## Usage
@@ -102,7 +102,7 @@ scarb build
 ```bash
 scarb test
 ```
-Running a specific subset of tests 
+Running a specific subset of tests
 ```bash
 scarb test -f math
 ```
