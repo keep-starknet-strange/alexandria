@@ -44,4 +44,4 @@ The MuSig scheme helps us prevent the key cancellation attack. Let's see a schem
 
 ![Graph](https://github.com/cliraa/alexandria/blob/main/src/signing/images/musig_scheme.jpg)
 
-Here you can find an implementation of this in Cairo: [link](https://github.com/cliraa/alexandria/blob/main/src/signing/musig_scheme_secp256k1.cairo)
+Here you can find an implementation of this in Cairo: [link](https://github.com/cliraa/alexandria/blob/main/src/signing/schnorr/tests/musig_scheme_secp256k1.cairo)
