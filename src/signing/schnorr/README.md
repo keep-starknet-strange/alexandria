@@ -6,9 +6,11 @@ In the context of blockchain, we can say things like this: we want to make a tra
 
 Let's understand that we'll be working with Elliptic Curve Cryptography (ECC).
 
-•	We start with a generator (G), a public and standardized value. It is a point on the curve.
-•	We choose a private key (let's call it "ska"), which is a large number.
-•	And with these values, we can find the public key, which will result from multiplying G * ska.
+- We start with a generator (G), a public and standardized value. It is a point on the curve.
+
+- We choose a private key (let's call it "ska"), which is a large number.
+
+- And with these values, we can find the public key, which will result from multiplying G * ska.
 
 Operations on elliptic curves are very curious, doing the multiplication referred to above does not obey conventional multiplication. Super interesting geometric and algebraic issues are involved.
 
@@ -16,9 +18,11 @@ For the purposes of this content, we can say that after finding the public key (
 
 ## A brief summary:
 
-•	G: The generator (it is a point on the curve).
-•	ska: Private key.
-•	Pa: Public key (G * ska, they are also coordinates on the curve).
+- G: The generator (it is a point on the curve).
+
+- ska: Private key.
+
+- Pa: Public key (G * ska, they are also coordinates on the curve).
 
 ## What is happening?
 
