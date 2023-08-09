@@ -155,7 +155,7 @@ fn add_trailing_zeroes(ref data: Array<u8>, msg_len: usize) {
     let mut i = 0;
     loop {
         if (i >= padding_len) {
-            break ();
+            break;
         }
         data.append(0);
         i += 1;
@@ -168,7 +168,7 @@ fn from_u8Array_to_WordArray(data: Array<u8>) -> Array<Word64> {
 
     loop {
         if (i >= data.len()) {
-            break ();
+            break;
         }
         let new_word: u128 = (BitShift::shl((*data[i + 0]).into(), 56)
             + BitShift::shl((*data[i + 1]).into(), 48)
@@ -190,7 +190,7 @@ fn from_WordArray_to_u8array(data: Span<Word64>) -> Array<u8> {
     let mut i: usize = 0;
     loop {
         if (i == data.len()) {
-            break ();
+            break;
         }
         let mut res: u128 = BitShift::shr((*data.at(i).data).into(), 56)
             & BoundedInt::<u8>::max().into();
@@ -233,7 +233,7 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
 
     loop {
         if (i == block_nb) {
-            break ();
+            break;
         }
         // Prepare message schedule
         let mut t: usize = 0;
@@ -241,7 +241,7 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
         let mut W: Array<Word64> = array![];
         loop {
             if t == 80 {
-                break ();
+                break;
             } else if t < 16 {
                 W.append(*data.at(i * 16 + t));
             } else {

@@ -18,7 +18,7 @@ fn gcd(mut n: Span<u128>) -> u128 {
             Option::Some(b) => {
                 a = gcd_two_numbers(a, *b);
             },
-            Option::None(()) => {
+            Option::None => {
                 break a;
             },
         };

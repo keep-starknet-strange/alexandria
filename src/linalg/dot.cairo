@@ -30,7 +30,7 @@ fn dot<
                 let y_value = ys.pop_front().unwrap();
                 value += *x_value * *y_value;
             },
-            Option::None(_) => {
+            Option::None => {
                 break value;
             },
         };

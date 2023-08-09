@@ -39,7 +39,7 @@ fn perfect_numbers(max: u128) -> Array<u128> {
 
     loop {
         if index == max {
-            break ();
+            break;
         }
         if is_perfect_number(index) {
             res.append(index);

@@ -74,7 +74,7 @@ impl Felt252StackImpl<
     /// * Option<u256> The item removed or None if the stack is empty.
     fn pop(ref self: Felt252Stack<T>) -> Option<T> {
         if self.is_empty() {
-            return Option::None(());
+            return Option::None;
         }
 
         self.len -= 1;
@@ -88,7 +88,7 @@ impl Felt252StackImpl<
     /// * Option<u256> The last item of the stack
     fn peek(ref self: Felt252Stack<T>) -> Option<T> {
         if self.is_empty() {
-            return Option::None(());
+            return Option::None;
         }
         Option::Some(self.elements.get((self.len - 1).into()))
     }
@@ -138,7 +138,7 @@ impl NullableStackImpl<
 
     fn pop(ref self: NullableStack<T>) -> Option<T> {
         if self.is_empty() {
-            return Option::None(());
+            return Option::None;
         }
 
         self.len -= 1;
@@ -148,7 +148,7 @@ impl NullableStackImpl<
 
     fn peek(ref self: NullableStack<T>) -> Option<T> {
         if self.is_empty() {
-            return Option::None(());
+            return Option::None;
         }
         Option::Some(self.elements.get((self.len - 1).into()).deref())
     }

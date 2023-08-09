@@ -169,7 +169,7 @@ impl SpanU8TryIntoPoint of TryInto<Span<u8>, Point> {
 
         let mut y: u256 = self.into();
         if (y >= p) {
-            return Option::None(());
+            return Option::None;
         }
         // bitshit of 255
         let bitshift_255: u256 =
@@ -197,12 +197,12 @@ impl SpanU8TryIntoPoint of TryInto<Span<u8>, Point> {
             let p_minus_one_over_4: u256 = div_mod(sub_mod(p, 1, p), 4, p);
             x = mult_mod(x_candidate_root, pow_mod(2, p_minus_one_over_4, p), p);
         } else {
-            return Option::None(());
+            return Option::None;
         }
 
         if (x == 0) {
             if (x_0 == 1) {
-                return Option::None(());
+                return Option::None;
             }
         }
         if (x_0 != x % 2) {
@@ -234,7 +234,7 @@ fn point_mult(mut scalar: u256, mut P: ExtendedHomogeneousPoint) -> ExtendedHomo
     // Double and add method
     loop {
         if (scalar == zero_u512) {
-            break ();
+            break;
         }
         if ((scalar.low & 1) == 1) {
             Q = Q + P;

@@ -83,7 +83,7 @@ impl ListImpl<
 
     fn get(self: @List<T>, index: u32) -> Option<T> {
         if (index >= *self.len) {
-            return Option::None(());
+            return Option::None;
         }
 
         let (base, offset) = calculate_base_and_offset_for_index(
@@ -103,7 +103,7 @@ impl ListImpl<
 
     fn pop_front(ref self: List<T>) -> Option<T> {
         if self.len == 0 {
-            return Option::None(());
+            return Option::None;
         }
 
         let popped = self.get(self.len - 1);
@@ -121,7 +121,7 @@ impl ListImpl<
         let mut index = 0;
         loop {
             if index == *self.len {
-                break ();
+                break;
             }
             array.append(self.get(index).expect('List index out of bounds'));
             index += 1;

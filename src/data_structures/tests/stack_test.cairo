@@ -44,8 +44,8 @@ fn stack_peek_test<
         Option::Some(result) => {
             assert(result == val_2, 'wrong result');
         },
-        Option::None(_) => {
-            assert(0 == 1, 'should return value');
+        Option::None => {
+            assert(false, 'should return value');
         },
     };
 
@@ -71,8 +71,8 @@ fn stack_pop_test<
         Option::Some(result) => {
             assert(result == val_2, 'wrong result');
         },
-        Option::None(_) => {
-            assert(0 == 1, 'should return a value');
+        Option::None => {
+            assert(false, 'should return a value');
         },
     };
 

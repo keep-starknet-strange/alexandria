@@ -23,7 +23,7 @@ fn bubble_sort_elements<
         if idx2 == array.len() {
             sorted_array.append(*array[idx1]);
             if sorted_iteration == 0 {
-                break ();
+                break;
             }
             array = sorted_array;
             sorted_array = array![];
