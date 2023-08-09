@@ -55,7 +55,7 @@ Current version: [v2.0.1](https://github.com/starkware-libs/cairo/releases/tag/v
 
 ## Features
 
-This repository is divided in 8 modules:
+This repository is divided in 9 modules:
 
 - [Data Structures](./src/data_structures/README.md)
 - [Encoding](./src/encoding/README.md)
