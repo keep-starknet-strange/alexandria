@@ -89,7 +89,6 @@ mod mod_arithmetics;
 mod perfect_number;
 mod sha256;
 mod sha512;
-mod signed_integers;
 mod zellers_congruence;
 
 #[cfg(test)]
