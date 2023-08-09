@@ -65,6 +65,7 @@ This repository is divided in 8 modules:
 - [Searching](./src/searching/README.md)
 - [Sorting](./src/sorting/README.md)
 - [Storage](./src/storage/README.md)
+- [Signing](./src/signing/README.md)
 
 ## Getting Started
 
