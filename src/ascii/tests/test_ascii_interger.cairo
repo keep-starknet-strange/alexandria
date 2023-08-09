@@ -1,7 +1,7 @@
 use array::ArrayTrait;
 use traits::{Into, TryInto};
 use integer::BoundedInt;
-use alexandria::ascii::IntergerToAsciiTrait;
+use alexandria::ascii::ToAsciiTrait;
 
 #[test]
 #[available_gas(2000000000)]

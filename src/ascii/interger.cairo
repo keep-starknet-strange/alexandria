@@ -1,24 +1,23 @@
-use core::option::OptionTrait;
+use option::OptionTrait;
 use alexandria::data_structures::array_ext::ArrayTraitExt;
-use array::{ArrayTrait, Array};
+use array::{ArrayTrait, SpanTrait};
 use traits::{Into, TryInto, DivRem};
 use zeroable::Zeroable;
 
-trait IntergerToAsciiTrait<T, U> {
+trait ToAsciiTrait<T, U> {
     fn to_ascii(self: T) -> U;
 }
 
 // converts intergers into an array of its individual ascii values
-trait IntergerToAsciiArrayTrait<T> {
+trait ToAsciiArrayTrait<T> {
     fn to_ascii_array(self: T) -> Array<felt252>;
     fn to_inverse_ascii_array(self: T) -> Array<felt252>;
 }
 
 // converts intergers into an array of its individual ascii values
 // e.g. 123 -> [49, 50, 51]
-impl IntergerToAsciiArrayTraitImpl<
+impl ToAsciiArrayTraitImpl<
     T,
-    impl TNumericLiteral: NumericLiteral<T>,
     impl TPartialOrd: PartialOrd<T>,
     impl TDivRem: DivRem<T>,
     impl TInto: Into<T, felt252>,
@@ -27,7 +26,7 @@ impl IntergerToAsciiArrayTraitImpl<
     impl TZeroable: Zeroable<T>,
     impl TDrop: Drop<T>,
     impl TCopy: Copy<T>,
-> of IntergerToAsciiArrayTrait<T> {
+> of ToAsciiArrayTrait<T> {
     fn to_ascii_array(self: T) -> Array<felt252> {
         let mut new_arr = self.to_inverse_ascii_array();
         new_arr.reverse();
@@ -44,7 +43,7 @@ impl IntergerToAsciiArrayTraitImpl<
         let mut num = self;
         loop {
             if num.is_zero() {
-                break ();
+                break;
             }
             let (quotient, remainder) = DivRem::div_rem(
                 num, TryInto::<felt252, T>::try_into(10).unwrap().try_into().expect('Division by 0')
@@ -61,7 +60,6 @@ impl IntergerToAsciiArrayTraitImpl<
 // e.g. 1000 -> "1000"
 impl SmallIntergerToAsciiTraitImpl<
     T,
-    impl TNumericLiteral: NumericLiteral<T>,
     impl TPartialOrd: PartialOrd<T>,
     impl TDivRem: DivRem<T>,
     impl TInto: Into<T, felt252>,
@@ -70,25 +68,25 @@ impl SmallIntergerToAsciiTraitImpl<
     impl TZeroable: Zeroable<T>,
     impl TDrop: Drop<T>,
     impl TCopy: Copy<T>,
-> of IntergerToAsciiTrait<T, felt252> {
+> of ToAsciiTrait<T, felt252> {
     fn to_ascii(self: T) -> felt252 {
         if self <= 9.try_into().unwrap() {
             return self.into() + 48;
         }
 
-        let inverse_ascii_arr = self.to_inverse_ascii_array();
-        let len = inverse_ascii_arr.len();
-        let mut index = 0;
+        let mut inverse_ascii_arr = self.to_inverse_ascii_array().span();
         let mut ascii: felt252 = 0;
         loop {
-            if index >= len {
-                break ();
-            }
-            // recursively keep getting the index from the end of the array
-            let l_index = len - index - 1;
-            ascii = ascii * 256 + *inverse_ascii_arr[l_index];
-            index += 1;
+            match inverse_ascii_arr.pop_back() {
+                Option::Some(val) => {
+                    ascii = ascii * 256 + *val;
+                },
+                Option::None(_) => {
+                    break;
+                },
+            };
         };
+
         ascii
     }
 }
@@ -98,7 +96,6 @@ impl SmallIntergerToAsciiTraitImpl<
 // e.g. max_num + 123 -> ["max_num", "123"]
 impl BigIntergerToAsciiTraitImpl<
     T,
-    impl TNumericLiteral: NumericLiteral<T>,
     impl TPartialOrd: PartialOrd<T>,
     impl TDivRem: DivRem<T>,
     impl TInto: Into<T, felt252>,
@@ -107,7 +104,7 @@ impl BigIntergerToAsciiTraitImpl<
     impl TZeroable: Zeroable<T>,
     impl TDrop: Drop<T>,
     impl TCopy: Copy<T>,
-> of IntergerToAsciiTrait<T, Array<felt252>> {
+> of ToAsciiTrait<T, Array<felt252>> {
     fn to_ascii(self: T) -> Array<felt252> {
         let mut data = ArrayTrait::new();
         if self <= 9.try_into().unwrap() {
@@ -115,30 +112,30 @@ impl BigIntergerToAsciiTraitImpl<
             return data;
         }
 
-        let inverse_ascii_arr = self.to_inverse_ascii_array();
-        let len = inverse_ascii_arr.len();
-        let mut index = 0;
+        let mut inverse_ascii_arr = self.to_inverse_ascii_array().span();
         let mut ascii: felt252 = 0;
+        let mut index = 0;
         loop {
-            if index >= len {
-                // if ascii is 0 it means we have already appended the first ascii
-                // and theres no need to append it again
-                if ascii.is_non_zero() {
-                    data.append(ascii);
-                }
-
-                break ();
-            }
-            // recursively keep getting the index from the end of the array
-            let l_index = len - index - 1;
-            let new_ascii = ascii * 256 + *inverse_ascii_arr[l_index];
-            // if index is at 30 it means we have reached the max size of felt252 at 31 characters
-            // so we append the current ascii and reset the ascii to 0
-            ascii = if index == 30 {
-                data.append(new_ascii);
-                0
-            } else {
-                new_ascii
+            match inverse_ascii_arr.pop_back() {
+                Option::Some(val) => {
+                    let new_ascii = ascii * 256 + *val;
+                    // if index is at 30 it means we have reached the max size of felt252 at 31 characters
+                    // so we append the current ascii and reset the ascii to 0
+                    ascii = if index == 30 {
+                        data.append(new_ascii);
+                        0
+                    } else {
+                        new_ascii
+                    };
+                },
+                Option::None(_) => {
+                    // if ascii is 0 it means we have already appended the first ascii
+                    // and theres no need to append it again
+                    if ascii.is_non_zero() {
+                        data.append(ascii);
+                    }
+                    break;
+                },
             };
             index += 1;
         };
@@ -151,7 +148,7 @@ impl BigIntergerToAsciiTraitImpl<
 // -------------------------------------------------------------------------- //
 // have to implement seperately for u256 because 
 // it dosent have the same implementations as the generic version
-impl U256ToAsciiArrayTraitImpl of IntergerToAsciiArrayTrait<u256> {
+impl U256ToAsciiArrayTraitImpl of ToAsciiArrayTrait<u256> {
     fn to_ascii_array(self: u256) -> Array<felt252> {
         let mut new_arr = self.to_inverse_ascii_array();
         new_arr.reverse();
@@ -167,7 +164,7 @@ impl U256ToAsciiArrayTraitImpl of IntergerToAsciiArrayTrait<u256> {
         let mut num = self;
         loop {
             if num.is_zero() {
-                break ();
+                break;
             }
             let (quotient, remainder) = DivRem::div_rem(
                 num, 10_u256.try_into().expect('Division by 0')
@@ -179,7 +176,7 @@ impl U256ToAsciiArrayTraitImpl of IntergerToAsciiArrayTrait<u256> {
     }
 }
 
-impl U256ToAsciiTraitImpl of IntergerToAsciiTrait<u256, Array<felt252>> {
+impl U256ToAsciiTraitImpl of ToAsciiTrait<u256, Array<felt252>> {
     fn to_ascii(self: u256) -> Array<felt252> {
         let mut data = ArrayTrait::new();
         if self <= 9 {
@@ -187,31 +184,33 @@ impl U256ToAsciiTraitImpl of IntergerToAsciiTrait<u256, Array<felt252>> {
             return data;
         }
 
-        let inverse_ascii_arr = self.to_inverse_ascii_array();
-        let len = inverse_ascii_arr.len();
+        let mut inverse_ascii_arr = self.to_inverse_ascii_array().span();
         let mut index = 0;
         let mut ascii: felt252 = 0;
         loop {
-            if index >= len {
-                // if ascii is 0 it means we have already appended the first ascii
-                // and theres no need to append it again
-                if ascii.is_non_zero() {
-                    data.append(ascii);
-                }
-                break ();
-            }
-            // recursively keep getting the index from the end of the array
-            let l_index = len - index - 1;
-            let new_ascii = ascii * 256 + *inverse_ascii_arr[l_index];
-            // if index is currently at 30 it means we have processed the number for index 31
-            // this means we have reached the max size of felt252 at 31 characters
-            // so we append the current ascii and reset the ascii to 0
-            // do the same at index 61 as well because max u256 is 78 characters
-            ascii = if index == 30 || index == 61 {
-                data.append(new_ascii);
-                0
-            } else {
-                new_ascii
+            match inverse_ascii_arr.pop_back() {
+                Option::Some(val) => {
+                    let new_ascii = ascii * 256 + *val;
+                    // if index is currently at 30 it means we have processed the number for index 31
+                    // this means we have reached the max size of felt252 at 31 characters
+                    // so we append the current ascii and reset the ascii to 0
+                    // do the same at index 61 as well because max u256 is 78 characters
+                    ascii =
+                        if index == 30 || index == 61 {
+                            data.append(new_ascii);
+                            0
+                        } else {
+                            new_ascii
+                        };
+                },
+                Option::None(_) => {
+                    // if ascii is 0 it means we have already appended the first ascii
+                    // and theres no need to append it again
+                    if ascii.is_non_zero() {
+                        data.append(ascii);
+                    }
+                    break;
+                },
             };
             index += 1;
         };
