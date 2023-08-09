@@ -22,4 +22,4 @@ Some digital signature algorithms are:
 
 - ECDSA (Elliptic Curve Digital Signature Algorithm).
 
-- [Schnorr signature](./src/signing/schnorr/README.md)
+- Schnorr signature.
