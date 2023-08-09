@@ -410,7 +410,6 @@ fn sha256_lorem_ipsum_test() {
     assert(*result[31] == 0x44, 'invalid result');
 }
 
-use alexandria::math::math::BitShift;
 use debug::PrintTrait;
 #[test]
 #[available_gas(10_000_000_000)]

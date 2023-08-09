@@ -88,7 +88,6 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
     from_u32Array_to_u8Array(res)
 }
 
-use alexandria::math::math::BitShift;
 fn from_u32Array_to_u8Array(mut data: Span<u32>) -> Array<u8> {
     let mut result = array![];
     loop {
