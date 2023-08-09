@@ -4,7 +4,5 @@ version = "0.1.0"
 description = "Starknet storage utilities"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/src/storage"
 
-[[target.starknet-contract]]
-
 [dependencies]
-starknet = ">=2.1.0"
+starknet.workspace = true

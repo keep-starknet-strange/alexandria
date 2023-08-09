@@ -14,5 +14,8 @@ version = "0.1.0"
 description = "Community maintained Cairo and Starknet libraries"
 homepage = "https://github.com/keep-starknet-strange/alexandria/"
 
+[workspace.dependencies]
+starknet = ">=2.1.0"
+
 [scripts]
 all = "scarb build && scarb test"
