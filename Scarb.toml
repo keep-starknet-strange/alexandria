@@ -7,7 +7,8 @@ members = [
     "src/numeric",
     "src/searching",
     "src/sorting",
-    "src/storage"
+    "src/storage",
+    "src/ascii"
 ]
 name = "alexandria"
 version = "0.1.0"
