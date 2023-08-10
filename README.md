@@ -76,11 +76,12 @@ This repository is divided in 8 modules:
 
 ### Installation
 
-Alexandria is a collection of cairo utilities, which can be installed by adding the following line to your `Scarb.toml`:
+Alexandria is a collection of utility Cairo packages, which have to be added as dependencies separately.
+For example, the `alexandria_math` package can be installed by adding the following line to your `Scarb.toml`:
 
 ```toml
 [dependencies]
-alexandria = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
+alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
 ```
 
 then add the following line in your `.cairo` file
