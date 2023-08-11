@@ -2,6 +2,7 @@ use option::OptionTrait;
 use traits::Into;
 
 /// Raise a number to a power.
+/// O(n) time complexity.
 /// * `base` - The number to raise.
 /// * `exp` - The exponent.
 /// # Returns
@@ -42,6 +43,8 @@ impl U128BitShift of BitShift<u128> {
     fn fpow(x: u128, n: u128) -> u128 {
         if n == 0 {
             1
+        } else if n == 1 {
+            x
         } else if (n & 1) == 1 {
             x * BitShift::fpow(x * x, n / 2)
         } else {
@@ -61,6 +64,8 @@ impl U256BitShift of BitShift<u256> {
     fn fpow(x: u256, n: u256) -> u256 {
         if n == 0 {
             1
+        } else if n == 1 {
+            x
         } else if (n & 1) == 1 {
             x * BitShift::fpow(x * x, n / 2)
         } else {
