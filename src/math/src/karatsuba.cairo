@@ -17,9 +17,9 @@ fn multiply(x: u128, y: u128) -> u128 {
     }
 
     let max_digit_counts = max(count_digits_of_base(x, 10), count_digits_of_base(y, 10));
-    let middle_idx = _div_half_ceil(max_digit_counts);
-    let (x1, x0) = _split_number(x, middle_idx);
-    let (y1, y0) = _split_number(y, middle_idx);
+    let middle_idx = div_half_ceil(max_digit_counts);
+    let (x1, x0) = split_number(x, middle_idx);
+    let (y1, y0) = split_number(y, middle_idx);
 
     let z0 = multiply(x0, y0);
     let z1 = multiply(x1, y1);
@@ -33,7 +33,7 @@ fn multiply(x: u128, y: u128) -> u128 {
 /// * `num` - The current value to be divided.
 /// # Returns
 /// * `u128` - Half (rounded up) of num.
-fn _div_half_ceil(num: u128) -> u128 {
+fn div_half_ceil(num: u128) -> u128 {
     if num % 2 != 0 {
         (num + 1) % 2
     } else {
@@ -47,7 +47,7 @@ fn _div_half_ceil(num: u128) -> u128 {
 /// * `split_idx` - Index at which the number will be split
 /// # Returns
 /// * `(u128, u128)` -tuple representing the split number.
-fn _split_number(num: u128, split_idx: u128) -> (u128, u128) {
+fn split_number(num: u128, split_idx: u128) -> (u128, u128) {
     let divisor = pow(10, split_idx);
     (num / divisor, num % divisor)
 }
