@@ -1,4 +1,4 @@
-use array::{ArrayTrait};
+use array::ArrayTrait;
 use alexandria_math::sha512::{WordOperations, sha512, Word64, Word64WordOperations};
 
 fn get_lorem_ipsum() -> Array<u8> {
