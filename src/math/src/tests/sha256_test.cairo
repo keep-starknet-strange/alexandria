@@ -44,6 +44,44 @@ fn sha256_empty_test() {
 }
 
 #[test]
+#[available_gas(200000000000)]
+fn sha256_random_data_test(){
+	let mut input: Array<u8> = array![0x57, 0x77, 0x71, 0x71, 0x66, 0x50, 0x45, 0x51, 0x51, 0x43, 0x39, 0x48, 0x38];
+	let result = sha256::sha256(input);assert(*result[0] == 61, 'invalid result');
+	assert(*result[1] == 226, 'invalid result');
+	assert(*result[2] == 188, 'invalid result');
+	assert(*result[3] == 242, 'invalid result');
+	assert(*result[4] == 118, 'invalid result');
+	assert(*result[5] == 121, 'invalid result');
+	assert(*result[6] == 7, 'invalid result');
+	assert(*result[7] == 225, 'invalid result');
+	assert(*result[8] == 150, 'invalid result');
+	assert(*result[9] == 220, 'invalid result');
+	assert(*result[10] == 105, 'invalid result');
+	assert(*result[11] == 158, 'invalid result');
+	assert(*result[12] == 185, 'invalid result');
+	assert(*result[13] == 180, 'invalid result');
+	assert(*result[14] == 139, 'invalid result');
+	assert(*result[15] == 103, 'invalid result');
+	assert(*result[16] == 221, 'invalid result');
+	assert(*result[17] == 95, 'invalid result');
+	assert(*result[18] == 56, 'invalid result');
+	assert(*result[19] == 88, 'invalid result');
+	assert(*result[20] == 209, 'invalid result');
+	assert(*result[21] == 159, 'invalid result');
+	assert(*result[22] == 255, 'invalid result');
+	assert(*result[23] == 247, 'invalid result');
+	assert(*result[24] == 145, 'invalid result');
+	assert(*result[25] == 146, 'invalid result');
+	assert(*result[26] == 83, 'invalid result');
+	assert(*result[27] == 110, 'invalid result');
+	assert(*result[28] == 185, 'invalid result');
+	assert(*result[29] == 5, 'invalid result');
+	assert(*result[30] == 248, 'invalid result');
+	assert(*result[31] == 15, 'invalid result');
+}
+
+#[test]
 #[available_gas(2000000000)]
 fn sha256_lorem_ipsum_test() {
     // Lorem ipsum, or lsipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs.
