@@ -63,19 +63,19 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
     };
 
     // add length to the end
-    let mut res = (data_len & 0xff00000000000000) / 0xffffffffffffff;
+    let mut res = (data_len & 0xff00000000000000) / 0x100000000000000;
     data.append(res.try_into().unwrap());
-    res = (data_len.into() & 0xff000000000000) / 0xffffffffffff;
+    res = (data_len.into() & 0xff000000000000) / 0x1000000000000;
     data.append(res.try_into().unwrap());
-    res = (data_len.into() & 0xff0000000000) / 0xffffffffff;
+    res = (data_len.into() & 0xff0000000000) / 0x10000000000;
     data.append(res.try_into().unwrap());
-    res = (data_len.into() & 0xff00000000) / 0xffffffff;
+    res = (data_len.into() & 0xff00000000) / 0x100000000;
     data.append(res.try_into().unwrap());
-    res = (data_len.into() & 0xff000000) / 0xffffff;
+    res = (data_len.into() & 0xff000000) / 0x1000000;
     data.append(res.try_into().unwrap());
-    res = (data_len.into() & 0xff0000) / 0xffff;
+    res = (data_len.into() & 0xff0000) / 0x10000;
     data.append(res.try_into().unwrap());
-    res = (data_len.into() & 0xff00) / 0xff;
+    res = (data_len.into() & 0xff00) / 0x100;
     data.append(res.try_into().unwrap());
     res = data_len.into() & 0xff;
     data.append(res.try_into().unwrap());
@@ -93,11 +93,11 @@ fn from_u32Array_to_u8Array(mut data: Span<u32>) -> Array<u8> {
     loop {
         match data.pop_front() {
             Option::Some(val) => {
-                let mut res = (*val & 0xff000000) / 0xffffff;
+                let mut res = (*val & 0xff000000) / 0x1000000;
                 result.append(res.try_into().unwrap());
-                res = (*val & 0xff0000) / 0xffff;
+                res = (*val & 0xff0000) / 0x10000;
                 result.append(res.try_into().unwrap());
-                res = (*val & 0xff00) / 0xff;
+                res = (*val & 0xff00) / 0x100;
                 result.append(res.try_into().unwrap());
                 res = *val & 0xff;
                 result.append(res.try_into().unwrap());
