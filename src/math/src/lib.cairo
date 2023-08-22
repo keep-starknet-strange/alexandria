@@ -39,6 +39,90 @@ trait BitShift<T> {
     fn shr(x: T, n: T) -> T;
 }
 
+impl U8BitShift of BitShift<u8> {
+    fn fpow(x: u8, n: u8) -> u8 {
+        if n == 0 {
+            1
+        } else if n == 1 {
+            x
+        } else if (n & 1) == 1 {
+            x * BitShift::fpow(x * x, n / 2)
+        } else {
+            BitShift::fpow(x * x, n / 2)
+        }
+    }
+    fn shl(x: u8, n: u8) -> u8 {
+        x * BitShift::fpow(2, n)
+    }
+
+    fn shr(x: u8, n: u8) -> u8 {
+        x / BitShift::fpow(2, n)
+    }
+}
+
+impl U16BitShift of BitShift<u16> {
+    fn fpow(x: u16, n: u16) -> u16 {
+        if n == 0 {
+            1
+        } else if n == 1 {
+            x
+        } else if (n & 1) == 1 {
+            x * BitShift::fpow(x * x, n / 2)
+        } else {
+            BitShift::fpow(x * x, n / 2)
+        }
+    }
+    fn shl(x: u16, n: u16) -> u16 {
+        x * BitShift::fpow(2, n)
+    }
+
+    fn shr(x: u16, n: u16) -> u16 {
+        x / BitShift::fpow(2, n)
+    }
+}
+
+impl U32BitShift of BitShift<u32> {
+    fn fpow(x: u32, n: u32) -> u32 {
+        if n == 0 {
+            1
+        } else if n == 1 {
+            x
+        } else if (n & 1) == 1 {
+            x * BitShift::fpow(x * x, n / 2)
+        } else {
+            BitShift::fpow(x * x, n / 2)
+        }
+    }
+    fn shl(x: u32, n: u32) -> u32 {
+        x * BitShift::fpow(2, n)
+    }
+
+    fn shr(x: u32, n: u32) -> u32 {
+        x / BitShift::fpow(2, n)
+    }
+}
+
+impl U64BitShift of BitShift<u64> {
+    fn fpow(x: u64, n: u64) -> u64 {
+        if n == 0 {
+            1
+        } else if n == 1 {
+            x
+        } else if (n & 1) == 1 {
+            x * BitShift::fpow(x * x, n / 2)
+        } else {
+            BitShift::fpow(x * x, n / 2)
+        }
+    }
+    fn shl(x: u64, n: u64) -> u64 {
+        x * BitShift::fpow(2, n)
+    }
+
+    fn shr(x: u64, n: u64) -> u64 {
+        x / BitShift::fpow(2, n)
+    }
+}
+
 impl U128BitShift of BitShift<u128> {
     fn fpow(x: u128, n: u128) -> u128 {
         if n == 0 {
