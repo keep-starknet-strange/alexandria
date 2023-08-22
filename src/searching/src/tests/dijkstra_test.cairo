@@ -5,9 +5,8 @@ use traits::Into;
 use option::OptionTrait;
 use array::{Array, ArrayTrait};
 use dict::Felt252DictTrait;
-use nullable::{NullableTrait, nullable_from_box, match_nullable, FromNullableResult};
+use nullable::{FromNullableResult};
 use alexandria_searching::dijkstra::{Graph, Node, GraphTrait};
-use alexandria_data_structures::vec::{Felt252Vec, VecTrait};
 
 
 #[test]
@@ -28,7 +27,7 @@ fn add_edge() {
     let val = graph.adj_nodes.get(source.into());
 
     let span = match match_nullable(val) {
-        FromNullableResult::Null(()) => {
+        FromNullableResult::Null => {
             panic_with_felt252('No value found')
         },
         FromNullableResult::NotNull(val) => {

@@ -1,13 +1,11 @@
 //! Dijkstra algorithm using priority queue
-use core::traits::Index;
 use core::option::OptionTrait;
 use core::array::SpanTrait;
 use core::box::BoxTrait;
 use array::{Array, ArrayTrait};
-use traits::Into;
+use traits::{Into, Index};
 use dict::Felt252DictTrait;
-use nullable::{NullableTrait, nullable_from_box, match_nullable, FromNullableResult};
-use alexandria_data_structures::vec::{Felt252Vec, VecTrait};
+use nullable::{FromNullableResult};
 
 
 #[derive(Copy, Drop)]
@@ -63,7 +61,7 @@ impl GraphImpl of GraphTrait {
             },
         };
 
-        //iterate over existing array to add new node
+        // iterate over existing array to add new node
         if (!is_null) {
             let mut index = 0;
             loop {
@@ -77,9 +75,9 @@ impl GraphImpl of GraphTrait {
             };
             nodes.append(node);
         }
-        //add node
+        // add node
         self.nodes.append(node);
-        //add adj node
+        // add adj node
         self.adj_nodes.insert(source.into(), nullable_from_box(BoxTrait::new(nodes.span())));
     }
 
@@ -94,11 +92,11 @@ fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u
     let mut dist: Felt252Dict<u128> = Default::default();
     let node_size = self.nodes.len();
     let nodes = self.nodes.span();
-    //add first node to pripority queue
+    // add first node to pripority queue
     let initial_node = Node { source: source, dest: 0, weight: 0 };
     priority_queue.append(initial_node);
 
-    //init dist with infinite value
+    // init dist with infinite value
     let mut index = 0;
     loop {
         if index == node_size {
@@ -110,12 +108,12 @@ fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u
         index += 1;
     };
 
-    //distance from itself is 0
+    // distance from itself is 0
     dist.insert(source.into(), 0);
 
     let mut visited = 0;
     let mut no_more_adj_node = false;
-    //iterate while all node aren't visited
+    // iterate while all node aren't visited
     loop {
         if visited == node_size {
             break;
@@ -125,9 +123,9 @@ fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u
         let mut new_distance: u128 = 0;
         let adj_nodes = self.adj_nodes.get(visited.into());
 
-        //retrieve adj node
+        // retrieve adj node
         let mut adj_nodes_list = match match_nullable(adj_nodes) {
-            FromNullableResult::Null(()) => {
+            FromNullableResult::Null => {
                 no_more_adj_node = true;
                 priority_queue.span()
             },
@@ -152,12 +150,12 @@ fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u
                     edge_distance = adj_node.weight.into();
                     new_distance = dist.get(adj_node.source.into()) + edge_distance;
 
-                    //lower distance calculated
+                    // lower distance calculated
                     if new_distance < dist.get(adj_node.dest.into()) {
                         dist.insert(adj_node.dest.into(), new_distance);
                     }
 
-                    //add node to priority_queue
+                    // add node to priority_queue
                     priority_queue
                         .append(
                             Node {
@@ -179,7 +177,7 @@ fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u
     dist
 }
 
-//Check is a node has already been visited
+/// Check if a node has already been visited
 fn is_node_visited(ref nodes: Array<u32>, current_node: u32) -> bool {
     let mut index = 0;
     let mut is_visited = false;
