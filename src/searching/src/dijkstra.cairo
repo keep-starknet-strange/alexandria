@@ -1,11 +1,10 @@
 //! Dijkstra algorithm using priority queue
-use core::option::OptionTrait;
-use core::array::SpanTrait;
-use core::box::BoxTrait;
-use array::{Array, ArrayTrait};
+use option::OptionTrait;
+use box::BoxTrait;
+use array::{Array, ArrayTrait, SpanTrait};
 use traits::{Into, Index};
 use dict::Felt252DictTrait;
-use nullable::{FromNullableResult};
+use nullable::FromNullableResult;
 
 
 #[derive(Copy, Drop)]
@@ -51,7 +50,7 @@ impl GraphImpl of GraphTrait {
         let mut is_null: bool = false;
         let node = Node { source, dest, weight };
         let mut span = match match_nullable(adj_nodes) {
-            FromNullableResult::Null(()) => {
+            FromNullableResult::Null => {
                 is_null = true;
                 nodes.append(node);
                 nodes.span()

@@ -1,11 +1,10 @@
-use core::debug::PrintTrait;
-use core::array::SpanTrait;
-use core::box::BoxTrait;
+use debug::PrintTrait;
+use box::BoxTrait;
 use traits::Into;
 use option::OptionTrait;
-use array::{Array, ArrayTrait};
+use array::{Array, ArrayTrait, SpanTrait};
 use dict::Felt252DictTrait;
-use nullable::{FromNullableResult};
+use nullable::FromNullableResult;
 use alexandria_searching::dijkstra::{Graph, Node, GraphTrait};
 
 
@@ -48,7 +47,7 @@ fn add_edge() {
     let val = graph.adj_nodes.get(2.into());
 
     let span = match match_nullable(val) {
-        FromNullableResult::Null(()) => {
+        FromNullableResult::Null => {
             panic_with_felt252('No value found')
         },
         FromNullableResult::NotNull(val) => {
