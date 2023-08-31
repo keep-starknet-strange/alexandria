@@ -21,7 +21,7 @@ trait ArrayTraitExt<T> {
     fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         self: @Array<T>
     ) -> Option<usize>;
-    fn dedup<impl TPartialEq: PartialEq<T>>(self: Array<T>) -> Array<T>;
+    fn dedup<impl TPartialEq: PartialEq<T>>(self: @Array<T>) -> Array<T>;
 }
 
 trait SpanTraitExt<T> {
