@@ -21,6 +21,7 @@ trait ArrayTraitExt<T> {
     fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         self: @Array<T>
     ) -> Option<usize>;
+    fn dedup<impl TPartialEq: PartialEq<T>>(self: Array<T>) -> Array<T>;
 }
 
 trait SpanTraitExt<T> {
@@ -134,6 +135,43 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         mut self: @Array<T>
     ) -> Option<usize> {
         self.span().index_of_max()
+    }
+
+    fn dedup<impl TPartialEq: PartialEq<T>>(mut self: Array<T>) -> Array<T> {
+        let len = self.len();
+
+        if(len <= 1) {
+            return self;
+        }
+
+        let mut ret = array![];
+
+        let mut last_value = match self.pop_front() {
+            Option::Some(v) => v,
+            Option::None => {
+                return ret;
+            },
+        };
+
+        ret.append(last_value);
+
+        loop {
+            match self.pop_front() {
+                Option::Some(v) => {
+
+                    if(last_value == v) {
+                        continue;
+                    };
+                    last_value = v;
+                    ret.append(v);
+                },
+                Option::None(()) => {
+                    break;
+                }
+            };
+        };
+
+        ret
     }
 }
 
