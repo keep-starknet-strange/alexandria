@@ -159,11 +159,10 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
             match self.pop_front() {
                 Option::Some(v) => {
 
-                    if(last_value == v) {
-                        continue;
+                    if(last_value != v) {
+                      last_value = v;
+                      ret.append(v);
                     };
-                    last_value = v;
-                    ret.append(v);
                 },
                 Option::None(()) => {
                     break;
