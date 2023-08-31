@@ -7,7 +7,7 @@ use option::OptionTrait;
 /// * `sequence` - The sequence to operate.
 /// # Returns
 /// * `Array<T>` - The cumulative sum of sequence.
-fn cumsum<T, impl TAdd: Add<T>, impl TCopy: Copy<T>, impl TDrop: Drop<T>, >(
+fn cumsum<T, impl TAdd: Add<T>, impl TCopy: Copy<T>, impl TDrop: Drop<T>,>(
     mut sequence: Span<T>
 ) -> Array<T> {
     // [Check] Inputs

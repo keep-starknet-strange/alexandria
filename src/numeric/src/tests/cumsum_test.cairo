@@ -12,7 +12,7 @@ fn cumsum_test() {
 }
 
 #[test]
-#[should_panic(expected: ('Array must have at least 1 elt', ))]
+#[should_panic(expected: ('Array must have at least 1 elt',))]
 #[available_gas(2000000)]
 fn cumsum_test_revert_empty() {
     let xs: Array<u64> = array![];

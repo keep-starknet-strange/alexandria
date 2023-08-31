@@ -32,7 +32,7 @@ fn gcd_single_test() {
 
 #[test]
 #[available_gas(1000000000)]
-#[should_panic(expected: ('EI', ))]
+#[should_panic(expected: ('EI',))]
 fn gcd_empty_input_test() {
     let mut arr = array![];
     gcd(arr.span());
