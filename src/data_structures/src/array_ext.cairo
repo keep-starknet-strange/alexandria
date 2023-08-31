@@ -143,7 +143,6 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         }
 
         let mut ret = array![];
-
         let mut last_value = self.pop_front().unwrap();
 
         ret.append(last_value);
@@ -151,7 +150,6 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         loop {
             match self.pop_front() {
                 Option::Some(v) => {
-
                     if(last_value != v) {
                       last_value = v;
                       ret.append(v);
