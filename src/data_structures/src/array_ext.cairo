@@ -155,7 +155,7 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
                       ret.append(v);
                     };
                 },
-                Option::None(()) => {
+                Option::None => {
                     break;
                 }
             };
