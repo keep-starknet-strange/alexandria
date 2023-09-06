@@ -48,7 +48,7 @@ impl DestructFeltStack<
 }
 
 impl Felt252StackImpl<
-    T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TFelt252DictValue: Felt252DictValue<T>, 
+    T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TFelt252DictValue: Felt252DictValue<T>,
 > of StackTrait<Felt252Stack<T>, T> {
     #[inline(always)]
     /// Creates a new Stack instance.
@@ -123,7 +123,7 @@ impl DestructNullableStack<T, impl TDrop: Drop<T>> of Destruct<NullableStack<T>>
 }
 
 impl NullableStackImpl<
-    T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, 
+    T, impl TCopy: Copy<T>, impl TDrop: Drop<T>,
 > of StackTrait<NullableStack<T>, T> {
     #[inline(always)]
     fn new() -> NullableStack<T> {

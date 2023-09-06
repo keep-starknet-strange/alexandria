@@ -3,7 +3,7 @@ use alexandria_math::karatsuba::multiply;
 // TODO All the out of gas have got lazily fixed. Maybe there is a way to fix those.
 #[test]
 #[available_gas(10000000)]
-#[should_panic(expected: ('Out of gas', ))]
+#[should_panic(expected: ('Out of gas',))]
 fn multiply_same_size_positive_number() {
     let n1 = 31415;
     let n2 = 31415;
@@ -23,7 +23,7 @@ fn multiply_distinct_size_positive_number() {
 
 #[test]
 #[available_gas(20000000)]
-#[should_panic(expected: ('Out of gas', ))]
+#[should_panic(expected: ('Out of gas',))]
 fn multiply_by_zero() {
     let n1 = 10296;
     let n2 = 0;

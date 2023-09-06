@@ -10,7 +10,7 @@ fn trapezoidal_rule_test() {
 }
 
 #[test]
-#[should_panic(expected: ('Arrays must have the same len', ))]
+#[should_panic(expected: ('Arrays must have the same len',))]
 #[available_gas(2000000)]
 fn trapezoidal_rule_test_revert_len_mismatch() {
     let xs: Array::<u64> = array![3];
@@ -19,7 +19,7 @@ fn trapezoidal_rule_test_revert_len_mismatch() {
 }
 
 #[test]
-#[should_panic(expected: ('Array must have at least 2 elts', ))]
+#[should_panic(expected: ('Array must have at least 2 elts',))]
 #[available_gas(2000000)]
 fn trapezoidal_rule_test_revert_len_too_short() {
     let xs: Array::<u64> = array![3];
@@ -28,7 +28,7 @@ fn trapezoidal_rule_test_revert_len_too_short() {
 }
 
 #[test]
-#[should_panic(expected: ('Abscissa must be sorted', ))]
+#[should_panic(expected: ('Abscissa must be sorted',))]
 #[available_gas(2000000)]
 fn trapezoidal_rule_test_revert_not_sorted() {
     let xs: Array::<u64> = array![5, 3];

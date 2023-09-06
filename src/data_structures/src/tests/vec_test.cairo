@@ -182,7 +182,7 @@ fn felt252_vec_at_test() {
 
 #[test]
 #[available_gas(2000000)]
-#[should_panic(expected: ('Index out of bounds', ))]
+#[should_panic(expected: ('Index out of bounds',))]
 fn felt252_vec_at_out_of_bounds_test() {
     let mut vec = VecTrait::<Felt252Vec, u128>::new();
     vec_at_out_of_bounds_test(ref vec);
@@ -204,7 +204,7 @@ fn felt252_vec_set_test() {
 
 #[test]
 #[available_gas(2000000)]
-#[should_panic(expected: ('Index out of bounds', ))]
+#[should_panic(expected: ('Index out of bounds',))]
 fn felt252_vec_set_test_expect_error() {
     let mut vec = VecTrait::<Felt252Vec, u128>::new();
     vec_set_test_expect_error(ref vec, 1, 2);
@@ -219,7 +219,7 @@ fn felt252_vec_index_trait_test() {
 
 #[test]
 #[available_gas(2000000)]
-#[should_panic(expected: ('Index out of bounds', ))]
+#[should_panic(expected: ('Index out of bounds',))]
 fn felt252_vec_index_trait_out_of_bounds_test() {
     let mut vec = VecTrait::<Felt252Vec, u128>::new();
     vec_index_trait_out_of_bounds_test(ref vec, 1);
@@ -254,7 +254,7 @@ fn nullable_vec_at_test() {
 
 #[test]
 #[available_gas(2000000)]
-#[should_panic(expected: ('Index out of bounds', ))]
+#[should_panic(expected: ('Index out of bounds',))]
 fn nullable_vec_at_out_of_bounds_test() {
     let mut vec = VecTrait::<NullableVec, u128>::new();
     vec_at_out_of_bounds_test(ref vec);
@@ -276,7 +276,7 @@ fn nullable_vec_set_test() {
 
 #[test]
 #[available_gas(2000000)]
-#[should_panic(expected: ('Index out of bounds', ))]
+#[should_panic(expected: ('Index out of bounds',))]
 fn nullable_vec_set_test_expect_error() {
     let mut vec = VecTrait::<NullableVec, u128>::new();
     vec_set_test_expect_error(ref vec, 1, 2);
@@ -291,7 +291,7 @@ fn nullable_vec_index_trait_test() {
 
 #[test]
 #[available_gas(2000000)]
-#[should_panic(expected: ('Index out of bounds', ))]
+#[should_panic(expected: ('Index out of bounds',))]
 fn nullable_vec_index_trait_out_of_bounds_test() {
     let mut vec = VecTrait::<NullableVec, u128>::new();
     vec_index_trait_out_of_bounds_test(ref vec, 1);
