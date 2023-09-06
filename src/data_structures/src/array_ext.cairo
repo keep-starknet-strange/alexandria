@@ -21,7 +21,7 @@ trait ArrayTraitExt<T> {
     fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         self: @Array<T>
     ) -> Option<usize>;
-    fn dedup<impl TPartialEq: PartialEq<T>>(self: Array<T>) -> Array<T>;
+    fn dedup<impl TPartialEq: PartialEq<T>>(self: @Array<T>) -> Array<T>;
 }
 
 trait SpanTraitExt<T> {
@@ -44,6 +44,7 @@ trait SpanTraitExt<T> {
     fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
         self: Span<T>
     ) -> Option<usize>;
+    fn dedup<impl TPartialEq: PartialEq<T>>(self: Span<T>) -> Array<T>;
 }
 
 impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> {
@@ -137,29 +138,8 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         self.span().index_of_max()
     }
 
-    fn dedup<impl TPartialEq: PartialEq<T>>(mut self: Array<T>) -> Array<T> {
-        if self.len() <= 1 {
-            return self;
-        }
-
-        let mut last_value = self.pop_front().unwrap();
-        let mut ret = array![last_value];
-
-        loop {
-            match self.pop_front() {
-                Option::Some(v) => {
-                    if (last_value != v) {
-                        last_value = v;
-                        ret.append(v);
-                    };
-                },
-                Option::None => {
-                    break;
-                }
-            };
-        };
-
-        ret
+    fn dedup<impl TPartialEq: PartialEq<T>>(mut self: @Array<T>) -> Array<T> {
+        self.span().dedup()
     }
 }
 
@@ -379,5 +359,33 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
             };
             index += 1;
         }
+    }
+
+    fn dedup<impl TPartialEq: PartialEq<T>>(mut self: Span<T>) -> Array<T> {
+        if self.len() == 0 {
+            return array![];
+        }
+        if (self.len() <= 1) {
+            return array![*self[0]];
+        }
+
+        let mut last_value = self.pop_front().unwrap();
+        let mut ret = array![*last_value];
+
+        loop {
+            match self.pop_front() {
+                Option::Some(v) => {
+                    if (last_value != v) {
+                        last_value = v;
+                        ret.append(*v);
+                    };
+                },
+                Option::None => {
+                    break;
+                }
+            };
+        };
+
+        ret
     }
 }
