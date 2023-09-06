@@ -187,3 +187,17 @@ impl ListStore<T, impl TStore: Store<T>> of Store<List<T>> {
         Store::<u8>::size()
     }
 }
+
+
+// List cannot implement `deserialize` because it needs to know the StorageBaseAddress to write to, which can't be passed to the function.
+// Therefore, trying to deserialize a List will always panic.
+impl ListSerde<
+    T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TStore: Store<T>, impl TSerde: Serde<T>,
+> of Serde<List<T>> {
+    fn serialize(self: @List<T>, ref output: Array<felt252>) {
+        Serde::<Array<T>>::serialize(@self.array(), ref output);
+    }
+    fn deserialize(ref serialized: Span<felt252>) -> Option<List<T>> {
+        panic_with_felt252('List deserialize not supported')
+    }
+}
