@@ -15,6 +15,7 @@ trait IAListHolder<TContractState> {
     );
     fn do_pop_front(ref self: TContractState) -> (Option<ContractAddress>, Option<u256>);
     fn do_array(self: @TContractState) -> (Array<ContractAddress>, Array<u256>);
+    fn do_serialize(self: @TContractState) -> Array<felt252>;
 }
 
 #[starknet::contract]
@@ -77,6 +78,13 @@ mod AListHolder {
             let mut a = self.addrs.read();
             let mut n = self.numbers.read();
             (a.array(), n.array())
+        }
+
+        fn do_serialize(self: @ContractState) -> Array<felt252> {
+            let mut a = self.addrs.read();
+            let mut output = Default::default();
+            Serde::<List<ContractAddress>>::serialize(@a, ref output);
+            output
         }
     }
 }
@@ -349,6 +357,29 @@ mod tests {
         assert((*array_addr[0], *array_number[0]) == contract.do_get_index(0), 'idx 0');
         assert((*array_addr[1], *array_number[1]) == contract.do_get_index(1), 'idx 1');
         assert((*array_addr[2], *array_number[2]) == contract.do_get_index(2), 'idx 2');
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_serialize_pass() {
+        let contract = deploy_mock();
+        let mock_addr = mock_addr();
+
+        contract.do_append(mock_addr, 100); // idx 0
+        contract.do_append(mock_addr, 200); // idx 1
+        contract.do_append(mock_addr, 300); // idx 2
+
+        let addresses = contract.do_serialize();
+
+        let (list_len, _) = contract.do_get_len();
+        let (idx_0, _) = contract.do_get_index(0);
+        let (idx_1, _) = contract.do_get_index(1);
+        let (idx_2, _) = contract.do_get_index(2);
+
+        assert(*addresses[0] == list_len.into(), 'idx 0');
+        assert(*addresses[1] == idx_0.into(), 'idx 1');
+        assert(*addresses[2] == idx_1.into(), 'idx 2');
+        assert(*addresses[3] == idx_2.into(), 'idx 3');
     }
 
     #[test]
