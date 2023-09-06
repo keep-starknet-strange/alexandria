@@ -138,7 +138,7 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
     }
 
     fn dedup<impl TPartialEq: PartialEq<T>>(mut self: Array<T>) -> Array<T> {
-        if (self.len() <= 1) {
+        if self.len() <= 1 {
             return self;
         }
 
