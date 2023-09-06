@@ -142,10 +142,8 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
             return self;
         }
 
-        let mut ret = array![];
         let mut last_value = self.pop_front().unwrap();
-
-        ret.append(last_value);
+        let mut ret = array![last_value];
 
         loop {
             match self.pop_front() {
