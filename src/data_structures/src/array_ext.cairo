@@ -365,9 +365,6 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
         if self.len() == 0 {
             return array![];
         }
-        if (self.len() <= 1) {
-            return array![*self[0]];
-        }
 
         let mut last_value = self.pop_front().unwrap();
         let mut ret = array![*last_value];
