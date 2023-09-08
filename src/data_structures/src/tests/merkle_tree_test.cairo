@@ -2,13 +2,14 @@
 use array::ArrayTrait;
 use hash::LegacyHash;
 // Internal imports
-use alexandria_data_structures::merkle_tree::{MerkleTree, MerkleTreeLegacy, MerkleTreeTrait};
+use alexandria_data_structures::merkle_tree::{MerkleTree, HashMethod, MerkleTreeTrait};
 
 #[test]
 #[available_gas(2000000)]
-fn merkle_tree_legacy_test() {
+fn merkle_tree_pedersen_test() {
     // [Setup] Merkle tree.
-    let mut merkle_tree: MerkleTreeLegacy = MerkleTreeTrait::new();
+    let hash_method = HashMethod::Pedersen(());
+    let mut merkle_tree: MerkleTree = MerkleTreeTrait::new(hash_method);
     let root = 0x15ac9e457789ef0c56e5d559809e7336a909c14ee2511503fa7af69be1ba639;
     let leaf = 0x1;
     let valid_proof = array![0x2, 0x68ba2a188dd231112c1cb5aaa5d18be6d84f6c8683e5c3a6638dee83e727acc]
@@ -45,9 +46,10 @@ fn merkle_tree_legacy_test() {
 
 #[test]
 #[available_gas(2000000)]
-fn merkle_tree_test() {
+fn merkle_tree_poseidon_test() {
     // [Setup] Merkle tree.
-    let mut merkle_tree: MerkleTree = MerkleTreeTrait::new();
+    let hash_method = HashMethod::Poseidon(());
+    let mut merkle_tree: MerkleTree = MerkleTreeTrait::new(hash_method);
     let root = 0x7abc09d19c8a03abd4333a23f7823975c7bdd325170f0d32612b8baa1457d47;
     let leaf = 0x1;
     let valid_proof = array![0x2, 0x47ef3ad11ad3f8fc055281f1721acd537563ec134036bc4bd4de2af151f0832]

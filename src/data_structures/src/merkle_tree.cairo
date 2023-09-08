@@ -2,10 +2,11 @@
 //!
 //! # Example
 //! ```
-//! use alexandria::data_structures::merkle_tree::{MerklTree, MerkleTreeLegacy, MerkleTreeTrait};
+//! use alexandria::data_structures::merkle_tree::{MerklTree, HashMethod, MerkleTreeTrait};
 //!
 //! // Create a new merkle tree legacy instance, this version uses the pedersen hash method.
-//! let mut merkle_tree: MerkleTreeLegacy = MerkleTreeTrait::new();
+//! let hash_method = HashMethod::Pedersen(());
+//! let mut merkle_tree: MerkleTree = MerkleTreeTrait::new(hash_method);
 //! let mut proof = array![];
 //! proof.append(element_1);
 //! proof.append(element_2);
@@ -13,7 +14,8 @@
 //! let root = merkle_tree.compute_root(leaf, proof);
 //!
 //! // Create a new merkle tree instance, this version uses the poseidon hash method.
-//! let mut merkle_tree: MerkleTree = MerkleTreeTrait::new();
+//! let hash_method = HashMethod::Poseidon(());
+//! let mut merkle_tree: MerkleTree = MerkleTreeTrait::new(hash_method);
 //! let mut proof = array![];
 //! proof.append(element_1);
 //! proof.append(element_2);
@@ -22,17 +24,16 @@
 
 // Core lib imports
 use array::{ArrayTrait, SpanTrait};
-use hash::LegacyHash;
-use poseidon::poseidon_hash_span;
+use pedersen::PedersenTrait;
+use poseidon::PoseidonTrait;
+use hash::HashStateTrait;
 use traits::Into;
 
-/// MerkleTree Legacy representation.
+/// MerkleTree representations.
 #[derive(Drop)]
-struct MerkleTreeLegacy {}
-
-/// MerkleTree representation.
-#[derive(Drop)]
-struct MerkleTree {}
+struct MerkleTree {
+    hash_method: HashMethod,
+}
 
 #[derive(Serde, Copy, Drop)]
 enum HashMethod {
@@ -43,7 +44,7 @@ enum HashMethod {
 /// MerkleTree trait.
 trait MerkleTreeTrait<T> {
     /// Create a new merkle tree instance.
-    fn new() -> T;
+    fn new(hash_method: HashMethod) -> T;
     /// Compute the merkle root of a given proof.
     fn compute_root(ref self: T, current_node: felt252, proof: Span<felt252>) -> felt252;
     /// Verify a merkle proof.
@@ -53,80 +54,14 @@ trait MerkleTreeTrait<T> {
 }
 
 /// MerkleTree Legacy implementation.
-impl MerkleTreeLegacyImpl of MerkleTreeTrait<MerkleTreeLegacy> {
-    /// Create a new merkle tree instance.
-    #[inline(always)]
-    fn new() -> MerkleTreeLegacy {
-        MerkleTreeLegacy {}
-    }
-
-    /// Compute the merkle root of a given proof using the pedersen hash method.
-    /// # Arguments
-    /// * `current_node` - The current node of the proof.
-    /// * `proof` - The proof.
-    /// # Returns
-    /// The merkle root.
-    fn compute_root(
-        ref self: MerkleTreeLegacy, mut current_node: felt252, mut proof: Span<felt252>
-    ) -> felt252 {
-        loop {
-            match proof.pop_front() {
-                Option::Some(proof_element) => {
-                    // Compute the pedersen hash of the current node and the current element of the proof.
-                    // We need to check if the current node is smaller than the current element of the proof.
-                    // If it is, we need to swap the order of the hash.
-                    current_node =
-                        if Into::<felt252, u256>::into(current_node) < (*proof_element).into() {
-                            LegacyHash::hash(current_node, *proof_element)
-                        } else {
-                            LegacyHash::hash(*proof_element, current_node)
-                        };
-                },
-                Option::None => {
-                    break current_node;
-                },
-            };
-        }
-    }
-
-    /// Verify a merkle proof.
-    /// # Arguments
-    /// * `root` - The merkle root.
-    /// * `leaf` - The leaf to verify.
-    /// * `proof` - The proof.
-    /// # Returns
-    /// True if the proof is valid, false otherwise.
-    fn verify(
-        ref self: MerkleTreeLegacy, root: felt252, leaf: felt252, mut proof: Span<felt252>
-    ) -> bool {
-        let computed_root = self.compute_root(leaf, proof);
-        computed_root == root
-    }
-
-    /// Compute a merkle proof of given leaves and at a given index using the pedersen hash method.
-    /// # Arguments
-    /// * `leaves` - The sorted leaves.
-    /// * `index` - The index of the given.
-    /// # Returns
-    /// The merkle proof.
-    fn compute_proof(
-        ref self: MerkleTreeLegacy, mut leaves: Array<felt252>, index: u32
-    ) -> Span<felt252> {
-        let mut proof: Array<felt252> = array![];
-        _compute_proof(leaves, index, HashMethod::Pedersen(()), ref proof);
-        proof.span()
-    }
-}
-
-/// MerkleTree legacy implementation.
 impl MerkleTreeImpl of MerkleTreeTrait<MerkleTree> {
     /// Create a new merkle tree instance.
     #[inline(always)]
-    fn new() -> MerkleTree {
-        MerkleTree {}
+    fn new(hash_method: HashMethod) -> MerkleTree {
+        MerkleTree { hash_method }
     }
 
-    /// Compute the merkle root of a given proof using the poseidon hash method.
+    /// Compute the merkle root of a given proof using the pedersen hash method.
     /// # Arguments
     /// * `current_node` - The current node of the proof.
     /// * `proof` - The proof.
@@ -141,12 +76,30 @@ impl MerkleTreeImpl of MerkleTreeTrait<MerkleTree> {
                     // Compute the hash of the current node and the current element of the proof.
                     // We need to check if the current node is smaller than the current element of the proof.
                     // If it is, we need to swap the order of the hash.
-                    current_node =
-                        if Into::<felt252, u256>::into(current_node) < (*proof_element).into() {
-                            poseidon_hash_span(array![current_node, *proof_element].span())
-                        } else {
-                            poseidon_hash_span(array![*proof_element, current_node].span())
-                        };
+                    current_node = match self.hash_method {
+                        HashMethod::Pedersen(()) => {
+                            if Into::<felt252, u256>::into(current_node) < (*proof_element).into() {
+                                let mut state = PedersenTrait::new(current_node);
+                                state = state.update(*proof_element);
+                                state.finalize()
+                            } else {
+                                let mut state = PedersenTrait::new(*proof_element);
+                                state = state.update(current_node);
+                                state.finalize()
+                            }
+                        },
+                        HashMethod::Poseidon(()) => {
+                            let mut state = PoseidonTrait::new();
+                            if Into::<felt252, u256>::into(current_node) < (*proof_element).into() {
+                                state = state.update(current_node);
+                                state = state.update(*proof_element);
+                            } else {
+                                state = state.update(*proof_element);
+                                state = state.update(current_node);
+                            };
+                            state.finalize()
+                        },
+                    };
                 },
                 Option::None => {
                     break current_node;
@@ -169,7 +122,7 @@ impl MerkleTreeImpl of MerkleTreeTrait<MerkleTree> {
         computed_root == root
     }
 
-    /// Compute a merkle proof of given leaves and at a given index using the poseidon hash method.
+    /// Compute a merkle proof of given leaves and at a given index using the pedersen hash method.
     /// # Arguments
     /// * `leaves` - The sorted leaves.
     /// * `index` - The index of the given.
@@ -179,7 +132,7 @@ impl MerkleTreeImpl of MerkleTreeTrait<MerkleTree> {
         ref self: MerkleTree, mut leaves: Array<felt252>, index: u32
     ) -> Span<felt252> {
         let mut proof: Array<felt252> = array![];
-        _compute_proof(leaves, index, HashMethod::Poseidon(()), ref proof);
+        _compute_proof(leaves, index, self.hash_method, ref proof);
         proof.span()
     }
 }
@@ -231,7 +184,7 @@ fn _compute_proof(
 /// * `method` - The hash method to use.
 /// # Returns
 /// The next layer of nodes.
-fn _get_next_level(mut nodes: Span<felt252>, method: HashMethod) -> Array<felt252> {
+fn _get_next_level(mut nodes: Span<felt252>, hash_method: HashMethod) -> Array<felt252> {
     let mut next_level: Array<felt252> = array![];
     loop {
         if nodes.is_empty() {
@@ -239,16 +192,29 @@ fn _get_next_level(mut nodes: Span<felt252>, method: HashMethod) -> Array<felt25
         }
         let left = *nodes.pop_front().expect('Index out of bounds');
         let right = *nodes.pop_front().expect('Index out of bounds');
-        let node = if Into::<felt252, u256>::into(left) < right.into() {
-            match method {
-                HashMethod::Pedersen => LegacyHash::hash(left, right),
-                HashMethod::Poseidon => poseidon_hash_span(array![left, right].span()),
-            }
-        } else {
-            match method {
-                HashMethod::Pedersen => LegacyHash::hash(right, left),
-                HashMethod::Poseidon => poseidon_hash_span(array![right, left].span()),
-            }
+        let node = match hash_method {
+            HashMethod::Pedersen(()) => {
+                if Into::<felt252, u256>::into(left) < right.into() {
+                    let mut state = PedersenTrait::new(left);
+                    state = state.update(right);
+                    state.finalize()
+                } else {
+                    let mut state = PedersenTrait::new(right);
+                    state = state.update(left);
+                    state.finalize()
+                }
+            },
+            HashMethod::Poseidon(()) => {
+                let mut state = PoseidonTrait::new();
+                if Into::<felt252, u256>::into(left) < right.into() {
+                    state = state.update(left);
+                    state = state.update(right);
+                } else {
+                    state = state.update(right);
+                    state = state.update(left);
+                };
+                state.finalize()
+            },
         };
         next_level.append(node);
     };
