@@ -25,7 +25,6 @@ use array::{ArrayTrait, SpanTrait};
 use hash::LegacyHash;
 use poseidon::poseidon_hash_span;
 use traits::Into;
-use debug::PrintTrait;
 
 /// MerkleTree Legacy representation.
 #[derive(Drop)]

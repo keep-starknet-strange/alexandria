@@ -1,7 +1,6 @@
 // Core lib imports
 use array::ArrayTrait;
 use hash::LegacyHash;
-use debug::PrintTrait;
 // Internal imports
 use alexandria_data_structures::merkle_tree::{MerkleTree, MerkleTreeLegacy, MerkleTreeTrait};
 
