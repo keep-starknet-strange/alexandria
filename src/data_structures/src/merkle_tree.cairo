@@ -2,7 +2,7 @@
 //!
 //! # Example
 //! ```
-//! use alexandria::data_structures::merkle_tree::{MerklTree, HashMethod, MerkleTreeTrait};
+//! use alexandria::data_structures::merkle_tree::{MerkleTree, HashMethod, MerkleTreeTrait};
 //!
 //! // Create a new merkle tree legacy instance, this version uses the pedersen hash method.
 //! let hash_method = HashMethod::Pedersen(());
