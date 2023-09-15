@@ -8,7 +8,7 @@ use alexandria_data_structures::merkle_tree::{MerkleTree, HashMethod, MerkleTree
 #[available_gas(2000000)]
 fn merkle_tree_pedersen_test() {
     // [Setup] Merkle tree.
-    let hash_method = HashMethod::Pedersen(());
+    let hash_method = HashMethod::Pedersen;
     let mut merkle_tree: MerkleTree = MerkleTreeTrait::new(hash_method);
     let root = 0x15ac9e457789ef0c56e5d559809e7336a909c14ee2511503fa7af69be1ba639;
     let leaf = 0x1;
@@ -48,7 +48,7 @@ fn merkle_tree_pedersen_test() {
 #[available_gas(2000000)]
 fn merkle_tree_poseidon_test() {
     // [Setup] Merkle tree.
-    let hash_method = HashMethod::Poseidon(());
+    let hash_method = HashMethod::Poseidon;
     let mut merkle_tree: MerkleTree = MerkleTreeTrait::new(hash_method);
     let root = 0x7abc09d19c8a03abd4333a23f7823975c7bdd325170f0d32612b8baa1457d47;
     let leaf = 0x1;

@@ -5,7 +5,7 @@
 //! use alexandria::data_structures::merkle_tree::{MerkleTree, HashMethod, MerkleTreeTrait};
 //!
 //! // Create a new merkle tree legacy instance, this version uses the pedersen hash method.
-//! let hash_method = HashMethod::Pedersen(());
+//! let hash_method = HashMethod::Pedersen;
 //! let mut merkle_tree: MerkleTree = MerkleTreeTrait::new(hash_method);
 //! let mut proof = array![];
 //! proof.append(element_1);
@@ -14,7 +14,7 @@
 //! let root = merkle_tree.compute_root(leaf, proof);
 //!
 //! // Create a new merkle tree instance, this version uses the poseidon hash method.
-//! let hash_method = HashMethod::Poseidon(());
+//! let hash_method = HashMethod::Poseidon;
 //! let mut merkle_tree: MerkleTree = MerkleTreeTrait::new(hash_method);
 //! let mut proof = array![];
 //! proof.append(element_1);
@@ -37,8 +37,8 @@ struct MerkleTree {
 
 #[derive(Serde, Copy, Drop)]
 enum HashMethod {
-    Pedersen: (),
-    Poseidon: (),
+    Pedersen,
+    Poseidon,
 }
 
 /// MerkleTree trait.
@@ -77,7 +77,7 @@ impl MerkleTreeImpl of MerkleTreeTrait<MerkleTree> {
                     // We need to check if the current node is smaller than the current element of the proof.
                     // If it is, we need to swap the order of the hash.
                     current_node = match self.hash_method {
-                        HashMethod::Pedersen(()) => {
+                        HashMethod::Pedersen => {
                             if Into::<felt252, u256>::into(current_node) < (*proof_element).into() {
                                 let mut state = PedersenTrait::new(current_node);
                                 state = state.update(*proof_element);
@@ -88,7 +88,7 @@ impl MerkleTreeImpl of MerkleTreeTrait<MerkleTree> {
                                 state.finalize()
                             }
                         },
-                        HashMethod::Poseidon(()) => {
+                        HashMethod::Poseidon => {
                             let mut state = PoseidonTrait::new();
                             if Into::<felt252, u256>::into(current_node) < (*proof_element).into() {
                                 state = state.update(current_node);
@@ -193,7 +193,7 @@ fn _get_next_level(mut nodes: Span<felt252>, hash_method: HashMethod) -> Array<f
         let left = *nodes.pop_front().expect('Index out of bounds');
         let right = *nodes.pop_front().expect('Index out of bounds');
         let node = match hash_method {
-            HashMethod::Pedersen(()) => {
+            HashMethod::Pedersen => {
                 if Into::<felt252, u256>::into(left) < right.into() {
                     let mut state = PedersenTrait::new(left);
                     state = state.update(right);
@@ -204,7 +204,7 @@ fn _get_next_level(mut nodes: Span<felt252>, hash_method: HashMethod) -> Array<f
                     state.finalize()
                 }
             },
-            HashMethod::Poseidon(()) => {
+            HashMethod::Poseidon => {
                 let mut state = PoseidonTrait::new();
                 if Into::<felt252, u256>::into(left) < right.into() {
                     state = state.update(left);
