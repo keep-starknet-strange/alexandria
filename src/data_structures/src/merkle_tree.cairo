@@ -2,11 +2,11 @@
 //!
 //! # Example
 //! ```
-//! use alexandria::data_structures::merkle_tree::{MerkleTree, HashMethod, MerkleTreeTrait};
+//! use alexandria::data_structures::merkle_tree::{MerkleTree, HasherTrait, PedersenHasher, PoseidonHasher, MerkleTreeTrait};
 //!
 //! // Create a new merkle tree legacy instance, this version uses the pedersen hash method.
-//! let hash_method = HashMethod::Pedersen;
-//! let mut merkle_tree: MerkleTree = MerkleTreeTrait::new(hash_method);
+//! let hasher: PedersenHasher = HasherTrait::new();
+//! let mut merkle_tree: MerkleTree<PedersenHasher> = MerkleTreeTrait::new();
 //! let mut proof = array![];
 //! proof.append(element_1);
 //! proof.append(element_2);
@@ -14,8 +14,8 @@
 //! let root = merkle_tree.compute_root(leaf, proof);
 //!
 //! // Create a new merkle tree instance, this version uses the poseidon hash method.
-//! let hash_method = HashMethod::Poseidon;
-//! let mut merkle_tree: MerkleTree = MerkleTreeTrait::new(hash_method);
+//! let hasher: PoseidonHasher = HasherTrait::new();
+//! let mut merkle_tree: MerkleTree<PoseidonHasher> = MerkleTreeTrait::new();
 //! let mut proof = array![];
 //! proof.append(element_1);
 //! proof.append(element_2);
@@ -45,7 +45,6 @@ struct PedersenHasher {}
 #[derive(Drop, Copy)]
 struct PoseidonHasher {}
 
-
 /// Hasher impls.
 
 impl PedersenHasherImpl of HasherTrait<PedersenHasher> {
@@ -59,22 +58,11 @@ impl PedersenHasherImpl of HasherTrait<PedersenHasher> {
     }
 }
 
-impl AtPedersenHasherImpl of HasherTrait<@PedersenHasher> {
-    fn new() -> @PedersenHasher {
-        @PedersenHasher {}
+impl PoseidonHasherImpl of HasherTrait<PoseidonHasher> {
+    fn new() -> PoseidonHasher {
+        PoseidonHasher {}
     }
-    fn hash(ref self: @PedersenHasher, data1: felt252, data2: felt252) -> felt252 {
-        let mut state = PedersenTrait::new(data1);
-        state = state.update(data2);
-        state.finalize()
-    }
-}
-
-impl AtPoseidonHasherImpl of HasherTrait<@PoseidonHasher> {
-    fn new() -> @PoseidonHasher {
-        @PoseidonHasher {}
-    }
-    fn hash(ref self: @PoseidonHasher, data1: felt252, data2: felt252) -> felt252 {
+    fn hash(ref self: PoseidonHasher, data1: felt252, data2: felt252) -> felt252 {
         let mut state = PoseidonTrait::new();
         state = state.update(data1);
         state = state.update(data2);
@@ -83,9 +71,10 @@ impl AtPoseidonHasherImpl of HasherTrait<@PoseidonHasher> {
 }
 
 /// MerkleTree representation.
+
 #[derive(Drop)]
 struct MerkleTree<T> {
-    hasher: @T
+    hasher: T
 }
 
 /// MerkleTree trait.
@@ -104,7 +93,7 @@ trait MerkleTreeTrait<T> {
 
 /// MerkleTree Legacy implementation.
 impl MerkleTreeImpl<
-    T, impl THasher: HasherTrait<@T>, impl TCopy: Copy<T>, impl TDrop: Drop<T>
+    T, impl THasher: HasherTrait<T>, impl TCopy: Copy<T>, impl TDrop: Drop<T>
 > of MerkleTreeTrait<T> {
     /// Create a new merkle tree instance.
     fn new() -> MerkleTree<T> {
@@ -192,8 +181,8 @@ impl MerkleTreeImpl<
 /// * `index` - The index of the given.
 /// * `method` - The hash method to use.
 /// * `proof` - The proof array to fill.
-fn _compute_proof<T, impl THasher: HasherTrait<@T>>(
-    mut nodes: Array<felt252>, mut hasher: @T, index: u32, ref proof: Array<felt252>
+fn _compute_proof<T, impl THasher: HasherTrait<T>, impl TDrop: Drop<T>>(
+    mut nodes: Array<felt252>, mut hasher: T, index: u32, ref proof: Array<felt252>
 ) {
     // Break if we have reached the top of the tree
     if nodes.len() == 1 {
@@ -206,7 +195,7 @@ fn _compute_proof<T, impl THasher: HasherTrait<@T>>(
     }
 
     // Compute next level
-    let mut next_level: Array<felt252> = _get_next_level(nodes.span(), hasher);
+    let mut next_level: Array<felt252> = _get_next_level(nodes.span(), ref hasher);
 
     // Find neighbor node
     let mut index_parent = 0;
@@ -233,8 +222,8 @@ fn _compute_proof<T, impl THasher: HasherTrait<@T>>(
 /// * `method` - The hash method to use.
 /// # Returns
 /// The next layer of nodes.
-fn _get_next_level<T, impl THasher: HasherTrait<@T>>(
-    mut nodes: Span<felt252>, mut hasher: @T
+fn _get_next_level<T, impl THasher: HasherTrait<T>, impl TDrop: Drop<T>>(
+    mut nodes: Span<felt252>, ref hasher: T
 ) -> Array<felt252> {
     let mut next_level: Array<felt252> = array![];
     loop {
