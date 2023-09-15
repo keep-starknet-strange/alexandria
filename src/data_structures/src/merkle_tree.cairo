@@ -100,7 +100,7 @@ impl MerkleTreeImpl<
         MerkleTree { hasher: HasherTrait::new() }
     }
 
-    /// Compute the merkle root of a given proof using the pedersen hash method.
+    /// Compute the merkle root of a given proof using the generic T hasher.
     /// # Arguments
     /// * `current_node` - The current node of the proof.
     /// * `proof` - The proof.
@@ -129,7 +129,7 @@ impl MerkleTreeImpl<
         }
     }
 
-    /// Verify a merkle proof.
+    /// Verify a merkle proof using the generic T hasher.
     /// # Arguments
     /// * `root` - The merkle root.
     /// * `leaf` - The leaf to verify.
@@ -160,7 +160,7 @@ impl MerkleTreeImpl<
         computed_root == root
     }
 
-    /// Compute a merkle proof of given leaves and at a given index using the pedersen hash method.
+    /// Compute a merkle proof of given leaves and at a given index using the generic T hasher.
     /// # Arguments
     /// * `leaves` - The sorted leaves.
     /// * `index` - The index of the given.
@@ -179,7 +179,7 @@ impl MerkleTreeImpl<
 /// # Arguments
 /// * `nodes` - The sorted nodes.
 /// * `index` - The index of the given.
-/// * `method` - The hash method to use.
+/// * `hasher` - The hasher to use.
 /// * `proof` - The proof array to fill.
 fn _compute_proof<T, impl THasher: HasherTrait<T>, impl TDrop: Drop<T>>(
     mut nodes: Array<felt252>, mut hasher: T, index: u32, ref proof: Array<felt252>
@@ -219,7 +219,7 @@ fn _compute_proof<T, impl THasher: HasherTrait<T>, impl TDrop: Drop<T>>(
 /// Helper function to compute the next layer of a merkle tree providing a layer of nodes.
 /// # Arguments
 /// * `nodes` - The sorted nodes.
-/// * `method` - The hash method to use.
+/// * `hasher` - The hasher to use.
 /// # Returns
 /// The next layer of nodes.
 fn _get_next_level<T, impl THasher: HasherTrait<T>, impl TDrop: Drop<T>>(
