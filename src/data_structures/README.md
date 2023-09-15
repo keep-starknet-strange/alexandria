@@ -8,7 +8,7 @@ The Merkle tree algorithm is a cryptographic hashing algorithm used to create a 
 The purpose of the Merkle tree algorithm is to provide a way to verify the integrity and authenticity of large amounts of data without needing to store the entire data set. The algorithm has applications in various areas of computer science, including cryptocurrency, file sharing, and database management.  
 The Merkle tree algorithm is also used in creating digital signatures and verifying the authenticity of transactions.  
 By providing a secure and efficient way to verify data integrity, the Merkle tree algorithm is an important tool in cryptography and information security.
-Two implementations are available to manage both pedersen (legacy) and poseidon hash methods.
+A generic implementation is available to manage both pedersen (legacy) and poseidon hash methods.
 
 ## [Queue](./src/queue.cairo)
 
