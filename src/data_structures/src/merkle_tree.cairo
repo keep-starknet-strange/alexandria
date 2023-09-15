@@ -27,38 +27,88 @@ use array::{ArrayTrait, SpanTrait};
 use pedersen::PedersenTrait;
 use poseidon::PoseidonTrait;
 use hash::HashStateTrait;
-use traits::Into;
+use traits::{Into, Copy, Drop};
 
-/// MerkleTree representations.
-#[derive(Drop)]
-struct MerkleTree {
-    hash_method: HashMethod,
+/// Hasher trait.
+
+trait HasherTrait<T> {
+    fn new() -> T;
+    fn hash(ref self: T, data1: felt252, data2: felt252) -> felt252;
 }
 
-#[derive(Serde, Copy, Drop)]
-enum HashMethod {
-    Pedersen,
-    Poseidon,
+
+// Hasher representations.
+
+#[derive(Drop, Copy)]
+struct PedersenHasher {}
+
+#[derive(Drop, Copy)]
+struct PoseidonHasher {}
+
+
+/// Hasher impls.
+
+impl PedersenHasherImpl of HasherTrait<PedersenHasher> {
+    fn new() -> PedersenHasher {
+        PedersenHasher {}
+    }
+    fn hash(ref self: PedersenHasher, data1: felt252, data2: felt252) -> felt252 {
+        let mut state = PedersenTrait::new(data1);
+        state = state.update(data2);
+        state.finalize()
+    }
+}
+
+impl AtPedersenHasherImpl of HasherTrait<@PedersenHasher> {
+    fn new() -> @PedersenHasher {
+        @PedersenHasher {}
+    }
+    fn hash(ref self: @PedersenHasher, data1: felt252, data2: felt252) -> felt252 {
+        let mut state = PedersenTrait::new(data1);
+        state = state.update(data2);
+        state.finalize()
+    }
+}
+
+impl AtPoseidonHasherImpl of HasherTrait<@PoseidonHasher> {
+    fn new() -> @PoseidonHasher {
+        @PoseidonHasher {}
+    }
+    fn hash(ref self: @PoseidonHasher, data1: felt252, data2: felt252) -> felt252 {
+        let mut state = PoseidonTrait::new();
+        state = state.update(data1);
+        state = state.update(data2);
+        state.finalize()
+    }
+}
+
+/// MerkleTree representation.
+#[derive(Drop)]
+struct MerkleTree<T> {
+    hasher: @T
 }
 
 /// MerkleTree trait.
 trait MerkleTreeTrait<T> {
     /// Create a new merkle tree instance.
-    fn new(hash_method: HashMethod) -> T;
+    fn new() -> MerkleTree<T>;
     /// Compute the merkle root of a given proof.
-    fn compute_root(ref self: T, current_node: felt252, proof: Span<felt252>) -> felt252;
+    fn compute_root(
+        ref self: MerkleTree<T>, current_node: felt252, proof: Span<felt252>
+    ) -> felt252;
     /// Verify a merkle proof.
-    fn verify(ref self: T, root: felt252, leaf: felt252, proof: Span<felt252>) -> bool;
+    fn verify(ref self: MerkleTree<T>, root: felt252, leaf: felt252, proof: Span<felt252>) -> bool;
     /// Compute a merkle proof of given leaves and at a given index.
-    fn compute_proof(ref self: T, leaves: Array<felt252>, index: u32) -> Span<felt252>;
+    fn compute_proof(ref self: MerkleTree<T>, leaves: Array<felt252>, index: u32) -> Span<felt252>;
 }
 
 /// MerkleTree Legacy implementation.
-impl MerkleTreeImpl of MerkleTreeTrait<MerkleTree> {
+impl MerkleTreeImpl<
+    T, impl THasher: HasherTrait<@T>, impl TCopy: Copy<T>, impl TDrop: Drop<T>
+> of MerkleTreeTrait<T> {
     /// Create a new merkle tree instance.
-    #[inline(always)]
-    fn new(hash_method: HashMethod) -> MerkleTree {
-        MerkleTree { hash_method }
+    fn new() -> MerkleTree<T> {
+        MerkleTree { hasher: HasherTrait::new() }
     }
 
     /// Compute the merkle root of a given proof using the pedersen hash method.
@@ -68,7 +118,7 @@ impl MerkleTreeImpl of MerkleTreeTrait<MerkleTree> {
     /// # Returns
     /// The merkle root.
     fn compute_root(
-        ref self: MerkleTree, mut current_node: felt252, mut proof: Span<felt252>
+        ref self: MerkleTree<T>, mut current_node: felt252, mut proof: Span<felt252>
     ) -> felt252 {
         loop {
             match proof.pop_front() {
@@ -76,30 +126,12 @@ impl MerkleTreeImpl of MerkleTreeTrait<MerkleTree> {
                     // Compute the hash of the current node and the current element of the proof.
                     // We need to check if the current node is smaller than the current element of the proof.
                     // If it is, we need to swap the order of the hash.
-                    current_node = match self.hash_method {
-                        HashMethod::Pedersen => {
-                            if Into::<felt252, u256>::into(current_node) < (*proof_element).into() {
-                                let mut state = PedersenTrait::new(current_node);
-                                state = state.update(*proof_element);
-                                state.finalize()
-                            } else {
-                                let mut state = PedersenTrait::new(*proof_element);
-                                state = state.update(current_node);
-                                state.finalize()
-                            }
-                        },
-                        HashMethod::Poseidon => {
-                            let mut state = PoseidonTrait::new();
-                            if Into::<felt252, u256>::into(current_node) < (*proof_element).into() {
-                                state = state.update(current_node);
-                                state = state.update(*proof_element);
-                            } else {
-                                state = state.update(*proof_element);
-                                state = state.update(current_node);
-                            };
-                            state.finalize()
-                        },
-                    };
+                    current_node =
+                        if Into::<felt252, u256>::into(current_node) < (*proof_element).into() {
+                            self.hasher.hash(current_node, *proof_element)
+                        } else {
+                            self.hasher.hash(*proof_element, current_node)
+                        };
                 },
                 Option::None => {
                     break current_node;
@@ -116,9 +148,26 @@ impl MerkleTreeImpl of MerkleTreeTrait<MerkleTree> {
     /// # Returns
     /// True if the proof is valid, false otherwise.
     fn verify(
-        ref self: MerkleTree, root: felt252, leaf: felt252, mut proof: Span<felt252>
+        ref self: MerkleTree<T>, root: felt252, mut leaf: felt252, mut proof: Span<felt252>
     ) -> bool {
-        let computed_root = self.compute_root(leaf, proof);
+        let computed_root = loop {
+            match proof.pop_front() {
+                Option::Some(proof_element) => {
+                    // Compute the hash of the current node and the current element of the proof.
+                    // We need to check if the current node is smaller than the current element of the proof.
+                    // If it is, we need to swap the order of the hash.
+                    leaf =
+                        if Into::<felt252, u256>::into(leaf) < (*proof_element).into() {
+                            self.hasher.hash(leaf, *proof_element)
+                        } else {
+                            self.hasher.hash(*proof_element, leaf)
+                        };
+                },
+                Option::None => {
+                    break leaf;
+                },
+            };
+        };
         computed_root == root
     }
 
@@ -129,10 +178,10 @@ impl MerkleTreeImpl of MerkleTreeTrait<MerkleTree> {
     /// # Returns
     /// The merkle proof.
     fn compute_proof(
-        ref self: MerkleTree, mut leaves: Array<felt252>, index: u32
+        ref self: MerkleTree<T>, mut leaves: Array<felt252>, index: u32
     ) -> Span<felt252> {
         let mut proof: Array<felt252> = array![];
-        _compute_proof(leaves, index, self.hash_method, ref proof);
+        _compute_proof(leaves, self.hasher, index, ref proof);
         proof.span()
     }
 }
@@ -143,8 +192,8 @@ impl MerkleTreeImpl of MerkleTreeTrait<MerkleTree> {
 /// * `index` - The index of the given.
 /// * `method` - The hash method to use.
 /// * `proof` - The proof array to fill.
-fn _compute_proof(
-    mut nodes: Array<felt252>, index: u32, method: HashMethod, ref proof: Array<felt252>
+fn _compute_proof<T, impl THasher: HasherTrait<@T>>(
+    mut nodes: Array<felt252>, mut hasher: @T, index: u32, ref proof: Array<felt252>
 ) {
     // Break if we have reached the top of the tree
     if nodes.len() == 1 {
@@ -157,7 +206,7 @@ fn _compute_proof(
     }
 
     // Compute next level
-    let mut next_level: Array<felt252> = _get_next_level(nodes.span(), method);
+    let mut next_level: Array<felt252> = _get_next_level(nodes.span(), hasher);
 
     // Find neighbor node
     let mut index_parent = 0;
@@ -175,7 +224,7 @@ fn _compute_proof(
         i += 1;
     };
 
-    _compute_proof(next_level, index_parent, method, ref proof)
+    _compute_proof(next_level, hasher, index_parent, ref proof)
 }
 
 /// Helper function to compute the next layer of a merkle tree providing a layer of nodes.
@@ -184,7 +233,9 @@ fn _compute_proof(
 /// * `method` - The hash method to use.
 /// # Returns
 /// The next layer of nodes.
-fn _get_next_level(mut nodes: Span<felt252>, hash_method: HashMethod) -> Array<felt252> {
+fn _get_next_level<T, impl THasher: HasherTrait<@T>>(
+    mut nodes: Span<felt252>, mut hasher: @T
+) -> Array<felt252> {
     let mut next_level: Array<felt252> = array![];
     loop {
         if nodes.is_empty() {
@@ -192,29 +243,10 @@ fn _get_next_level(mut nodes: Span<felt252>, hash_method: HashMethod) -> Array<f
         }
         let left = *nodes.pop_front().expect('Index out of bounds');
         let right = *nodes.pop_front().expect('Index out of bounds');
-        let node = match hash_method {
-            HashMethod::Pedersen => {
-                if Into::<felt252, u256>::into(left) < right.into() {
-                    let mut state = PedersenTrait::new(left);
-                    state = state.update(right);
-                    state.finalize()
-                } else {
-                    let mut state = PedersenTrait::new(right);
-                    state = state.update(left);
-                    state.finalize()
-                }
-            },
-            HashMethod::Poseidon => {
-                let mut state = PoseidonTrait::new();
-                if Into::<felt252, u256>::into(left) < right.into() {
-                    state = state.update(left);
-                    state = state.update(right);
-                } else {
-                    state = state.update(right);
-                    state = state.update(left);
-                };
-                state.finalize()
-            },
+        let node = if Into::<felt252, u256>::into(left) < right.into() {
+            hasher.hash(left, right)
+        } else {
+            hasher.hash(right, left)
         };
         next_level.append(node);
     };
