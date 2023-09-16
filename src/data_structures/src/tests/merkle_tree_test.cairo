@@ -3,14 +3,13 @@ use array::ArrayTrait;
 use hash::LegacyHash;
 // Internal imports
 use alexandria_data_structures::merkle_tree::{
-    MerkleTree, PedersenHasher, PoseidonHasher, HasherTrait, MerkleTreeTrait
+    MerkleTree, PedersenHasher, PoseidonHasher, MerkleTreeTrait
 };
 
 #[test]
 #[available_gas(2000000)]
 fn merkle_tree_pedersen_test() {
     // [Setup] Merkle tree.
-    let hasher: PedersenHasher = HasherTrait::new();
     let mut merkle_tree: MerkleTree<PedersenHasher> = MerkleTreeTrait::new();
     let root = 0x15ac9e457789ef0c56e5d559809e7336a909c14ee2511503fa7af69be1ba639;
     let leaf = 0x1;
@@ -50,7 +49,6 @@ fn merkle_tree_pedersen_test() {
 #[available_gas(2000000)]
 fn merkle_tree_poseidon_test() {
     // [Setup] Merkle tree.
-    let hasher: PoseidonHasher = HasherTrait::new();
     let mut merkle_tree: MerkleTree<PoseidonHasher> = MerkleTreeTrait::new();
     let root = 0x7abc09d19c8a03abd4333a23f7823975c7bdd325170f0d32612b8baa1457d47;
     let leaf = 0x1;

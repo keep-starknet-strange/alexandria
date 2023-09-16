@@ -2,23 +2,17 @@
 //!
 //! # Example
 //! ```
-//! use alexandria::data_structures::merkle_tree::{MerkleTree, HasherTrait, PedersenHasher, PoseidonHasher, MerkleTreeTrait};
+//! use alexandria::data_structures::merkle_tree::{MerkleTree, PedersenHasher, PoseidonHasher, MerkleTreeTrait};
 //!
 //! // Create a new merkle tree legacy instance, this version uses the pedersen hash method.
-//! let hasher: PedersenHasher = HasherTrait::new();
 //! let mut merkle_tree: MerkleTree<PedersenHasher> = MerkleTreeTrait::new();
-//! let mut proof = array![];
-//! proof.append(element_1);
-//! proof.append(element_2);
+//! let mut proof = array![element_1, element_2];
 //! // Compute the merkle root.
 //! let root = merkle_tree.compute_root(leaf, proof);
 //!
 //! // Create a new merkle tree instance, this version uses the poseidon hash method.
-//! let hasher: PoseidonHasher = HasherTrait::new();
 //! let mut merkle_tree: MerkleTree<PoseidonHasher> = MerkleTreeTrait::new();
-//! let mut proof = array![];
-//! proof.append(element_1);
-//! proof.append(element_2);
+//! let mut proof = array![element_1, element_2];
 //! // Compute the merkle root.
 //! let root = merkle_tree.compute_root(leaf, proof);
 
