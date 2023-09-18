@@ -3,6 +3,111 @@ use array::{ArrayTrait, SpanTrait};
 
 use alexandria_data_structures::array_ext::{ArrayTraitExt, SpanTraitExt};
 
+// dedup
+
+#[test]
+#[available_gas(2000000)]
+fn dedup_all_different() {
+    let mut destination = array![1, 2, 3, 4];
+    let new_arr = destination.dedup();
+    let len = new_arr.len();
+
+    assert(*new_arr[0] == 1, 'Should be 1');
+    assert(*new_arr[1] == 2, 'Should be 2');
+    assert(*new_arr[2] == 3, 'Should be 3');
+    assert(*new_arr[3] == 4, 'Should be 4');
+    assert(new_arr.len() == 4, 'Len should be 4');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn dedup_one_match() {
+    let mut destination = array![1, 2, 2, 3, 4];
+    let new_arr = destination.dedup();
+    let len = new_arr.len();
+
+    assert(*new_arr[0] == 1, 'Should be 1');
+    assert(*new_arr[1] == 2, 'Should be 2');
+    assert(*new_arr[2] == 3, 'Should be 3');
+    assert(*new_arr[3] == 4, 'Should be 4');
+    assert(new_arr.len() == 4, 'Len should be 4');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn dedup_two_matches() {
+    let mut destination = array![1, 2, 2, 3, 4, 4];
+    let new_arr = destination.dedup();
+    let len = new_arr.len();
+
+    assert(*new_arr[0] == 1, 'Should be 1');
+    assert(*new_arr[1] == 2, 'Should be 2');
+    assert(*new_arr[2] == 3, 'Should be 3');
+    assert(*new_arr[3] == 4, 'Should be 4');
+    assert(new_arr.len() == 4, 'Len should be 4');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn dedup_one_match_more() {
+    let mut destination = array![1, 2, 2, 2, 3, 4, 4];
+    let new_arr = destination.dedup();
+    let len = new_arr.len();
+
+    assert(*new_arr[0] == 1, 'Should be 1');
+    assert(*new_arr[1] == 2, 'Should be 2');
+    assert(*new_arr[2] == 3, 'Should be 3');
+    assert(*new_arr[3] == 4, 'Should be 4');
+    assert(new_arr.len() == 4, 'Len should be 4');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn dedup_all_same() {
+    let mut destination = array![2, 2, 2, 2];
+    let new_arr = destination.dedup();
+    let len = new_arr.len();
+
+    assert(*new_arr[0] == 2, 'Should be 2');
+    assert(new_arr.len() == 1, 'Len should be 1');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn dedup_one_elem() {
+    let mut destination = array![2];
+    let new_arr = destination.dedup();
+    let len = new_arr.len();
+
+    assert(*new_arr[0] == 2, 'Should be 2');
+    assert(new_arr.len() == 1, 'Len should be 1');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn dedup_no_elem() {
+    let mut destination = ArrayTrait::<felt252>::new();
+    let new_arr = destination.dedup();
+    let len = new_arr.len();
+    assert(new_arr.len() == 0, 'Len should be 0');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn dedup_multiple_duplicates_same() {
+    let mut destination = array![1, 1, 3, 4, 3, 3, 3, 4, 2, 2];
+    let new_arr = destination.dedup();
+    let len = new_arr.len();
+
+    assert(new_arr.len() == 6, 'Len should be 6');
+    assert(*new_arr[0] == 1, 'Should be 1');
+    assert(*new_arr[1] == 3, 'Should be 3');
+    assert(*new_arr[2] == 4, 'Should be 4');
+    assert(*new_arr[3] == 3, 'Should be 3');
+    assert(*new_arr[4] == 4, 'Should be 4');
+    assert(*new_arr[5] == 2, 'Should be 2');
+}
+
 // append_all
 
 #[test]
