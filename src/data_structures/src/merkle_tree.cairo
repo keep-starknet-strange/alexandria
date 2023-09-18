@@ -4,7 +4,7 @@
 //!
 //! ```
 //! // This version uses the pedersen hash method because the PedersenHasherImpl is in the scope.
-//! use alexandria_data_structures::merkle_tree::{ Hasher, MerkleTree, pedersen::PedersenHasherImpl, MerkleTreeTrait };
+//! use alexandria_data_structures::merkle_tree::{Hasher, MerkleTree, pedersen::PedersenHasherImpl, MerkleTreeTrait};
 //!
 //! // Create a new merkle tree instance.
 //! let mut merkle_tree: MerkleTree<Hasher> = MerkleTreeTrait::new();
