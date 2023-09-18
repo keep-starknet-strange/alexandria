@@ -164,7 +164,7 @@ impl MerkleTreeImpl<
         ref self: MerkleTree<T>, mut leaves: Array<felt252>, index: u32
     ) -> Span<felt252> {
         let mut proof: Array<felt252> = array![];
-        _compute_proof(leaves, self.hasher, index, ref proof);
+        compute_proof(leaves, self.hasher, index, ref proof);
         proof.span()
     }
 }
@@ -175,7 +175,7 @@ impl MerkleTreeImpl<
 /// * `index` - The index of the given.
 /// * `hasher` - The hasher to use.
 /// * `proof` - The proof array to fill.
-fn _compute_proof<T, impl THasher: HasherTrait<T>, impl TDrop: Drop<T>>(
+fn compute_proof<T, impl THasher: HasherTrait<T>, impl TDrop: Drop<T>>(
     mut nodes: Array<felt252>, mut hasher: T, index: u32, ref proof: Array<felt252>
 ) {
     // Break if we have reached the top of the tree
@@ -189,7 +189,7 @@ fn _compute_proof<T, impl THasher: HasherTrait<T>, impl TDrop: Drop<T>>(
     }
 
     // Compute next level
-    let mut next_level: Array<felt252> = _get_next_level(nodes.span(), ref hasher);
+    let mut next_level: Array<felt252> = get_next_level(nodes.span(), ref hasher);
 
     // Find neighbor node
     let mut index_parent = 0;
@@ -207,7 +207,7 @@ fn _compute_proof<T, impl THasher: HasherTrait<T>, impl TDrop: Drop<T>>(
         i += 1;
     };
 
-    _compute_proof(next_level, hasher, index_parent, ref proof)
+    compute_proof(next_level, hasher, index_parent, ref proof)
 }
 
 /// Helper function to compute the next layer of a merkle tree providing a layer of nodes.
@@ -216,7 +216,7 @@ fn _compute_proof<T, impl THasher: HasherTrait<T>, impl TDrop: Drop<T>>(
 /// * `hasher` - The hasher to use.
 /// # Returns
 /// The next layer of nodes.
-fn _get_next_level<T, impl THasher: HasherTrait<T>, impl TDrop: Drop<T>>(
+fn get_next_level<T, impl THasher: HasherTrait<T>, impl TDrop: Drop<T>>(
     mut nodes: Span<felt252>, ref hasher: T
 ) -> Array<felt252> {
     let mut next_level: Array<felt252> = array![];
