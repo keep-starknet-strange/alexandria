@@ -18,9 +18,6 @@
 
 // Core lib imports
 use array::{ArrayTrait, SpanTrait};
-use pedersen::PedersenTrait;
-use poseidon::PoseidonTrait;
-use hash::HashStateTrait;
 use traits::{Into, Copy, Drop};
 
 /// Hasher trait.
@@ -34,36 +31,44 @@ trait HasherTrait<T> {
 // Hasher representations.
 
 #[derive(Drop, Copy)]
-struct PedersenHasher {}
-
-#[derive(Drop, Copy)]
-struct PoseidonHasher {}
+struct Hasher {}
 
 /// Hasher impls.
 
-impl PedersenHasherImpl of HasherTrait<PedersenHasher> {
-    fn new() -> PedersenHasher {
-        PedersenHasher {}
-    }
-    fn hash(ref self: PedersenHasher, data1: felt252, data2: felt252) -> felt252 {
-        let mut state = PedersenTrait::new(data1);
-        state = state.update(data2);
-        state.finalize()
+mod pedersen {
+    use pedersen::PedersenTrait;
+    use hash::HashStateTrait;
+    use super::{Hasher, HasherTrait};
+
+    impl PedersenHasher of HasherTrait<Hasher> {
+        fn new() -> Hasher {
+            Hasher {}
+        }
+        fn hash(ref self: Hasher, data1: felt252, data2: felt252) -> felt252 {
+            let mut state = PedersenTrait::new(data1);
+            state = state.update(data2);
+            state.finalize()
+        }
     }
 }
 
-impl PoseidonHasherImpl of HasherTrait<PoseidonHasher> {
-    fn new() -> PoseidonHasher {
-        PoseidonHasher {}
-    }
-    fn hash(ref self: PoseidonHasher, data1: felt252, data2: felt252) -> felt252 {
-        let mut state = PoseidonTrait::new();
-        state = state.update(data1);
-        state = state.update(data2);
-        state.finalize()
+mod poseidon {
+    use poseidon::PoseidonTrait;
+    use hash::HashStateTrait;
+    use super::{Hasher, HasherTrait};
+
+    impl PoseidonHasher of HasherTrait<Hasher> {
+        fn new() -> Hasher {
+            Hasher {}
+        }
+        fn hash(ref self: Hasher, data1: felt252, data2: felt252) -> felt252 {
+            let mut state = PoseidonTrait::new();
+            state = state.update(data1);
+            state = state.update(data2);
+            state.finalize()
+        }
     }
 }
-
 /// MerkleTree representation.
 
 #[derive(Drop)]
