@@ -1,20 +1,28 @@
 //! MerkleTree implementation.
 //!
-//! # Example
-//! ```
-//! use alexandria::data_structures::merkle_tree::{MerkleTree, PedersenHasher, PoseidonHasher, MerkleTreeTrait};
+//! # Examples
 //!
-//! // Create a new merkle tree legacy instance, this version uses the pedersen hash method.
-//! let mut merkle_tree: MerkleTree<PedersenHasher> = MerkleTreeTrait::new();
+//! ```
+//! // This version uses the pedersen hash method because the PedersenHasherImpl is in the scope.
+//! use alexandria_data_structures::merkle_tree::{ Hasher, MerkleTree, pedersen::PedersenHasherImpl, MerkleTreeTrait };
+//!
+//! // Create a new merkle tree instance.
+//! let mut merkle_tree: MerkleTree<Hasher> = MerkleTreeTrait::new();
 //! let mut proof = array![element_1, element_2];
 //! // Compute the merkle root.
 //! let root = merkle_tree.compute_root(leaf, proof);
+//! ```
 //!
-//! // Create a new merkle tree instance, this version uses the poseidon hash method.
+//! ```
+//! // This version uses the poseidon hash method because the PoseidonHasherImpl is in the scope.
+//! use alexandria_data_structures::merkle_tree::{ Hasher, MerkleTree, poseidon::PoseidonHasherImpl, MerkleTreeTrait };
+//!
+//! // Create a new merkle tree instance.
 //! let mut merkle_tree: MerkleTree<PoseidonHasher> = MerkleTreeTrait::new();
 //! let mut proof = array![element_1, element_2];
 //! // Compute the merkle root.
 //! let root = merkle_tree.compute_root(leaf, proof);
+//! ```
 
 // Core lib imports
 use array::{ArrayTrait, SpanTrait};
@@ -40,7 +48,7 @@ mod pedersen {
     use hash::HashStateTrait;
     use super::{Hasher, HasherTrait};
 
-    impl PedersenHasher of HasherTrait<Hasher> {
+    impl PedersenHasherImpl of HasherTrait<Hasher> {
         fn new() -> Hasher {
             Hasher {}
         }
@@ -57,7 +65,7 @@ mod poseidon {
     use hash::HashStateTrait;
     use super::{Hasher, HasherTrait};
 
-    impl PoseidonHasher of HasherTrait<Hasher> {
+    impl PoseidonHasherImpl of HasherTrait<Hasher> {
         fn new() -> Hasher {
             Hasher {}
         }
@@ -69,6 +77,7 @@ mod poseidon {
         }
     }
 }
+
 /// MerkleTree representation.
 
 #[derive(Drop)]
