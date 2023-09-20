@@ -6,7 +6,7 @@ use debug::PrintTrait;
 fn test_keccak256_empty_bytes() {
     let input = array![];
 
-    let hash = keccak256(input);
+    let hash = keccak256(input.span());
 
     assert(
         hash == 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470,
@@ -19,7 +19,7 @@ fn test_keccak256_empty_bytes() {
 fn test_keccak256_partial_bytes() {
     let input = array![0x00, 0x01, 0x02, 0x03, 0x04, 0x05];
 
-    let hash = keccak256(input);
+    let hash = keccak256(input.span());
 
     assert(
         hash == 0x51e8babe8b42352100dffa7f7b3843c95245d3d545c6cbf5052e80258ae80627,
@@ -66,7 +66,7 @@ fn test_keccak256_full_u256() {
         0x32
     ];
 
-    let hash = keccak256(input);
+    let hash = keccak256(input.span());
 
     assert(
         hash == 0x98cfb1eca8a71b4a4b1c115f3d5a462296a66487d1d97fb4c47b979c64bde069,

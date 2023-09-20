@@ -12,6 +12,7 @@ impl U64Impl of U64Trait {
     ///
     /// A tuple containing the converted 64-bit unsigned integer and the amount of bytes consumed
     fn from_le_bytes(mut self: Span<u8>) -> (u64, u32) {
+        assert(self.len() < 9, 'bytes dont fit in u64');
         // Pack full value
         let mut value: u64 = 0;
         let mut n_bytes: u32 = self.len();
