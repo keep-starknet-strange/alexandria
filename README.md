@@ -194,6 +194,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/neotheprogramist"><img src="https://avatars.githubusercontent.com/u/128649481?v=4?s=100" width="100px;" alt="Paweł"/><br /><sub><b>Paweł</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=neotheprogramist" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/tensojka"><img src="https://avatars.githubusercontent.com/u/8470346?v=4?s=100" width="100px;" alt="Ondřej Sojka"/><br /><sub><b>Ondřej Sojka</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=tensojka" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/edisontim"><img src="https://avatars.githubusercontent.com/u/76473430?v=4?s=100" width="100px;" alt="tedison"/><br /><sub><b>tedison</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=edisontim" title="Code">💻</a></td>
+    </tr>
   </tbody>
   <tfoot>
     <tr>
