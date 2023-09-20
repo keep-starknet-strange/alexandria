@@ -199,6 +199,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/raphaelDkhn"><img src="https://avatars.githubusercontent.com/u/113879115?v=4?s=100" width="100px;" alt="raphaelDkhn"/><br /><sub><b>raphaelDkhn</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=raphaelDkhn" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://rules.art/"><img src="https://avatars.githubusercontent.com/u/19663399?v=4?s=100" width="100px;" alt="Charles Lanier"/><br /><sub><b>Charles Lanier</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=0xChqrles" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/omahs"><img src="https://avatars.githubusercontent.com/u/73983677?v=4?s=100" width="100px;" alt="omahs"/><br /><sub><b>omahs</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=omahs" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/maciejka"><img src="https://avatars.githubusercontent.com/u/190855?v=4?s=100" width="100px;" alt="Maciej Kamiński"/><br /><sub><b>Maciej Kamiński</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=maciejka" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>

@@ -171,6 +171,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "maciejka",
+      "name": "Maciej Kamiński",
+      "avatar_url": "https://avatars.githubusercontent.com/u/190855?v=4",
+      "profile": "https://github.com/maciejka",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
