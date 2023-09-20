@@ -207,6 +207,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/0xTitan"><img src="https://avatars.githubusercontent.com/u/104304962?v=4?s=100" width="100px;" alt="0xTitan"/><br /><sub><b>0xTitan</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=0xTitan" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ermvrs"><img src="https://avatars.githubusercontent.com/u/3417324?v=4?s=100" width="100px;" alt="Erim"/><br /><sub><b>Erim</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=ermvrs" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/maciektr"><img src="https://avatars.githubusercontent.com/u/18600023?v=4?s=100" width="100px;" alt="maciektr"/><br /><sub><b>maciektr</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=maciektr" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/lambda-0x"><img src="https://avatars.githubusercontent.com/u/87354252?v=4?s=100" width="100px;" alt="lambda-0x"/><br /><sub><b>lambda-0x</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=lambda-0x" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
