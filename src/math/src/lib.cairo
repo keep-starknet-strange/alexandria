@@ -183,6 +183,7 @@ mod perfect_number;
 mod sha256;
 mod sha512;
 mod zellers_congruence;
+mod keccak256;
 
 #[cfg(test)]
 mod tests;
