@@ -203,6 +203,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Bal7hazar"><img src="https://avatars.githubusercontent.com/u/97087040?v=4?s=100" width="100px;" alt="Bal7hazar @ Carbonable"/><br /><sub><b>Bal7hazar @ Carbonable</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=Bal7hazar" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/0xKahi"><img src="https://avatars.githubusercontent.com/u/97916104?v=4?s=100" width="100px;" alt="kahi"/><br /><sub><b>kahi</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=0xKahi" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/0xTitan"><img src="https://avatars.githubusercontent.com/u/104304962?v=4?s=100" width="100px;" alt="0xTitan"/><br /><sub><b>0xTitan</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=0xTitan" title="Code">💻</a></td>
+    </tr>
   </tbody>
   <tfoot>
     <tr>
