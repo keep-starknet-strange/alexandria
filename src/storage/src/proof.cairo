@@ -9,7 +9,6 @@ use alexandria_math::BitShift;
 // https://github.com/eqlabs/pathfinder/blob/main/doc/rpc/pathfinder_rpc_api.json
 // https://github.com/NethermindEth/starknet-state-verifier/blob/main/contracts/contracts/SNStateProofVerifier.sol
 
-
 #[derive(Drop)]
 struct BinaryNode {
     left: felt252,
@@ -51,37 +50,27 @@ fn verify(
     proof: ContractStateProof
 ) -> felt252 {
     let (contract_root_hash, storage_value) = traverse(
-        storage_address.into(),
-        proof.contract_data.storage_proof
+        storage_address.into(), proof.contract_data.storage_proof
     );
 
     let contract_state_hash = pedersen(
         pedersen(
-            pedersen(proof.contract_data.class_hash, contract_root_hash),
-            proof.contract_data.nonce),
+            pedersen(proof.contract_data.class_hash, contract_root_hash), proof.contract_data.nonce
+        ),
         proof.contract_data.contract_state_hash_version
     );
 
     let (contracts_tree_root, expected_contract_state_hash) = traverse(
-        contract_address.into(),
-        proof.contract_proof
+        contract_address.into(), proof.contract_proof
     );
 
-    assert(
-        expected_contract_state_hash == contract_state_hash,
-        'wrong contract_state_hash'
+    assert(expected_contract_state_hash == contract_state_hash, 'wrong contract_state_hash');
+
+    let state_commitment = poseidon_hash_span(
+        array!['STARKNET_STATE_V0', contracts_tree_root, proof.class_commitment].span()
     );
 
-    let state_commitment = poseidon_hash_span(array![
-        'STARKNET_STATE_V0',
-        contracts_tree_root,
-        proof.class_commitment
-    ].span());
-
-    assert(
-        expected_state_commitment == state_commitment,
-        'wrong state_commitment'
-    );
+    assert(expected_state_commitment == state_commitment, 'wrong state_commitment');
 
     storage_value
 }
@@ -99,16 +88,20 @@ fn traverse(leaf_path: u256, proof: Array<TrieNode>) -> (felt252, felt252) {
                 assert(expected_hash == node_hash(@node), 'invalid proof node hash');
                 match node {
                     TrieNode::Binary(binary_node) => {
-                        expected_hash = if shr251(path, 250) == 1_u256 {
-                            binary_node.right
-                        } else {
-                            binary_node.left
-                        };
+                        expected_hash =
+                            if shr251(path, 250) == 1_u256 {
+                                binary_node.right
+                            } else {
+                                binary_node.left
+                            };
                         path = shl251(path, 1);
                         path_length += 1;
                     },
                     TrieNode::Edge(edge_node) => {
-                        assert(shr251(path, 251 - edge_node.length) == (edge_node.path).into(), 'invalid proof node path');
+                        assert(
+                            shr251(path, 251 - edge_node.length) == (edge_node.path).into(),
+                            'invalid proof node path'
+                        );
                         expected_hash = edge_node.child;
                         path = shl251(path, edge_node.length);
                         path_length += edge_node.length;
@@ -142,8 +135,7 @@ fn node_hash(node: @TrieNode) -> felt252 {
             pedersen(*binary_node.left, *binary_node.right)
         },
         TrieNode::Edge(edge_node) => {
-            pedersen(*edge_node.child, *edge_node.path)
-            + (*edge_node.length).into()
+            pedersen(*edge_node.child, *edge_node.path) + (*edge_node.length).into()
         }
     }
 }
