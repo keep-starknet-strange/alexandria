@@ -117,7 +117,6 @@ fn proof1_test() {
         contract_data: ContractData {
             class_hash: 0xeafb0413e759430def79539db681f8a4eb98cf4196fe457077d694c6aeeb82,
             nonce: 0,
-            root: 0x7ef6e24f657238c148b0111de8d3c26d4820cb1dbd8fe1483b89f460c631ea9,
             contract_state_hash_version: 0,
             storage_proof: array![
                 TrieNode::Binary( BinaryNode {
@@ -263,7 +262,6 @@ fn proof2_test() {
         contract_data: ContractData {
             class_hash: 0x1cb96b938da26c060d5fd807eef8b580c49490926393a5eeb408a89f84b9b46,
             nonce: 0,
-            root: 0x55e836d714a781bf126fe0963b5ef79f6a9032ac1213125a201f158c700af1,
             contract_state_hash_version: 0,
             storage_proof: array![
                 TrieNode::Binary( BinaryNode {

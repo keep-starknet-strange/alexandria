@@ -29,14 +29,15 @@ enum TrieNode {
     Edge: EdgeNode,
 }
 
+#[derive(Destruct)]
 struct ContractData {
     class_hash: felt252,
     nonce: felt252,
-    root: felt252,
     contract_state_hash_version: felt252,
     storage_proof: Array<TrieNode>
 }
 
+#[derive(Destruct)]
 struct ContractStateProof {
     class_commitment: felt252,
     contract_proof: Array<TrieNode>,
@@ -44,20 +45,34 @@ struct ContractStateProof {
 }
 
 fn verify(
-    state_commitment: felt252,
+    expected_state_commitment: felt252,
     contract_address: felt252,
     storage_address: felt252,
     proof: ContractStateProof
 ) -> felt252 {
-    let storage_value = verify_proof(
-        proof.contract_data.root,
+    let (contract_root_hash, storage_value) = traverse(
         storage_address.into(),
         proof.contract_data.storage_proof
     );
 
-    let contracts_tree_root = node_hash(proof.contract_proof.at(0));
+    let contract_state_hash = pedersen(
+        pedersen(
+            pedersen(proof.contract_data.class_hash, contract_root_hash),
+            proof.contract_data.nonce),
+        proof.contract_data.contract_state_hash_version
+    );
 
-    let expected_state_commitment = poseidon_hash_span(array![
+    let (contracts_tree_root, expected_contract_state_hash) = traverse(
+        contract_address.into(),
+        proof.contract_proof
+    );
+
+    assert(
+        expected_contract_state_hash == contract_state_hash,
+        'wrong contract_state_hash'
+    );
+
+    let state_commitment = poseidon_hash_span(array![
         'STARKNET_STATE_V0',
         contracts_tree_root,
         proof.class_commitment
@@ -68,34 +83,16 @@ fn verify(
         'wrong state_commitment'
     );
 
-    let expected_contract_state_hash = verify_proof(
-        contracts_tree_root,
-        contract_address.into(),
-        proof.contract_proof
-    );
-
-    // TODO: think about: proof.contract_data.root
-
-    let contract_state_hash = pedersen(
-        pedersen(
-            pedersen(proof.contract_data.class_hash, proof.contract_data.root),
-            proof.contract_data.nonce),
-        proof.contract_data.contract_state_hash_version
-    );
-
-    assert(
-        expected_contract_state_hash == contract_state_hash,
-        'wrong contract_state_hash'
-    );
-
     storage_value
 }
 
-fn verify_proof(root: felt252, leaf_path: u256, proof: Array<TrieNode>) -> felt252 {
+fn traverse(leaf_path: u256, proof: Array<TrieNode>) -> (felt252, felt252) {
     let mut path_length = 0_u8;
-    let mut expected_hash = root;
+
     let mut path = leaf_path;
     let mut nodes = proof;
+    let root_hash = node_hash(nodes.at(0));
+    let mut expected_hash = root_hash;
     loop {
         match nodes.pop_front() {
             Option::Some(node) => {
@@ -124,20 +121,21 @@ fn verify_proof(root: felt252, leaf_path: u256, proof: Array<TrieNode>) -> felt2
             }
         };
     };
-    expected_hash
+    (root_hash, expected_hash)
 }
 
-
-
+#[inline]
 fn shl251(x: u256, bits: u8) -> u256 {
     let (r, _) = u256_overflow_mul(x, BitShift::fpow(2_u256, bits.into()));
     r & 0x7ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff_u256
 }
 
+#[inline]
 fn shr251(x: u256, bits: u8) -> u256 {
     x / BitShift::fpow(2_u256, bits.into())
 }
 
+#[inline]
 fn node_hash(node: @TrieNode) -> felt252 {
     match node {
         TrieNode::Binary(binary_node) => {
@@ -150,6 +148,7 @@ fn node_hash(node: @TrieNode) -> felt252 {
     }
 }
 
+#[inline]
 fn pedersen(a: felt252, b: felt252) -> felt252 {
     hash::LegacyHash::hash(a, b)
 }
