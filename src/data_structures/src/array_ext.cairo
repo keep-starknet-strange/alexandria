@@ -22,6 +22,7 @@ trait ArrayTraitExt<T> {
         self: @Array<T>
     ) -> Option<usize>;
     fn dedup<impl TPartialEq: PartialEq<T>>(self: @Array<T>) -> Array<T>;
+    fn drop_duplicates<impl TPartialEq: PartialEq<T>>(self: @Array<T>) -> Array<T>;
 }
 
 trait SpanTraitExt<T> {
@@ -45,6 +46,7 @@ trait SpanTraitExt<T> {
         self: Span<T>
     ) -> Option<usize>;
     fn dedup<impl TPartialEq: PartialEq<T>>(self: Span<T>) -> Array<T>;
+    fn drop_duplicates<impl TPartialEq: PartialEq<T>>(self: Span<T>) -> Array<T>;
 }
 
 impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> {
@@ -140,6 +142,10 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
 
     fn dedup<impl TPartialEq: PartialEq<T>>(mut self: @Array<T>) -> Array<T> {
         self.span().dedup()
+    }
+
+    fn drop_duplicates<impl TPartialEq: PartialEq<T>>(mut self: @Array<T>) -> Array<T> {
+        self.span().drop_duplicates()
     }
 }
 
@@ -383,6 +389,28 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
             };
         };
 
+        ret
+    }
+
+    fn drop_duplicates<impl TPartialEq: PartialEq<T>>(mut self: Span<T>) -> Array<T> {
+        let mut ret = array![];
+        loop {
+            match self.pop_front() {
+                Option::Some(v) => {
+                    let shortest: Span<T> = if (self.len() <= 1) || (ret.len() <= self.len()) {
+                        ret.span()
+                    } else {
+                        self
+                    };
+                    if !shortest.contains(*v) {
+                        ret.append(*v);
+                    }
+                },
+                Option::None => {
+                    break;
+                }
+            };
+        };
         ret
     }
 }

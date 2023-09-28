@@ -1,6 +1,5 @@
 use core::option::OptionTrait;
 use array::{ArrayTrait, SpanTrait};
-
 use alexandria_data_structures::array_ext::{ArrayTraitExt, SpanTraitExt};
 
 // dedup
@@ -1066,6 +1065,84 @@ fn index_of_max_last_span() {
     let mut arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.span().index_of_max().unwrap() == 0, 'index_of_max should be 0');
     assert(arr.len() == 3, 'arr should not be consummed');
+}
+
+// drop_duplicates
+
+#[test]
+#[available_gas(2000000)]
+fn drop_duplicates() {
+    let mut arr = array![32_u128, 256_u128, 128_u128, 256_u128, 1024_u128];
+    let mut out_arr = arr.drop_duplicates();
+    assert(out_arr.len() == 4, 'Duplicates should be dropped');
+    assert(*out_arr[0] == 32_u128, 'Should be 32');
+    assert(*out_arr[1] == 256_u128, 'Should be 256');
+    assert(*out_arr[2] == 128_u128, 'Should be 128');
+    assert(*out_arr[3] == 1024_u128, 'Should be 1024');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn drop_duplicates_all() {
+    let mut arr = array![84_u128, 84_u128, 84_u128];
+    let mut out_arr = arr.drop_duplicates();
+    assert(out_arr.len() == 1, 'Duplicates should be dropped');
+    assert(*out_arr[0] == 84_u128, 'Should be 128');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn drop_duplicates_middle() {
+    let mut arr = array![128_u128, 256_u128, 84_u128, 84_u128, 84_u128, 1_u128];
+    let mut out_arr = arr.drop_duplicates();
+    assert(out_arr.len() == 4, 'Duplicates should be dropped');
+    assert(*out_arr[0] == 128_u128, 'Should be 128');
+    assert(*out_arr[1] == 256_u128, 'Should be 256');
+    assert(*out_arr[2] == 84_u128, 'Should be 84');
+    assert(*out_arr[3] == 1_u128, 'Should be 1');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn drop_duplicates_start() {
+    let mut arr = array![16_u128, 16_u128, 16_u128, 128_u128, 64_u128, 32_u128];
+    let mut out_arr = arr.drop_duplicates();
+    assert(out_arr.len() == 4, 'Duplicates should be dropped');
+    assert(*out_arr[0] == 16_u128, 'Should be 16');
+    assert(*out_arr[1] == 128_u128, 'Should be 128');
+    assert(*out_arr[2] == 64_u128, 'Should be 64');
+    assert(*out_arr[3] == 32_u128, 'Should be 32');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn drop_duplicates_end() {
+    let mut arr = array![32_u128, 16_u128, 64_u128, 128_u128, 128_u128, 128_u128];
+    let mut out_arr = arr.drop_duplicates();
+    assert(out_arr.len() == 4, 'Duplicates should be dropped');
+    assert(*out_arr[0] == 32_u128, 'Should be 32');
+    assert(*out_arr[1] == 16_u128, 'Should be 16');
+    assert(*out_arr[2] == 64_u128, 'Should be 64');
+    assert(*out_arr[3] == 128_u128, 'Should be 128');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn drop_duplicates_without_duplicates() {
+    let mut arr = array![42_u128, 84_u128, 21_u128];
+    let mut out_arr = arr.drop_duplicates();
+    assert(out_arr.len() == 3, 'No values should drop');
+    assert(*out_arr[0] == 42_u128, 'Should be 42');
+    assert(*out_arr[1] == 84_u128, 'Should be 84');
+    assert(*out_arr[2] == 21_u128, 'Should be 21');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn drop_duplicates_empty() {
+    let mut arr: Array<u128> = array![];
+    let mut out_arr = arr.drop_duplicates();
+    assert(out_arr.len() == 0, 'out_arr should be empty');
 }
 
 
