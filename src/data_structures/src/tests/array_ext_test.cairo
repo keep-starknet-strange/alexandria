@@ -1092,19 +1092,15 @@ fn drop_duplicates_all() {
 
 #[test]
 #[available_gas(2000000)]
-fn drop_duplicates_middle() {
-    let mut arr = array![128_u128, 256_u128, 84_u128, 84_u128, 84_u128, 1_u128];
+fn drop_duplicates_none() {
+    let mut arr: Array<u128> = array![];
     let mut out_arr = arr.drop_duplicates();
-    assert(out_arr.len() == 4, 'Duplicates should be dropped');
-    assert(*out_arr[0] == 128_u128, 'Should be 128');
-    assert(*out_arr[1] == 256_u128, 'Should be 256');
-    assert(*out_arr[2] == 84_u128, 'Should be 84');
-    assert(*out_arr[3] == 1_u128, 'Should be 1');
+    assert(out_arr.len() == 0, 'out_arr should be empty');
 }
 
 #[test]
 #[available_gas(2000000)]
-fn drop_duplicates_start() {
+fn drop_duplicates_at_start() {
     let mut arr = array![16_u128, 16_u128, 16_u128, 128_u128, 64_u128, 32_u128];
     let mut out_arr = arr.drop_duplicates();
     assert(out_arr.len() == 4, 'Duplicates should be dropped');
@@ -1116,7 +1112,19 @@ fn drop_duplicates_start() {
 
 #[test]
 #[available_gas(2000000)]
-fn drop_duplicates_end() {
+fn drop_duplicates_at_middle() {
+    let mut arr = array![128_u128, 256_u128, 84_u128, 84_u128, 84_u128, 1_u128];
+    let mut out_arr = arr.drop_duplicates();
+    assert(out_arr.len() == 4, 'Duplicates should be dropped');
+    assert(*out_arr[0] == 128_u128, 'Should be 128');
+    assert(*out_arr[1] == 256_u128, 'Should be 256');
+    assert(*out_arr[2] == 84_u128, 'Should be 84');
+    assert(*out_arr[3] == 1_u128, 'Should be 1');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn drop_duplicates_at_end() {
     let mut arr = array![32_u128, 16_u128, 64_u128, 128_u128, 128_u128, 128_u128];
     let mut out_arr = arr.drop_duplicates();
     assert(out_arr.len() == 4, 'Duplicates should be dropped');
@@ -1135,14 +1143,6 @@ fn drop_duplicates_without_duplicates() {
     assert(*out_arr[0] == 42_u128, 'Should be 42');
     assert(*out_arr[1] == 84_u128, 'Should be 84');
     assert(*out_arr[2] == 21_u128, 'Should be 21');
-}
-
-#[test]
-#[available_gas(2000000)]
-fn drop_duplicates_empty() {
-    let mut arr: Array<u128> = array![];
-    let mut out_arr = arr.drop_duplicates();
-    assert(out_arr.len() == 0, 'out_arr should be empty');
 }
 
 
