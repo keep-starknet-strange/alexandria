@@ -395,14 +395,9 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
     fn unique<impl TPartialEq: PartialEq<T>>(mut self: Span<T>) -> Array<T> {
         let mut ret = array![];
         loop {
-            let shortest: Span<T> = if (self.len() <= 1) || (ret.len() <= self.len()) {
-                ret.span()
-            } else {
-                self
-            };
             match self.pop_front() {
                 Option::Some(v) => {
-                    if !shortest.contains(*v) {
+                    if !ret.contains(*v) {
                         ret.append(*v);
                     }
                 },
