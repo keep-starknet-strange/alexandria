@@ -1,7 +1,6 @@
 use core::array::ArrayTrait;
 use integer::u256_overflow_mul;
 use poseidon::poseidon_hash_span;
-use alexandria_math::BitShift;
 
 // documentation
 // https://docs.starknet.io/documentation/architecture_and_concepts/State/starknet-state/
@@ -49,15 +48,18 @@ fn verify(
     storage_address: felt252,
     proof: ContractStateProof
 ) -> felt252 {
+
+    let contract_data = proof.contract_data;
+
     let (contract_root_hash, storage_value) = traverse(
-        storage_address.into(), proof.contract_data.storage_proof
+        storage_address.into(), contract_data.storage_proof
     );
 
     let contract_state_hash = pedersen(
         pedersen(
-            pedersen(proof.contract_data.class_hash, contract_root_hash), proof.contract_data.nonce
+            pedersen(contract_data.class_hash, contract_root_hash), contract_data.nonce
         ),
-        proof.contract_data.contract_state_hash_version
+        contract_data.contract_state_hash_version
     );
 
     let (contracts_tree_root, expected_contract_state_hash) = traverse(
@@ -66,8 +68,8 @@ fn verify(
 
     assert(expected_contract_state_hash == contract_state_hash, 'wrong contract_state_hash');
 
-    let state_commitment = poseidon_hash_span(
-        array!['STARKNET_STATE_V0', contracts_tree_root, proof.class_commitment].span()
+    let state_commitment = poseidon_hash(
+        'STARKNET_STATE_V0', contracts_tree_root, proof.class_commitment
     );
 
     assert(expected_state_commitment == state_commitment, 'wrong state_commitment');
@@ -75,57 +77,46 @@ fn verify(
     storage_value
 }
 
-fn traverse(leaf_path: u256, proof: Array<TrieNode>) -> (felt252, felt252) {
-    let mut path_length = 0_u8;
+fn traverse(expected_path: u256, proof: Array<TrieNode>) -> (felt252, felt252) {
+    // TODO: why not traverse bottom up?
 
-    let mut path = leaf_path;
+    let mut path = 0_u256;
+    let mut path_index = 251_u8; // TODO: better name
+
     let mut nodes = proof;
-    let root_hash = node_hash(nodes.at(0));
-    let mut expected_hash = root_hash;
+    let mut expected_hash = node_hash(nodes.at(0));
+
+    let root_hash = expected_hash;
+
     loop {
         match nodes.pop_front() {
             Option::Some(node) => {
                 assert(expected_hash == node_hash(@node), 'invalid proof node hash');
                 match node {
                     TrieNode::Binary(binary_node) => {
-                        expected_hash =
-                            if shr251(path, 250) == 1_u256 {
-                                binary_node.right
-                            } else {
-                                binary_node.left
-                            };
-                        path = shl251(path, 1);
-                        path_length += 1;
+                        path_index -= 1;
+                        if expected_path & pow2(path_index) > 0 {
+                            expected_hash = binary_node.right;
+                            path = shl(path, 1) + 1;
+                        } else {
+                            expected_hash = binary_node.left;
+                            path = shl(path, 1);
+                        };
                     },
                     TrieNode::Edge(edge_node) => {
-                        assert(
-                            shr251(path, 251 - edge_node.length) == (edge_node.path).into(),
-                            'invalid proof node path'
-                        );
                         expected_hash = edge_node.child;
-                        path = shl251(path, edge_node.length);
-                        path_length += edge_node.length;
+                        path = shl(path, edge_node.length) + edge_node.path.into();
+                        path_index -= edge_node.length;
                     }
                 }
             },
             Option::None => {
-                assert(path_length == 251, 'invalid proof path');
                 break;
             }
         };
     };
+    assert(expected_path == path, 'invalid proof path');
     (root_hash, expected_hash)
-}
-
-#[inline]
-fn shl251(x: u256, bits: u8) -> u256 {
-    let (r, _) = u256_overflow_mul(x, BitShift::fpow(2_u256, bits.into()));
-    r & 0x7ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff_u256
-}
-
-#[inline]
-fn shr251(x: u256, bits: u8) -> u256 {
-    x / BitShift::fpow(2_u256, bits.into())
 }
 
 #[inline]
@@ -140,7 +131,36 @@ fn node_hash(node: @TrieNode) -> felt252 {
     }
 }
 
+fn pow(x: u256, n: u8) -> u256 {
+    if n == 0 {
+        1
+    } else if n == 1 {
+        x
+    } else if (n & 1) == 1 {
+        x * pow(x * x, n / 2)
+    } else {
+        pow(x * x, n / 2)
+    }
+}
+
+#[inline]
+fn pow2(n: u8) -> u256 {
+    pow(2, n)
+}
+
+#[inline]
+fn shl(x: u256, b: u8) -> u256 {
+    // unchecked mul is faster
+    let (r, _) = u256_overflow_mul(x, pow2(b));
+    r
+}
+
 #[inline]
 fn pedersen(a: felt252, b: felt252) -> felt252 {
     hash::LegacyHash::hash(a, b)
+}
+
+#[inline]
+fn poseidon_hash(a: felt252, b: felt252, c: felt252) -> felt252 {
+    poseidon_hash_span(array![a, b, c].span())
 }
