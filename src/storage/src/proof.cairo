@@ -75,10 +75,9 @@ fn verify(
 }
 
 fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252) {
-    // TODO: why not traverse bottom up?
 
-    let mut path = 0;
-    let mut path_index = 251_u8; // TODO: better name
+    let mut path: felt252 = 0;
+    let mut remaining_depth: u8 = 251;
 
     let mut nodes = proof;
     let mut expected_hash = node_hash(nodes.at(0));
@@ -93,8 +92,8 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
                 assert(expected_hash == node_hash(@node), 'invalid proof node hash');
                 match node {
                     TrieNode::Binary(binary_node) => {
-                        path_index -= 1;
-                        if expected_path_u256 & pow(2, path_index).into() > 0 {
+                        remaining_depth -= 1;
+                        if expected_path_u256 & pow(2, remaining_depth).into() > 0 {
                             expected_hash = binary_node.right;
                             path = shl(path, 1) + 1;
                         } else {
@@ -105,7 +104,7 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
                     TrieNode::Edge(edge_node) => {
                         expected_hash = edge_node.child;
                         path = shl(path, edge_node.length) + edge_node.path;
-                        path_index -= edge_node.length;
+                        remaining_depth -= edge_node.length;
                     }
                 }
             },
