@@ -75,7 +75,6 @@ fn verify(
 }
 
 fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252) {
-
     let mut path: felt252 = 0;
     let mut remaining_depth: u8 = 251;
 
