@@ -1,6 +1,5 @@
 use core::traits::Into;
 use core::array::ArrayTrait;
-use integer::u256_overflow_mul;
 use poseidon::poseidon_hash_span;
 
 // documentation
@@ -52,7 +51,7 @@ fn verify(
     let contract_data = proof.contract_data;
 
     let (contract_root_hash, storage_value) = traverse(
-        storage_address.into(), contract_data.storage_proof
+        storage_address, contract_data.storage_proof
     );
 
     let contract_state_hash = pedersen(
@@ -61,7 +60,7 @@ fn verify(
     );
 
     let (contracts_tree_root, expected_contract_state_hash) = traverse(
-        contract_address.into(), proof.contract_proof
+        contract_address, proof.contract_proof
     );
 
     assert(expected_contract_state_hash == contract_state_hash, 'wrong contract_state_hash');
@@ -95,7 +94,7 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
                 match node {
                     TrieNode::Binary(binary_node) => {
                         path_index -= 1;
-                        if expected_path_u256 & pow(2, path_index) > 0 {
+                        if expected_path_u256 & pow(2, path_index).into() > 0 {
                             expected_hash = binary_node.right;
                             path = shl(path, 1) + 1;
                         } else {
