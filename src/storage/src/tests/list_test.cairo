@@ -13,6 +13,7 @@ trait IAListHolder<TContractState> {
     fn do_set(
         ref self: TContractState, index: u32, addrs_value: ContractAddress, numbers_value: u256
     );
+    fn do_clean(ref self: TContractState);
     fn do_pop_front(ref self: TContractState) -> (Option<ContractAddress>, Option<u256>);
     fn do_array(self: @TContractState) -> (Array<ContractAddress>, Array<u256>);
     fn do_from_array(
@@ -68,6 +69,13 @@ mod AListHolder {
             let mut n = self.numbers.read();
             a.set(index, addrs_value);
             n.set(index, numbers_value);
+        }
+
+        fn do_clean(ref self: ContractState) {
+            let mut a = self.addrs.read();
+            let mut n = self.numbers.read();
+            a.clean();
+            n.clean();
         }
 
         fn do_pop_front(ref self: ContractState) -> (Option<ContractAddress>, Option<u256>) {
@@ -370,6 +378,54 @@ mod tests {
 
         let (array_addr, array_number) = contract.do_array();
         assert((array_addr.len(), array_number.len()) == (0, 0), 'lens must be null');
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_array_clean() {
+        let contract = deploy_mock();
+        let mock_addr = mock_addr();
+
+        contract.do_append(mock_addr, 100); // idx 0
+        contract.do_append(mock_addr, 200); // idx 1
+        contract.do_append(mock_addr, 300); // idx 2
+        contract.do_clean();
+        assert(contract.do_get_len() == (0, 0), 'is empty');
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_array_clean_with_empty_array() {
+        let contract = deploy_mock();
+        let mock_addr = mock_addr();
+
+        assert(contract.do_get_len() == (0, 0), 'is empty');
+
+        contract.do_clean();
+
+        assert(contract.do_get_len() == (0, 0), 'is still empty');
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_array_get_value_after_clean() {
+        let contract = deploy_mock();
+        let mock_addr = mock_addr();
+
+        contract.do_append(mock_addr, 100); // idx 0
+        let (addr, number) = contract.do_get(0);
+        assert(addr.is_some(), 'addr is some');
+        assert(addr.unwrap() == mock_addr, 'should be mock_addr');
+        assert(number.is_some(), 'number is some');
+        assert(number.unwrap() == 100, 'should be 100');
+
+        contract.do_clean();
+
+        assert(contract.do_get_len() == (0, 0), 'len');
+
+        let (addr, number) = contract.do_get(0);
+        assert(addr.is_none(), 'addr is none');
+        assert(number.is_none(), 'number is none');
     }
 
     #[test]
