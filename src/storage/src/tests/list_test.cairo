@@ -1,3 +1,4 @@
+use array::{ArrayTrait, Array};
 use option::OptionTrait;
 use starknet::ContractAddress;
 
@@ -15,6 +16,7 @@ trait IAListHolder<TContractState> {
     );
     fn do_pop_front(ref self: TContractState) -> (Option<ContractAddress>, Option<u256>);
     fn do_array(self: @TContractState) -> (Array<ContractAddress>, Array<u256>);
+    fn do_from_array(ref self: TContractState, array: @Array<u256>);
 }
 
 #[starknet::contract]
@@ -77,6 +79,11 @@ mod AListHolder {
             let mut a = self.addrs.read();
             let mut n = self.numbers.read();
             (a.array(), n.array())
+        }
+
+        fn do_from_array(ref self: ContractState, array: @Array<u256>) {
+            let mut n = self.numbers.read();
+            n.from_array(array);
         }
     }
 }
@@ -358,5 +365,14 @@ mod tests {
 
         let (array_addr, array_number) = contract.do_array();
         assert((array_addr.len(), array_number.len()) == (0, 0), 'lens must be null');
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_from_array() {
+        let contract = deploy_mock();
+        let arr = array![1_u256, 2_u256];
+        contract.do_from_array(@arr);
+        assert(contract.do_get_len() == (2, 2), 'len 1');
     }
 }

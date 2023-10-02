@@ -1,4 +1,4 @@
-use array::ArrayTrait;
+use array::{ArrayTrait, Array};
 use integer::U32DivRem;
 use option::OptionTrait;
 use poseidon::poseidon_hash_span;
@@ -27,6 +27,7 @@ trait ListTrait<T> {
     fn set(ref self: List<T>, index: u32, value: T);
     fn pop_front(ref self: List<T>) -> Option<T>;
     fn array(self: @List<T>) -> Array<T>;
+    fn from_array(ref self: List<T>, array: @Array<T>);
 }
 
 impl ListImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TStore: Store<T>> of ListTrait<T> {
@@ -97,6 +98,28 @@ impl ListImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TStore: Store<T>
             index += 1;
         };
         array
+    }
+
+    fn from_array(ref self: List<T>, array: @Array<T>) {
+        if array.len() == 0 {
+            return;
+        }
+        let mut array: Span<T> = array.span();
+        let (base, offset) = calculate_base_and_offset_for_index(
+            self.base, self.len, self.storage_size
+        );
+        loop {
+            match array.pop_front() {
+                Option::Some(v) => (
+                    Store::write_at_offset(self.address_domain, base, offset, *v).unwrap_syscall()
+                ),
+                Option::None => {
+                    break;
+                }
+            };
+        };
+        self.len = array.len();
+        Store::write(self.address_domain, self.base, self.len);
     }
 }
 
