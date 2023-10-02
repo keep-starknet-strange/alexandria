@@ -102,12 +102,15 @@ impl ListImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TStore: Store<T>
 
     fn from_array(ref self: List<T>, array: @Array<T>) {
         let mut array: Span<T> = array.span();
-        let (base, offset) = calculate_base_and_offset_for_index(self.base, 0, self.storage_size);
+        let mut index = 0;
         self.len = array.len();
         loop {
             match array.pop_front() {
-                Option::Some(v) => (Store::write_at_offset(self.address_domain, base, offset, *v)
-                    .unwrap_syscall()),
+                Option::Some(v) => {
+                    let (base, offset) = calculate_base_and_offset_for_index(self.base, index, self.storage_size);
+                    Store::write_at_offset(self.address_domain, base, offset, *v).unwrap_syscall();
+                    index += 1;
+                },
                 Option::None => {
                     break;
                 }
