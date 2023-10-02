@@ -1,4 +1,3 @@
-use array::{ArrayTrait, Array};
 use option::OptionTrait;
 use starknet::ContractAddress;
 

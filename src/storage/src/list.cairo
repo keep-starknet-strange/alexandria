@@ -1,4 +1,4 @@
-use array::{ArrayTrait, Array};
+use array::{ArrayTrait};
 use integer::U32DivRem;
 use option::OptionTrait;
 use poseidon::poseidon_hash_span;
