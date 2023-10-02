@@ -376,7 +376,7 @@ mod tests {
     #[available_gas(100000000)]
     fn test_from_array() {
         let contract = deploy_mock();
-        let mock_addr = mock_addr();    
+        let mock_addr = mock_addr();
 
         let addrs_array = array![mock_addr, mock_addr, mock_addr];
         let numbers_array = array![200, 300, 100];
