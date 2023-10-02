@@ -200,6 +200,7 @@ fn proof1_test() {
 fn proof2_test() {
     let state_commitment = 0x5de4713d440dcc861552edc8a86cee0c4a0014d8fb0138b27b16cddec6535e5;
     let contract_address = 0x00da114221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3;
+    // get_storage_var_address('_balances', 0x063c94d6B73eA2284338f464f86F33E12642149F763Cd8E76E035E8E6A5Bb0e6)
     let storage_address = 0x4ae51d08cd202d1472587dfe63dbf2d5ec767cbf4218b59b7ab71956780c6ee;
     let expected_value = 8700000000000000005;
     let proof = ContractStateProof {

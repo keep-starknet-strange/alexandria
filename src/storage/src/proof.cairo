@@ -1,6 +1,9 @@
+use core::option::OptionTrait;
+use core::array::SpanTrait;
 use core::traits::Into;
 use core::array::ArrayTrait;
 use poseidon::poseidon_hash_span;
+use debug::PrintTrait;
 
 // documentation
 // https://docs.starknet.io/documentation/architecture_and_concepts/State/starknet-state/
@@ -14,7 +17,7 @@ struct BinaryNode {
     right: felt252,
 }
 
-#[derive(Drop)]
+#[derive(Drop, Copy)]
 struct EdgeNode {
     child: felt252,
     path: felt252,
@@ -75,37 +78,43 @@ fn verify(
 }
 
 fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252) {
+
     let mut path: felt252 = 0;
     let mut remaining_depth: u8 = 251;
 
-    let mut nodes = proof;
-    let mut expected_hash = node_hash(nodes.at(0));
-
-    let root_hash = expected_hash;
-
+    let mut nodes = proof.span();
     let expected_path_u256: u256 = expected_path.into();
 
+    let leaf = *match nodes.pop_back().unwrap() {
+        TrieNode::Binary(_) => panic_with_felt252('invalid leaf type'),
+        TrieNode::Edge(edge) => edge
+    };
+
+    let mut expected_hash = node_hash(@TrieNode::Edge(leaf));
+    let value = leaf.child;
+    let mut path = leaf.path;
+    let mut path_length_pow2 = pow(2, leaf.length);
+
     loop {
-        match nodes.pop_front() {
+        match nodes.pop_back() {
             Option::Some(node) => {
-                assert(expected_hash == node_hash(@node), 'invalid proof node hash');
                 match node {
                     TrieNode::Binary(binary_node) => {
-                        remaining_depth -= 1;
-                        if expected_path_u256 & pow(2, remaining_depth).into() > 0 {
-                            expected_hash = binary_node.right;
-                            path = shl(path, 1) + 1;
+                        if expected_path_u256 & path_length_pow2.into() > 0 {
+                            assert(expected_hash == *binary_node.right, 'invalid node hash');
+                            path += path_length_pow2;
                         } else {
-                            expected_hash = binary_node.left;
-                            path = shl(path, 1);
+                            assert(expected_hash == *binary_node.left, 'invalid node hash');
                         };
+                        path_length_pow2 *= 2;
                     },
                     TrieNode::Edge(edge_node) => {
-                        expected_hash = edge_node.child;
-                        path = shl(path, edge_node.length) + edge_node.path;
-                        remaining_depth -= edge_node.length;
+                        assert(expected_hash == *edge_node.child, 'invalid node hash');
+                        path += *edge_node.path * path_length_pow2;
+                        path_length_pow2 *= pow(2, *edge_node.length);
                     }
                 }
+                expected_hash = node_hash(node);
             },
             Option::None => {
                 break;
@@ -113,7 +122,7 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
         };
     };
     assert(expected_path == path, 'invalid proof path');
-    (root_hash, expected_hash)
+    (expected_hash, value)
 }
 
 #[inline]
@@ -142,11 +151,6 @@ fn pow<
     } else {
         pow(x * x, n / 2)
     }
-}
-
-#[inline]
-fn shl(x: felt252, b: u8) -> felt252 {
-    x * pow(2, b)
 }
 
 #[inline]
