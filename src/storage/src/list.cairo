@@ -101,24 +101,18 @@ impl ListImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TStore: Store<T>
     }
 
     fn from_array(ref self: List<T>, array: @Array<T>) {
-        if array.len() == 0 {
-            return;
-        }
         let mut array: Span<T> = array.span();
-        let (base, offset) = calculate_base_and_offset_for_index(
-            self.base, self.len, self.storage_size
-        );
+        let (base, offset) = calculate_base_and_offset_for_index(self.base, 0, self.storage_size);
+        self.len = array.len();
         loop {
             match array.pop_front() {
-                Option::Some(v) => (
-                    Store::write_at_offset(self.address_domain, base, offset, *v).unwrap_syscall()
-                ),
+                Option::Some(v) => (Store::write_at_offset(self.address_domain, base, offset, *v)
+                    .unwrap_syscall()),
                 Option::None => {
                     break;
                 }
             };
         };
-        self.len = array.len();
         Store::write(self.address_domain, self.base, self.len);
     }
 }
