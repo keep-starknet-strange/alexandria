@@ -114,35 +114,16 @@ impl ListImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TStore: Store<T>
     }
 
     fn from_span(ref self: List<T>, mut span: Span<T>) {
+        let mut index = 0;
         self.len = span.len();
-        if self.len == 0 {
-            Store::write(self.address_domain, self.base, self.len);
-            return;
-        }
-        let (mut base, mut offset) = calculate_base_and_offset_for_index(
-            self.base, 0, self.storage_size
-        );
-        let mut segment = 0;
         loop {
             match span.pop_front() {
                 Option::Some(v) => {
+                    let (base, offset) = calculate_base_and_offset_for_index(
+                        self.base, index, self.storage_size
+                    );
                     Store::write_at_offset(self.address_domain, base, offset, *v).unwrap_syscall();
-                    let off: u32 = offset.into();
-                    let xx: u32 = off + self.storage_size.into();
-                    if xx >= POW2_8 {
-                        offset = 0;
-                        segment += 1;
-                        let addr_elements = array![
-                            storage_address_to_felt252(storage_address_from_base(self.base)),
-                            segment
-                        ];
-                        base =
-                            storage_base_address_from_felt252(
-                                poseidon_hash_span(addr_elements.span())
-                            );
-                    } else {
-                        offset += self.storage_size;
-                    }
+                    index += 1;
                 },
                 Option::None => {
                     break;

@@ -451,7 +451,7 @@ mod tests {
 
         let mut addrs_array = array![];
         let mut numbers_array = array![];
-        let nb_of_elements: usize = 128;
+        let nb_of_elements: usize = 256;
         let mut idx: usize = 0;
         loop {
             if (idx >= nb_of_elements) {
