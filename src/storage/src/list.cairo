@@ -19,8 +19,6 @@ struct List<T> {
     storage_size: u8
 }
 
-use debug::PrintTrait;
-
 trait ListTrait<T> {
     fn len(self: @List<T>) -> u32;
     fn is_empty(self: @List<T>) -> bool;
