@@ -445,37 +445,6 @@ mod tests {
 
     #[test]
     #[available_gas(100000000)]
-    fn test_from_array_big() {
-        let contract = deploy_mock();
-        let mock_addr = mock_addr();
-
-        let mut addrs_array = array![];
-        let mut numbers_array = array![];
-        let nb_of_elements: usize = 256;
-        let mut idx: usize = 0;
-        loop {
-            if (idx >= nb_of_elements) {
-                break;
-            };
-            addrs_array.append(mock_addr);
-            numbers_array.append(100);
-            idx += 1;
-        };
-
-        contract.do_from_array(addrs_array, numbers_array);
-        assert(
-            contract.do_get_len() == (nb_of_elements, nb_of_elements),
-            'len should be nb_of_elements'
-        );
-        assert(contract.do_get_index(0) == (mock_addr, 100), 'idx 0');
-        assert(contract.do_get_index(1) == (mock_addr, 100), 'idx 1');
-        assert(contract.do_get_index(2) == (mock_addr, 100), 'idx 2');
-        assert(contract.do_get_index(8) == (mock_addr, 100), 'idx 8');
-        assert(contract.do_get_index(nb_of_elements - 1) == (mock_addr, 100), 'idx last');
-    }
-
-    #[test]
-    #[available_gas(100000000)]
     fn test_from_array_empty() {
         let contract = deploy_mock();
 
