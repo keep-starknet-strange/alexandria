@@ -1,4 +1,6 @@
 mod array_ext;
+mod byte_array_ext;
+mod byte_array_reader;
 mod merkle_tree;
 mod queue;
 mod stack;
