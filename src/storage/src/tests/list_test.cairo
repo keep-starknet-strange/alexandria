@@ -101,7 +101,7 @@ mod AListHolder {
     }
 }
 
-#[cft(test)]
+#[cfg(test)]
 mod tests {
     use array::{ArrayTrait, SpanTrait};
     use debug::PrintTrait;
