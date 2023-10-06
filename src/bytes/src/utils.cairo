@@ -2,9 +2,9 @@ use keccak::{u128_to_u64, u128_split as u128_split_to_u64, cairo_keccak};
 use integer::u128_byte_reverse;
 use alexandria_data_structures::array_ext::ArrayTraitExt;
 
-// Computes the keccak256 of multiple uint128 values.
-// The values are interpreted as big-endian.
-// https://github.com/starkware-libs/cairo/blob/main/corelib/src/keccak.cairo
+/// Computes the keccak256 of multiple uint128 values.
+/// The values are interpreted as big-endian.
+/// https://github.com/starkware-libs/cairo/blob/main/corelib/src/keccak.cairo
 fn keccak_u128s_be(mut input: Span<u128>, n_bytes: usize) -> u256 {
     let mut keccak_input: Array::<u64> = ArrayTrait::new();
     let mut size = n_bytes;
@@ -32,8 +32,8 @@ fn keccak_u128s_be(mut input: Span<u128>, n_bytes: usize) -> u256 {
     }
 }
 
-// return the minimal value
-// support u8, u16, u32, u64, u128, u256
+/// return the minimal value
+/// support u8, u16, u32, u64, u128, u256
 fn uint_min<T, impl TDrop: Drop<T>, impl TPartialOrd: PartialOrd<T>, impl TCopy: Copy<T>>(
     l: T, r: T
 ) -> T {
@@ -62,7 +62,7 @@ fn keccak_add_uint128_be(ref keccak_input: Array::<u64>, value: u128, value_size
             keccak_input.append(u128_to_u64(reversed_value));
         } else {
             let (high, low) = DivRem::div_rem(
-                reversed_value, u128_fast_pow2(64).try_into().unwrap()
+                reversed_value, u128_fast_pow2(64).try_into().expect('Division by 0')
             );
             keccak_input.append(u128_to_u64(low));
             keccak_input.append(u128_to_u64(high));
@@ -89,8 +89,8 @@ fn update_u256_array_at(arr: @Array<u256>, index: usize, value: u256) -> Array<u
     new_arr
 }
 
-// Convert sha256 result(Array<u8>) to u256
-// result length MUST be 32
+/// Convert sha256 result(Array<u8>) to u256
+/// result length MUST be 32
 fn u8_array_to_u256(arr: Span<u8>) -> u256 {
     assert(arr.len() == 32, 'too large');
     let mut i = 0;
@@ -162,46 +162,48 @@ fn u128_array_slice(src: @Array<u128>, mut begin: usize, end: usize) -> Array<u1
     slice
 }
 
-// Split a u128 into two parts, [0, left_size-1] and [left_size, end]
-// Parameters:
-//  - value: data of u128
-//  - value_size: the size of `value` in bytes
-//  - left_size: the size of left part in bytes
-// Returns:
-//  - letf: [0, left_size-1] of the origin u128
-//  - right: [left_size, end] of the origin u128 which size is (value_size - left_size)
-// Examples:
-// u128_split(0x01020304, 4, 0) -> (0, 0x01020304)
-// u128_split(0x01020304, 4, 1) -> (0x01, 0x020304)
-// u128_split(0x0001020304, 5, 1) -> (0x00, 0x01020304)
+/// Split a u128 into two parts, [0, left_size-1] and [left_size, end]
+/// Parameters:
+///  - value: data of u128
+///  - value_size: the size of `value` in bytes
+///  - left_size: the size of left part in bytes
+/// Returns:
+///  - letf: [0, left_size-1] of the origin u128
+///  - right: [left_size, end] of the origin u128 which size is (value_size - left_size)
+/// Examples:
+/// u128_split(0x01020304, 4, 0) -> (0, 0x01020304)
+/// u128_split(0x01020304, 4, 1) -> (0x01, 0x020304)
+/// u128_split(0x0001020304, 5, 1) -> (0x00, 0x01020304)
 fn u128_split(value: u128, value_size: usize, left_size: usize) -> (u128, u128) {
     assert(value_size <= 16, 'value_size can not be gt 16');
     assert(left_size <= value_size, 'size can not be gt value_size');
 
     if left_size == 0 {
-        return (0_u128, value);
+        (0_u128, value)
     } else {
         let (left, right) = DivRem::div_rem(
-            value, u128_fast_pow2((value_size - left_size) * 8).try_into().unwrap()
+            value, u128_fast_pow2((value_size - left_size) * 8).try_into().expect('Division by 0')
         );
-        return (left, right);
+        (left, right)
     }
 }
 
-// Read sub value from u128 just like substr in other language
-// Parameters:
-//  - value: data of u128
-//  - value_size: the size of data in bytes
-//  - offset: the offset of sub value
-//  - size: the size of sub value in bytes
-// Returns:
-//  - sub_value: the sub value of origin u128
-// Examples:
-// u128_sub_value(0x000001020304, 6, 1, 3) -> 0x000102
-fn u128_sub_value(value: u128, value_size: usize, offset: usize, size: usize) -> u128 {
-    assert(value_size != 0, 'value_size can not be 0');
-    assert(size != 0, 'size can not be 0');
+/// Read sub value from u128 just like substr in other language
+/// Parameters:
+///  - value: data of u128
+///  - value_size: the size of data in bytes
+///  - offset: the offset of sub value
+///  - size: the size of sub value in bytes
+/// Returns:
+///  - sub_value: the sub value of origin u128
+/// Examples:
+/// u128_sub_value(0x000001020304, 6, 1, 3) -> 0x000102
+fn read_sub_u128(value: u128, value_size: usize, offset: usize, size: usize) -> u128 {
     assert(offset + size <= value_size, 'too long');
+
+    if (value_size == 0) || (size == 0) {
+        return 0;
+    }
 
     if size == value_size {
         return value;
@@ -212,26 +214,26 @@ fn u128_sub_value(value: u128, value_size: usize, offset: usize, size: usize) ->
     sub_value
 }
 
-// Join two u128 into one
-// Parameters:
-//  - left: the left part of u128
-//  - right: the right part of u128
-//  - right_size: the size of right part in bytes
-// Returns:
-//  - value: the joined u128
-// Examples: 
-// u128_join(0x010203, 0xaabb, 2) -> 0x010203aabb
-// u128_join(0x010203, 0, 2) -> 0x0102030000
+/// Join two u128 into one
+/// Parameters:
+///  - left: the left part of u128
+///  - right: the right part of u128
+///  - right_size: the size of right part in bytes
+/// Returns:
+///  - value: the joined u128
+/// Examples: 
+/// u128_join(0x010203, 0xaabb, 2) -> 0x010203aabb
+/// u128_join(0x010203, 0, 2) -> 0x0102030000
 fn u128_join(left: u128, right: u128, right_size: usize) -> u128 {
     let left_size = u128_bytes_len(left);
     assert(left_size + right_size <= 16, 'left shift overflow');
-    let shit = u128_fast_pow2(right_size * 8);
-    left * shit + right
+    let shift = u128_fast_pow2(right_size * 8);
+    left * shift + right
 }
 
-// Return the bytes len represent in u128
-// Examples:
-// u128_bytes_len(0x0102) -> 2
+/// Return the bytes len represent in u128
+/// Examples:
+/// u128_bytes_len(0x0102) -> 2
 fn u128_bytes_len(value: u128) -> usize {
     if value <= 0xff_u128 {
         1_usize
@@ -268,7 +270,7 @@ fn u128_bytes_len(value: u128) -> usize {
     }
 }
 
-// return 2^exp where exp in [0, 127]
+/// return 2^exp where exp in [0, 127]
 fn u128_fast_pow2(exp: usize) -> u128 {
     assert(exp <= 127, 'invalid exp');
 

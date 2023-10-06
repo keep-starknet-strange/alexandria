@@ -27,8 +27,8 @@ fn test_bytes_zero() {
 #[available_gas(200000000)]
 #[should_panic(expected: ('update out of bound',))]
 fn test_bytes_update_panic() {
-    let mut bytes = BytesTrait::new(0, array![]);
-    bytes.update(0, 0x01);
+    let mut bytes = BytesTrait::new_empty();
+    bytes.update_at(0, 0x01);
 }
 
 #[test]
@@ -36,23 +36,23 @@ fn test_bytes_update_panic() {
 fn test_bytes_update() {
     let mut bytes = BytesTrait::new(5, array![0x01020304050000000000000000000000]);
 
-    bytes.update(0, 0x05);
+    bytes.update_at(0, 0x05);
     assert(bytes.size == 5, 'update_size1');
     assert(*bytes.data[0] == 0x05020304050000000000000000000000, 'update_value_1');
 
-    bytes.update(1, 0x06);
+    bytes.update_at(1, 0x06);
     assert(bytes.size == 5, 'update_size2');
     assert(*bytes.data[0] == 0x05060304050000000000000000000000, 'update_value_2');
 
-    bytes.update(2, 0x07);
+    bytes.update_at(2, 0x07);
     assert(bytes.size == 5, 'update_size3');
     assert(*bytes.data[0] == 0x05060704050000000000000000000000, 'update_value_3');
 
-    bytes.update(3, 0x08);
+    bytes.update_at(3, 0x08);
     assert(bytes.size == 5, 'update_size4');
     assert(*bytes.data[0] == 0x05060708050000000000000000000000, 'update_value_4');
 
-    bytes.update(4, 0x09);
+    bytes.update_at(4, 0x09);
     assert(bytes.size == 5, 'update_size5');
     assert(*bytes.data[0] == 0x05060708090000000000000000000000, 'update_value_5');
 
@@ -65,13 +65,13 @@ fn test_bytes_update() {
         ]
     );
 
-    bytes.update(16, 0x16);
+    bytes.update_at(16, 0x16);
     assert(bytes.size == 42, 'update_size6');
     assert(*bytes.data[0] == 0x01020304050607080910111213141516, 'update_value_6');
     assert(*bytes.data[1] == 0x16020304050607080910111213141516, 'update_value_7');
     assert(*bytes.data[2] == 0x01020304050607080910000000000000, 'update_value_8');
 
-    bytes.update(15, 0x01);
+    bytes.update_at(15, 0x01);
     assert(bytes.size == 42, 'update_size7');
     assert(*bytes.data[0] == 0x01020304050607080910111213141501, 'update_value_9');
     assert(*bytes.data[1] == 0x16020304050607080910111213141516, 'update_value_10');
@@ -419,7 +419,7 @@ fn test_bytes_read_bytes() {
 #[test]
 #[available_gas(20000000)]
 fn test_bytes_append() {
-    let mut bytes = BytesTrait::new(0, array![]);
+    let mut bytes = BytesTrait::new_empty();
 
     // append_u128_packed
     bytes.append_u128_packed(0x101112131415161718, 9);
@@ -553,7 +553,7 @@ fn test_bytes_concat() {
     bytes = Bytes { size: size, data: data };
 
     // empty bytes concat
-    let mut empty_bytes = BytesTrait::new(0, array![]);
+    let mut empty_bytes = BytesTrait::new_empty();
     empty_bytes.concat(@bytes);
     let Bytes{size, data } = empty_bytes;
 
@@ -571,7 +571,7 @@ fn test_bytes_concat() {
     assert(*data[10] == 0x194a4f00000000000000000000000000, 'concat_value_11');
 
     // concat empty_bytes
-    let empty_bytes = BytesTrait::new(0, array![]);
+    let empty_bytes = BytesTrait::new_empty();
     bytes.concat(@empty_bytes);
 
     assert(size == 163, 'concat_size');
@@ -598,7 +598,7 @@ fn test_bytes_keccak() {
     // print(k.hexdigest())
 
     // empty
-    let bytes = BytesTrait::new(0, array![]);
+    let bytes = BytesTrait::new_empty();
     let hash: u256 = 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470;
     let res = bytes.keccak();
     assert(res == hash, 'bytes_keccak_0');
@@ -634,7 +634,7 @@ fn test_bytes_keccak() {
 #[available_gas(20000000000)]
 fn test_bytes_sha256() {
     // empty
-    let bytes = BytesTrait::new(0, array![]);
+    let bytes = BytesTrait::new_empty();
     let hash: u256 = 0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855;
     let res = bytes.sha256();
     assert(res == hash, 'bytes_sha256_0');
