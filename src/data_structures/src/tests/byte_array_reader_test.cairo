@@ -44,13 +44,16 @@ fn test_read() {
     let mut rd = ba.reader();
     assert(rd.read_i8() == Option::Some(1), 'expected 1');
     // rd.read_i128().unwrap().print();
-    assert(rd.read_i128() == Option::Some(0x02030405060708090a0b0c0d0e0f1011),
-     'not 0x0203040506...');
-    assert(rd.read_u128() == Option::Some(0x12131415161718191a1b1c1d1e1f2021),
-     'not 0x1213141516...');
+    assert(
+        rd.read_i128() == Option::Some(0x02030405060708090a0b0c0d0e0f1011), 'not 0x0203040506...'
+    );
+    assert(
+        rd.read_u128() == Option::Some(0x12131415161718191a1b1c1d1e1f2021), 'not 0x1213141516...'
+    );
     assert(rd.read_i64() == Option::Some(0x2223242526272829), 'not 0x22232425...');
-    assert(rd.read_u128() == Option::Some(0x2a2b2c2d2e2f30313233343536373839), 
-     'not 0x2a2b2c2d2e...');
+    assert(
+        rd.read_u128() == Option::Some(0x2a2b2c2d2e2f30313233343536373839), 'not 0x2a2b2c2d2e...'
+    );
     assert(rd.read_u32() == Option::Some(0x3a3b3c3d), 'not 0x3a3b3c3d');
     assert(rd.read_i16() == Option::Some(0x3e3f), 'not 0x3e3f');
     assert(rd.read_u8() == Option::Some(0x40), 'not 0x40');
@@ -62,7 +65,7 @@ fn test_read() {
 fn test_read_u256() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
-    let u256{low: low1, high: high1} = rd.read_u256().unwrap();
+    let u256{low: low1, high: high1 } = rd.read_u256().unwrap();
     assert(high1 == 0x0102030405060708090a0b0c0d0e0f10_u128, 'wrong value for high1');
     assert(low1 == 0x1112131415161718191a1b1c1d1e1f20_u128, 'wrong value for low1');
 }
@@ -72,7 +75,7 @@ fn test_read_u256() {
 fn test_read_u512() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
-    let u512{limb0, limb1, limb2, limb3} = rd.read_u512().unwrap();
+    let u512{limb0, limb1, limb2, limb3 } = rd.read_u512().unwrap();
 
     assert(limb3 == 0x0102030405060708090a0b0c0d0e0f10_u128, 'wrong value for limb3');
     assert(limb2 == 0x1112131415161718191a1b1c1d1e1f20_u128, 'wrong value for limb2');
