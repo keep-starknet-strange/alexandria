@@ -10,7 +10,23 @@ struct ByteArrayReader {
     reader_index: usize,
 }
 
-#[generate_trait]
+trait ByteArrayReaderTrait {
+    fn new(from: @ByteArray) -> ByteArrayReader;
+    fn read_u8(ref self: ByteArrayReader) -> Option<u8>;
+    fn read_u16(ref self: ByteArrayReader) -> Option<u16>;
+    fn read_u32(ref self: ByteArrayReader) -> Option<u32>;
+    fn read_u64(ref self: ByteArrayReader) -> Option<u64>;
+    fn read_u128(ref self: ByteArrayReader) -> Option<u128>;
+    fn read_u256(ref self: ByteArrayReader) -> Option<u256>;
+    fn read_u512(ref self: ByteArrayReader) -> Option<u512>;
+    fn read_i8(ref self: ByteArrayReader) -> Option<i8>;
+    fn read_i16(ref self: ByteArrayReader) -> Option<i16>;
+    fn read_i32(ref self: ByteArrayReader) -> Option<i32>;
+    fn read_i64(ref self: ByteArrayReader) -> Option<i64>;
+    fn read_i128(ref self: ByteArrayReader) -> Option<i128>;
+    fn len(self: @ByteArrayReader) -> usize;
+}
+
 impl ByteArrayReaderImpl of ByteArrayReaderTrait {
     fn new(from: @ByteArray) -> ByteArrayReader {
         ByteArrayReader { data: from, reader_index: 0, }
@@ -69,16 +85,6 @@ impl ByteArrayReaderImpl of ByteArrayReaderTrait {
     fn read_i8(ref self: ByteArrayReader) -> Option<i8> {
         let felt: felt252 = self.read_u8()?.into();
         Option::Some(parse_signed(felt, 1).unwrap())
-    // match felt.try_into() {
-    //     Option::Some(pos) => Option::Some(pos),
-    //     Option::None => {
-    //         let negated: felt252 = felt - 0x100;
-    //         'negated'.print();
-    //         negated.print();
-    //             // - one_shift_left_bytes_felt252(1);
-    //         Option::Some(negated.try_into().unwrap())
-    //     },
-    // }
     }
 
     fn read_i16(ref self: ByteArrayReader) -> Option<i16> {
@@ -101,7 +107,6 @@ impl ByteArrayReaderImpl of ByteArrayReaderTrait {
         Option::Some(parse_signed(felt, 16).unwrap())
     }
 
-    // #[inline]
     fn len(self: @ByteArrayReader) -> usize {
         let byte_array = *self.data;
         let byte_array_len = byte_array.len();
@@ -118,9 +123,3 @@ fn parse_signed<T, +TryInto<felt252, T>>(value: felt252, bytes: usize) -> Option
         },
     }
 }
-
-// impl ByteArrayReaderCloneImpl of Clone<ByteArrayReader> {
-//     fn clone(self: @ByteArrayReader) -> ByteArrayReader {
-//         ByteArrayReader { data: *self.data, reader_index: *self.reader_index }
-//     }
-// }
