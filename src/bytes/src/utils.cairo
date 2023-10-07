@@ -16,7 +16,7 @@ fn keccak_u128s_be(mut input: Span<u128>, n_bytes: usize) -> u256 {
                 size -= value_size;
             },
             Option::None(_) => {
-                break ();
+                break;
             },
         };
     };
@@ -38,9 +38,9 @@ fn uint_min<T, impl TDrop: Drop<T>, impl TPartialOrd: PartialOrd<T>, impl TCopy:
     l: T, r: T
 ) -> T {
     if l <= r {
-        return l;
+        l
     } else {
-        return r;
+        r
     }
 }
 
@@ -77,7 +77,7 @@ fn update_u256_array_at(arr: @Array<u256>, index: usize, value: u256) -> Array<u
 
     loop {
         if i == arr.len() {
-            break ();
+            break;
         }
         if i == index {
             new_arr.append(value);
@@ -99,10 +99,10 @@ fn u8_array_to_u256(arr: Span<u8>) -> u256 {
     // process high
     loop {
         if i >= arr.len() {
-            break ();
+            break;
         }
         if i == 16 {
-            break ();
+            break;
         }
         high = u128_join(high, (*arr[i]).into(), 1);
         i += 1;
@@ -110,10 +110,10 @@ fn u8_array_to_u256(arr: Span<u8>) -> u256 {
     // process low
     loop {
         if i >= arr.len() {
-            break ();
+            break;
         }
         if i == 32 {
-            break ();
+            break;
         }
         low = u128_join(low, (*arr[i]).into(), 1);
         i += 1;
@@ -127,10 +127,10 @@ fn u64_array_slice(src: @Array<u64>, mut begin: usize, end: usize) -> Array<u64>
     let len = begin + end;
     loop {
         if begin >= len {
-            break ();
+            break;
         }
         if begin >= src.len() {
-            break ();
+            break;
         }
 
         slice.append(*src[begin]);
@@ -150,10 +150,10 @@ fn u128_array_slice(src: @Array<u128>, mut begin: usize, end: usize) -> Array<u1
     let len = begin + end;
     loop {
         if begin >= len {
-            break ();
+            break;
         }
         if begin >= src.len() {
-            break ();
+            break;
         }
 
         slice.append(*src[begin]);

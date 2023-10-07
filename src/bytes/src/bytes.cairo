@@ -113,10 +113,12 @@ trait BytesTrait {
 }
 
 impl BytesImpl of BytesTrait {
+    #[inline(always)]
     fn new(size: usize, data: Array::<u128>) -> Bytes {
         Bytes { size, data }
     }
 
+    #[inline(always)]
     fn new_empty() -> Bytes {
         Bytes { size: 0_usize, data: ArrayTrait::<u128>::new() }
     }
@@ -148,11 +150,13 @@ impl BytesImpl of BytesTrait {
     /// Returns:
     ///  - element_index: the index of the element in Bytes
     ///  - element_offset: the offset in the element
+    #[inline(always)]
     fn locate(offset: usize) -> (usize, usize) {
         DivRem::div_rem(offset, BYTES_PER_ELEMENT.try_into().expect('Division by 0'))
     }
 
     /// Get Bytes size
+    #[inline(always)]
     fn size(self: @Bytes) -> usize {
         *self.size
     }
@@ -256,36 +260,44 @@ impl BytesImpl of BytesTrait {
     }
 
     /// Read a u8 from Bytes
+    #[inline(always)]
     fn read_u8(self: @Bytes, offset: usize) -> (usize, u8) {
         let (new_offset, value) = self.read_u128_packed(offset, 1);
         (new_offset, value.try_into().unwrap())
     }
     /// Read a u16 from Bytes
+    #[inline(always)]
     fn read_u16(self: @Bytes, offset: usize) -> (usize, u16) {
         let (new_offset, value) = self.read_u128_packed(offset, 2);
         (new_offset, value.try_into().unwrap())
     }
     /// Read a u32 from Bytes
+    #[inline(always)]
     fn read_u32(self: @Bytes, offset: usize) -> (usize, u32) {
         let (new_offset, value) = self.read_u128_packed(offset, 4);
         (new_offset, value.try_into().unwrap())
     }
     /// Read a usize from Bytes
+    #[inline(always)]
     fn read_usize(self: @Bytes, offset: usize) -> (usize, usize) {
         let (new_offset, value) = self.read_u128_packed(offset, 4);
         (new_offset, value.try_into().unwrap())
     }
     /// Read a u64 from Bytes
+    #[inline(always)]
     fn read_u64(self: @Bytes, offset: usize) -> (usize, u64) {
         let (new_offset, value) = self.read_u128_packed(offset, 8);
         (new_offset, value.try_into().unwrap())
     }
 
+    /// read a u128 from Bytes
+    #[inline(always)]
     fn read_u128(self: @Bytes, offset: usize) -> (usize, u128) {
         self.read_u128_packed(offset, 16)
     }
 
     /// read a u256 from Bytes
+    #[inline(always)]
     fn read_u256(self: @Bytes, offset: usize) -> (usize, u256) {
         // check
         assert(offset + 32 <= self.size(), 'out of bound');
@@ -360,12 +372,14 @@ impl BytesImpl of BytesTrait {
 
     /// read felt252 from Bytes
     /// felt252 stores as u256 in Bytes
+    #[inline(always)]
     fn read_felt252(self: @Bytes, offset: usize) -> (usize, felt252) {
         let (new_offset, value) = self.read_u256(offset);
         (new_offset, value.try_into().expect('Couldn\'t convert to felt252'))
     }
 
     /// read Contract Address from Bytes
+    #[inline(always)]
     fn read_address(self: @Bytes, offset: usize) -> (usize, ContractAddress) {
         let (new_offset, value) = self.read_u256(offset);
         let address: felt252 = value.try_into().expect('Couldn\'t convert to felt252');
@@ -407,48 +421,57 @@ impl BytesImpl of BytesTrait {
     }
 
     /// Write u8 into Bytes
+    #[inline(always)]
     fn append_u8(ref self: Bytes, value: u8) {
         self.append_u128_packed(value.into(), 1)
     }
 
     /// Write u16 into Bytes
+    #[inline(always)]
     fn append_u16(ref self: Bytes, value: u16) {
         self.append_u128_packed(value.into(), 2)
     }
 
     /// Write u32 into Bytes
+    #[inline(always)]
     fn append_u32(ref self: Bytes, value: u32) {
         self.append_u128_packed(value.into(), 4)
     }
 
     /// Write usize into Bytes
+    #[inline(always)]
     fn append_usize(ref self: Bytes, value: usize) {
         self.append_u128_packed(value.into(), 4)
     }
 
     /// Write u64 into Bytes
+    #[inline(always)]
     fn append_u64(ref self: Bytes, value: u64) {
         self.append_u128_packed(value.into(), 8)
     }
 
     /// Write u128 into Bytes
+    #[inline(always)]
     fn append_u128(ref self: Bytes, value: u128) {
         self.append_u128_packed(value, 16)
     }
 
     /// Write u256 into Bytes
+    #[inline(always)]
     fn append_u256(ref self: Bytes, value: u256) {
         self.append_u128(value.high);
         self.append_u128(value.low);
     }
 
     /// Write felt252 into Bytes, which stored as u256
+    #[inline(always)]
     fn append_felt252(ref self: Bytes, value: felt252) {
         let value: u256 = value.into();
         self.append_u256(value)
     }
 
     /// Write address into Bytes
+    #[inline(always)]
     fn append_address(ref self: Bytes, value: ContractAddress) {
         let address_felt256: felt252 = value.into();
         let address_u256: u256 = address_felt256.into();
@@ -462,7 +485,7 @@ impl BytesImpl of BytesTrait {
         let mut sub_bytes_full_array_len = *other.size / BYTES_PER_ELEMENT;
         loop {
             if sub_bytes_full_array_len == 0 {
-                break ();
+                break;
             };
             let (new_offset, value) = other.read_u128(offset);
             self.append_u128(value);
@@ -501,7 +524,7 @@ impl BytesImpl of BytesTrait {
         let mut offset: usize = 0;
         loop {
             if i == self.size() {
-                break ();
+                break;
             }
             let (new_offset, hash_data_item) = self.read_u8(offset);
             hash_data.append(hash_data_item);
