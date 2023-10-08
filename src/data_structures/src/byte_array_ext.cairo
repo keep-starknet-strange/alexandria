@@ -51,25 +51,25 @@ trait ByteArrayTraitExt {
     /// # Arguments
     /// * `word` - a 128 bit signed integer typed as i128
     fn append_i128(ref self: ByteArray, word: i128);
-    /// Reads consecutive bytes from a specified offset as an unsigned integer 
+    /// Reads consecutive bytes from a specified offset as an unsigned integer
     /// # Arguments
     /// * `offset` - the start location of the consecutive bytes to read
     /// # Returns
     /// * `Option<u16>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
     fn word_u16(self: @ByteArray, offset: usize) -> Option<u16>;
-    /// Reads consecutive bytes from a specified offset as an unsigned integer 
+    /// Reads consecutive bytes from a specified offset as an unsigned integer
     /// # Arguments
     /// * `offset` - the start location of the consecutive bytes to read
     /// # Returns
     /// * `Option<u32>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
     fn word_u32(self: @ByteArray, offset: usize) -> Option<u32>;
-    /// Reads consecutive bytes from a specified offset as an unsigned integer 
+    /// Reads consecutive bytes from a specified offset as an unsigned integer
     /// # Arguments
     /// * `offset` - the start location of the consecutive bytes to read
     /// # Returns
     /// * `Option<u64>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
     fn word_u64(self: @ByteArray, offset: usize) -> Option<u64>;
-    /// Reads consecutive bytes from a specified offset as an unsigned integer 
+    /// Reads consecutive bytes from a specified offset as an unsigned integer
     /// # Arguments
     /// * `offset` - the start location of the consecutive bytes to read
     /// # Returns
