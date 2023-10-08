@@ -4,26 +4,74 @@ use byte_array::ByteArray;
 use alexandria_data_structures::byte_array_ext::ByteArrayTraitExt;
 use core::clone::Clone;
 
+/// A read-only snapshot of an underlying ByteArray that maintains
+/// sequential access to the integers encoded in the array
 #[derive(Copy, Drop)]
 struct ByteArrayReader {
+    /// A snapshot of the ByteArray
     data: @ByteArray,
+    /// The `read_index` is incremented in accordance with the integers consumed
     reader_index: usize,
 }
 
 trait ByteArrayReaderTrait {
+    /// Creates a ByteArrayReader from a ByteArray snapshot
+    /// # Arguments
+    /// * `from` - a ByteArray snapshot to read from
+    /// # Returns
+    /// `ByteArrayReader` - a new reader starting at the beginning of the underlying ByteArray
     fn new(from: @ByteArray) -> ByteArrayReader;
+    /// Reads a u8 unsigned integer
+    /// # Returns 
+    /// `Option<u8>` - If there are enough bytes remaining an optional integer is returned
     fn read_u8(ref self: ByteArrayReader) -> Option<u8>;
+    /// Reads a u16 unsigned integer
+    /// # Returns 
+    /// `Option<u16>` - If there are enough bytes remaining an optional integer is returned
     fn read_u16(ref self: ByteArrayReader) -> Option<u16>;
+    /// Reads a u32 unsigned integer
+    /// # Returns 
+    /// `Option<u32>` - If there are enough bytes remaining an optional integer is returned
     fn read_u32(ref self: ByteArrayReader) -> Option<u32>;
+    /// Reads a u64 unsigned integer
+    /// # Returns 
+    /// `Option<u64>` - If there are enough bytes remaining an optional integer is returned
     fn read_u64(ref self: ByteArrayReader) -> Option<u64>;
+    /// Reads a u128 unsigned integer
+    /// # Returns 
+    /// `Option<u218>` - If there are enough bytes remaining an optional integer is returned
     fn read_u128(ref self: ByteArrayReader) -> Option<u128>;
+    /// Reads a u256 unsigned integer
+    /// # Returns 
+    /// `Option<u256>` - If there are enough bytes remaining an optional integer is returned
     fn read_u256(ref self: ByteArrayReader) -> Option<u256>;
+    /// Reads a u512 unsigned integer
+    /// # Returns 
+    /// `Option<u512>` - If there are enough bytes remaining an optional integer is returned
     fn read_u512(ref self: ByteArrayReader) -> Option<u512>;
+    /// Reads an i8 signed integer in two's complement encoding from the ByteArray
+    /// # Returns 
+    /// `Option<i8>` - If there are enough bytes remaining an optional integer is returned
     fn read_i8(ref self: ByteArrayReader) -> Option<i8>;
+    /// Reads an i16 signed integer in two's complement encoding from the ByteArray
+    /// # Returns 
+    /// `Option<i16>` - If there are enough bytes remaining an optional integer is returned
     fn read_i16(ref self: ByteArrayReader) -> Option<i16>;
+    /// Reads an i32 signed integer in two's complement encoding from the ByteArray
+    /// # Returns 
+    /// `Option<i32>` - If there are enough bytes remaining an optional integer is returned
     fn read_i32(ref self: ByteArrayReader) -> Option<i32>;
+    /// Reads an i64 signed integer in two's complement encoding from the ByteArray
+    /// # Returns 
+    /// `Option<i64>` - If there are enough bytes remaining an optional integer is returned
     fn read_i64(ref self: ByteArrayReader) -> Option<i64>;
+    /// Reads an i128 signed integer in two's complement encoding from the ByteArray
+    /// # Returns 
+    /// `Option<i128>` - If there are enough bytes remaining an optional integer is returned
     fn read_i128(ref self: ByteArrayReader) -> Option<i128>;
+    /// Returns the remaining length of the ByteArrayReader
+    /// # Returns
+    /// `usize` - The number of bytes remaining considering the number of bytes that have already been consumed
     fn len(self: @ByteArrayReader) -> usize;
 }
 

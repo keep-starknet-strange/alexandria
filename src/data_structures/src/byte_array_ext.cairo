@@ -7,21 +7,77 @@ use traits::DivRem;
 use core::serde::into_felt252_based::SerdeImpl;
 
 trait ByteArrayTraitExt {
+    /// Appends an unsigned 16 bit integer
+    /// # Arguments
+    /// * `word` - a 16 bit unsigned integer typed as u16
     fn append_u16(ref self: ByteArray, word: u16);
+    /// Appends an unsigned 32 bit integer
+    /// # Arguments
+    /// * `word` - a 32 bit unsigned integer typed as u32
     fn append_u32(ref self: ByteArray, word: u32);
+    /// Appends an unsigned 64 bit integer
+    /// # Arguments
+    /// * `word` - a 64 bit unsigned integer typed as u64
     fn append_u64(ref self: ByteArray, word: u64);
+    /// Appends an unsigned 128 bit integer
+    /// # Arguments
+    /// * `word` - a 128 bit unsigned integer typed as u128
     fn append_u128(ref self: ByteArray, word: u128);
+    /// Appends an unsigned 256 bit integer
+    /// # Arguments
+    /// * `word` - a 256 bit unsigned integer typed as u256
     fn append_u256(ref self: ByteArray, word: u256);
+    /// Appends an unsigned 512 bit integer
+    /// # Arguments
+    /// * `word` - a 512 bit unsigned integer typed as u32
     fn append_u512(ref self: ByteArray, word: u512);
+    /// Appends a signed 8 bit integer
+    /// # Arguments
+    /// * `word` - an 8 bit signed integer typed as i8
     fn append_i8(ref self: ByteArray, word: i8);
+    /// Appends a signed 16 bit integer
+    /// # Arguments
+    /// * `word` - a 16 bit signed integer typed as i16
     fn append_i16(ref self: ByteArray, word: i16);
+    /// Appends a signed 32 bit integer
+    /// # Arguments
+    /// * `word` - a 32 bit signed integer typed as i32
     fn append_i32(ref self: ByteArray, word: i32);
+    /// Appends a signed 64 bit integer
+    /// # Arguments
+    /// * `word` - a 64 bit signed integer typed as i64
     fn append_i64(ref self: ByteArray, word: i64);
+    /// Appends a signed 128 bit integer
+    /// # Arguments
+    /// * `word` - a 128 bit signed integer typed as i128
     fn append_i128(ref self: ByteArray, word: i128);
+    /// Reads consecutive bytes from a specified offset as an unsigned integer 
+    /// # Arguments
+    /// * `offset` - the start location of the consecutive bytes to read
+    /// # Returns
+    /// * `Option<u16>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
     fn word_u16(self: @ByteArray, offset: usize) -> Option<u16>;
+    /// Reads consecutive bytes from a specified offset as an unsigned integer 
+    /// # Arguments
+    /// * `offset` - the start location of the consecutive bytes to read
+    /// # Returns
+    /// * `Option<u32>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
     fn word_u32(self: @ByteArray, offset: usize) -> Option<u32>;
+    /// Reads consecutive bytes from a specified offset as an unsigned integer 
+    /// # Arguments
+    /// * `offset` - the start location of the consecutive bytes to read
+    /// # Returns
+    /// * `Option<u64>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
     fn word_u64(self: @ByteArray, offset: usize) -> Option<u64>;
+    /// Reads consecutive bytes from a specified offset as an unsigned integer 
+    /// # Arguments
+    /// * `offset` - the start location of the consecutive bytes to read
+    /// # Returns
+    /// * `Option<u128>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
     fn word_u128(self: @ByteArray, offset: usize) -> Option<u128>;
+    /// Wraps the ByteArray in a ByteArrayReader for sequential consumption of integers and/or bytes
+    /// # Returns
+    /// * `ByteArrayReader` - The reader struct wrapping a read-only snapshot of this ByteArray
     fn reader(self: @ByteArray) -> ByteArrayReader;
 }
 

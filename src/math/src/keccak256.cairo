@@ -19,9 +19,7 @@ impl U64Impl of U64Trait {
         loop {
             let byte = match self.pop_back() {
                 Option::Some(byte) => *byte,
-                Option::None => {
-                    break;
-                },
+                Option::None => { break; },
             };
             value = value * 0x100 + (byte.into());
         };

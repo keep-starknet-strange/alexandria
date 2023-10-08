@@ -24,9 +24,7 @@ fn cumsum<T, impl TAdd: Add<T>, impl TCopy: Copy<T>, impl TDrop: Drop<T>,>(
                 array.append(sum);
                 prev_value = sum;
             },
-            Option::None => {
-                break;
-            },
+            Option::None => { break; },
         };
     };
     array

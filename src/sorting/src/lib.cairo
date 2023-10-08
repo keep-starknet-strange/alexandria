@@ -24,9 +24,7 @@ fn is_equal(mut a: Span<u32>, mut b: Span<u32>) -> bool {
                     break false;
                 }
             },
-            Option::None => {
-                break true;
-            },
+            Option::None => { break true; },
         };
     }
 }
