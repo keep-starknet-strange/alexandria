@@ -5,5 +5,4 @@ description = "Starknet storage utilities"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/src/storage"
 
 [dependencies]
-alexandria_math = { path = "../math" }
 starknet.workspace = true

@@ -5,12 +5,6 @@ use core::array::ArrayTrait;
 use poseidon::poseidon_hash_span;
 use debug::PrintTrait;
 
-// documentation
-// https://docs.starknet.io/documentation/architecture_and_concepts/State/starknet-state/
-// https://github.com/eqlabs/pathfinder/blob/main/crates/merkle-tree/src/tree.rs
-// https://github.com/eqlabs/pathfinder/blob/main/doc/rpc/pathfinder_rpc_api.json
-// https://github.com/NethermindEth/starknet-state-verifier/blob/main/contracts/contracts/SNStateProofVerifier.sol
-
 #[derive(Drop)]
 struct BinaryNode {
     left: felt252,
@@ -45,6 +39,17 @@ struct ContractStateProof {
     contract_data: ContractData
 }
 
+/// Verify Starknet storage proof. For reference see:
+/// - ([state](https://docs.starknet.io/documentation/architecture_and_concepts/State/starknet-state/))
+/// - ([pathfinder_getproof API endpoint](https://github.com/eqlabs/pathfinder/blob/main/doc/rpc/pathfinder_rpc_api.json))
+/// - ([pathfinder storage implementation](https://github.com/eqlabs/pathfinder/blob/main/crates/merkle-tree/src/tree.rs))
+/// # Arguments
+/// * `expected_state_commitment` - state root `proof` is going to be verified against
+/// * `contract_address` - `contract_address` of the value to be verified
+/// * `storage_address` - `storage_address` of the value to be verified
+/// * `proof` - `ContractStateProof` representing storage proof
+/// # Returns
+/// * `felt252` - `value` at `storage_address` if verified, panic otherwise.
 fn verify(
     expected_state_commitment: felt252,
     contract_address: felt252,
@@ -136,13 +141,9 @@ fn node_hash(node: @TrieNode) -> felt252 {
     }
 }
 
-fn pow<
-    T, impl TMul: Mul<T>, impl TInto: Into<felt252, T>, impl TDrop: Drop<T>, impl TCopy: Copy<T>
->(
-    x: T, n: u8
-) -> T {
+fn pow(x: felt252, n: u8) -> felt252 {
     if n == 0 {
-        1.into()
+        1
     } else if n == 1 {
         x
     } else if (n & 1) == 1 {
