@@ -130,9 +130,7 @@ impl MerkleTreeImpl<
                             self.hasher.hash(*proof_element, current_node)
                         };
                 },
-                Option::None => {
-                    break current_node;
-                },
+                Option::None => { break current_node; },
             };
         }
     }
@@ -160,9 +158,7 @@ impl MerkleTreeImpl<
                             self.hasher.hash(*proof_element, leaf)
                         };
                 },
-                Option::None => {
-                    break leaf;
-                },
+                Option::None => { break leaf; },
             };
         };
         computed_root == root

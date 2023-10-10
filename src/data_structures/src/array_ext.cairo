@@ -22,6 +22,7 @@ trait ArrayTraitExt<T> {
         self: @Array<T>
     ) -> Option<usize>;
     fn dedup<impl TPartialEq: PartialEq<T>>(self: @Array<T>) -> Array<T>;
+    fn unique<impl TPartialEq: PartialEq<T>>(self: @Array<T>) -> Array<T>;
 }
 
 trait SpanTraitExt<T> {
@@ -45,6 +46,7 @@ trait SpanTraitExt<T> {
         self: Span<T>
     ) -> Option<usize>;
     fn dedup<impl TPartialEq: PartialEq<T>>(self: Span<T>) -> Array<T>;
+    fn unique<impl TPartialEq: PartialEq<T>>(self: Span<T>) -> Array<T>;
 }
 
 impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> {
@@ -65,12 +67,8 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
                 break;
             }
             match self.pop_front() {
-                Option::Some(v) => {
-                    n -= 1;
-                },
-                Option::None => {
-                    break;
-                },
+                Option::Some(v) => { n -= 1; },
+                Option::None => { break; },
             };
         };
     }
@@ -141,6 +139,10 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
     fn dedup<impl TPartialEq: PartialEq<T>>(mut self: @Array<T>) -> Array<T> {
         self.span().dedup()
     }
+
+    fn unique<impl TPartialEq: PartialEq<T>>(mut self: @Array<T>) -> Array<T> {
+        self.span().unique()
+    }
 }
 
 impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
@@ -150,12 +152,8 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
                 break;
             }
             match self.pop_front() {
-                Option::Some(v) => {
-                    n -= 1;
-                },
-                Option::None => {
-                    break;
-                },
+                Option::Some(v) => { n -= 1; },
+                Option::None => { break; },
             };
         };
     }
@@ -166,12 +164,8 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
                 break;
             }
             match self.pop_back() {
-                Option::Some(v) => {
-                    n -= 1;
-                },
-                Option::None => {
-                    break;
-                },
+                Option::Some(v) => { n -= 1; },
+                Option::None => { break; },
             };
         };
     }
@@ -180,9 +174,7 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
         let mut response = array![];
         loop {
             match self.pop_back() {
-                Option::Some(v) => {
-                    response.append(*v);
-                },
+                Option::Some(v) => { response.append(*v); },
                 Option::None => {
                     break; // Can't `break response;` "Variable was previously moved"
                 },
@@ -194,14 +186,10 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
     fn contains<impl TPartialEq: PartialEq<T>>(mut self: Span<T>, item: T) -> bool {
         loop {
             match self.pop_front() {
-                Option::Some(v) => {
-                    if *v == item {
-                        break true;
-                    }
-                },
-                Option::None => {
-                    break false;
-                },
+                Option::Some(v) => { if *v == item {
+                    break true;
+                } },
+                Option::None => { break false; },
             };
         }
     }
@@ -238,9 +226,7 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
                     }
                     index += 1;
                 },
-                Option::None => {
-                    break Option::None;
-                },
+                Option::None => { break Option::None; },
             };
         }
     }
@@ -249,14 +235,10 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
         let mut count = 0_usize;
         loop {
             match self.pop_front() {
-                Option::Some(v) => {
-                    if *v == item {
-                        count += 1;
-                    }
-                },
-                Option::None => {
-                    break count;
-                },
+                Option::Some(v) => { if *v == item {
+                    count += 1;
+                } },
+                Option::None => { break count; },
             };
         }
     }
@@ -266,20 +248,14 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
     ) -> Option<T> {
         let mut min = match self.pop_front() {
             Option::Some(item) => *item,
-            Option::None => {
-                return Option::None;
-            },
+            Option::None => { return Option::None; },
         };
         loop {
             match self.pop_front() {
-                Option::Some(item) => {
-                    if *item < min {
-                        min = *item
-                    }
-                },
-                Option::None => {
-                    break Option::Some(min);
-                },
+                Option::Some(item) => { if *item < min {
+                    min = *item
+                } },
+                Option::None => { break Option::Some(min); },
             };
         }
     }
@@ -291,21 +267,15 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
         let mut index_of_min = 0;
         let mut min: T = match self.pop_front() {
             Option::Some(item) => *item,
-            Option::None => {
-                return Option::None;
-            },
+            Option::None => { return Option::None; },
         };
         loop {
             match self.pop_front() {
-                Option::Some(item) => {
-                    if *item < min {
-                        index_of_min = index + 1;
-                        min = *item;
-                    }
-                },
-                Option::None => {
-                    break Option::Some(index_of_min);
-                },
+                Option::Some(item) => { if *item < min {
+                    index_of_min = index + 1;
+                    min = *item;
+                } },
+                Option::None => { break Option::Some(index_of_min); },
             };
             index += 1;
         }
@@ -316,20 +286,14 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
     ) -> Option<T> {
         let mut max = match self.pop_front() {
             Option::Some(item) => *item,
-            Option::None => {
-                return Option::None;
-            },
+            Option::None => { return Option::None; },
         };
         loop {
             match self.pop_front() {
-                Option::Some(item) => {
-                    if *item > max {
-                        max = *item
-                    }
-                },
-                Option::None => {
-                    break Option::Some(max);
-                },
+                Option::Some(item) => { if *item > max {
+                    max = *item
+                } },
+                Option::None => { break Option::Some(max); },
             };
         }
     }
@@ -341,21 +305,15 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
         let mut index_of_max = 0;
         let mut max = match self.pop_front() {
             Option::Some(item) => *item,
-            Option::None => {
-                return Option::None;
-            },
+            Option::None => { return Option::None; },
         };
         loop {
             match self.pop_front() {
-                Option::Some(item) => {
-                    if *item > max {
-                        index_of_max = index + 1;
-                        max = *item
-                    }
-                },
-                Option::None => {
-                    break Option::Some(index_of_max);
-                },
+                Option::Some(item) => { if *item > max {
+                    index_of_max = index + 1;
+                    max = *item
+                } },
+                Option::None => { break Option::Some(index_of_max); },
             };
             index += 1;
         }
@@ -371,18 +329,27 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
 
         loop {
             match self.pop_front() {
-                Option::Some(v) => {
-                    if (last_value != v) {
-                        last_value = v;
-                        ret.append(*v);
-                    };
-                },
-                Option::None => {
-                    break;
-                }
+                Option::Some(v) => { if (last_value != v) {
+                    last_value = v;
+                    ret.append(*v);
+                }; },
+                Option::None => { break; }
             };
         };
 
+        ret
+    }
+
+    fn unique<impl TPartialEq: PartialEq<T>>(mut self: Span<T>) -> Array<T> {
+        let mut ret = array![];
+        loop {
+            match self.pop_front() {
+                Option::Some(v) => { if !ret.contains(*v) {
+                    ret.append(*v);
+                } },
+                Option::None => { break; }
+            };
+        };
         ret
     }
 }

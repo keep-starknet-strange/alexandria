@@ -25,8 +25,11 @@ trait ListTrait<T> {
     fn append(ref self: List<T>, value: T) -> u32;
     fn get(self: @List<T>, index: u32) -> Option<T>;
     fn set(ref self: List<T>, index: u32, value: T);
+    fn clean(ref self: List<T>);
     fn pop_front(ref self: List<T>) -> Option<T>;
     fn array(self: @List<T>) -> Array<T>;
+    fn from_array(ref self: List<T>, array: @Array<T>);
+    fn from_span(ref self: List<T>, span: Span<T>);
 }
 
 impl ListImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TStore: Store<T>> of ListTrait<T> {
@@ -71,6 +74,11 @@ impl ListImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TStore: Store<T>
         Store::write_at_offset(self.address_domain, base, offset, value).unwrap_syscall();
     }
 
+    fn clean(ref self: List<T>) {
+        self.len = 0;
+        Store::write(self.address_domain, self.base, self.len);
+    }
+
     fn pop_front(ref self: List<T>) -> Option<T> {
         if self.len == 0 {
             return Option::None;
@@ -97,6 +105,28 @@ impl ListImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TStore: Store<T>
             index += 1;
         };
         array
+    }
+
+    fn from_array(ref self: List<T>, array: @Array<T>) {
+        self.from_span(array.span());
+    }
+
+    fn from_span(ref self: List<T>, mut span: Span<T>) {
+        let mut index = 0;
+        self.len = span.len();
+        loop {
+            match span.pop_front() {
+                Option::Some(v) => {
+                    let (base, offset) = calculate_base_and_offset_for_index(
+                        self.base, index, self.storage_size
+                    );
+                    Store::write_at_offset(self.address_domain, base, offset, *v).unwrap_syscall();
+                    index += 1;
+                },
+                Option::None => { break; }
+            };
+        };
+        Store::write(self.address_domain, self.base, self.len);
     }
 }
 

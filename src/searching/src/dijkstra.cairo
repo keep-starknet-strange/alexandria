@@ -55,9 +55,7 @@ impl GraphImpl of GraphTrait {
                 nodes.append(node);
                 nodes.span()
             },
-            FromNullableResult::NotNull(adj_nodes) => {
-                adj_nodes.unbox()
-            },
+            FromNullableResult::NotNull(adj_nodes) => { adj_nodes.unbox() },
         };
 
         // iterate over existing array to add new node
@@ -128,9 +126,7 @@ fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u
                 no_more_adj_node = true;
                 priority_queue.span()
             },
-            FromNullableResult::NotNull(adj_nodes) => {
-                adj_nodes.unbox()
-            },
+            FromNullableResult::NotNull(adj_nodes) => { adj_nodes.unbox() },
         };
 
         if !no_more_adj_node {

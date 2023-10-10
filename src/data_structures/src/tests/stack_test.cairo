@@ -41,12 +41,8 @@ fn stack_peek_test<
     stack.push(val_1);
     stack.push(val_2);
     match stack.peek() {
-        Option::Some(result) => {
-            assert(result == val_2, 'wrong result');
-        },
-        Option::None => {
-            assert(false, 'should return value');
-        },
+        Option::Some(result) => { assert(result == val_2, 'wrong result'); },
+        Option::None => { assert(false, 'should return value'); },
     };
 
     assert(stack.len() == 2, 'should not remove items');
@@ -68,12 +64,8 @@ fn stack_pop_test<
 
     let value = stack.pop();
     match value {
-        Option::Some(result) => {
-            assert(result == val_2, 'wrong result');
-        },
-        Option::None => {
-            assert(false, 'should return a value');
-        },
+        Option::Some(result) => { assert(result == val_2, 'wrong result'); },
+        Option::None => { assert(false, 'should return a value'); },
     };
 
     assert(stack.len() == 1, 'should remove item');
