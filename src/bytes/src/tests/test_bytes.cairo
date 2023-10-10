@@ -499,8 +499,9 @@ fn test_bytes_append() {
     bytes = Bytes { size: size, data: data };
 
     // append_address
-    let address =
-        contract_address_const::<0x015401855d7796176b05d160196ff92381eb7910f5446c2e0e04e13db2194a4f>();
+    let address = contract_address_const::<
+        0x015401855d7796176b05d160196ff92381eb7910f5446c2e0e04e13db2194a4f
+    >();
     bytes.append_address(address);
     let Bytes{size, mut data } = bytes;
     assert(size == 117, 'append_address_size');
