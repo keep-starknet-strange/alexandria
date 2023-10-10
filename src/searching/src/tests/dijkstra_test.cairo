@@ -26,12 +26,8 @@ fn add_edge() {
     let val = graph.adj_nodes.get(source.into());
 
     let span = match match_nullable(val) {
-        FromNullableResult::Null => {
-            panic_with_felt252('No value found')
-        },
-        FromNullableResult::NotNull(val) => {
-            val.unbox()
-        },
+        FromNullableResult::Null => { panic_with_felt252('No value found') },
+        FromNullableResult::NotNull(val) => { val.unbox() },
     };
 
     assert(span.len() == 4, 'wrong nb of adj edge for node 0');
@@ -47,12 +43,8 @@ fn add_edge() {
     let val = graph.adj_nodes.get(2.into());
 
     let span = match match_nullable(val) {
-        FromNullableResult::Null => {
-            panic_with_felt252('No value found')
-        },
-        FromNullableResult::NotNull(val) => {
-            val.unbox()
-        },
+        FromNullableResult::Null => { panic_with_felt252('No value found') },
+        FromNullableResult::NotNull(val) => { val.unbox() },
     };
 
     assert(span.len() == 2, 'wrong nb of adj edge for node 2');

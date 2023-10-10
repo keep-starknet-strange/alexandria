@@ -102,9 +102,7 @@ fn from_u32Array_to_u8Array(mut data: Span<u32>) -> Array<u8> {
                 res = *val & 0xff;
                 result.append(res.try_into().unwrap());
             },
-            Option::None => {
-                break;
-            },
+            Option::None => { break; },
         };
     };
     result
@@ -195,9 +193,7 @@ fn from_u8Array_to_u32Array(mut data: Span<u8>) -> Array<u32> {
                 value = value + (*val4).into();
                 result.append(value);
             },
-            Option::None => {
-                break;
-            },
+            Option::None => { break; },
         };
     };
     result

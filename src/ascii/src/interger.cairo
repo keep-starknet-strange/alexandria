@@ -78,12 +78,8 @@ impl SmallIntergerToAsciiTraitImpl<
         let mut ascii: felt252 = 0;
         loop {
             match inverse_ascii_arr.pop_back() {
-                Option::Some(val) => {
-                    ascii = ascii * 256 + *val;
-                },
-                Option::None(_) => {
-                    break;
-                },
+                Option::Some(val) => { ascii = ascii * 256 + *val; },
+                Option::None(_) => { break; },
             };
         };
 

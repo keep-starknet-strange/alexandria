@@ -64,20 +64,23 @@ fn merkle_tree_pedersen_test() {
     let leaves = array![0x1, 0x2, 0x3];
 
     // [Assert] Compute merkle root.
-    let computed_root = MerkleTreeImpl::<_,
-    PedersenHasherImpl>::compute_root(ref merkle_tree, leaf, valid_proof);
+    let computed_root = MerkleTreeImpl::<
+        _, PedersenHasherImpl
+    >::compute_root(ref merkle_tree, leaf, valid_proof);
     assert(computed_root == root, 'compute valid root failed');
 
     // [Assert] Compute merkle proof.
     let mut input_leaves = leaves;
     let index = 0;
-    let computed_proof = MerkleTreeImpl::<_,
-    PedersenHasherImpl>::compute_proof(ref merkle_tree, input_leaves, index);
+    let computed_proof = MerkleTreeImpl::<
+        _, PedersenHasherImpl
+    >::compute_proof(ref merkle_tree, input_leaves, index);
     assert(computed_proof == valid_proof, 'compute valid proof failed');
 
     // [Assert] Verify a valid proof.
-    let result = MerkleTreeImpl::<_,
-    PedersenHasherImpl>::verify(ref merkle_tree, root, leaf, valid_proof);
+    let result = MerkleTreeImpl::<
+        _, PedersenHasherImpl
+    >::verify(ref merkle_tree, root, leaf, valid_proof);
     assert(result, 'verify valid proof failed');
 
     // [Assert] Verify an invalid proof.
@@ -85,14 +88,16 @@ fn merkle_tree_pedersen_test() {
         0x2 + 1, 0x68ba2a188dd231112c1cb5aaa5d18be6d84f6c8683e5c3a6638dee83e727acc
     ]
         .span();
-    let result = MerkleTreeImpl::<_,
-    PedersenHasherImpl>::verify(ref merkle_tree, root, leaf, invalid_proof);
+    let result = MerkleTreeImpl::<
+        _, PedersenHasherImpl
+    >::verify(ref merkle_tree, root, leaf, invalid_proof);
     assert(!result, 'verify invalid proof failed');
 
     // [Assert] Verify a valid proof with an invalid leaf.
     let invalid_leaf = 0x1 + 1;
-    let result = MerkleTreeImpl::<_,
-    PedersenHasherImpl>::verify(ref merkle_tree, root, invalid_leaf, valid_proof);
+    let result = MerkleTreeImpl::<
+        _, PedersenHasherImpl
+    >::verify(ref merkle_tree, root, invalid_leaf, valid_proof);
     assert(!result, 'wrong result');
 }
 
@@ -108,20 +113,23 @@ fn merkle_tree_poseidon_test() {
     let leaves = array![0x1, 0x2, 0x3];
 
     // [Assert] Compute merkle root.
-    let computed_root = MerkleTreeImpl::<_,
-    PoseidonHasherImpl>::compute_root(ref merkle_tree, leaf, valid_proof);
+    let computed_root = MerkleTreeImpl::<
+        _, PoseidonHasherImpl
+    >::compute_root(ref merkle_tree, leaf, valid_proof);
     assert(computed_root == root, 'compute valid root failed');
 
     // [Assert] Compute merkle proof.
     let mut input_leaves = leaves;
     let index = 0;
-    let computed_proof = MerkleTreeImpl::<_,
-    PoseidonHasherImpl>::compute_proof(ref merkle_tree, input_leaves, index);
+    let computed_proof = MerkleTreeImpl::<
+        _, PoseidonHasherImpl
+    >::compute_proof(ref merkle_tree, input_leaves, index);
     assert(computed_proof == valid_proof, 'compute valid proof failed');
 
     // [Assert] Verify a valid proof.
-    let result = MerkleTreeImpl::<_,
-    PoseidonHasherImpl>::verify(ref merkle_tree, root, leaf, valid_proof);
+    let result = MerkleTreeImpl::<
+        _, PoseidonHasherImpl
+    >::verify(ref merkle_tree, root, leaf, valid_proof);
     assert(result, 'verify valid proof failed');
 
     // [Assert] Verify an invalid proof.
@@ -129,13 +137,15 @@ fn merkle_tree_poseidon_test() {
         0x2 + 1, 0x68ba2a188dd231112c1cb5aaa5d18be6d84f6c8683e5c3a6638dee83e727acc
     ]
         .span();
-    let result = MerkleTreeImpl::<_,
-    PoseidonHasherImpl>::verify(ref merkle_tree, root, leaf, invalid_proof);
+    let result = MerkleTreeImpl::<
+        _, PoseidonHasherImpl
+    >::verify(ref merkle_tree, root, leaf, invalid_proof);
     assert(!result, 'verify invalid proof failed');
 
     // [Assert] Verify a valid proof with an invalid leaf.
     let invalid_leaf = 0x1 + 1;
-    let result = MerkleTreeImpl::<_,
-    PoseidonHasherImpl>::verify(ref merkle_tree, root, invalid_leaf, valid_proof);
+    let result = MerkleTreeImpl::<
+        _, PoseidonHasherImpl
+    >::verify(ref merkle_tree, root, invalid_leaf, valid_proof);
     assert(!result, 'wrong result');
 }

@@ -123,9 +123,7 @@ impl ListImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TStore: Store<T>
                     Store::write_at_offset(self.address_domain, base, offset, *v).unwrap_syscall();
                     index += 1;
                 },
-                Option::None => {
-                    break;
-                }
+                Option::None => { break; }
             };
         };
         Store::write(self.address_domain, self.base, self.len);

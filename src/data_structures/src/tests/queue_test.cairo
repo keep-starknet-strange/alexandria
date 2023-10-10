@@ -42,12 +42,8 @@ fn queue_peek_front_test() {
     queue.enqueue(3);
 
     match queue.peek_front() {
-        Option::Some(result) => {
-            assert(*(result.unbox()) == 1, 'wrong result');
-        },
-        Option::None => {
-            assert(false, 'should return value');
-        },
+        Option::Some(result) => { assert(*(result.unbox()) == 1, 'wrong result'); },
+        Option::None => { assert(false, 'should return value'); },
     };
 
     let result_len = queue.len();
@@ -63,12 +59,8 @@ fn queue_dequeue_test() {
     queue.enqueue(3);
 
     match queue.dequeue() {
-        Option::Some(result) => {
-            assert(result == 1, 'wrong result');
-        },
-        Option::None => {
-            assert(false, 'should return a value');
-        },
+        Option::Some(result) => { assert(result == 1, 'wrong result'); },
+        Option::None => { assert(false, 'should return a value'); },
     };
 
     let result_len = queue.len();

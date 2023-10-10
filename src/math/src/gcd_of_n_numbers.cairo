@@ -15,12 +15,8 @@ fn gcd(mut n: Span<u128>) -> u128 {
     let mut a = *n.pop_front().unwrap();
     loop {
         match n.pop_front() {
-            Option::Some(b) => {
-                a = gcd_two_numbers(a, *b);
-            },
-            Option::None => {
-                break a;
-            },
+            Option::Some(b) => { a = gcd_two_numbers(a, *b); },
+            Option::None => { break a; },
         };
     }
 }
