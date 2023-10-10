@@ -66,6 +66,7 @@ This repository is composed of multiple crates:
 - [Searching](./src/searching/README.md)
 - [Sorting](./src/sorting/README.md)
 - [Storage](./src/storage/README.md)
+- [Bytes](./src/bytes/README.md)
 
 ## Getting Started
 
