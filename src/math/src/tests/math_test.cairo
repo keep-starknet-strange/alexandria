@@ -1,4 +1,5 @@
 use alexandria_math::{pow, BitShift, count_digits_of_base};
+use integer::{BoundedInt};
 
 // Test power function
 #[test]
@@ -167,4 +168,15 @@ fn fpow_test() {
 #[available_gas(2000000)]
 fn fpow_test_u256() {
     assert(BitShift::fpow(3_u256, 8) == 6561, 'invalid result');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn shl_should_not_overflow() {
+    assert(BitShift::shl(BitShift::<u8>::fpow(2, 7), 1) == 0, 'invalid result');
+    assert(BitShift::shl(BitShift::<u16>::fpow(2, 15), 1) == 0, 'invalid result');
+    assert(BitShift::shl(BitShift::<u32>::fpow(2, 31), 1) == 0, 'invalid result');
+    assert(BitShift::shl(BitShift::<u64>::fpow(2, 63), 1) == 0, 'invalid result');
+    assert(BitShift::shl(BitShift::<u128>::fpow(2, 127), 1) == 0, 'invalid result');
+    assert(BitShift::shl(BitShift::<u256>::fpow(2, 255), 1) == 0, 'invalid result');
 }
