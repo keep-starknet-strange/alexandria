@@ -193,15 +193,11 @@ impl Bytes31Reversible of ReversibleBytes<bytes31> {
     // high: C Z -> high_rev: A_rev Z
     fn reverse_bytes(self: @bytes31) -> bytes31 {
         let u256{low, high } = (*self).into();
-        let (c_rev, _) = reversing(
-            word: high, size: 15, step: SELECT_BYTE.into()
-        );
+        let (c_rev, _) = reversing(word: high, size: 15, step: SELECT_BYTE.into());
         let (low_rev, a) = reversing_partial_result( // pushes b_rev yielding low_rev
             word: low, onto: c_rev, size: 1, step: SELECT_BYTE.into()
         );
-        let (high_rev, _) = reversing(
-            word: a, size: 15, step: SELECT_BYTE.into()
-        );
+        let (high_rev, _) = reversing(word: a, size: 15, step: SELECT_BYTE.into());
         let felt: felt252 = u256 { low: low_rev, high: high_rev }.try_into().unwrap();
         felt.try_into().unwrap()
     }
@@ -210,29 +206,13 @@ impl Bytes31Reversible of ReversibleBytes<bytes31> {
 impl Bytes31ReversibleBits of ReversibleBits<bytes31> {
     fn reverse_bits(self: @bytes31) -> bytes31 {
         let u256{low, high } = (*self).into();
-        let (c_rev, _) = reversing(
-            word: high, size: 120, step: SELECT_BIT.into()
-        );
+        let (c_rev, _) = reversing(word: high, size: 120, step: SELECT_BIT.into());
         let (low_rev, a) = reversing_partial_result( // pushes b_rev yielding low_rev
             word: low, onto: c_rev, size: 8, step: SELECT_BIT.into()
         );
-        let (high_rev, _) = reversing(
-            word: a, size: 120, step: SELECT_BIT.into()
-        );
+        let (high_rev, _) = reversing(word: a, size: 120, step: SELECT_BIT.into());
         let felt: felt252 = u256 { low: low_rev, high: high_rev }.try_into().unwrap();
         felt.try_into().unwrap()
-
-
-        // let u256{low, high } = (*self).into();
-        // let (high_rev, b) = reversing(
-        //     word: low, size: 120, step: SELECT_BIT.into()
-        // );
-        // let (b_rev, _) = reversing(word: b, size: 8, step: SELECT_BIT.into());
-        // let (low_rev, _) = reversing_partial_result(
-        //     word: high, onto: b_rev, size: 120, step: SELECT_BIT.into()
-        // );
-        // let felt: felt252 = u256 { low: low_rev, high: high_rev }.try_into().unwrap();
-        // felt.try_into().unwrap()
     }
 }
 
