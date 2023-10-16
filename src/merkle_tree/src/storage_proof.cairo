@@ -120,9 +120,7 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
                 }
                 expected_hash = node_hash(node);
             },
-            Option::None => {
-                break;
-            }
+            Option::None => { break; }
         };
     };
     assert(expected_path == path, 'invalid proof path');
@@ -132,9 +130,7 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
 #[inline]
 fn node_hash(node: @TrieNode) -> felt252 {
     match node {
-        TrieNode::Binary(binary_node) => {
-            pedersen(*binary_node.left, *binary_node.right)
-        },
+        TrieNode::Binary(binary_node) => { pedersen(*binary_node.left, *binary_node.right) },
         TrieNode::Edge(edge_node) => {
             pedersen(*edge_node.child, *edge_node.path) + (*edge_node.length).into()
         }

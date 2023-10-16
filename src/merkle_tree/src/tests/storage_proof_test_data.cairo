@@ -1,4 +1,6 @@
-use alexandria_merkle_tree::storage_proof::{ContractStateProof, ContractData, TrieNode, BinaryNode, EdgeNode};
+use alexandria_merkle_tree::storage_proof::{
+    ContractStateProof, ContractData, TrieNode, BinaryNode, EdgeNode
+};
 
 fn balance_proof() -> ContractStateProof {
     // func _balances(user : felt) -> (res : Uint256):
