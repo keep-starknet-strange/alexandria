@@ -234,7 +234,7 @@ impl BitArrayImpl of BitArrayTrait {
 
     fn write_word_be_u256(ref self: BitArray, word: u256, length: usize) {
         assert(length <= 256, 'illegal length');
-        let u256{low, high } = word;
+        let u256 { low, high } = word;
         if length > 128 {
             self.write_word_be(high.into(), length - 128);
             self.write_word_be(low.into(), 128);
