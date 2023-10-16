@@ -1,5 +1,5 @@
 // Internal imports
-use alexandria_data_structures::merkle_tree::{
+use alexandria_merkle_tree::merkle_tree::{
     Hasher, MerkleTree, pedersen::PedersenHasherImpl, poseidon::PoseidonHasherImpl, MerkleTreeTrait,
     MerkleTreeImpl
 };
@@ -7,7 +7,7 @@ use alexandria_data_structures::merkle_tree::{
 
 mod regular_call_merkle_tree_pedersen {
     // Internal imports
-    use alexandria_data_structures::merkle_tree::{
+    use alexandria_merkle_tree::merkle_tree::{
         Hasher, MerkleTree, pedersen::PedersenHasherImpl, MerkleTreeTrait,
     };
     #[test]

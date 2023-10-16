@@ -15,4 +15,4 @@ curl -s -X POST \
         "id": 0
     }' \
     https://starknet-mainnet.g.alchemy.com/v2/-PEdaMXc6znJmRDiadouarlPjdT6f10Z \
-    | jq -r -f proof_filter.jq
+    | jq -r -f storage_proof_filter.jq

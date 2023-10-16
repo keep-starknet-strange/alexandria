@@ -1,8 +1,8 @@
-use alexandria_proof::proof::{
+use alexandria_merkle_tree::storage_proof::{
     ContractStateProof, ContractData, TrieNode, BinaryNode, EdgeNode, verify
 };
 
-use alexandria_proof::tests::proof_test_data::{balance_proof, total_balance_proof};
+use alexandria_merkle_tree::tests::storage_proof_test_data::{balance_proof, total_balance_proof};
 
 const DAI: felt252 = 0x00da114221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3;
 const ETH: felt252 = 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7;
