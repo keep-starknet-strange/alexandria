@@ -1,9 +1,6 @@
-use core::option::OptionTrait;
-use core::array::SpanTrait;
-use core::traits::Into;
-use core::array::ArrayTrait;
-use poseidon::poseidon_hash_span;
-use debug::PrintTrait;
+use pedersen::PedersenTrait;
+use poseidon::PoseidonTrait;
+use hash::HashStateTrait;
 
 #[derive(Drop)]
 struct BinaryNode {
@@ -62,8 +59,10 @@ fn verify(
         storage_address, contract_data.storage_proof
     );
 
-    let contract_state_hash = pedersen(
-        pedersen(pedersen(contract_data.class_hash, contract_root_hash), contract_data.nonce),
+    let contract_state_hash = pedersen_hash_4(
+        contract_data.class_hash,
+        contract_root_hash,
+        contract_data.nonce,
         contract_data.contract_state_hash_version
     );
 
@@ -130,13 +129,12 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
 #[inline]
 fn node_hash(node: @TrieNode) -> felt252 {
     match node {
-        TrieNode::Binary(binary_node) => { pedersen(*binary_node.left, *binary_node.right) },
-        TrieNode::Edge(edge_node) => {
-            pedersen(*edge_node.child, *edge_node.path) + (*edge_node.length).into()
-        }
+        TrieNode::Binary(binary) => pedersen_hash(*binary.left, *binary.right),
+        TrieNode::Edge(edge) => pedersen_hash(*edge.child, *edge.path) + (*edge.length).into()
     }
 }
 
+// TODO: replace with lookup table once array constants are available in Cairo
 fn pow(x: felt252, n: u8) -> felt252 {
     if n == 0 {
         1
@@ -149,12 +147,17 @@ fn pow(x: felt252, n: u8) -> felt252 {
     }
 }
 
-#[inline]
-fn pedersen(a: felt252, b: felt252) -> felt252 {
-    hash::LegacyHash::hash(a, b)
+#[inline(always)]
+fn pedersen_hash(a: felt252, b: felt252) -> felt252 {
+    PedersenTrait::new(a).update(b).finalize()
 }
 
-#[inline]
+#[inline(always)]
+fn pedersen_hash_4(a: felt252, b: felt252, c: felt252, d: felt252) -> felt252 {
+    PedersenTrait::new(a).update(b).update(c).update(d).finalize()
+}
+
+#[inline(always)]
 fn poseidon_hash(a: felt252, b: felt252, c: felt252) -> felt252 {
-    poseidon_hash_span(array![a, b, c].span())
+    PoseidonTrait::new().update(a).update(b).update(c).finalize()
 }
