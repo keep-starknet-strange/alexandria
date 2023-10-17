@@ -4,6 +4,7 @@ members = [
     "src/encoding",
     "src/linalg",
     "src/math",
+    "src/merkle_tree",
     "src/numeric",
     "src/searching",
     "src/sorting",

@@ -24,10 +24,6 @@
 //! let root = merkle_tree.compute_root(leaf, proof);
 //! ```
 
-// Core lib imports
-use array::{ArrayTrait, SpanTrait};
-use traits::{Into, Copy, Drop};
-
 /// Hasher trait.
 
 trait HasherTrait<T> {
