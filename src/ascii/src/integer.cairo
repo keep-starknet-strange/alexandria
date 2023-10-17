@@ -8,13 +8,13 @@ trait ToAsciiTrait<T, U> {
     fn to_ascii(self: T) -> U;
 }
 
-// converts intergers into an array of its individual ascii values
+// converts integers into an array of its individual ascii values
 trait ToAsciiArrayTrait<T> {
     fn to_ascii_array(self: T) -> Array<felt252>;
     fn to_inverse_ascii_array(self: T) -> Array<felt252>;
 }
 
-// converts intergers into an array of its individual ascii values
+// converts integers into an array of its individual ascii values
 // e.g. 123 -> [49, 50, 51]
 impl ToAsciiArrayTraitImpl<
     T,
@@ -54,10 +54,10 @@ impl ToAsciiArrayTraitImpl<
     }
 }
 
-// gneric implementation for small intergers <u128 
-// to transform its intergers into a string represented as a single felt252
+// generic implementation for small integers <u128 
+// to transform its integers into a string represented as a single felt252
 // e.g. 1000 -> "1000"
-impl SmallIntergerToAsciiTraitImpl<
+impl SmallIntegerToAsciiTraitImpl<
     T,
     impl TPartialOrd: PartialOrd<T>,
     impl TDivRem: DivRem<T>,
@@ -86,10 +86,10 @@ impl SmallIntergerToAsciiTraitImpl<
     }
 }
 
-// gneric implementation for big intergers u128 
-// to transform its intergers into a string represented as multiple felt252 if there is overflow
+// generic implementation for big integers u128 
+// to transform its integers into a string represented as multiple felt252 if there is overflow
 // e.g. max_num + 123 -> ["max_num", "123"]
-impl BigIntergerToAsciiTraitImpl<
+impl BigIntegerToAsciiTraitImpl<
     T,
     impl TPartialOrd: PartialOrd<T>,
     impl TDivRem: DivRem<T>,
@@ -125,7 +125,7 @@ impl BigIntergerToAsciiTraitImpl<
                 },
                 Option::None(_) => {
                     // if ascii is 0 it means we have already appended the first ascii
-                    // and theres no need to append it again
+                    // and there's no need to append it again
                     if ascii.is_non_zero() {
                         data.append(ascii);
                     }
@@ -141,8 +141,8 @@ impl BigIntergerToAsciiTraitImpl<
 // -------------------------------------------------------------------------- //
 //                                  for u256                                  //
 // -------------------------------------------------------------------------- //
-// have to implement seperately for u256 because 
-// it dosent have the same implementations as the generic version
+// have to implement separately for u256 because 
+// it doesn't have the same implementations as the generic version
 impl U256ToAsciiArrayTraitImpl of ToAsciiArrayTrait<u256> {
     fn to_ascii_array(self: u256) -> Array<felt252> {
         let mut new_arr = self.to_inverse_ascii_array();
@@ -200,7 +200,7 @@ impl U256ToAsciiTraitImpl of ToAsciiTrait<u256, Array<felt252>> {
                 },
                 Option::None(_) => {
                     // if ascii is 0 it means we have already appended the first ascii
-                    // and theres no need to append it again
+                    // and there's no need to append it again
                     if ascii.is_non_zero() {
                         data.append(ascii);
                     }

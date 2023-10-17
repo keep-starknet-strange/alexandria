@@ -20,14 +20,14 @@ const BYTES_PER_ELEMENT: usize = 16;
 /// Bytes is a cairo implementation of solidity Bytes in Big-endian.
 /// It is a dynamic array of u128, where each element contains 16 bytes.
 /// To save cost, the last element MUST be filled fully.
-/// That's means that every element should and MUST contains 16 bytes.
+/// That means that every element should and MUST contain 16 bytes.
 /// For example, if we have a Bytes with 33 bytes, we will have 3 elements.
-/// Theroetically, the bytes looks like this:
+/// Theoretically, the bytes look like this:
 ///      first element:  [16 bytes]
 ///      second element: [16 bytes]
 ///      third element:  [1 byte]
 /// But in alexandria bytes, the last element should be padded with zero to make
-/// it 16 bytes. So the alexandria bytes looks like this:
+/// it 16 bytes. So the alexandria bytes look like this:
 ///      first element:  [16 bytes]
 ///      second element: [16 bytes]
 ///      third element:  [1 byte] + [15 bytes zero padding]
@@ -508,7 +508,7 @@ impl BytesImpl of BytesTrait {
             return keccak_u128s_be(self.data.span(), self.size());
         } else {
             let mut hash_data = u128_array_slice(self.data, 0, last_data_index);
-            // To cumpute hash, we should remove 0 padded
+            // To compute hash, we should remove 0 padded
             let (last_element_value, _) = u128_split(
                 *self.data[last_data_index], BYTES_PER_ELEMENT, last_element_size
             );

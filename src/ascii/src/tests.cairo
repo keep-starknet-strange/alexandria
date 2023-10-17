@@ -1,1 +1,1 @@
-mod test_ascii_interger;
+mod test_ascii_integer;

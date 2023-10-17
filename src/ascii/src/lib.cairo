@@ -1,5 +1,5 @@
-mod interger;
-use interger::{ToAsciiTrait, ToAsciiArrayTrait};
+mod integer;
+use integer::{ToAsciiTrait, ToAsciiArrayTrait};
 
 #[cfg(test)]
 mod tests;
