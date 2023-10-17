@@ -1,8 +1,8 @@
 # ASCII
 
-## Interger
+## Integer
 
-1. Split Intergers into an array of its individual ascii values
+1. Split Integers into an array of its individual ascii values
 
 > 123 -> [49,50,51]
 
