@@ -29,8 +29,7 @@ impl ToAsciiArrayTraitImpl<
 > of ToAsciiArrayTrait<T> {
     fn to_ascii_array(self: T) -> Array<felt252> {
         let mut new_arr = self.to_inverse_ascii_array();
-        new_arr.reverse();
-        new_arr
+        new_arr.reverse()
     }
 
     fn to_inverse_ascii_array(self: T) -> Array<felt252> {
