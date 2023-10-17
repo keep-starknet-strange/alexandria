@@ -1,4 +1,5 @@
 mod array_ext_test;
+mod bit_array_test;
 mod byte_array_ext_test;
 mod byte_array_reader_test;
 mod queue_test;
