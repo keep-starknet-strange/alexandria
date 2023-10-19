@@ -15,9 +15,7 @@ fn stack_is_empty_test<S, T, impl Stack: StackTrait<S, T>>(stack: @S) {
     assert(stack.is_empty(), 'stack should be empty');
 }
 
-fn stack_push_test<
-    S, T, impl Stack: StackTrait<S, T>, impl TDrop: Drop<T>, impl SDestruct: Destruct<S>
->(
+fn stack_push_test<S, T, impl Stack: StackTrait<S, T>, +Drop<T>, impl SDestruct: Destruct<S>>(
     ref stack: S, val_1: T, val_2: T
 ) {
     stack.push(val_1);
@@ -31,9 +29,9 @@ fn stack_peek_test<
     S,
     T,
     impl Stack: StackTrait<S, T>,
-    impl TDrop: Drop<T>,
-    impl TCopy: Copy<T>,
-    impl TPartialEq: PartialEq<T>,
+    +Drop<T>,
+    +Copy<T>,
+    +PartialEq<T>,
     impl SDestruct: Destruct<S>
 >(
     ref stack: S, val_1: T, val_2: T
@@ -52,9 +50,9 @@ fn stack_pop_test<
     S,
     T,
     impl Stack: StackTrait<S, T>,
-    impl TDrop: Drop<T>,
-    impl TCopy: Copy<T>,
-    impl TPartialEq: PartialEq<T>,
+    +Drop<T>,
+    +Copy<T>,
+    +PartialEq<T>,
     impl SDestruct: Destruct<S>
 >(
     ref stack: S, val_1: T, val_2: T
@@ -75,9 +73,9 @@ fn stack_push_pop_push_test<
     S,
     T,
     impl Stack: StackTrait<S, T>,
-    impl TDrop: Drop<T>,
-    impl TCopy: Copy<T>,
-    impl TPartialEq: PartialEq<T>,
+    +Drop<T>,
+    +Copy<T>,
+    +PartialEq<T>,
     impl SDestruct: Destruct<S>
 >(
     ref stack: S, val_1: T, val_2: T, val_3: T

@@ -11,17 +11,17 @@ use traits::Into;
 /// * `T` - The approximate integral.
 fn trapezoidal_rule<
     T,
-    impl TPartialOrd: PartialOrd<T>,
-    impl TNumericLiteral: NumericLiteral<T>,
-    impl TAdd: Add<T>,
-    impl TAddEq: AddEq<T>,
-    impl TSub: Sub<T>,
-    impl TMul: Mul<T>,
-    impl TDiv: Div<T>,
-    impl TCopy: Copy<T>,
-    impl TDrop: Drop<T>,
-    impl TZeroable: Zeroable<T>,
-    impl TInto: Into<u8, T>,
+    +PartialOrd<T>,
+    +NumericLiteral<T>,
+    +Add<T>,
+    +AddEq<T>,
+    +Sub<T>,
+    +Mul<T>,
+    +Div<T>,
+    +Copy<T>,
+    +Drop<T>,
+    +Zeroable<T>,
+    +Into<u8, T>,
 >(
     xs: Span<T>, ys: Span<T>
 ) -> T {
@@ -40,5 +40,5 @@ fn trapezoidal_rule<
         value += (*xs[index + 1] - *xs[index]) * (*ys[index] + *ys[index + 1]);
         index += 1;
     };
-    value / TInto::into(2)
+    value / Into::into(2_u8)
 }

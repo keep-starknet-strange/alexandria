@@ -11,13 +11,7 @@ fn vec_new_test<V, T, impl Vec: VecTrait<V, T>>(vec: @V) {
 }
 
 fn vec_len_test<
-    V,
-    T,
-    impl Vec: VecTrait<V, T>,
-    impl TDrop: Drop<T>,
-    impl TCopy: Copy<T>,
-    impl TPartialEq: PartialEq<T>,
-    impl SDestruct: Destruct<V>
+    V, T, impl Vec: VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, impl SDestruct: Destruct<V>
 >(
     ref vec: V, val_1: T
 ) {
@@ -26,13 +20,7 @@ fn vec_len_test<
 }
 
 fn vec_get_test<
-    V,
-    T,
-    impl Vec: VecTrait<V, T>,
-    impl TDrop: Drop<T>,
-    impl TCopy: Copy<T>,
-    impl TPartialEq: PartialEq<T>,
-    impl SDestruct: Destruct<V>
+    V, T, impl Vec: VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, impl SDestruct: Destruct<V>
 >(
     ref vec: V, val_1: T
 ) {
@@ -42,13 +30,7 @@ fn vec_get_test<
 }
 
 fn vec_at_test<
-    V,
-    T,
-    impl Vec: VecTrait<V, T>,
-    impl TDrop: Drop<T>,
-    impl TCopy: Copy<T>,
-    impl TPartialEq: PartialEq<T>,
-    impl SDestruct: Destruct<V>
+    V, T, impl Vec: VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, impl SDestruct: Destruct<V>
 >(
     ref vec: V, val_1: T
 ) {
@@ -58,13 +40,7 @@ fn vec_at_test<
 }
 
 fn vec_at_out_of_bounds_test<
-    V,
-    T,
-    impl Vec: VecTrait<V, T>,
-    impl TDrop: Drop<T>,
-    impl TCopy: Copy<T>,
-    impl TPartialEq: PartialEq<T>,
-    impl SDestruct: Destruct<V>
+    V, T, impl Vec: VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, impl SDestruct: Destruct<V>
 >(
     ref vec: V
 ) {
@@ -72,13 +48,7 @@ fn vec_at_out_of_bounds_test<
 }
 
 fn vec_push_test<
-    V,
-    T,
-    impl Vec: VecTrait<V, T>,
-    impl TDrop: Drop<T>,
-    impl TCopy: Copy<T>,
-    impl TPartialEq: PartialEq<T>,
-    impl SDestruct: Destruct<V>
+    V, T, impl Vec: VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, impl SDestruct: Destruct<V>
 >(
     ref vec: V, val_1: T
 ) {
@@ -88,13 +58,7 @@ fn vec_push_test<
 }
 
 fn vec_set_test<
-    V,
-    T,
-    impl Vec: VecTrait<V, T>,
-    impl TDrop: Drop<T>,
-    impl TCopy: Copy<T>,
-    impl TPartialEq: PartialEq<T>,
-    impl SDestruct: Destruct<V>
+    V, T, impl Vec: VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, impl SDestruct: Destruct<V>
 >(
     ref vec: V, val_1: T, val_2: T
 ) {
@@ -105,13 +69,7 @@ fn vec_set_test<
 }
 
 fn vec_set_test_expect_error<
-    V,
-    T,
-    impl Vec: VecTrait<V, T>,
-    impl TDrop: Drop<T>,
-    impl TCopy: Copy<T>,
-    impl TPartialEq: PartialEq<T>,
-    impl SDestruct: Destruct<V>
+    V, T, impl Vec: VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, impl SDestruct: Destruct<V>
 >(
     ref vec: V, val_1: T, val_2: T
 ) {
@@ -123,9 +81,9 @@ fn vec_index_trait_test<
     V,
     T,
     impl Vec: VecTrait<V, T>,
-    impl TDrop: Drop<T>,
-    impl TCopy: Copy<T>,
-    impl TPartialEq: PartialEq<T>,
+    +Drop<T>,
+    +Copy<T>,
+    +PartialEq<T>,
     impl SDestruct: Destruct<V>,
     impl VIndex: Index<V, usize, T>
 >(
@@ -141,9 +99,9 @@ fn vec_index_trait_out_of_bounds_test<
     V,
     T,
     impl Vec: VecTrait<V, T>,
-    impl TDrop: Drop<T>,
-    impl TCopy: Copy<T>,
-    impl TPartialEq: PartialEq<T>,
+    +Drop<T>,
+    +Copy<T>,
+    +PartialEq<T>,
     impl SDestruct: Destruct<V>,
     impl VIndex: Index<V, usize, T>
 >(

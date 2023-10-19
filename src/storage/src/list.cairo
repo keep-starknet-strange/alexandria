@@ -32,7 +32,7 @@ trait ListTrait<T> {
     fn from_span(ref self: List<T>, span: Span<T>);
 }
 
-impl ListImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TStore: Store<T>> of ListTrait<T> {
+impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
     fn len(self: @List<T>) -> u32 {
         *self.len
     }
@@ -130,9 +130,7 @@ impl ListImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TStore: Store<T>
     }
 }
 
-impl AListIndexViewImpl<
-    T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TStore: Store<T>
-> of IndexView<List<T>, u32, T> {
+impl AListIndexViewImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of IndexView<List<T>, u32, T> {
     fn index(self: @List<T>, index: u32) -> T {
         self.get(index).expect('List index out of bounds')
     }
@@ -186,7 +184,7 @@ fn calculate_base_and_offset_for_index(
     (segment_base, offset.try_into().unwrap() * storage_size)
 }
 
-impl ListStore<T, impl TStore: Store<T>> of Store<List<T>> {
+impl ListStore<T, +Store<T>> of Store<List<T>> {
     fn read(address_domain: u32, base: StorageBaseAddress) -> SyscallResult<List<T>> {
         let len: u32 = Store::read(address_domain, base).unwrap_syscall();
         let storage_size: u8 = Store::<T>::size();

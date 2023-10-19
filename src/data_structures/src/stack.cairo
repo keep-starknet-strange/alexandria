@@ -39,16 +39,14 @@ struct Felt252Stack<T> {
     len: usize,
 }
 
-impl DestructFeltStack<
-    T, impl TDrop: Drop<T>, impl TFelt252DictValue: Felt252DictValue<T>
-> of Destruct<Felt252Stack<T>> {
+impl DestructFeltStack<T, +Drop<T>, +Felt252DictValue<T>> of Destruct<Felt252Stack<T>> {
     fn destruct(self: Felt252Stack<T>) nopanic {
         self.elements.squash();
     }
 }
 
 impl Felt252StackImpl<
-    T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TFelt252DictValue: Felt252DictValue<T>,
+    T, +Copy<T>, +Drop<T>, +Felt252DictValue<T>,
 > of StackTrait<Felt252Stack<T>, T> {
     #[inline(always)]
     /// Creates a new Stack instance.
@@ -116,15 +114,13 @@ struct NullableStack<T> {
     len: usize,
 }
 
-impl DestructNullableStack<T, impl TDrop: Drop<T>> of Destruct<NullableStack<T>> {
+impl DestructNullableStack<T, +Drop<T>> of Destruct<NullableStack<T>> {
     fn destruct(self: NullableStack<T>) nopanic {
         self.elements.squash();
     }
 }
 
-impl NullableStackImpl<
-    T, impl TCopy: Copy<T>, impl TDrop: Drop<T>,
-> of StackTrait<NullableStack<T>, T> {
+impl NullableStackImpl<T, +Copy<T>, +Drop<T>,> of StackTrait<NullableStack<T>, T> {
     #[inline(always)]
     fn new() -> NullableStack<T> {
         let elements: Felt252Dict<Nullable<T>> = Default::default();

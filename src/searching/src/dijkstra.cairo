@@ -31,9 +31,7 @@ trait GraphTrait {
     fn shortest_path(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u128>;
 }
 
-impl DestructGraph<
-    T, impl TDrop: Drop<T>, impl TFelt252DictValue: Felt252DictValue<T>
-> of Destruct<Graph<T>> {
+impl DestructGraph<T, +Drop<T>, +Felt252DictValue<T>> of Destruct<Graph<T>> {
     fn destruct(self: Graph<T>) nopanic {
         self.adj_nodes.squash();
     }
@@ -192,4 +190,3 @@ fn is_node_visited(ref nodes: Array<u32>, current_node: u32) -> bool {
     };
     is_visited
 }
-
