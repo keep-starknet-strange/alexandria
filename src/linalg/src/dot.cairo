@@ -8,14 +8,7 @@ use array::SpanTrait;
 /// * `ys` - The second sequence of len L.
 /// # Returns
 /// * `T` - The dot product.
-fn dot<
-    T,
-    impl TMul: Mul<T>,
-    impl TAddEq: AddEq<T>,
-    impl TZeroable: Zeroable<T>,
-    impl TCopy: Copy<T>,
-    impl TDrop: Drop<T>,
->(
+fn dot<T, +Mul<T>, +AddEq<T>, +Zeroable<T>, +Copy<T>, +Drop<T>,>(
     mut xs: Span<T>, mut ys: Span<T>
 ) -> T {
     // [Check] Inputs

@@ -18,14 +18,14 @@ trait ToAsciiArrayTrait<T> {
 // e.g. 123 -> [49, 50, 51]
 impl ToAsciiArrayTraitImpl<
     T,
-    impl TPartialOrd: PartialOrd<T>,
-    impl TDivRem: DivRem<T>,
-    impl TInto: Into<T, felt252>,
-    impl TryInto: TryInto<felt252, T>,
-    impl TTryIntoZero: TryInto<T, NonZero<T>>,
-    impl TZeroable: Zeroable<T>,
-    impl TDrop: Drop<T>,
-    impl TCopy: Copy<T>,
+    +PartialOrd<T>,
+    +DivRem<T>,
+    +Into<T, felt252>,
+    +TryInto<felt252, T>,
+    +TryInto<T, NonZero<T>>,
+    +Zeroable<T>,
+    +Drop<T>,
+    +Copy<T>,
 > of ToAsciiArrayTrait<T> {
     fn to_ascii_array(self: T) -> Array<felt252> {
         let mut new_arr = self.to_inverse_ascii_array();
@@ -54,19 +54,19 @@ impl ToAsciiArrayTraitImpl<
     }
 }
 
-// generic implementation for small integers <u128 
+// generic implementation for small integers <u128
 // to transform its integers into a string represented as a single felt252
 // e.g. 1000 -> "1000"
 impl SmallIntegerToAsciiTraitImpl<
     T,
-    impl TPartialOrd: PartialOrd<T>,
-    impl TDivRem: DivRem<T>,
-    impl TInto: Into<T, felt252>,
-    impl TTryInto: TryInto<felt252, T>,
-    impl TTryIntoZero: TryInto<T, NonZero<T>>,
-    impl TZeroable: Zeroable<T>,
-    impl TDrop: Drop<T>,
-    impl TCopy: Copy<T>,
+    +PartialOrd<T>,
+    +DivRem<T>,
+    +Into<T, felt252>,
+    +TryInto<felt252, T>,
+    +TryInto<T, NonZero<T>>,
+    +Zeroable<T>,
+    +Drop<T>,
+    +Copy<T>,
 > of ToAsciiTrait<T, felt252> {
     fn to_ascii(self: T) -> felt252 {
         if self <= 9.try_into().unwrap() {
@@ -86,19 +86,19 @@ impl SmallIntegerToAsciiTraitImpl<
     }
 }
 
-// generic implementation for big integers u128 
+// generic implementation for big integers u128
 // to transform its integers into a string represented as multiple felt252 if there is overflow
 // e.g. max_num + 123 -> ["max_num", "123"]
 impl BigIntegerToAsciiTraitImpl<
     T,
-    impl TPartialOrd: PartialOrd<T>,
-    impl TDivRem: DivRem<T>,
-    impl TInto: Into<T, felt252>,
-    impl TTryInto: TryInto<felt252, T>,
-    impl TTryIntoZero: TryInto<T, NonZero<T>>,
-    impl TZeroable: Zeroable<T>,
-    impl TDrop: Drop<T>,
-    impl TCopy: Copy<T>,
+    +PartialOrd<T>,
+    +DivRem<T>,
+    +Into<T, felt252>,
+    +TryInto<felt252, T>,
+    +TryInto<T, NonZero<T>>,
+    +Zeroable<T>,
+    +Drop<T>,
+    +Copy<T>,
 > of ToAsciiTrait<T, Array<felt252>> {
     fn to_ascii(self: T) -> Array<felt252> {
         let mut data = ArrayTrait::new();
@@ -141,7 +141,7 @@ impl BigIntegerToAsciiTraitImpl<
 // -------------------------------------------------------------------------- //
 //                                  for u256                                  //
 // -------------------------------------------------------------------------- //
-// have to implement separately for u256 because 
+// have to implement separately for u256 because
 // it doesn't have the same implementations as the generic version
 impl U256ToAsciiArrayTraitImpl of ToAsciiArrayTrait<u256> {
     fn to_ascii_array(self: u256) -> Array<felt252> {

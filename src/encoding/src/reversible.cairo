@@ -25,31 +25,24 @@ trait ReversibleBits<T> {
 #[inline]
 fn reversing<
     T,
-    impl TCopy: Copy<T>,
-    impl TZeroable: Zeroable<T>,
-    impl TTryInto: TryInto<T, NonZero<T>>,
-    impl TDivRem: DivRem<T>,
-    impl TDrop: Drop<T>,
-    impl TMulEq: MulEq<T>,
-    impl TRem: Rem<T>,
-    impl TAddEq: AddEq<T>
+    +Copy<T>,
+    +Zeroable<T>,
+    +TryInto<T, NonZero<T>>,
+    +DivRem<T>,
+    +Drop<T>,
+    +MulEq<T>,
+    +Rem<T>,
+    +AddEq<T>
 >(
     word: T, size: usize, step: T
 ) -> (T, T) {
-    let result = TZeroable::zero();
+    let result = Zeroable::zero();
     reversing_partial_result(word, result, size, step)
 }
 
 #[inline]
 fn reversing_partial_result<
-    T,
-    impl TCopy: Copy<T>,
-    impl TDivRem: DivRem<T>,
-    impl TTryInto: TryInto<T, NonZero<T>>,
-    impl TDrop: Drop<T>,
-    impl TMulEq: MulEq<T>,
-    impl TRem: Rem<T>,
-    impl TAddEq: AddEq<T>
+    T, +Copy<T>, +DivRem<T>, +TryInto<T, NonZero<T>>, +Drop<T>, +MulEq<T>, +Rem<T>, +AddEq<T>
 >(
     mut word: T, mut onto: T, size: usize, step: T
 ) -> (T, T) {

@@ -32,9 +32,7 @@ fn keccak_u128s_be(mut input: Span<u128>, n_bytes: usize) -> u256 {
 
 /// return the minimal value
 /// support u8, u16, u32, u64, u128, u256
-fn uint_min<T, impl TDrop: Drop<T>, impl TPartialOrd: PartialOrd<T>, impl TCopy: Copy<T>>(
-    l: T, r: T
-) -> T {
+fn uint_min<T, +Drop<T>, +PartialOrd<T>, +Copy<T>>(l: T, r: T) -> T {
     if l <= r {
         l
     } else {
@@ -219,7 +217,7 @@ fn read_sub_u128(value: u128, value_size: usize, offset: usize, size: usize) -> 
 ///  - right_size: the size of right part in bytes
 /// Returns:
 ///  - value: the joined u128
-/// Examples: 
+/// Examples:
 /// u128_join(0x010203, 0xaabb, 2) -> 0x010203aabb
 /// u128_join(0x010203, 0, 2) -> 0x0102030000
 fn u128_join(left: u128, right: u128, right_size: usize) -> u128 {

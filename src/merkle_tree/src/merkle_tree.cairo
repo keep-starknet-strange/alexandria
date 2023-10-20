@@ -96,9 +96,7 @@ trait MerkleTreeTrait<T> {
 }
 
 /// MerkleTree Legacy implementation.
-impl MerkleTreeImpl<
-    T, impl THasher: HasherTrait<T>, impl TCopy: Copy<T>, impl TDrop: Drop<T>
-> of MerkleTreeTrait<T> {
+impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTrait<T> {
     /// Create a new merkle tree instance.
     fn new() -> MerkleTree<T> {
         MerkleTree { hasher: HasherTrait::new() }
@@ -181,7 +179,7 @@ impl MerkleTreeImpl<
 /// * `index` - The index of the given.
 /// * `hasher` - The hasher to use.
 /// * `proof` - The proof array to fill.
-fn compute_proof<T, impl THasher: HasherTrait<T>, impl TDrop: Drop<T>>(
+fn compute_proof<T, +HasherTrait<T>, +Drop<T>>(
     mut nodes: Array<felt252>, mut hasher: T, index: u32, ref proof: Array<felt252>
 ) {
     // Break if we have reached the top of the tree
@@ -222,7 +220,7 @@ fn compute_proof<T, impl THasher: HasherTrait<T>, impl TDrop: Drop<T>>(
 /// * `hasher` - The hasher to use.
 /// # Returns
 /// The next layer of nodes.
-fn get_next_level<T, impl THasher: HasherTrait<T>, impl TDrop: Drop<T>>(
+fn get_next_level<T, +HasherTrait<T>, +Drop<T>>(
     mut nodes: Span<felt252>, ref hasher: T
 ) -> Array<felt252> {
     let mut next_level: Array<felt252> = array![];

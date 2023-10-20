@@ -8,14 +8,7 @@ use zeroable::Zeroable;
 /// * `sequence` - The sorted sequence to operate.
 /// # Returns
 /// * `Array<T>` - The discrete difference of sorted sequence.
-fn diff<
-    T,
-    impl TPartialOrd: PartialOrd<T>,
-    impl TSub: Sub<T>,
-    impl TCopy: Copy<T>,
-    impl TDrop: Drop<T>,
-    impl TZeroable: Zeroable<T>,
->(
+fn diff<T, +PartialOrd<T>, +Sub<T>, +Copy<T>, +Drop<T>, +Zeroable<T>,>(
     mut sequence: Span<T>
 ) -> Array<T> {
     // [Check] Inputs

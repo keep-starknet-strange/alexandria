@@ -28,15 +28,15 @@ enum Extrapolation {
 /// * `T` - The interpolated y at x.
 fn interpolate<
     T,
-    impl TPartialOrd: PartialOrd<T>,
-    impl TNumericLiteral: NumericLiteral<T>,
-    impl TAdd: Add<T>,
-    impl TSub: Sub<T>,
-    impl TMul: Mul<T>,
-    impl TDiv: Div<T>,
-    impl TZeroable: Zeroable<T>,
-    impl TCopy: Copy<T>,
-    impl TDrop: Drop<T>,
+    +PartialOrd<T>,
+    +NumericLiteral<T>,
+    +Add<T>,
+    +Sub<T>,
+    +Mul<T>,
+    +Div<T>,
+    +Zeroable<T>,
+    +Copy<T>,
+    +Drop<T>,
 >(
     x: T, xs: Span<T>, ys: Span<T>, interpolation: Interpolation, extrapolation: Extrapolation
 ) -> T {

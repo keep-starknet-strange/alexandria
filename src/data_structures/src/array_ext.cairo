@@ -5,51 +5,35 @@ trait ArrayTraitExt<T> {
     fn append_all(ref self: Array<T>, ref arr: Array<T>);
     fn pop_front_n(ref self: Array<T>, n: usize);
     fn reverse(self: @Array<T>) -> Array<T>;
-    fn contains<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> bool;
+    fn contains<+PartialEq<T>>(self: @Array<T>, item: T) -> bool;
     fn concat(self: @Array<T>, a: @Array<T>) -> Array<T>;
-    fn index_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> Option<usize>;
-    fn occurrences_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize;
-    fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        self: @Array<T>
-    ) -> Option<T>;
-    fn index_of_min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        self: @Array<T>
-    ) -> Option<usize>;
-    fn max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        self: @Array<T>
-    ) -> Option<T>;
-    fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        self: @Array<T>
-    ) -> Option<usize>;
-    fn dedup<impl TPartialEq: PartialEq<T>>(self: @Array<T>) -> Array<T>;
-    fn unique<impl TPartialEq: PartialEq<T>>(self: @Array<T>) -> Array<T>;
+    fn index_of<+PartialEq<T>>(self: @Array<T>, item: T) -> Option<usize>;
+    fn occurrences_of<+PartialEq<T>>(self: @Array<T>, item: T) -> usize;
+    fn min<+PartialEq<T>, +PartialOrd<T>>(self: @Array<T>) -> Option<T>;
+    fn index_of_min<+PartialEq<T>, +PartialOrd<T>>(self: @Array<T>) -> Option<usize>;
+    fn max<+PartialEq<T>, +PartialOrd<T>>(self: @Array<T>) -> Option<T>;
+    fn index_of_max<+PartialEq<T>, +PartialOrd<T>>(self: @Array<T>) -> Option<usize>;
+    fn dedup<+PartialEq<T>>(self: @Array<T>) -> Array<T>;
+    fn unique<+PartialEq<T>>(self: @Array<T>) -> Array<T>;
 }
 
 trait SpanTraitExt<T> {
     fn pop_front_n(ref self: Span<T>, n: usize);
     fn pop_back_n(ref self: Span<T>, n: usize);
     fn reverse(self: Span<T>) -> Array<T>;
-    fn contains<impl TPartialEq: PartialEq<T>>(self: Span<T>, item: T) -> bool;
+    fn contains<+PartialEq<T>>(self: Span<T>, item: T) -> bool;
     fn concat(self: Span<T>, a: Span<T>) -> Span<T>;
-    fn index_of<impl TPartialEq: PartialEq<T>>(self: Span<T>, item: T) -> Option<usize>;
-    fn occurrences_of<impl TPartialEq: PartialEq<T>>(self: Span<T>, item: T) -> usize;
-    fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        self: Span<T>
-    ) -> Option<T>;
-    fn index_of_min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        self: Span<T>
-    ) -> Option<usize>;
-    fn max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        self: Span<T>
-    ) -> Option<T>;
-    fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        self: Span<T>
-    ) -> Option<usize>;
-    fn dedup<impl TPartialEq: PartialEq<T>>(self: Span<T>) -> Array<T>;
-    fn unique<impl TPartialEq: PartialEq<T>>(self: Span<T>) -> Array<T>;
+    fn index_of<+PartialEq<T>>(self: Span<T>, item: T) -> Option<usize>;
+    fn occurrences_of<+PartialEq<T>>(self: Span<T>, item: T) -> usize;
+    fn min<+PartialEq<T>, +PartialOrd<T>>(self: Span<T>) -> Option<T>;
+    fn index_of_min<+PartialEq<T>, +PartialOrd<T>>(self: Span<T>) -> Option<usize>;
+    fn max<+PartialEq<T>, +PartialOrd<T>>(self: Span<T>) -> Option<T>;
+    fn index_of_max<+PartialEq<T>, +PartialOrd<T>>(self: Span<T>) -> Option<usize>;
+    fn dedup<+PartialEq<T>>(self: Span<T>) -> Array<T>;
+    fn unique<+PartialEq<T>>(self: Span<T>) -> Array<T>;
 }
 
-impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> {
+impl ArrayImpl<T, +Copy<T>, +Drop<T>> of ArrayTraitExt<T> {
     fn append_all(ref self: Array<T>, ref arr: Array<T>) {
         match arr.pop_front() {
             Option::Some(v) => {
@@ -77,7 +61,7 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         self.span().reverse()
     }
 
-    fn contains<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> bool {
+    fn contains<+PartialEq<T>>(self: @Array<T>, item: T) -> bool {
         self.span().contains(item)
     }
 
@@ -104,48 +88,40 @@ impl ArrayImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of ArrayTraitExt<T> 
         ret
     }
 
-    fn index_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> Option<usize> {
+    fn index_of<+PartialEq<T>>(self: @Array<T>, item: T) -> Option<usize> {
         self.span().index_of(item)
     }
 
-    fn occurrences_of<impl TPartialEq: PartialEq<T>>(self: @Array<T>, item: T) -> usize {
+    fn occurrences_of<+PartialEq<T>>(self: @Array<T>, item: T) -> usize {
         self.span().occurrences_of(item)
     }
 
-    fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        self: @Array<T>
-    ) -> Option<T> {
+    fn min<+PartialEq<T>, +PartialOrd<T>>(self: @Array<T>) -> Option<T> {
         self.span().min()
     }
 
-    fn index_of_min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        self: @Array<T>
-    ) -> Option<usize> {
+    fn index_of_min<+PartialEq<T>, +PartialOrd<T>>(self: @Array<T>) -> Option<usize> {
         self.span().index_of_min()
     }
 
-    fn max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        self: @Array<T>
-    ) -> Option<T> {
+    fn max<+PartialEq<T>, +PartialOrd<T>>(self: @Array<T>) -> Option<T> {
         self.span().max()
     }
 
-    fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        mut self: @Array<T>
-    ) -> Option<usize> {
+    fn index_of_max<+PartialEq<T>, +PartialOrd<T>>(mut self: @Array<T>) -> Option<usize> {
         self.span().index_of_max()
     }
 
-    fn dedup<impl TPartialEq: PartialEq<T>>(mut self: @Array<T>) -> Array<T> {
+    fn dedup<+PartialEq<T>>(mut self: @Array<T>) -> Array<T> {
         self.span().dedup()
     }
 
-    fn unique<impl TPartialEq: PartialEq<T>>(mut self: @Array<T>) -> Array<T> {
+    fn unique<+PartialEq<T>>(mut self: @Array<T>) -> Array<T> {
         self.span().unique()
     }
 }
 
-impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
+impl SpanImpl<T, +Copy<T>, +Drop<T>> of SpanTraitExt<T> {
     fn pop_front_n(ref self: Span<T>, mut n: usize) {
         loop {
             if n == 0 {
@@ -183,7 +159,7 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
         response
     }
 
-    fn contains<impl TPartialEq: PartialEq<T>>(mut self: Span<T>, item: T) -> bool {
+    fn contains<+PartialEq<T>>(mut self: Span<T>, item: T) -> bool {
         loop {
             match self.pop_front() {
                 Option::Some(v) => { if *v == item {
@@ -216,7 +192,7 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
         ret.span()
     }
 
-    fn index_of<impl TPartialEq: PartialEq<T>>(mut self: Span<T>, item: T) -> Option<usize> {
+    fn index_of<+PartialEq<T>>(mut self: Span<T>, item: T) -> Option<usize> {
         let mut index = 0_usize;
         loop {
             match self.pop_front() {
@@ -231,7 +207,7 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
         }
     }
 
-    fn occurrences_of<impl TPartialEq: PartialEq<T>>(mut self: Span<T>, item: T) -> usize {
+    fn occurrences_of<+PartialEq<T>>(mut self: Span<T>, item: T) -> usize {
         let mut count = 0_usize;
         loop {
             match self.pop_front() {
@@ -243,9 +219,7 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
         }
     }
 
-    fn min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        mut self: Span<T>
-    ) -> Option<T> {
+    fn min<+PartialEq<T>, +PartialOrd<T>>(mut self: Span<T>) -> Option<T> {
         let mut min = match self.pop_front() {
             Option::Some(item) => *item,
             Option::None => { return Option::None; },
@@ -260,9 +234,7 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
         }
     }
 
-    fn index_of_min<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        mut self: Span<T>
-    ) -> Option<usize> {
+    fn index_of_min<+PartialEq<T>, +PartialOrd<T>>(mut self: Span<T>) -> Option<usize> {
         let mut index = 0;
         let mut index_of_min = 0;
         let mut min: T = match self.pop_front() {
@@ -281,9 +253,7 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
         }
     }
 
-    fn max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        mut self: Span<T>
-    ) -> Option<T> {
+    fn max<+PartialEq<T>, +PartialOrd<T>>(mut self: Span<T>) -> Option<T> {
         let mut max = match self.pop_front() {
             Option::Some(item) => *item,
             Option::None => { return Option::None; },
@@ -298,9 +268,7 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
         }
     }
 
-    fn index_of_max<impl TPartialEq: PartialEq<T>, impl TPartialOrd: PartialOrd<T>>(
-        mut self: Span<T>
-    ) -> Option<usize> {
+    fn index_of_max<+PartialEq<T>, +PartialOrd<T>>(mut self: Span<T>) -> Option<usize> {
         let mut index = 0;
         let mut index_of_max = 0;
         let mut max = match self.pop_front() {
@@ -319,7 +287,7 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
         }
     }
 
-    fn dedup<impl TPartialEq: PartialEq<T>>(mut self: Span<T>) -> Array<T> {
+    fn dedup<+PartialEq<T>>(mut self: Span<T>) -> Array<T> {
         if self.len() == 0 {
             return array![];
         }
@@ -340,7 +308,7 @@ impl SpanImpl<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>> of SpanTraitExt<T> {
         ret
     }
 
-    fn unique<impl TPartialEq: PartialEq<T>>(mut self: Span<T>) -> Array<T> {
+    fn unique<+PartialEq<T>>(mut self: Span<T>) -> Array<T> {
         let mut ret = array![];
         loop {
             match self.pop_front() {

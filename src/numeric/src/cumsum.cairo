@@ -7,9 +7,7 @@ use option::OptionTrait;
 /// * `sequence` - The sequence to operate.
 /// # Returns
 /// * `Array<T>` - The cumulative sum of sequence.
-fn cumsum<T, impl TAdd: Add<T>, impl TCopy: Copy<T>, impl TDrop: Drop<T>,>(
-    mut sequence: Span<T>
-) -> Array<T> {
+fn cumsum<T, +Add<T>, +Copy<T>, +Drop<T>,>(mut sequence: Span<T>) -> Array<T> {
     // [Check] Inputs
     assert(sequence.len() >= 1, 'Array must have at least 1 elt');
 
