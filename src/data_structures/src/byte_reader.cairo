@@ -491,16 +491,23 @@ fn parse_signed<T, +TryInto<felt252, T>>(value: felt252, bytes: usize) -> Option
     }
 }
 
-/// Len trait that abstracts the `len()` property of both Array<u8> and ByteArray types
+/// Len trait that abstracts the `len()` property of `Array<u8>`, `Span<u8>` and `ByteArray` types
 trait Len<T> {
     fn len(self: @T) -> usize;
 }
 
-impl ArrayOfBytesLenImpl of Len<Array<u8>> {
+impl ArrayU8LenImpl of Len<Array<u8>> {
     fn len(self: @Array<u8>) -> usize {
         core::array::array_len::<u8>(self)
     }
 }
+
+impl SpanU8LenImpl of Len<Span<u8>> {
+    fn len(self: @Span<u8>) -> usize {
+        SpanTrait::<u8>::len(*self)
+    }
+}
+
 
 impl ByteArrayLenImpl of Len<ByteArray> {
     fn len(self: @ByteArray) -> usize {
@@ -526,4 +533,5 @@ impl ByteArrayIndexViewAsSnapshotImpl of IndexView<ByteArray, usize, @u8> {
 }
 
 impl ArrayU8ReaderImpl = ByteReaderImpl<Array<u8>>;
+impl SpanU8ReaderImpl = ByteReaderImpl<Span<u8>>;
 impl ByteArrayReaderImpl = ByteReaderImpl<ByteArray>;

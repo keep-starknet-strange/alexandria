@@ -43,8 +43,9 @@ impl ByteArraySerde of Serde<ByteArray> {
     }
 }
 
-impl ArrayU8IntoByteArray of Into<Array<u8>, ByteArray> {
-    fn into(self: Array<u8>) -> ByteArray {
+impl SpanU8IntoBytearray of Into<Span<u8>, ByteArray> {
+    #[inline]
+    fn into(self: Span<u8>) -> ByteArray {
         let mut reader = self.reader();
         let mut result: ByteArray = Default::default();
         loop {
@@ -54,6 +55,12 @@ impl ArrayU8IntoByteArray of Into<Array<u8>, ByteArray> {
             }
         };
         result
+    }
+}
+
+impl ArrayU8IntoByteArray of Into<Array<u8>, ByteArray> {
+    fn into(self: Array<u8>) -> ByteArray {
+        self.span().into()
     }
 }
 

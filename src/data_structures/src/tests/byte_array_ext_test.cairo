@@ -1,4 +1,6 @@
-use alexandria_data_structures::byte_array_ext::ByteArraySerde;
+use alexandria_data_structures::byte_array_ext::{
+    ByteArraySerde, ByteArrayIntoArrayU8, SpanU8IntoBytearray
+};
 
 #[test]
 #[available_gas(1000000)]
@@ -16,6 +18,35 @@ fn test_deserialize() {
     let mut in = serialized_byte_array_64().span();
     let ba: ByteArray = Serde::deserialize(ref in).unwrap();
     assert(ba == test_byte_array_64(), 'deserialized ByteArray differs');
+}
+
+#[test]
+#[available_gas(1000000)]
+fn test_span_u8_into_byte_array() {
+    let array: Array<u8> = array![1, 2, 3, 4, 5, 6, 7, 8,];
+    let ba: ByteArray = array.span().into();
+    let mut index = 0_usize;
+    loop {
+        match ba.at(index) {
+            Option::Some(byte) => assert(*(array[index]) == byte, 'should equal'),
+            Option::None => { break; }
+        };
+        index += 1;
+    };
+}
+
+#[test]
+#[available_gas(10000000)]
+fn test_byte_array_into_array_u8() {
+    let array: Array<u8> = test_byte_array_64().into();
+    let mut index = 0_usize;
+    loop {
+        if index == 0x40 {
+            break;
+        }
+        assert((*array[index]).into() == index + 1, 'unexpected result');
+        index += 1;
+    }
 }
 
 fn test_byte_array_64() -> ByteArray {
