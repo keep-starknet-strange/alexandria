@@ -1,4 +1,3 @@
-// use alexandria_data_structures::byte_collection::{ByteCollection, Len, ByteArrayIndexViewAsSnapshotImpl};
 use bytes_31::{one_shift_left_bytes_u128, one_shift_left_bytes_felt252};
 use integer::u512;
 
@@ -9,6 +8,65 @@ struct ByteReaderState<T> {
 }
 
 trait ByteReader<T> {
+    /// Wraps the array of bytes in a ByteReader for sequential consumption of integers and/or bytes
+    /// # Returns
+    /// * `ByteReader` - The reader struct wrapping a read-only snapshot of this ByteArray
+    fn reader(self: @T) -> ByteReaderState<T>;
+    /// Checks that there are enoguh remaining bytes available
+    /// # Arguments
+    /// * `at` - the start index position of the byte data
+    /// * `count` - the number of bytes required
+    /// # Returns
+    /// * `Option<()>` - `Some(())` when there are `count` bytes remaining, `None` otherwise.
+    fn remaining(self: @T, at: usize, count: usize) -> Option<()>;
+    /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
+    /// # Arguments
+    /// * `offset` - the start location of the consecutive bytes to read
+    /// # Returns
+    /// * `Option<u16>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    fn word_u16(self: @T, offset: usize) -> Option<u16>;
+    /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
+    /// # Arguments
+    /// * `offset` - the start location of the consecutive bytes to read
+    /// # Returns
+    /// * `Option<u16>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    fn word_u16_le(self: @T, offset: usize) -> Option<u16>;
+    /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
+    /// # Arguments
+    /// * `offset` - the start location of the consecutive bytes to read
+    /// # Returns
+    /// * `Option<u32>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    fn word_u32(self: @T, offset: usize) -> Option<u32>;
+    /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
+    /// # Arguments
+    /// * `offset` - the start location of the consecutive bytes to read
+    /// # Returns
+    /// * `Option<u32>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    fn word_u32_le(self: @T, offset: usize) -> Option<u32>;
+    /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
+    /// # Arguments
+    /// * `offset` - the start location of the consecutive bytes to read
+    /// # Returns
+    /// * `Option<u64>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    fn word_u64(self: @T, offset: usize) -> Option<u64>;
+    /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
+    /// # Arguments
+    /// * `offset` - the start location of the consecutive bytes to read
+    /// # Returns
+    /// * `Option<u64>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    fn word_u64_le(self: @T, offset: usize) -> Option<u64>;
+    /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
+    /// # Arguments
+    /// * `offset` - the start location of the consecutive bytes to read
+    /// # Returns
+    /// * `Option<u128>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    fn word_u128(self: @T, offset: usize) -> Option<u128>;
+    /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
+    /// # Arguments
+    /// * `offset` - the start location of the consecutive bytes to read
+    /// # Returns
+    /// * `Option<u128>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    fn word_u128_le(self: @T, offset: usize) -> Option<u128>;
     /// Reads a u8 unsigned integer
     /// # Returns
     /// `Option<u8>` - If there are enough bytes remaining an optional integer is returned
@@ -99,232 +157,7 @@ trait ByteReader<T> {
     fn read_i128_le(ref self: ByteReaderState<T>) -> Option<i128>;
 }
 
-impl ByteReaderLenImpl<T, +Len<T>> of Len<ByteReaderState<T>> {
-    /// Returns the remaining length of the ByteReader
-    /// # Returns
-    /// `usize` - The number of bytes remaining, considering the number of bytes that have already been consumed
-    fn len(self: @ByteReaderState<T>) -> usize {
-        let byte_array = *self.data;
-        let byte_array_len = byte_array.len();
-        byte_array_len - *self.index
-    }
-}
-
 impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteReader<T> {
-    fn read_u8(ref self: ByteReaderState<T>) -> Option<u8> {
-        self.data.remaining(self.index, 1)?;
-        let result = *self.data[self.index];
-        self.index += 1;
-        Option::Some(result)
-    }
-
-    fn read_u16(ref self: ByteReaderState<T>) -> Option<u16> {
-        let result = self.data.word_u16(self.index)?;
-        self.index += 2;
-        Option::Some(result)
-    }
-
-    fn read_u16_le(ref self: ByteReaderState<T>) -> Option<u16> {
-        let result = self.data.word_u16_le(self.index)?;
-        self.index += 2;
-        Option::Some(result)
-    }
-
-    fn read_u32(ref self: ByteReaderState<T>) -> Option<u32> {
-        let result = self.data.word_u32(self.index)?;
-        self.index += 4;
-        Option::Some(result)
-    }
-
-    fn read_u32_le(ref self: ByteReaderState<T>) -> Option<u32> {
-        let result = self.data.word_u32_le(self.index)?;
-        self.index += 4;
-        Option::Some(result)
-    }
-
-    fn read_u64(ref self: ByteReaderState<T>) -> Option<u64> {
-        let result = self.data.word_u64(self.index)?;
-        self.index += 8;
-        Option::Some(result)
-    }
-
-    fn read_u64_le(ref self: ByteReaderState<T>) -> Option<u64> {
-        let result = self.data.word_u64_le(self.index)?;
-        self.index += 8;
-        Option::Some(result)
-    }
-
-    fn read_u128(ref self: ByteReaderState<T>) -> Option<u128> {
-        let result = self.data.word_u128(self.index)?;
-        self.index += 16;
-        Option::Some(result)
-    }
-
-    fn read_u128_le(ref self: ByteReaderState<T>) -> Option<u128> {
-        let result = self.data.word_u128_le(self.index)?;
-        self.index += 16;
-        Option::Some(result)
-    }
-
-    fn read_u256(ref self: ByteReaderState<T>) -> Option<u256> {
-        let result = u256 {
-            high: self.data.word_u128(self.index)?, low: self.data.word_u128(self.index + 16)?
-        };
-        self.index += 32;
-        Option::Some(result)
-    }
-
-    fn read_u256_le(ref self: ByteReaderState<T>) -> Option<u256> {
-        let result = u256 {
-            low: self.data.word_u128_le(self.index)?, high: self.data.word_u128_le(self.index + 16)?
-        };
-        self.index += 32;
-        Option::Some(result)
-    }
-
-    fn read_u512(ref self: ByteReaderState<T>) -> Option<u512> {
-        let result = u512 {
-            limb3: self.data.word_u128(self.index)?,
-            limb2: self.data.word_u128(self.index + 16)?,
-            limb1: self.data.word_u128(self.index + 32)?,
-            limb0: self.data.word_u128(self.index + 48)?
-        };
-        self.index += 64;
-        Option::Some(result)
-    }
-
-    fn read_u512_le(ref self: ByteReaderState<T>) -> Option<u512> {
-        let result = u512 {
-            limb0: self.data.word_u128_le(self.index)?,
-            limb1: self.data.word_u128_le(self.index + 16)?,
-            limb2: self.data.word_u128_le(self.index + 32)?,
-            limb3: self.data.word_u128_le(self.index + 48)?
-        };
-        self.index += 64;
-        Option::Some(result)
-    }
-
-    fn read_i8(ref self: ByteReaderState<T>) -> Option<i8> {
-        let felt: felt252 = self.read_u8()?.into();
-        Option::Some(parse_signed(felt, 1).unwrap())
-    }
-
-    fn read_i16(ref self: ByteReaderState<T>) -> Option<i16> {
-        let felt: felt252 = self.read_u16()?.into();
-        Option::Some(parse_signed(felt, 2).unwrap())
-    }
-
-    fn read_i16_le(ref self: ByteReaderState<T>) -> Option<i16> {
-        let felt: felt252 = self.read_u16_le()?.into();
-        Option::Some(parse_signed(felt, 2).unwrap())
-    }
-
-    fn read_i32(ref self: ByteReaderState<T>) -> Option<i32> {
-        let felt: felt252 = self.read_u32()?.into();
-        Option::Some(parse_signed(felt, 4).unwrap())
-    }
-
-    fn read_i32_le(ref self: ByteReaderState<T>) -> Option<i32> {
-        let felt: felt252 = self.read_u32_le()?.into();
-        Option::Some(parse_signed(felt, 4).unwrap())
-    }
-
-    fn read_i64(ref self: ByteReaderState<T>) -> Option<i64> {
-        let felt: felt252 = self.read_u64()?.into();
-        Option::Some(parse_signed(felt, 8).unwrap())
-    }
-
-    fn read_i64_le(ref self: ByteReaderState<T>) -> Option<i64> {
-        let felt: felt252 = self.read_u64_le()?.into();
-        Option::Some(parse_signed(felt, 8).unwrap())
-    }
-
-    fn read_i128(ref self: ByteReaderState<T>) -> Option<i128> {
-        let felt: felt252 = self.read_u128()?.into();
-        Option::Some(parse_signed(felt, 16).unwrap())
-    }
-
-    fn read_i128_le(ref self: ByteReaderState<T>) -> Option<i128> {
-        let felt: felt252 = self.read_u128_le()?.into();
-        Option::Some(parse_signed(felt, 16).unwrap())
-    }
-}
-
-fn parse_signed<T, +TryInto<felt252, T>>(value: felt252, bytes: usize) -> Option<T> {
-    match value.try_into() {
-        Option::Some(pos) => Option::Some(pos),
-        Option::None => {
-            let negated: felt252 = value - one_shift_left_bytes_felt252(bytes);
-            negated.try_into()
-        },
-    }
-}
-
-trait ByteCollection<T> {
-    /// Wraps the array of bytes in a ByteReader for sequential consumption of integers and/or bytes
-    /// # Returns
-    /// * `ByteReader` - The reader struct wrapping a read-only snapshot of this ByteArray
-    fn reader(self: @T) -> ByteReaderState<T>;
-    /// Checks that there are enoguh remaining bytes available
-    /// # Arguments
-    /// * `at` - the start index position of the byte data
-    /// * `count` - the number of bytes required
-    /// # Returns
-    /// * `Option<()>` - `Some(())` when there are `count` bytes remaining, `None` otherwise.
-    fn remaining(self: @T, at: usize, count: usize) -> Option<()>;
-    /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
-    /// # Arguments
-    /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
-    /// * `Option<u16>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
-    fn word_u16(self: @T, offset: usize) -> Option<u16>;
-    /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
-    /// # Arguments
-    /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
-    /// * `Option<u16>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
-    fn word_u16_le(self: @T, offset: usize) -> Option<u16>;
-    /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
-    /// # Arguments
-    /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
-    /// * `Option<u32>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
-    fn word_u32(self: @T, offset: usize) -> Option<u32>;
-    /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
-    /// # Arguments
-    /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
-    /// * `Option<u32>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
-    fn word_u32_le(self: @T, offset: usize) -> Option<u32>;
-    /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
-    /// # Arguments
-    /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
-    /// * `Option<u64>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
-    fn word_u64(self: @T, offset: usize) -> Option<u64>;
-    /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
-    /// # Arguments
-    /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
-    /// * `Option<u64>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
-    fn word_u64_le(self: @T, offset: usize) -> Option<u64>;
-    /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
-    /// # Arguments
-    /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
-    /// * `Option<u128>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
-    fn word_u128(self: @T, offset: usize) -> Option<u128>;
-    /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
-    /// # Arguments
-    /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
-    /// * `Option<u128>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
-    fn word_u128_le(self: @T, offset: usize) -> Option<u128>;
-}
-
-impl ByteCollectionImpl<
-    T, impl TDrop: Drop<T>, impl TLen: Len<T>, impl TIndexView: IndexView<T, usize, @u8>
-> of ByteCollection<T> {
     #[inline]
     fn reader(self: @T) -> ByteReaderState<T> {
         ByteReaderState { data: self, index: 0 }
@@ -508,6 +341,154 @@ impl ByteCollectionImpl<
                 + b16.into() * one_shift_left_bytes_u128(15).try_into().unwrap()
         )
     }
+
+    fn read_u8(ref self: ByteReaderState<T>) -> Option<u8> {
+        self.data.remaining(self.index, 1)?;
+        let result = *self.data[self.index];
+        self.index += 1;
+        Option::Some(result)
+    }
+
+    fn read_u16(ref self: ByteReaderState<T>) -> Option<u16> {
+        let result = self.data.word_u16(self.index)?;
+        self.index += 2;
+        Option::Some(result)
+    }
+
+    fn read_u16_le(ref self: ByteReaderState<T>) -> Option<u16> {
+        let result = self.data.word_u16_le(self.index)?;
+        self.index += 2;
+        Option::Some(result)
+    }
+
+    fn read_u32(ref self: ByteReaderState<T>) -> Option<u32> {
+        let result = self.data.word_u32(self.index)?;
+        self.index += 4;
+        Option::Some(result)
+    }
+
+    fn read_u32_le(ref self: ByteReaderState<T>) -> Option<u32> {
+        let result = self.data.word_u32_le(self.index)?;
+        self.index += 4;
+        Option::Some(result)
+    }
+
+    fn read_u64(ref self: ByteReaderState<T>) -> Option<u64> {
+        let result = self.data.word_u64(self.index)?;
+        self.index += 8;
+        Option::Some(result)
+    }
+
+    fn read_u64_le(ref self: ByteReaderState<T>) -> Option<u64> {
+        let result = self.data.word_u64_le(self.index)?;
+        self.index += 8;
+        Option::Some(result)
+    }
+
+    fn read_u128(ref self: ByteReaderState<T>) -> Option<u128> {
+        let result = self.data.word_u128(self.index)?;
+        self.index += 16;
+        Option::Some(result)
+    }
+
+    fn read_u128_le(ref self: ByteReaderState<T>) -> Option<u128> {
+        let result = self.data.word_u128_le(self.index)?;
+        self.index += 16;
+        Option::Some(result)
+    }
+
+    fn read_u256(ref self: ByteReaderState<T>) -> Option<u256> {
+        let result = u256 {
+            high: self.data.word_u128(self.index)?, low: self.data.word_u128(self.index + 16)?
+        };
+        self.index += 32;
+        Option::Some(result)
+    }
+
+    fn read_u256_le(ref self: ByteReaderState<T>) -> Option<u256> {
+        let result = u256 {
+            low: self.data.word_u128_le(self.index)?, high: self.data.word_u128_le(self.index + 16)?
+        };
+        self.index += 32;
+        Option::Some(result)
+    }
+
+    fn read_u512(ref self: ByteReaderState<T>) -> Option<u512> {
+        let result = u512 {
+            limb3: self.data.word_u128(self.index)?,
+            limb2: self.data.word_u128(self.index + 16)?,
+            limb1: self.data.word_u128(self.index + 32)?,
+            limb0: self.data.word_u128(self.index + 48)?
+        };
+        self.index += 64;
+        Option::Some(result)
+    }
+
+    fn read_u512_le(ref self: ByteReaderState<T>) -> Option<u512> {
+        let result = u512 {
+            limb0: self.data.word_u128_le(self.index)?,
+            limb1: self.data.word_u128_le(self.index + 16)?,
+            limb2: self.data.word_u128_le(self.index + 32)?,
+            limb3: self.data.word_u128_le(self.index + 48)?
+        };
+        self.index += 64;
+        Option::Some(result)
+    }
+
+    fn read_i8(ref self: ByteReaderState<T>) -> Option<i8> {
+        let felt: felt252 = self.read_u8()?.into();
+        Option::Some(parse_signed(felt, 1).unwrap())
+    }
+
+    fn read_i16(ref self: ByteReaderState<T>) -> Option<i16> {
+        let felt: felt252 = self.read_u16()?.into();
+        Option::Some(parse_signed(felt, 2).unwrap())
+    }
+
+    fn read_i16_le(ref self: ByteReaderState<T>) -> Option<i16> {
+        let felt: felt252 = self.read_u16_le()?.into();
+        Option::Some(parse_signed(felt, 2).unwrap())
+    }
+
+    fn read_i32(ref self: ByteReaderState<T>) -> Option<i32> {
+        let felt: felt252 = self.read_u32()?.into();
+        Option::Some(parse_signed(felt, 4).unwrap())
+    }
+
+    fn read_i32_le(ref self: ByteReaderState<T>) -> Option<i32> {
+        let felt: felt252 = self.read_u32_le()?.into();
+        Option::Some(parse_signed(felt, 4).unwrap())
+    }
+
+    fn read_i64(ref self: ByteReaderState<T>) -> Option<i64> {
+        let felt: felt252 = self.read_u64()?.into();
+        Option::Some(parse_signed(felt, 8).unwrap())
+    }
+
+    fn read_i64_le(ref self: ByteReaderState<T>) -> Option<i64> {
+        let felt: felt252 = self.read_u64_le()?.into();
+        Option::Some(parse_signed(felt, 8).unwrap())
+    }
+
+    fn read_i128(ref self: ByteReaderState<T>) -> Option<i128> {
+        let felt: felt252 = self.read_u128()?.into();
+        Option::Some(parse_signed(felt, 16).unwrap())
+    }
+
+    fn read_i128_le(ref self: ByteReaderState<T>) -> Option<i128> {
+        let felt: felt252 = self.read_u128_le()?.into();
+        Option::Some(parse_signed(felt, 16).unwrap())
+    }
+}
+
+fn parse_signed<T, +TryInto<felt252, T>>(value: felt252, bytes: usize) -> Option<T> {
+    match value.try_into() {
+        Option::Some(pos) => Option::Some(pos),
+        Option::None => {
+            let negated: felt252 = value - one_shift_left_bytes_felt252(bytes);
+            negated.try_into()
+        },
+    }
 }
 
 /// Len trait that abstracts the `len()` property of both Array<u8> and ByteArray types
@@ -527,6 +508,17 @@ impl ByteArrayLenImpl of Len<ByteArray> {
     }
 }
 
+impl ByteReaderLenImpl<T, +Len<T>> of Len<ByteReaderState<T>> {
+    /// Returns the remaining length of the ByteReader
+    /// # Returns
+    /// `usize` - The number of bytes remaining, considering the number of bytes that have already been consumed
+    fn len(self: @ByteReaderState<T>) -> usize {
+        let byte_array = *self.data;
+        let byte_array_len = byte_array.len();
+        byte_array_len - *self.index
+    }
+}
+
 impl ByteArrayIndexViewAsSnapshotImpl of IndexView<ByteArray, usize, @u8> {
     fn index(self: @ByteArray, index: usize) -> @u8 {
         @self.at(index).expect('Index out of bounds')
@@ -535,5 +527,3 @@ impl ByteArrayIndexViewAsSnapshotImpl of IndexView<ByteArray, usize, @u8> {
 
 impl ArrayU8ReaderImpl = ByteReaderImpl<Array<u8>>;
 impl ByteArrayReaderImpl = ByteReaderImpl<ByteArray>;
-impl ArrayU8CollectionImpl = ByteCollectionImpl<Array<u8>>;
-impl ByteArrayCollectionImpl = ByteCollectionImpl<ByteArray>;

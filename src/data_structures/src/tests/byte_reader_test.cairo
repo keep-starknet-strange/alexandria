@@ -1,4 +1,4 @@
-use alexandria_data_structures::byte_reader::{ByteCollection, ByteReaderImpl, ByteReaderState, Len};
+use alexandria_data_structures::byte_reader::{ByteReader, Len};
 use integer::u512;
 
 #[test]

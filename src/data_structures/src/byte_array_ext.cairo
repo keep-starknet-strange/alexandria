@@ -1,5 +1,5 @@
 use alexandria_data_structures::byte_appender::ByteAppender;
-use alexandria_data_structures::byte_reader::{ByteCollection, ByteReader};
+use alexandria_data_structures::byte_reader::ByteReader;
 use array::{serialize_array_helper, deserialize_array_helper};
 use bytes_31::BYTES_IN_BYTES31;
 use traits::DivRem;
@@ -59,6 +59,14 @@ impl ArrayU8IntoByteArray of Into<Array<u8>, ByteArray> {
 
 impl ByteArrayIntoArrayU8 of Into<ByteArray, Array<u8>> {
     fn into(self: ByteArray) -> Array<u8> {
-
+        let mut reader = self.reader();
+        let mut result = array![];
+        loop {
+            match reader.read_u8() {
+                Option::Some(byte) => result.append(byte),
+                Option::None => { break; },
+            }
+        };
+        result
     }
 }
