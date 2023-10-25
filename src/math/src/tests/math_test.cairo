@@ -1,4 +1,4 @@
-use alexandria_math::{pow, BitShift, count_digits_of_base};
+use alexandria_math::{pow, BitShift, BitRotate, count_digits_of_base};
 use integer::{BoundedInt};
 
 // Test power function
@@ -169,4 +169,50 @@ fn shl_should_not_overflow() {
     assert(BitShift::shl(pow::<u64>(2, 63), 1) == 0, 'invalid result');
     assert(BitShift::shl(pow::<u128>(2, 127), 1) == 0, 'invalid result');
     assert(BitShift::shl(pow::<u256>(2, 255), 1) == 0, 'invalid result');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn test_rotl_min() {
+    assert(BitRotate::rotl(pow::<u8>(2, 7) + 1, 1) == 3, 'invalid result');
+    assert(BitRotate::rotl(pow::<u16>(2, 15) + 1, 1) == 3, 'invalid result');
+    assert(BitRotate::rotl(pow::<u32>(2, 31) + 1, 1) == 3, 'invalid result');
+    assert(BitRotate::rotl(pow::<u64>(2, 63) + 1, 1) == 3, 'invalid result');
+    assert(BitRotate::rotl(pow::<u128>(2, 127) + 1, 1) == 3, 'invalid result');
+//  TODO(sveamarcus): missing implementation
+//  assert(BitRotate::rotl(pow::<u256>(2, 255) + 1, 1) == 3, 'invalid result');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn test_rotl_max() {
+    assert(BitRotate::rotl(0b101, 7) == pow::<u8>(2, 7) + 0b10, 'invalid result');
+    assert(BitRotate::rotl(0b101, 15) == pow::<u16>(2, 15) + 0b10, 'invalid result');
+    assert(BitRotate::rotl(0b101, 31) == pow::<u32>(2, 31) + 0b10, 'invalid result');
+    assert(BitRotate::rotl(0b101, 63) == pow::<u64>(2, 63) + 0b10, 'invalid result');
+    assert(BitRotate::rotl(0b101, 127) == pow::<u128>(2, 127) + 0b10, 'invalid result');
+//  TODO(sveamarcus): missing implementation
+//  assert(BitRotate::rotl(0b101, 255) == pow::<u256>(2, 255) + 0b10, 'invalid result');
+}
+
+#[test]
+#[available_gas(4000000)]
+fn test_rotr_min() {
+    assert(BitRotate::rotr(pow::<u8>(2, 7) + 1, 1) == 0b11 * pow(2, 6), 'invalid result');
+    assert(BitRotate::rotr(pow::<u16>(2, 15) + 1, 1) == 0b11 * pow(2, 14), 'invalid result');
+    assert(BitRotate::rotr(pow::<u32>(2, 31) + 1, 1) == 0b11 * pow(2, 30), 'invalid result');
+    assert(BitRotate::rotr(pow::<u64>(2, 63) + 1, 1) == 0b11 * pow(2, 62), 'invalid result');
+    assert(BitRotate::rotr(pow::<u128>(2, 127) + 1, 1) == 0b11 * pow(2, 126), 'invalid result');
+    assert(BitRotate::rotr(pow::<u256>(2, 255) + 1, 1) == 0b11 * pow(2, 254), 'invalid result');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn test_rotr_max() {
+    assert(BitRotate::rotr(0b101_u8, 7) == 0b1010, 'invalid result');
+    assert(BitRotate::rotr(0b101_u16, 15) == 0b1010, 'invalid result');
+    assert(BitRotate::rotr(0b101_u32, 31) == 0b1010, 'invalid result');
+    assert(BitRotate::rotr(0b101_u64, 63) == 0b1010, 'invalid result');
+    assert(BitRotate::rotr(0b101_u128, 127) == 0b1010, 'invalid result');
+    assert(BitRotate::rotr(0b101_u256, 255) == 0b1010, 'invalid result');
 }
