@@ -15,6 +15,7 @@ jobs:
         run: scarb build
 
   test:
+    needs: build
     name: test
     runs-on: ubuntu-latest
     steps:
@@ -26,6 +27,7 @@ jobs:
         run: scarb test
 
   check-format:
+    needs: build
     name: check-format
     runs-on: ubuntu-latest
     steps:
