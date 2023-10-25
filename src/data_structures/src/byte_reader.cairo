@@ -155,6 +155,10 @@ trait ByteReader<T> {
     /// # Returns
     /// `Option<i128>` - If there are enough bytes remaining an optional integer is returned
     fn read_i128_le(ref self: ByteReaderState<T>) -> Option<i128>;
+    /// Remaining length count relative to what has already been consume/read
+    /// # Returns
+    /// `usize` - count number of bytes remaining
+    fn len(self: @ByteReaderState<T>) -> usize;
 }
 
 impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteReader<T> {
@@ -479,6 +483,11 @@ impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteRead
         let felt: felt252 = self.read_u128_le()?.into();
         Option::Some(parse_signed(felt, 16).unwrap())
     }
+
+    #[inline]
+    fn len(self: @ByteReaderState<T>) -> usize {
+        Len::len(self)
+    }
 }
 
 fn parse_signed<T, +TryInto<felt252, T>>(value: felt252, bytes: usize) -> Option<T> {
@@ -497,12 +506,14 @@ trait Len<T> {
 }
 
 impl ArrayU8LenImpl of Len<Array<u8>> {
+    #[inline]
     fn len(self: @Array<u8>) -> usize {
         core::array::array_len::<u8>(self)
     }
 }
 
 impl SpanU8LenImpl of Len<Span<u8>> {
+    #[inline]
     fn len(self: @Span<u8>) -> usize {
         SpanTrait::<u8>::len(*self)
     }
@@ -510,6 +521,7 @@ impl SpanU8LenImpl of Len<Span<u8>> {
 
 
 impl ByteArrayLenImpl of Len<ByteArray> {
+    #[inline]
     fn len(self: @ByteArray) -> usize {
         ByteArrayTrait::len(self)
     }
@@ -519,6 +531,7 @@ impl ByteReaderLenImpl<T, +Len<T>> of Len<ByteReaderState<T>> {
     /// Returns the remaining length of the ByteReader
     /// # Returns
     /// `usize` - The number of bytes remaining, considering the number of bytes that have already been consumed
+    #[inline]
     fn len(self: @ByteReaderState<T>) -> usize {
         let byte_array = *self.data;
         let byte_array_len = byte_array.len();
