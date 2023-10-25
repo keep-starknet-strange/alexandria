@@ -111,8 +111,21 @@ impl U256BitShift of BitShift<u256> {
     }
 }
 
+/// Rotate the bits of an unsigned integer of type T
 trait BitRotate<T> {
+    /// Take the bits of an unsigned integer and rotate in the left direction
+    /// # Arguments
+    /// * `x` - rotate its bit representation in the leftward direction
+    /// * `n` - number of steps to rotate
+    /// # Returns
+    /// * `T` - the result of rotating the bits of number `x` left, `n` number of steps
     fn rotl(x: T, n: T) -> T;
+    /// Take the bits of an unsigned integer and rotate in the right direction
+    /// # Arguments
+    /// * `x` - rotate its bit representation in the rightward direction
+    /// * `n` - number of steps to rotate
+    /// # Returns
+    /// * `T` - the result of rotating the bits of number `x` right, `n` number of steps
     fn rotr(x: T, n: T) -> T;
 }
 
