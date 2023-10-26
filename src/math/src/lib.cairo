@@ -124,6 +124,7 @@ mod mod_arithmetics;
 mod perfect_number;
 mod sha256;
 mod sha512;
+mod siphash;
 mod zellers_congruence;
 mod keccak256;
 

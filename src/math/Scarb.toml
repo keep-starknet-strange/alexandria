@@ -7,3 +7,5 @@ homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/ma
 [dependencies]
 # dependency due to ArrayTraitExt::concat in ed25519.cairo
 alexandria_data_structures = { path = "../data_structures" }
+# dependency due to ReversibleBytes in siphash.cairo
+alexandria_encoding = { path = "../encoding" }

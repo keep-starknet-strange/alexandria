@@ -39,6 +39,7 @@ name = "alexandria_math"
 version = "0.2.0"
 dependencies = [
  "alexandria_data_structures",
+ "alexandria_encoding",
 ]
 
 [[package]]
