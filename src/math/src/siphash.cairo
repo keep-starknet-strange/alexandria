@@ -16,17 +16,17 @@ trait SipHash<T> {
     /// bytes, it is the little endian interpretation of each
     /// key 64-bit part.
     /// # Arguments
+    /// `self` - the byte data to be hashed by SipHash-2-4
     /// `key0` - the first 64 bits of the 128 bit key
     /// `key1` - the last 64 bits of the 128 bit key
-    /// `data` - the byte data to be hashed by SipHash-2-4
     /// # Returns
     /// `u64` - The little endian uint of the resulting bytes
-    fn sip_hash(key0: u64, key1: u64, data: @T) -> u64;
+    fn sip_hash(self: @T, key0: u64, key1: u64) -> u64;
 }
 
 impl SipHashImpl<T, +Drop<T>, +ByteReader<T>> of SipHash<T> {
-    fn sip_hash(key0: u64, key1: u64, data: @T) -> u64 {
-        let mut reader = data.reader();
+    fn sip_hash(self: @T, key0: u64, key1: u64) -> u64 {
+        let mut reader = self.reader();
         let mut state = _InternalSiphHash::<T>::initialize(key0, key1);
         state.sip_hash(ref reader)
     }

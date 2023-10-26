@@ -8,7 +8,7 @@ fn test_veorq_vectors_h() {
     let (key0, key1) = generate_keys();
     let mut ba = array![];
     let first_result = *expected_results[0];
-    let first = SipHash::sip_hash(key0, key1, @ba.span()); // empty data
+    let first = ba.sip_hash(key0, key1); // key data
     assert(first == first_result, 'should be equal');
     let mut i = 0_u8;
     loop {
@@ -17,7 +17,7 @@ fn test_veorq_vectors_h() {
         }
         ba.append(i);
         let expected = *expected_results[i.into() + 1];
-        assert(SipHash::sip_hash(key0, key1, @ba.span()) == expected, 'should equal');
+        assert(ba.sip_hash(key0, key1) == expected, 'should equal');
         i += 1;
     };
 }
