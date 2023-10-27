@@ -8,7 +8,7 @@ fn test_veorq_vectors_h() {
     let (key0, key1) = generate_keys();
     let mut ba = array![];
     let first_result = *expected_results[0];
-    let first = ba.sip_hash(key0, key1); // key data
+    let first = ba.sip_hash(key0, key1); // empty byte data
     assert(first == first_result, 'should be equal');
     let mut i = 0_u8;
     loop {
