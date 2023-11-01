@@ -78,7 +78,7 @@ impl Sha256ByteReaderImpl<
             } else {
                 let last = self.final_sha256_word(r);
                 result.append(last);
-                if result.len() < 14 {
+                if result.len() < 15 {
                     let mut i = result.len();
                     loop {
                         if i == 14 {
@@ -88,11 +88,8 @@ impl Sha256ByteReaderImpl<
                         i += 1;
                     };
                     Sha256Block::Fin(result)
-                } else {
-                    if result.len() == 14 {
-                        result.append(0);
-                    }
-                    result.append(0); // len == 16
+                } else { // result.len() == 15
+                    result.append(0);
                     let mut padded: Array<u32> = array![];
                     padded_block(ref padded, terminate: false);
                     Sha256Block::BlockAndFin((result, padded))
@@ -356,9 +353,11 @@ fn padded_block(ref empty: Array<u32>, terminate: bool) {
     let mut i = 0;
     loop {
         if i == count {
+            assert(empty.len() == 14, 'should be 14');
             break;
         }
         empty.append(0);
+        i += 1;
     }
 }
 
