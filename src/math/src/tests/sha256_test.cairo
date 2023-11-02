@@ -1,3 +1,4 @@
+use alexandria_data_structures::byte_reader::ByteArrayIndexViewAsSnapshotImpl;
 use alexandria_math::sha256;
 use alexandria_math::sha256::{Sha256, Sha256StateTrait, Sha256Trait};
 use array::ArrayTrait;
@@ -822,4 +823,23 @@ fn sha256_edge_case_len_64() {
             },
         'invalid hash len 64'
     );
+}
+
+#[test]
+#[available_gas(2000000000)]
+fn sha256_equivalence() {
+    let mut byte_array = Default::<ByteArray>::default();
+    let mut index = 0;
+    loop {
+        if index == 64 {
+            break;
+        }
+        byte_array.append_byte(index.try_into().unwrap());
+        index += 1;
+    };
+    let sha256 = byte_array.sha256();
+    let expected = u256 {
+        high: 0xfdeab9acf3710362bd2658cdc9a29e8f, low: 0x9c757fcf9811603a8c447cd1d9151108,
+    };
+    assert(sha256.u256() == expected, 'ByteArray sha256 invalid')
 }
