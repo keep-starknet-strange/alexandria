@@ -1,5 +1,7 @@
 use alexandria_data_structures::byte_appender::ByteAppender;
-use alexandria_data_structures::byte_reader::{ByteReader, ByteReaderState};
+use alexandria_data_structures::byte_reader::{
+    ByteArrayIndexViewAsSnapshotImpl, ByteReader, ByteReaderState
+};
 use integer::{u32_wrapping_add, BoundedInt};
 use traits::DivRem;
 use traits::Into;
@@ -88,8 +90,10 @@ impl Sha256ByteReaderImpl<
                         i += 1;
                     };
                     Sha256Block::Fin(result)
-                } else { // result.len() == 15
-                    result.append(0);
+                } else { // 15 or 16
+                    if result.len() == 15 {
+                        result.append(0);
+                    }
                     let mut padded: Array<u32> = array![];
                     padded_block(ref padded, terminate: false);
                     Sha256Block::BlockAndFin((result, padded))
@@ -345,7 +349,7 @@ fn bytes_from_u32(word: @u32, ref into: Array<u8>) {
 #[inline]
 fn padded_block(ref empty: Array<u32>, terminate: bool) {
     let count = if terminate {
-        empty.append(0x80);
+        empty.append(0x80000000);
         13
     } else {
         14
