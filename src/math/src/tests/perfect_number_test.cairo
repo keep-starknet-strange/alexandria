@@ -1,7 +1,3 @@
-// Core library imports.
-use option::OptionTrait;
-use array::ArrayTrait;
-
 use alexandria_math::perfect_number::{is_perfect_number, perfect_numbers};
 
 // is_perfect_number

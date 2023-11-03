@@ -1,5 +1,4 @@
 //! # Collatz Sequence
-use array::ArrayTrait;
 
 /// Generates the Collatz sequence for a given number.
 /// # Arguments

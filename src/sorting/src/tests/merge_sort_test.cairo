@@ -1,5 +1,3 @@
-use array::ArrayTrait;
-
 use alexandria_sorting::{is_equal, merge_sort::merge};
 
 #[test]

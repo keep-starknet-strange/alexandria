@@ -1,4 +1,3 @@
-use array::ArrayTrait;
 use alexandria_numeric::diff::diff;
 
 #[test]

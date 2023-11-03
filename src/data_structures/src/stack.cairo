@@ -13,12 +13,6 @@
 //! let item = stack.pop();
 //! ```
 
-// Core lib imports
-use dict::Felt252DictTrait;
-use option::OptionTrait;
-use traits::Into;
-use nullable::NullableTrait;
-
 trait StackTrait<S, T> {
     /// Creates a new Stack instance.
     fn new() -> S;

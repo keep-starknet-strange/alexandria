@@ -1,6 +1,6 @@
+use hash::HashStateTrait;
 use pedersen::PedersenTrait;
 use poseidon::PoseidonTrait;
-use hash::HashStateTrait;
 
 #[derive(Drop)]
 struct BinaryNode {

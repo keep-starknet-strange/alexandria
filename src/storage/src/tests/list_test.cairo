@@ -1,4 +1,3 @@
-use option::OptionTrait;
 use starknet::ContractAddress;
 
 #[starknet::interface]
@@ -24,7 +23,6 @@ trait IAListHolder<TContractState> {
 #[starknet::contract]
 mod AListHolder {
     use alexandria_storage::list::{List, ListTrait};
-    use option::OptionTrait;
     use starknet::ContractAddress;
 
     #[storage]
@@ -103,12 +101,7 @@ mod AListHolder {
 
 #[cfg(test)]
 mod tests {
-    use array::{ArrayTrait, SpanTrait};
-    use debug::PrintTrait;
-    use option::OptionTrait;
     use starknet::{ClassHash, ContractAddress, deploy_syscall, SyscallResultTrait};
-    use traits::{Default, Into, TryInto};
-
     use super::{AListHolder, IAListHolderDispatcher, IAListHolderDispatcherTrait};
 
     fn deploy_mock() -> IAListHolderDispatcher {

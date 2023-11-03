@@ -1,12 +1,12 @@
-use keccak::{u128_to_u64, u128_split as u128_split_to_u64, cairo_keccak};
-use integer::u128_byte_reverse;
 use alexandria_data_structures::array_ext::ArrayTraitExt;
+use integer::u128_byte_reverse;
+use keccak::{u128_to_u64, u128_split as u128_split_to_u64, cairo_keccak};
 
 /// Computes the keccak256 of multiple uint128 values.
 /// The values are interpreted as big-endian.
 /// https://github.com/starkware-libs/cairo/blob/main/corelib/src/keccak.cairo
 fn keccak_u128s_be(mut input: Span<u128>, n_bytes: usize) -> u256 {
-    let mut keccak_input: Array::<u64> = ArrayTrait::new();
+    let mut keccak_input: Array::<u64> = array![];
     let mut size = n_bytes;
     loop {
         match input.pop_front() {
@@ -119,7 +119,7 @@ fn u8_array_to_u256(arr: Span<u8>) -> u256 {
 }
 
 fn u64_array_slice(src: @Array<u64>, mut begin: usize, end: usize) -> Array<u64> {
-    let mut slice = ArrayTrait::new();
+    let mut slice = array![];
     let len = begin + end;
     loop {
         if begin >= len {
@@ -142,7 +142,7 @@ fn u64_array_slice(src: @Array<u64>, mut begin: usize, end: usize) -> Array<u64>
 /// # Returns
 /// * `Array<u128>` - The slice of the array.
 fn u128_array_slice(src: @Array<u128>, mut begin: usize, end: usize) -> Array<u128> {
-    let mut slice = ArrayTrait::new();
+    let mut slice = array![];
     let len = begin + end;
     loop {
         if begin >= len {

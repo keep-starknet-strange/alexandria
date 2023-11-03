@@ -1,5 +1,3 @@
-use option::OptionTrait;
-use traits::{Into, TryInto};
 use integer::u512;
 
 /// Function that performs modular addition.

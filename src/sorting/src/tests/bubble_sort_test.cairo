@@ -1,5 +1,3 @@
-use array::ArrayTrait;
-
 use alexandria_sorting::{is_equal, bubble_sort};
 
 #[test]
