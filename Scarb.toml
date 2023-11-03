@@ -10,7 +10,7 @@ members = [
     "src/sorting",
     "src/storage",
     "src/ascii",
-    "src/bytes"
+    "src/bytes",
 ]
 name = "alexandria"
 version = "0.1.0"
@@ -18,7 +18,7 @@ description = "Community maintained Cairo and Starknet libraries"
 homepage = "https://github.com/keep-starknet-strange/alexandria/"
 
 [workspace.dependencies]
-starknet = ">=2.3.0-rc0"
+starknet = "=2.3.1"
 
 [scripts]
 all = "scarb build && scarb test"
