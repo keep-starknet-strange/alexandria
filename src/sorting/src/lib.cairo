@@ -4,9 +4,6 @@ mod merge_sort;
 #[cfg(test)]
 mod tests;
 
-use array::SpanTrait;
-use option::OptionTrait;
-
 // Check if two arrays are equal.
 /// * `a` - The first array.
 /// * `b` - The second array.

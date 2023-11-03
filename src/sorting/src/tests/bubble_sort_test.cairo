@@ -1,5 +1,4 @@
 use alexandria_sorting::{is_equal, bubble_sort};
-use array::ArrayTrait;
 
 #[test]
 #[available_gas(20000000000000)]

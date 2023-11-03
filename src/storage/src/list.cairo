@@ -1,13 +1,10 @@
-use array::ArrayTrait;
 use integer::U32DivRem;
-use option::OptionTrait;
 use poseidon::poseidon_hash_span;
 use starknet::storage_access::{
     Store, StorageBaseAddress, storage_address_to_felt252, storage_address_from_base,
-    storage_address_from_base_and_offset, storage_base_address_from_felt252
+    storage_base_address_from_felt252
 };
 use starknet::{storage_read_syscall, storage_write_syscall, SyscallResult, SyscallResultTrait};
-use traits::{Default, DivRem, IndexView, Into, TryInto};
 
 const POW2_8: u32 = 256; // 2^8
 

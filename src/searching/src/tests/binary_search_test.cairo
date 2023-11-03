@@ -1,6 +1,4 @@
 use alexandria_searching::binary_search::binary_search;
-use array::ArrayTrait;
-use option::OptionTrait;
 
 #[test]
 #[available_gas(2000000)]

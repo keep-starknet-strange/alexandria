@@ -1,5 +1,4 @@
 use alexandria_sorting::{is_equal, merge_sort::merge};
-use array::ArrayTrait;
 
 #[test]
 #[available_gas(2000000000)]
