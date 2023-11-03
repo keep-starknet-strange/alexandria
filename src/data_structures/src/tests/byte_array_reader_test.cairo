@@ -1,6 +1,7 @@
-use alexandria_data_structures::byte_array_ext::ByteArrayTraitExt;
-use alexandria_data_structures::byte_array_reader::ByteArrayReaderTrait;
 use alexandria_data_structures::tests::byte_array_ext_test::test_byte_array_64;
+use alexandria_data_structures::{
+    byte_array_ext::ByteArrayTraitExt, byte_array_reader::ByteArrayReaderTrait
+};
 use integer::u512;
 
 #[test]

@@ -6,7 +6,6 @@ use bytes_31::{
 };
 use integer::u512;
 use serde::into_felt252_based::SerdeImpl;
-use traits::DivRem;
 
 const SELECT_BIT: u128 = 0b10;
 

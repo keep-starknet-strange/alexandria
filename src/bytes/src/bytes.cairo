@@ -305,7 +305,7 @@ impl BytesImpl of BytesTrait {
     /// read a u256 array from Bytes
     fn read_u256_array(self: @Bytes, offset: usize, array_length: usize) -> (usize, Array<u256>) {
         assert(offset + array_length * 32 <= self.size(), 'out of bound');
-        let mut array = ArrayTrait::<u256>::new();
+        let mut array = array![];
 
         if array_length == 0 {
             return (offset, array);

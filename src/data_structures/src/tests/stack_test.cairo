@@ -1,9 +1,5 @@
 // Internal imports
 use alexandria_data_structures::stack::{StackTrait, Felt252Stack, NullableStack};
-use integer::Felt252IntoU256;
-use option::OptionTrait;
-// Core lib imports
-use traits::{Into, TryInto};
 
 
 fn stack_new_test<S, T, impl Stack: StackTrait<S, T>>(stack: @S) {

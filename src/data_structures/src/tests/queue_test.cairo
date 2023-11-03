@@ -1,7 +1,4 @@
 use alexandria_data_structures::queue::{Queue, QueueTrait};
-use array::ArrayTrait;
-use box::BoxTrait;
-use option::OptionTrait;
 
 #[test]
 #[available_gas(2000000)]

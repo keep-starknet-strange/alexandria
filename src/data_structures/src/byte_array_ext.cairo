@@ -3,9 +3,8 @@ use alexandria_encoding::reversible::ArrayReversibleBytes;
 use array::{serialize_array_helper, deserialize_array_helper};
 use byte_array::ByteArray;
 use bytes_31::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128, BYTES_IN_BYTES31};
-use core::serde::into_felt252_based::SerdeImpl;
 use integer::u512;
-use traits::DivRem;
+use serde::into_felt252_based::SerdeImpl;
 
 trait ByteArrayTraitExt {
     /// Appends an unsigned 16 bit integer encoded in big endian
