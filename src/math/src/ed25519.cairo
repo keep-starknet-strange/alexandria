@@ -3,10 +3,7 @@ use alexandria_math::mod_arithmetics::{
     add_mod, sub_mod, mult_mod, div_mod, pow_mod, add_inverse_mod
 };
 use alexandria_math::sha512::{sha512, SHA512_LEN};
-use array::{ArrayTrait, SpanTrait};
 use integer::u512;
-use option::OptionTrait;
-use traits::{Into, TryInto};
 
 // As per RFC-8032: https://datatracker.ietf.org/doc/html/rfc8032#section-5.1.7
 // Variable namings in this function refer to naming in the RFC

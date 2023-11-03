@@ -1,7 +1,4 @@
 use alexandria_math::perfect_number::{is_perfect_number, perfect_numbers};
-use array::ArrayTrait;
-// Core library imports.
-use option::OptionTrait;
 
 // is_perfect_number
 #[test]

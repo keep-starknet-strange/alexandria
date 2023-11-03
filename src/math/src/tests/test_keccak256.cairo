@@ -1,5 +1,4 @@
 use alexandria_math::keccak256::keccak256;
-use debug::PrintTrait;
 
 #[test]
 #[available_gas(2000000)]

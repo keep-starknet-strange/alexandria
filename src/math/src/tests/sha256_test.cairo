@@ -1,7 +1,4 @@
 use alexandria_math::sha256;
-use array::ArrayTrait;
-
-use debug::PrintTrait;
 
 #[test]
 #[available_gas(2000000000)]

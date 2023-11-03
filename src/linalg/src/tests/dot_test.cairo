@@ -1,5 +1,4 @@
 use alexandria_linalg::dot::dot;
-use array::ArrayTrait;
 
 #[test]
 #[available_gas(2000000)]

@@ -1,9 +1,5 @@
 // Internal imports
 use alexandria_data_structures::vec::{Felt252Vec, NullableVec, VecTrait};
-use option::OptionTrait;
-use result::ResultTrait;
-// Core lib imports
-use traits::{Index, Into, TryInto};
 
 fn vec_new_test<V, T, impl Vec: VecTrait<V, T>>(vec: @V) {
     assert(vec.len() == 0, 'vec length should be 0');

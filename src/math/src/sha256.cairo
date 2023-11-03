@@ -1,9 +1,4 @@
-use array::{ArrayTrait, SpanTrait};
-use clone::Clone;
-use core::traits::TryInto;
 use integer::{u32_wrapping_add, BoundedInt};
-use option::OptionTrait;
-use traits::Into;
 
 fn ch(x: u32, y: u32, z: u32) -> u32 {
     (x & y) ^ ((x ^ BoundedInt::<u32>::max().into()) & z)

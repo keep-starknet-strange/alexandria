@@ -1,5 +1,4 @@
 use alexandria_math::sha512::{WordOperations, sha512, Word64, Word64WordOperations};
-use array::ArrayTrait;
 
 fn get_lorem_ipsum() -> Array<u8> {
     let mut input: Array<u8> = array![

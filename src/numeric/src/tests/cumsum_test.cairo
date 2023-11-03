@@ -1,5 +1,4 @@
 use alexandria_numeric::cumsum::cumsum;
-use array::ArrayTrait;
 
 #[test]
 #[available_gas(2000000)]

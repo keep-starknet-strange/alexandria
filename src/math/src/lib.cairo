@@ -16,13 +16,10 @@ mod sha512;
 #[cfg(test)]
 mod tests;
 mod zellers_congruence;
-use debug::PrintTrait;
 use integer::{
     u8_wide_mul, u16_wide_mul, u32_wide_mul, u64_wide_mul, u128_wide_mul, u256_overflow_mul,
     BoundedInt
 };
-use option::OptionTrait;
-use traits::Into;
 
 /// Raise a number to a power.
 /// O(log n) time complexity.

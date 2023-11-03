@@ -1,6 +1,4 @@
 use alexandria_encoding::reversible::{ReversibleBits, ReversibleBytes};
-
-use debug::PrintTrait;
 use integer::u512;
 
 #[test]

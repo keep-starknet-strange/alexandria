@@ -1,11 +1,5 @@
-use array::{Array, ArrayTrait, SpanTrait};
-use box::BoxTrait;
-use dict::Felt252DictTrait;
 use nullable::FromNullableResult;
 //! Dijkstra algorithm using priority queue
-use option::OptionTrait;
-use traits::{Into, Index};
-
 
 #[derive(Copy, Drop)]
 struct Node {

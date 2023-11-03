@@ -1,6 +1,4 @@
 use alexandria_math::zellers_congruence::day_of_week;
-use option::OptionTrait;
-
 
 // Define a test case function to avoid code duplication.
 fn test_case(day: u128, month: u128, year: u128, expected: u128, error_expected: bool) {

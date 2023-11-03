@@ -1,7 +1,4 @@
 //! The discrete difference of the elements.
-use array::{ArrayTrait, SpanTrait};
-use core::option::OptionTrait;
-use zeroable::Zeroable;
 
 /// Compute the discrete difference of a sorted sequence.
 /// # Arguments

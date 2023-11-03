@@ -1,6 +1,4 @@
 //! The cumulative sum of the elements.
-use array::{SpanTrait, ArrayTrait};
-use option::OptionTrait;
 
 /// Compute the cumulative sum of a sequence.
 /// # Arguments

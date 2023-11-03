@@ -1,5 +1,4 @@
 use alexandria_math::gcd_of_n_numbers::gcd;
-use array::ArrayTrait;
 
 #[test]
 #[available_gas(1000000000)]
