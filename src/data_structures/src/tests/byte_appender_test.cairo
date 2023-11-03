@@ -5,9 +5,6 @@ use alexandria_data_structures::tests::byte_reader_test::{
 };
 use integer::u512;
 
-
-use debug::PrintTrait;
-
 #[test]
 #[available_gas(1000000)]
 fn test_append_u16() {
