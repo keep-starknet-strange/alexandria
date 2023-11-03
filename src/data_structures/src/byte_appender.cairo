@@ -25,7 +25,6 @@ impl ByteAppenderSupportArrayU8Impl of ByteAppenderSupportTrait<Array<u8>> {
 
     fn append_bytes_le(ref self: Array<u8>, bytes: felt252, count: usize) {
         assert(count <= 16, 'count too big');
-        assert(count <= 16, 'count too big');
         let u256{mut low, high } = bytes.into();
         let mut index = 0;
         loop {
