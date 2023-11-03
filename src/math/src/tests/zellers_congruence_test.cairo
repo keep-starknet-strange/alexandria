@@ -1,5 +1,5 @@
-use option::OptionTrait;
 use alexandria_math::zellers_congruence::day_of_week;
+use option::OptionTrait;
 
 
 // Define a test case function to avoid code duplication.

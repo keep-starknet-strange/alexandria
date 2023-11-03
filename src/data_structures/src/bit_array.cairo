@@ -1,9 +1,9 @@
 use array::{serialize_array_helper, deserialize_array_helper};
+use byte_array::BYTES_IN_BYTES31_MINUS_ONE;
 use bytes_31::{
     one_shift_left_bytes_u128, one_shift_left_bytes_felt252, bytes31, BYTES_IN_U128,
     BYTES_IN_BYTES31,
 };
-use byte_array::BYTES_IN_BYTES31_MINUS_ONE;
 use integer::u512;
 use serde::into_felt252_based::SerdeImpl;
 use traits::DivRem;

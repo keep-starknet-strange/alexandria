@@ -1,9 +1,9 @@
-use integer::{u64_wrapping_add, bitwise, BoundedInt};
-use traits::{Into, TryInto};
-use option::OptionTrait;
 use array::{ArrayTrait, SpanTrait};
+use integer::{u64_wrapping_add, bitwise, BoundedInt};
+use option::OptionTrait;
 
 use super::BitShift;
+use traits::{Into, TryInto};
 
 // Variable naming is compliant to RFC-6234 (https://datatracker.ietf.org/doc/html/rfc6234)
 

@@ -1,6 +1,8 @@
 use alexandria_math::sha256;
 use array::ArrayTrait;
 
+use debug::PrintTrait;
+
 #[test]
 #[available_gas(2000000000)]
 fn sha256_empty_test() {
@@ -450,8 +452,6 @@ fn sha256_lorem_ipsum_test() {
     assert(*result[30] == 0xEA, 'invalid result');
     assert(*result[31] == 0x44, 'invalid result');
 }
-
-use debug::PrintTrait;
 #[test]
 #[available_gas(10_000_000_000)]
 fn sha256_url() {

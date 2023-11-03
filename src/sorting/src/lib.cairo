@@ -1,5 +1,5 @@
-mod merge_sort;
 mod bubble_sort;
+mod merge_sort;
 
 #[cfg(test)]
 mod tests;

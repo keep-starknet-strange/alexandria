@@ -1,7 +1,7 @@
 //! Integrate using the composite trapezoidal rule
 use array::SpanTrait;
-use zeroable::Zeroable;
 use traits::Into;
+use zeroable::Zeroable;
 
 /// Integrate y(x).
 /// # Arguments

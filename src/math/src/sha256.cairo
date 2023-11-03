@@ -1,6 +1,6 @@
-use core::traits::TryInto;
 use array::{ArrayTrait, SpanTrait};
 use clone::Clone;
+use core::traits::TryInto;
 use integer::{u32_wrapping_add, BoundedInt};
 use option::OptionTrait;
 use traits::Into;

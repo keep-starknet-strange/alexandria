@@ -1,8 +1,8 @@
-use integer::u512;
-use bytes_31::one_shift_left_bytes_felt252;
-use byte_array::ByteArray;
 use alexandria_data_structures::byte_array_ext::ByteArrayTraitExt;
+use byte_array::ByteArray;
+use bytes_31::one_shift_left_bytes_felt252;
 use core::clone::Clone;
+use integer::u512;
 
 /// A read-only snapshot of an underlying ByteArray that maintains
 /// sequential access to the integers encoded in the array

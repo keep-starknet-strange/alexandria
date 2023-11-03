@@ -1,10 +1,10 @@
-//! Dijkstra algorithm using priority queue
-use option::OptionTrait;
-use box::BoxTrait;
 use array::{Array, ArrayTrait, SpanTrait};
-use traits::{Into, Index};
+use box::BoxTrait;
 use dict::Felt252DictTrait;
 use nullable::FromNullableResult;
+//! Dijkstra algorithm using priority queue
+use option::OptionTrait;
+use traits::{Into, Index};
 
 
 #[derive(Copy, Drop)]
@@ -39,12 +39,12 @@ impl DestructGraph<T, +Drop<T>, +Felt252DictValue<T>> of Destruct<Graph<T>> {
 
 impl GraphImpl of GraphTrait {
     fn new() -> Graph<Nullable<Span<Node>>> {
-        Graph { nodes: ArrayTrait::new(), adj_nodes: Default::default() }
+        Graph { nodes: array![], adj_nodes: Default::default() }
     }
 
     fn add_edge(ref self: Graph<Nullable<Span<Node>>>, source: u32, dest: u32, weight: u128) {
         let adj_nodes = self.adj_nodes.get(source.into());
-        let mut nodes: Array<Node> = ArrayTrait::new();
+        let mut nodes: Array<Node> = array![];
         let mut is_null: bool = false;
         let node = Node { source, dest, weight };
         let mut span = match match_nullable(adj_nodes) {
@@ -82,8 +82,8 @@ impl GraphImpl of GraphTrait {
 }
 
 fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u128> {
-    let mut priority_queue = ArrayTrait::new();
-    let mut visited_node = ArrayTrait::new();
+    let mut priority_queue = array![];
+    let mut visited_node = array![];
     let mut dist: Felt252Dict<u128> = Default::default();
     let node_size = self.nodes.len();
     let nodes = self.nodes.span();

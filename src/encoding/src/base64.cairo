@@ -1,9 +1,8 @@
+use alexandria_math::BitShift;
 use array::ArrayTrait;
 use integer::BoundedInt;
 use option::OptionTrait;
 use traits::{Into, TryInto};
-
-use alexandria_math::BitShift;
 
 const U6_MAX: u128 = 0x3F;
 

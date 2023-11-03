@@ -1,5 +1,5 @@
-use array::ArrayTrait;
 use alexandria_numeric::interpolate::{interpolate, Interpolation, Extrapolation};
+use array::ArrayTrait;
 
 #[test]
 #[available_gas(2000000)]

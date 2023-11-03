@@ -1,5 +1,5 @@
-use array::ArrayTrait;
 use alexandria_numeric::trapezoidal_rule::trapezoidal_rule;
+use array::ArrayTrait;
 
 #[test]
 #[available_gas(2000000)]

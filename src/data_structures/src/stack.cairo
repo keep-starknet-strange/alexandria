@@ -15,9 +15,9 @@
 
 // Core lib imports
 use dict::Felt252DictTrait;
+use nullable::NullableTrait;
 use option::OptionTrait;
 use traits::Into;
-use nullable::NullableTrait;
 
 trait StackTrait<S, T> {
     /// Creates a new Stack instance.

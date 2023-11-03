@@ -107,9 +107,9 @@ mod tests {
     use debug::PrintTrait;
     use option::OptionTrait;
     use starknet::{ClassHash, ContractAddress, deploy_syscall, SyscallResultTrait};
-    use traits::{Default, Into, TryInto};
 
     use super::{AListHolder, IAListHolderDispatcher, IAListHolderDispatcherTrait};
+    use traits::{Default, Into, TryInto};
 
     fn deploy_mock() -> IAListHolderDispatcher {
         let class_hash: ClassHash = AListHolder::TEST_CLASS_HASH.try_into().unwrap();

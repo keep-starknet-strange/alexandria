@@ -1,8 +1,7 @@
+use alexandria_math::collatz_sequence::sequence;
+use array::ArrayTrait;
 // Core library imports.
 use option::OptionTrait;
-use array::ArrayTrait;
-
-use alexandria_math::collatz_sequence::sequence;
 
 #[test]
 #[available_gas(2000000)]

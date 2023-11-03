@@ -1,7 +1,7 @@
 use alexandria_encoding::reversible::{ReversibleBits, ReversibleBytes};
-use integer::u512;
 
 use debug::PrintTrait;
+use integer::u512;
 
 #[test]
 #[available_gas(1000000)]

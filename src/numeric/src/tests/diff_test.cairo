@@ -1,5 +1,5 @@
-use array::ArrayTrait;
 use alexandria_numeric::diff::diff;
+use array::ArrayTrait;
 
 #[test]
 #[available_gas(2000000)]

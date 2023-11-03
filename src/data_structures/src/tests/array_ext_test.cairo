@@ -1,6 +1,6 @@
-use core::option::OptionTrait;
-use array::{ArrayTrait, SpanTrait};
 use alexandria_data_structures::array_ext::{ArrayTraitExt, SpanTraitExt};
+use array::{ArrayTrait, SpanTrait};
+use core::option::OptionTrait;
 
 // dedup
 

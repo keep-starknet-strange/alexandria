@@ -1,8 +1,4 @@
-use option::OptionTrait;
 use alexandria_data_structures::array_ext::ArrayTraitExt;
-use array::{ArrayTrait, SpanTrait};
-use traits::{Into, TryInto, DivRem};
-use zeroable::Zeroable;
 
 trait ToAsciiTrait<T, U> {
     fn to_ascii(self: T) -> U;
@@ -33,7 +29,7 @@ impl ToAsciiArrayTraitImpl<
     }
 
     fn to_inverse_ascii_array(self: T) -> Array<felt252> {
-        let mut new_arr = ArrayTrait::new();
+        let mut new_arr = array![];
         if self <= 9.try_into().unwrap() {
             new_arr.append(self.into() + 48);
             return new_arr;
@@ -101,7 +97,7 @@ impl BigIntegerToAsciiTraitImpl<
     +Copy<T>,
 > of ToAsciiTrait<T, Array<felt252>> {
     fn to_ascii(self: T) -> Array<felt252> {
-        let mut data = ArrayTrait::new();
+        let mut data = array![];
         if self <= 9.try_into().unwrap() {
             data.append(self.into() + 48);
             return data;
@@ -151,7 +147,7 @@ impl U256ToAsciiArrayTraitImpl of ToAsciiArrayTrait<u256> {
     }
 
     fn to_inverse_ascii_array(self: u256) -> Array<felt252> {
-        let mut new_arr = ArrayTrait::new();
+        let mut new_arr = array![];
         if self <= 9 {
             new_arr.append(self.try_into().expect('number overflow felt252') + 48);
             return new_arr;
@@ -173,7 +169,7 @@ impl U256ToAsciiArrayTraitImpl of ToAsciiArrayTrait<u256> {
 
 impl U256ToAsciiTraitImpl of ToAsciiTrait<u256, Array<felt252>> {
     fn to_ascii(self: u256) -> Array<felt252> {
-        let mut data = ArrayTrait::new();
+        let mut data = array![];
         if self <= 9 {
             data.append(self.try_into().expect('number overflow felt252') + 48);
             return data;
