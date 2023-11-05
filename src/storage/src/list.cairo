@@ -17,119 +17,304 @@ struct List<T> {
 }
 
 trait ListTrait<T> {
+    /// Instantiates a new List with the given base address.
+    ///
+    ///
+    /// # Arguments
+    ///
+    /// * `address_domain` - The domain of the address. Only address_domain 0 is
+    /// currently supported, in the future it will enable access to address
+    /// spaces with different data availability
+    /// * `base` - The base address of the List. This corresponds to the
+    /// location in storage of the List's first element.
+    ///
+    /// # Returns
+    ///
+    /// A new List.
+    fn new(address_domain: u32, base: StorageBaseAddress) -> List<T>;
+
+    /// Fetches an existing List stored at the given base address.
+    /// Returns an error if the storage read fails.
+    ///
+    /// # Arguments
+    ///
+    /// * `address_domain` - The domain of the address. Only address_domain 0 is
+    /// currently supported, in the future it will enable access to address
+    /// spaces with different data availability
+    /// * `base` - The base address of the List. This corresponds to the
+    /// location in storage of the List's first element.
+    ///
+    /// # Returns
+    ///
+    /// An instance of the List fetched from storage, or an error in
+    /// `SyscallResult`.
+    fn fetch(address_domain: u32, base: StorageBaseAddress) -> SyscallResult<List<T>>;
+
+    /// Creates a List from an existing Array. If the array cannot be converted
+    /// to a list due storage errors, an error is returned.
+    ///
+    /// # Arguments
+    ///
+    /// * `address_domain` - The domain of the address. Only address_domain 0 is
+    /// currently supported, in the future it will enable access to address
+    /// spaces with different data availability
+    /// * `address` - The base address of the List. This corresponds to the
+    /// location in storage of the List's first element.
+    /// * `array` - An Array from which to create the List.
+    ///
+    /// # Returns
+    ///
+    /// A List constructed from the array or an error in `SyscallResult`.
+    fn from_array(
+        address_domain: u32, address: StorageBaseAddress, array: @Array<T>
+    ) -> SyscallResult<List<T>>;
+
+    /// Creates a List from an existing Span. Returns an error if the span
+    /// cannot be converted into a list due to storage errors
+    ///
+    /// # Arguments
+    ///
+    /// * `address_domain` - The domain of the address. Only address_domain 0 is
+    /// currently supported, in the future it will enable access to address
+    /// spaces with different data availability
+    /// * `address` - The base address of the List. This corresponds to the
+    /// location in storage of the List's first element.
+    /// * `span` - A Span from which to create the List.
+    ///
+    /// # Returns
+    ///
+    /// A List constructed from the span or an error in `SyscallResult`.
+    fn from_span(
+        address_domain: u32, address: StorageBaseAddress, span: Span<T>
+    ) -> SyscallResult<List<T>>;
+
+    /// Gets the length of the List.
+    ///
+    /// # Returns
+    ///
+    /// The number of elements in the List.
     fn len(self: @List<T>) -> u32;
+
+    /// Checks if the List is empty.
+    ///
+    /// # Returns
+    ///
+    /// `true` if the List is empty, `false` otherwise.
     fn is_empty(self: @List<T>) -> bool;
-    fn append(ref self: List<T>, value: T) -> u32;
-    fn get(self: @List<T>, index: u32) -> Option<T>;
-    fn set(ref self: List<T>, index: u32, value: T);
+
+    /// Appends a value to the end of the List. Returns an error if the append
+    /// operation fails due to reasons such as storage issues.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The value to append.
+    ///
+    /// # Returns
+    ///
+    /// The index at which the value was appended or an error in `SyscallResult`.
+    fn append(ref self: List<T>, value: T) -> SyscallResult<u32>;
+
+    /// Retrieves an element by index from the List. Returns an error if there
+    /// is a retrieval issue.
+    ///
+    /// # Arguments
+    ///
+    /// * `index` - The index of the element to retrieve.
+    ///
+    /// # Returns
+    ///
+    /// An `Option<T>` which is `None` if the list is empty, or
+    /// `Some(value)` if an element was found, encapsulated
+    /// in `SyscallResult`.
+    fn get(self: @List<T>, index: u32) -> SyscallResult<Option<T>>;
+
+    /// Sets the value of an element at a given index.
+    ///
+    /// # Arguments
+    ///
+    /// * `index` - The index of the element to modify.
+    /// * `value` - The value to set at the given index.
+    ///
+    /// # Returns
+    ///
+    /// A result indicating success or encapsulating the error in `SyscallResult`.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the index is out of bounds.
+    fn set(ref self: List<T>, index: u32, value: T) -> SyscallResult<()>;
+
+    /// Clears the List by setting its length to 0.
+    ///
+    /// The storage is not actually cleared, only the length is set to 0.
+    /// The values can still be accessible using low-level syscalls, but cannot
+    /// be accessed through the list interface.
     fn clean(ref self: List<T>);
-    fn pop_front(ref self: List<T>) -> Option<T>;
-    fn array(self: @List<T>) -> Array<T>;
-    fn from_array(ref self: List<T>, array: @Array<T>);
-    fn from_span(ref self: List<T>, span: Span<T>);
+
+    /// Removes and returns the first element of the List.
+    ///
+    /// The storage is not actually cleared, only the length is decreased by
+    /// one.
+    /// The value popped can still be accessible using low-level syscalls, but
+    /// cannot be accessed through the list interface.
+    /// # Returns
+    ///
+    /// An `Option<T>` which is `None` if the index is out of bounds, or
+    /// `Some(value)` if an element was found at the given index, encapsulated
+    /// in `SyscallResult`.
+    fn pop_front(ref self: List<T>) -> SyscallResult<Option<T>>;
+
+    /// Converts the List into an Array.  If the list cannot be converted
+    /// to an array due storage errors, an error is returned.
+    ///
+    /// # Returns
+    ///
+    /// An `Array<T>` containing all the elements of the List, encapsulated
+    /// in `SyscallResult`.
+    fn array(self: @List<T>) -> SyscallResult<Array<T>>;
 }
 
 impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
+    #[inline(always)]
+    fn new(address_domain: u32, base: StorageBaseAddress) -> List<T> {
+        let storage_size: u8 = Store::<T>::size();
+        List { address_domain, base, len: 0, storage_size }
+    }
+
+    fn fetch(address_domain: u32, base: StorageBaseAddress) -> SyscallResult<List<T>> {
+        ListStore::read(address_domain, base)
+    }
+
+    #[inline(always)]
+    fn from_array(
+        address_domain: u32, address: StorageBaseAddress, array: @Array<T>
+    ) -> SyscallResult<List<T>> {
+        ListTrait::<T>::from_span(address_domain, address, array.span())
+    }
+
+    fn from_span(
+        address_domain: u32, address: StorageBaseAddress, mut span: Span<T>
+    ) -> SyscallResult<List<T>> {
+        let mut list = ListTrait::<T>::new(address_domain, address);
+        let mut index = 0;
+        list.len = span.len();
+
+        let result: SyscallResult<()> = loop {
+            match span.pop_front() {
+                Option::Some(v) => {
+                    let (base, offset) = calculate_base_and_offset_for_index(
+                        list.base, index, list.storage_size
+                    );
+                    match Store::write_at_offset(list.address_domain, base, offset, *v) {
+                        Result::Ok(()) => {},
+                        Result::Err(e) => { break Result::Err(e); }
+                    }
+                    index += 1;
+                },
+                Option::None => {
+                    match Store::write(list.address_domain, list.base, list.len) {
+                        Result::Ok(()) => { break Result::Ok(()); },
+                        Result::Err(e) => { break Result::Err(e); }
+                    }
+                }
+            };
+        };
+
+        match result {
+            Result::Ok(()) => Result::Ok(list),
+            Result::Err(e) => Result::Err(e)
+        }
+    }
+
+    #[inline(always)]
     fn len(self: @List<T>) -> u32 {
         *self.len
     }
 
+    #[inline(always)]
     fn is_empty(self: @List<T>) -> bool {
         *self.len == 0
     }
 
-    fn append(ref self: List<T>, value: T) -> u32 {
+    fn append(ref self: List<T>, value: T) -> SyscallResult<u32> {
         let (base, offset) = calculate_base_and_offset_for_index(
             self.base, self.len, self.storage_size
         );
-        Store::write_at_offset(self.address_domain, base, offset, value).unwrap_syscall();
+        Store::write_at_offset(self.address_domain, base, offset, value)?;
 
         let append_at = self.len;
         self.len += 1;
-        Store::write(self.address_domain, self.base, self.len);
+        Store::write(self.address_domain, self.base, self.len)?;
 
-        append_at
+        Result::Ok(append_at)
     }
 
-    fn get(self: @List<T>, index: u32) -> Option<T> {
+    fn get(self: @List<T>, index: u32) -> SyscallResult<Option<T>> {
         if (index >= *self.len) {
-            return Option::None;
+            return Result::Ok(Option::None);
         }
 
         let (base, offset) = calculate_base_and_offset_for_index(
             *self.base, index, *self.storage_size
         );
-        let t = Store::read_at_offset(*self.address_domain, base, offset).unwrap_syscall();
-        Option::Some(t)
+        let t = Store::read_at_offset(*self.address_domain, base, offset)?;
+        Result::Ok(Option::Some(t))
     }
 
-    fn set(ref self: List<T>, index: u32, value: T) {
+    fn set(ref self: List<T>, index: u32, value: T) -> SyscallResult<()> {
         assert(index < self.len, 'List index out of bounds');
         let (base, offset) = calculate_base_and_offset_for_index(
             self.base, index, self.storage_size
         );
-        Store::write_at_offset(self.address_domain, base, offset, value).unwrap_syscall();
+        Store::write_at_offset(self.address_domain, base, offset, value)
     }
 
+    #[inline(always)]
     fn clean(ref self: List<T>) {
         self.len = 0;
         Store::write(self.address_domain, self.base, self.len);
     }
 
-    fn pop_front(ref self: List<T>) -> Option<T> {
+    fn pop_front(ref self: List<T>) -> SyscallResult<Option<T>> {
         if self.len == 0 {
-            return Option::None;
+            return Result::Ok(Option::None);
         }
 
-        let popped = self.get(self.len - 1);
+        let popped = self.get(self.len - 1)?;
         // not clearing the popped value to save a storage write,
         // only decrementing the len - makes it unaccessible through
         // the interfaces, next append will overwrite the values
         self.len -= 1;
-        Store::write(self.address_domain, self.base, self.len);
+        Store::write(self.address_domain, self.base, self.len)?;
 
-        popped
+        Result::Ok(popped)
     }
 
-    fn array(self: @List<T>) -> Array<T> {
+    fn array(self: @List<T>) -> SyscallResult<Array<T>> {
         let mut array = array![];
         let mut index = 0;
-        loop {
+        let result: SyscallResult<()> = loop {
             if index == *self.len {
-                break;
+                break Result::Ok(());
             }
-            array.append(self.get(index).expect('List index out of bounds'));
+            let value = match self.get(index) {
+                Result::Ok(v) => v,
+                Result::Err(e) => { break Result::Err(e); }
+            }.expect('List index out of bounds');
+            array.append(value);
             index += 1;
         };
-        array
-    }
 
-    fn from_array(ref self: List<T>, array: @Array<T>) {
-        self.from_span(array.span());
-    }
-
-    fn from_span(ref self: List<T>, mut span: Span<T>) {
-        let mut index = 0;
-        self.len = span.len();
-        loop {
-            match span.pop_front() {
-                Option::Some(v) => {
-                    let (base, offset) = calculate_base_and_offset_for_index(
-                        self.base, index, self.storage_size
-                    );
-                    Store::write_at_offset(self.address_domain, base, offset, *v).unwrap_syscall();
-                    index += 1;
-                },
-                Option::None => { break; }
-            };
-        };
-        Store::write(self.address_domain, self.base, self.len);
+        match result {
+            Result::Ok(()) => Result::Ok(array),
+            Result::Err(e) => Result::Err(e)
+        }
     }
 }
 
 impl AListIndexViewImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of IndexView<List<T>, u32, T> {
     fn index(self: @List<T>, index: u32) -> T {
-        self.get(index).expect('List index out of bounds')
+        self.get(index).expect('read syscall failed').expect('List index out of bounds')
     }
 }
 

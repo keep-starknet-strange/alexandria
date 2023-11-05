@@ -29,7 +29,7 @@ mod AListHolder {
     struct Storage {
         // to test a corelib type that has Store and
         // Into<ContractAddress, felt252>
-        addrs: List<ContractAddress>,
+        addresses: List<ContractAddress>,
         // to test a corelib compound struct
         numbers: List<u256>
     }
@@ -37,72 +37,102 @@ mod AListHolder {
     #[external(v0)]
     impl Holder of super::IAListHolder<ContractState> {
         fn do_get_len(self: @ContractState) -> (u32, u32) {
-            (self.addrs.read().len(), self.numbers.read().len())
+            (self.addresses.read().len(), self.numbers.read().len())
         }
 
         fn do_is_empty(self: @ContractState) -> (bool, bool) {
-            (self.addrs.read().is_empty(), self.numbers.read().is_empty())
+            (self.addresses.read().is_empty(), self.numbers.read().is_empty())
         }
 
         fn do_append(
             ref self: ContractState, addrs_value: ContractAddress, numbers_value: u256
         ) -> (u32, u32) {
-            let mut a = self.addrs.read();
+            let mut a = self.addresses.read();
             let mut n = self.numbers.read();
-            (a.append(addrs_value), n.append(numbers_value))
+            (
+                a.append(addrs_value).expect('syscallresult error'),
+                n.append(numbers_value).expect('syscallresult error')
+            )
         }
 
         fn do_get(self: @ContractState, index: u32) -> (Option<ContractAddress>, Option<u256>) {
-            (self.addrs.read().get(index), self.numbers.read().get(index))
+            (
+                self.addresses.read().get(index).expect('syscallresult error'),
+                self.numbers.read().get(index).expect('syscallresult error')
+            )
         }
 
         fn do_get_index(self: @ContractState, index: u32) -> (ContractAddress, u256) {
-            (self.addrs.read()[index], self.numbers.read()[index])
+            (self.addresses.read()[index], self.numbers.read()[index])
         }
 
         fn do_set(
             ref self: ContractState, index: u32, addrs_value: ContractAddress, numbers_value: u256
         ) {
-            let mut a = self.addrs.read();
+            let mut a = self.addresses.read();
             let mut n = self.numbers.read();
             a.set(index, addrs_value);
             n.set(index, numbers_value);
         }
 
         fn do_clean(ref self: ContractState) {
-            let mut a = self.addrs.read();
+            let mut a = self.addresses.read();
             let mut n = self.numbers.read();
             a.clean();
             n.clean();
         }
 
         fn do_pop_front(ref self: ContractState) -> (Option<ContractAddress>, Option<u256>) {
-            let mut a = self.addrs.read();
+            let mut a = self.addresses.read();
             let mut n = self.numbers.read();
-            (a.pop_front(), n.pop_front())
+            (
+                a.pop_front().expect('syscallresult error'),
+                n.pop_front().expect('syscallresult error')
+            )
         }
 
         fn do_array(self: @ContractState) -> (Array<ContractAddress>, Array<u256>) {
-            let mut a = self.addrs.read();
+            let mut a = self.addresses.read();
             let mut n = self.numbers.read();
-            (a.array(), n.array())
+            (a.array().expect('syscallresult error'), n.array().expect('syscallresult error'))
         }
 
         fn do_from_array(
             ref self: ContractState, addrs_array: Array<ContractAddress>, numbers_array: Array<u256>
         ) {
-            let mut a = self.addrs.read();
+            let mut a = self.addresses.read();
             let mut n = self.numbers.read();
-            a.from_array(@addrs_array);
-            n.from_array(@numbers_array);
+            ListTrait::from_array(0, self.addresses.address(), @addrs_array)
+                .expect('syscallresult error');
+            ListTrait::from_array(0, self.numbers.address(), @numbers_array)
+                .expect('syscallresult error');
         }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use starknet::{ClassHash, ContractAddress, deploy_syscall, SyscallResultTrait};
+    use AListHolder::{addressesContractMemberStateTrait, numbersContractMemberStateTrait};
+    use alexandria_storage::list::{List, ListTrait};
+    use debug::PrintTrait;
+    use starknet::{
+        ClassHash, ContractAddress, deploy_syscall, SyscallResultTrait,
+        testing::set_contract_address, storage_address_from_base, storage_address_to_felt252,
+        storage_base_address_from_felt252, StorageBaseAddress
+    };
     use super::{AListHolder, IAListHolderDispatcher, IAListHolderDispatcherTrait};
+
+    impl StorageBaseAddressPartialEq of PartialEq<StorageBaseAddress> {
+        fn eq(lhs: @StorageBaseAddress, rhs: @StorageBaseAddress) -> bool {
+            storage_address_to_felt252(
+                storage_address_from_base(*lhs)
+            ) == storage_address_to_felt252(storage_address_from_base(*rhs))
+        }
+
+        fn ne(lhs: @StorageBaseAddress, rhs: @StorageBaseAddress) -> bool {
+            !StorageBaseAddressPartialEq::eq(lhs, rhs)
+        }
+    }
 
     fn deploy_mock() -> IAListHolderDispatcher {
         let class_hash: ClassHash = AListHolder::TEST_CLASS_HASH.try_into().unwrap();
@@ -120,6 +150,100 @@ mod tests {
     fn test_deploy() {
         let contract = deploy_mock();
         assert(contract.do_get_len() == (0, 0), 'do_get_len');
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_new_initializes_empty_list() {
+        let contract = deploy_mock();
+        set_contract_address(contract.contract_address);
+        let mut contract_state = AListHolder::unsafe_new_contract_state();
+
+        let addresses_address = contract_state.addresses.address();
+        let addresses_list = ListTrait::<ContractAddress>::new(0, addresses_address);
+        assert(addresses_list.address_domain == 0, 'Address domain should be 0');
+        assert(addresses_list.len() == 0, 'Initial length should be 0');
+        assert(addresses_list.base.into() == addresses_address, 'Base address mismatch');
+        assert(addresses_list.storage_size == 1, 'Storage size should be 1');
+
+        let numbers_address = contract_state.numbers.address();
+        let numbers_list = ListTrait::<u256>::new(0, numbers_address);
+        assert(numbers_list.address_domain == 0, 'Address domain should be 0');
+        assert(numbers_list.len() == 0, 'Initial length should be 0');
+        assert(numbers_list.base.into() == numbers_address, 'Base address mismatch');
+        assert(numbers_list.storage_size == 2, 'Storage size should be 2');
+
+        // Check if both addresses and numbers lists are initialized to be empty
+        assert(contract.do_get_len() == (0, 0), 'Initial lengths should be 0');
+        assert(contract.do_is_empty() == (true, true), 'Lists should be empty');
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_new_then_fill_list() {
+        let contract = deploy_mock();
+        set_contract_address(contract.contract_address);
+        let mut contract_state = AListHolder::unsafe_new_contract_state();
+
+        let addresses_address = contract_state.addresses.address();
+        let mut addresses_list = ListTrait::<ContractAddress>::new(0, addresses_address);
+
+        let numbers_address = contract_state.numbers.address();
+        let mut numbers_list = ListTrait::<u256>::new(0, numbers_address);
+
+        addresses_list.append(mock_addr());
+        numbers_list.append(1);
+        numbers_list.append(2);
+
+        assert(addresses_list.len() == 1, 'Addresses length should be 1');
+        assert(numbers_list.len() == 2, 'Numbers length should be 2');
+
+        assert(contract.do_get_len() == (1, 2), 'Lengths should be (1,2)');
+        assert(contract.do_is_empty() == (false, false), 'Lists should not be empty');
+    }
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_fetch_empty_list() {
+        let contract = deploy_mock();
+        set_contract_address(contract.contract_address);
+        let mut contract_state = AListHolder::unsafe_new_contract_state();
+        let storage_address = storage_base_address_from_felt252('empty_address');
+        let contract = deploy_mock();
+
+        let empty_list = ListTrait::<u128>::fetch(0, storage_address).expect('List fetch failed');
+
+        assert(empty_list.address_domain == 0, 'Address domain should be 0');
+        assert(empty_list.len() == 0, 'Length should be 0');
+        assert(empty_list.base.into() == storage_address, 'Base address mismatch');
+        assert(empty_list.storage_size == 1, 'Storage size should be 1');
+    }
+
+
+    #[test]
+    #[available_gas(100000000)]
+    fn test_fetch_existing_list() {
+        let contract = deploy_mock();
+        set_contract_address(contract.contract_address);
+        let mut contract_state = AListHolder::unsafe_new_contract_state();
+        let mock_addr = mock_addr();
+
+        assert(contract.do_append(mock_addr, 10) == (0, 0), '1st append idx');
+        assert(contract.do_append(mock_addr, 20) == (1, 1), '2nd append idx');
+
+        let addresses_address = contract_state.addresses.address();
+        let addresses_list = ListTrait::<ContractAddress>::fetch(0, addresses_address)
+            .expect('List fetch failed');
+        assert(addresses_list.address_domain == 0, 'Address domain should be 0');
+        assert(addresses_list.len() == 2, 'Length should be 2');
+        assert(addresses_list.base.into() == addresses_address, 'Base address mismatch');
+        assert(addresses_list.storage_size == 1, 'Storage size should be 1');
+
+        let numbers_address = contract_state.numbers.address();
+        let numbers_list = ListTrait::<u256>::fetch(0, numbers_address).expect('List fetch failed');
+        assert(numbers_list.address_domain == 0, 'Address domain should be 0');
+        assert(numbers_list.len() == 2, 'Length should be 2');
+        assert(numbers_list.base.into() == numbers_address, 'Base address mismatch');
     }
 
     #[test]
