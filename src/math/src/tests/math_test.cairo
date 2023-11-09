@@ -1,5 +1,5 @@
 use alexandria_math::{pow, BitShift, BitRotate, count_digits_of_base};
-use integer::{BoundedInt};
+use integer::BoundedInt;
 
 // Test power function
 #[test]
@@ -135,7 +135,6 @@ fn test_pow_power_2_all() {
     assert(pow::<u128>(2, 127) == 170141183460469231731687303715884105728, '127');
 }
 
-
 #[test]
 #[available_gas(2000000)]
 fn pow_test() {
@@ -145,7 +144,6 @@ fn pow_test() {
     assert(pow::<u128>(3, 8) == 6561, '3^8_u128');
     assert(pow::<u256>(3, 8) == 6561, '3^8_u256');
 }
-
 
 // Test counting of number of digits function
 #[test]
