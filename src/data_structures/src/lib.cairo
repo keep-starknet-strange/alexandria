@@ -5,7 +5,7 @@ mod byte_array_ext;
 mod byte_reader;
 mod queue;
 mod stack;
-mod vec;
 
 #[cfg(test)]
 mod tests;
+mod vec;

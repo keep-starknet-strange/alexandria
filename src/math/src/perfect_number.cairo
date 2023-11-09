@@ -1,5 +1,4 @@
 //! # Perfect Number.
-use array::ArrayTrait;
 
 /// Algorithm to determine if a number is a perfect number
 /// # Arguments

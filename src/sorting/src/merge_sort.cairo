@@ -1,5 +1,4 @@
 //! Merge Sort
-use array::ArrayTrait;
 
 // Merge Sort
 /// # Arguments

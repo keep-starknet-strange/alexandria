@@ -3,3 +3,6 @@ name = "alexandria_sorting"
 version = "0.1.0"
 description = "A set of sorting algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/src/sorting"
+
+[tool]
+fmt.workspace = true

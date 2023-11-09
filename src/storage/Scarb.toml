@@ -4,5 +4,8 @@ version = "0.2.0"
 description = "Starknet storage utilities"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/src/storage"
 
+[tool]
+fmt.workspace = true
+
 [dependencies]
 starknet.workspace = true

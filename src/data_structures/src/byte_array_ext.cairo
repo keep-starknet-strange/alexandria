@@ -1,10 +1,7 @@
-use alexandria_data_structures::byte_appender::ByteAppender;
 use alexandria_data_structures::byte_reader::ByteReader;
 use array::{serialize_array_helper, deserialize_array_helper};
 use bytes_31::BYTES_IN_BYTES31;
-use traits::DivRem;
-use core::serde::into_felt252_based::SerdeImpl;
-use traits::Into;
+use serde::into_felt252_based::SerdeImpl;
 
 
 impl ByteArraySerde of Serde<ByteArray> {

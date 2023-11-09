@@ -1,8 +1,6 @@
 use alexandria_encoding::reversible::{ReversibleBits, ReversibleBytes};
 use integer::u512;
 
-use debug::PrintTrait;
-
 #[test]
 #[available_gas(1000000)]
 fn test_reverse_bytes_u8() {

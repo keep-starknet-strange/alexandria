@@ -1,7 +1,4 @@
 //! # Fast power algorithm
-use array::ArrayTrait;
-use option::OptionTrait;
-use traits::{Into, TryInto};
 
 // Calculate the ( base ^ power ) mod modulus
 // using the fast powering algorithm # Arguments

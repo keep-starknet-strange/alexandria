@@ -1,5 +1,4 @@
 use integer::u512;
-use traits::DivRem;
 
 const SELECT_BYTE: u16 = 0x100;
 const SELECT_BIT: u8 = 0b10;

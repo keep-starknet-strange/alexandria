@@ -1,9 +1,4 @@
-use core::option::OptionTrait;
-use core::array::SpanTrait;
 use alexandria_math::ed25519::{p, Point, verify_signature, SpanU8TryIntoPoint};
-use array::ArrayTrait;
-use debug::PrintTrait;
-use traits::TryInto;
 
 fn gen_msg() -> Span<u8> {
     // Hello World!

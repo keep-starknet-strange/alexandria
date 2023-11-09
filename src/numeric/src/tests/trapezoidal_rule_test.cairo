@@ -1,4 +1,3 @@
-use array::ArrayTrait;
 use alexandria_numeric::trapezoidal_rule::trapezoidal_rule;
 
 #[test]

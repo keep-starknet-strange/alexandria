@@ -40,8 +40,8 @@ struct Hasher {}
 /// Hasher impls.
 
 mod pedersen {
-    use pedersen::PedersenTrait;
     use hash::HashStateTrait;
+    use pedersen::PedersenTrait;
     use super::{Hasher, HasherTrait};
 
     impl PedersenHasherImpl of HasherTrait<Hasher> {
@@ -57,8 +57,8 @@ mod pedersen {
 }
 
 mod poseidon {
-    use poseidon::PoseidonTrait;
     use hash::HashStateTrait;
+    use poseidon::PoseidonTrait;
     use super::{Hasher, HasherTrait};
 
     impl PoseidonHasherImpl of HasherTrait<Hasher> {

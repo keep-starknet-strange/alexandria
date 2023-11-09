@@ -1,7 +1,7 @@
 use alexandria_data_structures::bit_array::{BitArray, BitArrayTrait, shift_bit};
-use integer::u512;
-use integer::BoundedInt;
 use bytes_31::one_shift_left_bytes_felt252;
+use integer::BoundedInt;
+use integer::u512;
 
 #[test]
 #[available_gas(30000000)]

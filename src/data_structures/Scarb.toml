@@ -4,5 +4,8 @@ version = "0.1.0"
 description = "A set of Cairo data structure libraries and algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/data_structures"
 
+[tool]
+fmt.workspace = true
+
 [dependencies]
 alexandria_encoding = { path = "../encoding" }

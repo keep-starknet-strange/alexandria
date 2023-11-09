@@ -1,6 +1,4 @@
 //! # GCD for N numbers
-use array::SpanTrait;
-use option::OptionTrait;
 
 // Calculate the greatest common dividor for n numbers
 // # Arguments

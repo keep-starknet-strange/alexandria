@@ -1,8 +1,4 @@
 use integer::{u64_wrapping_add, bitwise, BoundedInt};
-use traits::{Into, TryInto};
-use option::OptionTrait;
-use array::{ArrayTrait, SpanTrait};
-
 use super::BitShift;
 
 // Variable naming is compliant to RFC-6234 (https://datatracker.ietf.org/doc/html/rfc6234)

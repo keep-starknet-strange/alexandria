@@ -4,5 +4,5 @@ version = "0.1.0"
 description = "Merkle tree related stuff"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/src/merkle_tree"
 
-[dependencies]
-starknet.workspace = true
+[tool]
+fmt.workspace = true

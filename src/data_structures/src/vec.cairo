@@ -12,12 +12,6 @@
 //! ...
 //! ```
 
-// Core lib imports
-use core::nullable::NullableTrait;
-use dict::Felt252DictTrait;
-use option::OptionTrait;
-use traits::{Index, Into};
-
 trait VecTrait<V, T> {
     /// Creates a new V instance.
     /// Returns
