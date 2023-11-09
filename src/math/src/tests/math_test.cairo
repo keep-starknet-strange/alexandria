@@ -170,27 +170,25 @@ fn shl_should_not_overflow() {
 }
 
 #[test]
-#[available_gas(2000000)]
+#[available_gas(3000000)]
 fn test_rotl_min() {
     assert(BitRotate::rotate_left(pow::<u8>(2, 7) + 1, 1) == 3, 'invalid result');
     assert(BitRotate::rotate_left(pow::<u16>(2, 15) + 1, 1) == 3, 'invalid result');
     assert(BitRotate::rotate_left(pow::<u32>(2, 31) + 1, 1) == 3, 'invalid result');
     assert(BitRotate::rotate_left(pow::<u64>(2, 63) + 1, 1) == 3, 'invalid result');
     assert(BitRotate::rotate_left(pow::<u128>(2, 127) + 1, 1) == 3, 'invalid result');
-//  TODO(sveamarcus): missing implementation
-//  assert(BitRotate::rotate_left(pow::<u256>(2, 255) + 1, 1) == 3, 'invalid result');
+    assert(BitRotate::rotate_left(pow::<u256>(2, 255) + 1, 1) == 3, 'invalid result');
 }
 
 #[test]
-#[available_gas(2000000)]
+#[available_gas(3000000)]
 fn test_rotl_max() {
     assert(BitRotate::rotate_left(0b101, 7) == pow::<u8>(2, 7) + 0b10, 'invalid result');
     assert(BitRotate::rotate_left(0b101, 15) == pow::<u16>(2, 15) + 0b10, 'invalid result');
     assert(BitRotate::rotate_left(0b101, 31) == pow::<u32>(2, 31) + 0b10, 'invalid result');
     assert(BitRotate::rotate_left(0b101, 63) == pow::<u64>(2, 63) + 0b10, 'invalid result');
     assert(BitRotate::rotate_left(0b101, 127) == pow::<u128>(2, 127) + 0b10, 'invalid result');
-//  TODO(sveamarcus): missing implementation
-//  assert(BitRotate::rotate_left(0b101, 255) == pow::<u256>(2, 255) + 0b10, 'invalid result');
+    assert(BitRotate::rotate_left(0b101, 255) == pow::<u256>(2, 255) + 0b10, 'invalid result');
 }
 
 #[test]

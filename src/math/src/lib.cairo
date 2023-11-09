@@ -221,12 +221,8 @@ impl U128BitRotate of BitRotate<u128> {
 
 impl U256BitRotate of BitRotate<u256> {
     fn rotate_left(x: u256, n: u256) -> u256 {
-        // TODO(sveamarcus): missing non-zero implementation for u512
-        // let word = u256_wide_mul(x, pow(2, n));
-        // let (quotient, remainder) = DivRem::div_rem(word,
-        //     u512_as_non_zero(u512{limb0: 0, limb1: 0, limb2: 1, limb3: 0 }));
-        // (quotient + remainder).try_into().unwrap()
-        panic_with_felt252('missing impl')
+        // Alternative solution since we cannot divide u512 yet
+        BitShift::shl(x, n) + BitShift::shr(x, 256 - n)
     }
 
     fn rotate_right(x: u256, n: u256) -> u256 {
