@@ -1,4 +1,3 @@
-use array::ArrayTrait;
 use alexandria_math::gcd_of_n_numbers::gcd;
 
 #[test]

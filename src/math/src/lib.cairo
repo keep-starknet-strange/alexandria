@@ -1,10 +1,25 @@
-use option::OptionTrait;
-use traits::Into;
+mod aliquot_sum;
+mod armstrong_number;
+mod collatz_sequence;
+mod ed25519;
+mod extended_euclidean_algorithm;
+mod fast_power;
+mod fibonacci;
+mod gcd_of_n_numbers;
+mod karatsuba;
+mod keccak256;
+mod mod_arithmetics;
+mod perfect_number;
+mod sha256;
+mod sha512;
+
+#[cfg(test)]
+mod tests;
+mod zellers_congruence;
 use integer::{
     u8_wide_mul, u16_wide_mul, u32_wide_mul, u64_wide_mul, u128_wide_mul, u256_overflow_mul,
     BoundedInt
 };
-use debug::PrintTrait;
 
 /// Raise a number to a power.
 /// O(log n) time complexity.
@@ -221,21 +236,3 @@ impl U256BitRotate of BitRotate<u256> {
     }
 }
 
-mod aliquot_sum;
-mod armstrong_number;
-mod collatz_sequence;
-mod ed25519;
-mod extended_euclidean_algorithm;
-mod fast_power;
-mod fibonacci;
-mod gcd_of_n_numbers;
-mod karatsuba;
-mod mod_arithmetics;
-mod perfect_number;
-mod sha256;
-mod sha512;
-mod zellers_congruence;
-mod keccak256;
-
-#[cfg(test)]
-mod tests;

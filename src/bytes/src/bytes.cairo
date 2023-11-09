@@ -1,14 +1,8 @@
-use clone::Clone;
-use array::ArrayTrait;
-use traits::Into;
-use traits::TryInto;
-use traits::DivRem;
-use option::OptionTrait;
-use starknet::{ContractAddress, Felt252TryIntoContractAddress};
-use alexandria_math::sha256::sha256;
 use alexandria_bytes::utils::{
     u128_join, read_sub_u128, u128_split, u128_array_slice, keccak_u128s_be, u8_array_to_u256
 };
+use alexandria_math::sha256::sha256;
+use starknet::ContractAddress;
 
 /// Bytes is a dynamic array of u128, where each element contains 16 bytes.
 const BYTES_PER_ELEMENT: usize = 16;
@@ -120,11 +114,11 @@ impl BytesImpl of BytesTrait {
 
     #[inline(always)]
     fn new_empty() -> Bytes {
-        Bytes { size: 0_usize, data: ArrayTrait::<u128>::new() }
+        Bytes { size: 0_usize, data: array![] }
     }
 
     fn zero(size: usize) -> Bytes {
-        let mut data = ArrayTrait::<u128>::new();
+        let mut data = array![];
         let (data_index, mut data_len) = DivRem::div_rem(
             size, BYTES_PER_ELEMENT.try_into().expect('Division by 0')
         );
@@ -222,7 +216,7 @@ impl BytesImpl of BytesTrait {
         self: @Bytes, offset: usize, array_length: usize, element_size: usize
     ) -> (usize, Array<u128>) {
         assert(offset + array_length * element_size <= self.size(), 'out of bound');
-        let mut array = ArrayTrait::<u128>::new();
+        let mut array = array![];
 
         if array_length == 0 {
             return (offset, array);
@@ -311,7 +305,7 @@ impl BytesImpl of BytesTrait {
     /// read a u256 array from Bytes
     fn read_u256_array(self: @Bytes, offset: usize, array_length: usize) -> (usize, Array<u256>) {
         assert(offset + array_length * 32 <= self.size(), 'out of bound');
-        let mut array = ArrayTrait::<u256>::new();
+        let mut array = array![];
 
         if array_length == 0 {
             return (offset, array);
@@ -340,7 +334,7 @@ impl BytesImpl of BytesTrait {
             return (offset, BytesTrait::new_empty());
         }
 
-        let mut array = ArrayTrait::<u128>::new();
+        let mut array = array![];
 
         // read full array element for sub_bytes
         let mut offset = offset;
@@ -519,7 +513,7 @@ impl BytesImpl of BytesTrait {
 
     /// sha256 hash
     fn sha256(self: @Bytes) -> u256 {
-        let mut hash_data: Array<u8> = ArrayTrait::new();
+        let mut hash_data: Array<u8> = array![];
         let mut i: usize = 0;
         let mut offset: usize = 0;
         loop {

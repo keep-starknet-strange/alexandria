@@ -1,6 +1,4 @@
-use core::option::OptionTrait;
 //! Dot product of two arrays
-use array::SpanTrait;
 
 /// Compute the dot product for 2 given arrays.
 /// # Arguments

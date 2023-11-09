@@ -1,8 +1,5 @@
 //! # Karatsuba Multiplication.
 use cmp::max;
-use traits::Into;
-
-// Internal imports.
 use super::{pow, count_digits_of_base};
 
 /// Algorithm to multiply two numbers in O(n^1.6) running time

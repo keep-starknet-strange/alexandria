@@ -1,5 +1,4 @@
 //! Bubble sort algorithm
-use array::ArrayTrait;
 
 // Bubble sort
 /// # Arguments

@@ -1,7 +1,4 @@
 //! One-dimensional linear interpolation for monotonically increasing sample points.
-use array::SpanTrait;
-use traits::Into;
-use zeroable::Zeroable;
 
 #[derive(Serde, Copy, Drop, PartialEq)]
 enum Interpolation {
