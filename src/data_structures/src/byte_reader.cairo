@@ -540,8 +540,18 @@ impl ByteReaderLenImpl<T, +Len<T>> of Len<ByteReaderState<T>> {
 }
 
 impl ByteArrayIndexViewAsSnapshotImpl of IndexView<ByteArray, usize, @u8> {
+    #[inline(always)]
     fn index(self: @ByteArray, index: usize) -> @u8 {
         @self.at(index).expect('Index out of bounds')
+    }
+}
+
+impl ByteReaderIndexViewImpl<
+    T, impl TIndexView: IndexView<T, usize, @u8>
+> of IndexView<ByteReaderState<T>, usize, @u8> {
+    #[inline(always)]
+    fn index(self: @ByteReaderState<T>, index: usize) -> @u8 {
+        TIndexView::index(*self.data, index)
     }
 }
 
