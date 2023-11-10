@@ -50,43 +50,18 @@ trait ListTrait<T> {
     /// `SyscallResult`.
     fn fetch(address_domain: u32, base: StorageBaseAddress) -> SyscallResult<List<T>>;
 
-    /// Creates a List from an existing Array. If the array cannot be converted
-    /// to a list due storage errors, an error is returned.
+    /// Appends an existing Span to a List. Returns an error if the span
+    /// cannot be appended to the a list due to storage errors
     ///
     /// # Arguments
     ///
-    /// * `address_domain` - The domain of the address. Only address_domain 0 is
-    /// currently supported, in the future it will enable access to address
-    /// spaces with different data availability
-    /// * `address` - The base address of the List. This corresponds to the
-    /// location in storage of the List's first element.
-    /// * `array` - An Array from which to create the List.
-    ///
-    /// # Returns
-    ///
-    /// A List constructed from the array or an error in `SyscallResult`.
-    fn from_array(
-        address_domain: u32, address: StorageBaseAddress, array: @Array<T>
-    ) -> SyscallResult<List<T>>;
-
-    /// Creates a List from an existing Span. Returns an error if the span
-    /// cannot be converted into a list due to storage errors
-    ///
-    /// # Arguments
-    ///
-    /// * `address_domain` - The domain of the address. Only address_domain 0 is
-    /// currently supported, in the future it will enable access to address
-    /// spaces with different data availability
-    /// * `address` - The base address of the List. This corresponds to the
-    /// location in storage of the List's first element.
-    /// * `span` - A Span from which to create the List.
+    /// * `self` - The List to add the span to.
+    /// * `span` - A Span to append to the List.
     ///
     /// # Returns
     ///
     /// A List constructed from the span or an error in `SyscallResult`.
-    fn from_span(
-        address_domain: u32, address: StorageBaseAddress, span: Span<T>
-    ) -> SyscallResult<List<T>>;
+    fn append_span(ref self: List<T>, span: Span<T>) -> SyscallResult<()>;
 
     /// Gets the length of the List.
     ///
@@ -181,48 +156,29 @@ impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
         List { address_domain, base, len: 0, storage_size }
     }
 
+    #[inline(always)]
     fn fetch(address_domain: u32, base: StorageBaseAddress) -> SyscallResult<List<T>> {
         ListStore::read(address_domain, base)
     }
 
-    #[inline(always)]
-    fn from_array(
-        address_domain: u32, address: StorageBaseAddress, array: @Array<T>
-    ) -> SyscallResult<List<T>> {
-        ListTrait::<T>::from_span(address_domain, address, array.span())
-    }
+    fn append_span(ref self: List<T>, mut span: Span<T>) -> SyscallResult<()> {
+        let mut index = self.len;
+        self.len += span.len();
 
-    fn from_span(
-        address_domain: u32, address: StorageBaseAddress, mut span: Span<T>
-    ) -> SyscallResult<List<T>> {
-        let mut list = ListTrait::<T>::new(address_domain, address);
-        let mut index = 0;
-        list.len = span.len();
-
-        let result: SyscallResult<()> = loop {
+        loop {
             match span.pop_front() {
                 Option::Some(v) => {
                     let (base, offset) = calculate_base_and_offset_for_index(
-                        list.base, index, list.storage_size
+                        self.base, index, self.storage_size
                     );
-                    match Store::write_at_offset(list.address_domain, base, offset, *v) {
-                        Result::Ok(()) => {},
+                    match Store::write_at_offset(self.address_domain, base, offset, *v) {
+                        Result::Ok(_) => {},
                         Result::Err(e) => { break Result::Err(e); }
                     }
                     index += 1;
                 },
-                Option::None => {
-                    match Store::write(list.address_domain, list.base, list.len) {
-                        Result::Ok(()) => { break Result::Ok(()); },
-                        Result::Err(e) => { break Result::Err(e); }
-                    }
-                }
+                Option::None => { break Store::write(self.address_domain, self.base, self.len); }
             };
-        };
-
-        match result {
-            Result::Ok(()) => Result::Ok(list),
-            Result::Err(e) => Result::Err(e)
         }
     }
 
@@ -306,7 +262,7 @@ impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
         };
 
         match result {
-            Result::Ok(()) => Result::Ok(array),
+            Result::Ok(_) => Result::Ok(array),
             Result::Err(e) => Result::Err(e)
         }
     }

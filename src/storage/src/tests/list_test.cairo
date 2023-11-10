@@ -15,7 +15,7 @@ trait IAListHolder<TContractState> {
     fn do_clean(ref self: TContractState);
     fn do_pop_front(ref self: TContractState) -> (Option<ContractAddress>, Option<u256>);
     fn do_array(self: @TContractState) -> (Array<ContractAddress>, Array<u256>);
-    fn do_from_array(
+    fn do_append_span(
         ref self: TContractState, addrs_array: Array<ContractAddress>, numbers_array: Array<u256>
     );
 }
@@ -97,15 +97,13 @@ mod AListHolder {
             (a.array().expect('syscallresult error'), n.array().expect('syscallresult error'))
         }
 
-        fn do_from_array(
+        fn do_append_span(
             ref self: ContractState, addrs_array: Array<ContractAddress>, numbers_array: Array<u256>
         ) {
             let mut a = self.addresses.read();
             let mut n = self.numbers.read();
-            ListTrait::from_array(0, self.addresses.address(), @addrs_array)
-                .expect('syscallresult error');
-            ListTrait::from_array(0, self.numbers.address(), @numbers_array)
-                .expect('syscallresult error');
+            a.append_span(addrs_array.span()).expect('syscallresult error');
+            n.append_span(numbers_array.span()).expect('syscallresult error');
         }
     }
 }
@@ -547,31 +545,16 @@ mod tests {
 
     #[test]
     #[available_gas(100000000)]
-    fn test_from_array() {
-        let contract = deploy_mock();
-        let mock_addr = mock_addr();
-
-        let addrs_array = array![mock_addr, mock_addr, mock_addr];
-        let numbers_array = array![200, 300, 100];
-        contract.do_from_array(addrs_array, numbers_array);
-        assert(contract.do_get_len() == (3, 3), 'len should be 3');
-        assert(contract.do_get_index(0) == (mock_addr, 200), 'idx 0');
-        assert(contract.do_get_index(1) == (mock_addr, 300), 'idx 1');
-        assert(contract.do_get_index(2) == (mock_addr, 100), 'idx 2');
-    }
-
-    #[test]
-    #[available_gas(100000000)]
-    fn test_from_array_empty() {
+    fn test_append_array_empty() {
         let contract = deploy_mock();
 
-        contract.do_from_array(array![], array![]);
+        contract.do_append_span(array![], array![]);
         assert(contract.do_is_empty() == (true, true), 'should be empty');
     }
 
     #[test]
     #[available_gas(100000000)]
-    fn test_from_array_remove_elements() {
+    fn test_append_span_existing_list() {
         let contract = deploy_mock();
         let mock_addr = mock_addr();
 
@@ -581,8 +564,12 @@ mod tests {
         assert(contract.do_get_index(0) == (mock_addr, 10), 'idx 0');
         assert(contract.do_get_index(1) == (mock_addr, 20), 'idx 1');
 
-        contract.do_from_array(array![], array![]);
+        contract.do_append_span(array![mock_addr], array![30]);
         let (a, b) = contract.do_get_len();
-        assert(contract.do_is_empty() == (true, true), 'should be empty');
+        assert((a, b) == (3, 3), 'len');
+
+        assert(contract.do_get_index(0) == (mock_addr, 10), 'idx 0');
+        assert(contract.do_get_index(1) == (mock_addr, 20), 'idx 1');
+        assert(contract.do_get_index(2) == (mock_addr, 30), 'idx 2');
     }
 }
