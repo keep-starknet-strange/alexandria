@@ -14,3 +14,4 @@ mod sha256_test;
 mod sha512_test;
 mod test_keccak256;
 mod zellers_congruence_test;
+mod wad_ray_math_test;

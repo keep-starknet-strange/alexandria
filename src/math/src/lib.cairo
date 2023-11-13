@@ -12,6 +12,7 @@ mod mod_arithmetics;
 mod perfect_number;
 mod sha256;
 mod sha512;
+mod wad_ray_math;
 
 #[cfg(test)]
 mod tests;
