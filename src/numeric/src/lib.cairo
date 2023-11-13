@@ -1,5 +1,6 @@
 mod cumsum;
 mod diff;
+mod integers;
 mod interpolate;
 
 #[cfg(test)]

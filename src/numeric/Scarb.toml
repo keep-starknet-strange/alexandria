@@ -6,3 +6,6 @@ homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/nu
 
 [tool]
 fmt.workspace = true
+
+[dependencies]
+alexandria_math = { path = "../math" }
