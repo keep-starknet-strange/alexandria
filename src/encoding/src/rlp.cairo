@@ -1,7 +1,8 @@
-use alexandria_data_structures::array_ext::SpanTraitExt;
+use alexandria_data_structures::array_ext::{SpanTraitExt, ArrayTraitExt};
 use alexandria_numeric::integers::U32Trait;
 use core::result::ResultTrait;
 
+use debug::PrintTrait;
 // Possible RLP types
 #[derive(Drop, PartialEq)]
 enum RLPType {
@@ -60,6 +61,81 @@ impl RLPImpl of RLPTrait {
             let list_len_bytes = input.slice(1, len_bytes_count);
             let list_len: u32 = U32Trait::from_bytes(list_len_bytes).unwrap();
             (RLPType::List, 1 + len_bytes_count, list_len)
+        }
+    }
+
+    /// RLP encodes multiple RLPItem
+    /// # Arguments
+    /// * `input` - Span of RLPItem to encode
+    /// # Returns
+    /// * `ByteArray - RLP encoded ByteArray
+    /// # Errors
+    /// * RLPError::RlpEmptyInput - if the input is empty
+    fn encode(mut input: Span<RLPItem>) -> Span<u8> {
+        if input.len() == 0 {
+            panic_with_felt252('empty input');
+        }
+
+        let mut output: Array<u8> = Default::default();
+        let item = input.pop_front().unwrap();
+
+        match item {
+            RLPItem::String(string) => { output.concat_span(RLPTrait::encode_string(*string)); },
+            RLPItem::List(list) => {
+                if (*list).len() == 0 {
+                    output.append(0xc0);
+                } else {
+                    let payload = RLPTrait::encode(*list);
+                    let payload_len = payload.len();
+                    if payload_len > 55 {
+                        let len_in_bytes = payload_len.to_bytes();
+                        output.append(0xf7 + len_in_bytes.len().try_into().unwrap());
+                        output.concat_span(len_in_bytes);
+                    } else {
+                        output.append(0xc0 + payload_len.try_into().unwrap());
+                    }
+                    output.concat_span(payload);
+                }
+            }
+        }
+
+        if input.len() > 0 {
+            output.concat_span(RLPTrait::encode(input));
+        }
+
+        output.span()
+    }
+
+    /// RLP encodes a Span<u8>, which is the underlying type used to represent
+    /// string data in Cairo.  Since RLP encoding is only used for eth_address
+    /// computation by calculating the RLP::encode(deployer_address, deployer_nonce)
+    /// and then hash it, the input is a ByteArray and not a Span<u8>
+    /// # Arguments
+    /// * `input` - Span<u8> to encode
+    /// # Returns
+    /// * `ByteArray - RLP encoded ByteArray
+    /// # Errors
+    /// * RLPError::RlpEmptyInput - if the input is empty
+    fn encode_string(input: Span<u8>) -> Span<u8> {
+        let len = input.len();
+        if len == 0 {
+            return array![0x80].span();
+        } else if len == 1 && *input[0] < 0x80 {
+            return input;
+        } else if len < 56 {
+            let mut encoding: Array<u8> = Default::default();
+            encoding.append(0x80 + len.try_into().unwrap());
+            encoding.concat_span(input);
+            return encoding.span();
+        } else {
+            let mut encoding: Array<u8> = Default::default();
+            let len_as_bytes = len.to_bytes();
+            let len_bytes_count = len_as_bytes.len();
+            let prefix = 0xb7 + len_bytes_count.try_into().unwrap();
+            encoding.append(prefix);
+            encoding.concat_span(len_as_bytes);
+            encoding.concat_span(input);
+            return encoding.span();
         }
     }
 
