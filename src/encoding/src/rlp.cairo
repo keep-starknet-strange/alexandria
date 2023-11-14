@@ -1,8 +1,6 @@
-use alexandria_data_structures::array_ext::{SpanTraitExt, ArrayTraitExt};
+use alexandria_data_structures::array_ext::ArrayTraitExt;
 use alexandria_numeric::integers::U32Trait;
-use core::result::ResultTrait;
 
-use debug::PrintTrait;
 // Possible RLP types
 #[derive(Drop, PartialEq)]
 enum RLPType {
@@ -27,8 +25,8 @@ impl RLPImpl of RLPTrait {
     /// * `(RLPType, offset, size)` - A tuple containing the RLPType
     /// the offset and the size of the RLPItem to decode
     /// # Errors
-    /// * RLPError::EmptyInput - if the input is empty
-    /// * RLPError::InputTooShort - if the input is too short for a given
+    /// * empty input - if the input is empty
+    /// * input too short - if the input is too short for a given
     fn decode_type(input: Span<u8>) -> (RLPType, u32, u32) {
         let input_len = input.len();
         if input_len == 0 {
@@ -64,13 +62,13 @@ impl RLPImpl of RLPTrait {
         }
     }
 
-    /// RLP encodes multiple RLPItem
+    /// Recursively encodes multiple RLPItems
     /// # Arguments
     /// * `input` - Span of RLPItem to encode
     /// # Returns
-    /// * `ByteArray - RLP encoded ByteArray
+    /// * `Span<u8> - RLP encoded items as a span of bytes
     /// # Errors
-    /// * RLPError::RlpEmptyInput - if the input is empty
+    /// * empty input - if the input is empty
     fn encode(mut input: Span<RLPItem>) -> Span<u8> {
         if input.len() == 0 {
             panic_with_felt252('empty input');
@@ -106,16 +104,11 @@ impl RLPImpl of RLPTrait {
         output.span()
     }
 
-    /// RLP encodes a Span<u8>, which is the underlying type used to represent
-    /// string data in Cairo.  Since RLP encoding is only used for eth_address
-    /// computation by calculating the RLP::encode(deployer_address, deployer_nonce)
-    /// and then hash it, the input is a ByteArray and not a Span<u8>
+    /// RLP encodes a Array of bytes representing a RLP String.
     /// # Arguments
-    /// * `input` - Span<u8> to encode
+    /// * `input` - Array of bytes representing a RLP String to encode
     /// # Returns
-    /// * `ByteArray - RLP encoded ByteArray
-    /// # Errors
-    /// * RLPError::RlpEmptyInput - if the input is empty
+    /// * `Span<u8> - RLP encoded items as a span of bytes
     fn encode_string(input: Span<u8>) -> Span<u8> {
         let len = input.len();
         if len == 0 {
@@ -139,7 +132,7 @@ impl RLPImpl of RLPTrait {
         }
     }
 
-    /// RLP decodes a rlp encoded byte array
+    /// Recursively decodes a rlp encoded byte array
     /// as described in https://ethereum.org/en/developers/docs/data-structures-and-encoding/rlp/
     ///
     /// # Arguments
@@ -147,7 +140,7 @@ impl RLPImpl of RLPTrait {
     /// # Returns
     /// * `Span<RLPItem>` - Span of RLPItem
     /// # Errors
-    /// * RLPError::InputTooShort - if the input is too short for a given
+    /// * input too short - if the input is too short for a given
     fn decode(input: Span<u8>) -> Span<RLPItem> {
         let mut output: Array<RLPItem> = Default::default();
         let input_len = input.len();
@@ -162,7 +155,7 @@ impl RLPImpl of RLPTrait {
             RLPType::String => {
                 // checking for default value `0`
                 if (len == 0) {
-                    output.append(RLPItem::String(array![0].span()));
+                    output.append(RLPItem::String(array![].span()));
                 } else {
                     output.append(RLPItem::String(input.slice(offset, len)));
                 }
@@ -179,9 +172,10 @@ impl RLPImpl of RLPTrait {
 
         let total_item_len = len + offset;
         if total_item_len < input_len {
-            return output
-                .span()
-                .concat(RLPTrait::decode(input.slice(total_item_len, input_len - total_item_len)));
+            output
+                .concat_span(
+                    RLPTrait::decode(input.slice(total_item_len, input_len - total_item_len))
+                );
         }
 
         output.span()
