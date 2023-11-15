@@ -1,8 +1,7 @@
-use core::debug::PrintTrait;
-use alexandria_math::{pow};
 use alexandria_math::wad_ray_math::{
     ray_div, ray_mul, wad_div, wad_mul, ray_to_wad, wad_to_ray, ray, wad, half_ray, half_wad
 };
+use alexandria_math::{pow};
 
 // conversion
 #[test]
