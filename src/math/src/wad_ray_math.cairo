@@ -57,8 +57,7 @@ fn wad_mul(a: u256, b: u256) -> u256 {
 /// # Returns
 /// * a/b, in wad
 fn wad_div(a: u256, b: u256) -> u256 {
-    let half_b = b / 2;
-    return (a * WAD + half_b) / b;
+    return (a * WAD + (b / 2)) / b;
 }
 
 /// Multiplies two ray, rounding half up to the nearest ray
@@ -78,8 +77,7 @@ fn ray_mul(a: u256, b: u256) -> u256 {
 /// # Returns
 /// * a raydiv b
 fn ray_div(a: u256, b: u256) -> u256 {
-    let half_b = b / 2;
-    return (a * RAY + half_b) / b;
+    return (a * RAY + (b / 2)) / b;
 }
 
 /// Casts ray down to wad
@@ -88,8 +86,7 @@ fn ray_div(a: u256, b: u256) -> u256 {
 /// # Returns
 /// * a converted to wad, rounded half up to the nearest wad
 fn ray_to_wad(a: u256) -> u256 {
-    let half_ratio = WAD_RAY_RATIO / 2;
-    return (half_ratio + a) / WAD_RAY_RATIO;
+    return ((WAD_RAY_RATIO / 2) + a) / WAD_RAY_RATIO;
 }
 
 /// Converts wad up to ray
