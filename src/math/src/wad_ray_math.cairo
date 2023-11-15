@@ -9,6 +9,7 @@ const HALF_WAD: u256 = 500_000_000_000_000_000; // 0.5e18
 const RAY: u256 = 1_000_000_000_000_000_000_000_000_000; // 1e27
 const HALF_RAY: u256 = 500_000_000_000_000_000_000_000_000; // 0.5e27
 const WAD_RAY_RATIO: u256 = 1_000_000_000; // 1e9
+const HALF_WAD_RAY_RATIO: u256 = 500_000_000; // 0.5e9
 
 
 /// Return the wad value
@@ -86,7 +87,7 @@ fn ray_div(a: u256, b: u256) -> u256 {
 /// # Returns
 /// * a converted to wad, rounded half up to the nearest wad
 fn ray_to_wad(a: u256) -> u256 {
-    return ((WAD_RAY_RATIO / 2) + a) / WAD_RAY_RATIO;
+    return (HALF_WAD_RAY_RATIO + a) / WAD_RAY_RATIO;
 }
 
 /// Converts wad up to ray
