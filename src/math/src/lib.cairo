@@ -15,6 +15,7 @@ mod sha512;
 
 #[cfg(test)]
 mod tests;
+mod wad_ray_math;
 mod zellers_congruence;
 use integer::{
     u8_wide_mul, u16_wide_mul, u32_wide_mul, u64_wide_mul, u128_wide_mul, u256_overflow_mul,
