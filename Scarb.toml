@@ -1,16 +1,16 @@
 [workspace]
 members = [
-    "src/data_structures",
-    "src/encoding",
-    "src/linalg",
-    "src/math",
-    "src/merkle_tree",
-    "src/numeric",
-    "src/searching",
-    "src/sorting",
-    "src/storage",
-    "src/ascii",
-    "src/bytes",
+  "src/data_structures",
+  "src/encoding",
+  "src/linalg",
+  "src/math",
+  "src/merkle_tree",
+  "src/numeric",
+  "src/searching",
+  "src/sorting",
+  "src/storage",
+  "src/ascii",
+  "src/bytes",
 ]
 name = "alexandria"
 version = "0.1.0"
@@ -18,7 +18,7 @@ description = "Community maintained Cairo and Starknet libraries"
 homepage = "https://github.com/keep-starknet-strange/alexandria/"
 
 [workspace.dependencies]
-starknet = "=2.3.1"
+starknet = "=2.4.0-rc2"
 
 [workspace.tool.fmt]
 sort-module-level-items = true

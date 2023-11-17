@@ -12,7 +12,7 @@ jobs:
       - name: Step 2 - Getting scarb
         uses: software-mansion/setup-scarb@v1
         with:
-          scarb-version: 2.3.1
+          scarb-version: 2.4.0-rc2
       - name: Step 3 - Trying to build
         run: scarb build
 
@@ -26,7 +26,7 @@ jobs:
       - name: Step 2 - Getting scarb
         uses: software-mansion/setup-scarb@v1
         with:
-          scarb-version: 2.3.1
+          scarb-version: 2.4.0-rc2
       - name: Step 3 - Running tests
         run: scarb test
 
@@ -40,6 +40,6 @@ jobs:
       - name: Step 2 - Getting scarb
         uses: software-mansion/setup-scarb@v1
         with:
-          scarb-version: 2.3.1
+          scarb-version: 2.4.0-rc2
       - name: Step 3 - Checking formatting
         run: scarb fmt --check
