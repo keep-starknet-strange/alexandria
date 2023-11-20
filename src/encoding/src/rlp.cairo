@@ -1,6 +1,7 @@
 use alexandria_data_structures::array_ext::ArrayTraitExt;
 use alexandria_numeric::integers::UIntBytes;
 
+// Possible RLP errors
 #[derive(Drop, Copy, PartialEq)]
 enum RLPError {
     EmptyInput,
@@ -68,7 +69,7 @@ impl RLPImpl of RLPTrait {
         }
     }
 
-    /// Recursively encodes multiple RLPItems
+    /// Recursively encodes multiple a list of RLPItems
     /// # Arguments
     /// * `input` - Span of RLPItem to encode
     /// # Returns
