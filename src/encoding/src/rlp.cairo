@@ -1,5 +1,5 @@
 use alexandria_data_structures::array_ext::ArrayTraitExt;
-use alexandria_numeric::integers::U32Trait;
+use alexandria_numeric::integers::UIntBytes;
 
 #[derive(Drop, Copy, PartialEq)]
 enum RLPError {
@@ -51,7 +51,7 @@ impl RLPImpl of RLPTrait {
                 return Result::Err(RLPError::InputTooShort(()));
             }
             let string_len_bytes = input.slice(1, len_bytes_count);
-            let string_len: u32 = U32Trait::from_bytes(string_len_bytes).unwrap();
+            let string_len: u32 = UIntBytes::from_bytes(string_len_bytes).unwrap();
 
             return Result::Ok((RLPType::String, 1 + len_bytes_count, string_len));
         } else if prefix_byte < 0xf8 { // Short List
@@ -63,7 +63,7 @@ impl RLPImpl of RLPTrait {
             }
 
             let list_len_bytes = input.slice(1, len_bytes_count);
-            let list_len: u32 = U32Trait::from_bytes(list_len_bytes).unwrap();
+            let list_len: u32 = UIntBytes::from_bytes(list_len_bytes).unwrap();
             return Result::Ok((RLPType::List, 1 + len_bytes_count, list_len));
         }
     }

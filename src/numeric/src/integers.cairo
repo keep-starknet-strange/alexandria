@@ -1,7 +1,12 @@
 use alexandria_math::BitShift;
 
-#[generate_trait]
-impl U32Impl of U32Trait {
+trait UIntBytes<T> {
+    fn from_bytes(input: Span<u8>) -> Option<T>;
+    fn to_bytes(self: T) -> Span<u8>;
+    fn bytes_used(self: T) -> u8;
+}
+
+impl U32BytesImpl of UIntBytes<u32> {
     /// Packs 4 bytes into a u32
     /// # Arguments
     /// * `input` a Span<u8> of len <=4
@@ -57,7 +62,7 @@ impl U32Impl of U32Trait {
     /// * `self` - The value to check.
     /// # Returns
     /// The number of bytes used to represent the value.
-    fn bytes_used(self: usize) -> u8 {
+    fn bytes_used(self: u32) -> u8 {
         if self < 0x10000 { // 256^2
             if self < 0x100 { // 256^1
                 if self == 0 {
