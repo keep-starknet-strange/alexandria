@@ -18,7 +18,7 @@ dependencies = [
 
 [[package]]
 name = "alexandria_data_structures"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "alexandria_encoding",
 ]
@@ -66,4 +66,4 @@ version = "0.1.0"
 
 [[package]]
 name = "alexandria_storage"
-version = "0.2.0"
+version = "0.3.0"
