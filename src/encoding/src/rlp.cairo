@@ -1,6 +1,11 @@
 use alexandria_data_structures::array_ext::ArrayTraitExt;
-use alexandria_encoding::errors::{RLPError, RLP_EMPTY_INPUT, RLP_INPUT_TOO_SHORT};
 use alexandria_numeric::integers::U32Trait;
+
+#[derive(Drop, Copy, PartialEq)]
+enum RLPError {
+    EmptyInput,
+    InputTooShort
+}
 
 // Possible RLP types
 #[derive(Drop, PartialEq)]
@@ -31,7 +36,7 @@ impl RLPImpl of RLPTrait {
     fn decode_type(input: Span<u8>) -> Result<(RLPType, u32, u32), RLPError> {
         let input_len = input.len();
         if input_len == 0 {
-            return Result::Err(RLPError::EmptyInput(RLP_EMPTY_INPUT));
+            return Result::Err(RLPError::EmptyInput(()));
         }
 
         let prefix_byte = *input[0];
@@ -43,7 +48,7 @@ impl RLPImpl of RLPTrait {
         } else if prefix_byte < 0xc0 { // Long String
             let len_bytes_count: u32 = (prefix_byte - 0xb7).into();
             if input_len <= len_bytes_count {
-                return Result::Err(RLPError::InputTooShort(RLP_INPUT_TOO_SHORT));
+                return Result::Err(RLPError::InputTooShort(()));
             }
             let string_len_bytes = input.slice(1, len_bytes_count);
             let string_len: u32 = U32Trait::from_bytes(string_len_bytes).unwrap();
@@ -54,7 +59,7 @@ impl RLPImpl of RLPTrait {
         } else { // Long List
             let len_bytes_count = prefix_byte.into() - 0xf7;
             if input.len() <= len_bytes_count {
-                return Result::Err(RLPError::InputTooShort(RLP_INPUT_TOO_SHORT));
+                return Result::Err(RLPError::InputTooShort(()));
             }
 
             let list_len_bytes = input.slice(1, len_bytes_count);
@@ -72,10 +77,11 @@ impl RLPImpl of RLPTrait {
     /// * empty input - if the input is empty
     fn encode(mut input: Span<RLPItem>) -> Result<Span<u8>, RLPError> {
         if input.len() == 0 {
-            return Result::Err(RLPError::EmptyInput(RLP_EMPTY_INPUT));
+            return Result::Err(RLPError::EmptyInput(()));
         }
 
         let mut output: Array<u8> = Default::default();
+        // Safe to unwrap because input length is not 0
         let item = input.pop_front().unwrap();
 
         match item {
@@ -87,10 +93,13 @@ impl RLPImpl of RLPTrait {
                     let payload = RLPTrait::encode(*list)?;
                     let payload_len = payload.len();
                     if payload_len > 55 {
+                        // The payload length being a u32, the length in bytes
+                        // will maximum be equal to 4, making the unwrap safe
                         let len_in_bytes = payload_len.to_bytes();
                         output.append(0xf7 + len_in_bytes.len().try_into().unwrap());
                         output.concat_span(len_in_bytes);
                     } else {
+                        // Safe to unwrap because payload_len<55
                         output.append(0xc0 + payload_len.try_into().unwrap());
                     }
                     output.concat_span(payload);
@@ -118,11 +127,14 @@ impl RLPImpl of RLPTrait {
             return Result::Ok(input);
         } else if len < 56 {
             let mut encoding: Array<u8> = Default::default();
+            // Safe to unwrap because len<56
             encoding.append(0x80 + len.try_into().unwrap());
             encoding.concat_span(input);
             return Result::Ok(encoding.span());
         } else {
             let mut encoding: Array<u8> = Default::default();
+            // The payload length being a u32, the length in bytes
+            // will maximum be equal to 4, making the unwrap safe
             let len_as_bytes = len.to_bytes();
             let len_bytes_count = len_as_bytes.len();
             let prefix = 0xb7 + len_bytes_count.try_into().unwrap();
@@ -149,7 +161,7 @@ impl RLPImpl of RLPTrait {
         let (rlp_type, offset, len) = RLPTrait::decode_type(input)?;
 
         if input_len < offset + len {
-            return Result::Err(RLPError::InputTooShort(RLP_INPUT_TOO_SHORT));
+            return Result::Err(RLPError::InputTooShort(()));
         }
 
         match rlp_type {

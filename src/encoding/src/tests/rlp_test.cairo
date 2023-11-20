@@ -1,5 +1,4 @@
-use alexandria_encoding::errors::{RLPError, RLP_EMPTY_INPUT, RLP_INPUT_TOO_SHORT};
-use alexandria_encoding::rlp::{RLPType, RLPTrait, RLPItem};
+use alexandria_encoding::rlp::{RLPError, RLPType, RLPTrait, RLPItem};
 use result::ResultTrait;
 
 #[test]
@@ -72,7 +71,7 @@ fn test_rlp_decode_type_long_list_len_too_short() {
 
     assert(res.is_err(), 'Should have failed');
     assert(
-        res.unwrap_err() == RLPError::InputTooShort(RLP_INPUT_TOO_SHORT), 'err != InputTooShort'
+        res.unwrap_err() == RLPError::InputTooShort(()), 'err != InputTooShort'
     );
 }
 
@@ -82,7 +81,7 @@ fn test_rlp_empty() {
     let res = RLPTrait::decode(ArrayTrait::new().span());
 
     assert(res.is_err(), 'Should have failed');
-    assert(res.unwrap_err() == RLPError::EmptyInput(RLP_EMPTY_INPUT), 'err != EmptyInput');
+    assert(res.unwrap_err() == RLPError::EmptyInput(()), 'err != EmptyInput');
 }
 
 #[test]
@@ -198,7 +197,7 @@ fn test_rlp_decode_short_string_input_too_short() {
 
     assert(res.is_err(), 'Should have failed');
     assert(
-        res.unwrap_err() == RLPError::InputTooShort(RLP_INPUT_TOO_SHORT), 'err != InputTooShort'
+        res.unwrap_err() == RLPError::InputTooShort(()), 'err != InputTooShort'
     );
 }
 
@@ -350,7 +349,7 @@ fn test_rlp_decode_long_string_with_input_too_short() {
 
     assert(res.is_err(), 'Should have failed');
     assert(
-        res.unwrap_err() == RLPError::InputTooShort(RLP_INPUT_TOO_SHORT), 'err != InputTooShort'
+        res.unwrap_err() == RLPError::InputTooShort(()), 'err != InputTooShort'
     );
 }
 
@@ -642,7 +641,7 @@ fn test_rlp_decode_long_string_with_payload_len_too_short() {
 
     assert(res.is_err(), 'Should have failed');
     assert(
-        res.unwrap_err() == RLPError::InputTooShort(RLP_INPUT_TOO_SHORT), 'err != InputTooShort'
+        res.unwrap_err() == RLPError::InputTooShort(()), 'err != InputTooShort'
     );
 }
 
@@ -701,7 +700,7 @@ fn test_rlp_decode_short_list_with_input_too_short() {
 
     assert(res.is_err(), 'Should have failed');
     assert(
-        res.unwrap_err() == RLPError::InputTooShort(RLP_INPUT_TOO_SHORT), 'err != InputTooShort'
+        res.unwrap_err() == RLPError::InputTooShort(()), 'err != InputTooShort'
     );
 }
 
@@ -1903,7 +1902,7 @@ fn test_rlp_decode_long_list_with_input_too_short() {
 
     assert(res.is_err(), 'Should have failed');
     assert(
-        res.unwrap_err() == RLPError::InputTooShort(RLP_INPUT_TOO_SHORT), 'err != InputTooShort'
+        res.unwrap_err() == RLPError::InputTooShort(()), 'err != InputTooShort'
     );
 }
 
@@ -1916,7 +1915,7 @@ fn test_rlp_decode_long_list_with_len_too_short() {
 
     assert(res.is_err(), 'Should have failed');
     assert(
-        res.unwrap_err() == RLPError::InputTooShort(RLP_INPUT_TOO_SHORT), 'err != InputTooShort'
+        res.unwrap_err() == RLPError::InputTooShort(()), 'err != InputTooShort'
     );
 }
 
@@ -1928,7 +1927,7 @@ fn test_rlp_encode_empty_input_should_fail() {
     let res = RLPTrait::encode(input.span());
 
     assert(res.is_err(), 'Should have failed');
-    assert(res.unwrap_err() == RLPError::EmptyInput(RLP_EMPTY_INPUT), 'err != EmptyInput');
+    assert(res.unwrap_err() == RLPError::EmptyInput(()), 'err != EmptyInput');
 }
 
 
