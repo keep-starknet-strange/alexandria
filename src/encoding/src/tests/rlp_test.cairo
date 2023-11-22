@@ -1,4 +1,6 @@
 use alexandria_encoding::rlp::{RLPError, RLPType, RLPTrait, RLPItem};
+
+use debug::PrintTrait;
 use result::ResultTrait;
 
 #[test]
@@ -24,7 +26,6 @@ fn test_rlp_decode_type_short_string() {
     assert(offset == 1, 'Wrong offset');
     assert(size == 2, 'Wrong size');
 }
-
 
 #[test]
 #[available_gas(99999999)]
@@ -71,6 +72,28 @@ fn test_rlp_decode_type_long_list_len_too_short() {
 
     assert(res.is_err(), 'Should have failed');
     assert(res.unwrap_err() == RLPError::InputTooShort(()), 'err != InputTooShort');
+}
+
+#[test]
+#[available_gas(99999999)]
+fn test_rlp_decode_type_long_string_payload_too_long() {
+    let mut arr = array![0xbf, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02];
+
+    let res = RLPTrait::decode_type(arr.span());
+
+    assert(res.is_err(), 'Should have failed');
+    assert(res.unwrap_err() == RLPError::PayloadTooLong(()), 'err != PayloadTooLong');
+}
+
+#[test]
+#[available_gas(99999999)]
+fn test_rlp_decode_type_long_list_payload_too_long() {
+    let mut arr = array![0xfc, 0x01, 0x02, 0x02, 0x02, 0x02];
+
+    let res = RLPTrait::decode_type(arr.span());
+
+    assert(res.is_err(), 'Should have failed');
+    assert(res.unwrap_err() == RLPError::PayloadTooLong(()), 'err != PayloadTooLong');
 }
 
 #[test]
@@ -1939,7 +1962,6 @@ fn test_rlp_encode_string_single_byte_lt_0x80() {
     assert(res.len() == 1, 'wrong len');
     assert(*res[0] == 0x40, 'wrong encoded value');
 }
-
 
 #[test]
 #[available_gas(20000000)]

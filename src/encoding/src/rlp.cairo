@@ -5,7 +5,8 @@ use alexandria_numeric::integers::UIntBytes;
 #[derive(Drop, Copy, PartialEq)]
 enum RLPError {
     EmptyInput,
-    InputTooShort
+    InputTooShort,
+    PayloadTooLong
 }
 
 // Possible RLP types
@@ -37,7 +38,7 @@ impl RLPImpl of RLPTrait {
     fn decode_type(input: Span<u8>) -> Result<(RLPType, u32, u32), RLPError> {
         let input_len = input.len();
         if input_len == 0 {
-            return Result::Err(RLPError::EmptyInput(()));
+            return Result::Err(RLPError::EmptyInput);
         }
 
         let prefix_byte = *input[0];
@@ -49,9 +50,14 @@ impl RLPImpl of RLPTrait {
         } else if prefix_byte < 0xc0 { // Long String
             let len_bytes_count: u32 = (prefix_byte - 0xb7).into();
             if input_len <= len_bytes_count {
-                return Result::Err(RLPError::InputTooShort(()));
+                return Result::Err(RLPError::InputTooShort);
+            }
+            if len_bytes_count > 4 {
+                return Result::Err(RLPError::PayloadTooLong);
             }
             let string_len_bytes = input.slice(1, len_bytes_count);
+            // Length bytes count value being 1 <= x <= 4,
+            // we're sure to retrieve an u32 value making the unwrap safe
             let string_len: u32 = UIntBytes::from_bytes(string_len_bytes).unwrap();
 
             return Result::Ok((RLPType::String, 1 + len_bytes_count, string_len));
@@ -60,10 +66,14 @@ impl RLPImpl of RLPTrait {
         } else { // Long List
             let len_bytes_count = prefix_byte.into() - 0xf7;
             if input.len() <= len_bytes_count {
-                return Result::Err(RLPError::InputTooShort(()));
+                return Result::Err(RLPError::InputTooShort);
             }
-
+            if len_bytes_count > 4 {
+                return Result::Err(RLPError::PayloadTooLong);
+            }
             let list_len_bytes = input.slice(1, len_bytes_count);
+            // Length bytes count value being 1 <= x <= 4,
+            // we're sure to retrieve an u32 value making the unwrap safe
             let list_len: u32 = UIntBytes::from_bytes(list_len_bytes).unwrap();
             return Result::Ok((RLPType::List, 1 + len_bytes_count, list_len));
         }
@@ -78,7 +88,7 @@ impl RLPImpl of RLPTrait {
     /// * empty input - if the input is empty
     fn encode(mut input: Span<RLPItem>) -> Result<Span<u8>, RLPError> {
         if input.len() == 0 {
-            return Result::Err(RLPError::EmptyInput(()));
+            return Result::Err(RLPError::EmptyInput);
         }
 
         let mut output: Array<u8> = Default::default();
@@ -162,12 +172,11 @@ impl RLPImpl of RLPTrait {
         let (rlp_type, offset, len) = RLPTrait::decode_type(input)?;
 
         if input_len < offset + len {
-            return Result::Err(RLPError::InputTooShort(()));
+            return Result::Err(RLPError::InputTooShort);
         }
 
         match rlp_type {
             RLPType::String => {
-                // checking for default value `0`
                 if (len == 0) {
                     output.append(RLPItem::String(array![].span()));
                 } else {
