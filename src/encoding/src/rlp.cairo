@@ -52,13 +52,9 @@ impl RLPImpl of RLPTrait {
             if input_len <= len_bytes_count {
                 return Result::Err(RLPError::InputTooShort);
             }
-            if len_bytes_count > 4 {
-                return Result::Err(RLPError::PayloadTooLong);
-            }
             let string_len_bytes = input.slice(1, len_bytes_count);
-            // Length bytes count value being 1 <= x <= 4,
-            // we're sure to retrieve an u32 value making the unwrap safe
-            let string_len: u32 = UIntBytes::from_bytes(string_len_bytes).unwrap();
+            let string_len: u32 = UIntBytes::from_bytes(string_len_bytes)
+                .ok_or(RLPError::PayloadTooLong)?;
 
             return Result::Ok((RLPType::String, 1 + len_bytes_count, string_len));
         } else if prefix_byte < 0xf8 { // Short List
@@ -68,13 +64,9 @@ impl RLPImpl of RLPTrait {
             if input.len() <= len_bytes_count {
                 return Result::Err(RLPError::InputTooShort);
             }
-            if len_bytes_count > 4 {
-                return Result::Err(RLPError::PayloadTooLong);
-            }
             let list_len_bytes = input.slice(1, len_bytes_count);
-            // Length bytes count value being 1 <= x <= 4,
-            // we're sure to retrieve an u32 value making the unwrap safe
-            let list_len: u32 = UIntBytes::from_bytes(list_len_bytes).unwrap();
+            let list_len: u32 = UIntBytes::from_bytes(list_len_bytes)
+                .ok_or(RLPError::PayloadTooLong)?;
             return Result::Ok((RLPType::List, 1 + len_bytes_count, list_len));
         }
     }
