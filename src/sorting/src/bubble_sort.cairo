@@ -26,7 +26,7 @@ fn bubble_sort_elements<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(mut array: Array<
             idx2 = 1;
             sorted_iteration = 0;
         } else {
-            if *array[idx1] < *array[idx2] {
+            if *array[idx1] <= *array[idx2] {
                 sorted_array.append(*array[idx1]);
                 idx1 = idx2;
                 idx2 += 1;
