@@ -96,9 +96,9 @@ impl RLPImpl of RLPTrait {
                     let payload = RLPTrait::encode(*list)?;
                     let payload_len = payload.len();
                     if payload_len > 55 {
+                        let len_in_bytes = payload_len.to_bytes();
                         // The payload length being a u32, the length in bytes
                         // will maximum be equal to 4, making the unwrap safe
-                        let len_in_bytes = payload_len.to_bytes();
                         output.append(0xf7 + len_in_bytes.len().try_into().unwrap());
                         output.concat_span(len_in_bytes);
                     } else {
@@ -136,10 +136,10 @@ impl RLPImpl of RLPTrait {
             return Result::Ok(encoding.span());
         } else {
             let mut encoding: Array<u8> = Default::default();
-            // The payload length being a u32, the length in bytes
-            // will maximum be equal to 4, making the unwrap safe
             let len_as_bytes = len.to_bytes();
             let len_bytes_count = len_as_bytes.len();
+            // The payload length being a u32, the length in bytes
+            // will maximum be equal to 4, making the unwrap safe
             let prefix = 0xb7 + len_bytes_count.try_into().unwrap();
             encoding.append(prefix);
             encoding.concat_span(len_as_bytes);
