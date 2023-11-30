@@ -13,6 +13,17 @@ fn mergesort_test() {
 
 #[test]
 #[available_gas(2000000)]
+fn mergesort_test_2_pre_sorted_decreasing() {
+    let mut data = array![4_u32, 3_u32, 2_u32, 1_u32];
+    let mut correct = array![1_u32, 2_u32, 3_u32, 4_u32];
+
+    let sorted = merge(data);
+
+    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
+}
+
+#[test]
+#[available_gas(2000000)]
 fn mergesort_test_empty() {
     let mut data = array![];
 
@@ -39,6 +50,28 @@ fn mergesort_test_one_element() {
 fn mergesort_test_pre_sorted() {
     let mut data = array![1_u32, 2_u32, 3_u32, 4_u32];
     let mut correct = array![1_u32, 2_u32, 3_u32, 4_u32];
+
+    let sorted = merge(data);
+
+    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn mergesort_test_2_same_values() {
+    let mut data = array![1_u32, 2_u32, 3_u32, 2_u32, 4_u32];
+    let mut correct = array![1_u32, 2_u32, 2_u32, 3_u32, 4_u32];
+
+    let sorted = merge(data);
+
+    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn mergesort_test_2_same_values_pre_sorted() {
+    let mut data = array![1_u32, 2_u32, 2_u32, 3_u32, 4_u32];
+    let mut correct = array![1_u32, 2_u32, 2_u32, 3_u32, 4_u32];
 
     let sorted = merge(data);
 
