@@ -47,8 +47,30 @@ fn bubblesort_test_pre_sorted() {
 
 #[test]
 #[available_gas(2000000)]
-fn bubblesort_test_2_same_values() {
+fn bubblesort_test_pre_sorted_decreasing() {
+    let mut data = array![4_u32, 3_u32, 2_u32, 1_u32];
+    let mut correct = array![1_u32, 2_u32, 3_u32, 4_u32];
+
+    let sorted = bubble_sort::bubble_sort_elements(data);
+
+    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn bubblesort_test_pre_sorted_2_same_values() {
     let mut data = array![1_u32, 2_u32, 2_u32, 4_u32];
+    let mut correct = array![1_u32, 2_u32, 2_u32, 4_u32];
+
+    let sorted = bubble_sort::bubble_sort_elements(data);
+
+    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
+}
+
+#[test]
+#[available_gas(2000000)]
+fn bubblesort_test_2_same_values() {
+    let mut data = array![1_u32, 2_u32, 4_u32, 2_u32];
     let mut correct = array![1_u32, 2_u32, 2_u32, 4_u32];
 
     let sorted = bubble_sort::bubble_sort_elements(data);
