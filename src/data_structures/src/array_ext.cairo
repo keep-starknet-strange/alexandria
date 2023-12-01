@@ -4,6 +4,7 @@ trait ArrayTraitExt<T> {
     fn reverse(self: @Array<T>) -> Array<T>;
     fn contains<+PartialEq<T>>(self: @Array<T>, item: T) -> bool;
     fn concat(self: @Array<T>, a: @Array<T>) -> Array<T>;
+    fn concat_span<+Drop<T>>(ref self: Array<T>, arr2: Span<T>);
     fn index_of<+PartialEq<T>>(self: @Array<T>, item: T) -> Option<usize>;
     fn occurrences_of<+PartialEq<T>>(self: @Array<T>, item: T) -> usize;
     fn min<+PartialEq<T>, +PartialOrd<T>>(self: @Array<T>) -> Option<T>;
@@ -83,6 +84,15 @@ impl ArrayImpl<T, +Copy<T>, +Drop<T>> of ArrayTraitExt<T> {
             i += 1;
         };
         ret
+    }
+
+    fn concat_span<+Destruct<T>>(ref self: Array<T>, mut arr2: Span<T>) {
+        loop {
+            match arr2.pop_front() {
+                Option::Some(elem) => self.append(*elem),
+                Option::None => { break; }
+            };
+        }
     }
 
     fn index_of<+PartialEq<T>>(self: @Array<T>, item: T) -> Option<usize> {
