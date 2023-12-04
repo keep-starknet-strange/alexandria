@@ -28,6 +28,7 @@ name = "alexandria_encoding"
 version = "0.1.0"
 dependencies = [
  "alexandria_math",
+ "alexandria_numeric",
 ]
 
 [[package]]
@@ -48,6 +49,9 @@ version = "0.1.0"
 [[package]]
 name = "alexandria_numeric"
 version = "0.1.0"
+dependencies = [
+ "alexandria_math",
+]
 
 [[package]]
 name = "alexandria_searching"
