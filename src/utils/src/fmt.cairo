@@ -9,8 +9,7 @@ mod display_felt252_based {
     impl TDisplay<T, +Into<T, felt252>, +Copy<T>> of Display<T> {
         fn fmt(self: @T, ref f: Formatter) -> Result<(), Error> {
             let value: felt252 = (*self).into();
-            let base: felt252 = 10_u8.into();
-            value.append_formatted_to_byte_array(ref f.buffer, base.try_into().unwrap());
+            Display::<u256>::fmt(@value.into(), ref f)?;
             Result::Ok(())
         }
     }
