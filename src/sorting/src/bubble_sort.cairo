@@ -5,7 +5,9 @@
 /// * `array` - Array to sort
 /// # Returns
 /// * `Array<usize>` - Sorted array
-fn bubble_sort_elements<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(mut array: Array<T>) -> Array<T> {
+fn bubble_sort_elements<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>>(
+    mut array: Array<T>, asc: bool
+) -> Array<T> {
     if array.len() <= 1 {
         return array;
     }
@@ -26,7 +28,7 @@ fn bubble_sort_elements<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(mut array: Array<
             idx2 = 1;
             sorted_iteration = 0;
         } else {
-            if *array[idx1] <= *array[idx2] {
+            if (*array[idx1] == *array[idx2]) || !((asc) ^ (*array[idx1] < *array[idx2])) {
                 sorted_array.append(*array[idx1]);
                 idx1 = idx2;
                 idx2 += 1;
