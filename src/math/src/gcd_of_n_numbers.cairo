@@ -1,6 +1,6 @@
 //! # GCD for N numbers
 
-// Calculate the greatest common dividor for n numbers
+// Calculate the greatest common divisor for n numbers
 // # Arguments
 // * `n` - The array of numbers to calculate the gcd for
 // # Returns
