@@ -48,14 +48,14 @@ trait BitArrayTrait {
     /// # Returns
     /// `Option<felt252>` - If there are `length` bits remaining, the word is returned as felt252
     fn read_word_be(ref self: BitArray, length: usize) -> Option<felt252>;
-    /// Reads a single word of the specified length upto 256 bits in big endian representation.
+    /// Reads a single word of the specified length up to 256 bits in big endian representation.
     /// For words shorter than (or equal to) 248 bits use `read_word_be(...)` instead.
     /// # Arguments
     /// `length` - The bit length of the word to read, max 256
     /// # Returns
     /// `Option<u256>` - If there are `length` bits remaining, the word is returned as u256
     fn read_word_be_u256(ref self: BitArray, length: usize) -> Option<u256>;
-    /// Reads a single word of the specified length upto 512 bits in big endian representation.
+    /// Reads a single word of the specified length up to 512 bits in big endian representation.
     /// For words shorter than (or equal to) 256 bits consider the other read calls instead.
     /// # Arguments
     /// `length` - The bit length of the word to read, max 512
@@ -86,7 +86,7 @@ trait BitArrayTrait {
     /// # Returns
     /// `Option<felt252>` - If there are `length` bits remaining, the word is returned as felt252
     fn read_word_le(ref self: BitArray, length: usize) -> Option<felt252>;
-    /// Reads a single word of the specified length upto 256 bits in little endian representation.
+    /// Reads a single word of the specified length up to 256 bits in little endian representation.
     /// For words shorter than (or equal to) 248 bits use `read_word_be(...)` instead.
     /// # Arguments
     /// `length` - The bit length of the word to read, max 256
