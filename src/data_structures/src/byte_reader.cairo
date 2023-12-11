@@ -464,47 +464,47 @@ impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteRead
 
     fn read_i8(ref self: ByteReaderState<T>) -> Option<i8> {
         let felt: felt252 = self.read_u8()?.into();
-        Option::Some(parse_signed(felt, 1).unwrap())
+        Option::Some(parse_signed(felt, 1)?)
     }
 
     fn read_i16(ref self: ByteReaderState<T>) -> Option<i16> {
         let felt: felt252 = self.read_u16()?.into();
-        Option::Some(parse_signed(felt, 2).unwrap())
+        Option::Some(parse_signed(felt, 2)?)
     }
 
     fn read_i16_le(ref self: ByteReaderState<T>) -> Option<i16> {
         let felt: felt252 = self.read_u16_le()?.into();
-        Option::Some(parse_signed(felt, 2).unwrap())
+        Option::Some(parse_signed(felt, 2)?)
     }
 
     fn read_i32(ref self: ByteReaderState<T>) -> Option<i32> {
         let felt: felt252 = self.read_u32()?.into();
-        Option::Some(parse_signed(felt, 4).unwrap())
+        Option::Some(parse_signed(felt, 4)?)
     }
 
     fn read_i32_le(ref self: ByteReaderState<T>) -> Option<i32> {
         let felt: felt252 = self.read_u32_le()?.into();
-        Option::Some(parse_signed(felt, 4).unwrap())
+        Option::Some(parse_signed(felt, 4)?)
     }
 
     fn read_i64(ref self: ByteReaderState<T>) -> Option<i64> {
         let felt: felt252 = self.read_u64()?.into();
-        Option::Some(parse_signed(felt, 8).unwrap())
+        Option::Some(parse_signed(felt, 8)?)
     }
 
     fn read_i64_le(ref self: ByteReaderState<T>) -> Option<i64> {
         let felt: felt252 = self.read_u64_le()?.into();
-        Option::Some(parse_signed(felt, 8).unwrap())
+        Option::Some(parse_signed(felt, 8)?)
     }
 
     fn read_i128(ref self: ByteReaderState<T>) -> Option<i128> {
         let felt: felt252 = self.read_u128()?.into();
-        Option::Some(parse_signed(felt, 16).unwrap())
+        Option::Some(parse_signed(felt, 16)?)
     }
 
     fn read_i128_le(ref self: ByteReaderState<T>) -> Option<i128> {
         let felt: felt252 = self.read_u128_le()?.into();
-        Option::Some(parse_signed(felt, 16).unwrap())
+        Option::Some(parse_signed(felt, 16)?)
     }
 
     #[inline]
