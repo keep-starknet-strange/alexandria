@@ -10,9 +10,7 @@ jobs:
       - name: Step 1 - Check out main branch
         uses: actions/checkout@v3
       - name: Step 2 - Getting scarb
-        uses: software-mansion/setup-scarb@v1
-        with:
-          scarb-version: 2.4.0-rc2
+        uses: software-mansion/setup-scarb@v1.3.2
       - name: Step 3 - Trying to build
         run: scarb build
 
@@ -24,9 +22,7 @@ jobs:
       - name: Step 1 - Check out main branch
         uses: actions/checkout@v3
       - name: Step 2 - Getting scarb
-        uses: software-mansion/setup-scarb@v1
-        with:
-          scarb-version: 2.4.0-rc2
+        uses: software-mansion/setup-scarb@v1.3.2
       - name: Step 3 - Running tests
         run: scarb test
 
@@ -38,8 +34,6 @@ jobs:
       - name: Step 1 - Check out main branch
         uses: actions/checkout@v3
       - name: Step 2 - Getting scarb
-        uses: software-mansion/setup-scarb@v1
-        with:
-          scarb-version: 2.4.0-rc2
+        uses: software-mansion/setup-scarb@v1.3.2
       - name: Step 3 - Checking formatting
         run: scarb fmt --check
