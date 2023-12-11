@@ -10,7 +10,6 @@ trait IByteArrayStorage<T> {
     fn set_map_value(ref self: T, key: felt252, value: ByteArray);
     fn get_map_key(self: @T, key: ByteArray) -> felt252;
     fn set_map_key(ref self: T, key: ByteArray, value: felt252);
-    fn health(self: @T) -> felt252;
 }
 
 #[starknet::contract]
@@ -58,10 +57,6 @@ mod byte_array_storage {
         fn set_map_key(ref self: ContractState, key: ByteArray, value: felt252) {
             self.map_key.write(key, value);
         }
-
-        fn health(self: @ContractState) -> felt252 {
-            0x42
-        }
     }
 }
 
@@ -79,7 +74,8 @@ fn deploy_mock() -> IByteArrayStorageDispatcher {
 #[test]
 fn test_deploy() {
     let contract = deploy_mock();
-    assert(contract.health() == 0x42, 'deploy');
+    let empty: ByteArray = "";
+    assert(contract.get_b1() == empty, 'deploy failed');
 }
 
 #[test]

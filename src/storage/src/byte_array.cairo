@@ -16,7 +16,6 @@ use starknet::{
     SyscallResult, SyscallResultTrait, StorageBaseAddress, Store,
 };
 
-const ADDRESS_DOMAIN: u32 = 0;
 const BYTE_ARRAY_KEY: felt252 = '__BYTE_ARRAY__';
 const PENDING_WORD_KEY: felt252 = '__PENDING_WORD__';
 const PENDING_WORD_LEN_KEY: felt252 = '__PENDING_WORD_LEN__';
@@ -70,20 +69,19 @@ impl StoreByteArray of Store<ByteArray> {
     ) -> SyscallResult<ByteArray> {
         let data_len: usize = storage_read_syscall(
             address_domain, storage_address_from_base_and_offset(base, offset)
-        )
-            .unwrap_syscall()
+        )?
             .try_into()
             .expect('data len out of range');
 
         let pw_base = compute_storage_address(base, PENDING_WORD_KEY);
-        let pending_word = storage_read_syscall(address_domain, storage_address_from_base(pw_base))
-            .unwrap_syscall();
+        let pending_word = storage_read_syscall(
+            address_domain, storage_address_from_base(pw_base)
+        )?;
 
         let pwl_base = compute_storage_address(base, PENDING_WORD_LEN_KEY);
         let pending_word_len: usize = storage_read_syscall(
             address_domain, storage_address_from_base(pwl_base)
-        )
-            .unwrap_syscall()
+        )?
             .try_into()
             .expect('pending_word_len out of range');
 
@@ -96,14 +94,14 @@ impl StoreByteArray of Store<ByteArray> {
 
         loop {
             if index == data_len {
-                break ();
+                break;
             }
 
             let elt_base = compute_storage_address(base, index.into());
 
             data
                 .append(
-                    storage_read_syscall(ADDRESS_DOMAIN, storage_address_from_base(elt_base))
+                    storage_read_syscall(address_domain, storage_address_from_base(elt_base))
                         .unwrap_syscall()
                         .try_into()
                         .expect('invalid bytes31 data')
@@ -123,22 +121,19 @@ impl StoreByteArray of Store<ByteArray> {
             address_domain,
             storage_address_from_base_and_offset(base, offset),
             value.data.len().into()
-        )
-            .unwrap_syscall();
+        )?;
 
         // pending word
         let pw_base = compute_storage_address(base, PENDING_WORD_KEY);
         storage_write_syscall(
             address_domain, storage_address_from_base(pw_base), value.pending_word
-        )
-            .unwrap_syscall();
+        )?;
 
         // pending word len
         let pwl_base = compute_storage_address(base, PENDING_WORD_LEN_KEY);
         storage_write_syscall(
             address_domain, storage_address_from_base(pwl_base), value.pending_word_len.into()
-        )
-            .unwrap_syscall();
+        )?;
 
         if value.data.len() == 0 {
             return Result::Ok(());
@@ -155,7 +150,7 @@ impl StoreByteArray of Store<ByteArray> {
             let elt: felt252 = (*value.data[index]).into();
             let elt_base = compute_storage_address(base, index.into());
 
-            storage_write_syscall(ADDRESS_DOMAIN, storage_address_from_base(elt_base), elt,)
+            storage_write_syscall(address_domain, storage_address_from_base(elt_base), elt,)
                 .unwrap_syscall();
 
             index += 1;
