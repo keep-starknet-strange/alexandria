@@ -10,8 +10,8 @@ Returns the one-dimensional piecewise linear interpolant to a function with give
 Several interpolation methods are supported as follow:
 - Linear interpolation: y is linearly interpolated between the two nearest neighbors at x
 - Nearest-neighbor interpolation: y is set to the value of the nearest neighbor at x
-- Constant left interpolation: ys behaves as a integer part function where each y data point extends to the left up to the next index
-- Constant right interpolation: ys behaves as a integer part function where each y data point extends to the right up to the next index
+- Constant left interpolation: ys behaves as an integer part function where each y data point extends to the left up to the next index
+- Constant right interpolation: ys behaves as an integer part function where each y data point extends to the right up to the next index
 
 ## [Cumsum](./src/cumsum.cairo)
 

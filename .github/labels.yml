@@ -16,7 +16,7 @@
   description: "Updating the code with simpler, easier to understand or more efficient syntax or methods, but not introducing new features."
 - name: "performance"
   color: 1d76db
-  description: "Improving performance of the project, not introducing new features."
+  description: "Improving the performance of the project, not introducing new features."
 - name: "new-feature"
   color: 0e8a16
   description: "New features or options."
