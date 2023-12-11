@@ -9,8 +9,7 @@ mod display_felt252_based {
     impl TDisplay<T, +Into<T, felt252>, +Copy<T>> of Display<T> {
         fn fmt(self: @T, ref f: Formatter) -> Result<(), Error> {
             let value: felt252 = (*self).into();
-            Display::<u256>::fmt(@value.into(), ref f)?;
-            Result::Ok(())
+            Display::<u256>::fmt(@value.into(), ref f)
         }
     }
 }
@@ -63,7 +62,6 @@ impl SpanTDebug<T, +Display<T>, +Copy<T>> of Debug<Span<T>> {
                 Option::None => { break Result::Ok(()); }
             };
         }?;
-        write!(f, "]")?;
-        Result::Ok(())
+        write!(f, "]")
     }
 }
