@@ -48,3 +48,40 @@ There are two idiosyncacies you should be aware of when using `List`
 let mut amounts = self.amounts.read();
 amounts.append(42);
 ```
+
+## ByteArray
+
+`ByteArray` is the new native type of Cairo to support long strings.
+Awaiting for the built-in support for `ByteArray` in storage, a first implementation is proposed here.
+
+### Storage value and LegacyMap
+
+The `ByteArray` storage implementation comes with two traits:
+
+1. `StoreByteArray`: which allows you to use `ByteArray` as a value in the storage.
+2. `LegacyHashByteArray`: which permits the use of `ByteArray` as keys in `LegacyMap` data structure.
+
+### Usage
+
+`ByteArray` is already a type present in the prelude. To use it in the storage, the trait of alexandria must be in the scope.
+
+```rust
+mod my_contract {
+    use alexandria_storage::byte_array::{LegacyHashByteArray, StoreByteArray};
+    #[storage]
+    struct Storage {
+        my_string: ByteArray,
+        token_uris: LegacyMap<u256, ByteArray>,
+        string_keys: LegacyMap<ByteArray, felt252>,
+    }
+
+    #[constructor]
+    fn constructor(ref self: ContractState) {
+        self.my_string.write("ABCD");
+        self.token_uris.write(0x1, "ipfs://....");
+        self.string_keys.write("user 1", 0x1234);
+    }
+
+    // ... other code
+}
+```
