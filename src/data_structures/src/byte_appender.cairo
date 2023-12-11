@@ -3,23 +3,35 @@ use byte_array::ByteArrayTrait;
 use bytes_31::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 use integer::u512;
 
+/// Generic support trait for appending signed and unsigned integers onto byte storage.
+/// There are two functions, one for each of big and little endian byte order due to
+/// performance considerations. The byte reversal could be used in the naïve case when
+/// only one implementation is worthwhile.
 trait ByteAppenderSupportTrait<T> {
+    /// Appends `bytes` data of size `count` ordered in big endian
+    /// # Arguments
+    /// * `bytes` - big endian ordered bytes to append
+    /// * `count` - number of bytes from input to append
     fn append_bytes_be(ref self: T, bytes: felt252, count: usize);
+    /// Appends `bytes` data of size `count` ordered in little endian
+    /// # Arguments
+    /// * `bytes` - little endian ordered bytes to append
+    /// * `count` - number of bytes from input to append
     fn append_bytes_le(ref self: T, bytes: felt252, count: usize);
 }
 
 impl ByteAppenderSupportArrayU8Impl of ByteAppenderSupportTrait<Array<u8>> {
-    fn append_bytes_be(ref self: Array<u8>, bytes: felt252, count: usize) {
+    fn append_bytes_be(ref self: Array<u8>, bytes: felt252, mut count: usize) {
         assert(count <= 16, 'count too big');
         let u256{low, high } = bytes.into();
-        let mut index = count;
         loop {
-            if index == 0 {
+            if count == 0 {
                 break;
             }
-            let next = (low / one_shift_left_bytes_u128(index - 1)) % 0x100;
+            let next = (low / one_shift_left_bytes_u128(count - 1)) % 0x100;
+            // Unwrap safe by definition of modulus operation 0x100
             self.append(next.try_into().unwrap());
-            index -= 1;
+            count -= 1;
         };
     }
 
@@ -33,19 +45,20 @@ impl ByteAppenderSupportArrayU8Impl of ByteAppenderSupportTrait<Array<u8>> {
             }
             let (remaining_bytes, next) = DivRem::div_rem(low, 0x100_u128.try_into().unwrap());
             low = remaining_bytes;
+            // Unwrap safe by definition of remainder from division by 0x100
             self.append(next.try_into().unwrap());
             index += 1;
         };
     }
 }
 impl ByteAppenderSupportByteArrayImpl of ByteAppenderSupportTrait<ByteArray> {
-    #[inline]
+    #[inline(always)]
     fn append_bytes_be(ref self: ByteArray, bytes: felt252, count: usize) {
         assert(count <= 16, 'count too big');
         self.append_word(bytes.into(), count);
     }
 
-    #[inline]
+    #[inline(always)]
     fn append_bytes_le(ref self: ByteArray, bytes: felt252, count: usize) {
         assert(count <= 16, 'count too big');
         let u256{low, high } = bytes.into();

@@ -17,8 +17,8 @@ trait ByteReader<T> {
     /// * `at` - the start index position of the byte data
     /// * `count` - the number of bytes required
     /// # Returns
-    /// * `Option<()>` - `Some(())` when there are `count` bytes remaining, `None` otherwise.
-    fn remaining(self: @T, at: usize, count: usize) -> Option<()>;
+    /// * `bool` - `true` when there are `count` bytes remaining, `false` otherwise.
+    fn remaining(self: @T, at: usize, count: usize) -> bool;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
     /// # Arguments
     /// * `offset` - the start location of the consecutive bytes to read
@@ -168,189 +168,212 @@ impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteRead
     }
 
     #[inline]
-    fn remaining(self: @T, at: usize, count: usize) -> Option<()> {
-        if at + count - 1 < self.len() {
-            Option::Some(())
+    fn remaining(self: @T, at: usize, count: usize) -> bool {
+        at + count - 1 < self.len()
+    }
+
+    #[inline]
+    fn word_u16(self: @T, offset: usize) -> Option<u16> {
+        if self.remaining(offset, 2) {
+            let b1 = *self[offset];
+            let b2 = *self[offset + 1];
+            Option::Some(b1.into() * one_shift_left_bytes_u128(1).try_into().unwrap() + b2.into())
         } else {
             Option::None
         }
     }
 
     #[inline]
-    fn word_u16(self: @T, offset: usize) -> Option<u16> {
-        self.remaining(offset, 2)?;
-        let b1 = *self[offset];
-        let b2 = *self[offset + 1];
-        Option::Some(b1.into() * one_shift_left_bytes_u128(1).try_into().unwrap() + b2.into())
-    }
-
-    #[inline]
     fn word_u16_le(self: @T, offset: usize) -> Option<u16> {
-        self.remaining(offset, 2)?;
-        let b1 = *self[offset];
-        let b2 = *self[offset + 1];
-        Option::Some(b1.into() + b2.into() * one_shift_left_bytes_u128(1).try_into().unwrap())
+        if self.remaining(offset, 2) {
+            let b1 = *self[offset];
+            let b2 = *self[offset + 1];
+            Option::Some(b1.into() + b2.into() * one_shift_left_bytes_u128(1).try_into().unwrap())
+        } else {
+            Option::None
+        }
     }
 
     #[inline]
     fn word_u32(self: @T, offset: usize) -> Option<u32> {
-        self.remaining(offset, 4)?;
-        let b1 = *self[offset];
-        let b2 = *self[offset + 1];
-        let b3 = *self[offset + 2];
-        let b4 = *self[offset + 3];
-        Option::Some(
-            b1.into() * one_shift_left_bytes_u128(3).try_into().unwrap()
-                + b2.into() * one_shift_left_bytes_u128(2).try_into().unwrap()
-                + b3.into() * one_shift_left_bytes_u128(1).try_into().unwrap()
-                + b4.into()
-        )
+        if self.remaining(offset, 4) {
+            let b1 = *self[offset];
+            let b2 = *self[offset + 1];
+            let b3 = *self[offset + 2];
+            let b4 = *self[offset + 3];
+            Option::Some(
+                b1.into() * one_shift_left_bytes_u128(3).try_into().unwrap()
+                    + b2.into() * one_shift_left_bytes_u128(2).try_into().unwrap()
+                    + b3.into() * one_shift_left_bytes_u128(1).try_into().unwrap()
+                    + b4.into()
+            )
+        } else {
+            Option::None
+        }
     }
 
     #[inline]
     fn word_u32_le(self: @T, offset: usize) -> Option<u32> {
-        self.remaining(offset, 4)?;
-        let b1 = *self[offset];
-        let b2 = *self[offset + 1];
-        let b3 = *self[offset + 2];
-        let b4 = *self[offset + 3];
-        Option::Some(
-            b1.into()
-                + b2.into() * one_shift_left_bytes_u128(1).try_into().unwrap()
-                + b3.into() * one_shift_left_bytes_u128(2).try_into().unwrap()
-                + b4.into() * one_shift_left_bytes_u128(3).try_into().unwrap()
-        )
+        if self.remaining(offset, 4) {
+            let b1 = *self[offset];
+            let b2 = *self[offset + 1];
+            let b3 = *self[offset + 2];
+            let b4 = *self[offset + 3];
+            Option::Some(
+                b1.into()
+                    + b2.into() * one_shift_left_bytes_u128(1).try_into().unwrap()
+                    + b3.into() * one_shift_left_bytes_u128(2).try_into().unwrap()
+                    + b4.into() * one_shift_left_bytes_u128(3).try_into().unwrap()
+            )
+        } else {
+            Option::None
+        }
     }
 
     #[inline]
     fn word_u64(self: @T, offset: usize) -> Option<u64> {
-        self.remaining(offset, 8)?;
-        let b1 = *self[offset];
-        let b2 = *self[offset + 1];
-        let b3 = *self[offset + 2];
-        let b4 = *self[offset + 3];
-        let b5 = *self[offset + 4];
-        let b6 = *self[offset + 5];
-        let b7 = *self[offset + 6];
-        let b8 = *self[offset + 7];
-        Option::Some(
-            b1.into() * one_shift_left_bytes_u128(7).try_into().unwrap()
-                + b2.into() * one_shift_left_bytes_u128(6).try_into().unwrap()
-                + b3.into() * one_shift_left_bytes_u128(5).try_into().unwrap()
-                + b4.into() * one_shift_left_bytes_u128(4).try_into().unwrap()
-                + b5.into() * one_shift_left_bytes_u128(3).try_into().unwrap()
-                + b6.into() * one_shift_left_bytes_u128(2).try_into().unwrap()
-                + b7.into() * one_shift_left_bytes_u128(1).try_into().unwrap()
-                + b8.into()
-        )
+        if self.remaining(offset, 8) {
+            let b1 = *self[offset];
+            let b2 = *self[offset + 1];
+            let b3 = *self[offset + 2];
+            let b4 = *self[offset + 3];
+            let b5 = *self[offset + 4];
+            let b6 = *self[offset + 5];
+            let b7 = *self[offset + 6];
+            let b8 = *self[offset + 7];
+            Option::Some(
+                b1.into() * one_shift_left_bytes_u128(7).try_into().unwrap()
+                    + b2.into() * one_shift_left_bytes_u128(6).try_into().unwrap()
+                    + b3.into() * one_shift_left_bytes_u128(5).try_into().unwrap()
+                    + b4.into() * one_shift_left_bytes_u128(4).try_into().unwrap()
+                    + b5.into() * one_shift_left_bytes_u128(3).try_into().unwrap()
+                    + b6.into() * one_shift_left_bytes_u128(2).try_into().unwrap()
+                    + b7.into() * one_shift_left_bytes_u128(1).try_into().unwrap()
+                    + b8.into()
+            )
+        } else {
+            Option::None
+        }
     }
 
     #[inline]
     fn word_u64_le(self: @T, offset: usize) -> Option<u64> {
-        self.remaining(offset, 8)?;
-        let b1 = *self[offset];
-        let b2 = *self[offset + 1];
-        let b3 = *self[offset + 2];
-        let b4 = *self[offset + 3];
-        let b5 = *self[offset + 4];
-        let b6 = *self[offset + 5];
-        let b7 = *self[offset + 6];
-        let b8 = *self[offset + 7];
-        Option::Some(
-            b1.into()
-                + b2.into() * one_shift_left_bytes_u128(1).try_into().unwrap()
-                + b3.into() * one_shift_left_bytes_u128(2).try_into().unwrap()
-                + b4.into() * one_shift_left_bytes_u128(3).try_into().unwrap()
-                + b5.into() * one_shift_left_bytes_u128(4).try_into().unwrap()
-                + b6.into() * one_shift_left_bytes_u128(5).try_into().unwrap()
-                + b7.into() * one_shift_left_bytes_u128(6).try_into().unwrap()
-                + b8.into() * one_shift_left_bytes_u128(7).try_into().unwrap()
-        )
+        if self.remaining(offset, 8) {
+            let b1 = *self[offset];
+            let b2 = *self[offset + 1];
+            let b3 = *self[offset + 2];
+            let b4 = *self[offset + 3];
+            let b5 = *self[offset + 4];
+            let b6 = *self[offset + 5];
+            let b7 = *self[offset + 6];
+            let b8 = *self[offset + 7];
+            Option::Some(
+                b1.into()
+                    + b2.into() * one_shift_left_bytes_u128(1).try_into().unwrap()
+                    + b3.into() * one_shift_left_bytes_u128(2).try_into().unwrap()
+                    + b4.into() * one_shift_left_bytes_u128(3).try_into().unwrap()
+                    + b5.into() * one_shift_left_bytes_u128(4).try_into().unwrap()
+                    + b6.into() * one_shift_left_bytes_u128(5).try_into().unwrap()
+                    + b7.into() * one_shift_left_bytes_u128(6).try_into().unwrap()
+                    + b8.into() * one_shift_left_bytes_u128(7).try_into().unwrap()
+            )
+        } else {
+            Option::None
+        }
     }
 
     #[inline]
     fn word_u128(self: @T, offset: usize) -> Option<u128> {
-        self.remaining(offset, 16)?;
-        let b01 = *self[offset];
-        let b02 = *self[offset + 1];
-        let b03 = *self[offset + 2];
-        let b04 = *self[offset + 3];
-        let b05 = *self[offset + 4];
-        let b06 = *self[offset + 5];
-        let b07 = *self[offset + 6];
-        let b08 = *self[offset + 7];
-        let b09 = *self[offset + 8];
-        let b10 = *self[offset + 9];
-        let b11 = *self[offset + 10];
-        let b12 = *self[offset + 11];
-        let b13 = *self[offset + 12];
-        let b14 = *self[offset + 13];
-        let b15 = *self[offset + 14];
-        let b16 = *self[offset + 15];
-        Option::Some(
-            b01.into() * one_shift_left_bytes_u128(15).try_into().unwrap()
-                + b02.into() * one_shift_left_bytes_u128(14).try_into().unwrap()
-                + b03.into() * one_shift_left_bytes_u128(13).try_into().unwrap()
-                + b04.into() * one_shift_left_bytes_u128(12).try_into().unwrap()
-                + b05.into() * one_shift_left_bytes_u128(11).try_into().unwrap()
-                + b06.into() * one_shift_left_bytes_u128(10).try_into().unwrap()
-                + b07.into() * one_shift_left_bytes_u128(09).try_into().unwrap()
-                + b08.into() * one_shift_left_bytes_u128(08).try_into().unwrap()
-                + b09.into() * one_shift_left_bytes_u128(07).try_into().unwrap()
-                + b10.into() * one_shift_left_bytes_u128(06).try_into().unwrap()
-                + b11.into() * one_shift_left_bytes_u128(05).try_into().unwrap()
-                + b12.into() * one_shift_left_bytes_u128(04).try_into().unwrap()
-                + b13.into() * one_shift_left_bytes_u128(03).try_into().unwrap()
-                + b14.into() * one_shift_left_bytes_u128(02).try_into().unwrap()
-                + b15.into() * one_shift_left_bytes_u128(01).try_into().unwrap()
-                + b16.into()
-        )
+        if self.remaining(offset, 16) {
+            let b01 = *self[offset];
+            let b02 = *self[offset + 1];
+            let b03 = *self[offset + 2];
+            let b04 = *self[offset + 3];
+            let b05 = *self[offset + 4];
+            let b06 = *self[offset + 5];
+            let b07 = *self[offset + 6];
+            let b08 = *self[offset + 7];
+            let b09 = *self[offset + 8];
+            let b10 = *self[offset + 9];
+            let b11 = *self[offset + 10];
+            let b12 = *self[offset + 11];
+            let b13 = *self[offset + 12];
+            let b14 = *self[offset + 13];
+            let b15 = *self[offset + 14];
+            let b16 = *self[offset + 15];
+            Option::Some(
+                b01.into() * one_shift_left_bytes_u128(15).try_into().unwrap()
+                    + b02.into() * one_shift_left_bytes_u128(14).try_into().unwrap()
+                    + b03.into() * one_shift_left_bytes_u128(13).try_into().unwrap()
+                    + b04.into() * one_shift_left_bytes_u128(12).try_into().unwrap()
+                    + b05.into() * one_shift_left_bytes_u128(11).try_into().unwrap()
+                    + b06.into() * one_shift_left_bytes_u128(10).try_into().unwrap()
+                    + b07.into() * one_shift_left_bytes_u128(09).try_into().unwrap()
+                    + b08.into() * one_shift_left_bytes_u128(08).try_into().unwrap()
+                    + b09.into() * one_shift_left_bytes_u128(07).try_into().unwrap()
+                    + b10.into() * one_shift_left_bytes_u128(06).try_into().unwrap()
+                    + b11.into() * one_shift_left_bytes_u128(05).try_into().unwrap()
+                    + b12.into() * one_shift_left_bytes_u128(04).try_into().unwrap()
+                    + b13.into() * one_shift_left_bytes_u128(03).try_into().unwrap()
+                    + b14.into() * one_shift_left_bytes_u128(02).try_into().unwrap()
+                    + b15.into() * one_shift_left_bytes_u128(01).try_into().unwrap()
+                    + b16.into()
+            )
+        } else {
+            Option::None
+        }
     }
 
     #[inline]
     fn word_u128_le(self: @T, offset: usize) -> Option<u128> {
-        self.remaining(offset, 16)?;
-        let b01 = *self[offset];
-        let b02 = *self[offset + 1];
-        let b03 = *self[offset + 2];
-        let b04 = *self[offset + 3];
-        let b05 = *self[offset + 4];
-        let b06 = *self[offset + 5];
-        let b07 = *self[offset + 6];
-        let b08 = *self[offset + 7];
-        let b09 = *self[offset + 8];
-        let b10 = *self[offset + 9];
-        let b11 = *self[offset + 10];
-        let b12 = *self[offset + 11];
-        let b13 = *self[offset + 12];
-        let b14 = *self[offset + 13];
-        let b15 = *self[offset + 14];
-        let b16 = *self[offset + 15];
-        Option::Some(
-            b01.into()
-                + b02.into() * one_shift_left_bytes_u128(01).try_into().unwrap()
-                + b03.into() * one_shift_left_bytes_u128(02).try_into().unwrap()
-                + b04.into() * one_shift_left_bytes_u128(03).try_into().unwrap()
-                + b05.into() * one_shift_left_bytes_u128(04).try_into().unwrap()
-                + b06.into() * one_shift_left_bytes_u128(05).try_into().unwrap()
-                + b07.into() * one_shift_left_bytes_u128(06).try_into().unwrap()
-                + b08.into() * one_shift_left_bytes_u128(07).try_into().unwrap()
-                + b09.into() * one_shift_left_bytes_u128(08).try_into().unwrap()
-                + b10.into() * one_shift_left_bytes_u128(09).try_into().unwrap()
-                + b11.into() * one_shift_left_bytes_u128(10).try_into().unwrap()
-                + b12.into() * one_shift_left_bytes_u128(11).try_into().unwrap()
-                + b13.into() * one_shift_left_bytes_u128(12).try_into().unwrap()
-                + b14.into() * one_shift_left_bytes_u128(13).try_into().unwrap()
-                + b15.into() * one_shift_left_bytes_u128(14).try_into().unwrap()
-                + b16.into() * one_shift_left_bytes_u128(15).try_into().unwrap()
-        )
+        if self.remaining(offset, 16) {
+            let b01 = *self[offset];
+            let b02 = *self[offset + 1];
+            let b03 = *self[offset + 2];
+            let b04 = *self[offset + 3];
+            let b05 = *self[offset + 4];
+            let b06 = *self[offset + 5];
+            let b07 = *self[offset + 6];
+            let b08 = *self[offset + 7];
+            let b09 = *self[offset + 8];
+            let b10 = *self[offset + 9];
+            let b11 = *self[offset + 10];
+            let b12 = *self[offset + 11];
+            let b13 = *self[offset + 12];
+            let b14 = *self[offset + 13];
+            let b15 = *self[offset + 14];
+            let b16 = *self[offset + 15];
+            Option::Some(
+                b01.into()
+                    + b02.into() * one_shift_left_bytes_u128(01).try_into().unwrap()
+                    + b03.into() * one_shift_left_bytes_u128(02).try_into().unwrap()
+                    + b04.into() * one_shift_left_bytes_u128(03).try_into().unwrap()
+                    + b05.into() * one_shift_left_bytes_u128(04).try_into().unwrap()
+                    + b06.into() * one_shift_left_bytes_u128(05).try_into().unwrap()
+                    + b07.into() * one_shift_left_bytes_u128(06).try_into().unwrap()
+                    + b08.into() * one_shift_left_bytes_u128(07).try_into().unwrap()
+                    + b09.into() * one_shift_left_bytes_u128(08).try_into().unwrap()
+                    + b10.into() * one_shift_left_bytes_u128(09).try_into().unwrap()
+                    + b11.into() * one_shift_left_bytes_u128(10).try_into().unwrap()
+                    + b12.into() * one_shift_left_bytes_u128(11).try_into().unwrap()
+                    + b13.into() * one_shift_left_bytes_u128(12).try_into().unwrap()
+                    + b14.into() * one_shift_left_bytes_u128(13).try_into().unwrap()
+                    + b15.into() * one_shift_left_bytes_u128(14).try_into().unwrap()
+                    + b16.into() * one_shift_left_bytes_u128(15).try_into().unwrap()
+            )
+        } else {
+            Option::None
+        }
     }
 
     fn read_u8(ref self: ByteReaderState<T>) -> Option<u8> {
-        self.data.remaining(self.index, 1)?;
-        let result = *self.data[self.index];
-        self.index += 1;
-        Option::Some(result)
+        if self.data.remaining(self.index, 1) {
+            let result = *self.data[self.index];
+            self.index += 1;
+            Option::Some(result)
+        } else {
+            Option::None
+        }
     }
 
     fn read_u16(ref self: ByteReaderState<T>) -> Option<u16> {
