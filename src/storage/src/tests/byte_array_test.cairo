@@ -31,7 +31,7 @@ mod byte_array_storage {
         }
 
         fn set_b1(ref self: ContractState, value: ByteArray) {
-            self.b1.write(value);
+            self.b1.write(value)
         }
 
         fn get_b2(self: @ContractState) -> ByteArray {
@@ -39,7 +39,7 @@ mod byte_array_storage {
         }
 
         fn set_b2(ref self: ContractState, value: ByteArray) {
-            self.b2.write(value);
+            self.b2.write(value)
         }
 
         fn get_map_value(self: @ContractState, key: felt252) -> ByteArray {
@@ -47,7 +47,7 @@ mod byte_array_storage {
         }
 
         fn set_map_value(ref self: ContractState, key: felt252, value: ByteArray) {
-            self.map_value.write(key, value);
+            self.map_value.write(key, value)
         }
 
         fn get_map_key(self: @ContractState, key: ByteArray) -> felt252 {
@@ -55,7 +55,7 @@ mod byte_array_storage {
         }
 
         fn set_map_key(ref self: ContractState, key: ByteArray, value: felt252) {
-            self.map_key.write(key, value);
+            self.map_key.write(key, value)
         }
     }
 }
