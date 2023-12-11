@@ -39,7 +39,7 @@ Note that unlike `get`, using this bracket notation panics when accessing an out
 
 ### Caveats
 
-There are two idiosyncacies you should be aware of when using `List`
+There are two idiosyncrasies you should be aware of when using `List`
 
 1. The `append` operation costs 2 storage writes - one for the value itself and another one for updating the List's length
 2. Due to a compiler limitation, it is not possible to use mutating operations with a single inline statement. For example, `self.amounts.read().append(42);` will not work. You have to do it in 2 steps:
