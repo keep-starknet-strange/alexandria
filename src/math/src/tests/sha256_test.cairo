@@ -1,4 +1,6 @@
+use alexandria_math::sha256::{Sha256, Sha256StateTrait, Sha256Trait};
 use alexandria_math::sha256;
+use array::ArrayTrait;
 
 #[test]
 #[available_gas(2000000000)]
@@ -89,7 +91,7 @@ fn sha256_lorem_ipsum_test() {
     // Lorem ipsum, or lsipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs.
     // The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of
     // Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with
-    let mut input = array![];
+    let mut input = ArrayTrait::<u8>::new();
     input.append('L');
     input.append('o');
     input.append('r');
@@ -449,6 +451,7 @@ fn sha256_lorem_ipsum_test() {
     assert(*result[30] == 0xEA, 'invalid result');
     assert(*result[31] == 0x44, 'invalid result');
 }
+
 #[test]
 #[available_gas(10_000_000_000)]
 fn sha256_url() {
@@ -698,4 +701,144 @@ fn sha256_url() {
     assert(*result[29] == 0xA4, 'invalid result');
     assert(*result[30] == 0x5F, 'invalid result');
     assert(*result[31] == 0x59, 'invalid result');
+}
+
+fn sha256_edge_case(len: usize) -> Sha256 {
+    let mut array: Array<u8> = array![];
+    let mut index = 0;
+    loop {
+        if index == len {
+            break;
+        }
+        array.append(index.try_into().unwrap());
+        index += 1;
+    };
+    array.sha256()
+}
+
+#[test]
+#[available_gas(2000000000)]
+fn sha256_edge_case_len_56() {
+    assert(
+        sha256_edge_case(len: 56)
+            .u256() == u256 {
+                high: 0xda2ae4d6b36748f2a318f23e7ab1dfdf, low: 0x45acdc9d049bd80e59de82a60895f562,
+            },
+        'invalid hash len 56'
+    );
+}
+
+#[test]
+#[available_gas(2000000000)]
+fn sha256_edge_case_len_57() {
+    assert(
+        sha256_edge_case(len: 57)
+            .u256() == u256 {
+                high: 0x2fe741af801cc238602ac0ec6a7b0c3a, low: 0x8a87c7fc7d7f02a3fe03d1c12eac4d8f,
+            },
+        'invalid hash len 57'
+    );
+}
+
+#[test]
+#[available_gas(2000000000)]
+fn sha256_edge_case_len_58() {
+    assert(
+        sha256_edge_case(len: 58)
+            .u256() == u256 {
+                high: 0xe03b18640c635b338a92b82cce4ff072, low: 0xf9f1aba9ac5261ee1340f592f35c0499,
+            },
+        'invalid hash len 58'
+    );
+}
+
+#[test]
+#[available_gas(2000000000)]
+fn sha256_edge_case_len_59() {
+    assert(
+        sha256_edge_case(len: 59)
+            .u256() == u256 {
+                high: 0xbd2de8f5dd15c73f68dfd26a614080c2, low: 0xe323b2b51b1b5ed9d7933e535d223bda,
+            },
+        'invalid hash len 59'
+    );
+}
+
+#[test]
+#[available_gas(2000000000)]
+fn sha256_edge_case_len_60() {
+    assert(
+        sha256_edge_case(len: 60)
+            .u256() == u256 {
+                high: 0x0ddde28e40838ef6f9853e887f597d6a, low: 0xdb5f40eb35d5763c52e1e64d8ba3bfff,
+            },
+        'invalid hash len 60'
+    );
+}
+
+#[test]
+#[available_gas(2000000000)]
+fn sha256_edge_case_len_61() {
+    assert(
+        sha256_edge_case(len: 61)
+            .u256() == u256 {
+                high: 0x4b5c2783c91ceccb7c839213bcbb6a90, low: 0x2d7fe8c2ec866877a51f433ea17f3e85,
+            },
+        'invalid hash len 61'
+    );
+}
+
+#[test]
+#[available_gas(2000000000)]
+fn sha256_edge_case_len_62() {
+    assert(
+        sha256_edge_case(len: 62)
+            .u256() == u256 {
+                high: 0xc89da82cbcd76ddf220e4e9091019b98, low: 0x66ffda72bee30de1effe6c99701a2221,
+            },
+        'invalid hash len 62'
+    );
+}
+
+#[test]
+#[available_gas(2000000000)]
+fn sha256_edge_case_len_63() {
+    assert(
+        sha256_edge_case(len: 63)
+            .u256() == u256 {
+                high: 0x29af2686fd53374a36b0846694cc3421, low: 0x77e428d1647515f078784d69cdb9e488,
+            },
+        'invalid hash len 63'
+    );
+}
+
+#[test]
+#[available_gas(2000000000)]
+fn sha256_edge_case_len_64() {
+    assert(
+        sha256_edge_case(len: 64)
+            .u256() == u256 {
+                high: 0xfdeab9acf3710362bd2658cdc9a29e8f, low: 0x9c757fcf9811603a8c447cd1d9151108,
+            },
+        'invalid hash len 64'
+    );
+}
+
+#[test]
+#[available_gas(2000000000)]
+fn sha256_equivalence() {
+    let mut byte_array = Default::<ByteArray>::default();
+    let mut index = 0;
+    loop {
+        if index == 64 {
+            break;
+        }
+        byte_array.append_byte(index.try_into().unwrap());
+        index += 1;
+    };
+    let sha256 = byte_array.sha256();
+    let expected = u256 {
+        high: 0xfdeab9acf3710362bd2658cdc9a29e8f, low: 0x9c757fcf9811603a8c447cd1d9151108,
+    };
+    assert(sha256.u256() == expected, 'ByteArray sha256 invalid')
 }
