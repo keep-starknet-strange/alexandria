@@ -21,6 +21,7 @@ name = "alexandria_data_structures"
 version = "0.2.0"
 dependencies = [
  "alexandria_encoding",
+ "alexandria_storage",
 ]
 
 [[package]]

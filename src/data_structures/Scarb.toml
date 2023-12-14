@@ -9,3 +9,4 @@ fmt.workspace = true
 
 [dependencies]
 alexandria_encoding = { path = "../encoding" }
+alexandria_storage = { path = "../storage" }
