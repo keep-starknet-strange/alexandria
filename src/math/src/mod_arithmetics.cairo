@@ -53,9 +53,9 @@ fn sub_mod(mut a: u256, mut b: u256, modulo: u256) -> u256 {
     a = a % modulo;
     b = b % modulo;
     if (a >= b) {
-        return (a - b) % modulo;
+        return a - b;
     }
-    (a + add_inverse_mod(b, modulo)) % modulo
+    a + add_inverse_mod(b, modulo)
 }
 
 /// Function that performs modular multiplication.
