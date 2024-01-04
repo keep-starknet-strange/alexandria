@@ -398,3 +398,17 @@ fn i257_min(lhs: i257, rhs: i257) -> i257 {
         return rhs;
     }
 }
+
+// Convert u256 to i257
+impl U256IntoI257 of Into<u256, i257> {
+    fn into(self: u256) -> i257 {
+        i257 { inner: self, sign: false, }
+    }
+}
+
+// Convert felt252 to i257
+impl FeltIntoI257 of Into<felt252, i257> {
+    fn into(self: felt252) -> i257 {
+        i257 { inner: self.into(), sign: false, }
+    }
+}
