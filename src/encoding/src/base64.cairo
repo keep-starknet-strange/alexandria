@@ -1,4 +1,5 @@
 use alexandria_math::BitShift;
+use alexandria_data_structures::array_ext::ArrayTraitExt;
 use integer::BoundedInt;
 
 const U6_MAX: u128 = 0x3F;
@@ -16,7 +17,7 @@ impl Base64Encoder of Encoder<Array<u8>> {
         let mut char_set = get_base64_char_set();
         char_set.append('+');
         char_set.append('/');
-        inner_encode(data, char_set)
+        encode_u8_array(data, char_set)
     }
 }
 
@@ -25,11 +26,29 @@ impl Base64UrlEncoder of Encoder<Array<u8>> {
         let mut char_set = get_base64_char_set();
         char_set.append('-');
         char_set.append('_');
-        inner_encode(data, char_set)
+        encode_u8_array(data, char_set)
     }
 }
 
-fn inner_encode(mut bytes: Array<u8>, base64_chars: Array<u8>) -> Array<u8> {
+impl Base64FeltEncoder of Encoder<felt252> {
+    fn encode(data: felt252) -> Array<u8> {
+        let mut char_set = get_base64_char_set();
+        char_set.append('+');
+        char_set.append('/');
+        encode_felt(data, char_set)
+    }
+}
+
+impl Base64UrlFeltEncoder of Encoder<felt252> {
+    fn encode(data: felt252) -> Array<u8> {
+        let mut char_set = get_base64_char_set();
+        char_set.append('-');
+        char_set.append('_');
+        encode_felt(data, char_set)
+    }
+}
+
+fn encode_u8_array(mut bytes: Array<u8>, base64_chars: Array<u8>) -> Array<u8> {
     let mut result = array![];
     if bytes.len() == 0 {
         return result;
@@ -78,6 +97,52 @@ fn inner_encode(mut bytes: Array<u8>, base64_chars: Array<u8>) -> Array<u8> {
         }
         i += 3;
     };
+    result
+}
+
+fn encode_felt(self: felt252, base64_chars: Array<u8>) -> Array<u8>{
+    let mut result = array![];
+
+    let mut num: u256 = self.into();
+    if num != 0 {
+        let (quotient, remainder) = DivRem::div_rem(
+            num, 65536_u256.try_into().expect('Division by 0')
+        );
+        let remainder: usize = remainder.try_into().unwrap();
+        let r3: usize = (remainder / 1024) & 63;
+        let r2: usize = (remainder / 16) & 63;
+        let r1: usize = (remainder * 4) & 63;
+        result.append(*base64_chars[r1]);
+        result.append(*base64_chars[r2]);
+        result.append(*base64_chars[r3]);
+        num = quotient;
+    }
+    loop {
+        if num == 0 {
+            break;
+        }
+        let (quotient, remainder) = DivRem::div_rem(
+            num, 16777216_u256.try_into().expect('Division by 0')
+        );
+        let remainder: usize = remainder.try_into().unwrap();
+        let r4: usize = remainder / 262144;
+        let r3: usize = (remainder / 4096) & 63;
+        let r2: usize = (remainder / 64) & 63;
+        let r1: usize = remainder & 63;
+        result.append(*base64_chars[r1]);
+        result.append(*base64_chars[r2]);
+        result.append(*base64_chars[r3]);
+        result.append(*base64_chars[r4]);
+        num = quotient;
+    };
+    loop {
+        if result.len() >= 43 {
+            break;
+        }
+        result.append('A');
+    };
+    result = result.reverse();
+    result.append('=');
     result
 }
 
