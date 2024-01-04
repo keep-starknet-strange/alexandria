@@ -1,39 +1,41 @@
-// ====================== INT 129 ======================
+use core::traits::Into;
+// ====================== INT 257 ======================
 
-// i129 represents a 129-bit integer.
+// i257 represents a 129-bit integer.
 // The inner field holds the absolute value of the integer.
 // The sign field is true for negative integers, and false for non-negative integers.
 #[derive(Copy, Drop)]
-struct i129 {
-    inner: u128,
+struct i257 {
     sign: bool,
+    inner: u256,
 }
 
-// Checks if the given i129 integer is zero and has the correct sign.
+
+// Checks if the given i257 integer is zero and has the correct sign.
 // # Arguments
-// * `x` - The i129 integer to check.
+// * `x` - The i257 integer to check.
 // # Panics
 // Panics if `x` is zero and has a sign that is not false.
-fn i129_check_sign_zero(x: i129) {
+fn i257_check_sign_zero(x: i257) {
     if x.inner == 0 {
         assert(x.sign == false, 'sign of 0 must be false');
     }
 }
 
-// Adds two i129 integers.
+// Adds two i257 integers.
 // # Arguments
-// * `lhs` - The first i129 to add.
-// * `rhs` - The second i129 to add.
+// * `lhs` - The first i257 to add.
+// * `rhs` - The second i257 to add.
 // # Returns
-// * `i129` - The sum of `lhs` and `rhs`.
-fn i129_add(lhs: i129, rhs: i129) -> i129 {
-    i129_check_sign_zero(lhs);
-    i129_check_sign_zero(rhs);
+// * `i257` - The sum of `lhs` and `rhs`.
+fn i257_add(lhs: i257, rhs: i257) -> i257 {
+    i257_check_sign_zero(lhs);
+    i257_check_sign_zero(rhs);
     // If both integers have the same sign, 
     // the sum of their absolute values can be returned.
     if lhs.sign == rhs.sign {
         let sum = lhs.inner + rhs.inner;
-        return i129 { inner: sum, sign: lhs.sign };
+        return i257 { inner: sum, sign: lhs.sign };
     } else {
         // If the integers have different signs, 
         // the larger absolute value is subtracted from the smaller one.
@@ -44,103 +46,103 @@ fn i129_add(lhs: i129, rhs: i129) -> i129 {
         };
         let difference = larger.inner - smaller.inner;
 
-        return i129 { inner: difference, sign: larger.sign };
+        return i257 { inner: difference, sign: larger.sign };
     }
 }
 
-// Implements the Add trait for i129.
-impl i129Add of Add<i129> {
-    fn add(lhs: i129, rhs: i129) -> i129 {
-        i129_add(lhs, rhs)
+// Implements the Add trait for i257.
+impl i257Add of Add<i257> {
+    fn add(lhs: i257, rhs: i257) -> i257 {
+        i257_add(lhs, rhs)
     }
 }
 
-// Implements the AddEq trait for i129.
-impl i129AddEq of AddEq<i129> {
+// Implements the AddEq trait for i257.
+impl i257AddEq of AddEq<i257> {
     #[inline(always)]
-    fn add_eq(ref self: i129, other: i129) {
+    fn add_eq(ref self: i257, other: i257) {
         self = Add::add(self, other);
     }
 }
 
-// Subtracts two i129 integers.
+// Subtracts two i257 integers.
 // # Arguments
-// * `lhs` - The first i129 to subtract.
-// * `rhs` - The second i129 to subtract.
+// * `lhs` - The first i257 to subtract.
+// * `rhs` - The second i257 to subtract.
 // # Returns
-// * `i129` - The difference of `lhs` and `rhs`.
-fn i129_sub(lhs: i129, rhs: i129) -> i129 {
-    i129_check_sign_zero(lhs);
-    i129_check_sign_zero(rhs);
+// * `i257` - The difference of `lhs` and `rhs`.
+fn i257_sub(lhs: i257, rhs: i257) -> i257 {
+    i257_check_sign_zero(lhs);
+    i257_check_sign_zero(rhs);
 
     if (rhs.inner == 0) {
         return lhs;
     }
 
     // The subtraction of `lhs` to `rhs` is achieved by negating `rhs` sign and adding it to `lhs`.
-    let neg_b = i129 { inner: rhs.inner, sign: !rhs.sign };
+    let neg_b = i257 { inner: rhs.inner, sign: !rhs.sign };
     return lhs + neg_b;
 }
 
-// Implements the Sub trait for i129.
-impl i129Sub of Sub<i129> {
-    fn sub(lhs: i129, rhs: i129) -> i129 {
-        i129_sub(lhs, rhs)
+// Implements the Sub trait for i257.
+impl i257Sub of Sub<i257> {
+    fn sub(lhs: i257, rhs: i257) -> i257 {
+        i257_sub(lhs, rhs)
     }
 }
 
-// Implements the SubEq trait for i129.
-impl i129SubEq of SubEq<i129> {
+// Implements the SubEq trait for i257.
+impl i257SubEq of SubEq<i257> {
     #[inline(always)]
-    fn sub_eq(ref self: i129, other: i129) {
+    fn sub_eq(ref self: i257, other: i257) {
         self = Sub::sub(self, other);
     }
 }
 
-// Multiplies two i129 integers.
+// Multiplies two i257 integers.
 // 
 // # Arguments
 //
-// * `lhs` - The first i129 to multiply.
-// * `rhs` - The second i129 to multiply.
+// * `lhs` - The first i257 to multiply.
+// * `rhs` - The second i257 to multiply.
 //
 // # Returns
 //
-// * `i129` - The product of `lhs` and `rhs`.
-fn i129_mul(lhs: i129, rhs: i129) -> i129 {
-    i129_check_sign_zero(lhs);
-    i129_check_sign_zero(rhs);
+// * `i257` - The product of `lhs` and `rhs`.
+fn i257_mul(lhs: i257, rhs: i257) -> i257 {
+    i257_check_sign_zero(lhs);
+    i257_check_sign_zero(rhs);
 
     // The sign of the product is the XOR of the signs of the operands.
     let sign = lhs.sign ^ rhs.sign;
     // The product is the product of the absolute values of the operands.
     let inner = lhs.inner * rhs.inner;
-    return i129 { inner, sign };
+    return i257 { inner, sign };
 }
 
-// Implements the Mul trait for i129.
-impl i129Mul of Mul<i129> {
-    fn mul(lhs: i129, rhs: i129) -> i129 {
-        i129_mul(lhs, rhs)
+// Implements the Mul trait for i257.
+impl i257Mul of Mul<i257> {
+    fn mul(lhs: i257, rhs: i257) -> i257 {
+        i257_mul(lhs, rhs)
     }
 }
 
-// Implements the MulEq trait for i129.
-impl i129MulEq of MulEq<i129> {
+// Implements the MulEq trait for i257.
+impl i257MulEq of MulEq<i257> {
     #[inline(always)]
-    fn mul_eq(ref self: i129, other: i129) {
+    fn mul_eq(ref self: i257, other: i257) {
         self = Mul::mul(self, other);
     }
 }
 
-// Divides the first i129 by the second i129.
+// Divides the first i257 by the second i257.
 // # Arguments
-// * `lhs` - The i129 dividend.
-// * `rhs` - The i129 divisor.
+// * `lhs` - The i257 dividend.
+// * `rhs` - The i257 divisor.
 // # Returns
-// * `i129` - The quotient of `lhs` and `rhs`.
-fn i129_div(lhs: i129, rhs: i129) -> i129 {
-    i129_check_sign_zero(lhs);
+// * `i257` - The quotient of `lhs` and `rhs`.
+fn i257_div(lhs: i257, rhs: i257) -> i257 {
+    i257_check_sign_zero(lhs);
     // Check that the divisor is not zero.
     assert(rhs.inner != 0, 'b can not be 0');
 
@@ -149,13 +151,13 @@ fn i129_div(lhs: i129, rhs: i129) -> i129 {
 
     if (sign == false) {
         // If the operands are positive, the quotient is simply their absolute value quotient.
-        return i129 { inner: lhs.inner / rhs.inner, sign: sign };
+        return i257 { inner: lhs.inner / rhs.inner, sign: sign };
     }
 
     // If the operands have different signs, rounding is necessary.
     // First, check if the quotient is an integer.
     if (lhs.inner % rhs.inner == 0) {
-        return i129 { inner: lhs.inner / rhs.inner, sign: sign };
+        return i257 { inner: lhs.inner / rhs.inner, sign: sign };
     }
 
     // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
@@ -164,113 +166,113 @@ fn i129_div(lhs: i129, rhs: i129) -> i129 {
 
     // Check the last digit to determine rounding direction.
     if (last_digit <= 5) {
-        return i129 { inner: quotient / 10, sign: sign };
+        return i257 { inner: quotient / 10, sign: sign };
     } else {
-        return i129 { inner: (quotient / 10) + 1, sign: sign };
+        return i257 { inner: (quotient / 10) + 1, sign: sign };
     }
 }
 
-// Implements the Div trait for i129.
-impl i129Div of Div<i129> {
-    fn div(lhs: i129, rhs: i129) -> i129 {
-        i129_div(lhs, rhs)
+// Implements the Div trait for i257.
+impl i257Div of Div<i257> {
+    fn div(lhs: i257, rhs: i257) -> i257 {
+        i257_div(lhs, rhs)
     }
 }
 
-// Implements the DivEq trait for i129.
-impl i129DivEq of DivEq<i129> {
+// Implements the DivEq trait for i257.
+impl i257DivEq of DivEq<i257> {
     #[inline(always)]
-    fn div_eq(ref self: i129, other: i129) {
+    fn div_eq(ref self: i257, other: i257) {
         self = Div::div(self, other);
     }
 }
 
-// Calculates the remainder of the division of a first i129 by a second i129.
+// Calculates the remainder of the division of a first i257 by a second i257.
 // # Arguments
-// * `lhs` - The i129 dividend.
-// * `rhs` - The i129 divisor.
+// * `lhs` - The i257 dividend.
+// * `rhs` - The i257 divisor.
 // # Returns
-// * `i129` - The remainder of dividing `lhs` by `rhs`.
-fn i129_rem(lhs: i129, rhs: i129) -> i129 {
-    i129_check_sign_zero(lhs);
+// * `i257` - The remainder of dividing `lhs` by `rhs`.
+fn i257_rem(lhs: i257, rhs: i257) -> i257 {
+    i257_check_sign_zero(lhs);
     // Check that the divisor is not zero.
     assert(rhs.inner != 0, 'b can not be 0');
 
     return lhs - (rhs * (lhs / rhs));
 }
 
-// Implements the Rem trait for i129.
-impl i129Rem of Rem<i129> {
-    fn rem(lhs: i129, rhs: i129) -> i129 {
-        i129_rem(lhs, rhs)
+// Implements the Rem trait for i257.
+impl i257Rem of Rem<i257> {
+    fn rem(lhs: i257, rhs: i257) -> i257 {
+        i257_rem(lhs, rhs)
     }
 }
 
-// Implements the RemEq trait for i129.
-impl i129RemEq of RemEq<i129> {
+// Implements the RemEq trait for i257.
+impl i257RemEq of RemEq<i257> {
     #[inline(always)]
-    fn rem_eq(ref self: i129, other: i129) {
+    fn rem_eq(ref self: i257, other: i257) {
         self = Rem::rem(self, other);
     }
 }
 
-// Calculates both the quotient and the remainder of the division of a first i129 by a second i129.
+// Calculates both the quotient and the remainder of the division of a first i257 by a second i257.
 // # Arguments
-// * `lhs` - The i129 dividend.
-// * `rhs` - The i129 divisor.
+// * `lhs` - The i257 dividend.
+// * `rhs` - The i257 divisor.
 // # Returns
-// * `(i129, i129)` - A tuple containing the quotient and the remainder of dividing `lhs` by `rhs`.
-fn i129_div_rem(lhs: i129, rhs: i129) -> (i129, i129) {
-    let quotient = i129_div(lhs, rhs);
-    let remainder = i129_rem(lhs, rhs);
+// * `(i257, i257)` - A tuple containing the quotient and the remainder of dividing `lhs` by `rhs`.
+fn i257_div_rem(lhs: i257, rhs: i257) -> (i257, i257) {
+    let quotient = i257_div(lhs, rhs);
+    let remainder = i257_rem(lhs, rhs);
 
     return (quotient, remainder);
 }
 
-// Compares two i129 integers for equality.
+// Compares two i257 integers for equality.
 // # Arguments
-// * `lhs` - The first i129 integer to compare.
-// * `rhs` - The second i129 integer to compare.
+// * `lhs` - The first i257 integer to compare.
+// * `rhs` - The second i257 integer to compare.
 // # Returns
 // * `bool` - `true` if the two integers are equal, `false` otherwise.
-fn i129_eq(lhs: i129, rhs: i129) -> bool {
+fn i257_eq(lhs: @i257, rhs: @i257) -> bool {
     // Check if the two integers have the same sign and the same absolute value.
-    if lhs.sign == rhs.sign & lhs.inner == rhs.inner {
+    if lhs.sign == rhs.sign && lhs.inner == rhs.inner {
         return true;
     }
 
     return false;
 }
 
-// Compares two i129 integers for inequality.
+// Compares two i257 integers for inequality.
 // # Arguments
-// * `lhs` - The first i129 integer to compare.
-// * `rhs` - The second i129 integer to compare.
+// * `lhs` - The first i257 integer to compare.
+// * `rhs` - The second i257 integer to compare.
 // # Returns
 // * `bool` - `true` if the two integers are not equal, `false` otherwise.
-fn i129_ne(lhs: i129, rhs: i129) -> bool {
+fn i257_ne(lhs: @i257, rhs: @i257) -> bool {
     // The result is the inverse of the equal function.
-    return !i129_eq(lhs, rhs);
+    return !i257_eq(lhs, rhs);
 }
 
-// Implements the PartialEq trait for i129.
-impl i129PartialEq of PartialEq<i129> {
-    fn eq(lhs: i129, rhs: i129) -> bool {
-        i129_eq(lhs, rhs)
+// Implements the PartialEq trait for i257.
+impl i257PartialEq of PartialEq<i257> {
+    fn eq(lhs: @i257, rhs: @i257) -> bool {
+        i257_eq(lhs, rhs)
     }
 
-    fn ne(lhs: i129, rhs: i129) -> bool {
-        i129_ne(lhs, rhs)
+    fn ne(lhs: @i257, rhs: @i257) -> bool {
+        i257_ne(lhs, rhs)
     }
 }
 
-// Compares two i129 integers for greater than.
+// Compares two i257 integers for greater than.
 // # Arguments
-// * `lhs` - The first i129 integer to compare.
-// * `rhs` - The second i129 integer to compare.
+// * `lhs` - The first i257 integer to compare.
+// * `rhs` - The second i257 integer to compare.
 // # Returns
 // * `bool` - `true` if `lhs` is greater than `rhs`, `false` otherwise.
-fn i129_gt(lhs: i129, rhs: i129) -> bool {
+fn i257_gt(lhs: i257, rhs: i257) -> bool {
     // Check if `lhs` is negative and `rhs` is positive.
     if (lhs.sign & !rhs.sign) {
         return false;
@@ -287,95 +289,95 @@ fn i129_gt(lhs: i129, rhs: i129) -> bool {
     }
 }
 
-// Determines whether the first i129 is less than the second i129.
+// Determines whether the first i257 is less than the second i257.
 // # Arguments
-// * `lhs` - The i129 to compare against the second i129.
-// * `rhs` - The i129 to compare against the first i129.
+// * `lhs` - The i257 to compare against the second i257.
+// * `rhs` - The i257 to compare against the first i257.
 // # Returns
 // * `bool` - `true` if `lhs` is less than `rhs`, `false` otherwise.
-fn i129_lt(lhs: i129, rhs: i129) -> bool {
+fn i257_lt(lhs: i257, rhs: i257) -> bool {
     // The result is the inverse of the greater than function.
-    return !i129_gt(lhs, rhs);
+    return !i257_gt(lhs, rhs);
 }
 
-// Checks if the first i129 integer is less than or equal to the second.
+// Checks if the first i257 integer is less than or equal to the second.
 // # Arguments
-// * `lhs` - The first i129 integer to compare.
-// * `rhs` - The second i129 integer to compare.
+// * `lhs` - The first i257 integer to compare.
+// * `rhs` - The second i257 integer to compare.
 // # Returns
 // * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
-fn i129_le(lhs: i129, rhs: i129) -> bool {
-    if (lhs == rhs | i129_lt(lhs, rhs) == true) {
+fn i257_le(lhs: i257, rhs: i257) -> bool {
+    if (lhs == rhs || i257_lt(lhs, rhs) == true) {
         return true;
     } else {
         return false;
     }
 }
 
-// Checks if the first i129 integer is greater than or equal to the second.
+// Checks if the first i257 integer is greater than or equal to the second.
 // # Arguments
-// * `lhs` - The first i129 integer to compare.
-// * `rhs` - The second i129 integer to compare.
+// * `lhs` - The first i257 integer to compare.
+// * `rhs` - The second i257 integer to compare.
 // # Returns
 // * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
-fn i129_ge(lhs: i129, rhs: i129) -> bool {
-    if (lhs == rhs | i129_gt(lhs, rhs) == true) {
+fn i257_ge(lhs: i257, rhs: i257) -> bool {
+    if (lhs == rhs || i257_gt(lhs, rhs) == true) {
         return true;
     } else {
         return false;
     }
 }
 
-// Implements the PartialOrd trait for i129.
-impl i129PartialOrd of PartialOrd<i129> {
-    fn le(lhs: i129, rhs: i129) -> bool {
-        i129_le(lhs, rhs)
+// Implements the PartialOrd trait for i257.
+impl i257PartialOrd of PartialOrd<i257> {
+    fn le(lhs: i257, rhs: i257) -> bool {
+        i257_le(lhs, rhs)
     }
-    fn ge(lhs: i129, rhs: i129) -> bool {
-        i129_ge(lhs, rhs)
+    fn ge(lhs: i257, rhs: i257) -> bool {
+        i257_ge(lhs, rhs)
     }
 
-    fn lt(lhs: i129, rhs: i129) -> bool {
-        i129_lt(lhs, rhs)
+    fn lt(lhs: i257, rhs: i257) -> bool {
+        i257_lt(lhs, rhs)
     }
-    fn gt(lhs: i129, rhs: i129) -> bool {
-        i129_gt(lhs, rhs)
+    fn gt(lhs: i257, rhs: i257) -> bool {
+        i257_gt(lhs, rhs)
     }
 }
 
-// Negates the given i129 integer.
+// Negates the given i257 integer.
 // # Arguments
-// * `x` - The i129 integer to negate.
+// * `x` - The i257 integer to negate.
 // # Returns
-// * `i129` - The negation of `x`.
-fn i129_neg(x: i129) -> i129 {
+// * `i257` - The negation of `x`.
+fn i257_neg(x: i257) -> i257 {
     // The negation of an integer is obtained by flipping its sign.
-    return i129 { inner: x.inner, sign: !x.sign };
+    return i257 { inner: x.inner, sign: !x.sign };
 }
 
-// Implements the Neg trait for i129.
-impl i129Neg of Neg<i129> {
-    fn neg(a: i129) -> i129 {
-        i129_neg(a)
+// Implements the Neg trait for i257.
+impl i257Neg of Neg<i257> {
+    fn neg(a: i257) -> i257 {
+        i257_neg(a)
     }
 }
 
-// Computes the absolute value of the given i129 integer.
+// Computes the absolute value of the given i257 integer.
 // # Arguments
-// * `x` - The i129 integer to compute the absolute value of.
+// * `x` - The i257 integer to compute the absolute value of.
 // # Returns
-// * `i129` - The absolute value of `x`.
-fn i129_abs(x: i129) -> i129 {
-    return i129 { inner: x.inner, sign: false };
+// * `i257` - The absolute value of `x`.
+fn i257_abs(x: i257) -> i257 {
+    return i257 { inner: x.inner, sign: false };
 }
 
-// Computes the maximum between two i129 integers.
+// Computes the maximum between two i257 integers.
 // # Arguments
-// * `lhs` - The first i129 integer to compare.
-// * `rhs` - The second i129 integer to compare.
+// * `lhs` - The first i257 integer to compare.
+// * `rhs` - The second i257 integer to compare.
 // # Returns
-// * `i129` - The maximum between `lhs` and `rhs`.
-fn i129_max(lhs: i129, rhs: i129) -> i129 {
+// * `i257` - The maximum between `lhs` and `rhs`.
+fn i257_max(lhs: i257, rhs: i257) -> i257 {
     if (lhs > rhs) {
         return lhs;
     } else {
@@ -383,13 +385,13 @@ fn i129_max(lhs: i129, rhs: i129) -> i129 {
     }
 }
 
-// Computes the minimum between two i129 integers.
+// Computes the minimum between two i257 integers.
 // # Arguments
-// * `lhs` - The first i129 integer to compare.
-// * `rhs` - The second i129 integer to compare.
+// * `lhs` - The first i257 integer to compare.
+// * `rhs` - The second i257 integer to compare.
 // # Returns
-// * `i129` - The minimum between `lhs` and `rhs`.
-fn i129_min(lhs: i129, rhs: i129) -> i129 {
+// * `i257` - The minimum between `lhs` and `rhs`.
+fn i257_min(lhs: i257, rhs: i257) -> i257 {
     if (lhs < rhs) {
         return lhs;
     } else {
