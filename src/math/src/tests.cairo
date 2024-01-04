@@ -8,6 +8,7 @@ mod fibonacci_test;
 mod gcd_of_n_numbers_test;
 mod karatsuba_test;
 mod math_test;
+mod signed_u256_test;
 mod mod_arithmetics_test;
 mod perfect_number_test;
 mod sha256_test;
