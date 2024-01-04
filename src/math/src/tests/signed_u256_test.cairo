@@ -310,3 +310,15 @@ fn i257_test_check_sign_zero() {
     let x = i257 { inner: 0_u256, sign: true };
     alexandria_math::signed_u256::i257_check_sign_zero(x);
 }
+
+#[test]
+#[should_panic]
+fn i257_test_into() {
+    let x: i257 = 35_u256.into();
+    assert(x.inner == 35, 'incorrect into value');
+    assert(x.sign == false, 'incorrect into sign');
+
+    let y: i257 = 258973.into();
+    assert(y.inner == 258973, 'incorrect into value');
+    assert(y.sign == false, 'incorrect into sign');
+}
