@@ -312,7 +312,6 @@ fn i257_test_check_sign_zero() {
 }
 
 #[test]
-#[should_panic]
 fn i257_test_into() {
     let x: i257 = 35_u256.into();
     assert(x.inner == 35, 'incorrect into value');
