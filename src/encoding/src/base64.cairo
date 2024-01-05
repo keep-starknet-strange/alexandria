@@ -1,5 +1,5 @@
-use alexandria_math::BitShift;
 use alexandria_data_structures::array_ext::ArrayTraitExt;
+use alexandria_math::BitShift;
 use integer::BoundedInt;
 
 const U6_MAX: u128 = 0x3F;
@@ -71,9 +71,9 @@ fn encode_u8_array(mut bytes: Array<u8>, base64_chars: Array<u8>) -> Array<u8> {
         if i == bytes_len {
             break;
         }
-        let n: u32 = (*bytes[i]).into() * 65536_u32
-            | (*bytes[i + 1]).into() * 256_u32
-            | (*bytes[i + 2]).into();
+        let n: u32 = (*bytes[i]).into()
+            * 65536_u32 | (*bytes[i + 1]).into()
+            * 256_u32 | (*bytes[i + 2]).into();
         let e1: usize = ((n / 262144) & 63).try_into().unwrap();
         let e2: usize = ((n / 4096) & 63).try_into().unwrap();
         let e3: usize = ((n / 64) & 63).try_into().unwrap();
@@ -100,7 +100,7 @@ fn encode_u8_array(mut bytes: Array<u8>, base64_chars: Array<u8>) -> Array<u8> {
     result
 }
 
-fn encode_felt(self: felt252, base64_chars: Array<u8>) -> Array<u8>{
+fn encode_felt(self: felt252, base64_chars: Array<u8>) -> Array<u8> {
     let mut result = array![];
 
     let mut num: u256 = self.into();

@@ -1,7 +1,9 @@
-use core::traits::TryInto;
-use alexandria_encoding::base64::{Base64Encoder, Base64UrlEncoder, Base64FeltEncoder, Base64UrlFeltEncoder};
 use alexandria_data_structures::array_ext::ArrayTraitExt;
+use alexandria_encoding::base64::{
+    Base64Encoder, Base64UrlEncoder, Base64FeltEncoder, Base64UrlFeltEncoder
+};
 use core::debug::PrintTrait;
+use core::traits::TryInto;
 
 fn bytes_be(val: felt252) -> Array<u8> {
     let mut result = array![];
