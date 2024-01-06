@@ -22,38 +22,28 @@ fn i257_check_sign_zero(x: i257) {
     }
 }
 
-// Adds two i257 integers.
-// # Arguments
-// * `lhs` - The first i257 to add.
-// * `rhs` - The second i257 to add.
-// # Returns
-// * `i257` - The sum of `lhs` and `rhs`.
-fn i257_add(lhs: i257, rhs: i257) -> i257 {
-    i257_check_sign_zero(lhs);
-    i257_check_sign_zero(rhs);
-    // If both integers have the same sign, 
-    // the sum of their absolute values can be returned.
-    if lhs.sign == rhs.sign {
-        let sum = lhs.inner + rhs.inner;
-        return i257 { inner: sum, sign: lhs.sign };
-    } else {
-        // If the integers have different signs, 
-        // the larger absolute value is subtracted from the smaller one.
-        let (larger, smaller) = if lhs.inner >= rhs.inner {
-            (lhs, rhs)
-        } else {
-            (rhs, lhs)
-        };
-        let difference = larger.inner - smaller.inner;
-
-        return i257 { inner: difference, sign: larger.sign };
-    }
-}
-
 // Implements the Add trait for i257.
 impl i257Add of Add<i257> {
     fn add(lhs: i257, rhs: i257) -> i257 {
-        i257_add(lhs, rhs)
+        i257_check_sign_zero(lhs);
+        i257_check_sign_zero(rhs);
+        // If both integers have the same sign, 
+        // the sum of their absolute values can be returned.
+        if lhs.sign == rhs.sign {
+            let sum = lhs.inner + rhs.inner;
+            i257 { inner: sum, sign: lhs.sign }
+        } else {
+            // If the integers have different signs, 
+            // the larger absolute value is subtracted from the smaller one.
+            let (larger, smaller) = if lhs.inner >= rhs.inner {
+                (lhs, rhs)
+            } else {
+                (rhs, lhs)
+            };
+            let difference = larger.inner - smaller.inner;
+
+            i257 { inner: difference, sign: larger.sign }
+        }
     }
 }
 
@@ -65,29 +55,19 @@ impl i257AddEq of AddEq<i257> {
     }
 }
 
-// Subtracts two i257 integers.
-// # Arguments
-// * `lhs` - The first i257 to subtract.
-// * `rhs` - The second i257 to subtract.
-// # Returns
-// * `i257` - The difference of `lhs` and `rhs`.
-fn i257_sub(lhs: i257, rhs: i257) -> i257 {
-    i257_check_sign_zero(lhs);
-    i257_check_sign_zero(rhs);
-
-    if (rhs.inner == 0) {
-        return lhs;
-    }
-
-    // The subtraction of `lhs` to `rhs` is achieved by negating `rhs` sign and adding it to `lhs`.
-    let neg_b = i257 { inner: rhs.inner, sign: !rhs.sign };
-    return lhs + neg_b;
-}
-
 // Implements the Sub trait for i257.
 impl i257Sub of Sub<i257> {
     fn sub(lhs: i257, rhs: i257) -> i257 {
-        i257_sub(lhs, rhs)
+        i257_check_sign_zero(lhs);
+        i257_check_sign_zero(rhs);
+
+        if (rhs.inner == 0) {
+            return lhs;
+        }
+
+        // The subtraction of `lhs` to `rhs` is achieved by negating `rhs` sign and adding it to `lhs`.
+        let neg_b = i257 { inner: rhs.inner, sign: !rhs.sign };
+        lhs + neg_b
     }
 }
 
@@ -99,31 +79,17 @@ impl i257SubEq of SubEq<i257> {
     }
 }
 
-// Multiplies two i257 integers.
-// 
-// # Arguments
-//
-// * `lhs` - The first i257 to multiply.
-// * `rhs` - The second i257 to multiply.
-//
-// # Returns
-//
-// * `i257` - The product of `lhs` and `rhs`.
-fn i257_mul(lhs: i257, rhs: i257) -> i257 {
-    i257_check_sign_zero(lhs);
-    i257_check_sign_zero(rhs);
-
-    // The sign of the product is the XOR of the signs of the operands.
-    let sign = lhs.sign ^ rhs.sign;
-    // The product is the product of the absolute values of the operands.
-    let inner = lhs.inner * rhs.inner;
-    return i257 { inner, sign };
-}
-
 // Implements the Mul trait for i257.
 impl i257Mul of Mul<i257> {
     fn mul(lhs: i257, rhs: i257) -> i257 {
-        i257_mul(lhs, rhs)
+        i257_check_sign_zero(lhs);
+        i257_check_sign_zero(rhs);
+
+        // The sign of the product is the XOR of the signs of the operands.
+        let sign = lhs.sign ^ rhs.sign;
+        // The product is the product of the absolute values of the operands.
+        let inner = lhs.inner * rhs.inner;
+        i257 { inner, sign }
     }
 }
 
@@ -229,136 +195,62 @@ fn i257_div_rem(lhs: i257, rhs: i257) -> (i257, i257) {
     return (quotient, remainder);
 }
 
-// Compares two i257 integers for equality.
-// # Arguments
-// * `lhs` - The first i257 integer to compare.
-// * `rhs` - The second i257 integer to compare.
-// # Returns
-// * `bool` - `true` if the two integers are equal, `false` otherwise.
-fn i257_eq(lhs: @i257, rhs: @i257) -> bool {
-    // Check if the two integers have the same sign and the same absolute value.
-    if lhs.sign == rhs.sign && lhs.inner == rhs.inner {
-        return true;
+impl I257DivRem of DivRem<i257> {
+    fn div_rem(lhs: i257, rhs: NonZero<i257>) -> (i257, i257) {
+        i257_div_rem(lhs, rhs.into())
     }
-
-    return false;
-}
-
-// Compares two i257 integers for inequality.
-// # Arguments
-// * `lhs` - The first i257 integer to compare.
-// * `rhs` - The second i257 integer to compare.
-// # Returns
-// * `bool` - `true` if the two integers are not equal, `false` otherwise.
-fn i257_ne(lhs: @i257, rhs: @i257) -> bool {
-    // The result is the inverse of the equal function.
-    return !i257_eq(lhs, rhs);
 }
 
 // Implements the PartialEq trait for i257.
 impl i257PartialEq of PartialEq<i257> {
     fn eq(lhs: @i257, rhs: @i257) -> bool {
-        i257_eq(lhs, rhs)
+        if lhs.sign == rhs.sign && lhs.inner == rhs.inner {
+            return true;
+        }
+
+        return false;
     }
 
     fn ne(lhs: @i257, rhs: @i257) -> bool {
-        i257_ne(lhs, rhs)
-    }
-}
-
-// Compares two i257 integers for greater than.
-// # Arguments
-// * `lhs` - The first i257 integer to compare.
-// * `rhs` - The second i257 integer to compare.
-// # Returns
-// * `bool` - `true` if `lhs` is greater than `rhs`, `false` otherwise.
-fn i257_gt(lhs: i257, rhs: i257) -> bool {
-    // Check if `lhs` is negative and `rhs` is positive.
-    if (lhs.sign & !rhs.sign) {
-        return false;
-    }
-    // Check if `lhs` is positive and `rhs` is negative.
-    if (!lhs.sign & rhs.sign) {
-        return true;
-    }
-    // If `lhs` and `rhs` have the same sign, compare their absolute values.
-    if (lhs.sign & rhs.sign) {
-        return lhs.inner < rhs.inner;
-    } else {
-        return lhs.inner > rhs.inner;
-    }
-}
-
-// Determines whether the first i257 is less than the second i257.
-// # Arguments
-// * `lhs` - The i257 to compare against the second i257.
-// * `rhs` - The i257 to compare against the first i257.
-// # Returns
-// * `bool` - `true` if `lhs` is less than `rhs`, `false` otherwise.
-fn i257_lt(lhs: i257, rhs: i257) -> bool {
-    // The result is the inverse of the greater than function.
-    return !i257_gt(lhs, rhs);
-}
-
-// Checks if the first i257 integer is less than or equal to the second.
-// # Arguments
-// * `lhs` - The first i257 integer to compare.
-// * `rhs` - The second i257 integer to compare.
-// # Returns
-// * `bool` - `true` if `lhs` is less than or equal to `rhs`, `false` otherwise.
-fn i257_le(lhs: i257, rhs: i257) -> bool {
-    if (lhs == rhs || i257_lt(lhs, rhs) == true) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// Checks if the first i257 integer is greater than or equal to the second.
-// # Arguments
-// * `lhs` - The first i257 integer to compare.
-// * `rhs` - The second i257 integer to compare.
-// # Returns
-// * `bool` - `true` if `lhs` is greater than or equal to `rhs`, `false` otherwise.
-fn i257_ge(lhs: i257, rhs: i257) -> bool {
-    if (lhs == rhs || i257_gt(lhs, rhs) == true) {
-        return true;
-    } else {
-        return false;
+        !i257PartialEq::eq(lhs, rhs)
     }
 }
 
 // Implements the PartialOrd trait for i257.
 impl i257PartialOrd of PartialOrd<i257> {
     fn le(lhs: i257, rhs: i257) -> bool {
-        i257_le(lhs, rhs)
+        !i257PartialOrd::gt(lhs, rhs)
     }
     fn ge(lhs: i257, rhs: i257) -> bool {
-        i257_ge(lhs, rhs)
+        i257PartialOrd::gt(lhs, rhs) || lhs == rhs
     }
 
     fn lt(lhs: i257, rhs: i257) -> bool {
-        i257_lt(lhs, rhs)
+        !i257PartialOrd::gt(lhs, rhs) && lhs != rhs
     }
-    fn gt(lhs: i257, rhs: i257) -> bool {
-        i257_gt(lhs, rhs)
-    }
-}
 
-// Negates the given i257 integer.
-// # Arguments
-// * `x` - The i257 integer to negate.
-// # Returns
-// * `i257` - The negation of `x`.
-fn i257_neg(x: i257) -> i257 {
-    // The negation of an integer is obtained by flipping its sign.
-    return i257 { inner: x.inner, sign: !x.sign };
+    fn gt(lhs: i257, rhs: i257) -> bool {
+        // Check if `lhs` is negative and `rhs` is positive.
+        if (lhs.sign & !rhs.sign) {
+            return false;
+        }
+        // Check if `lhs` is positive and `rhs` is negative.
+        if (!lhs.sign & rhs.sign) {
+            return true;
+        }
+        // If `lhs` and `rhs` have the same sign, compare their absolute values.
+        if (lhs.sign & rhs.sign) {
+            return lhs.inner < rhs.inner;
+        } else {
+            return lhs.inner > rhs.inner;
+        }
+    }
 }
 
 // Implements the Neg trait for i257.
 impl i257Neg of Neg<i257> {
     fn neg(a: i257) -> i257 {
-        i257_neg(a)
+        i257 { inner: x.inner, sign: !x.sign }
     }
 }
 
