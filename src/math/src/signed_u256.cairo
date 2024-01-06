@@ -250,7 +250,7 @@ impl i257PartialOrd of PartialOrd<i257> {
 // Implements the Neg trait for i257.
 impl i257Neg of Neg<i257> {
     fn neg(a: i257) -> i257 {
-        i257 { inner: x.inner, sign: !x.sign }
+        i257 { inner: a.inner, sign: !a.sign }
     }
 }
 
