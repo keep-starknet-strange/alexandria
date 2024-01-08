@@ -3,6 +3,7 @@ use alexandria_encoding::base64::{
     Base64Encoder, Base64UrlEncoder, Base64FeltEncoder, Base64UrlFeltEncoder
 };
 use core::debug::PrintTrait;
+use core::option::OptionTrait;
 use core::traits::TryInto;
 
 fn bytes_be(val: felt252) -> Array<u8> {
@@ -13,9 +14,7 @@ fn bytes_be(val: felt252) -> Array<u8> {
         if num == 0 {
             break;
         }
-        let (quotient, remainder) = DivRem::div_rem(
-            num, 256_u256.try_into().expect('Division by 0')
-        );
+        let (quotient, remainder) = DivRem::div_rem(num, 256_u256.try_into().unwrap());
         result.append(remainder.try_into().unwrap());
         num = quotient;
     };
