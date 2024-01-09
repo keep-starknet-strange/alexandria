@@ -1,4 +1,7 @@
+use alexandria_data_structures::array_ext::ArrayTraitExt;
 use alexandria_math::BitShift;
+use core::array::ArrayTrait;
+use core::option::OptionTrait;
 use integer::BoundedInt;
 
 const U6_MAX: u128 = 0x3F;
@@ -16,7 +19,7 @@ impl Base64Encoder of Encoder<Array<u8>> {
         let mut char_set = get_base64_char_set();
         char_set.append('+');
         char_set.append('/');
-        inner_encode(data, char_set)
+        encode_u8_array(data, char_set.span())
     }
 }
 
@@ -25,8 +28,124 @@ impl Base64UrlEncoder of Encoder<Array<u8>> {
         let mut char_set = get_base64_char_set();
         char_set.append('-');
         char_set.append('_');
-        inner_encode(data, char_set)
+        encode_u8_array(data, char_set.span())
     }
+}
+
+impl Base64FeltEncoder of Encoder<felt252> {
+    fn encode(data: felt252) -> Array<u8> {
+        let mut char_set = get_base64_char_set();
+        char_set.append('+');
+        char_set.append('/');
+        encode_felt(data, char_set.span())
+    }
+}
+
+impl Base64UrlFeltEncoder of Encoder<felt252> {
+    fn encode(data: felt252) -> Array<u8> {
+        let mut char_set = get_base64_char_set();
+        char_set.append('-');
+        char_set.append('_');
+        encode_felt(data, char_set.span())
+    }
+}
+
+fn encode_u8_array(mut bytes: Array<u8>, base64_chars: Span<u8>) -> Array<u8> {
+    let mut result = array![];
+    if bytes.len() == 0 {
+        return result;
+    }
+    let mut p: u8 = 0;
+    let c = bytes.len() % 3;
+    if c == 1 {
+        p = 2;
+        bytes.append(0_u8);
+        bytes.append(0_u8);
+    } else if c == 2 {
+        p = 1;
+        bytes.append(0_u8);
+    }
+
+    let mut i = 0;
+    let bytes_len = bytes.len();
+    let last_iteration = bytes_len - 3;
+    loop {
+        if i == bytes_len {
+            break;
+        }
+        let n: u32 = (*bytes[i]).into()
+            * 65536 | (*bytes[i + 1]).into()
+            * 256 | (*bytes[i + 2]).into();
+        let e1 = (n / 262144) & 63;
+        let e2 = (n / 4096) & 63;
+        let e3 = (n / 64) & 63;
+        let e4 = n & 63;
+        result.append(*base64_chars[e1]);
+        result.append(*base64_chars[e2]);
+        if i == last_iteration {
+            if p == 2 {
+                result.append('=');
+                result.append('=');
+            } else if p == 1 {
+                result.append(*base64_chars[e3]);
+                result.append('=');
+            } else {
+                result.append(*base64_chars[e3]);
+                result.append(*base64_chars[e4]);
+            }
+        } else {
+            result.append(*base64_chars[e3]);
+            result.append(*base64_chars[e4]);
+        }
+        i += 3;
+    };
+    result
+}
+
+fn encode_felt(self: felt252, base64_chars: Span<u8>) -> Array<u8> {
+    let mut result = array![];
+
+    let mut num: u256 = self.into();
+    if num != 0 {
+        let (quotient, remainder) = DivRem::div_rem(num, 65536_u256.try_into().unwrap());
+        // Safe since 'remainder' is always less than 65536 (2^16), 
+        // which is within the range of usize (less than 2^32).
+        let remainder: usize = remainder.try_into().unwrap();
+        let r3 = (remainder / 1024) & 63;
+        let r2 = (remainder / 16) & 63;
+        let r1 = (remainder * 4) & 63;
+        result.append(*base64_chars[r1]);
+        result.append(*base64_chars[r2]);
+        result.append(*base64_chars[r3]);
+        num = quotient;
+    }
+    loop {
+        if num == 0 {
+            break;
+        }
+        let (quotient, remainder) = DivRem::div_rem(num, 16777216_u256.try_into().unwrap());
+        // Safe since 'remainder' is always less than 16777216 (2^24), 
+        // which is within the range of usize (less than 2^32).
+        let remainder: usize = remainder.try_into().unwrap();
+        let r4 = remainder / 262144;
+        let r3 = (remainder / 4096) & 63;
+        let r2 = (remainder / 64) & 63;
+        let r1 = remainder & 63;
+        result.append(*base64_chars[r1]);
+        result.append(*base64_chars[r2]);
+        result.append(*base64_chars[r3]);
+        result.append(*base64_chars[r4]);
+        num = quotient;
+    };
+    loop {
+        if result.len() >= 43 {
+            break;
+        }
+        result.append('A');
+    };
+    result = result.reverse();
+    result.append('=');
+    result
 }
 
 impl Base64Decoder of Decoder<Array<u8>> {
@@ -41,22 +160,6 @@ impl Base64UrlDecoder of Decoder<Array<u8>> {
     }
 }
 
-fn inner_encode(mut data: Array<u8>, char_set: Array<u8>) -> Array<u8> {
-    let mut p = if (data.len() % 3 == 1) {
-        data.append(0);
-        data.append(0);
-        2
-    } else if (data.len() % 3 == 2) {
-        data.append(0);
-        1
-    } else {
-        0
-    };
-
-    let mut result = array![];
-    encode_loop(p, data, 0, char_set, ref result);
-    result
-}
 
 fn inner_decode(data: Array<u8>) -> Array<u8> {
     let mut result = array![];
@@ -118,33 +221,6 @@ fn get_base64_value(x: u8) -> u8 {
     } else {
         0
     }
-}
-
-fn encode_loop(p: u8, data: Array<u8>, d: usize, char_set: Array<u8>, ref result: Array<u8>) {
-    if (d >= data.len()) {
-        return;
-    }
-    let mut x: u128 = BitShift::shl((*data[d]).into(), 16);
-    x = x | BitShift::shl((*data[d + 1]).into(), 8);
-    x = x | (*data[d + 2]).into();
-
-    let mut i: u8 = (BitShift::shr(x, 18) & U6_MAX).try_into().unwrap();
-    result.append(*char_set[i.into()]);
-    i = (BitShift::shr(x, 12) & U6_MAX).try_into().unwrap();
-    result.append(*char_set[(i.into())]);
-    i = (BitShift::shr(x, 6) & U6_MAX).try_into().unwrap();
-    if d.into() + 3 >= data.len() && p == 2 {
-        result.append('=');
-    } else {
-        result.append(*char_set[i.into()]);
-    }
-    i = (x & U6_MAX).try_into().unwrap();
-    if d.into() + 3 >= data.len() && p >= 1 {
-        result.append('=');
-    } else {
-        result.append(*char_set[i.into()]);
-    }
-    encode_loop(p, data, d + 3, char_set, ref result);
 }
 
 fn get_base64_char_set() -> Array<u8> {
