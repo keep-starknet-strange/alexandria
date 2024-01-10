@@ -195,12 +195,6 @@ fn i257_div_rem(lhs: i257, rhs: i257) -> (i257, i257) {
     return (quotient, remainder);
 }
 
-impl I257DivRem of DivRem<i257> {
-    fn div_rem(lhs: i257, rhs: NonZero<i257>) -> (i257, i257) {
-        i257_div_rem(lhs, rhs.into())
-    }
-}
-
 // Implements the PartialEq trait for i257.
 impl i257PartialEq of PartialEq<i257> {
     fn eq(lhs: @i257, rhs: @i257) -> bool {
