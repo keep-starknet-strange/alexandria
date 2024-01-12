@@ -114,6 +114,16 @@ fn mult_mod_2_test() {
 
 #[test]
 #[available_gas(500000000)]
+fn div_mod_test() {
+    let div_10_30_mod_p =
+        38597363079105398474523661669562635951089994888546854679819194669304376546633;
+    assert(div_mod(p, 1, p) == 0, 'Incorrect result');
+    assert(div_mod(30, 10, p) == 3, 'Incorrect result');
+    assert(div_mod(10, 30, p) == div_10_30_mod_p, 'Incorrect result');
+}
+
+#[test]
+#[available_gas(500000000)]
 fn pow_mod_test() {
     assert(pow_mod(2, 4, p) == 16, 'Incorrect result');
     assert(pow_mod(2, 256, p) == 38, 'Incorrect result');
