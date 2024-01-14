@@ -53,7 +53,7 @@ fn keccak256(mut self: Span<u8>) -> u256 {
             break (value, n_bytes);
         };
         let mut current_word = self.slice(0, 8);
-        let (value, n_bytes) = U64Trait::from_le_bytes(current_word);
+        let (value, _) = U64Trait::from_le_bytes(current_word);
         words64.append(value);
         self = self.slice(8, self.len() - 8);
     };

@@ -23,7 +23,7 @@ trait ByteAppenderSupportTrait<T> {
 impl ByteAppenderSupportArrayU8Impl of ByteAppenderSupportTrait<Array<u8>> {
     fn append_bytes_be(ref self: Array<u8>, bytes: felt252, mut count: usize) {
         assert(count <= 16, 'count too big');
-        let u256{low, high } = bytes.into();
+        let u256{low, high: _high } = bytes.into();
         loop {
             if count == 0 {
                 break;
@@ -37,7 +37,7 @@ impl ByteAppenderSupportArrayU8Impl of ByteAppenderSupportTrait<Array<u8>> {
 
     fn append_bytes_le(ref self: Array<u8>, bytes: felt252, count: usize) {
         assert(count <= 16, 'count too big');
-        let u256{mut low, high } = bytes.into();
+        let u256{mut low, high: _high } = bytes.into();
         let mut index = 0;
         loop {
             if index == count {
@@ -61,7 +61,7 @@ impl ByteAppenderSupportByteArrayImpl of ByteAppenderSupportTrait<ByteArray> {
     #[inline(always)]
     fn append_bytes_le(ref self: ByteArray, bytes: felt252, count: usize) {
         assert(count <= 16, 'count too big');
-        let u256{low, high } = bytes.into();
+        let u256{low, high: _high } = bytes.into();
         let (reversed, _) = reversing(low, count, 0x100);
         self.append_word(reversed.into(), count);
     }

@@ -228,7 +228,7 @@ impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
     #[inline(always)]
     fn clean(ref self: List<T>) {
         self.len = 0;
-        Store::write(self.address_domain, self.base, self.len);
+        Store::write(self.address_domain, self.base, self.len).unwrap_syscall();
     }
 
     fn pop_front(ref self: List<T>) -> SyscallResult<Option<T>> {

@@ -323,9 +323,6 @@ fn sha512(mut data: Array<u8>) -> Array<u8> {
 
     let mut data = from_u8Array_to_WordArray(data);
 
-    let mut h = get_h();
-    let mut k = get_k();
-
     let hash = digest_hash(data.span(), msg_len);
     from_WordArray_to_u8array(hash.span())
 }
