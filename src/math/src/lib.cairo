@@ -255,7 +255,7 @@ impl U8WrappingMath of WrappingMath<u8> {
 
     #[inline(always)]
     fn wrapping_mul(self: u8, rhs: u8) -> u8 {
-        (u8_wide_mul(self, rhs) % 0x100_u16).try_into().unwrap()
+        (u8_wide_mul(self, rhs) & BoundedInt::<u8>::max().into()).try_into().unwrap()
     }
 }
 
@@ -272,7 +272,7 @@ impl U16WrappingMath of WrappingMath<u16> {
 
     #[inline(always)]
     fn wrapping_mul(self: u16, rhs: u16) -> u16 {
-        (u16_wide_mul(self, rhs) % 0x10000_u32).try_into().unwrap()
+        (u16_wide_mul(self, rhs) & BoundedInt::<u16>::max().into()).try_into().unwrap()
     }
 }
 
@@ -289,7 +289,7 @@ impl U32WrappingMath of WrappingMath<u32> {
 
     #[inline(always)]
     fn wrapping_mul(self: u32, rhs: u32) -> u32 {
-        (u32_wide_mul(self, rhs) % 0x100000000_u64).try_into().unwrap()
+        (u32_wide_mul(self, rhs) & BoundedInt::<u32>::max().into()).try_into().unwrap()
     }
 }
 
@@ -306,7 +306,7 @@ impl U64WrappingMath of WrappingMath<u64> {
 
     #[inline(always)]
     fn wrapping_mul(self: u64, rhs: u64) -> u64 {
-        (u64_wide_mul(self, rhs) % 0x10000000000000000_u128).try_into().unwrap()
+        (u64_wide_mul(self, rhs) & BoundedInt::<u64>::max().into()).try_into().unwrap()
     }
 }
 
