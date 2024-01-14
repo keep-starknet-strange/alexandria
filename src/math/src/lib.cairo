@@ -242,85 +242,134 @@ trait WrappingMath<T> {
     fn wrapping_mul(self: T, rhs: T) -> T;
 }
 
-impl U8WrappingMath of WrappingMath<u8> {
+impl WrappingMathImpl<T, +WrappingAdd<T>, +WrappingSub<T>, +WrappingMul<T>> of WrappingMath<T> {
+    #[inline(always)]
+    fn wrapping_add(self: T, rhs: T) -> T {
+        WrappingAdd::<T>::wrapping_add(self, rhs)
+    }
+
+    #[inline(always)]
+    fn wrapping_sub(self: T, rhs: T) -> T {
+        WrappingSub::<T>::wrapping_sub(self, rhs)
+    }
+
+    #[inline(always)]
+    fn wrapping_mul(self: T, rhs: T) -> T {
+        WrappingMul::<T>::wrapping_mul(self, rhs)
+    }
+}
+
+trait WrappingAdd<T> {
+    fn wrapping_add(self: T, rhs: T) -> T;
+}
+
+trait WrappingSub<T> {
+    fn wrapping_sub(self: T, rhs: T) -> T;
+}
+
+trait WrappingMul<T> {
+    fn wrapping_mul(self: T, rhs: T) -> T;
+}
+
+impl U8WrappingAdd of WrappingAdd<u8> {
     #[inline(always)]
     fn wrapping_add(self: u8, rhs: u8) -> u8 {
         u8_wrapping_add(self, rhs)
     }
+}
 
+impl U8WrappingSub of WrappingSub<u8> {
     #[inline(always)]
     fn wrapping_sub(self: u8, rhs: u8) -> u8 {
         u8_wrapping_sub(self, rhs)
     }
+}
 
+impl U8WrappingMul of WrappingMul<u8> {
     #[inline(always)]
     fn wrapping_mul(self: u8, rhs: u8) -> u8 {
         (u8_wide_mul(self, rhs) & BoundedInt::<u8>::max().into()).try_into().unwrap()
     }
 }
 
-impl U16WrappingMath of WrappingMath<u16> {
+impl U16WrappingAdd of WrappingAdd<u16> {
     #[inline(always)]
     fn wrapping_add(self: u16, rhs: u16) -> u16 {
         u16_wrapping_add(self, rhs)
     }
+}
 
+impl U16WrappingSub of WrappingSub<u16> {
     #[inline(always)]
     fn wrapping_sub(self: u16, rhs: u16) -> u16 {
         u16_wrapping_sub(self, rhs)
     }
+}
 
+impl U16WrappingMul of WrappingMul<u16> {
     #[inline(always)]
     fn wrapping_mul(self: u16, rhs: u16) -> u16 {
         (u16_wide_mul(self, rhs) & BoundedInt::<u16>::max().into()).try_into().unwrap()
     }
 }
 
-impl U32WrappingMath of WrappingMath<u32> {
+impl U32WrappingAdd of WrappingAdd<u32> {
     #[inline(always)]
     fn wrapping_add(self: u32, rhs: u32) -> u32 {
         u32_wrapping_add(self, rhs)
     }
+}
 
+impl U32WrappingSub of WrappingSub<u32> {
     #[inline(always)]
     fn wrapping_sub(self: u32, rhs: u32) -> u32 {
         u32_wrapping_sub(self, rhs)
     }
+}
 
+impl U32WrappingMul of WrappingMul<u32> {
     #[inline(always)]
     fn wrapping_mul(self: u32, rhs: u32) -> u32 {
         (u32_wide_mul(self, rhs) & BoundedInt::<u32>::max().into()).try_into().unwrap()
     }
 }
 
-impl U64WrappingMath of WrappingMath<u64> {
+impl U64WrappingAdd of WrappingAdd<u64> {
     #[inline(always)]
     fn wrapping_add(self: u64, rhs: u64) -> u64 {
         u64_wrapping_add(self, rhs)
     }
+}
 
+impl U64WrappingSub of WrappingSub<u64> {
     #[inline(always)]
     fn wrapping_sub(self: u64, rhs: u64) -> u64 {
         u64_wrapping_sub(self, rhs)
     }
+}
 
+impl U64WrappingMul of WrappingMul<u64> {
     #[inline(always)]
     fn wrapping_mul(self: u64, rhs: u64) -> u64 {
         (u64_wide_mul(self, rhs) & BoundedInt::<u64>::max().into()).try_into().unwrap()
     }
 }
 
-impl U128WrappingMath of WrappingMath<u128> {
+impl U128WrappingAdd of WrappingAdd<u128> {
     #[inline(always)]
     fn wrapping_add(self: u128, rhs: u128) -> u128 {
         u128_wrapping_add(self, rhs)
     }
+}
 
+impl U128WrappingSub of WrappingSub<u128> {
     #[inline(always)]
     fn wrapping_sub(self: u128, rhs: u128) -> u128 {
         u128_wrapping_sub(self, rhs)
     }
+}
 
+impl U128WrappingMul of WrappingMul<u128> {
     #[inline(always)]
     fn wrapping_mul(self: u128, rhs: u128) -> u128 {
         let (_, low) = u128_wide_mul(self, rhs);
@@ -328,19 +377,23 @@ impl U128WrappingMath of WrappingMath<u128> {
     }
 }
 
-impl U256WrappingMath of WrappingMath<u256> {
+impl U256WrappingAdd of WrappingAdd<u256> {
     #[inline(always)]
     fn wrapping_add(self: u256, rhs: u256) -> u256 {
         let (val, _) = u256_overflowing_add(self, rhs);
         val
     }
+}
 
+impl U256WrappingSub of WrappingSub<u256> {
     #[inline(always)]
     fn wrapping_sub(self: u256, rhs: u256) -> u256 {
         let (val, _) = u256_overflow_sub(self, rhs);
         val
     }
+}
 
+impl U256WrappingMul of WrappingMul<u256> {
     #[inline(always)]
     fn wrapping_mul(self: u256, rhs: u256) -> u256 {
         let (val, _) = u256_overflow_mul(self, rhs);
