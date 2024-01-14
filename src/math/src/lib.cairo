@@ -20,7 +20,9 @@ mod wad_ray_math;
 mod zellers_congruence;
 use integer::{
     u8_wide_mul, u16_wide_mul, u32_wide_mul, u64_wide_mul, u128_wide_mul, u256_overflow_mul,
-    BoundedInt
+    u8_wrapping_add, u16_wrapping_add, u32_wrapping_add, u64_wrapping_add, u128_wrapping_add,
+    u256_overflowing_add, u8_wrapping_sub, u16_wrapping_sub, u32_wrapping_sub, u64_wrapping_sub,
+    u128_wrapping_sub, u256_overflow_sub, BoundedInt
 };
 
 /// Raise a number to a power.
@@ -231,5 +233,117 @@ impl U256BitRotate of BitRotate<u256> {
         let step = pow(2, n);
         let (quotient, remainder) = DivRem::div_rem(x, step.try_into().unwrap());
         remainder * pow(2, 256 - n) + quotient
+    }
+}
+
+trait WrappingMath<T> {
+    fn wrapping_add(self: T, rhs: T) -> T;
+    fn wrapping_sub(self: T, rhs: T) -> T;
+    fn wrapping_mul(self: T, rhs: T) -> T;
+}
+
+impl U8WrappingMath of WrappingMath<u8> {
+    #[inline(always)]
+    fn wrapping_add(self: u8, rhs: u8) -> u8 {
+        u8_wrapping_add(self, rhs)
+    }
+
+    #[inline(always)]
+    fn wrapping_sub(self: u8, rhs: u8) -> u8 {
+        u8_wrapping_sub(self, rhs)
+    }
+
+    #[inline(always)]
+    fn wrapping_mul(self: u8, rhs: u8) -> u8 {
+        (u8_wide_mul(self, rhs) % 0x100_u16).try_into().unwrap()
+    }
+}
+
+impl U16WrappingMath of WrappingMath<u16> {
+    #[inline(always)]
+    fn wrapping_add(self: u16, rhs: u16) -> u16 {
+        u16_wrapping_add(self, rhs)
+    }
+
+    #[inline(always)]
+    fn wrapping_sub(self: u16, rhs: u16) -> u16 {
+        u16_wrapping_sub(self, rhs)
+    }
+
+    #[inline(always)]
+    fn wrapping_mul(self: u16, rhs: u16) -> u16 {
+        (u16_wide_mul(self, rhs) % 0x10000_u32).try_into().unwrap()
+    }
+}
+
+impl U32WrappingMath of WrappingMath<u32> {
+    #[inline(always)]
+    fn wrapping_add(self: u32, rhs: u32) -> u32 {
+        u32_wrapping_add(self, rhs)
+    }
+
+    #[inline(always)]
+    fn wrapping_sub(self: u32, rhs: u32) -> u32 {
+        u32_wrapping_sub(self, rhs)
+    }
+
+    #[inline(always)]
+    fn wrapping_mul(self: u32, rhs: u32) -> u32 {
+        (u32_wide_mul(self, rhs) % 0x100000000_u64).try_into().unwrap()
+    }
+}
+
+impl U64WrappingMath of WrappingMath<u64> {
+    #[inline(always)]
+    fn wrapping_add(self: u64, rhs: u64) -> u64 {
+        u64_wrapping_add(self, rhs)
+    }
+
+    #[inline(always)]
+    fn wrapping_sub(self: u64, rhs: u64) -> u64 {
+        u64_wrapping_sub(self, rhs)
+    }
+
+    #[inline(always)]
+    fn wrapping_mul(self: u64, rhs: u64) -> u64 {
+        (u64_wide_mul(self, rhs) % 0x10000000000000000_u128).try_into().unwrap()
+    }
+}
+
+impl U128WrappingMath of WrappingMath<u128> {
+    #[inline(always)]
+    fn wrapping_add(self: u128, rhs: u128) -> u128 {
+        u128_wrapping_add(self, rhs)
+    }
+
+    #[inline(always)]
+    fn wrapping_sub(self: u128, rhs: u128) -> u128 {
+        u128_wrapping_sub(self, rhs)
+    }
+
+    #[inline(always)]
+    fn wrapping_mul(self: u128, rhs: u128) -> u128 {
+        let (_, low) = u128_wide_mul(self, rhs);
+        low
+    }
+}
+
+impl U256WrappingMath of WrappingMath<u256> {
+    #[inline(always)]
+    fn wrapping_add(self: u256, rhs: u256) -> u256 {
+        let (val, _) = u256_overflowing_add(self, rhs);
+        val
+    }
+
+    #[inline(always)]
+    fn wrapping_sub(self: u256, rhs: u256) -> u256 {
+        let (val, _) = u256_overflow_sub(self, rhs);
+        val
+    }
+
+    #[inline(always)]
+    fn wrapping_mul(self: u256, rhs: u256) -> u256 {
+        let (val, _) = u256_overflow_mul(self, rhs);
+        val
     }
 }
