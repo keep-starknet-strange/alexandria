@@ -95,7 +95,6 @@ impl SpanU8IntoU256 of Into<Span<u8>, u256> {
             return 0;
         }
         let mut ret: u256 = 0;
-        let mut i = 0;
         let two_pow_0 = 1;
         let two_pow_1 = 256;
         let two_pow_2 = 65536;
@@ -225,8 +224,6 @@ impl PointIntoExtendedHomogeneousPoint of Into<Point, ExtendedHomogeneousPoint> 
 fn point_mult(mut scalar: u256, mut P: ExtendedHomogeneousPoint) -> ExtendedHomogeneousPoint {
     let mut Q = ExtendedHomogeneousPoint { X: 0, Y: 1, Z: 1, T: 0 };
     let zero_u512 = Default::default();
-    let one_u512 = u512 { limb0: 1, limb1: 0, limb2: 0, limb3: 0 };
-    let two_non_zero: NonZero<u256> = integer::u256_try_as_non_zero(2).unwrap();
 
     // Double and add method
     loop {

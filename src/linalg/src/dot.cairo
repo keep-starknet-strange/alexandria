@@ -13,7 +13,6 @@ fn dot<T, +Mul<T>, +AddEq<T>, +Zeroable<T>, +Copy<T>, +Drop<T>,>(
     assert(xs.len() == ys.len(), 'Arrays must have the same len');
 
     // [Compute] Dot product in a loop
-    let mut index = 0;
     let mut value = Zeroable::zero();
     loop {
         match xs.pop_front() {

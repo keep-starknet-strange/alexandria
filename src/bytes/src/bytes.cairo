@@ -490,7 +490,7 @@ impl BytesImpl of BytesTrait {
         // process last array element for right
         let sub_bytes_last_element_size = *other.size % BYTES_PER_ELEMENT;
         if sub_bytes_last_element_size > 0 {
-            let (new_offset, value) = other.read_u128_packed(offset, sub_bytes_last_element_size);
+            let (_, value) = other.read_u128_packed(offset, sub_bytes_last_element_size);
             self.append_u128_packed(value, sub_bytes_last_element_size);
         }
     }

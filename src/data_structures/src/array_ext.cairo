@@ -49,7 +49,7 @@ impl ArrayImpl<T, +Copy<T>, +Drop<T>> of ArrayTraitExt<T> {
                 break;
             }
             match self.pop_front() {
-                Option::Some(v) => { n -= 1; },
+                Option::Some(_) => { n -= 1; },
                 Option::None => { break; },
             };
         };
@@ -135,7 +135,7 @@ impl SpanImpl<T, +Copy<T>, +Drop<T>> of SpanTraitExt<T> {
                 break;
             }
             match self.pop_front() {
-                Option::Some(v) => { n -= 1; },
+                Option::Some(_) => { n -= 1; },
                 Option::None => { break; },
             };
         };
@@ -147,7 +147,7 @@ impl SpanImpl<T, +Copy<T>, +Drop<T>> of SpanTraitExt<T> {
                 break;
             }
             match self.pop_back() {
-                Option::Some(v) => { n -= 1; },
+                Option::Some(_) => { n -= 1; },
                 Option::None => { break; },
             };
         };
