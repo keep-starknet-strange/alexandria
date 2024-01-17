@@ -1,0 +1,51 @@
+use alexandria_math::trigonometry::fast_sin;
+use alexandria_math::trigonometry::fast_cos;
+use alexandria_math::trigonometry::fast_tan;
+
+#[test]
+#[available_gas(200000)]
+fn sin_positive_test_1() {
+    assert(fast_sin(3000000000) == (true, 50000000), 'invalid result');
+}
+
+#[test]
+#[available_gas(200000)]
+fn sin_negative_test_1() {
+    assert(fast_sin(21000000000) == (false, 50000000), 'invalid result');
+}
+
+#[test]
+#[available_gas(200000)]
+fn sin_positive_test_2() {
+    assert(fast_sin(3500000000) == (true, 57367231), 'invalid result');
+}
+
+#[test]
+#[available_gas(200000)]
+fn sin_negative_test_2() {
+    assert(fast_sin(24300000000) == (false, 89101846), 'invalid result');
+}
+
+#[test]
+#[available_gas(200000)]
+fn sin_positive_test_3() {
+    assert(fast_sin(75000000000) == (true, 50000000), 'invalid result');
+}
+
+#[test]
+#[available_gas(200000)]
+fn cos_positive_test_1() {
+    assert(fast_cos(6000000000) == (true, 50000000), 'invalid result');
+}
+
+#[test]
+#[available_gas(200000)]
+fn cos_negative_test_1() {
+    assert(fast_cos(12000000000) == (false, 50000000), 'invalid result');
+}
+
+#[test]
+#[available_gas(200000)]
+fn tan_positive_test_1() {
+    assert(fast_tan(4500000000) == (true, 100000000), 'invalid result');
+}
