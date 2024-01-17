@@ -86,7 +86,6 @@ fn quick_sort_range<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>>(
 fn swap<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>>(
     mut array: Array<T>, left: usize, right: usize
 ) -> Array<T> {
-    let test = 111111;
     let array_size = array.len();
     let mut new_array = array![];
     let mut new_array_idx = 0;
