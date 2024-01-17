@@ -13,6 +13,7 @@ mod perfect_number;
 mod sha256;
 mod sha512;
 mod signed_u256;
+mod fast_root;
 
 #[cfg(test)]
 mod tests;

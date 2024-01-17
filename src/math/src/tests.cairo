@@ -17,3 +17,4 @@ mod test_keccak256;
 mod trigonometry_test;
 mod wad_ray_math_test;
 mod zellers_congruence_test;
+mod fast_root_test;
