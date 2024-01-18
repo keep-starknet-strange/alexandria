@@ -25,3 +25,9 @@ fn fast_curt_test_1() {
 fn fast_nr_optimize_test_1() {
     assert(fast_nr_optimize(10000, 4, 30) == 10, 'invalid result');
 }
+
+#[test]
+#[available_gas(5000000)]
+fn fast_nr_optimize_test_2() {
+    assert(fast_nr_optimize(10, 1, 10) == 10, 'invalid result');
+}

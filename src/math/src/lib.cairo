@@ -6,6 +6,7 @@ mod extended_euclidean_algorithm;
 mod fast_power;
 mod fibonacci;
 mod gcd_of_n_numbers;
+mod lcm_of_n_numbers;
 mod karatsuba;
 mod keccak256;
 mod mod_arithmetics;
@@ -14,6 +15,9 @@ mod sha256;
 mod sha512;
 mod signed_u256;
 mod fast_root;
+mod is_prime;
+mod is_power_of_two;
+mod carmichael_number;
 
 #[cfg(test)]
 mod tests;
