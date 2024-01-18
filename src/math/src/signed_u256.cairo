@@ -1,13 +1,12 @@
-use core::traits::Into;
 // ====================== INT 257 ======================
 
 // i257 represents a 129-bit integer.
-// The inner field holds the absolute value of the integer.
-// The sign field is true for negative integers, and false for non-negative integers.
+// The abs field holds the absolute value of the integer.
+// The is_negative field is true for negative integers, and false for non-negative integers.
 #[derive(Copy, Drop)]
 struct i257 {
-    sign: bool,
-    inner: u256,
+    is_negative: bool,
+    abs: u256,
 }
 
 
@@ -15,34 +14,34 @@ struct i257 {
 // # Arguments
 // * `x` - The i257 integer to check.
 // # Panics
-// Panics if `x` is zero and has a sign that is not false.
-fn i257_check_sign_zero(x: i257) {
-    if x.inner == 0 {
-        assert(x.sign == false, 'sign of 0 must be false');
+// Panics if `x` is zero and is not negative
+fn i257_assert_no_negative_zero(x: i257) {
+    if x.abs == 0 {
+        assert(!x.is_negative, 'negative zero');
     }
 }
 
 // Implements the Add trait for i257.
 impl i257Add of Add<i257> {
     fn add(lhs: i257, rhs: i257) -> i257 {
-        i257_check_sign_zero(lhs);
-        i257_check_sign_zero(rhs);
+        i257_assert_no_negative_zero(lhs);
+        i257_assert_no_negative_zero(rhs);
         // If both integers have the same sign, 
         // the sum of their absolute values can be returned.
-        if lhs.sign == rhs.sign {
-            let sum = lhs.inner + rhs.inner;
-            i257 { inner: sum, sign: lhs.sign }
+        if lhs.is_negative == rhs.is_negative {
+            let sum = lhs.abs + rhs.abs;
+            i257 { abs: sum, is_negative: lhs.is_negative }
         } else {
             // If the integers have different signs, 
             // the larger absolute value is subtracted from the smaller one.
-            let (larger, smaller) = if lhs.inner >= rhs.inner {
+            let (larger, smaller) = if lhs.abs >= rhs.abs {
                 (lhs, rhs)
             } else {
                 (rhs, lhs)
             };
-            let difference = larger.inner - smaller.inner;
+            let difference = larger.abs - smaller.abs;
 
-            i257 { inner: difference, sign: larger.sign }
+            i257 { abs: difference, is_negative: larger.is_negative }
         }
     }
 }
@@ -58,15 +57,15 @@ impl i257AddEq of AddEq<i257> {
 // Implements the Sub trait for i257.
 impl i257Sub of Sub<i257> {
     fn sub(lhs: i257, rhs: i257) -> i257 {
-        i257_check_sign_zero(lhs);
-        i257_check_sign_zero(rhs);
+        i257_assert_no_negative_zero(lhs);
+        i257_assert_no_negative_zero(rhs);
 
-        if (rhs.inner == 0) {
+        if rhs.abs == 0 {
             return lhs;
         }
 
         // The subtraction of `lhs` to `rhs` is achieved by negating `rhs` sign and adding it to `lhs`.
-        let neg_b = i257 { inner: rhs.inner, sign: !rhs.sign };
+        let neg_b = i257 { abs: rhs.abs, is_negative: !rhs.is_negative };
         lhs + neg_b
     }
 }
@@ -82,14 +81,14 @@ impl i257SubEq of SubEq<i257> {
 // Implements the Mul trait for i257.
 impl i257Mul of Mul<i257> {
     fn mul(lhs: i257, rhs: i257) -> i257 {
-        i257_check_sign_zero(lhs);
-        i257_check_sign_zero(rhs);
+        i257_assert_no_negative_zero(lhs);
+        i257_assert_no_negative_zero(rhs);
 
         // The sign of the product is the XOR of the signs of the operands.
-        let sign = lhs.sign ^ rhs.sign;
+        let is_negative = lhs.is_negative ^ rhs.is_negative;
         // The product is the product of the absolute values of the operands.
-        let inner = lhs.inner * rhs.inner;
-        i257 { inner, sign }
+        let abs = lhs.abs * rhs.abs;
+        i257 { abs, is_negative }
     }
 }
 
@@ -108,33 +107,33 @@ impl i257MulEq of MulEq<i257> {
 // # Returns
 // * `i257` - The quotient of `lhs` and `rhs`.
 fn i257_div(lhs: i257, rhs: i257) -> i257 {
-    i257_check_sign_zero(lhs);
+    i257_assert_no_negative_zero(lhs);
     // Check that the divisor is not zero.
-    assert(rhs.inner != 0, 'b can not be 0');
+    assert(rhs.abs != 0, 'b can not be 0');
 
     // The sign of the quotient is the XOR of the signs of the operands.
-    let sign = lhs.sign ^ rhs.sign;
+    let is_negative = lhs.is_negative ^ rhs.is_negative;
 
-    if (sign == false) {
+    if !is_negative {
         // If the operands are positive, the quotient is simply their absolute value quotient.
-        return i257 { inner: lhs.inner / rhs.inner, sign: sign };
+        return i257 { abs: lhs.abs / rhs.abs, is_negative };
     }
 
     // If the operands have different signs, rounding is necessary.
     // First, check if the quotient is an integer.
-    if (lhs.inner % rhs.inner == 0) {
-        return i257 { inner: lhs.inner / rhs.inner, sign: sign };
+    if lhs.abs % rhs.abs == 0 {
+        return i257 { abs: lhs.abs / rhs.abs, is_negative };
     }
 
     // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
-    let quotient = (lhs.inner * 10) / rhs.inner;
+    let quotient = (lhs.abs * 10) / rhs.abs;
     let last_digit = quotient % 10;
 
     // Check the last digit to determine rounding direction.
     if (last_digit <= 5) {
-        return i257 { inner: quotient / 10, sign: sign };
+        i257 { abs: quotient / 10, is_negative }
     } else {
-        return i257 { inner: (quotient / 10) + 1, sign: sign };
+        i257 { abs: (quotient / 10) + 1, is_negative }
     }
 }
 
@@ -160,11 +159,10 @@ impl i257DivEq of DivEq<i257> {
 // # Returns
 // * `i257` - The remainder of dividing `lhs` by `rhs`.
 fn i257_rem(lhs: i257, rhs: i257) -> i257 {
-    i257_check_sign_zero(lhs);
+    i257_assert_no_negative_zero(lhs);
     // Check that the divisor is not zero.
-    assert(rhs.inner != 0, 'b can not be 0');
-
-    return lhs - (rhs * (lhs / rhs));
+    assert(rhs.abs != 0, 'b can not be 0');
+    lhs - (rhs * (lhs / rhs))
 }
 
 // Implements the Rem trait for i257.
@@ -191,18 +189,13 @@ impl i257RemEq of RemEq<i257> {
 fn i257_div_rem(lhs: i257, rhs: i257) -> (i257, i257) {
     let quotient = i257_div(lhs, rhs);
     let remainder = i257_rem(lhs, rhs);
-
-    return (quotient, remainder);
+    (quotient, remainder)
 }
 
 // Implements the PartialEq trait for i257.
 impl i257PartialEq of PartialEq<i257> {
     fn eq(lhs: @i257, rhs: @i257) -> bool {
-        if lhs.sign == rhs.sign && lhs.inner == rhs.inner {
-            return true;
-        }
-
-        return false;
+        lhs.is_negative == rhs.is_negative && lhs.abs == rhs.abs
     }
 
     fn ne(lhs: @i257, rhs: @i257) -> bool {
@@ -225,18 +218,18 @@ impl i257PartialOrd of PartialOrd<i257> {
 
     fn gt(lhs: i257, rhs: i257) -> bool {
         // Check if `lhs` is negative and `rhs` is positive.
-        if (lhs.sign & !rhs.sign) {
+        if lhs.is_negative & !rhs.is_negative {
             return false;
         }
         // Check if `lhs` is positive and `rhs` is negative.
-        if (!lhs.sign & rhs.sign) {
+        if !lhs.is_negative & rhs.is_negative {
             return true;
         }
         // If `lhs` and `rhs` have the same sign, compare their absolute values.
-        if (lhs.sign & rhs.sign) {
-            return lhs.inner < rhs.inner;
+        if lhs.is_negative & rhs.is_negative {
+            lhs.abs < rhs.abs
         } else {
-            return lhs.inner > rhs.inner;
+            lhs.abs > rhs.abs
         }
     }
 }
@@ -244,7 +237,7 @@ impl i257PartialOrd of PartialOrd<i257> {
 // Implements the Neg trait for i257.
 impl i257Neg of Neg<i257> {
     fn neg(a: i257) -> i257 {
-        i257 { inner: a.inner, sign: !a.sign }
+        i257 { abs: a.abs, is_negative: !a.is_negative }
     }
 }
 
@@ -254,7 +247,7 @@ impl i257Neg of Neg<i257> {
 // # Returns
 // * `i257` - The absolute value of `x`.
 fn i257_abs(x: i257) -> i257 {
-    return i257 { inner: x.inner, sign: false };
+    i257 { abs: x.abs, is_negative: false }
 }
 
 // Computes the maximum between two i257 integers.
@@ -264,10 +257,10 @@ fn i257_abs(x: i257) -> i257 {
 // # Returns
 // * `i257` - The maximum between `lhs` and `rhs`.
 fn i257_max(lhs: i257, rhs: i257) -> i257 {
-    if (lhs > rhs) {
-        return lhs;
+    if lhs > rhs {
+        lhs
     } else {
-        return rhs;
+        rhs
     }
 }
 
@@ -278,23 +271,23 @@ fn i257_max(lhs: i257, rhs: i257) -> i257 {
 // # Returns
 // * `i257` - The minimum between `lhs` and `rhs`.
 fn i257_min(lhs: i257, rhs: i257) -> i257 {
-    if (lhs < rhs) {
-        return lhs;
+    if lhs < rhs {
+        lhs
     } else {
-        return rhs;
+        rhs
     }
 }
 
 // Convert u256 to i257
 impl U256IntoI257 of Into<u256, i257> {
     fn into(self: u256) -> i257 {
-        i257 { inner: self, sign: false, }
+        i257 { abs: self, is_negative: false }
     }
 }
 
 // Convert felt252 to i257
 impl FeltIntoI257 of Into<felt252, i257> {
     fn into(self: felt252) -> i257 {
-        i257 { inner: self.into(), sign: false, }
+        i257 { abs: self.into(), is_negative: false }
     }
 }
