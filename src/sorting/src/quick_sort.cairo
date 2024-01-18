@@ -1,115 +1,67 @@
 //! Quick sort algorithm
+use alexandria_data_structures::vec::{Felt252Vec, VecTrait};
 
 // Quick sort
 /// # Arguments
-/// * `array` - Array to sort
+/// * `Felt252Vec<T>` - Array to sort
 /// # Returns
-/// * `Array<usize>` - Sorted array
-fn quick_sort<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>>(
-    mut array: Array<T>, asc: bool
-) -> Array<T> {
+/// * `Felt252Vec<T>` - Sorted array
+fn quick_sort<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>, +Felt252DictValue<T>>(
+    mut array: Felt252Vec<T>
+) -> Felt252Vec<T> {
     let array_size = array.len();
     if array_size <= 1 {
         return array;
     }
-    let mut asc_array = quick_sort_range(array, 0, array_size - 1);
+    quick_sort_range(ref array, 0, array_size - 1);
 
-    if asc {
-        return asc_array;
-    } else {
-        let mut desc_array = array![];
-        let mut idx = asc_array.len() - 1;
-
-        loop {
-            if idx == 0 {
-                desc_array.append(*asc_array[idx]);
-                break;
-            }
-
-            desc_array.append(*asc_array[idx]);
-            idx -= 1;
-        };
-
-        return desc_array;
-    }
+    return array;
 }
 
 
-fn quick_sort_range<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>>(
-    mut array: Array<T>, left: usize, right: usize
-) -> Array<T> {
+fn quick_sort_range<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>, +Felt252DictValue<T>>(
+    ref array: Felt252Vec<T>, left: usize, right: usize
+) {
     if left >= right {
-        return array;
+        return;
     }
 
     let mut l = left;
     let mut r = right;
-    let mut new_array = array;
 
     loop {
         if l >= r {
             break;
         }
 
-        let new_array_snapshot = @new_array;
-
         loop {
-            if (l >= r) || (*new_array_snapshot[r] < *new_array_snapshot[left]) {
+            if (l >= r) || (array.get(r).unwrap() < array.get(left).unwrap()) {
                 break;
             }
             r -= 1;
         };
 
         loop {
-            if (l >= r) || (*new_array_snapshot[l] > *new_array_snapshot[left]) {
+            if (l >= r) || (array.get(l).unwrap() > array.get(left).unwrap()) {
                 break;
             }
             l += 1;
         };
 
         if left != right {
-            new_array = swap(new_array, l, r);
+            let tmp = array.get(l).unwrap();
+            array.set(l, array.get(r).unwrap());
+            array.set(r, tmp);
         }
     };
 
-    new_array = swap(new_array, left, l);
+    let tmp = array.get(left).unwrap();
+    array.set(left, array.get(l).unwrap());
+    array.set(l, tmp);
 
     if l > 1 {
-        new_array = quick_sort_range(new_array, left, l - 1);
+        quick_sort_range(ref array, left, l - 1);
     }
 
-    new_array = quick_sort_range(new_array, r + 1, right);
-    
-    new_array
-}
-
-fn swap<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>>(
-    mut array: Array<T>, left: usize, right: usize
-) -> Array<T> {
-    let array_size = array.len();
-    let mut new_array = array![];
-    let mut new_array_idx = 0;
-
-    loop {
-        if (new_array_idx == array_size) {
-            break;
-        }
-
-        if (new_array_idx == left) {
-            new_array.append(*array[right]);
-            new_array_idx += 1;
-            continue;
-        }
-
-        if (new_array_idx == right) {
-            new_array.append(*array[left]);
-            new_array_idx += 1;
-            continue;
-        }
-
-        new_array.append(*array[new_array_idx]);
-        new_array_idx += 1;
-    };
-
-    new_array
+    quick_sort_range(ref array, r + 1, right);
 }
