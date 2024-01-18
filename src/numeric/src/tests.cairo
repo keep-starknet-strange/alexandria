@@ -1,4 +1,5 @@
 mod cumsum_test;
+mod cumprod_test;
 mod diff_test;
 mod integers_test;
 mod interpolate_test;
