@@ -6,9 +6,7 @@ use dict::Felt252DictTrait;
 /// * `pattern` - The pattern to search for.
 /// # Returns
 /// * `Array<usize>` - The index of every match.
-fn bm_search(
-    text: @ByteArray, pattern: @ByteArray
-) -> Array<usize> {
+fn bm_search(text: @ByteArray, pattern: @ByteArray) -> Array<usize> {
     let mut positions: Array<usize> = array![];
     let n = text.len();
     let m = pattern.len();
@@ -23,7 +21,10 @@ fn bm_search(
             break;
         }
         let c = pattern.at(collect_id).unwrap();
-        collection.insert(c.into(), collect_id + 1); // avoid 0 since felt252_dict init every entry to 0 by default
+        collection
+            .insert(
+                c.into(), collect_id + 1
+            ); // avoid 0 since felt252_dict init every entry to 0 by default
         collect_id += 1;
     };
 
@@ -60,7 +61,7 @@ fn bm_search(
             let c = text.at(shift + j - 1).unwrap();
             let index = collection.get(c.into());
             if j <= (index + 1) {
-                shift += 1; 
+                shift += 1;
             } else {
                 shift += j - index;
             }
