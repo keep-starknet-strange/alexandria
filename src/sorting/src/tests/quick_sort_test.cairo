@@ -1,6 +1,6 @@
-use core::option::OptionTrait;
-use alexandria_sorting::{is_equal, quick_sort};
 use alexandria_data_structures::vec::{Felt252Vec, VecTrait};
+use alexandria_sorting::{is_equal, quick_sort};
+use core::option::OptionTrait;
 
 
 #[test]
@@ -24,7 +24,7 @@ fn quicksort_test() {
             break;
         }
 
-        assert(sorted.get(compare_id).unwrap() == *correct[compare_id], 'invalid result');
+        assert(sorted[compare_id] == *correct[compare_id], 'invalid result');
 
         compare_id += 1;
     }
@@ -46,7 +46,7 @@ fn quicksort_test_empty() {
             break;
         }
 
-        assert(sorted.get(compare_id).unwrap() == *correct[compare_id], 'invalid result');
+        assert(sorted[compare_id] == *correct[compare_id], 'invalid result');
 
         compare_id += 1;
     }
@@ -68,7 +68,7 @@ fn quicksort_test_one_element() {
             break;
         }
 
-        assert(sorted.get(compare_id).unwrap() == *correct[compare_id], 'invalid result');
+        assert(sorted[compare_id] == *correct[compare_id], 'invalid result');
 
         compare_id += 1;
     }
@@ -93,7 +93,7 @@ fn quicksort_test_pre_sorted() {
             break;
         }
 
-        assert(sorted.get(compare_id).unwrap() == *correct[compare_id], 'invalid result');
+        assert(sorted[compare_id] == *correct[compare_id], 'invalid result');
 
         compare_id += 1;
     }
@@ -118,7 +118,7 @@ fn quicksort_test_pre_sorted_decreasing() {
             break;
         }
 
-        assert(sorted.get(compare_id).unwrap() == *correct[compare_id], 'invalid result');
+        assert(sorted[compare_id] == *correct[compare_id], 'invalid result');
 
         compare_id += 1;
     }
@@ -143,7 +143,7 @@ fn quicksort_test_pre_sorted_2_same_values() {
             break;
         }
 
-        assert(sorted.get(compare_id).unwrap() == *correct[compare_id], 'invalid result');
+        assert(sorted[compare_id] == *correct[compare_id], 'invalid result');
 
         compare_id += 1;
     }
@@ -168,7 +168,7 @@ fn quicksort_test_2_same_values() {
             break;
         }
 
-        assert(sorted.get(compare_id).unwrap() == *correct[compare_id], 'invalid result');
+        assert(sorted[compare_id] == *correct[compare_id], 'invalid result');
 
         compare_id += 1;
     }

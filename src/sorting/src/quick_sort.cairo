@@ -35,28 +35,28 @@ fn quick_sort_range<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>, +Felt2
         }
 
         loop {
-            if (l >= r) || (array.get(r).unwrap() < array.get(left).unwrap()) {
+            if (l >= r) || (array[r] < array[left]) {
                 break;
             }
             r -= 1;
         };
 
         loop {
-            if (l >= r) || (array.get(l).unwrap() > array.get(left).unwrap()) {
+            if (l >= r) || (array[l] > array[left]) {
                 break;
             }
             l += 1;
         };
 
         if left != right {
-            let tmp = array.get(l).unwrap();
-            array.set(l, array.get(r).unwrap());
+            let tmp = array[l];
+            array.set(l, array[r]);
             array.set(r, tmp);
         }
     };
 
-    let tmp = array.get(left).unwrap();
-    array.set(left, array.get(l).unwrap());
+    let tmp = array[left];
+    array.set(left, array[l]);
     array.set(l, tmp);
 
     if l > 1 {
