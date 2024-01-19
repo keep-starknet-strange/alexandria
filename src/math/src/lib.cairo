@@ -13,10 +13,10 @@ mod perfect_number;
 mod sha256;
 mod sha512;
 mod signed_u256;
-mod trigonometry;
 
 #[cfg(test)]
 mod tests;
+mod trigonometry;
 mod wad_ray_math;
 mod zellers_congruence;
 use integer::{
