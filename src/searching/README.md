@@ -14,4 +14,6 @@ The Boyer-Moore algorithm is a string-searching algorithm that finds the positio
 
 The Boyer-Moore algorithm has a best-case time complexity of O(n/m) and a worst-case time complexity of O(nm), where n is the length of the text and m is the length of the pattern. It is the most efficient string-searching algorithm in practice.
 
+## [Levenshtein distance](./src/levenshtein_distance.cairo)
 
+The Levenshtein distance is a string metric for measuring the difference between two sequences. It is the minimum number of single-character edits (insertions, deletions, or substitutions) required to change one string into the other. This version of the algorithm optmizes the space complexity. Time complexity: O(nm). Space complexity: O(n),
