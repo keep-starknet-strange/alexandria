@@ -5,8 +5,8 @@
 // The is_negative field is true for negative integers, and false for non-negative integers.
 #[derive(Serde, Copy, Drop, Hash)]
 struct i257 {
-    is_negative: bool,
     abs: u256,
+    is_negative: bool,
 }
 
 #[inline(always)]
