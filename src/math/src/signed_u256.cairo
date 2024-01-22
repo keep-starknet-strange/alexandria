@@ -26,26 +26,25 @@ impl I128Default of Default<i257> {
 // Implements the Add trait for i257.
 impl i257Add of Add<i257> {
     fn add(lhs: i257, rhs: i257) -> i257 {
-    i257_assert_no_negative_zero(lhs);
-    i257_assert_no_negative_zero(rhs);
-    // If both integers have the same sign, 
-    // the sum of their absolute values can be returned.
-    if lhs.is_negative == rhs.is_negative {
-        let sum = lhs.abs + rhs.abs;
-        i257 { abs: sum, is_negative: lhs.is_negative }
-    } else {
-        // If the integers have different signs, 
-        // the larger absolute value is subtracted from the smaller one.
-        let (larger, smaller) = if lhs.abs >= rhs.abs {
-            (lhs, rhs)
+        i257_assert_no_negative_zero(lhs);
+        i257_assert_no_negative_zero(rhs);
+        // If both integers have the same sign, 
+        // the sum of their absolute values can be returned.
+        if lhs.is_negative == rhs.is_negative {
+            let sum = lhs.abs + rhs.abs;
+            i257 { abs: sum, is_negative: lhs.is_negative }
         } else {
-            (rhs, lhs)
-        };
-        let difference = larger.abs - smaller.abs;
+            // If the integers have different signs, 
+            // the larger absolute value is subtracted from the smaller one.
+            let (larger, smaller) = if lhs.abs >= rhs.abs {
+                (lhs, rhs)
+            } else {
+                (rhs, lhs)
+            };
+            let difference = larger.abs - smaller.abs;
 
-        i257 { abs: difference, is_negative: larger.is_negative }
-    }
-
+            i257 { abs: difference, is_negative: larger.is_negative }
+        }
     }
 }
 
@@ -60,17 +59,16 @@ impl i257AddEq of AddEq<i257> {
 // Implements the Sub trait for i257.
 impl i257Sub of Sub<i257> {
     fn sub(lhs: i257, rhs: i257) -> i257 {
-    i257_assert_no_negative_zero(lhs);
-    i257_assert_no_negative_zero(rhs);
+        i257_assert_no_negative_zero(lhs);
+        i257_assert_no_negative_zero(rhs);
 
-    if rhs.abs == 0 {
-        return lhs;
-    }
+        if rhs.abs == 0 {
+            return lhs;
+        }
 
-    // The subtraction of `lhs` to `rhs` is achieved by negating `rhs` sign and adding it to `lhs`.
-    let neg_b = i257 { abs: rhs.abs, is_negative: !rhs.is_negative };
-    lhs + neg_b
-
+        // The subtraction of `lhs` to `rhs` is achieved by negating `rhs` sign and adding it to `lhs`.
+        let neg_b = i257 { abs: rhs.abs, is_negative: !rhs.is_negative };
+        lhs + neg_b
     }
 }
 
@@ -85,15 +83,14 @@ impl i257SubEq of SubEq<i257> {
 // Implements the Mul trait for i257.
 impl i257Mul of Mul<i257> {
     fn mul(lhs: i257, rhs: i257) -> i257 {
-    i257_assert_no_negative_zero(lhs);
-    i257_assert_no_negative_zero(rhs);
+        i257_assert_no_negative_zero(lhs);
+        i257_assert_no_negative_zero(rhs);
 
-    // The sign of the product is the XOR of the signs of the operands.
-    let is_negative = lhs.is_negative ^ rhs.is_negative;
-    // The product is the product of the absolute values of the operands.
-    let abs = lhs.abs * rhs.abs;
-    i257 { abs, is_negative }
-
+        // The sign of the product is the XOR of the signs of the operands.
+        let is_negative = lhs.is_negative ^ rhs.is_negative;
+        // The product is the product of the absolute values of the operands.
+        let abs = lhs.abs * rhs.abs;
+        i257 { abs, is_negative }
     }
 }
 
