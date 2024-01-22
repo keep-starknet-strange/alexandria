@@ -102,6 +102,43 @@ impl i257MulEq of MulEq<i257> {
     }
 }
 
+// Divides the first i257 by the second i128.
+// # Arguments
+// * `lhs` - The i257 dividend.
+// * `rhs` - The i257 divisor.
+// # Returns
+// * `i257` - The quotient of `lhs` and `rhs`.
+fn i257_div(lhs: i257, rhs: i257) -> i257 {
+    i257_assert_no_negative_zero(lhs);
+    // Check that the divisor is not zero.
+    assert(rhs.abs != 0, 'b can not be 0');
+
+    // The sign of the quotient is the XOR of the signs of the operands.
+    let is_negative = lhs.is_negative ^ rhs.is_negative;
+
+    if !is_negative {
+        // If the operands are positive, the quotient is simply their absolute value quotient.
+        return i257 { abs: lhs.abs / rhs.abs, is_negative };
+    }
+
+    // If the operands have different signs, rounding is necessary.
+    // First, check if the quotient is an integer.
+    if lhs.abs % rhs.abs == 0 {
+        return i257 { abs: lhs.abs / rhs.abs, is_negative };
+    }
+
+    // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
+    let quotient = (lhs.abs * 10) / rhs.abs;
+    let last_digit = quotient % 10;
+
+    // Check the last digit to determine rounding direction.
+    if last_digit <= 5 {
+        i257 { abs: quotient / 10, is_negative }
+    } else {
+        i257 { abs: (quotient / 10) + 1, is_negative }
+    }
+}
+
 // Implements the Div trait for i257.
 impl i257Div of Div<i257> {
     fn div(lhs: i257, rhs: i257) -> i257 {
@@ -117,6 +154,19 @@ impl i257DivEq of DivEq<i257> {
     }
 }
 
+// Calculates the remainder of the division of a first i257 by a second i257.
+// # Arguments
+// * `lhs` - The i257 dividend.
+// * `rhs` - The i257 divisor.
+// # Returns
+// * `i257` - The remainder of dividing `lhs` by `rhs`.
+fn i257_rem(lhs: i257, rhs: i257) -> i257 {
+    i257_assert_no_negative_zero(lhs);
+    // Check that the divisor is not zero.
+    assert(rhs.abs != 0, 'b can not be 0');
+    lhs - (rhs * (lhs / rhs))
+}
+
 // Implements the Rem trait for i257.
 impl i257Rem of Rem<i257> {
     fn rem(lhs: i257, rhs: i257) -> i257 {
@@ -130,6 +180,18 @@ impl i257RemEq of RemEq<i257> {
     fn rem_eq(ref self: i257, other: i257) {
         self = Rem::rem(self, other);
     }
+}
+
+// Calculates both the quotient and the remainder of the division of a first i257 by a second i257.
+// # Arguments
+// * `lhs` - The i257 dividend.
+// * `rhs` - The i257 divisor.
+// # Returns
+// * `(i257, i257)` - A tuple containing the quotient and the remainder of dividing `lhs` by `rhs`.
+fn i257_div_rem(lhs: i257, rhs: i257) -> (i257, i257) {
+    let quotient = i257_div(lhs, rhs);
+    let remainder = i257_rem(lhs, rhs);
+    (quotient, remainder)
 }
 
 // Implements the PartialEq trait for i257.
@@ -205,68 +267,6 @@ fn i257_assert_no_negative_zero(x: i257) {
     if x.abs == 0 {
         assert(!x.is_negative, 'negative zero');
     }
-}
-
-// Divides the first i257 by the second i128.
-// # Arguments
-// * `lhs` - The i257 dividend.
-// * `rhs` - The i257 divisor.
-// # Returns
-// * `i257` - The quotient of `lhs` and `rhs`.
-fn i257_div(lhs: i257, rhs: i257) -> i257 {
-    i257_assert_no_negative_zero(lhs);
-    // Check that the divisor is not zero.
-    assert(rhs.abs != 0, 'b can not be 0');
-
-    // The sign of the quotient is the XOR of the signs of the operands.
-    let is_negative = lhs.is_negative ^ rhs.is_negative;
-
-    if !is_negative {
-        // If the operands are positive, the quotient is simply their absolute value quotient.
-        return i257 { abs: lhs.abs / rhs.abs, is_negative };
-    }
-
-    // If the operands have different signs, rounding is necessary.
-    // First, check if the quotient is an integer.
-    if lhs.abs % rhs.abs == 0 {
-        return i257 { abs: lhs.abs / rhs.abs, is_negative };
-    }
-
-    // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
-    let quotient = (lhs.abs * 10) / rhs.abs;
-    let last_digit = quotient % 10;
-
-    // Check the last digit to determine rounding direction.
-    if last_digit <= 5 {
-        i257 { abs: quotient / 10, is_negative }
-    } else {
-        i257 { abs: (quotient / 10) + 1, is_negative }
-    }
-}
-
-// Calculates the remainder of the division of a first i257 by a second i257.
-// # Arguments
-// * `lhs` - The i257 dividend.
-// * `rhs` - The i257 divisor.
-// # Returns
-// * `i257` - The remainder of dividing `lhs` by `rhs`.
-fn i257_rem(lhs: i257, rhs: i257) -> i257 {
-    i257_assert_no_negative_zero(lhs);
-    // Check that the divisor is not zero.
-    assert(rhs.abs != 0, 'b can not be 0');
-    lhs - (rhs * (lhs / rhs))
-}
-
-// Calculates both the quotient and the remainder of the division of a first i257 by a second i257.
-// # Arguments
-// * `lhs` - The i257 dividend.
-// * `rhs` - The i257 divisor.
-// # Returns
-// * `(i257, i257)` - A tuple containing the quotient and the remainder of dividing `lhs` by `rhs`.
-fn i257_div_rem(lhs: i257, rhs: i257) -> (i257, i257) {
-    let quotient = i257_div(lhs, rhs);
-    let remainder = i257_rem(lhs, rhs);
-    (quotient, remainder)
 }
 
 // Computes the absolute value of the given i257 integer.
