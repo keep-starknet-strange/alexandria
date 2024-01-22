@@ -1,5 +1,5 @@
 use alexandria_data_structures::vec::{Felt252Vec, VecTrait};
-use alexandria_sorting::{is_equal, quick_sort};
+use alexandria_sorting::{is_equal, is_equal_vec, quick_sort};
 use core::option::OptionTrait;
 
 
@@ -17,17 +17,7 @@ fn quicksort_test() {
 
     let mut sorted = quick_sort::quick_sort(data);
 
-    let mut compare_id = 0;
-    let array_len = correct.len();
-    loop {
-        if compare_id == array_len {
-            break;
-        }
-
-        assert(sorted[compare_id] == *correct[compare_id], 'invalid result');
-
-        compare_id += 1;
-    }
+    assert(is_equal_vec(sorted, correct.span()), 'invalid result');
 }
 
 
@@ -39,17 +29,7 @@ fn quicksort_test_empty() {
 
     let mut sorted = quick_sort::quick_sort(data);
 
-    let mut compare_id = 0;
-    let array_len = correct.len();
-    loop {
-        if compare_id == array_len {
-            break;
-        }
-
-        assert(sorted[compare_id] == *correct[compare_id], 'invalid result');
-
-        compare_id += 1;
-    }
+    assert(is_equal_vec(sorted, correct.span()), 'invalid result');
 }
 
 #[test]
@@ -61,17 +41,7 @@ fn quicksort_test_one_element() {
 
     let mut sorted = quick_sort::quick_sort(data);
 
-    let mut compare_id = 0;
-    let array_len = correct.len();
-    loop {
-        if compare_id == array_len {
-            break;
-        }
-
-        assert(sorted[compare_id] == *correct[compare_id], 'invalid result');
-
-        compare_id += 1;
-    }
+    assert(is_equal_vec(sorted, correct.span()), 'invalid result');
 }
 
 #[test]
@@ -86,17 +56,7 @@ fn quicksort_test_pre_sorted() {
 
     let mut sorted = quick_sort::quick_sort(data);
 
-    let mut compare_id = 0;
-    let array_len = correct.len();
-    loop {
-        if compare_id == array_len {
-            break;
-        }
-
-        assert(sorted[compare_id] == *correct[compare_id], 'invalid result');
-
-        compare_id += 1;
-    }
+    assert(is_equal_vec(sorted, correct.span()), 'invalid result');
 }
 
 #[test]
@@ -111,17 +71,7 @@ fn quicksort_test_pre_sorted_decreasing() {
 
     let mut sorted = quick_sort::quick_sort(data);
 
-    let mut compare_id = 0;
-    let array_len = correct.len();
-    loop {
-        if compare_id == array_len {
-            break;
-        }
-
-        assert(sorted[compare_id] == *correct[compare_id], 'invalid result');
-
-        compare_id += 1;
-    }
+    assert(is_equal_vec(sorted, correct.span()), 'invalid result');
 }
 
 #[test]
@@ -136,17 +86,7 @@ fn quicksort_test_pre_sorted_2_same_values() {
 
     let mut sorted = quick_sort::quick_sort(data);
 
-    let mut compare_id = 0;
-    let array_len = correct.len();
-    loop {
-        if compare_id == array_len {
-            break;
-        }
-
-        assert(sorted[compare_id] == *correct[compare_id], 'invalid result');
-
-        compare_id += 1;
-    }
+    assert(is_equal_vec(sorted, correct.span()), 'invalid result');
 }
 
 #[test]
@@ -161,15 +101,5 @@ fn quicksort_test_2_same_values() {
 
     let mut sorted = quick_sort::quick_sort(data);
 
-    let mut compare_id = 0;
-    let array_len = correct.len();
-    loop {
-        if compare_id == array_len {
-            break;
-        }
-
-        assert(sorted[compare_id] == *correct[compare_id], 'invalid result');
-
-        compare_id += 1;
-    }
+    assert(is_equal_vec(sorted, correct.span()), 'invalid result');
 }
