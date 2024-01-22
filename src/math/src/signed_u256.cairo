@@ -26,7 +26,26 @@ impl I128Default of Default<i257> {
 // Implements the Add trait for i257.
 impl i257Add of Add<i257> {
     fn add(lhs: i257, rhs: i257) -> i257 {
-        i257_add(lhs, rhs)
+    i257_assert_no_negative_zero(lhs);
+    i257_assert_no_negative_zero(rhs);
+    // If both integers have the same sign, 
+    // the sum of their absolute values can be returned.
+    if lhs.is_negative == rhs.is_negative {
+        let sum = lhs.abs + rhs.abs;
+        i257 { abs: sum, is_negative: lhs.is_negative }
+    } else {
+        // If the integers have different signs, 
+        // the larger absolute value is subtracted from the smaller one.
+        let (larger, smaller) = if lhs.abs >= rhs.abs {
+            (lhs, rhs)
+        } else {
+            (rhs, lhs)
+        };
+        let difference = larger.abs - smaller.abs;
+
+        i257 { abs: difference, is_negative: larger.is_negative }
+    }
+
     }
 }
 
@@ -41,7 +60,17 @@ impl i257AddEq of AddEq<i257> {
 // Implements the Sub trait for i257.
 impl i257Sub of Sub<i257> {
     fn sub(lhs: i257, rhs: i257) -> i257 {
-        i257_sub(lhs, rhs)
+    i257_assert_no_negative_zero(lhs);
+    i257_assert_no_negative_zero(rhs);
+
+    if rhs.abs == 0 {
+        return lhs;
+    }
+
+    // The subtraction of `lhs` to `rhs` is achieved by negating `rhs` sign and adding it to `lhs`.
+    let neg_b = i257 { abs: rhs.abs, is_negative: !rhs.is_negative };
+    lhs + neg_b
+
     }
 }
 
@@ -56,7 +85,15 @@ impl i257SubEq of SubEq<i257> {
 // Implements the Mul trait for i257.
 impl i257Mul of Mul<i257> {
     fn mul(lhs: i257, rhs: i257) -> i257 {
-        i257_mul(lhs, rhs)
+    i257_assert_no_negative_zero(lhs);
+    i257_assert_no_negative_zero(rhs);
+
+    // The sign of the product is the XOR of the signs of the operands.
+    let is_negative = lhs.is_negative ^ rhs.is_negative;
+    // The product is the product of the absolute values of the operands.
+    let abs = lhs.abs * rhs.abs;
+    i257 { abs, is_negative }
+
     }
 }
 
@@ -171,74 +208,6 @@ fn i257_assert_no_negative_zero(x: i257) {
     if x.abs == 0 {
         assert(!x.is_negative, 'negative zero');
     }
-}
-
-// Adds two i257 integers.
-// # Arguments
-// * `a` - The first i257 to add.
-// * `b` - The second i257 to add.
-// # Returns
-// * `i257` - The sum of `a` and `b`.
-fn i257_add(lhs: i257, rhs: i257) -> i257 {
-    i257_assert_no_negative_zero(lhs);
-    i257_assert_no_negative_zero(rhs);
-    // If both integers have the same sign, 
-    // the sum of their absolute values can be returned.
-    if lhs.is_negative == rhs.is_negative {
-        let sum = lhs.abs + rhs.abs;
-        i257 { abs: sum, is_negative: lhs.is_negative }
-    } else {
-        // If the integers have different signs, 
-        // the larger absolute value is subtracted from the smaller one.
-        let (larger, smaller) = if lhs.abs >= rhs.abs {
-            (lhs, rhs)
-        } else {
-            (rhs, lhs)
-        };
-        let difference = larger.abs - smaller.abs;
-
-        i257 { abs: difference, is_negative: larger.is_negative }
-    }
-}
-
-// Subtracts two i257 integers.
-// # Arguments
-// * `lhs` - The first i257 to subtract.
-// * `rhs` - The second i257 to subtract.
-// # Returns
-// * `i257` - The difference of `a` and `b`.
-fn i257_sub(lhs: i257, rhs: i257) -> i257 {
-    i257_assert_no_negative_zero(lhs);
-    i257_assert_no_negative_zero(rhs);
-
-    if rhs.abs == 0 {
-        return lhs;
-    }
-
-    // The subtraction of `lhs` to `rhs` is achieved by negating `rhs` sign and adding it to `lhs`.
-    let neg_b = i257 { abs: rhs.abs, is_negative: !rhs.is_negative };
-    lhs + neg_b
-}
-
-// Multiplies two i257 integers.
-// 
-// # Arguments
-//
-// * `lhs` - The first i257 to multiply.
-// * `rhs` - The second i257 to multiply.
-//
-// # Returns
-//
-// * `i257` - The product of `a` and `b`.
-fn i257_mul(lhs: i257, rhs: i257) -> i257 {
-    i257_assert_no_negative_zero(lhs);
-    i257_assert_no_negative_zero(rhs);
-
-    // The sign of the product is the XOR of the signs of the operands.
-    let is_negative = lhs.is_negative ^ rhs.is_negative;
-    // The product is the product of the absolute values of the operands.
-    let abs = lhs.abs * rhs.abs;
-    i257 { abs, is_negative }
 }
 
 // Divides the first i257 by the second i128.
