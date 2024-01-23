@@ -1,5 +1,17 @@
 # Math
 
+## [Is Prime](./src/is_prime.cairo)
+
+The `is_prime` algorithm is used to determine whether a given positive integer is a prime number or not.
+
+## [Is Power Of Two](./src/is_power_of_two.cairo)
+
+The `is_power_of_two` algorithm is used to determine whether a given positive integer is a power of two or not.
+
+## [Fast Root](./src/fast_root.cairo)
+
+The fast root algorithm uses Newton-Raphson method to calculate a arbitrary root of a given number (e.g., square root, cubic root, etc.). The algorithm is used to find the roots of a polynomial equation, which has applications in various areas of mathematics, including algebra, calculus, and number theory. The fast root algorithm is also used in computer science, as it can be used to solve problems involving the roots of a polynomial equation.
+
 ## [Fast trigonometric functions (sin, cos, tan)](./src/trigonometry.cairo)
 
 The trigonometric functions are a set of mathematical functions that relate the angles of a triangle to the lengths of its sides. The most common trigonometric functions are sine, cosine, and tangent. These functions are used in many areas of mathematics, including geometry, calculus, and statistics. They are also used in physics, engineering, and other sciences.
@@ -16,6 +28,16 @@ These classifications have applications in areas of math, including geometry, cr
 The Armstrong number algorithm is used to determine if a number is an Armstrong number, where the sum of its digits raised to the power of the number of digits equals the original number.
 The algorithm is used for problem-solving and mathematical puzzles, and has applications in number theory, discrete mathematics, and computer science, as well as in generating strong encryption keys.
 By identifying Armstrong numbers, the algorithm provides insight into the properties of numbers and can be used in various applications in mathematics and computer science.
+
+## [Carmichael number](./src/carmichael_number.cairo)
+
+A number n is said to be a Carmichael number if it satisfies the following modular arithmetic condition:
+
+> power(b, n-1) MOD n = 1,
+> for all b ranging from 1 to n such that b and
+> n are relatively prime, i.e, gcd(b, n) = 1
+
+Carmichael numbers are important because they pass the Fermat primality test but are not actually prime. Since Carmichael numbers exist, this primality test cannot be relied upon to prove the primality of a number, although it can still be used to prove a number is composite.
 
 ## [Collatz sequence](./src/collatz_sequence.cairo)
 The Collatz sequence number algorithm is a mathematical algorithm used to generate the Collatz sequence of a given positive integer.
@@ -39,6 +61,9 @@ The purpose of the Fibonacci algorithm is to explore the properties and patterns
 ## [GCD of N numbers](./src/gcd_of_n_numbers.cairo)
 The GCD (Greatest Common Divisor) of n numbers algorithm is used to find the largest positive integer that divides each of the given n numbers without a remainder.
 The purpose of this algorithm is to determine the highest common factor of the given set of numbers. It has applications in various areas of mathematics, including number theory, algebra, and cryptography. The GCD of n numbers algorithm is used in many real-world applications, such as finding the optimal solution to a problem that requires dividing resources among multiple agents. It is also used in computer science for designing efficient algorithms that require determining common factors or multiples of numbers.
+
+## [LCM of N numbers](./src/lcm_of_n_numbers.cairo)
+The LCM (Lowest Common Multiple) of n numbers algorithm is used to find the smallest positive integer that is a multiple of each of the given n numbers ([see also](https://numpy.org/doc/stable/reference/generated/numpy.lcm.html)).
 
 ## [Perfect Number Algorithm](./src/perfect_number.cairo)
 The perfect number algorithm is used to determine whether a given positive integer is a perfect number or not.
