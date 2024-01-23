@@ -12,7 +12,7 @@ fn is_carmichael_number(mut num: u128) -> bool {
     if num == 0 {
         return false;
     }
-    
+
     let mut ans: bool = true;
     let mut b: u128 = 2;
 
@@ -21,7 +21,7 @@ fn is_carmichael_number(mut num: u128) -> bool {
             break;
         }
 
-        if gcd_two_numbers(b, num) != 1{
+        if gcd_two_numbers(b, num) != 1 {
             b += 1;
             continue;
         }
@@ -30,7 +30,6 @@ fn is_carmichael_number(mut num: u128) -> bool {
             ans = false;
             break;
         }
-
 
         b += 1;
     };

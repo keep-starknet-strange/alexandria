@@ -20,9 +20,7 @@ fn kron<T, +Mul<T>, +AddEq<T>, +Zeroable<T>, +Copy<T>, +Drop<T>,>(
                 let mut ys_clone = ys.clone();
                 loop {
                     match ys_clone.pop_front() {
-                        Option::Some(y_value) => {
-                            array.append(*x_value * *y_value);
-                        },
+                        Option::Some(y_value) => { array.append(*x_value * *y_value); },
                         Option::None => { break; },
                     };
                 };

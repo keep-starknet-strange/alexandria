@@ -12,9 +12,7 @@ use alexandria_math::pow;
 
 use debug::PrintTrait;
 
-fn norm(
-    mut xs: Span<u128>, ord: u128, iter: usize
-) -> u128 {
+fn norm(mut xs: Span<u128>, ord: u128, iter: usize) -> u128 {
     let mut norm = 0;
     loop {
         match xs.pop_front() {
@@ -31,11 +29,11 @@ fn norm(
         };
     };
     norm.print();
-    
+
     if ord == 0 {
         return norm;
     }
-    
+
     norm = fast_nr_optimize(norm, ord, iter);
 
     norm

@@ -1,5 +1,5 @@
-mod cumsum;
 mod cumprod;
+mod cumsum;
 mod diff;
 mod integers;
 mod interpolate;
