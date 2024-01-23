@@ -63,6 +63,9 @@ dependencies = [
 [[package]]
 name = "alexandria_sorting"
 version = "0.1.0"
+dependencies = [
+ "alexandria_data_structures",
+]
 
 [[package]]
 name = "alexandria_storage"
