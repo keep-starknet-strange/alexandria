@@ -1,5 +1,11 @@
 # Math
 
+## [Fast trigonometric functions (sin, cos, tan)](./src/trigonometry.cairo)
+
+The trigonometric functions are a set of mathematical functions that relate the angles of a triangle to the lengths of its sides. The most common trigonometric functions are sine, cosine, and tangent. These functions are used in many areas of mathematics, including geometry, calculus, and statistics. They are also used in physics, engineering, and other sciences.
+
+Fast trigonometric functions are computational and spacial efficient, with minor errors compared to the standard trigonometric functions. Refer to http://hevi.info/tag/fast-sine-function/ for detailed information.
+
 ## [Aliquot sum](./src/aliquot_sum.cairo)
 
 The aliquot sum algorithm calculates the sum of proper divisors of a given positive integer, providing insight into factors and divisors of a number, and classifying it as perfect, abundant, or deficient.

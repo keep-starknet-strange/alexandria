@@ -16,6 +16,7 @@ mod signed_u256;
 
 #[cfg(test)]
 mod tests;
+mod trigonometry;
 mod wad_ray_math;
 mod zellers_congruence;
 use integer::{
