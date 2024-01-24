@@ -4,6 +4,7 @@ mod collatz_sequence;
 mod ed25519;
 mod extended_euclidean_algorithm;
 mod fast_power;
+mod fast_root;
 mod fibonacci;
 mod gcd_of_n_numbers;
 mod karatsuba;
