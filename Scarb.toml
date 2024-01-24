@@ -1,11 +1,28 @@
-[package]
+[workspace]
+members = [
+  "src/data_structures",
+  "src/encoding",
+  "src/linalg",
+  "src/math",
+  "src/merkle_tree",
+  "src/numeric",
+  "src/searching",
+  "src/sorting",
+  "src/storage",
+  "src/ascii",
+  "src/bytes",
+  "src/utils",
+]
 name = "alexandria"
 version = "0.1.0"
-description = "Starknet utilities"
+description = "Community maintained Cairo and Starknet libraries"
 homepage = "https://github.com/keep-starknet-strange/alexandria/"
 
-[dependencies]
-starknet = ">=2.0.0"
+[workspace.dependencies]
+starknet = ">=2.4.0"
+
+[workspace.tool.fmt]
+sort-module-level-items = true
 
 [scripts]
 all = "scarb build && scarb test"

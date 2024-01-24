@@ -1,0 +1,12 @@
+[package]
+name = "alexandria_searching"
+version = "0.1.0"
+description = "A set of searching algorithms"
+homepage = "https://github.com/keep-starknet-strange/alexandria/tree/src/searching"
+
+[tool]
+fmt.workspace = true
+
+[dependencies]
+# dependency due to VecTrait usage in dijkstra.cairo
+alexandria_data_structures = { path = "../data_structures" }

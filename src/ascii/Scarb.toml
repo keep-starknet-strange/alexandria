@@ -1,0 +1,11 @@
+[package]
+name = "alexandria_ascii"
+version = "0.1.0"
+description = "utilities for working with ascii values"
+homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/ascii"
+
+[tool]
+fmt.workspace = true
+
+[dependencies]
+alexandria_data_structures = { path = "../data_structures" }

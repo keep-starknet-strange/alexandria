@@ -16,6 +16,8 @@
 [![Project license](https://img.shields.io/github/license/keep-starknet-strange/alexandria.svg?style=flat-square)](LICENSE)
 [![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/keep-starknet-strange/alexandria/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 
+[![Exploration_Team](https://img.shields.io/badge/Exploration_Team-29296E.svg?&style=for-the-badge&logo=data:image/svg%2bxml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIGlkPSJhIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODEgMTgxIj48ZGVmcz48c3R5bGU+LmJ7ZmlsbDojZmZmO308L3N0eWxlPjwvZGVmcz48cGF0aCBjbGFzcz0iYiIgZD0iTTE3Ni43Niw4OC4xOGwtMzYtMzcuNDNjLTEuMzMtMS40OC0zLjQxLTIuMDQtNS4zMS0xLjQybC0xMC42MiwyLjk4LTEyLjk1LDMuNjNoLjc4YzUuMTQtNC41Nyw5LjktOS41NSwxNC4yNS0xNC44OSwxLjY4LTEuNjgsMS44MS0yLjcyLDAtNC4yN0w5Mi40NSwuNzZxLTEuOTQtMS4wNC00LjAxLC4xM2MtMTIuMDQsMTIuNDMtMjMuODMsMjQuNzQtMzYsMzcuNjktMS4yLDEuNDUtMS41LDMuNDQtLjc4LDUuMThsNC4yNywxNi41OGMwLDIuNzIsMS40Miw1LjU3LDIuMDcsOC4yOS00LjczLTUuNjEtOS43NC0xMC45Ny0xNS4wMi0xNi4wNi0xLjY4LTEuODEtMi41OS0xLjgxLTQuNCwwTDQuMzksODguMDVjLTEuNjgsMi4zMy0xLjgxLDIuMzMsMCw0LjUzbDM1Ljg3LDM3LjNjMS4zNiwxLjUzLDMuNSwyLjEsNS40NCwxLjQybDExLjQtMy4xMSwxMi45NS0zLjYzdi45MWMtNS4yOSw0LjE3LTEwLjIyLDguNzYtMTQuNzYsMTMuNzNxLTMuNjMsMi45OC0uNzgsNS4zMWwzMy40MSwzNC44NGMyLjIsMi4yLDIuOTgsMi4yLDUuMTgsMGwzNS40OC0zNy4xN2MxLjU5LTEuMzgsMi4xNi0zLjYsMS40Mi01LjU3LTEuNjgtNi4wOS0zLjI0LTEyLjMtNC43OS0xOC4zOS0uNzQtMi4yNy0xLjIyLTQuNjItMS40Mi02Ljk5LDQuMyw1LjkzLDkuMDcsMTEuNTIsMTQuMjUsMTYuNzEsMS42OCwxLjY4LDIuNzIsMS42OCw0LjQsMGwzNC4zMi0zNS43NHExLjU1LTEuODEsMC00LjAxWm0tNzIuMjYsMTUuMTVjLTMuMTEtLjc4LTYuMDktMS41NS05LjE5LTIuNTktMS43OC0uMzQtMy42MSwuMy00Ljc5LDEuNjhsLTEyLjk1LDEzLjg2Yy0uNzYsLjg1LTEuNDUsMS43Ni0yLjA3LDIuNzJoLS42NWMxLjMtNS4zMSwyLjcyLTEwLjYyLDQuMDEtMTUuOGwxLjY4LTYuNzNjLjg0LTIuMTgsLjE1LTQuNjUtMS42OC02LjA5bC0xMi45NS0xNC4xMmMtLjY0LS40NS0xLjE0LTEuMDgtMS40Mi0xLjgxbDE5LjA0LDUuMTgsMi41OSwuNzhjMi4wNCwuNzYsNC4zMywuMTQsNS43LTEuNTVsMTIuOTUtMTQuMzhzLjc4LTEuMDQsMS42OC0xLjE3Yy0xLjgxLDYuNi0yLjk4LDE0LjEyLTUuNDQsMjAuNDYtMS4wOCwyLjk2LS4wOCw2LjI4LDIuNDYsOC4xNiw0LjI3LDQuMTQsOC4yOSw4LjU1LDEyLjk1LDEyLjk1LDAsMCwxLjMsLjkxLDEuNDIsMi4wN2wtMTMuMzQtMy42M1oiLz48L3N2Zz4=)](https://github.com/keep-starknet-strange)
+
 </div>
 
 <details>
@@ -50,13 +52,14 @@
 ## About
 
 Alexandria is a community maintained standard library for Cairo 1.0.
-It is a collection of useful algorithms and data structures implemented in Cairo.  
-Current version: [v2.0.1](https://github.com/starkware-libs/cairo/releases/tag/v2.0.1)
+It is a collection of useful algorithms and data structures implemented in Cairo.
+Current version can be found in the [toml file](./Scarb.toml)
 
 ## Features
 
-This repository is divided in 8 modules:
+This repository is composed of multiple crates:
 
+- [ASCII](./src/ascii/README.md)
 - [Data Structures](./src/data_structures/README.md)
 - [Encoding](./src/encoding/README.md)
 - [Linalg](./src/linalg/README.md)
@@ -65,6 +68,7 @@ This repository is divided in 8 modules:
 - [Searching](./src/searching/README.md)
 - [Sorting](./src/sorting/README.md)
 - [Storage](./src/storage/README.md)
+- [Bytes](./src/bytes/README.md)
 
 ## Getting Started
 
@@ -76,17 +80,18 @@ This repository is divided in 8 modules:
 
 ### Installation
 
-Alexandria is a collection of cairo utilities, which can be installed by adding the following line to your `Scarb.toml`:
+Alexandria is a collection of utility Cairo packages, which have to be added as dependencies separately.
+For example, the `alexandria_math` package can be installed by adding the following line to your `Scarb.toml`:
 
 ```toml
 [dependencies]
-alexandria = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
+alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
 ```
 
 then add the following line in your `.cairo` file
 
 ```rust
-use alexandria::math::sha512::sha512;
+use alexandria_math::sha512::sha512;
 ```
 
 ## Usage
@@ -102,7 +107,7 @@ scarb build
 ```bash
 scarb test
 ```
-Running a specific subset of tests 
+Running a specific subset of tests
 ```bash
 scarb test -f math
 ```
@@ -191,6 +196,24 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://milancermak.com/"><img src="https://avatars.githubusercontent.com/u/184055?v=4?s=100" width="100px;" alt="Milan Cermak"/><br /><sub><b>Milan Cermak</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=milancermak" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/neotheprogramist"><img src="https://avatars.githubusercontent.com/u/128649481?v=4?s=100" width="100px;" alt="Paweł"/><br /><sub><b>Paweł</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=neotheprogramist" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/tensojka"><img src="https://avatars.githubusercontent.com/u/8470346?v=4?s=100" width="100px;" alt="Ondřej Sojka"/><br /><sub><b>Ondřej Sojka</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=tensojka" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/edisontim"><img src="https://avatars.githubusercontent.com/u/76473430?v=4?s=100" width="100px;" alt="tedison"/><br /><sub><b>tedison</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=edisontim" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/raphaelDkhn"><img src="https://avatars.githubusercontent.com/u/113879115?v=4?s=100" width="100px;" alt="raphaelDkhn"/><br /><sub><b>raphaelDkhn</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=raphaelDkhn" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://rules.art/"><img src="https://avatars.githubusercontent.com/u/19663399?v=4?s=100" width="100px;" alt="Charles Lanier"/><br /><sub><b>Charles Lanier</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=0xChqrles" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/omahs"><img src="https://avatars.githubusercontent.com/u/73983677?v=4?s=100" width="100px;" alt="omahs"/><br /><sub><b>omahs</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=omahs" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/maciejka"><img src="https://avatars.githubusercontent.com/u/190855?v=4?s=100" width="100px;" alt="Maciej Kamiński"/><br /><sub><b>Maciej Kamiński</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=maciejka" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Bal7hazar"><img src="https://avatars.githubusercontent.com/u/97087040?v=4?s=100" width="100px;" alt="Bal7hazar @ Carbonable"/><br /><sub><b>Bal7hazar @ Carbonable</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=Bal7hazar" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/0xKahi"><img src="https://avatars.githubusercontent.com/u/97916104?v=4?s=100" width="100px;" alt="kahi"/><br /><sub><b>kahi</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=0xKahi" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/0xTitan"><img src="https://avatars.githubusercontent.com/u/104304962?v=4?s=100" width="100px;" alt="0xTitan"/><br /><sub><b>0xTitan</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=0xTitan" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ermvrs"><img src="https://avatars.githubusercontent.com/u/3417324?v=4?s=100" width="100px;" alt="Erim"/><br /><sub><b>Erim</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=ermvrs" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/maciektr"><img src="https://avatars.githubusercontent.com/u/18600023?v=4?s=100" width="100px;" alt="maciektr"/><br /><sub><b>maciektr</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=maciektr" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/lambda-0x"><img src="https://avatars.githubusercontent.com/u/87354252?v=4?s=100" width="100px;" alt="lambda-0x"/><br /><sub><b>lambda-0x</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=lambda-0x" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Eikix"><img src="https://avatars.githubusercontent.com/u/66871571?v=4?s=100" width="100px;" alt="Elias Tazartes"/><br /><sub><b>Elias Tazartes</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=Eikix" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/akhercha"><img src="https://avatars.githubusercontent.com/u/22559023?v=4?s=100" width="100px;" alt="akhercha"/><br /><sub><b>akhercha</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=akhercha" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/azurwastaken"><img src="https://avatars.githubusercontent.com/u/30268138?v=4" width="100px;" alt="azurwastaken"/><br /><sub><b>azurwastaken</b></sub></a><br /><a href="https://github.com/keep-starknet-strange/alexandria/commits?author=azurwastaken" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>

@@ -1,0 +1,11 @@
+[package]
+name = "alexandria_numeric"
+version = "0.1.0"
+description = "A set of numerical analysis libraries and algorithms"
+homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/numeric"
+
+[tool]
+fmt.workspace = true
+
+[dependencies]
+alexandria_math = { path = "../math" }

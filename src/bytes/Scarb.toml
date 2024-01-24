@@ -1,0 +1,12 @@
+[package]
+name = "alexandria_bytes"
+version = "0.1.0"
+description = "An implementation similar to Solidity bytes written in Cairo 1"
+homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/bytes"
+
+[tool]
+fmt.workspace = true
+
+[dependencies]
+alexandria_math = { path = "../math" }
+alexandria_data_structures = { path = "../data_structures" }
