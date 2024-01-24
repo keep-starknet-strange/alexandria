@@ -312,6 +312,13 @@ fn i257_test_check_sign_zero() {
 }
 
 #[test]
+fn i257_test_div_sign_zero() {
+    let x = i257 { abs: 0, is_negative: false } / i257 {  abs: 3, is_negative: true };
+    assert(x.abs == 0, 'incorrect abs');
+    assert(!x.is_negative, 'incorrect sign');
+}
+
+#[test]
 fn i257_test_into() {
     let x: i257 = 35.into();
     assert(x.abs == 35, 'incorrect into value');
