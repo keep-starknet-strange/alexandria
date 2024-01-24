@@ -11,7 +11,7 @@ enum KronError {
 /// * `xs` - The first sequence of len L.
 /// * `ys` - The second sequence of len L.
 /// # Returns
-/// * `Array<T>` - The Kronecker product.
+/// * `Result<Array<T>, KronError>` - The Kronecker product.
 fn kron<T, +Mul<T>, +AddEq<T>, +Zeroable<T>, +Copy<T>, +Drop<T>,>(
     mut xs: Span<T>, mut ys: Span<T>
 ) -> Result<Array<T>, KronError> {
