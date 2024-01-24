@@ -17,6 +17,15 @@ The Armstrong number algorithm is used to determine if a number is an Armstrong 
 The algorithm is used for problem-solving and mathematical puzzles, and has applications in number theory, discrete mathematics, and computer science, as well as in generating strong encryption keys.
 By identifying Armstrong numbers, the algorithm provides insight into the properties of numbers and can be used in various applications in mathematics and computer science.
 
+## [Carmichael number](./src/carmichael_number.cairo)
+
+A number n is said to be a Carmichael number if it satisfies the following modular arithmetic condition:
+
+> power(b, n-1) MOD n = 1,
+> for all b ranging from 1 to n such that b and
+> n are relatively prime, i.e, gcd(b, n) = 1
+Carmichael numbers are important because they pass the Fermat primality test but are not actually prime. Since Carmichael numbers exist, this primality test cannot be relied upon to prove the primality of a number, although it can still be used to prove a number is composite.
+
 ## [Collatz sequence](./src/collatz_sequence.cairo)
 The Collatz sequence number algorithm is a mathematical algorithm used to generate the Collatz sequence of a given positive integer.
 The purpose of the Collatz sequence number algorithm is to explore the behavior of the Collatz conjecture, which is a famous unsolved problem in mathematics. The conjecture states that for any positive integer, the Collatz sequence will eventually reach the number 1. The Collatz sequence number algorithm is used to generate and study these sequences, which have applications in various areas of mathematics and computer science.

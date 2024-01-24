@@ -1,5 +1,6 @@
 mod aliquot_sum;
 mod armstrong_number;
+mod carmichael_number;
 mod collatz_sequence;
 mod ed25519;
 mod extended_euclidean_algorithm;
