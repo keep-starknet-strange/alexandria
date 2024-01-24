@@ -1,22 +1,36 @@
 //! # LCM for N numbers
 
-// Calculate the lowest common multiple for n numbers
-// # Arguments
-// * `n` - The array of numbers to calculate the lcm for
-// # Returns
-// * `u128` - The lcm of input numbers
 use alexandria_math::gcd_of_n_numbers::gcd_two_numbers;
+use core::option::OptionTrait;
+use core::traits::TryInto;
 
-fn lcm(mut n: Span<u128>) -> u128 {
+#[derive(Drop, Copy, PartialEq)]
+enum LCMError {
+    EmptyInput,
+}
+
+/// Calculate the lowest common multiple for n numbers
+/// # Arguments
+/// * `n` - The array of numbers to calculate the lcm for
+/// # Returns
+/// * `Result<T, LCMError>` - The lcm of input numbers
+fn lcm<T, +TryInto<T, u128>, +TryInto<u128, T>, +Mul<T>, +Div<T>, +Copy<T>, +Drop<T>>(
+    mut n: Span<T>
+) -> Result<T, LCMError> {
     // Return empty input error
     if n.is_empty() {
-        panic_with_felt252('EI')
+        return Result::Err(LCMError::EmptyInput);
     }
     let mut a = *n.pop_front().unwrap();
     loop {
         match n.pop_front() {
-            Option::Some(b) => { a = (a * *b) / gcd_two_numbers(a, *b); },
-            Option::None => { break a; },
+            Option::Some(b) => {
+                let gcd: T = gcd_two_numbers(a.try_into().unwrap(), (*b).try_into().unwrap())
+                    .try_into()
+                    .unwrap();
+                a = (a * *b) / gcd;
+            },
+            Option::None => { break Result::Ok(a); },
         };
     }
 }
