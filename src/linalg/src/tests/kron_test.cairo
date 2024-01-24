@@ -1,11 +1,11 @@
-use alexandria_linalg::kron::kron;
+use alexandria_linalg::kron::{kron, KronError};
 
 #[test]
 #[available_gas(2000000)]
 fn kron_product_test() {
     let mut xs: Array<u64> = array![1, 10, 100];
     let mut ys = array![5, 6, 7];
-    let zs = kron(xs.span(), ys.span());
+    let zs = kron(xs.span(), ys.span()).unwrap();
     assert(*zs[0] == 5, 'wrong value at index 0');
     assert(*zs[1] == 6, 'wrong value at index 1');
     assert(*zs[2] == 7, 'wrong value at index 2');
@@ -18,10 +18,12 @@ fn kron_product_test() {
 }
 
 #[test]
-#[should_panic(expected: ('Arrays must have the same len',))]
 #[available_gas(2000000)]
 fn kron_product_test_check_len() {
     let mut xs: Array<u64> = array![1];
     let mut ys = array![];
-    kron(xs.span(), ys.span());
+    assert(
+        kron(xs.span(), ys.span()) == Result::Err(KronError::UnequalLength),
+        'Arrays must have the same len'
+    );
 }

@@ -1,4 +1,10 @@
+use core::array::SpanTrait;
 //! Kronecker product of two arrays
+
+#[derive(Drop, Copy, PartialEq)]
+enum KronError {
+    UnequalLength,
+}
 
 /// Compute the Kronecker product for 2 given arrays.
 /// # Arguments
@@ -8,8 +14,11 @@
 /// * `Array<T>` - The Kronecker product.
 fn kron<T, +Mul<T>, +AddEq<T>, +Zeroable<T>, +Copy<T>, +Drop<T>,>(
     mut xs: Span<T>, mut ys: Span<T>
-) -> Array<T> {
+) -> Result<Array<T>, KronError> {
     // [Check] Inputs
+    if xs.len() != ys.len() {
+        return Result::Err(KronError::UnequalLength);
+    }
     assert(xs.len() == ys.len(), 'Arrays must have the same len');
 
     // [Compute] Kronecker product in a loop
@@ -17,7 +26,7 @@ fn kron<T, +Mul<T>, +AddEq<T>, +Zeroable<T>, +Copy<T>, +Drop<T>,>(
     loop {
         match xs.pop_front() {
             Option::Some(x_value) => {
-                let mut ys_clone = ys.clone();
+                let mut ys_clone = ys;
                 loop {
                     match ys_clone.pop_front() {
                         Option::Some(y_value) => { array.append(*x_value * *y_value); },
@@ -29,5 +38,5 @@ fn kron<T, +Mul<T>, +AddEq<T>, +Zeroable<T>, +Copy<T>, +Drop<T>,>(
         };
     };
 
-    array
+    Result::Ok(array)
 }
