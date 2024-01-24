@@ -7,3 +7,7 @@ The binary search algorithm is a simple search in an ordered array-like compound
 ## [Dijkstra](./src/dijkstra.cairo)
 
 Dijkstra's algorithm is a graph search algorithm that finds the shortest path from a source node to all other nodes in a weighted graph, ensuring the shortest distances are progressively updated as it explores nodes. It maintains a priority queue of nodes based on their tentative distances from the source and greedily selects the node with the smallest distance at each step.
+
+## [Levenshtein distance](./src/levenshtein_distance.cairo)
+
+The Levenshtein distance is a string metric for measuring the difference between two sequences. It is the minimum number of single-character edits (insertions, deletions, or substitutions) required to change one string into the other. This version of the algorithm optmizes the space complexity. Time complexity: O(nm). Space complexity: O(n),

@@ -1,2 +1,3 @@
 mod binary_search_test;
 mod dijkstra_test;
+mod levenshtein_distance_test;
