@@ -32,7 +32,7 @@ impl i257Add of Add<i257> {
         // If both integers have the same sign, 
         // the sum of their absolute values can be returned.
         if lhs.is_negative == rhs.is_negative {
-            let sum = lhs.abs + rhs.abs;
+            let sum = integer::u256_checked_add(lhs.abs, rhs.abs).expect('i257_add Overflow');
             i257_new(sum, lhs.is_negative)
         } else {
             // If the integers have different signs, 
@@ -89,7 +89,7 @@ impl i257Mul of Mul<i257> {
         // The sign of the product is the XOR of the signs of the operands.
         let is_negative = lhs.is_negative ^ rhs.is_negative;
         // The product is the product of the absolute values of the operands.
-        let abs = lhs.abs * rhs.abs;
+        let abs = integer::u256_checked_mul(lhs.abs, rhs.abs).expect('i257_mul Overflow');
         i257_new(abs, is_negative)
     }
 }
