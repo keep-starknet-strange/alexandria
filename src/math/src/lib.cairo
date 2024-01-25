@@ -9,6 +9,7 @@ mod fibonacci;
 mod gcd_of_n_numbers;
 mod karatsuba;
 mod keccak256;
+mod lcm_of_n_numbers;
 mod mod_arithmetics;
 mod perfect_number;
 mod sha256;

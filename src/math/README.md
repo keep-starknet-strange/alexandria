@@ -44,6 +44,9 @@ The purpose of the Fibonacci algorithm is to explore the properties and patterns
 The GCD (Greatest Common Divisor) of n numbers algorithm is used to find the largest positive integer that divides each of the given n numbers without a remainder.
 The purpose of this algorithm is to determine the highest common factor of the given set of numbers. It has applications in various areas of mathematics, including number theory, algebra, and cryptography. The GCD of n numbers algorithm is used in many real-world applications, such as finding the optimal solution to a problem that requires dividing resources among multiple agents. It is also used in computer science for designing efficient algorithms that require determining common factors or multiples of numbers.
 
+## [LCM of N numbers](./src/lcm_of_n_numbers.cairo)
+The LCM (Lowest Common Multiple) of n numbers algorithm is used to find the smallest positive integer that is a multiple of each of the given n numbers ([see also](https://numpy.org/doc/stable/reference/generated/numpy.lcm.html)).
+
 ## [Perfect Number Algorithm](./src/perfect_number.cairo)
 The perfect number algorithm is used to determine whether a given positive integer is a perfect number or not.
 A perfect number is a positive integer that is equal to the sum of its proper divisors (excluding itself).
