@@ -1,5 +1,13 @@
 # Math
 
+## [Fast Root](./src/fast_root.cairo)
+
+The fast root algorithm uses Newton-Raphson method to calculate a arbitrary root of a given number (e.g., square root, cubic root, etc.). The algorithm is used to find the roots of a polynomial equation, which has applications in various areas of mathematics, including algebra, calculus, and number theory. The fast root algorithm is also used in computer science, as it can be used to solve problems involving the roots of a polynomial equation.
+
+## [Is Power Of Two](./src/is_power_of_two.cairo)
+
+The `is_power_of_two` algorithm is used to determine whether a given positive integer is a power of two or not.
+
 ## [Fast trigonometric functions (sin, cos, tan)](./src/trigonometry.cairo)
 
 The trigonometric functions are a set of mathematical functions that relate the angles of a triangle to the lengths of its sides. The most common trigonometric functions are sine, cosine, and tangent. These functions are used in many areas of mathematics, including geometry, calculus, and statistics. They are also used in physics, engineering, and other sciences.
@@ -39,6 +47,9 @@ The purpose of the Fibonacci algorithm is to explore the properties and patterns
 ## [GCD of N numbers](./src/gcd_of_n_numbers.cairo)
 The GCD (Greatest Common Divisor) of n numbers algorithm is used to find the largest positive integer that divides each of the given n numbers without a remainder.
 The purpose of this algorithm is to determine the highest common factor of the given set of numbers. It has applications in various areas of mathematics, including number theory, algebra, and cryptography. The GCD of n numbers algorithm is used in many real-world applications, such as finding the optimal solution to a problem that requires dividing resources among multiple agents. It is also used in computer science for designing efficient algorithms that require determining common factors or multiples of numbers.
+
+## [LCM of N numbers](./src/lcm_of_n_numbers.cairo)
+The LCM (Lowest Common Multiple) of n numbers algorithm is used to find the smallest positive integer that is a multiple of each of the given n numbers ([see also](https://numpy.org/doc/stable/reference/generated/numpy.lcm.html)).
 
 ## [Perfect Number Algorithm](./src/perfect_number.cairo)
 The perfect number algorithm is used to determine whether a given positive integer is a perfect number or not.
