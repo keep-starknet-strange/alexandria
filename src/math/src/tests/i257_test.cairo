@@ -1,4 +1,4 @@
-use alexandria_math::signed_u256::{i257, i257_div_rem, i257_assert_no_negative_zero};
+use alexandria_math::i257::{i257, i257_div_rem, i257_assert_no_negative_zero};
 
 #[test]
 fn i257_test_add() {

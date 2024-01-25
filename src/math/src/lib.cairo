@@ -12,7 +12,7 @@ mod mod_arithmetics;
 mod perfect_number;
 mod sha256;
 mod sha512;
-mod signed_u256;
+mod i257;
 
 #[cfg(test)]
 mod tests;
