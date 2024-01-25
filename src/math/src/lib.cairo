@@ -7,6 +7,7 @@ mod fast_power;
 mod fast_root;
 mod fibonacci;
 mod gcd_of_n_numbers;
+mod is_power_of_two;
 mod karatsuba;
 mod keccak256;
 mod lcm_of_n_numbers;
