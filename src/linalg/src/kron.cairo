@@ -19,7 +19,6 @@ fn kron<T, +Mul<T>, +AddEq<T>, +Zeroable<T>, +Copy<T>, +Drop<T>,>(
     if xs.len() != ys.len() {
         return Result::Err(KronError::UnequalLength);
     }
-    assert(xs.len() == ys.len(), 'Arrays must have the same len');
 
     // [Compute] Kronecker product in a loop
     let mut array = array![];
