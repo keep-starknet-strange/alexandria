@@ -6,13 +6,13 @@ mod extended_euclidean_algorithm;
 mod fast_power;
 mod fibonacci;
 mod gcd_of_n_numbers;
+mod i257;
 mod karatsuba;
 mod keccak256;
 mod mod_arithmetics;
 mod perfect_number;
 mod sha256;
 mod sha512;
-mod i257;
 
 #[cfg(test)]
 mod tests;
