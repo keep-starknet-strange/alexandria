@@ -34,6 +34,9 @@ dependencies = [
 [[package]]
 name = "alexandria_linalg"
 version = "0.1.0"
+dependencies = [
+ "alexandria_math",
+]
 
 [[package]]
 name = "alexandria_math"
