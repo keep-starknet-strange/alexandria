@@ -1,4 +1,12 @@
 use alexandria_math::lcm_of_n_numbers::{lcm, LCMError};
+use core::traits::Into;
+
+// the following trait is not safe, it is only used for testing.
+impl u128_to_u32 of Into<u128, u32> {
+    fn into(self: u128) -> u32 {
+        self.try_into().unwrap()
+    }
+}
 
 #[test]
 #[available_gas(1000000000)]
