@@ -40,7 +40,7 @@ fn div_half_ceil(num: u128) -> u128 {
 
 /// Helper function for 'multiply',splits a number at the indicated index and returns it in a tuple.
 /// # Arguments
-/// * `num` - The current value to be splited.
+/// * `num` - The current value to be split.
 /// * `split_idx` - Index at which the number will be split
 /// # Returns
 /// * `(u128, u128)` -tuple representing the split number.
