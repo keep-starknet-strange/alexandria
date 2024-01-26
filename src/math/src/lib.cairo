@@ -9,6 +9,7 @@ mod fibonacci;
 mod gcd_of_n_numbers;
 mod i257;
 mod is_power_of_two;
+mod is_prime;
 mod karatsuba;
 mod keccak256;
 mod lcm_of_n_numbers;

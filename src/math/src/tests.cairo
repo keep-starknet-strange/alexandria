@@ -9,6 +9,7 @@ mod fibonacci_test;
 mod gcd_of_n_numbers_test;
 mod i257_test;
 mod is_power_of_two_test;
+mod is_prime_test;
 mod karatsuba_test;
 mod lcm_of_n_numbers_test;
 mod math_test;

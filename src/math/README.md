@@ -14,6 +14,10 @@ The trigonometric functions are a set of mathematical functions that relate the 
 
 Fast trigonometric functions are computational and spacial efficient, with minor errors compared to the standard trigonometric functions. Refer to http://hevi.info/tag/fast-sine-function/ for detailed information.
 
+## [Is Prime](./src/is_prime.cairo)
+
+The `is_prime` algorithm is used to determine whether a given positive integer is a prime number or not.
+
 ## [Aliquot sum](./src/aliquot_sum.cairo)
 
 The aliquot sum algorithm calculates the sum of proper divisors of a given positive integer, providing insight into factors and divisors of a number, and classifying it as perfect, abundant, or deficient.
