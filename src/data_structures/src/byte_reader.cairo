@@ -12,7 +12,7 @@ trait ByteReader<T> {
     /// # Returns
     /// * `ByteReader` - The reader struct wrapping a read-only snapshot of this ByteArray
     fn reader(self: @T) -> ByteReaderState<T>;
-    /// Checks that there are enoguh remaining bytes available
+    /// Checks that there are enough remaining bytes available
     /// # Arguments
     /// * `at` - the start index position of the byte data
     /// * `count` - the number of bytes required
