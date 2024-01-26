@@ -1,12 +1,5 @@
 use alexandria_linalg::norm::norm;
 
-// the following trait is not safe, it is only used for testing.
-impl u128_to_u32 of Into<u128, u32> {
-    fn into(self: u128) -> u32 {
-        self.try_into().unwrap()
-    }
-}
-
 #[test]
 #[available_gas(2000000)]
 fn norm_test_1() {

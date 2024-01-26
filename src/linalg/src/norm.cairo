@@ -9,7 +9,7 @@ use alexandria_math::pow;
 /// * `iter` - The number of iterations to run the algorithm
 /// # Returns
 /// * `u128` - The norm for the array.
-fn norm<T, +Into<T, u128>, +Into<u128, T>, +Zeroable<T>, +Copy<T>>(
+fn norm<T, +Into<T, u128>, +Zeroable<T>, +Copy<T>>(
     mut xs: Span<T>, ord: u128, iter: usize
 ) -> u128 {
     let mut norm: u128 = 0;
