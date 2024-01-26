@@ -32,7 +32,5 @@ fn norm<T, +Into<T, u128>, +Zeroable<T>, +Copy<T>>(
         return norm;
     }
 
-    norm = fast_nr_optimize(norm, ord, iter);
-
-    norm
+    fast_nr_optimize(norm, ord, iter)
 }
