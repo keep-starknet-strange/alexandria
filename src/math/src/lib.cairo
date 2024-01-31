@@ -7,7 +7,9 @@ mod fast_power;
 mod fast_root;
 mod fibonacci;
 mod gcd_of_n_numbers;
+mod i257;
 mod is_power_of_two;
+mod is_prime;
 mod karatsuba;
 mod keccak256;
 mod lcm_of_n_numbers;
@@ -15,7 +17,6 @@ mod mod_arithmetics;
 mod perfect_number;
 mod sha256;
 mod sha512;
-mod signed_u256;
 
 #[cfg(test)]
 mod tests;

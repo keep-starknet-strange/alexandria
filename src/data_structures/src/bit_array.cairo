@@ -64,19 +64,19 @@ trait BitArrayTrait {
     fn read_word_be_u512(ref self: BitArray, length: usize) -> Option<u512>;
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in big endian representation
-    /// # Arguemnts
+    /// # Arguments
     /// `word` - The value to store onto the bit array of type `felt252`
     /// `length` - The length of the word in bits, maximum 248
     fn write_word_be(ref self: BitArray, word: felt252, length: usize);
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in big endian representation
-    /// # Arguemnts
+    /// # Arguments
     /// `word` - The value to store onto the bit array of type `u256`
     /// `length` - The length of the word in bits, maximum 256
     fn write_word_be_u256(ref self: BitArray, word: u256, length: usize);
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in big endian representation
-    /// # Arguemnts
+    /// # Arguments
     /// `word` - The value to store onto the bit array of type `u512`
     /// `length` - The length of the word in bits, maximum 512
     fn write_word_be_u512(ref self: BitArray, word: u512, length: usize);
@@ -102,19 +102,19 @@ trait BitArrayTrait {
     fn read_word_le_u512(ref self: BitArray, length: usize) -> Option<u512>;
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in little endian representation
-    /// # Arguemnts
+    /// # Arguments
     /// `word` - The value to store onto the bit array of type `felt252`
     /// `length` - The length of the word in bits, maximum 248
     fn write_word_le(ref self: BitArray, word: felt252, length: usize);
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in little endian representation
-    /// # Arguemnts
+    /// # Arguments
     /// `word` - The value to store onto the bit array of type `u256`
     /// `length` - The length of the word in bits, maximum 256
     fn write_word_le_u256(ref self: BitArray, word: u256, length: usize);
     /// Writes the bits of the specified length from `word` onto the BitArray 
     /// in little endian representation
-    /// # Arguemnts
+    /// # Arguments
     /// `word` - The value to store onto the bit array of type `u512`
     /// `length` - The length of the word in bits, maximum 512
     fn write_word_le_u512(ref self: BitArray, word: u512, length: usize);

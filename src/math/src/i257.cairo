@@ -23,6 +23,7 @@ impl I128Default of Default<i257> {
         Zeroable::zero()
     }
 }
+
 // Implements the Add trait for i257.
 impl i257Add of Add<i257> {
     fn add(lhs: i257, rhs: i257) -> i257 {
@@ -31,8 +32,8 @@ impl i257Add of Add<i257> {
         // If both integers have the same sign, 
         // the sum of their absolute values can be returned.
         if lhs.is_negative == rhs.is_negative {
-            let sum = lhs.abs + rhs.abs;
-            i257 { abs: sum, is_negative: lhs.is_negative }
+            let sum = integer::u256_checked_add(lhs.abs, rhs.abs).expect('i257_add Overflow');
+            i257_new(sum, lhs.is_negative)
         } else {
             // If the integers have different signs, 
             // the larger absolute value is subtracted from the smaller one.
@@ -42,8 +43,7 @@ impl i257Add of Add<i257> {
                 (rhs, lhs)
             };
             let difference = larger.abs - smaller.abs;
-
-            i257 { abs: difference, is_negative: larger.is_negative }
+            i257_new(difference, larger.is_negative)
         }
     }
 }
@@ -67,7 +67,7 @@ impl i257Sub of Sub<i257> {
         }
 
         // The subtraction of `lhs` to `rhs` is achieved by negating `rhs` sign and adding it to `lhs`.
-        let neg_b = i257 { abs: rhs.abs, is_negative: !rhs.is_negative };
+        let neg_b = i257_new(rhs.abs, !rhs.is_negative);
         lhs + neg_b
     }
 }
@@ -89,8 +89,8 @@ impl i257Mul of Mul<i257> {
         // The sign of the product is the XOR of the signs of the operands.
         let is_negative = lhs.is_negative ^ rhs.is_negative;
         // The product is the product of the absolute values of the operands.
-        let abs = lhs.abs * rhs.abs;
-        i257 { abs, is_negative }
+        let abs = integer::u256_checked_mul(lhs.abs, rhs.abs).expect('i257_mul Overflow');
+        i257_new(abs, is_negative)
     }
 }
 
@@ -118,13 +118,13 @@ fn i257_div(lhs: i257, rhs: i257) -> i257 {
 
     if !is_negative {
         // If the operands are positive, the quotient is simply their absolute value quotient.
-        return i257 { abs: lhs.abs / rhs.abs, is_negative };
+        return i257_new(lhs.abs / rhs.abs, is_negative);
     }
 
     // If the operands have different signs, rounding is necessary.
     // First, check if the quotient is an integer.
     if lhs.abs % rhs.abs == 0 {
-        return i257 { abs: lhs.abs / rhs.abs, is_negative };
+        return i257_new(lhs.abs / rhs.abs, is_negative);
     }
 
     // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
@@ -133,9 +133,9 @@ fn i257_div(lhs: i257, rhs: i257) -> i257 {
 
     // Check the last digit to determine rounding direction.
     if last_digit <= 5 {
-        i257 { abs: quotient / 10, is_negative }
+        i257_new(quotient / 10, is_negative)
     } else {
-        i257 { abs: (quotient / 10) + 1, is_negative }
+        i257_new((quotient / 10) + 1, is_negative)
     }
 }
 

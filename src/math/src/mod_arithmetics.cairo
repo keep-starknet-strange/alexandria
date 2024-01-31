@@ -45,13 +45,13 @@ fn add_inverse_mod(b: u256, modulo: u256) -> u256 {
     modulo - b
 }
 
-/// Function that performs modular substraction.
+/// Function that performs modular subtraction.
 /// # Arguments
-/// * `a` - Left hand side of substraction.
-/// * `b` - Right hand side of substraction.
+/// * `a` - Left hand side of subtraction.
+/// * `b` - Right hand side of subtraction.
 /// * `modulo` - modulo.
 /// # Returns
-/// * `u256` - result of modular substraction
+/// * `u256` - result of modular subtraction
 #[inline(always)]
 fn sub_mod(mut a: u256, mut b: u256, modulo: u256) -> u256 {
     // reduce values
