@@ -3,7 +3,7 @@ use alexandria_data_structures::queue::{Queue, QueueTrait};
 #[test]
 #[available_gas(2000000)]
 fn queue_new_test() {
-    let mut queue = QueueTrait::<felt252>::new();
+    let queue = QueueTrait::<felt252>::new();
     let result_len = queue.len();
 
     assert(result_len == 0, 'wrong length');
@@ -12,7 +12,7 @@ fn queue_new_test() {
 #[test]
 #[available_gas(2000000)]
 fn queue_is_empty_test() {
-    let mut queue = QueueTrait::<felt252>::new();
+    let queue = QueueTrait::<felt252>::new();
     let result = queue.is_empty();
 
     assert(result, 'should be empty');

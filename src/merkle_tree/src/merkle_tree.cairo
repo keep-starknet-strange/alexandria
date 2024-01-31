@@ -193,7 +193,7 @@ fn compute_proof<T, +HasherTrait<T>, +Drop<T>>(
     }
 
     // Compute next level
-    let mut next_level: Array<felt252> = get_next_level(nodes.span(), ref hasher);
+    let next_level: Array<felt252> = get_next_level(nodes.span(), ref hasher);
 
     // Find neighbor node
     let mut index_parent = 0;

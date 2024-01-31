@@ -78,7 +78,7 @@ fn test_bytes_update() {
 #[test]
 #[available_gas(20000000)]
 fn test_bytes_read_u128_packed() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -111,7 +111,7 @@ fn test_bytes_read_u128_packed() {
 #[available_gas(20000000)]
 #[should_panic(expected: ('out of bound',))]
 fn test_bytes_read_u128_packed_out_of_bound() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -126,7 +126,7 @@ fn test_bytes_read_u128_packed_out_of_bound() {
 #[available_gas(20000000)]
 #[should_panic(expected: ('too large',))]
 fn test_bytes_read_u128_packed_too_large() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -140,7 +140,7 @@ fn test_bytes_read_u128_packed_too_large() {
 #[test]
 #[available_gas(20000000)]
 fn test_bytes_read_u128_array_packed() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -166,7 +166,7 @@ fn test_bytes_read_u128_array_packed() {
 #[available_gas(20000000)]
 #[should_panic(expected: ('out of bound',))]
 fn test_bytes_read_u128_array_packed_out_of_bound() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -181,7 +181,7 @@ fn test_bytes_read_u128_array_packed_out_of_bound() {
 #[available_gas(20000000)]
 #[should_panic(expected: ('too large',))]
 fn test_bytes_read_u128_array_packed_too_large() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -195,7 +195,7 @@ fn test_bytes_read_u128_array_packed_too_large() {
 #[test]
 #[available_gas(20000000)]
 fn test_bytes_read_felt252_packed() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -212,7 +212,7 @@ fn test_bytes_read_felt252_packed() {
 #[available_gas(20000000)]
 #[should_panic(expected: ('out of bound',))]
 fn test_bytes_read_felt252_packed_out_of_bound() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -227,7 +227,7 @@ fn test_bytes_read_felt252_packed_out_of_bound() {
 #[available_gas(20000000)]
 #[should_panic(expected: ('too large',))]
 fn test_bytes_read_felt252_packed_too_large() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -241,7 +241,7 @@ fn test_bytes_read_felt252_packed_too_large() {
 #[test]
 #[available_gas(20000000)]
 fn test_bytes_read_u8() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -257,7 +257,7 @@ fn test_bytes_read_u8() {
 #[test]
 #[available_gas(20000000)]
 fn test_bytes_read_u16() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -273,7 +273,7 @@ fn test_bytes_read_u16() {
 #[test]
 #[available_gas(20000000)]
 fn test_bytes_read_u32() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -289,7 +289,7 @@ fn test_bytes_read_u32() {
 #[test]
 #[available_gas(20000000)]
 fn test_bytes_read_usize() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -305,7 +305,7 @@ fn test_bytes_read_usize() {
 #[test]
 #[available_gas(20000000)]
 fn test_bytes_read_u64() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -321,7 +321,7 @@ fn test_bytes_read_u64() {
 #[test]
 #[available_gas(20000000)]
 fn test_bytes_read_u128() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -337,7 +337,7 @@ fn test_bytes_read_u128() {
 #[test]
 #[available_gas(20000000)]
 fn test_bytes_read_u256() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
         0x01020304050607080910000000000000
@@ -354,7 +354,7 @@ fn test_bytes_read_u256() {
 #[test]
 #[available_gas(20000000)]
 fn test_bytes_read_u256_array() {
-    let mut array = array![
+    let array = array![
         0x01020304050607080910111213141516,
         0x16151413121110090807060504030201,
         0x16151413121110090807060504030201,
@@ -378,10 +378,11 @@ fn test_bytes_read_u256_array() {
 #[test]
 #[available_gas(20000000)]
 fn test_bytes_read_address() {
-    let mut array = array![];
-    array.append(0x01020304050607080910111213140154);
-    array.append(0x01855d7796176b05d160196ff92381eb);
-    array.append(0x7910f5446c2e0e04e13db2194a4f0000);
+    let array = array![
+        0x01020304050607080910111213140154,
+        0x01855d7796176b05d160196ff92381eb,
+        0x7910f5446c2e0e04e13db2194a4f0000,
+    ];
 
     let bytes = BytesTrait::new(46, array);
     let address = 0x015401855d7796176b05d160196ff92381eb7910f5446c2e0e04e13db2194a4f;
@@ -394,10 +395,11 @@ fn test_bytes_read_address() {
 #[test]
 #[available_gas(20000000)]
 fn test_bytes_read_bytes() {
-    let mut array = array![];
-    array.append(0x01020304050607080910111213140154);
-    array.append(0x01855d7796176b05d160196ff92381eb);
-    array.append(0x7910f5446c2e0e04e13db2194a4f0000);
+    let array = array![
+        0x01020304050607080910111213140154,
+        0x01855d7796176b05d160196ff92381eb,
+        0x7910f5446c2e0e04e13db2194a4f0000,
+    ];
 
     let bytes = BytesTrait::new(46, array);
 
@@ -544,7 +546,7 @@ fn test_bytes_concat() {
     ];
     let mut bytes = BytesTrait::new(117, array);
 
-    let mut array: Array<u128> = array![
+    let array: Array<u128> = array![
         0x01020304050607080910111213140154,
         0x01855d7796176b05d160196ff92381eb,
         0x7910f5446c2e0e04e13db2194a4f0000
@@ -656,24 +658,23 @@ fn test_bytes_sha256() {
 
     // u256{low: 1, high: 0}
     // 0x0000000000000000000000000000000000000000000000000000000000000001
-    let mut array = array![];
-    array.append(0);
-    array.append(1);
+    let array = array![0, 1];
     let bytes: Bytes = BytesTrait::new(32, array);
     let res = bytes.sha256();
     let hash: u256 = 0xec4916dd28fc4c10d78e287ca5d9cc51ee1ae73cbfde08c6b37324cbfaac8bc5;
     assert(res == hash, 'bytes_sha256_1');
 
     // test_bytes_append bytes
-    let mut array = array![];
-    array.append(0x10111213141516171810111213141516);
-    array.append(0x17180101020102030400000001000003);
-    array.append(0x04050607080000000000000010111213);
-    array.append(0x14151617180000000000000001020304);
-    array.append(0x05060708090000000000000000000102);
-    array.append(0x0304050607015401855d7796176b05d1);
-    array.append(0x60196ff92381eb7910f5446c2e0e04e1);
-    array.append(0x3db2194a4f0000000000000000000000);
+    let array = array![
+        0x10111213141516171810111213141516,
+        0x17180101020102030400000001000003,
+        0x04050607080000000000000010111213,
+        0x14151617180000000000000001020304,
+        0x05060708090000000000000000000102,
+        0x0304050607015401855d7796176b05d1,
+        0x60196ff92381eb7910f5446c2e0e04e1,
+        0x3db2194a4f0000000000000000000000,
+    ];
 
     let bytes: Bytes = BytesTrait::new(117, array);
 

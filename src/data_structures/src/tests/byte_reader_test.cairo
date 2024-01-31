@@ -541,17 +541,15 @@ fn test_byte_array_64() -> ByteArray {
 }
 
 fn test_array_8() -> Array<u8> {
-    let mut ba1 = array![1, 2, 3, 4, 5, 6, 7, 8];
-    ba1
+    array![1, 2, 3, 4, 5, 6, 7, 8]
 }
 
 fn test_array_16() -> Array<u8> {
-    let mut ba1 = array![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-    ba1
+    array![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 }
 
 fn test_array_32() -> Array<u8> {
-    let mut ba1 = array![
+    array![
         1,
         2,
         3,
@@ -584,12 +582,11 @@ fn test_array_32() -> Array<u8> {
         30,
         31,
         32
-    ];
-    ba1
+    ]
 }
 
 fn test_array_32_neg() -> Array<u8> {
-    let mut ba1 = array![
+    array![
         0xff,
         0xfe,
         0xfd,
@@ -622,12 +619,11 @@ fn test_array_32_neg() -> Array<u8> {
         0xe2,
         0xe1,
         0xe0
-    ];
-    ba1
+    ]
 }
 
 fn test_array_16_neg() -> Array<u8> {
-    let mut ba1 = array![
+    array![
         0xff,
         0xff,
         0xff,
@@ -644,12 +640,11 @@ fn test_array_16_neg() -> Array<u8> {
         0xff,
         0xff,
         0xfe
-    ];
-    ba1
+    ]
 }
 
 fn test_array_64() -> Array<u8> {
-    let mut ba1 = array![
+    array![
         1,
         2,
         3,
@@ -714,8 +709,7 @@ fn test_array_64() -> Array<u8> {
         62,
         63,
         64
-    ];
-    ba1
+    ]
 }
 
 

@@ -155,7 +155,7 @@ mod tests {
     fn test_new_initializes_empty_list() {
         let contract = deploy_mock();
         set_contract_address(contract.contract_address);
-        let mut contract_state = AListHolder::unsafe_new_contract_state();
+        let contract_state = AListHolder::unsafe_new_contract_state();
 
         let addresses_address = contract_state.addresses.address();
         let addresses_list = ListTrait::<ContractAddress>::new(0, addresses_address);
@@ -181,7 +181,7 @@ mod tests {
     fn test_new_then_fill_list() {
         let contract = deploy_mock();
         set_contract_address(contract.contract_address);
-        let mut contract_state = AListHolder::unsafe_new_contract_state();
+        let contract_state = AListHolder::unsafe_new_contract_state();
 
         let addresses_address = contract_state.addresses.address();
         let mut addresses_list = ListTrait::<ContractAddress>::new(0, addresses_address);
@@ -221,7 +221,7 @@ mod tests {
     fn test_fetch_existing_list() {
         let contract = deploy_mock();
         set_contract_address(contract.contract_address);
-        let mut contract_state = AListHolder::unsafe_new_contract_state();
+        let contract_state = AListHolder::unsafe_new_contract_state();
         let mock_addr = mock_addr();
 
         assert(contract.do_append(mock_addr, 10) == (0, 0), '1st append idx');

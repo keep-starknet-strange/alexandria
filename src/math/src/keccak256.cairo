@@ -15,7 +15,7 @@ impl U64Impl of U64Trait {
         assert(self.len() < 9, 'bytes dont fit in u64');
         // Pack full value
         let mut value: u64 = 0;
-        let mut n_bytes: u32 = self.len();
+        let n_bytes: u32 = self.len();
         loop {
             let byte = match self.pop_back() {
                 Option::Some(byte) => *byte,
@@ -52,12 +52,12 @@ fn keccak256(mut self: Span<u8>) -> u256 {
             let (value, n_bytes) = U64Trait::from_le_bytes(self);
             break (value, n_bytes);
         };
-        let mut current_word = self.slice(0, 8);
+        let current_word = self.slice(0, 8);
         let (value, _) = U64Trait::from_le_bytes(current_word);
         words64.append(value);
         self = self.slice(8, self.len() - 8);
     };
-    let mut hash = reverse_endianness(cairo_keccak(ref words64, last_word, last_word_bytes));
+    let hash = reverse_endianness(cairo_keccak(ref words64, last_word, last_word_bytes));
     hash
 }
 

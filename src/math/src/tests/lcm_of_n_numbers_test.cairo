@@ -54,6 +54,6 @@ fn lcm_single_test() {
 #[test]
 #[available_gas(1000000000)]
 fn lcm_empty_input_test() {
-    let mut arr: Array<u128> = array![];
+    let arr: Array<u128> = array![];
     assert(lcm(arr.span()) == Result::Err(LCMError::EmptyInput), 'Empty inputs');
 }

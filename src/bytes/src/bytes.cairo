@@ -192,10 +192,8 @@ impl BytesImpl of BytesTrait {
         // if value in two elements, read them and join them
         let (element_index, element_offset) = BytesTrait::locate(offset);
         let value_in_one_element = element_offset + size <= BYTES_PER_ELEMENT;
-        let mut value = 0;
-        if value_in_one_element {
-            value =
-                read_sub_u128(*self.data[element_index], BYTES_PER_ELEMENT, element_offset, size);
+        let value = if value_in_one_element {
+            read_sub_u128(*self.data[element_index], BYTES_PER_ELEMENT, element_offset, size)
         } else {
             let (_, end_element_offset) = BytesTrait::locate(offset + size);
             let left = read_sub_u128(
@@ -207,8 +205,8 @@ impl BytesImpl of BytesTrait {
             let right = read_sub_u128(
                 *self.data[element_index + 1], BYTES_PER_ELEMENT, 0, end_element_offset
             );
-            value = u128_join(left, right, end_element_offset);
-        }
+            u128_join(left, right, end_element_offset)
+        };
         (offset + size, value)
     }
 
