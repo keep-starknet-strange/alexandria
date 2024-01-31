@@ -77,7 +77,7 @@ fn stack_push_pop_push_test<
 ) {
     stack.push(val_1);
     stack.push(val_2);
-    stack.pop();
+    let _ = stack.pop();
     stack.push(val_3);
 
     assert(stack.peek().unwrap() == val_3, 'wrong result');

@@ -15,5 +15,5 @@ fn cumsum_test() {
 #[available_gas(2000000)]
 fn cumsum_test_revert_empty() {
     let xs: Array<u64> = array![];
-    let ys = cumsum(xs.span());
+    cumsum(xs.span());
 }

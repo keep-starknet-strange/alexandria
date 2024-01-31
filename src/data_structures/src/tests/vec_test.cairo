@@ -30,7 +30,6 @@ fn vec_at_test<
     ref vec: V, val_1: T
 ) {
     vec.push(val_1);
-    let result = vec.at(0);
     assert(vec.at(0) == val_1, 'vec at should return val_1');
 }
 
@@ -39,7 +38,7 @@ fn vec_at_out_of_bounds_test<
 >(
     ref vec: V
 ) {
-    let result = vec.at(0);
+    vec.at(0);
 }
 
 fn vec_push_test<
