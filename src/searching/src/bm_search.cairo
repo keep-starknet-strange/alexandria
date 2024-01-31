@@ -16,21 +16,15 @@ fn bm_search(text: @ByteArray, pattern: @ByteArray) -> Array<usize> {
         return positions;
     }
 
-    let mut char_dict = felt252_dict_new::<
-        usize
-    >(); // Dictionary to store the last occurrence of each character in the pattern
+    // Dictionary to store the last occurrence of each character in the pattern
+    let mut char_dict = felt252_dict_new::<usize>();
     let mut pattern_index = 0; // Index of the current character in the pattern
 
     // Build the character dictionary
-    loop {
-        if pattern_index == pattern_len {
-            break;
-        }
+    while pattern_index != pattern_len {
         let current_char = pattern.at(pattern_index).unwrap();
-        char_dict
-            .insert(
-                current_char.into(), pattern_index + 1
-            ); // Avoid 0 since felt252_dict initializes every entry to 0 by default
+        // Avoid 0 since felt252_dict initializes every entry to 0 by default
+        char_dict.insert(current_char.into(), pattern_index + 1);
         pattern_index += 1;
     };
 
@@ -45,13 +39,10 @@ fn bm_search(text: @ByteArray, pattern: @ByteArray) -> Array<usize> {
         let mut pattern_index = pattern_len;
 
         // Compare characters from right to left
-        loop {
-            if pattern_index == 0
-                || @pattern
-                    .at(pattern_index - 1)
-                    .unwrap() != @text
-                    .at(shift + pattern_index - 1)
-                    .unwrap() {
+        while pattern_index != 0 {
+            let pattern_value = pattern.at(pattern_index - 1).unwrap();
+            let text_value = text.at(shift + pattern_index - 1).unwrap();
+            if pattern_value != text_value {
                 break;
             }
             pattern_index -= 1;

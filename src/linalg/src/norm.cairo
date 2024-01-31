@@ -13,20 +13,17 @@ fn norm<T, +Into<T, u128>, +Zeroable<T>, +Copy<T>>(
     mut xs: Span<T>, ord: u128, iter: usize
 ) -> u128 {
     let mut norm: u128 = 0;
-    loop {
-        match xs.pop_front() {
-            Option::Some(x_value) => {
-                if ord == 0 {
-                    if (*x_value).is_non_zero() {
-                        norm += 1;
-                    }
-                } else {
-                    norm += pow((*x_value).into(), ord);
+    while !xs
+        .is_empty() {
+            let x = xs.pop_front().unwrap();
+            if ord == 0 {
+                if (*x).is_non_zero() {
+                    norm += 1;
                 }
-            },
-            Option::None => { break; },
+            } else {
+                norm += pow((*x).into(), ord);
+            }
         };
-    };
 
     if ord == 0 {
         return norm;

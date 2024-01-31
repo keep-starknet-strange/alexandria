@@ -24,11 +24,8 @@ impl U32BytesImpl of UIntBytes<u32> {
         let offset: u32 = len - 1;
         let mut result: u32 = 0;
         let mut i: u32 = 0;
-        loop {
-            if i == len {
-                break;
-            }
-            let byte: u32 = (*input.at(i)).into();
+        while i != len {
+            let byte: u32 = (*input[i]).into();
             result += BitShift::shl(byte, 8 * (offset - i));
 
             i += 1;
@@ -45,10 +42,7 @@ impl U32BytesImpl of UIntBytes<u32> {
         let bytes_used: u32 = self.bytes_used().into();
         let mut bytes: Array<u8> = Default::default();
         let mut i = 0;
-        loop {
-            if i == bytes_used {
-                break;
-            }
+        while i != bytes_used {
             let val = BitShift::shr(self, 8 * (bytes_used.try_into().unwrap() - i - 1));
             bytes.append((val & 0xFF).try_into().unwrap());
             i += 1;

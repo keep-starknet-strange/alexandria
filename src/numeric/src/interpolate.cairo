@@ -43,18 +43,16 @@ fn interpolate<
 
     // [Check] Extrapolation
     if x <= *xs[0] {
-        let y = match extrapolation {
+        return match extrapolation {
             Extrapolation::Null(()) => Zeroable::zero(),
             Extrapolation::Constant(()) => *ys[0],
         };
-        return y;
     }
     if x >= *xs[xs.len() - 1] {
-        let y = match extrapolation {
+        return match extrapolation {
             Extrapolation::Null(()) => Zeroable::zero(),
             Extrapolation::Constant(()) => *ys[xs.len() - 1],
         };
-        return y;
     }
 
     // [Compute] Interpolation, could be optimized with binary search

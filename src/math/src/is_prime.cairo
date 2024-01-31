@@ -20,21 +20,17 @@ fn is_prime(n: u128, iter: usize) -> bool {
     }
 
     let divider_limit = fast_sqrt(n, iter);
-    let mut current_dividier = 3;
-    let mut ans = true;
+    let mut current_divider = 3;
 
     loop {
-        if current_dividier > divider_limit {
-            break;
+        if current_divider > divider_limit {
+            break true;
         }
 
-        if n % current_dividier == 0 {
-            ans = false;
-            break;
+        if n % current_divider == 0 {
+            break false;
         }
 
-        current_dividier += 2;
-    };
-
-    ans
+        current_divider += 2;
+    }
 }

@@ -36,16 +36,15 @@ impl ToAsciiArrayTraitImpl<
         }
 
         let mut num = self;
-        loop {
-            if num.is_zero() {
-                break;
-            }
-            let (quotient, remainder) = DivRem::div_rem(
-                num, TryInto::<felt252, T>::try_into(10).unwrap().try_into().expect('Division by 0')
-            );
-            new_arr.append(remainder.into() + 48);
-            num = quotient;
-        };
+        while num
+            .is_non_zero() {
+                let (quotient, remainder) = DivRem::div_rem(
+                    num,
+                    TryInto::<felt252, T>::try_into(10).unwrap().try_into().expect('Division by 0')
+                );
+                new_arr.append(remainder.into() + 48);
+                num = quotient;
+            };
         new_arr
     }
 }
@@ -71,12 +70,11 @@ impl SmallIntegerToAsciiTraitImpl<
 
         let mut inverse_ascii_arr = self.to_inverse_ascii_array().span();
         let mut ascii: felt252 = 0;
-        loop {
-            match inverse_ascii_arr.pop_back() {
-                Option::Some(val) => { ascii = ascii * 256 + *val; },
-                Option::None(_) => { break; },
+        while !inverse_ascii_arr
+            .is_empty() {
+                let val = *inverse_ascii_arr.pop_back().unwrap();
+                ascii = ascii * 256 + val;
             };
-        };
 
         ascii
     }
@@ -153,10 +151,7 @@ impl U256ToAsciiArrayTraitImpl of ToAsciiArrayTrait<u256> {
             return new_arr;
         }
         let mut num = self;
-        loop {
-            if num.is_zero() {
-                break;
-            }
+        while num != 0 {
             let (quotient, remainder) = DivRem::div_rem(
                 num, 10_u256.try_into().expect('Division by 0')
             );
