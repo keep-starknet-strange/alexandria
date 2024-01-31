@@ -131,7 +131,6 @@ fn i257_test_mul() {
     // Test multiplication by zero
     let a = i257 { abs: 10, is_negative: false };
     let b = i257 { abs: 0, is_negative: false };
-    let expected = i257 { abs: 0, is_negative: false };
     let result = a * b;
     assert(result.abs == 0, '10 * 0 = 0');
     assert(!result.is_negative, '10 * 0 -> positive');

@@ -15,7 +15,7 @@ fn diff_test() {
 #[available_gas(2000000)]
 fn diff_test_revert_not_sorted() {
     let xs: Array<u128> = array![3, 2];
-    let ys = diff(xs.span());
+    diff(xs.span());
 }
 
 #[test]
@@ -23,5 +23,5 @@ fn diff_test_revert_not_sorted() {
 #[available_gas(2000000)]
 fn diff_test_revert_empty() {
     let xs: Array<u128> = array![];
-    let ys = diff(xs.span());
+    diff(xs.span());
 }
