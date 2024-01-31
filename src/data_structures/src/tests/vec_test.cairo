@@ -2,7 +2,7 @@
 use alexandria_data_structures::vec::{Felt252Vec, NullableVec, VecTrait};
 
 fn vec_new_test<V, T, impl Vec: VecTrait<V, T>>(vec: @V) {
-    assert(vec.len() == 0, 'vec length should be 0');
+    assert!(vec.len() == 0, "vec length should be 0");
 }
 
 fn vec_len_test<
@@ -11,7 +11,7 @@ fn vec_len_test<
     ref vec: V, val_1: T
 ) {
     vec.push(val_1);
-    assert(vec.len() == 1, 'vec length should be 1');
+    assert!(vec.len() == 1, "vec length should be 1");
 }
 
 fn vec_get_test<
@@ -20,8 +20,8 @@ fn vec_get_test<
     ref vec: V, val_1: T
 ) {
     vec.push(val_1);
-    assert(vec.get(0).unwrap() == val_1, 'vec get should return val_1');
-    assert(vec.get(1).is_none(), 'vec get should return none');
+    assert!(vec.get(0).unwrap() == val_1, "vec get should return val_1");
+    assert!(vec.get(1).is_none(), "vec get should return none");
 }
 
 fn vec_at_test<
@@ -30,7 +30,7 @@ fn vec_at_test<
     ref vec: V, val_1: T
 ) {
     vec.push(val_1);
-    assert(vec.at(0) == val_1, 'vec at should return val_1');
+    assert!(vec.at(0) == val_1, "vec at should return val_1");
 }
 
 fn vec_at_out_of_bounds_test<
@@ -47,8 +47,8 @@ fn vec_push_test<
     ref vec: V, val_1: T
 ) {
     vec.push(val_1);
-    assert(vec.len() == 1, 'vec length should be 1');
-    assert(vec.at(0) == val_1, 'vec get should return val_1');
+    assert!(vec.len() == 1, "vec length should be 1");
+    assert!(vec.at(0) == val_1, "vec get should return val_1");
 }
 
 fn vec_set_test<
@@ -59,7 +59,7 @@ fn vec_set_test<
     vec.push(val_1);
     vec.set(0, val_2);
     let result = vec.get(0);
-    assert(result.unwrap() == val_2, 'vec get should return val_2');
+    assert!(result.unwrap() == val_2, "vec get should return val_2");
 }
 
 fn vec_set_test_expect_error<
@@ -85,8 +85,8 @@ fn vec_index_trait_test<
 ) {
     vec.push(val_1);
     vec.push(val_2);
-    assert(vec[0] == val_1, 'vec[0] != val_1');
-    assert(vec[1] == val_2, 'vec[1] != val_2');
+    assert!(vec[0] == val_1, "vec[0] != val_1");
+    assert!(vec[1] == val_2, "vec[1] != val_2");
 }
 
 fn vec_index_trait_out_of_bounds_test<

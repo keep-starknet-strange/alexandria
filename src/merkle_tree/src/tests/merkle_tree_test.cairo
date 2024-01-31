@@ -25,17 +25,17 @@ mod regular_call_merkle_tree_pedersen {
 
         // [Assert] Compute merkle root.
         let computed_root = merkle_tree.compute_root(leaf, valid_proof);
-        assert(computed_root == root, 'compute valid root failed');
+        assert!(computed_root == root, "compute valid root failed");
 
         // [Assert] Compute merkle proof.
         let mut input_leaves = leaves;
         let index = 0;
         let computed_proof = merkle_tree.compute_proof(input_leaves, index);
-        assert(computed_proof == valid_proof, 'compute valid proof failed');
+        assert!(computed_proof == valid_proof, "compute valid proof failed");
 
         // [Assert] Verify a valid proof.
         let result = merkle_tree.verify(root, leaf, valid_proof);
-        assert(result, 'verify valid proof failed');
+        assert!(result, "verify valid proof failed");
 
         // [Assert] Verify an invalid proof.
         let invalid_proof = array![
@@ -43,12 +43,12 @@ mod regular_call_merkle_tree_pedersen {
         ]
             .span();
         let result = merkle_tree.verify(root, leaf, invalid_proof);
-        assert(!result, 'verify invalid proof failed');
+        assert!(!result, "verify invalid proof failed");
 
         // [Assert] Verify a valid proof with an invalid leaf.
         let invalid_leaf = 0x1 + 1;
         let result = merkle_tree.verify(root, invalid_leaf, valid_proof);
-        assert(!result, 'wrong result');
+        assert!(!result, "wrong result");
     }
 }
 
@@ -67,7 +67,7 @@ fn merkle_tree_pedersen_test() {
     let computed_root = MerkleTreeImpl::<
         _, PedersenHasherImpl
     >::compute_root(ref merkle_tree, leaf, valid_proof);
-    assert(computed_root == root, 'compute valid root failed');
+    assert!(computed_root == root, "compute valid root failed");
 
     // [Assert] Compute merkle proof.
     let mut input_leaves = leaves;
@@ -75,13 +75,13 @@ fn merkle_tree_pedersen_test() {
     let computed_proof = MerkleTreeImpl::<
         _, PedersenHasherImpl
     >::compute_proof(ref merkle_tree, input_leaves, index);
-    assert(computed_proof == valid_proof, 'compute valid proof failed');
+    assert!(computed_proof == valid_proof, "compute valid proof failed");
 
     // [Assert] Verify a valid proof.
     let result = MerkleTreeImpl::<
         _, PedersenHasherImpl
     >::verify(ref merkle_tree, root, leaf, valid_proof);
-    assert(result, 'verify valid proof failed');
+    assert!(result, "verify valid proof failed");
 
     // [Assert] Verify an invalid proof.
     let invalid_proof = array![
@@ -91,14 +91,14 @@ fn merkle_tree_pedersen_test() {
     let result = MerkleTreeImpl::<
         _, PedersenHasherImpl
     >::verify(ref merkle_tree, root, leaf, invalid_proof);
-    assert(!result, 'verify invalid proof failed');
+    assert!(!result, "verify invalid proof failed");
 
     // [Assert] Verify a valid proof with an invalid leaf.
     let invalid_leaf = 0x1 + 1;
     let result = MerkleTreeImpl::<
         _, PedersenHasherImpl
     >::verify(ref merkle_tree, root, invalid_leaf, valid_proof);
-    assert(!result, 'wrong result');
+    assert!(!result, "wrong result");
 }
 
 #[test]
@@ -116,7 +116,7 @@ fn merkle_tree_poseidon_test() {
     let computed_root = MerkleTreeImpl::<
         _, PoseidonHasherImpl
     >::compute_root(ref merkle_tree, leaf, valid_proof);
-    assert(computed_root == root, 'compute valid root failed');
+    assert!(computed_root == root, "compute valid root failed");
 
     // [Assert] Compute merkle proof.
     let mut input_leaves = leaves;
@@ -124,13 +124,13 @@ fn merkle_tree_poseidon_test() {
     let computed_proof = MerkleTreeImpl::<
         _, PoseidonHasherImpl
     >::compute_proof(ref merkle_tree, input_leaves, index);
-    assert(computed_proof == valid_proof, 'compute valid proof failed');
+    assert!(computed_proof == valid_proof, "compute valid proof failed");
 
     // [Assert] Verify a valid proof.
     let result = MerkleTreeImpl::<
         _, PoseidonHasherImpl
     >::verify(ref merkle_tree, root, leaf, valid_proof);
-    assert(result, 'verify valid proof failed');
+    assert!(result, "verify valid proof failed");
 
     // [Assert] Verify an invalid proof.
     let invalid_proof = array![
@@ -140,12 +140,12 @@ fn merkle_tree_poseidon_test() {
     let result = MerkleTreeImpl::<
         _, PoseidonHasherImpl
     >::verify(ref merkle_tree, root, leaf, invalid_proof);
-    assert(!result, 'verify invalid proof failed');
+    assert!(!result, "verify invalid proof failed");
 
     // [Assert] Verify a valid proof with an invalid leaf.
     let invalid_leaf = 0x1 + 1;
     let result = MerkleTreeImpl::<
         _, PoseidonHasherImpl
     >::verify(ref merkle_tree, root, invalid_leaf, valid_proof);
-    assert(!result, 'wrong result');
+    assert!(!result, "wrong result");
 }

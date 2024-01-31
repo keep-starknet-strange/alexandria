@@ -5,222 +5,222 @@ use integer::u512;
 #[available_gas(1000000)]
 fn test_word_u16() {
     let word = test_byte_array_64().word_u16(62).unwrap();
-    assert(word == 0x3f40_u16, 'word u16 differs');
+    assert!(word == 0x3f40_u16, "word u16 differs");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u16_arr() {
     let word = test_array_64().word_u16(62).unwrap();
-    assert(word == 0x3f40_u16, 'word u16 differs');
+    assert!(word == 0x3f40_u16, "word u16 differs");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u16_le() {
     let word = test_byte_array_64().word_u16_le(62).unwrap();
-    assert(word == 0x403f_u16, 'word u16 differs');
+    assert!(word == 0x403f_u16, "word u16 differs");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u16_le_arr() {
     let word = test_array_64().word_u16_le(62).unwrap();
-    assert(word == 0x403f_u16, 'word u16 differs');
+    assert!(word == 0x403f_u16, "word u16 differs");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u16_none() {
     let is_none = test_byte_array_64().word_u16(63).is_none();
-    assert(is_none, 'word u16 should be empty');
+    assert!(is_none, "word u16 should be empty");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u16_none_arr() {
     let is_none = test_array_64().word_u16(63).is_none();
-    assert(is_none, 'word u16 should be empty');
+    assert!(is_none, "word u16 should be empty");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u16_le_none() {
     let is_none = test_byte_array_64().word_u16_le(63).is_none();
-    assert(is_none, 'word u16 should be empty');
+    assert!(is_none, "word u16 should be empty");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u16_le_none_arr() {
     let is_none = test_array_64().word_u16_le(63).is_none();
-    assert(is_none, 'word u16 should be empty');
+    assert!(is_none, "word u16 should be empty");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u32() {
     let word = test_byte_array_64().word_u32(60).unwrap();
-    assert(word == 0x3d3e3f40_u32, 'word u32 differs');
+    assert!(word == 0x3d3e3f40_u32, "word u32 differs");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u32_arr() {
     let word = test_array_64().word_u32(60).unwrap();
-    assert(word == 0x3d3e3f40_u32, 'word u32 differs');
+    assert!(word == 0x3d3e3f40_u32, "word u32 differs");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u32_le() {
     let word = test_byte_array_64().word_u32_le(60).unwrap();
-    assert(word == 0x403f3e3d_u32, 'word u32 differs');
+    assert!(word == 0x403f3e3d_u32, "word u32 differs");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u32_le_arr() {
     let word = test_array_64().word_u32_le(60).unwrap();
-    assert(word == 0x403f3e3d_u32, 'word u32 differs');
+    assert!(word == 0x403f3e3d_u32, "word u32 differs");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u32_none() {
     let is_none = test_byte_array_64().word_u32(61).is_none();
-    assert(is_none, 'word u32 should be empty');
+    assert!(is_none, "word u32 should be empty");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u32_none_arr() {
     let is_none = test_array_64().word_u32(61).is_none();
-    assert(is_none, 'word u32 should be empty');
+    assert!(is_none, "word u32 should be empty");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u32_le_none() {
     let is_none = test_byte_array_64().word_u32_le(61).is_none();
-    assert(is_none, 'word u32 should be empty');
+    assert!(is_none, "word u32 should be empty");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u32_le_none_arr() {
     let is_none = test_array_64().word_u32_le(61).is_none();
-    assert(is_none, 'word u32 should be empty');
+    assert!(is_none, "word u32 should be empty");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u64() {
     let word = test_byte_array_64().word_u64(56).unwrap();
-    assert(word == 0x393a3b3c3d3e3f40_u64, 'word u64 differs');
+    assert!(word == 0x393a3b3c3d3e3f40_u64, "word u64 differs");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u64_arr() {
     let word = test_array_64().word_u64(56).unwrap();
-    assert(word == 0x393a3b3c3d3e3f40_u64, 'word u64 differs');
+    assert!(word == 0x393a3b3c3d3e3f40_u64, "word u64 differs");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u64_le() {
     let word = test_byte_array_64().word_u64_le(56).unwrap();
-    assert(word == 0x403f3e3d3c3b3a39_u64, 'word u64 differs');
+    assert!(word == 0x403f3e3d3c3b3a39_u64, "word u64 differs");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u64_le_arr() {
     let word = test_array_64().word_u64_le(56).unwrap();
-    assert(word == 0x403f3e3d3c3b3a39_u64, 'word u64 differs');
+    assert!(word == 0x403f3e3d3c3b3a39_u64, "word u64 differs");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u64_none() {
     let is_none = test_byte_array_64().word_u64(57).is_none();
-    assert(is_none, 'word u64 should be empty');
+    assert!(is_none, "word u64 should be empty");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u64_none_arr() {
     let is_none = test_array_64().word_u64(57).is_none();
-    assert(is_none, 'word u64 should be empty');
+    assert!(is_none, "word u64 should be empty");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u64_le_none() {
     let is_none = test_byte_array_64().word_u64_le(57).is_none();
-    assert(is_none, 'word u64 should be empty');
+    assert!(is_none, "word u64 should be empty");
 }
 
 #[test]
 #[available_gas(1000000)]
 fn test_word_u64_le_none_arr() {
     let is_none = test_array_64().word_u64_le(57).is_none();
-    assert(is_none, 'word u64 should be empty');
+    assert!(is_none, "word u64 should be empty");
 }
 
 #[test]
 #[available_gas(2000000)]
 fn test_word_u128() {
     let word = test_byte_array_64().word_u128(48).unwrap();
-    assert(word == 0x3132333435363738393a3b3c3d3e3f40_u128, 'word u128 differs');
+    assert!(word == 0x3132333435363738393a3b3c3d3e3f40_u128, "word u128 differs");
 }
 
 #[test]
 #[available_gas(2000000)]
 fn test_word_u128_arr() {
     let word = test_array_64().word_u128(48).unwrap();
-    assert(word == 0x3132333435363738393a3b3c3d3e3f40_u128, 'word u128 differs');
+    assert!(word == 0x3132333435363738393a3b3c3d3e3f40_u128, "word u128 differs");
 }
 
 #[test]
 #[available_gas(2000000)]
 fn test_word_u128_le() {
     let word = test_byte_array_64().word_u128_le(48).unwrap();
-    assert(word == 0x403f3e3d3c3b3a393837363534333231_u128, 'word u128 differs');
+    assert!(word == 0x403f3e3d3c3b3a393837363534333231_u128, "word u128 differs");
 }
 
 #[test]
 #[available_gas(2000000)]
 fn test_word_u128_le_arr() {
     let word = test_array_64().word_u128_le(48).unwrap();
-    assert(word == 0x403f3e3d3c3b3a393837363534333231_u128, 'word u128 differs');
+    assert!(word == 0x403f3e3d3c3b3a393837363534333231_u128, "word u128 differs");
 }
 
 #[test]
 #[available_gas(2000000)]
 fn test_word_u128_none() {
     let is_none = test_byte_array_64().word_u128(49).is_none();
-    assert(is_none, 'word u128 should be empty');
+    assert!(is_none, "word u128 should be empty");
 }
 
 fn test_word_u128_none_arr() {
     let is_none = test_array_64().word_u128(49).is_none();
-    assert(is_none, 'word u128 should be empty');
+    assert!(is_none, "word u128 should be empty");
 }
 
 #[test]
 #[available_gas(2000000)]
 fn test_word_u128_le_none() {
     let is_none = test_byte_array_64().word_u128_le(49).is_none();
-    assert(is_none, 'word u128 should be empty');
+    assert!(is_none, "word u128 should be empty");
 }
 
 #[test]
 #[available_gas(2000000)]
 fn test_word_u128_le_none_arr() {
     let is_none = test_array_64().word_u128_le(49).is_none();
-    assert(is_none, 'word u128 should be empty');
+    assert!(is_none, "word u128 should be empty");
 }
 
 #[test]
@@ -228,7 +228,7 @@ fn test_word_u128_le_none_arr() {
 fn test_reader_helper() {
     let ba = test_byte_array_64();
     let reader = ba.reader();
-    assert(reader.data == @ba, 'reader failed');
+    assert!(reader.data == @ba, "reader failed");
 }
 
 #[test]
@@ -236,7 +236,7 @@ fn test_reader_helper() {
 fn test_reader_helper_arr() {
     let ba = test_array_64();
     let reader = ba.reader();
-    assert(reader.data == @ba, 'reader failed');
+    assert!(reader.data == @ba, "reader failed");
 }
 
 #[test]
@@ -244,21 +244,21 @@ fn test_reader_helper_arr() {
 fn test_len() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
-    assert(64 == rd.len(), 'expected len 64');
+    assert!(64 == rd.len(), "expected len 64");
     let _ = rd.read_u8().expect('some');
-    assert(63 == rd.len(), 'expected len 63');
+    assert!(63 == rd.len(), "expected len 63");
     let _ = rd.read_u256().expect('some');
-    assert(31 == rd.len(), 'expected len 31');
+    assert!(31 == rd.len(), "expected len 31");
     let _ = rd.read_u128().expect('some');
-    assert(15 == rd.len(), 'expected len 15');
+    assert!(15 == rd.len(), "expected len 15");
     let _ = rd.read_u64().expect('some');
-    assert(7 == rd.len(), 'expected len 7');
+    assert!(7 == rd.len(), "expected len 7");
     let _ = rd.read_u32().expect('some');
-    assert(3 == rd.len(), 'expected len 3');
+    assert!(3 == rd.len(), "expected len 3");
     let _ = rd.read_u16().expect('some');
-    assert(1 == rd.len(), 'expected len 1');
+    assert!(1 == rd.len(), "expected len 1");
     let _ = rd.read_i8().expect('some');
-    assert(0 == rd.len(), 'expected len 0');
+    assert!(0 == rd.len(), "expected len 0");
 }
 
 #[test]
@@ -266,21 +266,21 @@ fn test_len() {
 fn test_len_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
-    assert(64 == rd.len(), 'expected len 64');
+    assert!(64 == rd.len(), "expected len 64");
     let _ = rd.read_u8().expect('some');
-    assert(63 == rd.len(), 'expected len 63');
+    assert!(63 == rd.len(), "expected len 63");
     let _ = rd.read_u256().expect('some');
-    assert(31 == rd.len(), 'expected len 31');
+    assert!(31 == rd.len(), "expected len 31");
     let _ = rd.read_u128().expect('some');
-    assert(15 == rd.len(), 'expected len 15');
+    assert!(15 == rd.len(), "expected len 15");
     let _ = rd.read_u64().expect('some');
-    assert(7 == rd.len(), 'expected len 7');
+    assert!(7 == rd.len(), "expected len 7");
     let _ = rd.read_u32().expect('some');
-    assert(3 == rd.len(), 'expected len 3');
+    assert!(3 == rd.len(), "expected len 3");
     let _ = rd.read_u16().expect('some');
-    assert(1 == rd.len(), 'expected len 1');
+    assert!(1 == rd.len(), "expected len 1");
     let _ = rd.read_i8().expect('some');
-    assert(0 == rd.len(), 'expected len 0');
+    assert!(0 == rd.len(), "expected len 0");
 }
 
 #[test]
@@ -289,8 +289,8 @@ fn test_read_u256() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
     let u256{low: low1, high: high1 } = rd.read_u256().unwrap();
-    assert(high1 == 0x0102030405060708090a0b0c0d0e0f10_u128, 'wrong value for high1');
-    assert(low1 == 0x1112131415161718191a1b1c1d1e1f20_u128, 'wrong value for low1');
+    assert!(high1 == 0x0102030405060708090a0b0c0d0e0f10_u128, "wrong value for high1");
+    assert!(low1 == 0x1112131415161718191a1b1c1d1e1f20_u128, "wrong value for low1");
 }
 
 #[test]
@@ -299,8 +299,8 @@ fn test_read_u256_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
     let u256{low: low1, high: high1 } = rd.read_u256().unwrap();
-    assert(high1 == 0x0102030405060708090a0b0c0d0e0f10_u128, 'wrong value for high1');
-    assert(low1 == 0x1112131415161718191a1b1c1d1e1f20_u128, 'wrong value for low1');
+    assert!(high1 == 0x0102030405060708090a0b0c0d0e0f10_u128, "wrong value for high1");
+    assert!(low1 == 0x1112131415161718191a1b1c1d1e1f20_u128, "wrong value for low1");
 }
 
 #[test]
@@ -309,8 +309,8 @@ fn test_read_u256_le() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
     let u256{low: low1, high: high1 } = rd.read_u256_le().unwrap();
-    assert(high1 == 0x201f1e1d1c1b1a191817161514131211_u128, 'wrong value for high1');
-    assert(low1 == 0x100f0e0d0c0b0a090807060504030201_u128, 'wrong value for low1');
+    assert!(high1 == 0x201f1e1d1c1b1a191817161514131211_u128, "wrong value for high1");
+    assert!(low1 == 0x100f0e0d0c0b0a090807060504030201_u128, "wrong value for low1");
 }
 
 #[test]
@@ -319,8 +319,8 @@ fn test_read_u256_le_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
     let u256{low: low1, high: high1 } = rd.read_u256_le().unwrap();
-    assert(high1 == 0x201f1e1d1c1b1a191817161514131211_u128, 'wrong value for high1');
-    assert(low1 == 0x100f0e0d0c0b0a090807060504030201_u128, 'wrong value for low1');
+    assert!(high1 == 0x201f1e1d1c1b1a191817161514131211_u128, "wrong value for high1");
+    assert!(low1 == 0x100f0e0d0c0b0a090807060504030201_u128, "wrong value for low1");
 }
 
 #[test]
@@ -330,10 +330,10 @@ fn test_read_u512() {
     let mut rd = ba.reader();
     let u512{limb0, limb1, limb2, limb3 } = rd.read_u512().unwrap();
 
-    assert(limb3 == 0x0102030405060708090a0b0c0d0e0f10_u128, 'wrong value for limb3');
-    assert(limb2 == 0x1112131415161718191a1b1c1d1e1f20_u128, 'wrong value for limb2');
-    assert(limb1 == 0x2122232425262728292a2b2c2d2e2f30_u128, 'wrong value for limb1');
-    assert(limb0 == 0x3132333435363738393a3b3c3d3e3f40_u128, 'wrong value for limb0');
+    assert!(limb3 == 0x0102030405060708090a0b0c0d0e0f10_u128, "wrong value for limb3");
+    assert!(limb2 == 0x1112131415161718191a1b1c1d1e1f20_u128, "wrong value for limb2");
+    assert!(limb1 == 0x2122232425262728292a2b2c2d2e2f30_u128, "wrong value for limb1");
+    assert!(limb0 == 0x3132333435363738393a3b3c3d3e3f40_u128, "wrong value for limb0");
 }
 
 #[test]
@@ -343,10 +343,10 @@ fn test_read_u512_arr() {
     let mut rd = ba.reader();
     let u512{limb0, limb1, limb2, limb3 } = rd.read_u512().unwrap();
 
-    assert(limb3 == 0x0102030405060708090a0b0c0d0e0f10_u128, 'wrong value for limb3');
-    assert(limb2 == 0x1112131415161718191a1b1c1d1e1f20_u128, 'wrong value for limb2');
-    assert(limb1 == 0x2122232425262728292a2b2c2d2e2f30_u128, 'wrong value for limb1');
-    assert(limb0 == 0x3132333435363738393a3b3c3d3e3f40_u128, 'wrong value for limb0');
+    assert!(limb3 == 0x0102030405060708090a0b0c0d0e0f10_u128, "wrong value for limb3");
+    assert!(limb2 == 0x1112131415161718191a1b1c1d1e1f20_u128, "wrong value for limb2");
+    assert!(limb1 == 0x2122232425262728292a2b2c2d2e2f30_u128, "wrong value for limb1");
+    assert!(limb0 == 0x3132333435363738393a3b3c3d3e3f40_u128, "wrong value for limb0");
 }
 
 #[test]
@@ -355,10 +355,10 @@ fn test_read_u512_le() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
     let u512{limb0, limb1, limb2, limb3 } = rd.read_u512_le().unwrap();
-    assert(limb0 == 0x100f0e0d0c0b0a090807060504030201_u128, 'wrong value for limb0');
-    assert(limb1 == 0x201f1e1d1c1b1a191817161514131211_u128, 'wrong value for limb1');
-    assert(limb2 == 0x302f2e2d2c2b2a292827262524232221_u128, 'wrong value for limb2');
-    assert(limb3 == 0x403f3e3d3c3b3a393837363534333231_u128, 'wrong value for limb3');
+    assert!(limb0 == 0x100f0e0d0c0b0a090807060504030201_u128, "wrong value for limb0");
+    assert!(limb1 == 0x201f1e1d1c1b1a191817161514131211_u128, "wrong value for limb1");
+    assert!(limb2 == 0x302f2e2d2c2b2a292827262524232221_u128, "wrong value for limb2");
+    assert!(limb3 == 0x403f3e3d3c3b3a393837363534333231_u128, "wrong value for limb3");
 }
 
 #[test]
@@ -367,10 +367,10 @@ fn test_read_u512_le_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
     let u512{limb0, limb1, limb2, limb3 } = rd.read_u512_le().unwrap();
-    assert(limb0 == 0x100f0e0d0c0b0a090807060504030201_u128, 'wrong value for limb0');
-    assert(limb1 == 0x201f1e1d1c1b1a191817161514131211_u128, 'wrong value for limb1');
-    assert(limb2 == 0x302f2e2d2c2b2a292827262524232221_u128, 'wrong value for limb2');
-    assert(limb3 == 0x403f3e3d3c3b3a393837363534333231_u128, 'wrong value for limb3');
+    assert!(limb0 == 0x100f0e0d0c0b0a090807060504030201_u128, "wrong value for limb0");
+    assert!(limb1 == 0x201f1e1d1c1b1a191817161514131211_u128, "wrong value for limb1");
+    assert!(limb2 == 0x302f2e2d2c2b2a292827262524232221_u128, "wrong value for limb2");
+    assert!(limb3 == 0x403f3e3d3c3b3a393837363534333231_u128, "wrong value for limb3");
 }
 
 #[test]
@@ -378,21 +378,21 @@ fn test_read_u512_le_arr() {
 fn test_read_sequence() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
-    assert(rd.read_i8() == Option::Some(1), 'expected 1');
+    assert!(rd.read_i8() == Option::Some(1), "expected 1");
     assert(
         rd.read_i128() == Option::Some(0x02030405060708090a0b0c0d0e0f1011), 'not 0x0203040506...'
     );
     assert(
         rd.read_u128() == Option::Some(0x12131415161718191a1b1c1d1e1f2021), 'not 0x1213141516...'
     );
-    assert(rd.read_i64() == Option::Some(0x2223242526272829), 'not 0x22232425...');
+    assert!(rd.read_i64() == Option::Some(0x2223242526272829), "not 0x22232425...");
     assert(
         rd.read_u128() == Option::Some(0x2a2b2c2d2e2f30313233343536373839), 'not 0x2a2b2c2d2e...'
     );
-    assert(rd.read_u32() == Option::Some(0x3a3b3c3d), 'not 0x3a3b3c3d');
-    assert(rd.read_i16() == Option::Some(0x3e3f), 'not 0x3e3f');
-    assert(rd.read_u8() == Option::Some(0x40), 'not 0x40');
-    assert(rd.read_u8().is_none(), 'expected none');
+    assert!(rd.read_u32() == Option::Some(0x3a3b3c3d), "not 0x3a3b3c3d");
+    assert!(rd.read_i16() == Option::Some(0x3e3f), "not 0x3e3f");
+    assert!(rd.read_u8() == Option::Some(0x40), "not 0x40");
+    assert!(rd.read_u8().is_none(), "expected none");
 }
 
 #[test]
@@ -400,21 +400,21 @@ fn test_read_sequence() {
 fn test_read_sequence_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
-    assert(rd.read_i8() == Option::Some(1), 'expected 1');
+    assert!(rd.read_i8() == Option::Some(1), "expected 1");
     assert(
         rd.read_i128() == Option::Some(0x02030405060708090a0b0c0d0e0f1011), 'not 0x0203040506...'
     );
     assert(
         rd.read_u128() == Option::Some(0x12131415161718191a1b1c1d1e1f2021), 'not 0x1213141516...'
     );
-    assert(rd.read_i64() == Option::Some(0x2223242526272829), 'not 0x22232425...');
+    assert!(rd.read_i64() == Option::Some(0x2223242526272829), "not 0x22232425...");
     assert(
         rd.read_u128() == Option::Some(0x2a2b2c2d2e2f30313233343536373839), 'not 0x2a2b2c2d2e...'
     );
-    assert(rd.read_u32() == Option::Some(0x3a3b3c3d), 'not 0x3a3b3c3d');
-    assert(rd.read_i16() == Option::Some(0x3e3f), 'not 0x3e3f');
-    assert(rd.read_u8() == Option::Some(0x40), 'not 0x40');
-    assert(rd.read_u8().is_none(), 'expected none');
+    assert!(rd.read_u32() == Option::Some(0x3a3b3c3d), "not 0x3a3b3c3d");
+    assert!(rd.read_i16() == Option::Some(0x3e3f), "not 0x3e3f");
+    assert!(rd.read_u8() == Option::Some(0x40), "not 0x40");
+    assert!(rd.read_u8().is_none(), "expected none");
 }
 
 #[test]
@@ -422,21 +422,21 @@ fn test_read_sequence_arr() {
 fn test_read_sequence_le() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
-    assert(rd.read_i8() == Option::Some(1), 'expected 1');
+    assert!(rd.read_i8() == Option::Some(1), "expected 1");
     assert(
         rd.read_i128_le() == Option::Some(0x11100f0e0d0c0b0a0908070605040302), 'not 0x11100f0e0...'
     );
     assert(
         rd.read_u128_le() == Option::Some(0x21201f1e1d1c1b1a1918171615141312), 'not 0x21201f1e1d...'
     );
-    assert(rd.read_i64_le() == Option::Some(0x2928272625242322), 'not 0x29282726...');
+    assert!(rd.read_i64_le() == Option::Some(0x2928272625242322), "not 0x29282726...");
     assert(
         rd.read_u128_le() == Option::Some(0x393837363534333231302f2e2d2c2b2a), 'not 0x3938373635...'
     );
-    assert(rd.read_u32_le() == Option::Some(0x3d3c3b3a), 'not 0x3d3c3b3a');
-    assert(rd.read_i16_le() == Option::Some(0x3f3e), 'not 0x3f3e');
-    assert(rd.read_u8() == Option::Some(0x40), 'not 0x40');
-    assert(rd.read_u8().is_none(), 'expected none');
+    assert!(rd.read_u32_le() == Option::Some(0x3d3c3b3a), "not 0x3d3c3b3a");
+    assert!(rd.read_i16_le() == Option::Some(0x3f3e), "not 0x3f3e");
+    assert!(rd.read_u8() == Option::Some(0x40), "not 0x40");
+    assert!(rd.read_u8().is_none(), "expected none");
 }
 
 #[test]
@@ -444,21 +444,21 @@ fn test_read_sequence_le() {
 fn test_read_sequence_le_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
-    assert(rd.read_i8() == Option::Some(1), 'expected 1');
+    assert!(rd.read_i8() == Option::Some(1), "expected 1");
     assert(
         rd.read_i128_le() == Option::Some(0x11100f0e0d0c0b0a0908070605040302), 'not 0x11100f0e0...'
     );
     assert(
         rd.read_u128_le() == Option::Some(0x21201f1e1d1c1b1a1918171615141312), 'not 0x21201f1e1d...'
     );
-    assert(rd.read_i64_le() == Option::Some(0x2928272625242322), 'not 0x29282726...');
+    assert!(rd.read_i64_le() == Option::Some(0x2928272625242322), "not 0x29282726...");
     assert(
         rd.read_u128_le() == Option::Some(0x393837363534333231302f2e2d2c2b2a), 'not 0x3938373635...'
     );
-    assert(rd.read_u32_le() == Option::Some(0x3d3c3b3a), 'not 0x3d3c3b3a');
-    assert(rd.read_i16_le() == Option::Some(0x3f3e), 'not 0x3f3e');
-    assert(rd.read_u8() == Option::Some(0x40), 'not 0x40');
-    assert(rd.read_u8().is_none(), 'expected none');
+    assert!(rd.read_u32_le() == Option::Some(0x3d3c3b3a), "not 0x3d3c3b3a");
+    assert!(rd.read_i16_le() == Option::Some(0x3f3e), "not 0x3f3e");
+    assert!(rd.read_u8() == Option::Some(0x40), "not 0x40");
+    assert!(rd.read_u8().is_none(), "expected none");
 }
 
 #[test]
@@ -468,10 +468,10 @@ fn test_clone_byte_array_reader() {
     let mut rd1 = ba.reader();
     let mut rd2 = rd1.clone();
     let a = rd1.read_u128().unwrap();
-    assert(rd1.index != rd2.index, 'indicies equal');
+    assert!(rd1.index != rd2.index, "indicies equal");
     let b = rd2.read_u128().unwrap();
-    assert(rd1.index == rd2.index, 'indicies not equal');
-    assert(a == b, 'copy ByteArrayReader failed');
+    assert!(rd1.index == rd2.index, "indicies not equal");
+    assert!(a == b, "copy ByteArrayReader failed");
 }
 
 #[test]
@@ -481,10 +481,10 @@ fn test_clone_array_of_bytes_reader() {
     let mut rd1 = ba.reader();
     let mut rd2 = rd1.clone();
     let a = rd1.read_u128().unwrap();
-    assert(rd1.index != rd2.index, 'indicies equal');
+    assert!(rd1.index != rd2.index, "indicies equal");
     let b = rd2.read_u128().unwrap();
-    assert(rd1.index == rd2.index, 'indicies not equal');
-    assert(a == b, 'copy ByteArrayReader failed');
+    assert!(rd1.index == rd2.index, "indicies not equal");
+    assert!(a == b, "copy ByteArrayReader failed");
 }
 
 #[test]
@@ -492,11 +492,11 @@ fn test_clone_array_of_bytes_reader() {
 fn test_byte_array_reader_equals_array_of_bytes_reader() {
     let mut ba = test_array_64().reader();
     let mut bb = test_byte_array_64().reader();
-    assert(ba.read_u16() == bb.read_u16(), 'not equal');
-    assert(ba.read_u16_le() == bb.read_u16_le(), 'not equal');
-    assert(ba.read_i16() == bb.read_i16(), 'not equal');
-    assert(ba.read_i16_le() == bb.read_i16_le(), 'not equal');
-    assert(ba.read_u256() == bb.read_u256(), 'not equal');
+    assert!(ba.read_u16() == bb.read_u16(), "not equal");
+    assert!(ba.read_u16_le() == bb.read_u16_le(), "not equal");
+    assert!(ba.read_i16() == bb.read_i16(), "not equal");
+    assert!(ba.read_i16_le() == bb.read_i16_le(), "not equal");
+    assert!(ba.read_u256() == bb.read_u256(), "not equal");
 }
 
 // helpers

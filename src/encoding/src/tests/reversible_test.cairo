@@ -6,8 +6,8 @@ use integer::u512;
 fn test_reverse_bytes_u8() {
     let t: u8 = 0b10111010;
     let rev = t.reverse_bytes();
-    assert(t == rev, 'not equal');
-    assert(t == rev.reverse_bytes(), 'not equal');
+    assert!(t == rev, "not equal");
+    assert!(t == rev.reverse_bytes(), "not equal");
 }
 
 #[test]
@@ -15,8 +15,8 @@ fn test_reverse_bytes_u8() {
 fn test_reverse_bytes_u16() {
     let t: u16 = 0x1122;
     let rev = t.reverse_bytes();
-    assert(rev == 0x2211, 'not equal');
-    assert(rev.reverse_bytes() == t, 'not equal');
+    assert!(rev == 0x2211, "not equal");
+    assert!(rev.reverse_bytes() == t, "not equal");
 }
 
 #[test]
@@ -24,8 +24,8 @@ fn test_reverse_bytes_u16() {
 fn test_reverse_bytes_u32() {
     let t: u32 = 0x11223344;
     let rev = t.reverse_bytes();
-    assert(rev == 0x44332211, 'not equal');
-    assert(rev.reverse_bytes() == t, 'not equal');
+    assert!(rev == 0x44332211, "not equal");
+    assert!(rev.reverse_bytes() == t, "not equal");
 }
 
 #[test]
@@ -33,8 +33,8 @@ fn test_reverse_bytes_u32() {
 fn test_reverse_bytes_u64() {
     let t: u64 = 0x1122334455667788;
     let rev = t.reverse_bytes();
-    assert(rev == 0x8877665544332211, 'not equal');
-    assert(rev.reverse_bytes() == t, 'not equal');
+    assert!(rev == 0x8877665544332211, "not equal");
+    assert!(rev.reverse_bytes() == t, "not equal");
 }
 
 #[test]
@@ -42,8 +42,8 @@ fn test_reverse_bytes_u64() {
 fn test_reverse_bytes_u128() {
     let t: u128 = 0x112233445566778899aabbccddeeff00;
     let rev = t.reverse_bytes();
-    assert(rev == 0x00ffeeddccbbaa998877665544332211, 'not equal');
-    assert(rev.reverse_bytes() == t, 'not equal');
+    assert!(rev == 0x00ffeeddccbbaa998877665544332211, "not equal");
+    assert!(rev.reverse_bytes() == t, "not equal");
 }
 
 #[test]
@@ -53,8 +53,8 @@ fn test_reverse_bytes_u256() {
     let t2: u128 = 0x202122232425262728292a2b2c2d2e2f;
     let t = u256 { low: t1, high: t2 };
     let rev = t.reverse_bytes();
-    assert(rev == u256 { low: t2.reverse_bytes(), high: t1.reverse_bytes() }, 'not equal');
-    assert(rev.reverse_bytes() == t, 'not equal');
+    assert!(rev == u256 { low: t2.reverse_bytes(), high: t1.reverse_bytes() }, "not equal");
+    assert!(rev.reverse_bytes() == t, "not equal");
 }
 
 #[test]
@@ -72,8 +72,8 @@ fn test_reverse_bytes_u512() {
         limb3: t0.reverse_bytes()
     };
     let rev = t.reverse_bytes();
-    assert(rev == t_rev, 'not equal');
-    assert(rev.reverse_bytes() == t, 'not equal');
+    assert!(rev == t_rev, "not equal");
+    assert!(rev.reverse_bytes() == t, "not equal");
 }
 
 #[test]
@@ -89,8 +89,8 @@ fn test_reverse_bytes_bytes31() {
     let t_rev_felt: felt252 = t_rev_u256.try_into().unwrap();
     let t_rev: bytes31 = t_rev_felt.try_into().unwrap();
     let rev = t.reverse_bytes();
-    assert(rev == t_rev, 'not equal rev');
-    assert(rev.reverse_bytes() == t, 'not equal');
+    assert!(rev == t_rev, "not equal rev");
+    assert!(rev.reverse_bytes() == t, "not equal");
 }
 
 #[test]
@@ -99,8 +99,8 @@ fn test_reverse_bytes_array() {
     let t: Array<u16> = array![0x1122, 0x3344, 0x5566, 0x7788, 0x99aa, 0xbbcc, 0xddee];
     let t_rev: Array<u16> = array![0xeedd, 0xccbb, 0xaa99, 0x8877, 0x6655, 0x4433, 0x2211];
     let rev = t.reverse_bytes();
-    assert(rev == t_rev, 'not equal rev');
-    assert(rev.reverse_bytes() == t, 'not equal');
+    assert!(rev == t_rev, "not equal rev");
+    assert!(rev.reverse_bytes() == t, "not equal");
 }
 
 #[test]
@@ -109,8 +109,8 @@ fn test_reverse_bits_u8() {
     let t: u8 = 0b10111010;
     let t_rev: u8 = 0b01011101;
     let rev = t.reverse_bits();
-    assert(rev == t_rev, 'not equal rev');
-    assert(rev.reverse_bits() == t, 'not equal');
+    assert!(rev == t_rev, "not equal rev");
+    assert!(rev.reverse_bits() == t, "not equal");
 }
 
 #[test]
@@ -119,8 +119,8 @@ fn test_reverse_bits_u16() {
     let t: u16 = 0x11aa;
     let t_rev: u16 = 0x5588;
     let rev = t.reverse_bits();
-    assert(rev == t_rev, 'not equal rev');
-    assert(rev.reverse_bits() == t, 'not equal');
+    assert!(rev == t_rev, "not equal rev");
+    assert!(rev.reverse_bits() == t, "not equal");
 }
 
 #[test]
@@ -129,8 +129,8 @@ fn test_reverse_bits_u32() {
     let t: u32 = 0x1111aaaa;
     let t_rev: u32 = 0x55558888;
     let rev = t.reverse_bits();
-    assert(rev == t_rev, 'not equal rev');
-    assert(rev.reverse_bits() == t, 'not equal');
+    assert!(rev == t_rev, "not equal rev");
+    assert!(rev.reverse_bits() == t, "not equal");
 }
 
 #[test]
@@ -139,8 +139,8 @@ fn test_reverse_bits_u64() {
     let t: u64 = 0x11111111aaaaaaaa;
     let t_rev: u64 = 0x5555555588888888;
     let rev = t.reverse_bits();
-    assert(rev == t_rev, 'not equal rev');
-    assert(rev.reverse_bits() == t, 'not equal');
+    assert!(rev == t_rev, "not equal rev");
+    assert!(rev.reverse_bits() == t, "not equal");
 }
 
 #[test]
@@ -149,8 +149,8 @@ fn test_reverse_bits_u128() {
     let t: u128 = 0x1111111111111111aaaaaaaaaaaaaaaa;
     let t_rev: u128 = 0x55555555555555558888888888888888;
     let rev = t.reverse_bits();
-    assert(rev == t_rev, 'not equal rev');
-    assert(rev.reverse_bits() == t, 'not equal');
+    assert!(rev == t_rev, "not equal rev");
+    assert!(rev.reverse_bits() == t, "not equal");
 }
 
 #[test]
@@ -163,8 +163,8 @@ fn test_reverse_bits_u256() {
         low: 0xeeeeeeeeeeeeeeee3333333333333333, high: 0x55555555555555558888888888888888,
     };
     let rev = t.reverse_bits();
-    assert(rev == t_rev, 'not equal rev');
-    assert(rev.reverse_bits() == t, 'not equal');
+    assert!(rev == t_rev, "not equal rev");
+    assert!(rev.reverse_bits() == t, "not equal");
 }
 
 #[test]
@@ -182,8 +182,8 @@ fn test_reverse_bits_u512() {
         limb3: t0.reverse_bits(),
     };
     let rev = t.reverse_bits();
-    assert(rev == t_rev, 'not equal rev');
-    assert(rev.reverse_bits() == t, 'not equal');
+    assert!(rev == t_rev, "not equal rev");
+    assert!(rev.reverse_bits() == t, "not equal");
 }
 
 #[test]
@@ -200,8 +200,8 @@ fn test_reverse_bits_bytes31() {
     let t_rev_felt: felt252 = t_rev_u256.try_into().unwrap();
     let t_rev: bytes31 = t_rev_felt.try_into().unwrap();
     let rev = t.reverse_bits();
-    assert(rev == t_rev, 'not equal rev');
-    assert(rev.reverse_bits() == t, 'not equal');
+    assert!(rev == t_rev, "not equal rev");
+    assert!(rev.reverse_bits() == t, "not equal");
 }
 
 #[test]
@@ -210,6 +210,6 @@ fn test_reverse_bits_array() {
     let t: Array<u16> = array![0x1234, 0x57bc, 0xde84, 0xc2ae, 0xd3b7];
     let t_rev: Array<u16> = array![0xedcb, 0x7543, 0x217b, 0x3dea, 0x2c48];
     let rev = t.reverse_bits();
-    assert(rev == t_rev, 'not equal rev');
-    assert(rev.reverse_bits() == t, 'not equal');
+    assert!(rev == t_rev, "not equal rev");
+    assert!(rev.reverse_bits() == t, "not equal");
 }

@@ -5,7 +5,7 @@ use alexandria_linalg::dot::dot;
 fn dot_product_test() {
     let xs: Array<u64> = array![3, 5, 7];
     let ys = array![11, 13, 17];
-    assert(dot(xs.span(), ys.span()) == 217, 'invalid dot product');
+    assert!(dot(xs.span(), ys.span()) == 217, "invalid dot product");
 }
 
 #[test]

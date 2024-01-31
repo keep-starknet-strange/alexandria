@@ -3,11 +3,11 @@ use alexandria_data_structures::stack::{StackTrait, Felt252Stack, NullableStack}
 
 
 fn stack_new_test<S, T, impl Stack: StackTrait<S, T>>(stack: @S) {
-    assert(stack.len() == 0, 'stack length should be 0');
+    assert!(stack.len() == 0, "stack length should be 0");
 }
 
 fn stack_is_empty_test<S, T, impl Stack: StackTrait<S, T>>(stack: @S) {
-    assert(stack.is_empty(), 'stack should be empty');
+    assert!(stack.is_empty(), "stack should be empty");
 }
 
 fn stack_push_test<S, T, impl Stack: StackTrait<S, T>, +Drop<T>, impl SDestruct: Destruct<S>>(
@@ -16,8 +16,8 @@ fn stack_push_test<S, T, impl Stack: StackTrait<S, T>, +Drop<T>, impl SDestruct:
     stack.push(val_1);
     stack.push(val_2);
 
-    assert(!stack.is_empty(), 'must not be empty');
-    assert(stack.len() == 2, 'len should be 2');
+    assert!(!stack.is_empty(), "must not be empty");
+    assert!(stack.len() == 2, "len should be 2");
 }
 
 fn stack_peek_test<
@@ -34,11 +34,11 @@ fn stack_peek_test<
     stack.push(val_1);
     stack.push(val_2);
     match stack.peek() {
-        Option::Some(result) => { assert(result == val_2, 'wrong result'); },
-        Option::None => { assert(false, 'should return value'); },
+        Option::Some(result) => { assert!(result == val_2, "wrong result"); },
+        Option::None => { assert!(false, "should return value"); },
     };
 
-    assert(stack.len() == 2, 'should not remove items');
+    assert!(stack.len() == 2, "should not remove items");
 }
 
 fn stack_pop_test<
@@ -57,11 +57,11 @@ fn stack_pop_test<
 
     let value = stack.pop();
     match value {
-        Option::Some(result) => { assert(result == val_2, 'wrong result'); },
-        Option::None => { assert(false, 'should return a value'); },
+        Option::Some(result) => { assert!(result == val_2, "wrong result"); },
+        Option::None => { assert!(false, "should return a value"); },
     };
 
-    assert(stack.len() == 1, 'should remove item');
+    assert!(stack.len() == 1, "should remove item");
 }
 
 fn stack_push_pop_push_test<
@@ -80,8 +80,8 @@ fn stack_push_pop_push_test<
     let _ = stack.pop();
     stack.push(val_3);
 
-    assert(stack.peek().unwrap() == val_3, 'wrong result');
-    assert(stack.len() == 2, 'should update length');
+    assert!(stack.peek().unwrap() == val_3, "wrong result");
+    assert!(stack.len() == 2, "should update length");
 }
 
 #[test]

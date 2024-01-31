@@ -6,7 +6,7 @@ fn queue_new_test() {
     let queue = QueueTrait::<felt252>::new();
     let result_len = queue.len();
 
-    assert(result_len == 0, 'wrong length');
+    assert!(result_len == 0, "wrong length");
 }
 
 #[test]
@@ -15,7 +15,7 @@ fn queue_is_empty_test() {
     let queue = QueueTrait::<felt252>::new();
     let result = queue.is_empty();
 
-    assert(result, 'should be empty');
+    assert!(result, "should be empty");
 }
 
 #[test]
@@ -25,8 +25,8 @@ fn queue_enqueue_test() {
     queue.enqueue(1);
     queue.enqueue(2);
 
-    assert(!queue.is_empty(), 'must not be empty');
-    assert(queue.len() == 2, 'len should be 2');
+    assert!(!queue.is_empty(), "must not be empty");
+    assert!(queue.len() == 2, "len should be 2");
 }
 
 #[test]
@@ -38,12 +38,12 @@ fn queue_peek_front_test() {
     queue.enqueue(3);
 
     match queue.peek_front() {
-        Option::Some(result) => { assert(*(result.unbox()) == 1, 'wrong result'); },
-        Option::None => { assert(false, 'should return value'); },
+        Option::Some(result) => { assert!(*(result.unbox()) == 1, "wrong result"); },
+        Option::None => { assert!(false, "should return value"); },
     };
 
     let result_len = queue.len();
-    assert(result_len == 3, 'should not remove items');
+    assert!(result_len == 3, "should not remove items");
 }
 
 #[test]
@@ -55,10 +55,10 @@ fn queue_dequeue_test() {
     queue.enqueue(3);
 
     match queue.dequeue() {
-        Option::Some(result) => { assert(result == 1, 'wrong result'); },
-        Option::None => { assert(false, 'should return a value'); },
+        Option::Some(result) => { assert!(result == 1, "wrong result"); },
+        Option::None => { assert!(false, "should return a value"); },
     };
 
     let result_len = queue.len();
-    assert(result_len == 2, 'should remove item');
+    assert!(result_len == 2, "should remove item");
 }
