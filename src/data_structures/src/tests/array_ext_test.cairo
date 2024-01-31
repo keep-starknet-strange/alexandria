@@ -5,7 +5,7 @@ use alexandria_data_structures::array_ext::{ArrayTraitExt, SpanTraitExt};
 #[test]
 #[available_gas(2000000)]
 fn dedup_all_different() {
-    let mut destination = array![1, 2, 3, 4];
+    let destination = array![1, 2, 3, 4];
     let new_arr = destination.dedup();
 
     assert(*new_arr[0] == 1, 'Should be 1');
@@ -18,7 +18,7 @@ fn dedup_all_different() {
 #[test]
 #[available_gas(2000000)]
 fn dedup_one_match() {
-    let mut destination = array![1, 2, 2, 3, 4];
+    let destination = array![1, 2, 2, 3, 4];
     let new_arr = destination.dedup();
 
     assert(*new_arr[0] == 1, 'Should be 1');
@@ -31,7 +31,7 @@ fn dedup_one_match() {
 #[test]
 #[available_gas(2000000)]
 fn dedup_two_matches() {
-    let mut destination = array![1, 2, 2, 3, 4, 4];
+    let destination = array![1, 2, 2, 3, 4, 4];
     let new_arr = destination.dedup();
 
     assert(*new_arr[0] == 1, 'Should be 1');
@@ -44,7 +44,7 @@ fn dedup_two_matches() {
 #[test]
 #[available_gas(2000000)]
 fn dedup_one_match_more() {
-    let mut destination = array![1, 2, 2, 2, 3, 4, 4];
+    let destination = array![1, 2, 2, 2, 3, 4, 4];
     let new_arr = destination.dedup();
 
     assert(*new_arr[0] == 1, 'Should be 1');
@@ -57,7 +57,7 @@ fn dedup_one_match_more() {
 #[test]
 #[available_gas(2000000)]
 fn dedup_all_same() {
-    let mut destination = array![2, 2, 2, 2];
+    let destination = array![2, 2, 2, 2];
     let new_arr = destination.dedup();
 
     assert(*new_arr[0] == 2, 'Should be 2');
@@ -67,7 +67,7 @@ fn dedup_all_same() {
 #[test]
 #[available_gas(2000000)]
 fn dedup_one_elem() {
-    let mut destination = array![2];
+    let destination = array![2];
     let new_arr = destination.dedup();
 
     assert(*new_arr[0] == 2, 'Should be 2');
@@ -77,7 +77,7 @@ fn dedup_one_elem() {
 #[test]
 #[available_gas(2000000)]
 fn dedup_no_elem() {
-    let mut destination = ArrayTrait::<felt252>::new();
+    let destination: Array<felt252> = array![];
     let new_arr = destination.dedup();
 
     assert(new_arr.len() == 0, 'Len should be 0');
@@ -410,7 +410,7 @@ fn pop_back_n_more_then_len_span() {
 #[test]
 #[available_gas(2000000)]
 fn contains() {
-    let mut arr = get_felt252_array();
+    let arr = get_felt252_array();
     assert(arr.contains(21), 'Should contain 21');
     assert(arr.contains(42), 'Should contain 42');
     assert(arr.contains(84), 'Should contain 84');
@@ -420,7 +420,7 @@ fn contains() {
 #[test]
 #[available_gas(2000000)]
 fn contains_different_type() {
-    let mut arr = get_u128_array();
+    let arr = get_u128_array();
     assert(arr.contains(21_u128), 'Should contain 21_u128');
     assert(arr.contains(42_u128), 'Should contain 42_u128');
     assert(arr.contains(84_u128), 'Should contain 84_u128');
@@ -430,7 +430,7 @@ fn contains_different_type() {
 #[test]
 #[available_gas(2000000)]
 fn contains_false() {
-    let mut arr = get_felt252_array();
+    let arr = get_felt252_array();
     assert(!arr.contains(85), 'Should be false');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -438,7 +438,7 @@ fn contains_false() {
 #[test]
 #[available_gas(2000000)]
 fn contains_empty_array() {
-    let mut arr = array![];
+    let arr = array![];
     assert(!arr.contains(85), 'Should be false');
     assert(arr.len() == 0, 'arr should not be consummed');
 }
@@ -447,7 +447,7 @@ fn contains_empty_array() {
 #[test]
 #[available_gas(2000000)]
 fn contains_span() {
-    let mut arr = get_felt252_array().span();
+    let arr = get_felt252_array().span();
     assert(arr.contains(21), 'Should contain 21');
     assert(arr.contains(42), 'Should contain 42');
     assert(arr.contains(84), 'Should contain 84');
@@ -457,7 +457,7 @@ fn contains_span() {
 #[test]
 #[available_gas(2000000)]
 fn contains_different_type_span() {
-    let mut arr = get_u128_array().span();
+    let arr = get_u128_array().span();
     assert(arr.contains(21_u128), 'Should contain 21_u128');
     assert(arr.contains(42_u128), 'Should contain 42_u128');
     assert(arr.contains(84_u128), 'Should contain 84_u128');
@@ -467,7 +467,7 @@ fn contains_different_type_span() {
 #[test]
 #[available_gas(2000000)]
 fn contains_false_span() {
-    let mut arr = get_felt252_array().span();
+    let arr = get_felt252_array().span();
     assert(!arr.contains(85), 'Should be false');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -475,7 +475,7 @@ fn contains_false_span() {
 #[test]
 #[available_gas(2000000)]
 fn contains_empty_array_span() {
-    let mut arr = (array![]).span();
+    let arr = (array![]).span();
     assert(!arr.contains(85), 'Should be false');
     assert(arr.len() == 0, 'arr should not be consummed');
 }
@@ -485,7 +485,7 @@ fn contains_empty_array_span() {
 #[test]
 #[available_gas(2000000)]
 fn index_of() {
-    let mut arr = get_felt252_array();
+    let arr = get_felt252_array();
     assert(arr.index_of(21).unwrap() == 0, 'Index should be 0');
     assert(arr.index_of(42).unwrap() == 1, 'Index should be 1');
     assert(arr.index_of(84).unwrap() == 2, 'Index should be 2');
@@ -495,7 +495,7 @@ fn index_of() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_different_type() {
-    let mut arr = get_u128_array();
+    let arr = get_u128_array();
     assert(arr.index_of(21_u128).unwrap() == 0, 'Index should be 0');
     assert(arr.index_of(42_u128).unwrap() == 1, 'Index should be 1');
     assert(arr.index_of(84_u128).unwrap() == 2, 'Index should be 2');
@@ -505,21 +505,21 @@ fn index_of_different_type() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_panic() {
-    let mut arr = get_felt252_array();
+    let arr = get_felt252_array();
     assert(arr.index_of(12).is_none(), 'Should NOT contain 12');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn index_of_empty_array() {
-    let mut arr = array![];
+    let arr = array![];
     assert(arr.index_of(21).is_none(), 'Should NOT contain 21');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn index_of_span() {
-    let mut arr = get_felt252_array().span();
+    let arr = get_felt252_array().span();
     assert(arr.index_of(21).unwrap() == 0, 'Index should be 0');
     assert(arr.index_of(42).unwrap() == 1, 'Index should be 1');
     assert(arr.index_of(84).unwrap() == 2, 'Index should be 2');
@@ -529,7 +529,7 @@ fn index_of_span() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_different_type_span() {
-    let mut arr = get_u128_array().span();
+    let arr = get_u128_array().span();
     assert(arr.index_of(21_u128).unwrap() == 0, 'Index should be 0');
     assert(arr.index_of(42_u128).unwrap() == 1, 'Index should be 1');
     assert(arr.index_of(84_u128).unwrap() == 2, 'Index should be 2');
@@ -539,14 +539,14 @@ fn index_of_different_type_span() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_panic_span() {
-    let mut arr = get_felt252_array().span();
+    let arr = get_felt252_array().span();
     assert(arr.index_of(12).is_none(), 'Should NOT contain 12');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn index_of_empty_array_span() {
-    let mut arr = (array![]).span();
+    let arr = array![].span();
     assert(arr.index_of(21).is_none(), 'Should NOT contain 21');
 }
 
@@ -555,7 +555,7 @@ fn index_of_empty_array_span() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of() {
-    let mut arr = get_felt252_array();
+    let arr = get_felt252_array();
     assert(arr.occurrences_of(21) == 1, 'Should contain 21 exactly once');
     assert(arr.occurrences_of(42) == 1, 'Should contain 42 exactly once');
     assert(arr.occurrences_of(84) == 1, 'Should contain 84 exactly once');
@@ -565,7 +565,7 @@ fn occurrences_of() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_different_type() {
-    let mut arr = get_u128_array();
+    let arr = get_u128_array();
     assert(arr.occurrences_of(21_u128) == 1, 'Should contain 21 exactly once');
     assert(arr.occurrences_of(42_u128) == 1, 'Should contain 42 exactly once');
     assert(arr.occurrences_of(84_u128) == 1, 'Should contain 84 exactly once');
@@ -575,7 +575,7 @@ fn occurrences_of_different_type() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_not_in_array() {
-    let mut arr = get_felt252_array();
+    let arr = get_felt252_array();
     assert(arr.occurrences_of(12) == 0, 'Should contain exactly once');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -583,7 +583,7 @@ fn occurrences_of_not_in_array() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_empty_array() {
-    let mut arr = array![];
+    let arr = array![];
     assert(arr.occurrences_of(12) == 0, 'Should contain exactly 0');
     assert(arr.len() == 0, 'arr should not be consummed');
 }
@@ -591,7 +591,7 @@ fn occurrences_of_empty_array() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_double() {
-    let mut arr = array![21, 21, 84];
+    let arr = array![21, 21, 84];
     assert(arr.occurrences_of(21) == 2, 'Should contain exactly 2');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -599,7 +599,7 @@ fn occurrences_of_double() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_filled() {
-    let mut arr = array![21, 21, 21];
+    let arr = array![21, 21, 21];
     assert(arr.occurrences_of(21) == 3, 'Should contain exactly 3');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -607,7 +607,7 @@ fn occurrences_of_filled() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_span() {
-    let mut arr = get_felt252_array().span();
+    let arr = get_felt252_array().span();
     assert(arr.occurrences_of(21) == 1, 'Should contain 21 exactly once');
     assert(arr.occurrences_of(42) == 1, 'Should contain 42 exactly once');
     assert(arr.occurrences_of(84) == 1, 'Should contain 84 exactly once');
@@ -617,7 +617,7 @@ fn occurrences_of_span() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_different_type_span() {
-    let mut arr = get_u128_array().span();
+    let arr = get_u128_array().span();
     assert(arr.occurrences_of(21_u128) == 1, 'Should contain 21 exactly once');
     assert(arr.occurrences_of(42_u128) == 1, 'Should contain 42 exactly once');
     assert(arr.occurrences_of(84_u128) == 1, 'Should contain 84 exactly once');
@@ -627,7 +627,7 @@ fn occurrences_of_different_type_span() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_not_in_array_span() {
-    let mut arr = get_felt252_array().span();
+    let arr = get_felt252_array().span();
     assert(arr.occurrences_of(12) == 0, 'Should contain exactly once');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -635,7 +635,7 @@ fn occurrences_of_not_in_array_span() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_empty_array_span() {
-    let mut arr = array![].span();
+    let arr = array![].span();
     assert(arr.occurrences_of(12) == 0, 'Should contain exactly 0');
     assert(arr.len() == 0, 'arr should not be consummed');
 }
@@ -643,7 +643,7 @@ fn occurrences_of_empty_array_span() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_double_span() {
-    let mut arr = array![21, 21, 84];
+    let arr = array![21, 21, 84];
     assert(arr.span().occurrences_of(21) == 2, 'Should contain exactly 2');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -651,7 +651,7 @@ fn occurrences_of_double_span() {
 #[test]
 #[available_gas(2000000)]
 fn occurrences_of_filled_span() {
-    let mut arr = array![21, 21, 21];
+    let arr = array![21, 21, 21];
     assert(arr.span().occurrences_of(21) == 3, 'Should contain exactly 3');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -661,7 +661,7 @@ fn occurrences_of_filled_span() {
 #[test]
 #[available_gas(2000000)]
 fn min() {
-    let mut arr = @get_u128_array();
+    let arr = @get_u128_array();
     assert(arr.min().unwrap() == 21_u128, 'Min should be 21');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -687,14 +687,14 @@ fn min_with_duplicate() {
 #[test]
 #[available_gas(2000000)]
 fn min_empty_array() {
-    let mut arr: @Array<u128> = @array![];
+    let arr: @Array<u128> = @array![];
     assert(arr.index_of(12).is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn min_one_item() {
-    let mut arr = array![21_u128];
+    let arr = array![21_u128];
     assert(arr.min().unwrap() == 21_u128, 'Min should be 21');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -702,7 +702,7 @@ fn min_one_item() {
 #[test]
 #[available_gas(2000000)]
 fn min_last() {
-    let mut arr = array![84_u128, 42_u128, 21_u128];
+    let arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.min().unwrap() == 21_u128, 'Min should be 21');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -710,7 +710,7 @@ fn min_last() {
 #[test]
 #[available_gas(2000000)]
 fn min_span() {
-    let mut arr = get_u128_array().span();
+    let arr = get_u128_array().span();
     assert(arr.min().unwrap() == 21_u128, 'Min should be 21');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -736,14 +736,14 @@ fn min_with_duplicate_span() {
 #[test]
 #[available_gas(2000000)]
 fn min_empty_array_span() {
-    let mut arr: Span<u128> = array![].span();
+    let arr: Span<u128> = array![].span();
     assert(arr.index_of(12).is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn min_one_item_span() {
-    let mut arr = array![21_u128];
+    let arr = array![21_u128];
     assert(arr.span().min().unwrap() == 21_u128, 'Min should be 21');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -751,7 +751,7 @@ fn min_one_item_span() {
 #[test]
 #[available_gas(2000000)]
 fn min_last_span() {
-    let mut arr = array![84_u128, 42_u128, 21_u128];
+    let arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.span().min().unwrap() == 21_u128, 'Min should be 21');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -761,7 +761,7 @@ fn min_last_span() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_min() {
-    let mut arr = get_u128_array();
+    let arr = get_u128_array();
     assert(arr.index_of_min().unwrap() == 0, 'index_of_min should be 0');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -787,14 +787,14 @@ fn index_of_min_with_duplicate() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_min_empty_array() {
-    let mut arr: Array<u128> = array![];
+    let arr: Array<u128> = array![];
     assert(arr.index_of_min().is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn index_of_min_one_item() {
-    let mut arr = array![21_u128];
+    let arr = array![21_u128];
     assert(arr.index_of_min().unwrap() == 0, 'index_of_min should be 0');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -802,7 +802,7 @@ fn index_of_min_one_item() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_min_last() {
-    let mut arr = array![84_u128, 42_u128, 21_u128];
+    let arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.index_of_min().unwrap() == 2, 'index_of_min should be 2');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -811,7 +811,7 @@ fn index_of_min_last() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_min_span() {
-    let mut arr = get_u128_array();
+    let arr = get_u128_array();
     assert(arr.span().index_of_min().unwrap() == 0, 'index_of_min should be 0');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -837,14 +837,14 @@ fn index_of_min_with_duplicate_span() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_min_empty_array_span() {
-    let mut arr: Array<u128> = array![];
+    let arr: Array<u128> = array![];
     assert(arr.span().index_of_min().is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn index_of_min_one_item_span() {
-    let mut arr = array![21_u128];
+    let arr = array![21_u128];
     assert(arr.span().index_of_min().unwrap() == 0, 'index_of_min should be 0');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -852,7 +852,7 @@ fn index_of_min_one_item_span() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_min_last_span() {
-    let mut arr = array![84_u128, 42_u128, 21_u128];
+    let arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.span().index_of_min().unwrap() == 2, 'index_of_min should be 2');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -862,7 +862,7 @@ fn index_of_min_last_span() {
 #[test]
 #[available_gas(2000000)]
 fn max() {
-    let mut arr = get_u128_array();
+    let arr = get_u128_array();
     assert(arr.max().unwrap() == 84_u128, 'Max should be 84');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -888,14 +888,14 @@ fn max_with_duplicate() {
 #[test]
 #[available_gas(2000000)]
 fn max_empty_array() {
-    let mut arr: @Array<u128> = @array![];
+    let arr: @Array<u128> = @array![];
     assert(arr.index_of(12).is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn max_one_item() {
-    let mut arr = array![21_u128];
+    let arr = array![21_u128];
     assert(arr.max().unwrap() == 21_u128, 'Max should be 21');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -903,7 +903,7 @@ fn max_one_item() {
 #[test]
 #[available_gas(2000000)]
 fn max_first() {
-    let mut arr = array![84_u128, 42_u128, 21_u128];
+    let arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.max().unwrap() == 84_u128, 'Max should be 84');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -911,7 +911,7 @@ fn max_first() {
 #[test]
 #[available_gas(2000000)]
 fn max_span() {
-    let mut arr = get_u128_array();
+    let arr = get_u128_array();
     assert(arr.max().unwrap() == 84_u128, 'Max should be 84');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -937,14 +937,14 @@ fn max_with_duplicate_span() {
 #[test]
 #[available_gas(2000000)]
 fn max_empty_array_span() {
-    let mut arr: Span<u128> = array![].span();
+    let arr: Span<u128> = array![].span();
     assert(arr.index_of(12).is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn max_one_item_span() {
-    let mut arr = array![21_u128];
+    let arr = array![21_u128];
     assert(arr.span().max().unwrap() == 21_u128, 'Max should be 21');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -952,7 +952,7 @@ fn max_one_item_span() {
 #[test]
 #[available_gas(2000000)]
 fn max_first_span() {
-    let mut arr = array![84_u128, 42_u128, 21_u128];
+    let arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.span().max().unwrap() == 84_u128, 'Max should be 84');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -962,7 +962,7 @@ fn max_first_span() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_max() {
-    let mut arr = get_u128_array();
+    let arr = get_u128_array();
     assert(arr.index_of_max().unwrap() == 2, 'index_of_max should be 2');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -988,14 +988,14 @@ fn index_of_max_with_duplicate() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_max_empty_array() {
-    let mut arr: Array<u128> = array![];
+    let arr: Array<u128> = array![];
     assert(arr.index_of_max().is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn index_of_max_one_item() {
-    let mut arr = array![21_u128];
+    let arr = array![21_u128];
     assert(arr.index_of_max().unwrap() == 0, 'index_of_max should be 0');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -1003,7 +1003,7 @@ fn index_of_max_one_item() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_max_last() {
-    let mut arr = array![84_u128, 42_u128, 21_u128];
+    let arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.index_of_max().unwrap() == 0, 'index_of_max should be 0');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -1012,7 +1012,7 @@ fn index_of_max_last() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_max_span() {
-    let mut arr = get_u128_array();
+    let arr = get_u128_array();
     assert(arr.span().index_of_max().unwrap() == 2, 'index_of_max should be 2');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -1038,14 +1038,14 @@ fn index_of_max_with_duplicate_span() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_max_empty_array_span() {
-    let mut arr: Array<u128> = array![];
+    let arr: Array<u128> = array![];
     assert(arr.span().index_of_max().is_none(), 'Should be None');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn index_of_max_one_item_span() {
-    let mut arr = array![21_u128];
+    let arr = array![21_u128];
     assert(arr.span().index_of_max().unwrap() == 0, 'index_of_max should be 0');
     assert(arr.len() == 1, 'arr should not be consummed');
 }
@@ -1053,7 +1053,7 @@ fn index_of_max_one_item_span() {
 #[test]
 #[available_gas(2000000)]
 fn index_of_max_last_span() {
-    let mut arr = array![84_u128, 42_u128, 21_u128];
+    let arr = array![84_u128, 42_u128, 21_u128];
     assert(arr.span().index_of_max().unwrap() == 0, 'index_of_max should be 0');
     assert(arr.len() == 3, 'arr should not be consummed');
 }
@@ -1063,8 +1063,8 @@ fn index_of_max_last_span() {
 #[test]
 #[available_gas(2000000)]
 fn unique() {
-    let mut arr = array![32_u128, 256_u128, 128_u128, 256_u128, 1024_u128];
-    let mut out_arr = arr.unique();
+    let arr = array![32_u128, 256_u128, 128_u128, 256_u128, 1024_u128];
+    let out_arr = arr.unique();
     assert(out_arr.len() == 4, 'Duplicates should be dropped');
     assert(*out_arr[0] == 32_u128, 'Should be 32');
     assert(*out_arr[1] == 256_u128, 'Should be 256');
@@ -1075,8 +1075,8 @@ fn unique() {
 #[test]
 #[available_gas(2000000)]
 fn unique_all() {
-    let mut arr = array![84_u128, 84_u128, 84_u128];
-    let mut out_arr = arr.unique();
+    let arr = array![84_u128, 84_u128, 84_u128];
+    let out_arr = arr.unique();
     assert(out_arr.len() == 1, 'Duplicates should be dropped');
     assert(*out_arr[0] == 84_u128, 'Should be 128');
 }
@@ -1084,16 +1084,16 @@ fn unique_all() {
 #[test]
 #[available_gas(2000000)]
 fn unique_none() {
-    let mut arr: Array<u128> = array![];
-    let mut out_arr = arr.unique();
+    let arr: Array<u128> = array![];
+    let out_arr = arr.unique();
     assert(out_arr.len() == 0, 'out_arr should be empty');
 }
 
 #[test]
 #[available_gas(2000000)]
 fn unique_at_start() {
-    let mut arr = array![16_u128, 16_u128, 16_u128, 128_u128, 64_u128, 32_u128];
-    let mut out_arr = arr.unique();
+    let arr = array![16_u128, 16_u128, 16_u128, 128_u128, 64_u128, 32_u128];
+    let out_arr = arr.unique();
     assert(out_arr.len() == 4, 'Duplicates should be dropped');
     assert(*out_arr[0] == 16_u128, 'Should be 16');
     assert(*out_arr[1] == 128_u128, 'Should be 128');
@@ -1104,8 +1104,8 @@ fn unique_at_start() {
 #[test]
 #[available_gas(2000000)]
 fn unique_at_middle() {
-    let mut arr = array![128_u128, 256_u128, 84_u128, 84_u128, 84_u128, 1_u128];
-    let mut out_arr = arr.unique();
+    let arr = array![128_u128, 256_u128, 84_u128, 84_u128, 84_u128, 1_u128];
+    let out_arr = arr.unique();
     assert(out_arr.len() == 4, 'Duplicates should be dropped');
     assert(*out_arr[0] == 128_u128, 'Should be 128');
     assert(*out_arr[1] == 256_u128, 'Should be 256');
@@ -1116,8 +1116,8 @@ fn unique_at_middle() {
 #[test]
 #[available_gas(2000000)]
 fn unique_at_end() {
-    let mut arr = array![32_u128, 16_u128, 64_u128, 128_u128, 128_u128, 128_u128];
-    let mut out_arr = arr.unique();
+    let arr = array![32_u128, 16_u128, 64_u128, 128_u128, 128_u128, 128_u128];
+    let out_arr = arr.unique();
     assert(out_arr.len() == 4, 'Duplicates should be dropped');
     assert(*out_arr[0] == 32_u128, 'Should be 32');
     assert(*out_arr[1] == 16_u128, 'Should be 16');
@@ -1128,8 +1128,8 @@ fn unique_at_end() {
 #[test]
 #[available_gas(2000000)]
 fn unique_without_duplicates() {
-    let mut arr = array![42_u128, 84_u128, 21_u128];
-    let mut out_arr = arr.unique();
+    let arr = array![42_u128, 84_u128, 21_u128];
+    let out_arr = arr.unique();
     assert(out_arr.len() == 3, 'No values should drop');
     assert(*out_arr[0] == 42_u128, 'Should be 42');
     assert(*out_arr[1] == 84_u128, 'Should be 84');
@@ -1139,11 +1139,9 @@ fn unique_without_duplicates() {
 // Utility fn
 
 fn get_felt252_array() -> Array<felt252> {
-    let mut arr = array![21, 42, 84];
-    arr
+    array![21, 42, 84]
 }
 
 fn get_u128_array() -> Array<u128> {
-    let mut arr = array![21_u128, 42_u128, 84_u128];
-    arr
+    array![21_u128, 42_u128, 84_u128]
 }

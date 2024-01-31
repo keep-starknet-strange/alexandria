@@ -16,8 +16,8 @@ fn merge<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(mut arr: Array<T>) -> Array<T> {
     let (mut left_arr, mut right_arr) = split_array(ref arr, middle);
 
     // Recursively sort the left and right arrays
-    let mut sorted_left = merge(left_arr);
-    let mut sorted_right = merge(right_arr);
+    let sorted_left = merge(left_arr);
+    let sorted_right = merge(right_arr);
 
     let mut result_arr = array![];
     merge_recursive(sorted_left, sorted_right, ref result_arr, 0, 0);

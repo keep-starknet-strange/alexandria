@@ -3,7 +3,7 @@ use alexandria_encoding::base64::{Base64Encoder, Base64Decoder, Base64UrlEncoder
 #[test]
 #[available_gas(2000000000)]
 fn base64encode_empty_test() {
-    let mut input = array![];
+    let input = array![];
     let result = Base64Encoder::encode(input);
     assert(result.len() == 0, 'invalid result length');
 }
@@ -11,7 +11,7 @@ fn base64encode_empty_test() {
 #[test]
 #[available_gas(2000000000)]
 fn base64encode_simple_test() {
-    let mut input = array!['a'];
+    let input = array!['a'];
 
     let result = Base64Encoder::encode(input);
     assert(result.len() == 4, 'invalid result length');
@@ -24,7 +24,7 @@ fn base64encode_simple_test() {
 #[test]
 #[available_gas(2000000000)]
 fn base64encode_hello_world_test() {
-    let mut input = array!['h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'];
+    let input = array!['h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'];
 
     let result = Base64Encoder::encode(input);
     assert(result.len() == 16, 'invalid result length');
@@ -49,7 +49,7 @@ fn base64encode_hello_world_test() {
 #[test]
 #[available_gas(2000000000)]
 fn base64decode_empty_test() {
-    let mut input = array![];
+    let input = array![];
 
     let result = Base64Decoder::decode(input);
     assert(result.len() == 0, 'invalid result length');
@@ -58,7 +58,7 @@ fn base64decode_empty_test() {
 #[test]
 #[available_gas(2000000000)]
 fn base64decode_simple_test() {
-    let mut input = array!['Y', 'Q', '=', '='];
+    let input = array!['Y', 'Q', '=', '='];
 
     let result = Base64Decoder::decode(input);
     assert(result.len() == 1, 'invalid result length');
@@ -68,7 +68,7 @@ fn base64decode_simple_test() {
 #[test]
 #[available_gas(2000000000)]
 fn base64decode_hello_world_test() {
-    let mut input = array![
+    let input = array![
         'a', 'G', 'V', 's', 'b', 'G', '8', 'g', 'd', '2', '9', 'y', 'b', 'G', 'Q', '='
     ];
 
@@ -90,7 +90,7 @@ fn base64decode_hello_world_test() {
 #[test]
 #[available_gas(2000000000)]
 fn base64encode_with_plus_and_slash() {
-    let mut input = array![255, 239];
+    let input = array![255, 239];
 
     let result = Base64Encoder::encode(input);
     assert(result.len() == 4, 'invalid result length');
@@ -103,7 +103,7 @@ fn base64encode_with_plus_and_slash() {
 #[test]
 #[available_gas(2000000000)]
 fn base64urlencode_with_plus_and_slash() {
-    let mut input = array![255, 239];
+    let input = array![255, 239];
 
     let result = Base64UrlEncoder::encode(input);
     assert(result.len() == 4, 'invalid result length');
@@ -116,7 +116,7 @@ fn base64urlencode_with_plus_and_slash() {
 #[test]
 #[available_gas(2000000000)]
 fn base64decode_with_plus_and_slash() {
-    let mut input = array!['/', '+', '8', '='];
+    let input = array!['/', '+', '8', '='];
 
     let result = Base64UrlDecoder::decode(input);
     assert(result.len() == 2, 'invalid result length');
@@ -127,7 +127,7 @@ fn base64decode_with_plus_and_slash() {
 #[test]
 #[available_gas(2000000000)]
 fn base64urldecode_with_plus_and_slash() {
-    let mut input = array!['_', '-', '8', '='];
+    let input = array!['_', '-', '8', '='];
 
     let result = Base64UrlDecoder::decode(input);
     assert(result.len() == 2, 'invalid result length');
