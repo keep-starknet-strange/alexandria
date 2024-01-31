@@ -466,7 +466,6 @@ fn test_read_sequence_le_arr() {
 fn test_clone_byte_array_reader() {
     let ba = test_byte_array_64();
     let mut rd1 = ba.reader();
-    let temp = rd1.read_u256().unwrap();
     let mut rd2 = rd1.clone();
     let a = rd1.read_u128().unwrap();
     assert(rd1.index != rd2.index, 'indicies equal');
@@ -480,7 +479,6 @@ fn test_clone_byte_array_reader() {
 fn test_clone_array_of_bytes_reader() {
     let ba = test_array_64();
     let mut rd1 = ba.reader();
-    let temp = rd1.read_u256().unwrap();
     let mut rd2 = rd1.clone();
     let a = rd1.read_u128().unwrap();
     assert(rd1.index != rd2.index, 'indicies equal');

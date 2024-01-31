@@ -174,7 +174,7 @@ fn test_rlp_decode_short_string() {
     let res = RLPTrait::decode(arr.span()).unwrap();
 
     // Remove the byte representing the data type
-    arr.pop_front();
+    let _ = arr.pop_front();
     let expected_item = array![RLPItem::String(arr.span())].span();
 
     assert(res == expected_item, 'Wrong value');
@@ -291,8 +291,8 @@ fn test_rlp_decode_long_string_with_payload_len_on_1_byte() {
     let res = RLPTrait::decode(arr.span()).unwrap();
 
     // Remove the bytes representing the data type and their length
-    arr.pop_front();
-    arr.pop_front();
+    let _ = arr.pop_front();
+    let _ = arr.pop_front();
     let expected_item = array![RLPItem::String(arr.span())].span();
 
     assert(res == expected_item, 'Wrong value');
@@ -641,9 +641,9 @@ fn test_rlp_decode_long_string_with_payload_len_on_2_bytes() {
     let res = RLPTrait::decode(arr.span()).unwrap();
 
     // Remove the bytes representing the data type and their length
-    arr.pop_front();
-    arr.pop_front();
-    arr.pop_front();
+    let _ = arr.pop_front();
+    let _ = arr.pop_front();
+    let _ = arr.pop_front();
     let expected_item = array![RLPItem::String(arr.span())].span();
 
     assert(res == expected_item, 'Wrong value');

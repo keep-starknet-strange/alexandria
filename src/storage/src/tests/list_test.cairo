@@ -34,7 +34,7 @@ mod AListHolder {
         numbers: List<u256>
     }
 
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl Holder of super::IAListHolder<ContractState> {
         fn do_get_len(self: @ContractState) -> (u32, u32) {
             (self.addresses.read().len(), self.numbers.read().len())
@@ -71,8 +71,8 @@ mod AListHolder {
         ) {
             let mut a = self.addresses.read();
             let mut n = self.numbers.read();
-            a.set(index, addrs_value);
-            n.set(index, numbers_value);
+            let _ = a.set(index, addrs_value);
+            let _ = n.set(index, numbers_value);
         }
 
         fn do_clean(ref self: ContractState) {
@@ -189,9 +189,9 @@ mod tests {
         let numbers_address = contract_state.numbers.address();
         let mut numbers_list = ListTrait::<u256>::new(0, numbers_address);
 
-        addresses_list.append(mock_addr());
-        numbers_list.append(1);
-        numbers_list.append(2);
+        let _ = addresses_list.append(mock_addr());
+        let _ = numbers_list.append(1);
+        let _ = numbers_list.append(2);
 
         assert(addresses_list.len() == 1, 'Addresses length should be 1');
         assert(numbers_list.len() == 2, 'Numbers length should be 2');
@@ -205,9 +205,7 @@ mod tests {
     fn test_fetch_empty_list() {
         let contract = deploy_mock();
         set_contract_address(contract.contract_address);
-        let mut contract_state = AListHolder::unsafe_new_contract_state();
         let storage_address = storage_base_address_from_felt252('empty_address');
-        let contract = deploy_mock();
 
         let empty_list = ListTrait::<u128>::fetch(0, storage_address).expect('List fetch failed');
 
@@ -512,7 +510,6 @@ mod tests {
     #[available_gas(100000000)]
     fn test_array_clean_with_empty_array() {
         let contract = deploy_mock();
-        let mock_addr = mock_addr();
 
         assert(contract.do_get_len() == (0, 0), 'is empty');
 

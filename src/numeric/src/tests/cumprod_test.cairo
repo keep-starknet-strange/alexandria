@@ -15,5 +15,5 @@ fn cumprod_test() {
 #[available_gas(2000000)]
 fn cumprod_test_revert_empty() {
     let xs: Array<u64> = array![];
-    let ys = cumprod(xs.span());
+    cumprod(xs.span());
 }

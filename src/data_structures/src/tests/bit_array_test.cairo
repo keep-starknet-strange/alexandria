@@ -332,7 +332,7 @@ fn test_serde_ser_deser() {
 // helpers
 fn sample_bit_array() -> BitArray {
     let sample: felt252 = BoundedInt::<u128>::max().into() - 1;
-    let u256{low, high } = sample.into();
+    let u256{low, high: _ } = sample.into();
     let ba = BitArray {
         data: array![],
         current: low.into() * one_shift_left_bytes_felt252(15),

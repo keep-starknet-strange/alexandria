@@ -119,7 +119,7 @@ fn test_bytes_read_u128_packed_out_of_bound() {
 
     let bytes = BytesTrait::new(42, array);
 
-    let (new_offset, value) = bytes.read_u128_packed(0, 43);
+    bytes.read_u128_packed(0, 43);
 }
 
 #[test]
@@ -134,7 +134,7 @@ fn test_bytes_read_u128_packed_too_large() {
 
     let bytes = BytesTrait::new(42, array);
 
-    let (new_offset, value) = bytes.read_u128_packed(0, 17);
+    bytes.read_u128_packed(0, 17);
 }
 
 #[test]
@@ -174,7 +174,7 @@ fn test_bytes_read_u128_array_packed_out_of_bound() {
 
     let bytes = BytesTrait::new(42, array);
 
-    let (new_offset, new_array) = bytes.read_u128_array_packed(0, 11, 4);
+    bytes.read_u128_array_packed(0, 11, 4);
 }
 
 #[test]
@@ -189,7 +189,7 @@ fn test_bytes_read_u128_array_packed_too_large() {
 
     let bytes = BytesTrait::new(42, array);
 
-    let (new_offset, new_array) = bytes.read_u128_array_packed(0, 2, 17);
+    bytes.read_u128_array_packed(0, 2, 17);
 }
 
 #[test]
@@ -220,7 +220,7 @@ fn test_bytes_read_felt252_packed_out_of_bound() {
 
     let bytes = BytesTrait::new(42, array);
 
-    let (new_offset, new_array) = bytes.read_felt252_packed(0, 43);
+    bytes.read_felt252_packed(0, 43);
 }
 
 #[test]
@@ -235,7 +235,7 @@ fn test_bytes_read_felt252_packed_too_large() {
 
     let bytes = BytesTrait::new(42, array);
 
-    let (new_offset, new_array) = bytes.read_felt252_packed(0, 32);
+    bytes.read_felt252_packed(0, 32);
 }
 
 #[test]

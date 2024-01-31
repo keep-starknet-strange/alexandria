@@ -70,9 +70,6 @@ fn calculate_shortest_path() {
 #[test]
 #[available_gas(2000000)]
 fn calculate_shortest_path_random() {
-    let source = 0_u32;
-    let dest = 2_u32;
-    let weight = 4_u128;
     let mut graph = GraphTrait::new();
     GraphTrait::add_edge(ref graph, 0, 2, 4);
     GraphTrait::add_edge(ref graph, 0, 3, 5);
