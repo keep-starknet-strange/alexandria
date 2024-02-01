@@ -29,22 +29,12 @@ fn quick_sort_range<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>, +Felt2
     let mut l = left;
     let mut r = right;
 
-    loop {
-        if l >= r {
-            break;
-        }
-
-        loop {
-            if (l >= r) || (array[r] < array[left]) {
-                break;
-            }
+    while l < r {
+        while (l < r) && (array[r] >= array[left]) {
             r -= 1;
         };
 
-        loop {
-            if (l >= r) || (array[l] > array[left]) {
-                break;
-            }
+        while (l < r) && (array[l] <= array[left]) {
             l += 1;
         };
 

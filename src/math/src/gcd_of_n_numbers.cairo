@@ -11,12 +11,11 @@ fn gcd(mut n: Span<u128>) -> u128 {
         panic_with_felt252('EI')
     }
     let mut a = *n.pop_front().unwrap();
-    loop {
-        match n.pop_front() {
-            Option::Some(b) => { a = gcd_two_numbers(a, *b); },
-            Option::None => { break a; },
-        };
-    }
+    while !n.is_empty() {
+        let b = *n.pop_front().unwrap();
+        a = gcd_two_numbers(a, b);
+    };
+    a
 }
 
 // Internal function to calculate the gcd between two numbers
@@ -26,13 +25,10 @@ fn gcd(mut n: Span<u128>) -> u128 {
 // # Returns
 // * `felt252` - The gcd of a and b
 fn gcd_two_numbers(mut a: u128, mut b: u128) -> u128 {
-    loop {
-        if b == 0 {
-            break a;
-        }
-
+    while b != 0 {
         let r = a % b;
         a = b;
         b = r;
-    }
+    };
+    a
 }

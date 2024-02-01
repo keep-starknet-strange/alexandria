@@ -127,10 +127,7 @@ impl BytesImpl of BytesTrait {
             data_len += 1;
         }
 
-        loop {
-            if data_len == 0 {
-                break;
-            };
+        while data_len != 0 {
             data.append(0_u128);
             data_len -= 1;
         };
@@ -337,10 +334,7 @@ impl BytesImpl of BytesTrait {
         // read full array element for sub_bytes
         let mut offset = offset;
         let mut sub_bytes_full_array_len = size / BYTES_PER_ELEMENT;
-        loop {
-            if sub_bytes_full_array_len == 0 {
-                break;
-            };
+        while sub_bytes_full_array_len != 0 {
             let (new_offset, value) = self.read_u128(offset);
             array.append(value);
             offset = new_offset;
@@ -475,10 +469,7 @@ impl BytesImpl of BytesTrait {
         // read full array element for other
         let mut offset = 0;
         let mut sub_bytes_full_array_len = *other.size / BYTES_PER_ELEMENT;
-        loop {
-            if sub_bytes_full_array_len == 0 {
-                break;
-            };
+        while sub_bytes_full_array_len != 0 {
             let (new_offset, value) = other.read_u128(offset);
             self.append_u128(value);
             offset = new_offset;
@@ -514,15 +505,13 @@ impl BytesImpl of BytesTrait {
         let mut hash_data: Array<u8> = array![];
         let mut i: usize = 0;
         let mut offset: usize = 0;
-        loop {
-            if i == self.size() {
-                break;
-            }
-            let (new_offset, hash_data_item) = self.read_u8(offset);
-            hash_data.append(hash_data_item);
-            offset = new_offset;
-            i += 1;
-        };
+        while i != self
+            .size() {
+                let (new_offset, hash_data_item) = self.read_u8(offset);
+                hash_data.append(hash_data_item);
+                offset = new_offset;
+                i += 1;
+            };
 
         let output: Array<u8> = sha256(hash_data);
         u8_array_to_u256(output.span())

@@ -1,8 +1,5 @@
 //! # LCM for N numbers
 use alexandria_math::gcd_of_n_numbers::gcd_two_numbers;
-use core::option::OptionTrait;
-use core::traits::Into;
-use core::traits::TryInto;
 
 #[derive(Drop, Copy, PartialEq)]
 enum LCMError {
@@ -22,13 +19,11 @@ fn lcm<T, +Into<T, u128>, +Into<u128, T>, +Mul<T>, +Div<T>, +Copy<T>, +Drop<T>>(
         return Result::Err(LCMError::EmptyInput);
     }
     let mut a = *n.pop_front().unwrap();
-    loop {
-        match n.pop_front() {
-            Option::Some(b) => {
-                let gcd: T = gcd_two_numbers(a.into(), (*b).into()).into();
-                a = (a * *b) / gcd;
-            },
-            Option::None => { break Result::Ok(a); },
+    while !n
+        .is_empty() {
+            let b = *n.pop_front().unwrap();
+            let gcd: T = gcd_two_numbers(a.into(), b.into()).into();
+            a = (a * b) / gcd;
         };
-    }
+    Result::Ok(a)
 }

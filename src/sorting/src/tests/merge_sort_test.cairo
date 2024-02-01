@@ -3,8 +3,8 @@ use alexandria_sorting::{is_equal, merge_sort::merge};
 #[test]
 #[available_gas(2000000000)]
 fn mergesort_test() {
-    let data = array![7_u32, 4_u32, 2_u32, 6_u32, 1_u32, 3_u32, 5_u32, 8_u32, 0_u32];
-    let correct = array![0_u32, 1_u32, 2_u32, 3_u32, 4_u32, 5_u32, 6_u32, 7_u32, 8_u32].span();
+    let data = array![7_u32, 4, 2, 6, 1, 3, 5, 8, 0];
+    let correct = array![0_u32, 1, 2, 3, 4, 5, 6, 7, 8].span();
 
     let sorted = merge(data).span();
 
@@ -14,8 +14,8 @@ fn mergesort_test() {
 #[test]
 #[available_gas(2000000)]
 fn mergesort_test_2_pre_sorted_decreasing() {
-    let data = array![4_u32, 3_u32, 2_u32, 1_u32];
-    let correct = array![1_u32, 2_u32, 3_u32, 4_u32];
+    let data = array![4_u32, 3, 2, 1];
+    let correct = array![1_u32, 2, 3, 4];
 
     let sorted = merge(data);
 
@@ -48,8 +48,8 @@ fn mergesort_test_one_element() {
 #[test]
 #[available_gas(2000000)]
 fn mergesort_test_pre_sorted() {
-    let data = array![1_u32, 2_u32, 3_u32, 4_u32];
-    let correct = array![1_u32, 2_u32, 3_u32, 4_u32];
+    let data = array![1_u32, 2, 3, 4];
+    let correct = array![1_u32, 2, 3, 4];
 
     let sorted = merge(data);
 
@@ -59,8 +59,8 @@ fn mergesort_test_pre_sorted() {
 #[test]
 #[available_gas(2000000)]
 fn mergesort_test_2_same_values() {
-    let data = array![1_u32, 2_u32, 3_u32, 2_u32, 4_u32];
-    let correct = array![1_u32, 2_u32, 2_u32, 3_u32, 4_u32];
+    let data = array![1_u32, 2, 3, 2, 4];
+    let correct = array![1_u32, 2, 2, 3, 4];
 
     let sorted = merge(data);
 
@@ -70,8 +70,8 @@ fn mergesort_test_2_same_values() {
 #[test]
 #[available_gas(2000000)]
 fn mergesort_test_2_same_values_pre_sorted() {
-    let data = array![1_u32, 2_u32, 2_u32, 3_u32, 4_u32];
-    let correct = array![1_u32, 2_u32, 2_u32, 3_u32, 4_u32];
+    let data = array![1_u32, 2, 2, 3, 4];
+    let correct = array![1_u32, 2, 2, 3, 4];
 
     let sorted = merge(data);
 

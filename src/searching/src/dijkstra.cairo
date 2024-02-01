@@ -8,7 +8,6 @@ struct Node {
     weight: u128
 }
 
-
 /// Graph representation.
 struct Graph<T> {
     nodes: Array<Node>,
@@ -39,7 +38,7 @@ impl GraphImpl of GraphTrait {
     fn add_edge(ref self: Graph<Nullable<Span<Node>>>, source: u32, dest: u32, weight: u128) {
         let adj_nodes = self.adj_nodes.get(source.into());
         let mut nodes: Array<Node> = array![];
-        let mut is_null: bool = false;
+        let mut is_null = false;
         let node = Node { source, dest, weight };
         let mut span = match match_nullable(adj_nodes) {
             FromNullableResult::Null => {
@@ -51,16 +50,9 @@ impl GraphImpl of GraphTrait {
         };
 
         // iterate over existing array to add new node
-        if (!is_null) {
-            let mut index = 0;
-            loop {
-                if index >= span.len() {
-                    break;
-                }
-
-                let new_node = *span.get(index).unwrap().unbox();
-                nodes.append(new_node);
-                index += 1;
+        if !is_null {
+            while !span.is_empty() {
+                nodes.append(*span.pop_front().unwrap());
             };
             nodes.append(node);
         }
@@ -82,16 +74,12 @@ fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u
     let node_size = self.nodes.len();
     let nodes = self.nodes.span();
     // add first node to pripority queue
-    let initial_node = Node { source: source, dest: 0, weight: 0 };
+    let initial_node = Node { source, dest: 0, weight: 0 };
     priority_queue.append(initial_node);
 
     // init dist with infinite value
     let mut index = 0;
-    loop {
-        if index == node_size {
-            break;
-        }
-
+    while index != node_size {
         let current_node = *nodes.at(index);
         dist.insert(current_node.dest.into(), 255_u128);
         index += 1;
@@ -103,11 +91,7 @@ fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u
     let mut visited = 0;
     let mut no_more_adj_node = false;
     // iterate while all node aren't visited
-    loop {
-        if visited == node_size {
-            break;
-        }
-
+    while visited != node_size {
         let mut edge_distance: u128 = 0;
         let mut new_distance: u128 = 0;
         let adj_nodes = self.adj_nodes.get(visited.into());
@@ -126,11 +110,8 @@ fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u
             visited += 1;
             let mut index = 0;
 
-            loop {
-                if index == adj_nodes_list.len() {
-                    break;
-                }
-
+            let adj_nodes_list_len = adj_nodes_list.len();
+            while index != adj_nodes_list_len {
                 let adj_node: Node = *adj_nodes_list.get(index).unwrap().unbox();
 
                 if !is_node_visited(ref visited_node, adj_node.dest) {
@@ -142,15 +123,9 @@ fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u
                         dist.insert(adj_node.dest.into(), new_distance);
                     }
 
+                    let weight = dist.get(adj_node.dest.into());
                     // add node to priority_queue
-                    priority_queue
-                        .append(
-                            Node {
-                                source: source,
-                                dest: adj_node.dest,
-                                weight: dist.get(adj_node.dest.into())
-                            }
-                        );
+                    priority_queue.append(Node { source, dest: adj_node.dest, weight });
                 }
                 index += 1;
             };
@@ -167,20 +142,17 @@ fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u
 /// Check if a node has already been visited
 fn is_node_visited(ref nodes: Array<u32>, current_node: u32) -> bool {
     let mut index = 0;
-    let mut is_visited = false;
     let n = nodes.span();
 
     loop {
         if index == n.len() {
-            break;
+            break false;
         }
 
         let source: u32 = *n.at(index);
         if source == current_node {
-            is_visited = true;
-            break;
+            break true;
         }
         index += 1;
-    };
-    is_visited
+    }
 }

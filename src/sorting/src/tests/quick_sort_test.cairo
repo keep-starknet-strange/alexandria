@@ -7,13 +7,13 @@ use core::option::OptionTrait;
 #[available_gas(20000000000000)]
 fn quicksort_test() {
     let mut data = VecTrait::<Felt252Vec, u32>::new();
-    data.push(4_u32);
-    data.push(2_u32);
-    data.push(1_u32);
-    data.push(3_u32);
-    data.push(5_u32);
-    data.push(0_u32);
-    let correct = array![0_u32, 1_u32, 2_u32, 3_u32, 4_u32, 5_u32];
+    data.push(4);
+    data.push(2);
+    data.push(1);
+    data.push(3);
+    data.push(5);
+    data.push(0);
+    let correct = array![0_u32, 1, 2, 3, 4, 5];
 
     let sorted = quick_sort::quick_sort(data);
 
@@ -36,7 +36,7 @@ fn quicksort_test_empty() {
 #[available_gas(2000000)]
 fn quicksort_test_one_element() {
     let mut data = VecTrait::<Felt252Vec, u32>::new();
-    data.push(2_u32);
+    data.push(2);
     let correct = array![2_u32];
 
     let sorted = quick_sort::quick_sort(data);
@@ -48,11 +48,11 @@ fn quicksort_test_one_element() {
 #[available_gas(2000000)]
 fn quicksort_test_pre_sorted() {
     let mut data = VecTrait::<Felt252Vec, u32>::new();
-    data.push(1_u32);
-    data.push(2_u32);
-    data.push(3_u32);
-    data.push(4_u32);
-    let correct = array![1_u32, 2_u32, 3_u32, 4_u32];
+    data.push(1);
+    data.push(2);
+    data.push(3);
+    data.push(4);
+    let correct = array![1_u32, 2, 3, 4];
 
     let sorted = quick_sort::quick_sort(data);
 
@@ -63,11 +63,11 @@ fn quicksort_test_pre_sorted() {
 #[available_gas(2000000)]
 fn quicksort_test_pre_sorted_decreasing() {
     let mut data = VecTrait::<Felt252Vec, u32>::new();
-    data.push(4_u32);
-    data.push(3_u32);
-    data.push(2_u32);
-    data.push(1_u32);
-    let correct = array![1_u32, 2_u32, 3_u32, 4_u32];
+    data.push(4);
+    data.push(3);
+    data.push(2);
+    data.push(1);
+    let correct = array![1_u32, 2, 3, 4];
 
     let sorted = quick_sort::quick_sort(data);
 
@@ -78,11 +78,11 @@ fn quicksort_test_pre_sorted_decreasing() {
 #[available_gas(2000000)]
 fn quicksort_test_pre_sorted_2_same_values() {
     let mut data = VecTrait::<Felt252Vec, u32>::new();
-    data.push(1_u32);
-    data.push(2_u32);
-    data.push(2_u32);
-    data.push(4_u32);
-    let correct = array![1_u32, 2_u32, 2_u32, 4_u32];
+    data.push(1);
+    data.push(2);
+    data.push(2);
+    data.push(4);
+    let correct = array![1_u32, 2, 2, 4];
 
     let sorted = quick_sort::quick_sort(data);
 
@@ -93,11 +93,11 @@ fn quicksort_test_pre_sorted_2_same_values() {
 #[available_gas(2000000)]
 fn quicksort_test_2_same_values() {
     let mut data = VecTrait::<Felt252Vec, u32>::new();
-    data.push(1_u32);
-    data.push(2_u32);
-    data.push(4_u32);
-    data.push(2_u32);
-    let correct = array![1_u32, 2_u32, 2_u32, 4_u32];
+    data.push(1);
+    data.push(2);
+    data.push(4);
+    data.push(2);
+    let correct = array![1_u32, 2, 2, 4];
 
     let sorted = quick_sort::quick_sort(data);
 

@@ -12,18 +12,14 @@ fn diff<T, +PartialOrd<T>, +Sub<T>, +Copy<T>, +Drop<T>, +Zeroable<T>,>(
     assert(sequence.len() >= 1, 'Array must have at least 1 elt');
 
     // [Compute] Interpolation
-    let mut array = array![];
-    array.append(Zeroable::zero());
     let mut prev_value = *sequence.pop_front().unwrap();
-    loop {
-        match sequence.pop_front() {
-            Option::Some(current_value) => {
-                assert(*current_value >= prev_value, 'Sequence must be sorted');
-                array.append(*current_value - prev_value);
-                prev_value = *current_value;
-            },
-            Option::None => { break; },
+    let mut array = array![Zeroable::zero()];
+    while !sequence
+        .is_empty() {
+            let current_value = *sequence.pop_front().unwrap();
+            assert(current_value >= prev_value, 'Sequence must be sorted');
+            array.append(current_value - prev_value);
+            prev_value = current_value;
         };
-    };
     array
 }
