@@ -68,9 +68,11 @@ impl SmallIntegerToAsciiTraitImpl<
 
         let mut inverse_ascii_arr = self.to_inverse_ascii_array().span();
         let mut ascii: felt252 = 0;
-        while !inverse_ascii_arr.is_empty() {
-            let val = *inverse_ascii_arr.pop_back().unwrap();
-            ascii = ascii * 256 + val;
+        loop {
+            match inverse_ascii_arr.pop_back() {
+                Option::Some(val) => { ascii = ascii * 256 + *val; },
+                Option::None(_) => { break; },
+            };
         };
 
         ascii

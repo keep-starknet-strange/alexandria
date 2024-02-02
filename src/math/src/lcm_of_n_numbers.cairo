@@ -19,10 +19,13 @@ fn lcm<T, +Into<T, u128>, +Into<u128, T>, +Mul<T>, +Div<T>, +Copy<T>, +Drop<T>>(
         return Result::Err(LCMError::EmptyInput);
     }
     let mut a = *n.pop_front().unwrap();
-    while !n.is_empty() {
-        let b = *n.pop_front().unwrap();
-        let gcd: T = gcd_two_numbers(a.into(), b.into()).into();
-        a = (a * b) / gcd;
-    };
-    Result::Ok(a)
+    loop {
+        match n.pop_front() {
+            Option::Some(b) => {
+                let gcd: T = gcd_two_numbers(a.into(), (*b).into()).into();
+                a = (a * *b) / gcd;
+            },
+            Option::None => { break Result::Ok(a); },
+        };
+    }
 }

@@ -12,11 +12,15 @@ fn cumprod<T, +Mul<T>, +Copy<T>, +Drop<T>,>(mut sequence: Span<T>) -> Array<T> {
     // [Compute] Interpolation
     let mut prev_value = *sequence.pop_front().unwrap();
     let mut array = array![prev_value];
-    while !sequence.is_empty() {
-        let current_value = *sequence.pop_front().unwrap();
-        let product = current_value * prev_value;
-        array.append(product);
-        prev_value = product;
+    loop {
+        match sequence.pop_front() {
+            Option::Some(current_value) => {
+                let prod = *current_value * prev_value;
+                array.append(prod);
+                prev_value = prod;
+            },
+            Option::None => { break; },
+        };
     };
     array
 }
