@@ -8,13 +8,12 @@ use keccak::{u128_to_u64, u128_split as u128_split_to_u64, cairo_keccak};
 fn keccak_u128s_be(mut input: Span<u128>, n_bytes: usize) -> u256 {
     let mut keccak_input = array![];
     let mut size = n_bytes;
-    while !input
-        .is_empty() {
-            let v = *input.pop_front().unwrap();
-            let value_size = uint_min(size, 16);
-            keccak_add_uint128_be(ref keccak_input, v, value_size);
-            size -= value_size;
-        };
+    while !input.is_empty() {
+        let v = *input.pop_front().unwrap();
+        let value_size = uint_min(size, 16);
+        keccak_add_uint128_be(ref keccak_input, v, value_size);
+        size -= value_size;
+    };
 
     let aligned = n_bytes % 8 == 0;
     if aligned {
@@ -68,15 +67,14 @@ fn update_u256_array_at(arr: @Array<u256>, index: usize, value: u256) -> Array<u
     let mut new_arr = array![];
     let mut i = 0;
 
-    while i != arr
-        .len() {
-            if i == index {
-                new_arr.append(value);
-            } else {
-                new_arr.append(*arr[i]);
-            }
-            i += 1;
-        };
+    while i != arr.len() {
+        if i == index {
+            new_arr.append(value);
+        } else {
+            new_arr.append(*arr[i]);
+        }
+        i += 1;
+    };
     new_arr
 }
 

@@ -494,13 +494,12 @@ impl BytesImpl of BytesTrait {
         let mut hash_data: Array<u8> = array![];
         let mut i: usize = 0;
         let mut offset: usize = 0;
-        while i != self
-            .size() {
-                let (new_offset, hash_data_item) = self.read_u8(offset);
-                hash_data.append(hash_data_item);
-                offset = new_offset;
-                i += 1;
-            };
+        while i != self.size() {
+            let (new_offset, hash_data_item) = self.read_u8(offset);
+            hash_data.append(hash_data_item);
+            offset = new_offset;
+            i += 1;
+        };
 
         let output: Array<u8> = sha256(hash_data);
         u8_array_to_u256(output.span())
