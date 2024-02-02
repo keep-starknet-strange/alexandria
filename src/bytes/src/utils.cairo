@@ -6,18 +6,15 @@ use keccak::{u128_to_u64, u128_split as u128_split_to_u64, cairo_keccak};
 /// The values are interpreted as big-endian.
 /// https://github.com/starkware-libs/cairo/blob/main/corelib/src/keccak.cairo
 fn keccak_u128s_be(mut input: Span<u128>, n_bytes: usize) -> u256 {
-    let mut keccak_input: Array::<u64> = array![];
+    let mut keccak_input = array![];
     let mut size = n_bytes;
-    loop {
-        match input.pop_front() {
-            Option::Some(v) => {
-                let value_size = uint_min(size, 16);
-                keccak_add_uint128_be(ref keccak_input, *v, value_size);
-                size -= value_size;
-            },
-            Option::None => { break; },
+    while !input
+        .is_empty() {
+            let v = *input.pop_front().unwrap();
+            let value_size = uint_min(size, 16);
+            keccak_add_uint128_be(ref keccak_input, v, value_size);
+            size -= value_size;
         };
-    };
 
     let aligned = n_bytes % 8 == 0;
     if aligned {
@@ -68,20 +65,18 @@ fn keccak_add_uint128_be(ref keccak_input: Array::<u64>, value: u128, value_size
 
 fn update_u256_array_at(arr: @Array<u256>, index: usize, value: u256) -> Array<u256> {
     assert(index < arr.len(), 'index out of range');
-    let mut new_arr: Array<u256> = array![];
+    let mut new_arr = array![];
     let mut i = 0;
 
-    loop {
-        if i == arr.len() {
-            break;
-        }
-        if i == index {
-            new_arr.append(value);
-        } else {
-            new_arr.append(*arr[i]);
-        }
-        i += 1;
-    };
+    while i != arr
+        .len() {
+            if i == index {
+                new_arr.append(value);
+            } else {
+                new_arr.append(*arr[i]);
+            }
+            i += 1;
+        };
     new_arr
 }
 
@@ -90,27 +85,15 @@ fn update_u256_array_at(arr: @Array<u256>, index: usize, value: u256) -> Array<u
 fn u8_array_to_u256(arr: Span<u8>) -> u256 {
     assert(arr.len() == 32, 'too large');
     let mut i = 0;
-    let mut high: u128 = 0;
-    let mut low: u128 = 0;
+    let mut high = 0;
+    let mut low = 0;
     // process high
-    loop {
-        if i >= arr.len() {
-            break;
-        }
-        if i == 16 {
-            break;
-        }
+    while i < arr.len() && i != 16 {
         high = u128_join(high, (*arr[i]).into(), 1);
         i += 1;
     };
     // process low
-    loop {
-        if i >= arr.len() {
-            break;
-        }
-        if i == 32 {
-            break;
-        }
+    while i < arr.len() && i != 32 {
         low = u128_join(low, (*arr[i]).into(), 1);
         i += 1;
     };
@@ -121,14 +104,8 @@ fn u8_array_to_u256(arr: Span<u8>) -> u256 {
 fn u64_array_slice(src: @Array<u64>, mut begin: usize, end: usize) -> Array<u64> {
     let mut slice = array![];
     let len = begin + end;
-    loop {
-        if begin >= len {
-            break;
-        }
-        if begin >= src.len() {
-            break;
-        }
 
+    while begin < len && begin < src.len() {
         slice.append(*src[begin]);
         begin += 1;
     };
@@ -144,14 +121,7 @@ fn u64_array_slice(src: @Array<u64>, mut begin: usize, end: usize) -> Array<u64>
 fn u128_array_slice(src: @Array<u128>, mut begin: usize, end: usize) -> Array<u128> {
     let mut slice = array![];
     let len = begin + end;
-    loop {
-        if begin >= len {
-            break;
-        }
-        if begin >= src.len() {
-            break;
-        }
-
+    while begin < len && begin < src.len() {
         slice.append(*src[begin]);
         begin += 1;
     };
@@ -175,12 +145,10 @@ fn u128_split(value: u128, value_size: usize, left_size: usize) -> (u128, u128) 
     assert(left_size <= value_size, 'size can not be gt value_size');
 
     if left_size == 0 {
-        (0_u128, value)
+        (0, value)
     } else {
-        let (left, right) = DivRem::div_rem(
-            value, u128_fast_pow2((value_size - left_size) * 8).try_into().expect('Division by 0')
-        );
-        (left, right)
+        let power = u128_fast_pow2((value_size - left_size) * 8);
+        DivRem::div_rem(value, power.try_into().expect('Division by 0'))
     }
 }
 

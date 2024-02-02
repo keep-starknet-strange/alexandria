@@ -379,21 +379,16 @@ impl BytesImpl of BytesTrait {
         } else {
             let (last_element_value, _) = u128_split(*data[last_data_index], 16, last_element_size);
             data = u128_array_slice(@data, 0, last_data_index);
-            if size + last_element_size > BYTES_PER_ELEMENT {
-                let (left, right) = u128_split(value, size, BYTES_PER_ELEMENT - last_element_size);
-                let value_full = u128_join(
-                    last_element_value, left, BYTES_PER_ELEMENT - last_element_size
-                );
-                let value_padded = u128_join(
-                    right, 0, 2 * BYTES_PER_ELEMENT - size - last_element_size
-                );
+            let bytes_size = BYTES_PER_ELEMENT - last_element_size;
+            if size > bytes_size {
+                let (left, right) = u128_split(value, size, bytes_size);
+                let value_full = u128_join(last_element_value, left, bytes_size);
+                let value_padded = u128_join(right, 0, 2 * bytes_size - size);
                 data.append(value_full);
                 data.append(value_padded);
             } else {
                 let value = u128_join(last_element_value, value, size);
-                let value_padded = u128_join(
-                    value, 0, BYTES_PER_ELEMENT - size - last_element_size
-                );
+                let value_padded = u128_join(value, 0, bytes_size - size);
                 data.append(value_padded);
             }
         }
