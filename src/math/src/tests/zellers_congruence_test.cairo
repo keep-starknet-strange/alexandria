@@ -5,11 +5,11 @@ fn test_case(day: u128, month: u128, year: u128, expected: u128, error_expected:
     let day = day_of_week(day, month, year);
     // If error is expected, day must be none
     if error_expected {
-        assert(day.is_none(), 'expected error');
+        assert!(day.is_none(), "expected error");
     } // Otherwise, unwrap the day and check it
     else {
         let day = day.unwrap();
-        assert(day == expected, 'day is invalid');
+        assert!(day == expected, "day is invalid");
     }
 }
 

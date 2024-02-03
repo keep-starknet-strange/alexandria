@@ -20,7 +20,7 @@ fn test_append_bit() {
         .try_into()
         .unwrap();
     let expected: Array<bytes31> = array![val, val,];
-    assert(ba.data == expected, 'illegal array');
+    assert!(ba.data == expected, "illegal array");
     assert(
         ba.current == 0xa * one_shift_left_bytes_felt252(30) * shift_bit(4).into(),
         'expected current 0xa'
@@ -35,10 +35,10 @@ fn test_at() {
     loop {
         if index == 8 * 16 - 1 {
             // last value 
-            assert(ba[index] == false, 'expected false');
+            assert!(ba[index] == false, "expected false");
             break;
         }
-        assert(ba.at(index).unwrap() == true, 'expected true');
+        assert!(ba.at(index).unwrap() == true, "expected true");
         index += 1;
     };
 }
@@ -47,15 +47,15 @@ fn test_at() {
 #[available_gas(2000000)]
 fn test_at_none() {
     let ba = sample_bit_array();
-    assert(ba.at(8 * 16).is_none(), 'expected none');
+    assert!(ba.at(8 * 16).is_none(), "expected none");
 }
 
 #[test]
 #[available_gas(20000000)]
 fn test_index() {
     let ba = sample_bit_array();
-    assert(ba[0] == true, 'expected true');
-    assert(ba[8 * 16 - 1] == false, 'expected false');
+    assert!(ba[0] == true, "expected true");
+    assert!(ba[8 * 16 - 1] == false, "expected false");
 }
 
 #[test]
@@ -71,25 +71,25 @@ fn test_index_fail() {
 fn test_len() {
     let mut ba = sample_bit_array();
     let expected = 8 * 16;
-    assert(ba.len() == expected, 'expected len 8 * 16');
+    assert!(ba.len() == expected, "expected len 8 * 16");
     ba.append_bit(true);
-    assert(ba.len() == expected + 1, 'expected len 8 * 16 + 1');
+    assert!(ba.len() == expected + 1, "expected len 8 * 16 + 1");
     let _ = ba.pop_front();
-    assert(ba.len() == expected, 'expected len 8 * 16');
+    assert!(ba.len() == expected, "expected len 8 * 16");
 }
 
 #[test]
 #[available_gas(2000000)]
 fn test_pop_front() {
     let mut ba = sample_bit_array();
-    assert(ba.pop_front() == Option::Some(true), 'expected (some) true');
+    assert!(ba.pop_front() == Option::Some(true), "expected (some) true");
 }
 
 #[test]
 #[available_gas(2000000)]
 fn test_pop_front_empty() {
     let mut ba: BitArray = Default::default();
-    assert(ba.pop_front() == Option::None, 'expected none');
+    assert!(ba.pop_front() == Option::None, "expected none");
 }
 
 #[test]
@@ -119,7 +119,7 @@ fn test_read_word_be_u256() {
     let low = 0x101112131415161718191a1b1c1d1e1f_u128;
     ba.write_word_be(low.into(), 128);
     let high = 0xfffffffffffffffffffffffffffffffe_u128;
-    assert(ba.read_word_be_u256(length: 256).unwrap() == u256 { low, high }, 'unexpected value');
+    assert!(ba.read_word_be_u256(length: 256).unwrap() == u256 { low, high }, "unexpected value");
 }
 
 #[test]
@@ -129,7 +129,7 @@ fn test_read_word_le_u256() {
     let low = 0x7fffffffffffffffffffffffffffffff_u128;
     let high = 0x101112131415161718191a1b1c1d1e1f_u128;
     ba.write_word_le(high.into(), 128);
-    assert(ba.read_word_le_u256(length: 256).unwrap() == u256 { low, high }, 'unexpected value');
+    assert!(ba.read_word_le_u256(length: 256).unwrap() == u256 { low, high }, "unexpected value");
 }
 
 #[test]
@@ -170,16 +170,16 @@ fn test_read_word_le_u512() {
 #[available_gas(20000000)]
 fn test_read_word_be_half() {
     let mut ba = sample_bit_array();
-    assert(ba.read_word_be(64).unwrap() == 0xffffffffffffffff, 'unexpected result');
-    assert(ba.read_word_be(64).unwrap() == 0xfffffffffffffffe, 'unexpected result');
+    assert!(ba.read_word_be(64).unwrap() == 0xffffffffffffffff, "unexpected result");
+    assert!(ba.read_word_be(64).unwrap() == 0xfffffffffffffffe, "unexpected result");
 }
 
 #[test]
 #[available_gas(20000000)]
 fn test_read_word_le_half() {
     let mut ba = sample_bit_array();
-    assert(ba.read_word_le(64).unwrap() == 0xffffffffffffffff, 'unexpected result');
-    assert(ba.read_word_le(64).unwrap() == 0x7fffffffffffffff, 'unexpected result');
+    assert!(ba.read_word_le(64).unwrap() == 0xffffffffffffffff, "unexpected result");
+    assert!(ba.read_word_le(64).unwrap() == 0x7fffffffffffffff, "unexpected result");
 }
 
 #[test]
@@ -197,7 +197,9 @@ fn test_write_word_be() {
 fn test_write_word_be_half() {
     let mut ba: BitArray = Default::default();
     ba.write_word_be(BoundedInt::<u128>::max().into() - 3, 64);
-    assert(ba.read_word_be(64).unwrap() == BoundedInt::<u64>::max().into() - 3, 'unexpected value');
+    assert!(
+        ba.read_word_be(64).unwrap() == BoundedInt::<u64>::max().into() - 3, "unexpected value"
+    );
 }
 
 #[test]
@@ -215,7 +217,9 @@ fn test_write_word_le() {
 fn test_write_word_le_half() {
     let mut ba: BitArray = Default::default();
     ba.write_word_le(BoundedInt::<u128>::max().into() - 5, 64);
-    assert(ba.read_word_le(64).unwrap() == BoundedInt::<u64>::max().into() - 5, 'unexpected value');
+    assert!(
+        ba.read_word_le(64).unwrap() == BoundedInt::<u64>::max().into() - 5, "unexpected value"
+    );
 }
 
 #[test]
@@ -224,7 +228,7 @@ fn test_write_word_be_u256() {
     let mut ba: BitArray = Default::default();
     let expected = u256 { low: BoundedInt::max() - 1, high: BoundedInt::max() - 2 };
     ba.write_word_be_u256(expected, 256);
-    assert(ba.read_word_be_u256(256).unwrap() == expected, 'unexpected value');
+    assert!(ba.read_word_be_u256(256).unwrap() == expected, "unexpected value");
 }
 
 #[test]
@@ -233,7 +237,7 @@ fn test_write_word_le_u256() {
     let mut ba: BitArray = Default::default();
     let expected = u256 { low: BoundedInt::max() - 1, high: BoundedInt::max() - 2 };
     ba.write_word_le_u256(expected, 256);
-    assert(ba.read_word_le_u256(256).unwrap() == expected, 'unexpected value');
+    assert!(ba.read_word_le_u256(256).unwrap() == expected, "unexpected value");
 }
 
 #[test]
@@ -246,7 +250,7 @@ fn test_write_word_be_u512() {
     let limb3 = BoundedInt::<u128>::max() - 3;
     let expected = u512 { limb0, limb1, limb2, limb3 };
     ba.write_word_be_u512(expected, 512);
-    assert(ba.read_word_be_u512(512).unwrap() == expected, 'unexpected value');
+    assert!(ba.read_word_be_u512(512).unwrap() == expected, "unexpected value");
 }
 
 #[test]
@@ -259,7 +263,7 @@ fn test_write_word_le_u512() {
     let limb3 = BoundedInt::<u128>::max() - 3;
     let expected = u512 { limb0, limb1, limb2, limb3 };
     ba.write_word_le_u512(expected, 512);
-    assert(ba.read_word_le_u512(512).unwrap() == expected, 'unexpected value');
+    assert!(ba.read_word_le_u512(512).unwrap() == expected, "unexpected value");
 }
 
 #[test]
@@ -283,9 +287,9 @@ fn test_stress_test() {
             break;
         }
         let value = ba.read_word_be(248).unwrap();
-        assert(value == index.into(), 'not equal');
+        assert!(value == index.into(), "not equal");
         let value = ba.read_word_le(248).unwrap();
-        assert(value == index.into(), 'not equal');
+        assert!(value == index.into(), "not equal");
         index += 1;
     };
 }
@@ -298,11 +302,11 @@ fn test_serde_serialize() {
     ba.serialize(ref out);
     let length = out.pop_front().unwrap();
     let length: usize = length.try_into().unwrap();
-    assert(length == ba.len(), 'len not equal');
+    assert!(length == ba.len(), "len not equal");
     let data: felt252 = out.pop_front().unwrap();
     let expected: felt252 = BoundedInt::<u128>::max().into() - 1;
     let expected = expected * one_shift_left_bytes_felt252(15);
-    assert(data == expected, 'unexpected data');
+    assert!(data == expected, "unexpected data");
 }
 
 #[test]
@@ -320,13 +324,13 @@ fn test_serde_ser_deser() {
     ba.serialize(ref out);
     let mut span = out.span();
     let mut deser = Serde::<BitArray>::deserialize(ref span).unwrap();
-    assert(deser.len() == ba.len(), 'expected equal lengths');
-    assert(deser.read_word_be(248).unwrap() == test, 'expected test');
-    assert(deser.read_word_be(248).unwrap() == test + 1, 'expected test + 1');
-    assert(deser.read_word_be(248).unwrap() == test + 2, 'expected test + 2');
-    assert(deser.read_word_be(248).unwrap() == test + 3, 'expected test + 3');
-    assert(deser.read_word_be(248).unwrap() == test + 4, 'expected test + 4');
-    assert(deser.read_word_be(248).unwrap() == test + 5, 'expected test + 5');
+    assert!(deser.len() == ba.len(), "expected equal lengths");
+    assert!(deser.read_word_be(248).unwrap() == test, "expected test");
+    assert!(deser.read_word_be(248).unwrap() == test + 1, "expected test + 1");
+    assert!(deser.read_word_be(248).unwrap() == test + 2, "expected test + 2");
+    assert!(deser.read_word_be(248).unwrap() == test + 3, "expected test + 3");
+    assert!(deser.read_word_be(248).unwrap() == test + 4, "expected test + 4");
+    assert!(deser.read_word_be(248).unwrap() == test + 5, "expected test + 5");
 }
 
 // helpers

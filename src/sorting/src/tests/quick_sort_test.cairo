@@ -17,7 +17,7 @@ fn quicksort_test() {
 
     let sorted = quick_sort::quick_sort(data);
 
-    assert(is_equal_vec(sorted, correct.span()), 'invalid result');
+    assert!(is_equal_vec(sorted, correct.span()), "invalid result");
 }
 
 
@@ -29,7 +29,7 @@ fn quicksort_test_empty() {
 
     let sorted = quick_sort::quick_sort(data);
 
-    assert(is_equal_vec(sorted, correct.span()), 'invalid result');
+    assert!(is_equal_vec(sorted, correct.span()), "invalid result");
 }
 
 #[test]
@@ -41,7 +41,7 @@ fn quicksort_test_one_element() {
 
     let sorted = quick_sort::quick_sort(data);
 
-    assert(is_equal_vec(sorted, correct.span()), 'invalid result');
+    assert!(is_equal_vec(sorted, correct.span()), "invalid result");
 }
 
 #[test]
@@ -56,7 +56,7 @@ fn quicksort_test_pre_sorted() {
 
     let sorted = quick_sort::quick_sort(data);
 
-    assert(is_equal_vec(sorted, correct.span()), 'invalid result');
+    assert!(is_equal_vec(sorted, correct.span()), "invalid result");
 }
 
 #[test]
@@ -71,7 +71,7 @@ fn quicksort_test_pre_sorted_decreasing() {
 
     let sorted = quick_sort::quick_sort(data);
 
-    assert(is_equal_vec(sorted, correct.span()), 'invalid result');
+    assert!(is_equal_vec(sorted, correct.span()), "invalid result");
 }
 
 #[test]
@@ -86,7 +86,7 @@ fn quicksort_test_pre_sorted_2_same_values() {
 
     let sorted = quick_sort::quick_sort(data);
 
-    assert(is_equal_vec(sorted, correct.span()), 'invalid result');
+    assert!(is_equal_vec(sorted, correct.span()), "invalid result");
 }
 
 #[test]
@@ -101,5 +101,5 @@ fn quicksort_test_2_same_values() {
 
     let sorted = quick_sort::quick_sort(data);
 
-    assert(is_equal_vec(sorted, correct.span()), 'invalid result');
+    assert!(is_equal_vec(sorted, correct.span()), "invalid result");
 }

@@ -6,10 +6,10 @@ use alexandria_math::extended_euclidean_algorithm::{
 fn test_case(a: u128, b: u128, expected: (u128, u128, u128)) {
     let (gcd, x, y) = extended_euclidean_algorithm(a, b);
     let (expected_gcd, expected_x, expected_y) = expected;
-    assert(gcd == expected_gcd, 'gcd is incorrect');
+    assert!(gcd == expected_gcd, "gcd is incorrect");
 
-    assert(x == expected_x, 'x is incorrect');
-    assert(y == expected_y, 'y is incorrect');
+    assert!(x == expected_x, "x is incorrect");
+    assert!(y == expected_y, "y is incorrect");
 }
 
 #[test]

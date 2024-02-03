@@ -8,7 +8,7 @@ fn mergesort_test() {
 
     let sorted = merge(data).span();
 
-    assert(is_equal(sorted, correct), 'invalid result');
+    assert!(is_equal(sorted, correct), "invalid result");
 }
 
 #[test]
@@ -19,7 +19,7 @@ fn mergesort_test_2_pre_sorted_decreasing() {
 
     let sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
+    assert!(is_equal(sorted.span(), correct.span()), "invalid result");
 }
 
 #[test]
@@ -31,7 +31,7 @@ fn mergesort_test_empty() {
 
     let sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
+    assert!(is_equal(sorted.span(), correct.span()), "invalid result");
 }
 
 #[test]
@@ -42,7 +42,7 @@ fn mergesort_test_one_element() {
 
     let sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
+    assert!(is_equal(sorted.span(), correct.span()), "invalid result");
 }
 
 #[test]
@@ -53,7 +53,7 @@ fn mergesort_test_pre_sorted() {
 
     let sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
+    assert!(is_equal(sorted.span(), correct.span()), "invalid result");
 }
 
 #[test]
@@ -64,7 +64,7 @@ fn mergesort_test_2_same_values() {
 
     let sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
+    assert!(is_equal(sorted.span(), correct.span()), "invalid result");
 }
 
 #[test]
@@ -75,5 +75,5 @@ fn mergesort_test_2_same_values_pre_sorted() {
 
     let sorted = merge(data);
 
-    assert(is_equal(sorted.span(), correct.span()), 'invalid result');
+    assert!(is_equal(sorted.span(), correct.span()), "invalid result");
 }

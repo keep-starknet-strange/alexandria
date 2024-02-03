@@ -24,7 +24,7 @@ fn test_byte_array_into_array_u8() {
         if index == 0x40 {
             break;
         }
-        assert((*array[index]).into() == index + 1, 'unexpected result');
+        assert!((*array[index]).into() == index + 1, "unexpected result");
         index += 1;
     }
 }
