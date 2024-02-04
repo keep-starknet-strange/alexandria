@@ -16,7 +16,7 @@ fn balance_lsb_proof_test() {
     let expected_value = 8700000000000000005;
     let proof = balance_proof();
     let value = verify(state_commitment, contract_address, storage_address, proof);
-    assert!(expected_value == value, "wrong value");
+    assert_eq!(expected_value, value, "wrong value");
 }
 
 #[test]
@@ -29,7 +29,7 @@ fn balance_msb_proof_test() {
     let expected_value = 8700000000000000005;
     let proof = balance_proof();
     let value = verify(state_commitment, contract_address, storage_address, proof);
-    assert!(expected_value == value, "wrong value");
+    assert_eq!(expected_value, value, "wrong value");
 }
 
 #[test]
@@ -42,7 +42,7 @@ fn wrong_contract_address_proof_test() {
     let expected_value = 8700000000000000005;
     let proof = balance_proof();
     let value = verify(state_commitment, contract_address, storage_address, proof);
-    assert!(expected_value == value, "wrong value");
+    assert_eq!(expected_value, value, "wrong value");
 }
 
 #[test]
@@ -54,5 +54,5 @@ fn total_balance_lsb_proof_test() {
     let expected_value = 2970506847688829412026631;
     let proof = total_balance_proof();
     let value = verify(state_commitment, contract_address, storage_address, proof);
-    assert!(expected_value == value, "wrong value");
+    assert_eq!(expected_value, value, "wrong value");
 }

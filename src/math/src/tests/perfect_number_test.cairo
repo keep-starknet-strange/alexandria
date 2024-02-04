@@ -32,5 +32,5 @@ fn not_perfect_big_number_test() {
 #[available_gas(2000000)]
 fn perfect_numbers_test() {
     let mut res = perfect_numbers(10);
-    assert!(res.len() == 1, "invalid result");
+    assert_eq!(res.len(), 1, "invalid result");
 }
