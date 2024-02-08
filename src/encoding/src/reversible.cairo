@@ -46,10 +46,7 @@ fn reversing_partial_result<
     mut word: T, mut onto: T, size: usize, step: T
 ) -> (T, T) {
     let mut i: usize = 0;
-    loop {
-        if i == size {
-            break;
-        }
+    while i != size {
         let (new_word, remainder) = DivRem::div_rem(word, step.try_into().unwrap());
         word = new_word;
         onto *= step.into();

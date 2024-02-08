@@ -127,10 +127,7 @@ impl BytesImpl of BytesTrait {
             data_len += 1;
         }
 
-        loop {
-            if data_len == 0 {
-                break;
-            };
+        while data_len != 0 {
             data.append(0_u128);
             data_len -= 1;
         };
@@ -192,10 +189,8 @@ impl BytesImpl of BytesTrait {
         // if value in two elements, read them and join them
         let (element_index, element_offset) = BytesTrait::locate(offset);
         let value_in_one_element = element_offset + size <= BYTES_PER_ELEMENT;
-        let mut value = 0;
-        if value_in_one_element {
-            value =
-                read_sub_u128(*self.data[element_index], BYTES_PER_ELEMENT, element_offset, size);
+        let value = if value_in_one_element {
+            read_sub_u128(*self.data[element_index], BYTES_PER_ELEMENT, element_offset, size)
         } else {
             let (_, end_element_offset) = BytesTrait::locate(offset + size);
             let left = read_sub_u128(
@@ -207,8 +202,8 @@ impl BytesImpl of BytesTrait {
             let right = read_sub_u128(
                 *self.data[element_index + 1], BYTES_PER_ELEMENT, 0, end_element_offset
             );
-            value = u128_join(left, right, end_element_offset);
-        }
+            u128_join(left, right, end_element_offset)
+        };
         (offset + size, value)
     }
 
@@ -223,14 +218,11 @@ impl BytesImpl of BytesTrait {
         }
         let mut offset = offset;
         let mut i = array_length;
-        loop {
+        while i != 0 {
             let (new_offset, value) = self.read_u128_packed(offset, element_size);
             array.append(value);
             offset = new_offset;
             i -= 1;
-            if i == 0 {
-                break;
-            };
         };
         (offset, array)
     }
@@ -313,14 +305,11 @@ impl BytesImpl of BytesTrait {
 
         let mut offset = offset;
         let mut i = array_length;
-        loop {
+        while i != 0 {
             let (new_offset, value) = self.read_u256(offset);
             array.append(value);
             offset = new_offset;
             i -= 1;
-            if i == 0 {
-                break;
-            };
         };
         (offset, array)
     }
@@ -339,10 +328,7 @@ impl BytesImpl of BytesTrait {
         // read full array element for sub_bytes
         let mut offset = offset;
         let mut sub_bytes_full_array_len = size / BYTES_PER_ELEMENT;
-        loop {
-            if sub_bytes_full_array_len == 0 {
-                break;
-            };
+        while sub_bytes_full_array_len != 0 {
             let (new_offset, value) = self.read_u128(offset);
             array.append(value);
             offset = new_offset;
@@ -477,10 +463,7 @@ impl BytesImpl of BytesTrait {
         // read full array element for other
         let mut offset = 0;
         let mut sub_bytes_full_array_len = *other.size / BYTES_PER_ELEMENT;
-        loop {
-            if sub_bytes_full_array_len == 0 {
-                break;
-            };
+        while sub_bytes_full_array_len != 0 {
             let (new_offset, value) = other.read_u128(offset);
             self.append_u128(value);
             offset = new_offset;
@@ -516,10 +499,7 @@ impl BytesImpl of BytesTrait {
         let mut hash_data: Array<u8> = array![];
         let mut i: usize = 0;
         let mut offset: usize = 0;
-        loop {
-            if i == self.size() {
-                break;
-            }
+        while i != self.size() {
             let (new_offset, hash_data_item) = self.read_u8(offset);
             hash_data.append(hash_data_item);
             offset = new_offset;

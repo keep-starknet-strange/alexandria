@@ -12,9 +12,8 @@ fn diff<T, +PartialOrd<T>, +Sub<T>, +Copy<T>, +Drop<T>, +Zeroable<T>,>(
     assert(sequence.len() >= 1, 'Array must have at least 1 elt');
 
     // [Compute] Interpolation
-    let mut array = array![];
-    array.append(Zeroable::zero());
     let mut prev_value = *sequence.pop_front().unwrap();
+    let mut array = array![Zeroable::zero()];
     loop {
         match sequence.pop_front() {
             Option::Some(current_value) => {

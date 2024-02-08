@@ -36,10 +36,7 @@ impl ToAsciiArrayTraitImpl<
         }
 
         let mut num = self;
-        loop {
-            if num.is_zero() {
-                break;
-            }
+        while num.is_non_zero() {
             let (quotient, remainder) = DivRem::div_rem(
                 num, TryInto::<felt252, T>::try_into(10).unwrap().try_into().expect('Division by 0')
             );
@@ -153,10 +150,7 @@ impl U256ToAsciiArrayTraitImpl of ToAsciiArrayTrait<u256> {
             return new_arr;
         }
         let mut num = self;
-        loop {
-            if num.is_zero() {
-                break;
-            }
+        while num != 0 {
             let (quotient, remainder) = DivRem::div_rem(
                 num, 10_u256.try_into().expect('Division by 0')
             );

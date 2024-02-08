@@ -29,10 +29,7 @@ fn trapezoidal_rule<
     // [Compute] Trapezoidal rule
     let mut index = 0;
     let mut value = Zeroable::zero();
-    loop {
-        if index + 1 == xs.len() {
-            break;
-        }
+    while index + 1 != xs.len() {
         assert(*xs[index + 1] > *xs[index], 'Abscissa must be sorted');
         value += (*xs[index + 1] - *xs[index]) * (*ys[index] + *ys[index + 1]);
         index += 1;

@@ -17,7 +17,7 @@ fn bm_search_test_1() {
     arr2.append_byte(0x47_u8);
 
     let dist = levenshtein_distance(@arr1, @arr2);
-    assert(dist == 2, 'invalid result');
+    assert_eq!(dist, 2, "invalid result");
 }
 
 #[test]
@@ -27,7 +27,7 @@ fn bm_search_test_2() {
     let mut arr2: ByteArray = Default::default();
 
     let dist = levenshtein_distance(@arr1, @arr2);
-    assert(dist == 0, 'invalid result');
+    assert_eq!(dist, 0, "invalid result");
 }
 
 #[test]
@@ -38,7 +38,7 @@ fn bm_search_test_3() {
     arr2.append_byte(0x61_u8);
 
     let dist = levenshtein_distance(@arr1, @arr2);
-    assert(dist == 1, 'invalid result');
+    assert_eq!(dist, 1, "invalid result");
 }
 
 #[test]
@@ -49,7 +49,7 @@ fn bm_search_test_4() {
     let mut arr2: ByteArray = Default::default();
 
     let dist = levenshtein_distance(@arr1, @arr2);
-    assert(dist == 1, 'invalid result');
+    assert_eq!(dist, 1, "invalid result");
 }
 
 #[test]
@@ -62,7 +62,7 @@ fn bm_search_test_5() {
     arr2.append_byte(0x61_u8);
 
     let dist = levenshtein_distance(@arr1, @arr2);
-    assert(dist == 1, 'invalid result');
+    assert_eq!(dist, 1, "invalid result");
 }
 
 #[test]
@@ -86,7 +86,7 @@ fn bm_search_test_6() {
     arr2.append_byte(0x72_u8);
 
     let dist = levenshtein_distance(@arr1, @arr2);
-    assert(dist == 0, 'invalid result');
+    assert_eq!(dist, 0, "invalid result");
 }
 
 #[test]
@@ -110,5 +110,5 @@ fn bm_search_test_7() {
     arr2.append_byte(0x6f_u8);
 
     let dist = levenshtein_distance(@arr1, @arr2);
-    assert(dist == 6, 'invalid result');
+    assert_eq!(dist, 6, "invalid result");
 }
