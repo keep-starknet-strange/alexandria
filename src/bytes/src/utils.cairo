@@ -103,11 +103,10 @@ fn u8_array_to_u256(arr: Span<u8>) -> u256 {
     u256 { low, high }
 }
 
-fn u64_array_slice(src: @Array<u64>, mut begin: usize, end: usize) -> Array<u64> {
+fn u64_array_slice(src: @Array<u64>, mut begin: usize, len: usize) -> Array<u64> {
     let mut slice = array![];
-    let len = begin + end;
-
-    while begin < len && begin < src.len() {
+    let end = begin + len;
+    while begin < end && begin < src.len() {
         slice.append(*src[begin]);
         begin += 1;
     };
@@ -117,13 +116,25 @@ fn u64_array_slice(src: @Array<u64>, mut begin: usize, end: usize) -> Array<u64>
 /// Returns the slice of an array.
 /// * `arr` - The array to slice.
 /// * `begin` - The index to start the slice at.
-/// * `end` - The index to end the slice at (not included).
+/// * `len` - The length of the slice.
 /// # Returns
 /// * `Array<u128>` - The slice of the array.
-fn u128_array_slice(src: @Array<u128>, mut begin: usize, end: usize) -> Array<u128> {
+fn u128_array_slice(src: @Array<u128>, mut begin: usize, len: usize) -> Array<u128> {
     let mut slice = array![];
-    let len = begin + end;
-    while begin < len && begin < src.len() {
+    let end = begin + len;
+    while begin < end && begin < src.len() {
+        slice.append(*src[begin]);
+        begin += 1;
+    };
+    slice
+}
+
+fn array_slice<T, impl TDrop: Drop<T>, impl TCopy: Copy<T>>(
+    src: @Array<T>, mut begin: usize, len: usize
+) -> Array<T> {
+    let mut slice = array![];
+    let end = begin + len;
+    while begin < end && begin < src.len() {
         slice.append(*src[begin]);
         begin += 1;
     };
