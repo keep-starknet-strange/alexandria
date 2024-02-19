@@ -58,7 +58,7 @@ mod pedersen {
 
 mod poseidon {
     use hash::HashStateTrait;
-    use poseidon::PoseidonTrait;
+    use poseidon::hades_permutation;
     use super::{Hasher, HasherTrait};
 
     impl PoseidonHasherImpl of HasherTrait<Hasher> {
@@ -66,10 +66,8 @@ mod poseidon {
             Hasher {}
         }
         fn hash(ref self: Hasher, data1: felt252, data2: felt252) -> felt252 {
-            let mut state = PoseidonTrait::new();
-            state = state.update(data1);
-            state = state.update(data2);
-            state.finalize()
+            let (hash, _, _) = hades_permutation(data1, data2, 2);
+            hash
         }
     }
 }
