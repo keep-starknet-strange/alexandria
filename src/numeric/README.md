@@ -1,10 +1,10 @@
 # Numerical analysis
 
-## [Trapezoidal rule](./src/trapz.cairo)
+## [Trapezoidal rule](./src/trapezoidal_rule.cairo)
 
 In numerical analysis and scientific computing, the trapezoidal rule is a numerical method to solve ordinary differential equations derived from the trapezoidal rule for computing integrals ([see also](https://en.wikipedia.org/wiki/Trapezoidal_rule_(differential_equations))).
 
-## [Interpolation](./src/interp.cairo)
+## [Interpolation](./src/interpolate.cairo)
 
 Returns the one-dimensional piecewise linear interpolant to a function with given discrete data points (xs, ys), evaluated at x ([see also](https://numpy.org/doc/stable/reference/generated/numpy.interp.html)).
 Several interpolation methods are supported as follow:
