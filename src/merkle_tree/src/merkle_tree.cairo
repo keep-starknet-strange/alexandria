@@ -41,7 +41,6 @@ struct Hasher {}
 
 mod pedersen {
     use hash::HashStateTrait;
-    use pedersen::PedersenTrait;
     use super::{Hasher, HasherTrait};
 
     impl PedersenHasherImpl of HasherTrait<Hasher> {
@@ -49,9 +48,7 @@ mod pedersen {
             Hasher {}
         }
         fn hash(ref self: Hasher, data1: felt252, data2: felt252) -> felt252 {
-            let mut state = PedersenTrait::new(data1);
-            state = state.update(data2);
-            state.finalize()
+            pedersen::pedersen(data1, data2)
         }
     }
 }
