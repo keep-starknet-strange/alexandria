@@ -195,6 +195,8 @@ fn i257_div_rem(lhs: i257, rhs: i257) -> (i257, i257) {
 }
 
 // Implements the PartialEq trait for i257.
+// WARNING: If either `lhs` or `rhs` is negative zero, functions will revert.
+// Ensure that neither `lhs` nor `rhs` is negative zero before calling.
 impl i257PartialEq of PartialEq<i257> {
     fn eq(lhs: @i257, rhs: @i257) -> bool {
         i257_assert_no_negative_zero(*lhs);
@@ -208,6 +210,8 @@ impl i257PartialEq of PartialEq<i257> {
 }
 
 // Implements the PartialOrd trait for i257.
+// WARNING: If either `lhs` or `rhs` is negative zero, functions will revert.
+// Ensure that neither `lhs` nor `rhs` is negative zero before calling.
 impl i257PartialOrd of PartialOrd<i257> {
     fn le(lhs: i257, rhs: i257) -> bool {
         !i257PartialOrd::gt(lhs, rhs)
