@@ -197,6 +197,8 @@ fn i257_div_rem(lhs: i257, rhs: i257) -> (i257, i257) {
 // Implements the PartialEq trait for i257.
 impl i257PartialEq of PartialEq<i257> {
     fn eq(lhs: @i257, rhs: @i257) -> bool {
+        i257_assert_no_negative_zero(*lhs);
+        i257_assert_no_negative_zero(*rhs);
         lhs.is_negative == rhs.is_negative && lhs.abs == rhs.abs
     }
 
@@ -219,6 +221,8 @@ impl i257PartialOrd of PartialOrd<i257> {
     }
 
     fn gt(lhs: i257, rhs: i257) -> bool {
+        i257_assert_no_negative_zero(lhs);
+        i257_assert_no_negative_zero(rhs);
         // Check if `lhs` is negative and `rhs` is positive.
         if lhs.is_negative & !rhs.is_negative {
             return false;
@@ -262,7 +266,7 @@ impl i257Zeroable of Zeroable<i257> {
 // # Arguments
 // * `x` - The i257 integer to check.
 // # Panics
-// Panics if `x` is zero and is not negative
+// Panics if `x` is zero and is negative
 fn i257_assert_no_negative_zero(x: i257) {
     if x.abs == 0 {
         assert(!x.is_negative, 'negative zero');
