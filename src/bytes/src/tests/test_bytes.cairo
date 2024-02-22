@@ -356,15 +356,14 @@ fn test_bytes_read_u256() {
 #[available_gas(20000000)]
 fn test_bytes_read_bytes31() {
     let bytes: Bytes = BytesTrait::new(
-        31,
-        array![
-            0x0102030405060708090a0b0c0d0e0f10,
-            0x1112131415161718191a1b1c1d1e1f00
-        ]
+        31, array![0x0102030405060708090a0b0c0d0e0f10, 0x1112131415161718191a1b1c1d1e1f00]
     );
     let (offset, val) = bytes.read_bytes31(0);
     assert_eq!(offset, 31, "Offset after read_bytes31 failed");
-    assert!(val == bytes31_const::<0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f>(), "read_bytes31 test failed")
+    assert!(
+        val == bytes31_const::<0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f>(),
+        "read_bytes31 test failed"
+    )
 }
 
 #[test]
