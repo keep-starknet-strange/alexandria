@@ -10,3 +10,4 @@ fmt.workspace = true
 [dependencies]
 alexandria_math = { path = "../math" }
 alexandria_numeric = { path = "../numeric" }
+alexandria_bytes = { path = "../bytes" }

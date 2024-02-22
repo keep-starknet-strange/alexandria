@@ -27,6 +27,7 @@ dependencies = [
 name = "alexandria_encoding"
 version = "0.1.0"
 dependencies = [
+ "alexandria_bytes",
  "alexandria_math",
  "alexandria_numeric",
 ]

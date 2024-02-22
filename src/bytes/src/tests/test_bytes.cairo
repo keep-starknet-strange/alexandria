@@ -1,3 +1,4 @@
+use alexandria_bytes::utils::{BytesDebug, BytesDisplay};
 use alexandria_bytes::{Bytes, BytesTrait};
 use starknet::ContractAddress;
 
@@ -353,6 +354,21 @@ fn test_bytes_read_u256() {
 
 #[test]
 #[available_gas(20000000)]
+fn test_bytes_read_bytes31() {
+    let bytes: Bytes = BytesTrait::new(
+        31,
+        array![
+            0x0102030405060708090a0b0c0d0e0f10,
+            0x1112131415161718191a1b1c1d1e1f00
+        ]
+    );
+    let (offset, val) = bytes.read_bytes31(0);
+    assert_eq!(offset, 31, "Offset after read_bytes31 failed");
+    assert!(val == bytes31_const::<0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f>(), "read_bytes31 test failed")
+}
+
+#[test]
+#[available_gas(20000000)]
 fn test_bytes_read_u256_array() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -681,4 +697,20 @@ fn test_bytes_sha256() {
     let hash: u256 = 0xc3ab2c0ce2c246454f265f531ab14f210215ce72b91c23338405c273dc14ce1d;
     let res = bytes.sha256();
     assert_eq!(res, hash, "bytes_sha256_2");
+}
+
+#[test]
+fn test_byte_array_conversions() {
+    let bytes = BytesTrait::new(
+        52,
+        array![
+            0x01020304050607080910111213141516,
+            0x16151413121110090807060504030201,
+            0x60196ff92381eb7910f5446c2e0e04e1,
+            0x3db2194a000000000000000000000000
+        ]
+    );
+    let byte_array = bytes.clone().to_byte_array();
+    let new_bytes = BytesTrait::from_byte_array(byte_array);
+    assert_eq!(bytes, new_bytes, "byte <-> byte_array conversion failed");
 }

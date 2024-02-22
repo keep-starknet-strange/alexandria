@@ -1,6 +1,7 @@
 use alexandria_bytes::utils::{
     u128_join, read_sub_u128, u128_split, u128_array_slice, keccak_u128s_be, u8_array_to_u256
 };
+use alexandria_math::{U128BitShift, U256BitShift};
 use alexandria_math::sha256::sha256;
 use starknet::ContractAddress;
 
@@ -42,6 +43,10 @@ trait BytesTrait {
     fn new_empty() -> Bytes;
     /// Create a Bytes with size bytes 0
     fn zero(size: usize) -> Bytes;
+    /// Create a Bytes from ByteArray ( Array<bytes31> )
+    fn from_byte_array(bytes: ByteArray) -> Bytes;
+    /// Create a ByteArray from Bytes
+    fn to_byte_array(self: Bytes) -> ByteArray;
     /// Locate offset in Bytes
     fn locate(offset: usize) -> (usize, usize);
     /// Get Bytes size
@@ -76,6 +81,8 @@ trait BytesTrait {
     fn read_bytes(self: @Bytes, offset: usize, size: usize) -> (usize, Bytes);
     /// Read felt252 from Bytes, which stored as u256
     fn read_felt252(self: @Bytes, offset: usize) -> (usize, felt252);
+    /// Read bytes31 from Bytes
+    fn read_bytes31(self: @Bytes, offset: usize) -> (usize, bytes31);
     /// Read a ContractAddress from Bytes
     fn read_address(self: @Bytes, offset: usize) -> (usize, ContractAddress);
     /// Write value with size bytes into Bytes, value is packed into u128
@@ -96,6 +103,8 @@ trait BytesTrait {
     fn append_u256(ref self: Bytes, value: u256);
     /// Write felt252 into Bytes, which stored as u256
     fn append_felt252(ref self: Bytes, value: felt252);
+    /// Write bytes31 into Bytes
+    fn append_bytes31(ref self: Bytes, value: bytes31);
     /// Write address into Bytes
     fn append_address(ref self: Bytes, value: ContractAddress);
     /// concat with other Bytes
@@ -133,6 +142,38 @@ impl BytesImpl of BytesTrait {
         };
 
         Bytes { size, data }
+    }
+
+    fn from_byte_array(mut bytes: ByteArray) -> Bytes {
+        let mut res = BytesTrait::new_empty();
+        while !bytes.data.is_empty() {
+            let value: bytes31 = bytes.data.pop_front().unwrap();
+            res.append_bytes31(value);
+        };
+        // Last elem
+        if bytes.pending_word_len != 0 {
+            let mut val: u256 = bytes.pending_word.into();
+            val = U256BitShift::shl(val, 8 * (32 - bytes.pending_word_len.into()));
+            res.concat(@BytesTrait::new(bytes.pending_word_len, array![val.high, val.low]));
+        }
+        res
+    }
+
+    fn to_byte_array(self: Bytes) -> ByteArray {
+        let mut res: ByteArray = "";
+        let mut offset = 0;
+        while offset < self.size() {
+            if offset + 31 <= self.size() {
+                let (new_offset, value) = self.read_bytes31(offset);
+                res.append_word(value.into(), 31);
+                offset = new_offset;
+            } else {
+                let (new_offset, value) = self.read_u8(offset);
+                res.append_byte(value);
+                offset = new_offset;
+            }
+        };
+        res
     }
 
     /// Locate offset in Bytes
@@ -358,6 +399,19 @@ impl BytesImpl of BytesTrait {
         (new_offset, value.try_into().expect('Couldn\'t convert to felt252'))
     }
 
+    /// read bytes31 from Bytes
+    #[inline(always)]
+    fn read_bytes31(self: @Bytes, offset: usize) -> (usize, bytes31) {
+        let (new_offset, high) = self.read_u128(0);
+        let (new_offset, low) = self.read_u128_packed(new_offset, 15);
+        let low = U128BitShift::shl(low, 8);
+        let mut value: u256 = u256 { high, low };
+        value = U256BitShift::shr(value, 8);
+        let value: felt252 = value.try_into().expect('Couldn\'t convert to felt252');
+        let value: bytes31 = value.try_into().expect('Couldn\'t convert to bytes31');
+        (new_offset, value)
+    }
+
     /// read Contract Address from Bytes
     #[inline(always)]
     fn read_address(self: @Bytes, offset: usize) -> (usize, ContractAddress) {
@@ -450,12 +504,19 @@ impl BytesImpl of BytesTrait {
         self.append_u256(value)
     }
 
+    /// Write bytes31 into Bytes
+    #[inline(always)]
+    fn append_bytes31(ref self: Bytes, value: bytes31) {
+        let mut value: u256 = value.into();
+        value = U256BitShift::shl(value, 8);
+        self.concat(@BytesTrait::new(31, array![value.high, value.low]));
+    }
+
     /// Write address into Bytes
     #[inline(always)]
     fn append_address(ref self: Bytes, value: ContractAddress) {
-        let address_felt256: felt252 = value.into();
-        let address_u256: u256 = address_felt256.into();
-        self.append_u256(address_u256)
+        let address: felt252 = value.into();
+        self.append_felt252(address)
     }
 
     /// concat with other Bytes
