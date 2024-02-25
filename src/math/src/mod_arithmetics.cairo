@@ -57,10 +57,14 @@ fn sub_mod(mut a: u256, mut b: u256, modulo: u256) -> u256 {
     // reduce values
     a = a % modulo;
     b = b % modulo;
-    if (a >= b) {
-        return a - b;
+    let (diff, overflow) = integer::u256_overflow_sub(a, b);
+    if overflow {
+        // Overflow back with add modulo
+        let (diff, _) = integer::u256_overflowing_add(diff, modulo);
+        diff
+    } else {
+        diff
     }
-    a + add_inverse_mod(b, modulo)
 }
 
 /// Function that performs modular multiplication.
