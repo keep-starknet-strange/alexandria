@@ -58,14 +58,11 @@ fn pow<T, +Sub<T>, +Mul<T>, +Div<T>, +Rem<T>, +PartialEq<T>, +Into<u8, T>, +Drop
 /// * `felt252` - The number of digits in num of base
 fn count_digits_of_base(mut num: u128, base: u128) -> u128 {
     let mut res = 0;
-    loop {
-        if num == 0 {
-            break res;
-        } else {
-            num = num / base;
-        }
+    while (num != 0) {
+        num = num / base;
         res += 1;
-    }
+    };
+    res
 }
 
 trait BitShift<T> {

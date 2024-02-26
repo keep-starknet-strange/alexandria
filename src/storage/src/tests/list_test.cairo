@@ -272,11 +272,7 @@ mod tests {
         let max: u32 = 513;
 
         // test appending many
-        loop {
-            if index == max {
-                break;
-            }
-
+        while (index != max) {
             let append_indexes = contract.do_append(mock_addr, index.into());
             assert(append_indexes == (index, index), index.into());
             index += 1;
@@ -286,11 +282,7 @@ mod tests {
 
         // test getting many
         index = 0;
-        loop {
-            if index == max {
-                break;
-            }
-
+        while (index != max) {
             let (some_addr, some_number) = contract.do_get(index);
             assert!(some_addr.is_some(), "addr is some");
             assert_eq!(some_addr.unwrap(), mock_addr, "addr");

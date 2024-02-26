@@ -288,7 +288,7 @@ fn test_len_arr() {
 fn test_read_u256() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
-    let u256{low: low1, high: high1 } = rd.read_u256().unwrap();
+    let u256 { low: low1, high: high1 } = rd.read_u256().unwrap();
     assert!(high1 == 0x0102030405060708090a0b0c0d0e0f10_u128, "wrong value for high1");
     assert!(low1 == 0x1112131415161718191a1b1c1d1e1f20_u128, "wrong value for low1");
 }
@@ -298,7 +298,7 @@ fn test_read_u256() {
 fn test_read_u256_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
-    let u256{low: low1, high: high1 } = rd.read_u256().unwrap();
+    let u256 { low: low1, high: high1 } = rd.read_u256().unwrap();
     assert!(high1 == 0x0102030405060708090a0b0c0d0e0f10_u128, "wrong value for high1");
     assert!(low1 == 0x1112131415161718191a1b1c1d1e1f20_u128, "wrong value for low1");
 }
@@ -308,7 +308,7 @@ fn test_read_u256_arr() {
 fn test_read_u256_le() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
-    let u256{low: low1, high: high1 } = rd.read_u256_le().unwrap();
+    let u256 { low: low1, high: high1 } = rd.read_u256_le().unwrap();
     assert!(high1 == 0x201f1e1d1c1b1a191817161514131211_u128, "wrong value for high1");
     assert!(low1 == 0x100f0e0d0c0b0a090807060504030201_u128, "wrong value for low1");
 }
@@ -318,7 +318,7 @@ fn test_read_u256_le() {
 fn test_read_u256_le_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
-    let u256{low: low1, high: high1 } = rd.read_u256_le().unwrap();
+    let u256 { low: low1, high: high1 } = rd.read_u256_le().unwrap();
     assert!(high1 == 0x201f1e1d1c1b1a191817161514131211_u128, "wrong value for high1");
     assert!(low1 == 0x100f0e0d0c0b0a090807060504030201_u128, "wrong value for low1");
 }
@@ -328,7 +328,7 @@ fn test_read_u256_le_arr() {
 fn test_read_u512() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
-    let u512{limb0, limb1, limb2, limb3 } = rd.read_u512().unwrap();
+    let u512 { limb0, limb1, limb2, limb3 } = rd.read_u512().unwrap();
 
     assert!(limb3 == 0x0102030405060708090a0b0c0d0e0f10_u128, "wrong value for limb3");
     assert!(limb2 == 0x1112131415161718191a1b1c1d1e1f20_u128, "wrong value for limb2");
@@ -341,7 +341,7 @@ fn test_read_u512() {
 fn test_read_u512_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
-    let u512{limb0, limb1, limb2, limb3 } = rd.read_u512().unwrap();
+    let u512 { limb0, limb1, limb2, limb3 } = rd.read_u512().unwrap();
 
     assert!(limb3 == 0x0102030405060708090a0b0c0d0e0f10_u128, "wrong value for limb3");
     assert!(limb2 == 0x1112131415161718191a1b1c1d1e1f20_u128, "wrong value for limb2");
@@ -354,7 +354,7 @@ fn test_read_u512_arr() {
 fn test_read_u512_le() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
-    let u512{limb0, limb1, limb2, limb3 } = rd.read_u512_le().unwrap();
+    let u512 { limb0, limb1, limb2, limb3 } = rd.read_u512_le().unwrap();
     assert!(limb0 == 0x100f0e0d0c0b0a090807060504030201_u128, "wrong value for limb0");
     assert!(limb1 == 0x201f1e1d1c1b1a191817161514131211_u128, "wrong value for limb1");
     assert!(limb2 == 0x302f2e2d2c2b2a292827262524232221_u128, "wrong value for limb2");
@@ -366,7 +366,7 @@ fn test_read_u512_le() {
 fn test_read_u512_le_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
-    let u512{limb0, limb1, limb2, limb3 } = rd.read_u512_le().unwrap();
+    let u512 { limb0, limb1, limb2, limb3 } = rd.read_u512_le().unwrap();
     assert!(limb0 == 0x100f0e0d0c0b0a090807060504030201_u128, "wrong value for limb0");
     assert!(limb1 == 0x201f1e1d1c1b1a191817161514131211_u128, "wrong value for limb1");
     assert!(limb2 == 0x302f2e2d2c2b2a292827262524232221_u128, "wrong value for limb2");

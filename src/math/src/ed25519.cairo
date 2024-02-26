@@ -226,10 +226,7 @@ fn point_mult(mut scalar: u256, mut P: ExtendedHomogeneousPoint) -> ExtendedHomo
     let zero_u512 = Default::default();
 
     // Double and add method
-    loop {
-        if (scalar == zero_u512) {
-            break;
-        }
+    while (scalar != zero_u512) {
         if ((scalar.low & 1) == 1) {
             Q = Q + P;
         }
@@ -265,16 +262,11 @@ fn check_group_equation(
 }
 
 fn verify_signature(msg: Span<u8>, signature: Span<u8>, pub_key: Span<u8>) -> bool {
-    if (pub_key.len() != PUB_KEY_LEN) {
-        return false;
-    }
-
-    if (signature.len() != SIG_LEN) {
+    if (pub_key.len() != PUB_KEY_LEN || signature.len() != SIG_LEN) {
         return false;
     }
 
     let r_string = signature.slice(0, SIG_LEN / 2);
-    let s_string = signature.slice(32, SIG_LEN / 2);
     let R_opt: Option<Point> = r_string.try_into();
     if (R_opt.is_none()) {
         return false;
@@ -284,7 +276,7 @@ fn verify_signature(msg: Span<u8>, signature: Span<u8>, pub_key: Span<u8>) -> bo
         return false;
     }
     let R: Point = R_opt.unwrap();
-    let S: u256 = s_string.into();
+    let S: u256 = signature.slice(32, SIG_LEN / 2).into();
     let A_prime: Point = A_prime_opt.unwrap();
 
     let R_extended: ExtendedHomogeneousPoint = R.into();

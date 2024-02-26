@@ -69,10 +69,7 @@ fn encode_u8_array(mut bytes: Array<u8>, base64_chars: Span<u8>) -> Array<u8> {
     let mut i = 0;
     let bytes_len = bytes.len();
     let last_iteration = bytes_len - 3;
-    loop {
-        if i == bytes_len {
-            break;
-        }
+    while (i != bytes_len) {
         let n: u32 = (*bytes[i]).into()
             * 65536 | (*bytes[i + 1]).into()
             * 256 | (*bytes[i + 2]).into();
@@ -119,10 +116,7 @@ fn encode_felt(self: felt252, base64_chars: Span<u8>) -> Array<u8> {
         result.append(*base64_chars[r3]);
         num = quotient;
     }
-    loop {
-        if num == 0 {
-            break;
-        }
+    while (num != 0) {
         let (quotient, remainder) = DivRem::div_rem(num, 16777216_u256.try_into().unwrap());
         // Safe since 'remainder' is always less than 16777216 (2^24), 
         // which is within the range of usize (less than 2^32).
@@ -137,10 +131,7 @@ fn encode_felt(self: felt252, base64_chars: Span<u8>) -> Array<u8> {
         result.append(*base64_chars[r4]);
         num = quotient;
     };
-    loop {
-        if result.len() >= 43 {
-            break;
-        }
+    while (result.len() < 43) {
         result.append('A');
     };
     result = result.reverse();

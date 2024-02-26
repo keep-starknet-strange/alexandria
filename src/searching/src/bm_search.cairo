@@ -31,11 +31,7 @@ fn bm_search(text: @ByteArray, pattern: @ByteArray) -> Array<usize> {
     let mut shift: usize = 0; // Shift value for pattern matching
 
     // Perform pattern matching
-    loop {
-        if shift > text_len - pattern_len {
-            break;
-        }
-
+    while (shift <= text_len - pattern_len) {
         let mut pattern_index = pattern_len;
 
         // Compare characters from right to left

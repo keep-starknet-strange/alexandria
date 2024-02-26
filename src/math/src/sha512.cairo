@@ -108,11 +108,7 @@ fn fpow(mut base: u128, mut power: u128) -> u128 {
 
     let mut base_u128: u256 = base.into();
     let mut result: u256 = 1;
-    loop {
-        if power == 0 {
-            break result;
-        }
-
+    while (power != 0) {
         if power % 2 != 0 {
             result = (result * base_u128);
         }
@@ -149,10 +145,7 @@ fn add_trailing_zeroes(ref data: Array<u8>, msg_len: usize) {
     };
 
     let mut i = 0;
-    loop {
-        if (i >= padding_len) {
-            break;
-        }
+    while (i < padding_len) {
         data.append(0);
         i += 1;
     };
@@ -162,10 +155,7 @@ fn from_u8Array_to_WordArray(data: Array<u8>) -> Array<Word64> {
     let mut new_arr: Array<Word64> = array![];
     let mut i = 0;
 
-    loop {
-        if (i >= data.len()) {
-            break;
-        }
+    while (i < data.len()) {
         let new_word: u128 = (BitShift::shl((*data[i + 0]).into(), 56)
             + BitShift::shl((*data[i + 1]).into(), 48)
             + BitShift::shl((*data[i + 2]).into(), 40)
@@ -183,11 +173,8 @@ fn from_u8Array_to_WordArray(data: Array<u8>) -> Array<Word64> {
 fn from_WordArray_to_u8array(data: Span<Word64>) -> Array<u8> {
     let mut arr: Array<u8> = array![];
 
-    let mut i: usize = 0;
-    loop {
-        if (i == data.len()) {
-            break;
-        }
+    let mut i = 0;
+    while (i != data.len()) {
         let mut res: u128 = BitShift::shr((*data.at(i).data).into(), 56)
             & BoundedInt::<u8>::max().into();
         arr.append(res.try_into().unwrap());
@@ -227,18 +214,13 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
 
     let mut i = 0;
 
-    loop {
-        if (i == block_nb) {
-            break;
-        }
+    while (i != block_nb) {
         // Prepare message schedule
         let mut t: usize = 0;
 
         let mut W: Array<Word64> = array![];
-        loop {
-            if t == 80 {
-                break;
-            } else if t < 16 {
+        while (t != 80) {
+            if t < 16 {
                 W.append(*data.at(i * 16 + t));
             } else {
                 let buf = ssig1(*W.at(t - 2)) + *W.at(t - 7) + ssig0(*W.at(t - 15)) + *W.at(t - 16);
@@ -257,10 +239,7 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
         let mut h = h_7;
 
         let mut t: usize = 0;
-        loop {
-            if t == 80 {
-                break;
-            }
+        while (t != 80) {
             let T1 = h + bsig1(e) + ch(e, f, g) + *k.at(t) + *W.at(t);
             let T2 = bsig0(a) + maj(a, b, c);
             h = g;

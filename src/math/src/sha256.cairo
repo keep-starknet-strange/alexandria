@@ -50,10 +50,7 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
     // add one
     data.append(0x80);
     // add padding
-    loop {
-        if (64 * ((data.len() - 1) / 64 + 1)) - 8 == data.len() {
-            break;
-        }
+    while ((64 * ((data.len() - 1) / 64 + 1)) - 8 != data.len()) {
         data.append(0);
     };
 
@@ -151,18 +148,12 @@ fn compression(w: Span<u32>, i: usize, k: Span<u32>, mut h: Span<u32>) -> Span<u
 fn create_message_schedule(data: Span<u32>, i: usize) -> Span<u32> {
     let mut j = 0;
     let mut result = array![];
-    loop {
-        if j >= 16 {
-            break;
-        }
+    while (j < 16) {
         result.append(*data[i * 16 + j]);
         j += 1;
     };
     let mut i = 16;
-    loop {
-        if i >= 64 {
-            break;
-        }
+    while (i < 64) {
         let s0 = ssig0(*result[i - 15]);
         let s1 = ssig1(*result[i - 2]);
         let res = u32_wrapping_add(

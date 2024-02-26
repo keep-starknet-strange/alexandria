@@ -8,10 +8,7 @@ use integer::u512;
 fn test_append_bit() {
     let mut ba: BitArray = Default::default();
     let mut c = 250;
-    loop {
-        if c == 0 {
-            break;
-        }
+    while (c != 0) {
         ba.append_bit(true);
         ba.append_bit(false);
         c -= 1;
@@ -272,20 +269,14 @@ fn test_stress_test() {
     let mut ba: BitArray = Default::default();
     let mut index = 0;
     let limit = 20;
-    loop {
-        if index == limit {
-            break;
-        }
+    while (index != limit) {
         let value: felt252 = index.into();
         ba.write_word_be(value, 248);
         ba.write_word_le(value, 248);
         index += 1;
     };
     index = 0;
-    loop {
-        if index == limit {
-            break;
-        }
+    while (index != limit) {
         let value = ba.read_word_be(248).unwrap();
         assert!(value == index.into(), "not equal");
         let value = ba.read_word_le(248).unwrap();
@@ -336,7 +327,7 @@ fn test_serde_ser_deser() {
 // helpers
 fn sample_bit_array() -> BitArray {
     let sample: felt252 = BoundedInt::<u128>::max().into() - 1;
-    let u256{low, high: _ } = sample.into();
+    let u256 { low, high: _ } = sample.into();
     let ba = BitArray {
         data: array![],
         current: low.into() * one_shift_left_bytes_felt252(15),
