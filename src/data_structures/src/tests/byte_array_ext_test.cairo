@@ -20,10 +20,7 @@ fn test_span_u8_into_byte_array() {
 fn test_byte_array_into_array_u8() {
     let array: Array<u8> = test_byte_array_64().into();
     let mut index = 0_usize;
-    loop {
-        if index == 0x40 {
-            break;
-        }
+    while (index != 64) {
         assert!((*array[index]).into() == index + 1, "unexpected result");
         index += 1;
     }

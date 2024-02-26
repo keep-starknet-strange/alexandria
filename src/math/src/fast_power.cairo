@@ -21,11 +21,7 @@ fn fast_power(base: u128, mut power: u128, modulus: u128) -> u128 {
     let modulus: u256 = modulus.into();
     let mut result: u256 = 1;
 
-    let res = loop {
-        if power == 0 {
-            break result;
-        }
-
+    while (power != 0) {
         if power % 2 != 0 {
             result = (result * base) % modulus;
         }
@@ -34,5 +30,5 @@ fn fast_power(base: u128, mut power: u128, modulus: u128) -> u128 {
         power = power / 2;
     };
 
-    res.try_into().expect('value cant be larger than u128')
+    result.try_into().expect('value cant be larger than u128')
 }

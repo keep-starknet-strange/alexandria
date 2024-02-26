@@ -23,11 +23,8 @@ trait ByteAppenderSupportTrait<T> {
 impl ByteAppenderSupportArrayU8Impl of ByteAppenderSupportTrait<Array<u8>> {
     fn append_bytes_be(ref self: Array<u8>, bytes: felt252, mut count: usize) {
         assert(count <= 16, 'count too big');
-        let u256{low, high: _high } = bytes.into();
-        loop {
-            if count == 0 {
-                break;
-            }
+        let u256 { low, high: _high } = bytes.into();
+        while (count != 0) {
             let next = (low / one_shift_left_bytes_u128(count - 1)) % 0x100;
             // Unwrap safe by definition of modulus operation 0x100
             self.append(next.try_into().unwrap());
@@ -37,12 +34,9 @@ impl ByteAppenderSupportArrayU8Impl of ByteAppenderSupportTrait<Array<u8>> {
 
     fn append_bytes_le(ref self: Array<u8>, bytes: felt252, count: usize) {
         assert(count <= 16, 'count too big');
-        let u256{mut low, high: _high } = bytes.into();
+        let u256 { mut low, high: _high } = bytes.into();
         let mut index = 0;
-        loop {
-            if index == count {
-                break;
-            }
+        while (index != count) {
             let (remaining_bytes, next) = DivRem::div_rem(low, 0x100_u128.try_into().unwrap());
             low = remaining_bytes;
             // Unwrap safe by definition of remainder from division by 0x100
@@ -61,7 +55,7 @@ impl ByteAppenderSupportByteArrayImpl of ByteAppenderSupportTrait<ByteArray> {
     #[inline(always)]
     fn append_bytes_le(ref self: ByteArray, bytes: felt252, count: usize) {
         assert(count <= 16, 'count too big');
-        let u256{low, high: _high } = bytes.into();
+        let u256 { low, high: _high } = bytes.into();
         let (reversed, _) = reversing(low, count, 0x100);
         self.append_word(reversed.into(), count);
     }
@@ -188,19 +182,19 @@ impl ByteAppenderImpl<T, +Drop<T>, +ByteAppenderSupportTrait<T>> of ByteAppender
     }
 
     fn append_u256(ref self: T, word: u256) {
-        let u256{low, high } = word;
+        let u256 { low, high } = word;
         self.append_u128(high);
         self.append_u128(low);
     }
 
     fn append_u256_le(ref self: T, word: u256) {
-        let u256{low, high } = word;
+        let u256 { low, high } = word;
         self.append_u128_le(low);
         self.append_u128_le(high);
     }
 
     fn append_u512(ref self: T, word: u512) {
-        let u512{limb0, limb1, limb2, limb3 } = word;
+        let u512 { limb0, limb1, limb2, limb3 } = word;
         self.append_u128(limb3);
         self.append_u128(limb2);
         self.append_u128(limb1);
@@ -208,7 +202,7 @@ impl ByteAppenderImpl<T, +Drop<T>, +ByteAppenderSupportTrait<T>> of ByteAppender
     }
 
     fn append_u512_le(ref self: T, word: u512) {
-        let u512{limb0, limb1, limb2, limb3 } = word;
+        let u512 { limb0, limb1, limb2, limb3 } = word;
         self.append_u128_le(limb0);
         self.append_u128_le(limb1);
         self.append_u128_le(limb2);

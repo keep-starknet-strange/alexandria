@@ -122,10 +122,7 @@ fn test_rlp_decode_string_default_value() {
 #[available_gas(99999999)]
 fn test_rlp_decode_string() {
     let mut i = 0;
-    loop {
-        if i == 0x80 {
-            break;
-        }
+    while (i != 128) {
         let arr = array![i];
 
         let res = RLPTrait::decode(arr.span()).unwrap();
@@ -1995,10 +1992,7 @@ fn test_rlp_encode_string_length_between_2_and_55() {
 fn test_rlp_encode_string_length_exactly_56() {
     let mut input: Array<u8> = Default::default();
     let mut i = 0;
-    loop {
-        if i == 56 {
-            break;
-        }
+    while (i != 56) {
         input.append(0x60);
         i += 1;
     };
@@ -2009,7 +2003,7 @@ fn test_rlp_encode_string_length_exactly_56() {
     assert!(*res[0] == 0xb8, "wrong prefix");
     assert!(*res[1] == 56, "wrong string length");
     let mut i = 2;
-    loop {
+    while (i != 58) {
         if i == 58 {
             break;
         }
@@ -2024,10 +2018,7 @@ fn test_rlp_encode_string_length_exactly_56() {
 fn test_rlp_encode_string_length_greater_than_56() {
     let mut input: Array<u8> = Default::default();
     let mut i = 0;
-    loop {
-        if i == 60 {
-            break;
-        }
+    while (i != 60) {
         input.append(0x70);
         i += 1;
     };
@@ -2038,10 +2029,7 @@ fn test_rlp_encode_string_length_greater_than_56() {
     assert!(*res[0] == 0xb8, "wrong prefix");
     assert!(*res[1] == 60, "wrong length byte");
     let mut i = 2;
-    loop {
-        if i == 62 {
-            break;
-        }
+    while (i != 62) {
         assert!(*res[i] == 0x70, "wrong value in sequence");
         i += 1;
     }
@@ -2052,10 +2040,7 @@ fn test_rlp_encode_string_length_greater_than_56() {
 fn test_rlp_encode_string_large_bytearray_inputs() {
     let mut input: Array<u8> = Default::default();
     let mut i = 0;
-    loop {
-        if i == 500 {
-            break;
-        }
+    while (i != 500) {
         input.append(0x70);
         i += 1;
     };
@@ -2067,10 +2052,7 @@ fn test_rlp_encode_string_large_bytearray_inputs() {
     assert!(*res[1] == 0x01, "wrong first length byte");
     assert!(*res[2] == 0xF4, "wrong second length byte");
     let mut i = 3;
-    loop {
-        if i == 503 {
-            break;
-        }
+    while (i != 503) {
         assert!(*res[i] == 0x70, "wrong value in sequence");
         i += 1;
     }

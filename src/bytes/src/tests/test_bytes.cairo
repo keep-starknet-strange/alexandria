@@ -439,13 +439,13 @@ fn test_bytes_append() {
 
     // append_u128_packed
     bytes.append_u128_packed(0x101112131415161718, 9);
-    let Bytes{size, mut data } = bytes;
+    let Bytes { size, mut data } = bytes;
     assert_eq!(size, 9, "append_u128_packed_1_size");
     assert_eq!(*data[0], 0x10111213141516171800000000000000, "append_u128_packed_1_value_1");
     bytes = Bytes { size: size, data: data };
 
     bytes.append_u128_packed(0x101112131415161718, 9);
-    let Bytes{size, mut data } = bytes;
+    let Bytes { size, mut data } = bytes;
     assert_eq!(size, 18, "append_u128_packed_2_size");
     assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_u128_packed_2_value_1");
     assert_eq!(*data[1], 0x17180000000000000000000000000000, "append_u128_packed_2_value_2");
@@ -453,7 +453,7 @@ fn test_bytes_append() {
 
     // append_u8
     bytes.append_u8(0x01);
-    let Bytes{size, mut data } = bytes;
+    let Bytes { size, mut data } = bytes;
     assert_eq!(size, 19, "append_u8_size");
     assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_u8_value_1");
     assert_eq!(*data[1], 0x17180100000000000000000000000000, "append_u8_value_2");
@@ -461,7 +461,7 @@ fn test_bytes_append() {
 
     // append_u16
     bytes.append_u16(0x0102);
-    let Bytes{size, mut data } = bytes;
+    let Bytes { size, mut data } = bytes;
     assert_eq!(size, 21, "append_u16_size");
     assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_u16_value_1");
     assert_eq!(*data[1], 0x17180101020000000000000000000000, "append_u16_value_2");
@@ -469,7 +469,7 @@ fn test_bytes_append() {
 
     // append_u32
     bytes.append_u32(0x01020304);
-    let Bytes{size, mut data } = bytes;
+    let Bytes { size, mut data } = bytes;
     assert_eq!(size, 25, "append_u32_size");
     assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_u32_value_1");
     assert_eq!(*data[1], 0x17180101020102030400000000000000, "append_u32_value_2");
@@ -477,7 +477,7 @@ fn test_bytes_append() {
 
     // append_usize
     bytes.append_usize(0x01);
-    let Bytes{size, mut data } = bytes;
+    let Bytes { size, mut data } = bytes;
     assert_eq!(size, 29, "append_usize_size");
     assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_usize_value_1");
     assert_eq!(*data[1], 0x17180101020102030400000001000000, "append_usize_value_2");
@@ -485,7 +485,7 @@ fn test_bytes_append() {
 
     // append_u64
     bytes.append_u64(0x030405060708);
-    let Bytes{size, mut data } = bytes;
+    let Bytes { size, mut data } = bytes;
     assert_eq!(size, 37, "append_u64_size");
     assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_u64_value_1");
     assert_eq!(*data[1], 0x17180101020102030400000001000003, "append_u64_value_2");
@@ -494,7 +494,7 @@ fn test_bytes_append() {
 
     // append_u128
     bytes.append_u128(0x101112131415161718);
-    let Bytes{size, mut data } = bytes;
+    let Bytes { size, mut data } = bytes;
     assert_eq!(size, 53, "append_u128_size");
     assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_u128_value_1");
     assert_eq!(*data[1], 0x17180101020102030400000001000003, "append_u128_value_2");
@@ -504,7 +504,7 @@ fn test_bytes_append() {
 
     // append_u256
     bytes.append_u256(u256 { low: 0x01020304050607, high: 0x010203040506070809 });
-    let Bytes{size, mut data } = bytes;
+    let Bytes { size, mut data } = bytes;
     assert_eq!(size, 85, "append_u256_size");
     assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_u256_value_1");
     assert_eq!(*data[1], 0x17180101020102030400000001000003, "append_u256_value_2");
@@ -519,7 +519,7 @@ fn test_bytes_append() {
         .try_into()
         .unwrap();
     bytes.append_address(address);
-    let Bytes{size, mut data } = bytes;
+    let Bytes { size, mut data } = bytes;
     assert_eq!(size, 117, "append_address_size");
     assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_address_value_1");
     assert_eq!(*data[1], 0x17180101020102030400000001000003, "append_address_value_2");
@@ -554,7 +554,7 @@ fn test_bytes_concat() {
     let other = BytesTrait::new(46, array);
 
     bytes.concat(@other);
-    let Bytes{size, mut data } = bytes;
+    let Bytes { size, mut data } = bytes;
     assert_eq!(size, 163, "concat_size");
     assert_eq!(*data[0], 0x10111213141516171810111213141516, "concat_value_1");
     assert_eq!(*data[1], 0x17180101020102030400000001000003, "concat_value_2");
@@ -572,7 +572,7 @@ fn test_bytes_concat() {
     // empty bytes concat
     let mut empty_bytes = BytesTrait::new_empty();
     empty_bytes.concat(@bytes);
-    let Bytes{size, data } = empty_bytes;
+    let Bytes { size, data } = empty_bytes;
 
     assert_eq!(size, 163, "concat_size");
     assert_eq!(*data[0], 0x10111213141516171810111213141516, "concat_value_1");

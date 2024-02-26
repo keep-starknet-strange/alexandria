@@ -233,7 +233,7 @@ impl BitArrayImpl of BitArrayTrait {
 
     fn write_word_be_u256(ref self: BitArray, word: u256, length: usize) {
         assert(length <= 256, 'illegal length');
-        let u256{low, high } = word;
+        let u256 { low, high } = word;
         if length > 128 {
             self.write_word_be(high.into(), length - 128);
             self.write_word_be(low.into(), 128);
@@ -244,7 +244,7 @@ impl BitArrayImpl of BitArrayTrait {
 
     fn write_word_be_u512(ref self: BitArray, word: u512, length: usize) {
         assert(length <= 512, 'illegal length');
-        let u512{limb0, limb1, limb2, limb3 } = word;
+        let u512 { limb0, limb1, limb2, limb3 } = word;
 
         if length > 384 {
             self.write_word_be(limb3.into(), length - 384);
@@ -272,10 +272,7 @@ impl BitArrayImpl of BitArrayTrait {
         let mut bit_offset = 0_usize;
         let mut byte_offset = 0_usize;
         let mut result: Option<felt252> = Option::Some(0);
-        loop {
-            if bit_offset == bit_limit && byte_offset == byte_limit {
-                break;
-            }
+        while (bit_offset != bit_limit || byte_offset != byte_limit) {
             match self.pop_front() {
                 Option::Some(bit) => {
                     if bit {
@@ -359,7 +356,7 @@ impl BitArrayImpl of BitArrayTrait {
 
     fn write_word_le(ref self: BitArray, word: felt252, length: usize) {
         assert(length <= 248, 'illegal length');
-        let u256{low, high } = word.into();
+        let u256 { low, high } = word.into();
         if length > 128 {
             self._write_word_le_recursive(low, 128);
             self._write_word_le_recursive(high, length - 128);
@@ -370,7 +367,7 @@ impl BitArrayImpl of BitArrayTrait {
 
     fn write_word_le_u256(ref self: BitArray, word: u256, length: usize) {
         assert(length <= 256, 'illegal length');
-        let u256{low, high } = word;
+        let u256 { low, high } = word;
         if length > 128 {
             self.write_word_le(low.into(), 128);
             self.write_word_le(high.into(), length - 128);
@@ -381,7 +378,7 @@ impl BitArrayImpl of BitArrayTrait {
 
     fn write_word_le_u512(ref self: BitArray, word: u512, length: usize) {
         assert(length <= 512, 'illegal length');
-        let u512{limb0, limb1, limb2, limb3 } = word;
+        let u512 { limb0, limb1, limb2, limb3 } = word;
         if length > 384 {
             self.write_word_le(limb0.into(), 128);
             self.write_word_le(limb1.into(), 128);
@@ -498,7 +495,7 @@ fn shift_bit(number: usize) -> u8 {
 
 #[inline(always)]
 fn select(word: felt252, byte_index: usize, bit_index: usize) -> bool {
-    let u256{low, high } = word.into();
+    let u256 { low, high } = word.into();
     let shifted_bytes = if byte_index >= BYTES_IN_U128 {
         high / one_shift_left_bytes_u128(byte_index - BYTES_IN_U128)
     } else {

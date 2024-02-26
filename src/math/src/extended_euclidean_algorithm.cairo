@@ -18,17 +18,14 @@ fn extended_euclidean_algorithm(a: u128, b: u128) -> (u128, u128, u128) {
     let mut old_t = 0;
     let mut coeff_t = 1;
 
-    // Loop until remainder is 0.
-    loop {
-        if rem == 0 {
-            break (old_r, old_s, old_t);
-        }
+    while (rem != 0) {
         let quotient = old_r / rem;
 
         update_step(ref rem, ref old_r, quotient);
         update_step(ref coeff_s, ref old_s, quotient);
         update_step(ref coeff_t, ref old_t, quotient);
-    }
+    };
+    (old_r, old_s, old_t)
 }
 
 /// Update the step of the extended Euclidean algorithm.

@@ -127,7 +127,7 @@ impl U128ReversibleBits of ReversibleBits<u128> {
 
 impl U256Reversible of ReversibleBytes<u256> {
     fn reverse_bytes(self: @u256) -> u256 {
-        let u256{low, high } = *self;
+        let u256 { low, high } = *self;
         let (low_reversed, _) = reversing(word: low, size: 16, step: SELECT_BYTE.into());
         let (high_reversed, _) = reversing(word: high, size: 16, step: SELECT_BYTE.into());
         u256 { low: high_reversed, high: low_reversed }
@@ -136,7 +136,7 @@ impl U256Reversible of ReversibleBytes<u256> {
 
 impl U256ReversibleBits of ReversibleBits<u256> {
     fn reverse_bits(self: @u256) -> u256 {
-        let u256{low, high } = *self;
+        let u256 { low, high } = *self;
         let (low_reversed, _) = reversing(word: low, size: 128, step: SELECT_BIT.into());
         let (high_reversed, _) = reversing(word: high, size: 128, step: SELECT_BIT.into());
         u256 { low: high_reversed, high: low_reversed }
@@ -145,7 +145,7 @@ impl U256ReversibleBits of ReversibleBits<u256> {
 
 impl U512Reversible of ReversibleBytes<u512> {
     fn reverse_bytes(self: @u512) -> u512 {
-        let u512{limb0, limb1, limb2, limb3 } = *self;
+        let u512 { limb0, limb1, limb2, limb3 } = *self;
         let (limb0_reversed, _) = reversing(word: limb0, size: 16, step: SELECT_BYTE.into());
         let (limb1_reversed, _) = reversing(word: limb1, size: 16, step: SELECT_BYTE.into());
         let (limb2_reversed, _) = reversing(word: limb2, size: 16, step: SELECT_BYTE.into());
@@ -161,7 +161,7 @@ impl U512Reversible of ReversibleBytes<u512> {
 
 impl U512ReversibleBits of ReversibleBits<u512> {
     fn reverse_bits(self: @u512) -> u512 {
-        let u512{limb0, limb1, limb2, limb3 } = *self;
+        let u512 { limb0, limb1, limb2, limb3 } = *self;
         let (limb0_reversed, _) = reversing(word: limb0, size: 128, step: SELECT_BIT.into());
         let (limb1_reversed, _) = reversing(word: limb1, size: 128, step: SELECT_BIT.into());
         let (limb2_reversed, _) = reversing(word: limb2, size: 128, step: SELECT_BIT.into());
@@ -181,7 +181,7 @@ impl Bytes31Reversible of ReversibleBytes<bytes31> {
     // low:  A B -> low_rev:  C_rev B_rev
     // high: C Z -> high_rev: A_rev Z
     fn reverse_bytes(self: @bytes31) -> bytes31 {
-        let u256{low, high } = (*self).into();
+        let u256 { low, high } = (*self).into();
         let (c_rev, _) = reversing(word: high, size: 15, step: SELECT_BYTE.into());
         let (low_rev, a) = reversing_partial_result( // pushes b_rev yielding low_rev
             word: low, onto: c_rev, size: 1, step: SELECT_BYTE.into()
@@ -194,7 +194,7 @@ impl Bytes31Reversible of ReversibleBytes<bytes31> {
 
 impl Bytes31ReversibleBits of ReversibleBits<bytes31> {
     fn reverse_bits(self: @bytes31) -> bytes31 {
-        let u256{low, high } = (*self).into();
+        let u256 { low, high } = (*self).into();
         let (c_rev, _) = reversing(word: high, size: 120, step: SELECT_BIT.into());
         let (low_rev, a) = reversing_partial_result( // pushes b_rev yielding low_rev
             word: low, onto: c_rev, size: 8, step: SELECT_BIT.into()

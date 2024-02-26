@@ -2,16 +2,12 @@ use alexandria_math::ed25519::{p, Point, verify_signature, SpanU8TryIntoPoint};
 
 fn gen_msg() -> Span<u8> {
     // Hello World!
-    let mut msg: Array<u8> = array![
-        0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x21
-    ];
-    msg.span()
+    array!['H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!'].span()
 }
 
 fn gen_wrong_msg() -> Span<u8> {
     // Hello Bro!
-    let mut msg: Array<u8> = array![0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x42, 0x72, 0x6F, 0x21];
-    msg.span()
+    array!['H', 'e', 'l', 'l', 'o', ' ', 'B', 'r', 'o', '!'].span()
 }
 
 fn gen_sig() -> Span<u8> {

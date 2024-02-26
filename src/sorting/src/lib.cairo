@@ -39,17 +39,16 @@ fn is_equal_vec(mut a: Felt252Vec<u32>, mut b: Span<u32>) -> bool {
     }
 
     let mut compare_id = 0;
-    let mut is_equal = true;
+
     loop {
         if compare_id == b.len() {
-            break;
+            break true;
         }
 
         if a[compare_id] != *b[compare_id] {
-            is_equal = false;
+            break false;
         }
 
         compare_id += 1;
-    };
-    is_equal
+    }
 }

@@ -370,7 +370,7 @@ impl BytesImpl of BytesTrait {
     fn append_u128_packed(ref self: Bytes, value: u128, size: usize) {
         assert(size <= 16, 'size must be less than 16');
 
-        let Bytes{size: old_bytes_size, mut data } = self;
+        let Bytes { size: old_bytes_size, mut data } = self;
         let (last_data_index, last_element_size) = BytesTrait::locate(old_bytes_size);
 
         if last_element_size == 0 {

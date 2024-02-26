@@ -44,10 +44,7 @@ impl ArrayImpl<T, +Copy<T>, +Drop<T>> of ArrayTraitExt<T> {
 
     fn pop_front_n(ref self: Array<T>, mut n: usize) {
         // Can't do self.span().pop_front_n();
-        loop {
-            if n == 0 {
-                break;
-            }
+        while (n != 0) {
             match self.pop_front() {
                 Option::Some(_) => { n -= 1; },
                 Option::None => { break; },
@@ -68,18 +65,12 @@ impl ArrayImpl<T, +Copy<T>, +Drop<T>> of ArrayTraitExt<T> {
         let mut ret = array![];
         let mut i = 0;
 
-        loop {
-            if (i == self.len()) {
-                break;
-            }
+        while (i != self.len()) {
             ret.append(*self[i]);
             i += 1;
         };
         i = 0;
-        loop {
-            if (i == a.len()) {
-                break;
-            }
+        while (i != a.len()) {
             ret.append(*a[i]);
             i += 1;
         };
@@ -130,10 +121,7 @@ impl ArrayImpl<T, +Copy<T>, +Drop<T>> of ArrayTraitExt<T> {
 
 impl SpanImpl<T, +Copy<T>, +Drop<T>> of SpanTraitExt<T> {
     fn pop_front_n(ref self: Span<T>, mut n: usize) {
-        loop {
-            if n == 0 {
-                break;
-            }
+        while (n != 0) {
             match self.pop_front() {
                 Option::Some(_) => { n -= 1; },
                 Option::None => { break; },
@@ -142,10 +130,7 @@ impl SpanImpl<T, +Copy<T>, +Drop<T>> of SpanTraitExt<T> {
     }
 
     fn pop_back_n(ref self: Span<T>, mut n: usize) {
-        loop {
-            if n == 0 {
-                break;
-            }
+        while (n != 0) {
             match self.pop_back() {
                 Option::Some(_) => { n -= 1; },
                 Option::None => { break; },
@@ -181,18 +166,12 @@ impl SpanImpl<T, +Copy<T>, +Drop<T>> of SpanTraitExt<T> {
         let mut ret = array![];
         let mut i = 0;
 
-        loop {
-            if (i == self.len()) {
-                break;
-            }
+        while (i != self.len()) {
             ret.append(*self[i]);
             i += 1;
         };
         i = 0;
-        loop {
-            if (i == a.len()) {
-                break;
-            }
+        while (i != a.len()) {
             ret.append(*a[i]);
             i += 1;
         };

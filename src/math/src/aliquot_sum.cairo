@@ -16,14 +16,11 @@ fn aliquot_sum(number: u128) -> u128 {
     let limit = (number / 2) + 1;
     let mut index = 1;
     let mut res = 0;
-    loop {
-        if index == limit {
-            break res;
-        }
-
+    while (index != limit) {
         if number % index == 0 {
             res = res + index;
         }
         index += 1;
-    }
+    };
+    res
 }

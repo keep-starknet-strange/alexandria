@@ -10,19 +10,13 @@ fn bytes_be(val: felt252) -> Array<u8> {
     let mut result = array![];
 
     let mut num: u256 = val.into();
-    loop {
-        if num == 0 {
-            break;
-        }
+    while (num != 0) {
         let (quotient, remainder) = DivRem::div_rem(num, 256_u256.try_into().unwrap());
         result.append(remainder.try_into().unwrap());
         num = quotient;
     };
-    loop {
-        if result.len() >= 32 {
-            break;
-        }
-        result.append(0_u8);
+    while (result.len() < 32) {
+        result.append(0);
     };
     result = result.reverse();
     result

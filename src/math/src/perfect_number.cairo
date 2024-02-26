@@ -15,16 +15,13 @@ fn is_perfect_number(num: u128) -> bool {
 
     let mut index = 1;
     let mut sum = 0;
-    loop {
-        if index == num - 1 {
-            break num == sum;
-        }
-
+    while (index != num - 1) {
         if num % index == 0 {
             sum += index;
         }
         index += 1;
-    }
+    };
+    num == sum
 }
 
 /// Algorithm to determine all the perfect numbers up to a maximum value
@@ -36,10 +33,7 @@ fn perfect_numbers(max: u128) -> Array<u128> {
     let mut res = array![];
     let mut index = 1;
 
-    loop {
-        if index == max {
-            break;
-        }
+    while (index != max) {
         if is_perfect_number(index) {
             res.append(index);
         }
