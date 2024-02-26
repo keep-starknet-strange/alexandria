@@ -155,6 +155,7 @@ impl BytesImpl of BytesTrait {
         // Last elem
         if bytes.pending_word_len != 0 {
             let mut val: u256 = bytes.pending_word.into();
+            // Only append the right-aligned bytes of the last word ( using specified length )
             val = U256BitShift::shl(val, 8 * (32 - bytes.pending_word_len.into()));
             res.concat(@BytesTrait::new(bytes.pending_word_len, array![val.high, val.low]));
         }
