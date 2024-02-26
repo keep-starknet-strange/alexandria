@@ -1,10 +1,11 @@
 use alexandria_bytes::{Bytes, BytesTrait};
 use alexandria_encoding::sol_abi::SolAbiEncodeAsTrait;
 
-// Solidity Bytes Trait meant to provide an interface similar to Solidity's bytesX types.
-// Like `bytes1`, `bytes2`, `bytes3`, ..., `bytes32`. Acts as a wrapper around the `encode_as`
-// to make it easier to understand and use.
-// Use like this: `let bytes7Val: Bytes = SolBytesTrait::bytes7(0x01020304050607_u128);`
+/// Solidity Bytes Trait meant to provide an interface similar to Solidity's
+/// bytesX types, like `bytes1`, `bytes2`, `bytes3`, ..., `bytes32`. Acts as
+/// a wrapper around the `encode_as` to make it easier to understand and use.
+/// Use like this:
+/// `let bytes7Val: Bytes = SolBytesTrait::bytes7(0x01020304050607_u128);`
 pub trait SolBytesTrait<T> {
     fn bytes1(val: T) -> Bytes;
     fn bytes2(val: T) -> Bytes;

@@ -8,6 +8,7 @@ use keccak::{u128_to_u64, u128_split as u128_split_to_u64, cairo_keccak};
 fn format_byte_hex(byte: u8, ref f: Formatter) -> Result<(), Error> {
     let base: NonZero<u8> = 16_u8.try_into().unwrap();
     if byte < 0x10 {
+        // Add leading zero for single digit numbers
         let zero: ByteArray = "0";
         let res = Display::fmt(@zero, ref f);
         if res.is_err() {

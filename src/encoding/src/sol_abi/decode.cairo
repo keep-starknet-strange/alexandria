@@ -2,18 +2,18 @@ use alexandria_bytes::{Bytes, BytesTrait};
 use alexandria_encoding::sol_abi::SolBytesTrait;
 use starknet::{ContractAddress, EthAddress, eth_address::U256IntoEthAddress};
 
-// Decode trait meant to provide an interface similar to Solidity's abi.decode
-// function. It is meant to be used in a chain where the passed in `offset` is
-// updated after each decode operation.
-// Values are expected to be 32 bytes long, and will be interpreted as if they
-// were encoded using the `abi.encode` function in Solidity.
+/// Decode trait meant to provide an interface similar to Solidity's abi.decode
+/// function. It is meant to be used in a chain where the passed in `offset` is
+/// updated after each decode operation.
+/// Values are expected to be 32 bytes long, and will be interpreted as if they
+/// were encoded using the `abi.encode` function in Solidity.
 pub trait SolAbiDecodeTrait<T> {
     fn decode(self: @Bytes, ref offset: usize) -> T;
 }
 
-// Decode int types
-// Integers are decoded by reading 32 bytes from the `offset`
-// `Bytes` encoding is right-aligned/left-paddded Big-endian.
+/// Decode int types
+/// Integers are decoded by reading 32 bytes from the `offset`
+/// `Bytes` encoding is right-aligned/left-paddded Big-endian.
 
 pub impl SolAbiDecodeU8 of SolAbiDecodeTrait<u8> {
     fn decode(self: @Bytes, ref offset: usize) -> u8 {
@@ -63,9 +63,9 @@ pub impl SolAbiDecodeU256 of SolAbiDecodeTrait<u256> {
     }
 }
 
-// Decode other primitives
-// Primitives are decoded by reading 32 bytes from the `offset`
-// `Bytes` encoding is right-aligned/left-paddded Big-endian.
+/// Decode other primitives
+/// Primitives are decoded by reading 32 bytes from the `offset`
+/// `Bytes` encoding is right-aligned/left-paddded Big-endian.
 
 pub impl SolAbiDecodeBool of SolAbiDecodeTrait<bool> {
     fn decode(self: @Bytes, ref offset: usize) -> bool {
@@ -94,9 +94,9 @@ pub impl SolAbiDecodeBytes31 of SolAbiDecodeTrait<bytes31> {
     }
 }
 
-// Decode byte types
-// Bytes are decoded by reading 32 bytes from the `offset`
-// `Bytes` encoding is left-aligned/right-paddded
+/// Decode byte types
+/// Bytes are decoded by reading 32 bytes from the `offset`
+/// `Bytes` encoding is left-aligned/right-paddded
 
 pub impl SolAbiDecodeBytes of SolAbiDecodeTrait<Bytes> {
     fn decode(self: @Bytes, ref offset: usize) -> Bytes {
@@ -114,9 +114,9 @@ pub impl SolAbiDecodeByteArray of SolAbiDecodeTrait<ByteArray> {
     }
 }
 
-// Decode address types
-// Addresses are decoded by reading 32 bytes from the `offset`
-// `Bytes` encoding is right-aligned/left-paddded Big-endian.
+/// Decode address types
+/// Addresses are decoded by reading 32 bytes from the `offset`
+/// `Bytes` encoding is right-aligned/left-paddded Big-endian.
 
 pub impl SolAbiDecodeStarknetAddress of SolAbiDecodeTrait<ContractAddress> {
     fn decode(self: @Bytes, ref offset: usize) -> ContractAddress {

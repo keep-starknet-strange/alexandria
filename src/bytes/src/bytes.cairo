@@ -146,9 +146,11 @@ impl BytesImpl of BytesTrait {
 
     fn from_byte_array(mut bytes: ByteArray) -> Bytes {
         let mut res = BytesTrait::new_empty();
-        while !bytes.data.is_empty() {
-            let value: bytes31 = bytes.data.pop_front().unwrap();
-            res.append_bytes31(value);
+        loop {
+            match bytes.data.pop_front() {
+                Option::Some(val) => res.append_bytes31(val),
+                Option::None => { break; }
+            }
         };
         // Last elem
         if bytes.pending_word_len != 0 {
@@ -160,7 +162,7 @@ impl BytesImpl of BytesTrait {
     }
 
     fn to_byte_array(self: Bytes) -> ByteArray {
-        let mut res: ByteArray = "";
+        let mut res: ByteArray = Default::default();
         let mut offset = 0;
         while offset < self.size() {
             if offset + 31 <= self.size() {
@@ -402,11 +404,16 @@ impl BytesImpl of BytesTrait {
     /// read bytes31 from Bytes
     #[inline(always)]
     fn read_bytes31(self: @Bytes, offset: usize) -> (usize, bytes31) {
+        // Read 31 bytes of data ( 16 bytes high + 15 bytes low )
         let (new_offset, high) = self.read_u128(0);
         let (new_offset, low) = self.read_u128_packed(new_offset, 15);
+        // low bits shifting to remove the left padded 0 byte on u128 type
         let low = U128BitShift::shl(low, 8);
         let mut value: u256 = u256 { high, low };
+        // shift left aligned 31 bytes to the right
+        // thus the value is stored in the last 31 bytes of u256
         value = U256BitShift::shr(value, 8);
+        // Unwrap is always safe here, because highest byte is always 0
         let value: felt252 = value.try_into().expect('Couldn\'t convert to felt252');
         let value: bytes31 = value.try_into().expect('Couldn\'t convert to bytes31');
         (new_offset, value)

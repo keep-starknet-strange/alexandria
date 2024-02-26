@@ -2,10 +2,12 @@ use alexandria_bytes::{Bytes, BytesTrait};
 use alexandria_math::U256BitShift;
 use starknet::{ContractAddress, EthAddress};
 
-// Encode selector trait meant to provide an interface similar to Solidity's abi.encodeWithSelector
-// function. It is meant to be the first call in an encode chain, adding the function selector to
-// the encoded data. Value encoded is only 4 bytes long representing the function selector.
-// Use like this: BytesTrait::new_empty().encode_selector(selector).encode(arg1).encode(arg2)...
+/// Encode selector trait meant to provide an interface similar to Solidity's
+/// abi.encodeWithSelector function. It is meant to be the first call in an
+/// encode chain, adding the function selector to the encoded data. Value encoded
+/// is only 4 bytes long representing the function selector.
+/// Use like this:
+/// BytesTrait::new_empty().encode_selector(selector).encode(arg1).encode(arg2)...
 pub trait SolAbiEncodeSelectorTrait {
     fn encode_selector(self: Bytes, selector: u32) -> Bytes;
 }
@@ -17,21 +19,21 @@ pub impl SolAbiEncodeSelector of SolAbiEncodeSelectorTrait {
     }
 }
 
-// Encode trait meant to provide an interface similar to Solidity's abi.encode
-// function. It is meant to allow chaining of encode calls to build up a `Bytes`
-// object. Values are encoded in 32 bytes chunks, and padding is added as necessary.
-// Also provides a packed version of the encoding similar to Solidity's
-// abi.encodePacked, which does not add padding.
-// Use like this: BytesTrait::new_empty().encode(arg1).encode(arg2)...
-// Or like this: BytesTrait::new_empty().encode_packed(arg1).encode_packed(arg2)...
+/// Encode trait meant to provide an interface similar to Solidity's abi.encode
+/// function. It is meant to allow chaining of encode calls to build up a `Bytes`
+/// object. Values are encoded in 32 bytes chunks, and padding is added as necessary.
+/// Also provides a packed version of the encoding similar to Solidity's
+/// abi.encodePacked, which does not add padding.
+/// Use like this: BytesTrait::new_empty().encode(arg1).encode(arg2)...
+/// Or like this: BytesTrait::new_empty().encode_packed(arg1).encode_packed(arg2)...
 pub trait SolAbiEncodeTrait<T> {
     fn encode(self: Bytes, x: T) -> Bytes;
     fn encode_packed(self: Bytes, x: T) -> Bytes;
 }
 
-// Encode int types
-// Integers are encoded as 32 bytes long, which are right-aligned/left-padded Big-endian.
-// Packed encodings are not padded and only append the bytes of the value based on type.
+/// Encode int types
+/// Integers are encoded as 32 bytes long, which are right-aligned/left-padded Big-endian.
+/// Packed encodings are not padded and only append the bytes of the value based on type.
 
 pub impl SolAbiEncodeU8 of SolAbiEncodeTrait<u8> {
     fn encode(mut self: Bytes, x: u8) -> Bytes {
@@ -105,9 +107,9 @@ pub impl SolAbiEncodeU256 of SolAbiEncodeTrait<u256> {
     }
 }
 
-// Encode other primitives
-// Primitives are encoded as 32 bytes long, which are right-aligned/left-padded Big-endian.
-// Packed encodings are not padded and only append the bytes of the value based on type.
+/// Encode other primitives
+/// Primitives are encoded as 32 bytes long, which are right-aligned/left-padded Big-endian.
+/// Packed encodings are not padded and only append the bytes of the value based on type.
 
 pub impl SolAbiEncodeBool of SolAbiEncodeTrait<bool> {
     fn encode(mut self: Bytes, x: bool) -> Bytes {
@@ -153,9 +155,9 @@ pub impl SolAbiEncodeBytes31 of SolAbiEncodeTrait<bytes31> {
     }
 }
 
-// Encode byte types
-// Bytes are encoded as 32 bytes long, which are left-aligned/right-padded.
-// Packed encodings are not padded and only append the bytes up to the length of the value.
+/// Encode byte types
+/// Bytes are encoded as 32 bytes long, which are left-aligned/right-padded.
+/// Packed encodings are not padded and only append the bytes up to the length of the value.
 
 pub impl SolAbiEncodeBytes of SolAbiEncodeTrait<Bytes> {
     fn encode(mut self: Bytes, mut x: Bytes) -> Bytes {
@@ -184,9 +186,9 @@ pub impl SolAbiEncodeByteArray of SolAbiEncodeTrait<ByteArray> {
     }
 }
 
-// Encode address types
-// Addresses are encoded as 32 bytes long, which are right-aligned/left-padded Big-endian.
-// Packed encodings are not padded and only append the bytes of the value based on type.
+/// Encode address types
+/// Addresses are encoded as 32 bytes long, which are right-aligned/left-padded Big-endian.
+/// Packed encodings are not padded and only append the bytes of the value based on type.
 
 pub impl SolAbiEncodeStarknetAddress of SolAbiEncodeTrait<ContractAddress> {
     fn encode(mut self: Bytes, x: ContractAddress) -> Bytes {
