@@ -145,6 +145,7 @@ fn i257_test_is_zero() {
     assert!(a.is_zero(), "should be true");
     assert!(b.is_zero(), "should be true");
 }
+
 #[test]
 fn i257_test_div_no_rem() {
     // Test division of positive integers
