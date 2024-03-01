@@ -139,7 +139,7 @@ fn i257_test_mul() {
 
 #[test]
 fn i257_test_is_zero() {
-    let a = i257 { abs: 10, is_negative: true };
+    let a = i257 { abs: 0, is_negative: true };
     let b = i257 { abs: 0, is_negative: false };
 
     assert!(a.is_zero(), "should be true");
