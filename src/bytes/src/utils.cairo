@@ -71,14 +71,15 @@ fn update_u256_array_at(arr: @Array<u256>, index: usize, value: u256) -> Array<u
     let mut new_arr = array![];
     let mut i = 0;
 
-    while i != arr.len() {
-        if i == index {
-            new_arr.append(value);
-        } else {
-            new_arr.append(*arr[i]);
-        }
-        i += 1;
-    };
+    while i != arr
+        .len() {
+            if i == index {
+                new_arr.append(value);
+            } else {
+                new_arr.append(*arr[i]);
+            }
+            i += 1;
+        };
     new_arr
 }
 

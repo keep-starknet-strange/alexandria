@@ -46,12 +46,13 @@ fn reverse_endianness(value: u256) -> u256 {
 fn keccak256(mut self: Span<u8>) -> u256 {
     // Converts byte array to little endian 8 byte words array.
     let mut words64: Array<u64> = Default::default();
-    while self.len() >= 8 {
-        let current_word = self.slice(0, 8);
-        let (value, _) = U64Trait::from_le_bytes(current_word);
-        words64.append(value);
-        self = self.slice(8, self.len() - 8);
-    };
+    while self
+        .len() >= 8 {
+            let current_word = self.slice(0, 8);
+            let (value, _) = U64Trait::from_le_bytes(current_word);
+            words64.append(value);
+            self = self.slice(8, self.len() - 8);
+        };
     // handle last word specifically 
     let (last_word, last_word_bytes) = U64Trait::from_le_bytes(self);
     reverse_endianness(cairo_keccak(ref words64, last_word, last_word_bytes))

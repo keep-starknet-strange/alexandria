@@ -36,13 +36,15 @@ impl ToAsciiArrayTraitImpl<
         }
 
         let mut num = self;
-        while num.is_non_zero() {
-            let (quotient, remainder) = DivRem::div_rem(
-                num, TryInto::<felt252, T>::try_into(10).unwrap().try_into().expect('Division by 0')
-            );
-            new_arr.append(remainder.into() + 48);
-            num = quotient;
-        };
+        while num
+            .is_non_zero() {
+                let (quotient, remainder) = DivRem::div_rem(
+                    num,
+                    TryInto::<felt252, T>::try_into(10).unwrap().try_into().expect('Division by 0')
+                );
+                new_arr.append(remainder.into() + 48);
+                num = quotient;
+            };
         new_arr
     }
 }
