@@ -22,20 +22,15 @@ fn kron<T, +Mul<T>, +AddEq<T>, +Zeroable<T>, +Copy<T>, +Drop<T>,>(
 
     // [Compute] Kronecker product in a loop
     let mut array = array![];
-    loop {
-        match xs.pop_front() {
-            Option::Some(x_value) => {
-                let mut ys_clone = ys;
-                loop {
-                    match ys_clone.pop_front() {
-                        Option::Some(y_value) => { array.append(*x_value * *y_value); },
-                        Option::None => { break; },
-                    };
-                };
-            },
-            Option::None => { break; },
+
+    while let Option::Some(x_value) = xs
+        .pop_front() {
+            let mut ys_clone = ys;
+            while let Option::Some(y_value) = ys_clone
+                .pop_front() {
+                    array.append(*x_value * *y_value);
+                }
         };
-    };
 
     Result::Ok(array)
 }

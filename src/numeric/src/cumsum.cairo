@@ -12,15 +12,11 @@ fn cumsum<T, +Add<T>, +Copy<T>, +Drop<T>,>(mut sequence: Span<T>) -> Array<T> {
     // [Compute] Interpolation
     let mut prev_value = *sequence.pop_front().unwrap();
     let mut array = array![prev_value];
-    loop {
-        match sequence.pop_front() {
-            Option::Some(current_value) => {
-                let sum = *current_value + prev_value;
-                array.append(sum);
-                prev_value = sum;
-            },
-            Option::None => { break; },
+    while let Option::Some(current_value) = sequence
+        .pop_front() {
+            let sum = *current_value + prev_value;
+            array.append(sum);
+            prev_value = sum;
         };
-    };
     array
 }

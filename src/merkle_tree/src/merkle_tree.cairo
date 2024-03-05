@@ -106,22 +106,19 @@ impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTrait<T
     fn compute_root(
         ref self: MerkleTree<T>, mut current_node: felt252, mut proof: Span<felt252>
     ) -> felt252 {
-        loop {
-            match proof.pop_front() {
-                Option::Some(proof_element) => {
-                    // Compute the hash of the current node and the current element of the proof.
-                    // We need to check if the current node is smaller than the current element of the proof.
-                    // If it is, we need to swap the order of the hash.
-                    current_node =
-                        if Into::<felt252, u256>::into(current_node) < (*proof_element).into() {
-                            self.hasher.hash(current_node, *proof_element)
-                        } else {
-                            self.hasher.hash(*proof_element, current_node)
-                        };
-                },
-                Option::None => { break current_node; },
+        while let Option::Some(proof_element) = proof
+            .pop_front() {
+                // Compute the hash of the current node and the current element of the proof.
+                // We need to check if the current node is smaller than the current element of the proof.
+                // If it is, we need to swap the order of the hash.
+                current_node =
+                    if Into::<felt252, u256>::into(current_node) < (*proof_element).into() {
+                        self.hasher.hash(current_node, *proof_element)
+                    } else {
+                        self.hasher.hash(*proof_element, current_node)
+                    }
             };
-        }
+        current_node
     }
 
     /// Verify a merkle proof using the generic T hasher.
@@ -134,23 +131,19 @@ impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTrait<T
     fn verify(
         ref self: MerkleTree<T>, root: felt252, mut leaf: felt252, mut proof: Span<felt252>
     ) -> bool {
-        let computed_root = loop {
-            match proof.pop_front() {
-                Option::Some(proof_element) => {
-                    // Compute the hash of the current node and the current element of the proof.
-                    // We need to check if the current node is smaller than the current element of the proof.
-                    // If it is, we need to swap the order of the hash.
-                    leaf =
-                        if Into::<felt252, u256>::into(leaf) < (*proof_element).into() {
-                            self.hasher.hash(leaf, *proof_element)
-                        } else {
-                            self.hasher.hash(*proof_element, leaf)
-                        };
-                },
-                Option::None => { break leaf; },
+        while let Option::Some(proof_element) = proof
+            .pop_front() {
+                // Compute the hash of the current node and the current element of the proof.
+                // We need to check if the current node is smaller than the current element of the proof.
+                // If it is, we need to swap the order of the hash.
+                leaf =
+                    if Into::<felt252, u256>::into(leaf) < (*proof_element).into() {
+                        self.hasher.hash(leaf, *proof_element)
+                    } else {
+                        self.hasher.hash(*proof_element, leaf)
+                    };
             };
-        };
-        computed_root == root
+        leaf == root
     }
 
     /// Compute a merkle proof of given leaves and at a given index using the generic T hasher.
@@ -219,18 +212,15 @@ fn get_next_level<T, +HasherTrait<T>, +Drop<T>>(
     mut nodes: Span<felt252>, ref hasher: T
 ) -> Array<felt252> {
     let mut next_level: Array<felt252> = array![];
-    loop {
-        if nodes.is_empty() {
-            break;
-        }
-        let left = *nodes.pop_front().expect('Index out of bounds');
-        let right = *nodes.pop_front().expect('Index out of bounds');
-        let node = if Into::<felt252, u256>::into(left) < right.into() {
-            hasher.hash(left, right)
-        } else {
-            hasher.hash(right, left)
+    while let Option::Some(left) = nodes
+        .pop_front() {
+            let right = *nodes.pop_front().expect('Index out of bounds');
+            let node = if Into::<felt252, u256>::into(*left) < right.into() {
+                hasher.hash(*left, right)
+            } else {
+                hasher.hash(right, *left)
+            };
+            next_level.append(node);
         };
-        next_level.append(node);
-    };
     next_level
 }

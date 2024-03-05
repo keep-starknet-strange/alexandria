@@ -78,11 +78,8 @@ impl ArrayImpl<T, +Copy<T>, +Drop<T>> of ArrayTraitExt<T> {
     }
 
     fn concat_span<+Destruct<T>>(ref self: Array<T>, mut arr2: Span<T>) {
-        loop {
-            match arr2.pop_front() {
-                Option::Some(elem) => self.append(*elem),
-                Option::None => { break; }
-            };
+        while let Option::Some(elem) = arr2.pop_front() {
+            self.append(*elem);
         }
     }
 
@@ -195,14 +192,12 @@ impl SpanImpl<T, +Copy<T>, +Drop<T>> of SpanTraitExt<T> {
 
     fn occurrences_of<+PartialEq<T>>(mut self: Span<T>, item: T) -> usize {
         let mut count = 0_usize;
-        loop {
-            match self.pop_front() {
-                Option::Some(v) => { if *v == item {
-                    count += 1;
-                } },
-                Option::None => { break count; },
-            };
-        }
+        while let Option::Some(v) = self.pop_front() {
+            if *v == item {
+                count += 1;
+            }
+        };
+        count
     }
 
     fn min<+PartialEq<T>, +PartialOrd<T>>(mut self: Span<T>) -> Option<T> {
@@ -210,14 +205,12 @@ impl SpanImpl<T, +Copy<T>, +Drop<T>> of SpanTraitExt<T> {
             Option::Some(item) => *item,
             Option::None => { return Option::None; },
         };
-        loop {
-            match self.pop_front() {
-                Option::Some(item) => { if *item < min {
-                    min = *item
-                } },
-                Option::None => { break Option::Some(min); },
-            };
-        }
+        while let Option::Some(item) = self.pop_front() {
+            if *item < min {
+                min = *item
+            }
+        };
+        Option::Some(min)
     }
 
     fn index_of_min<+PartialEq<T>, +PartialOrd<T>>(mut self: Span<T>) -> Option<usize> {
@@ -227,16 +220,15 @@ impl SpanImpl<T, +Copy<T>, +Drop<T>> of SpanTraitExt<T> {
             Option::Some(item) => *item,
             Option::None => { return Option::None; },
         };
-        loop {
-            match self.pop_front() {
-                Option::Some(item) => { if *item < min {
+        while let Option::Some(item) = self
+            .pop_front() {
+                if *item < min {
                     index_of_min = index + 1;
                     min = *item;
-                } },
-                Option::None => { break Option::Some(index_of_min); },
+                }
+                index += 1;
             };
-            index += 1;
-        }
+        Option::Some(index_of_min)
     }
 
     fn max<+PartialEq<T>, +PartialOrd<T>>(mut self: Span<T>) -> Option<T> {
@@ -244,14 +236,12 @@ impl SpanImpl<T, +Copy<T>, +Drop<T>> of SpanTraitExt<T> {
             Option::Some(item) => *item,
             Option::None => { return Option::None; },
         };
-        loop {
-            match self.pop_front() {
-                Option::Some(item) => { if *item > max {
-                    max = *item
-                } },
-                Option::None => { break Option::Some(max); },
-            };
-        }
+        while let Option::Some(item) = self.pop_front() {
+            if *item > max {
+                max = *item
+            }
+        };
+        Option::Some(max)
     }
 
     fn index_of_max<+PartialEq<T>, +PartialOrd<T>>(mut self: Span<T>) -> Option<usize> {
@@ -261,16 +251,15 @@ impl SpanImpl<T, +Copy<T>, +Drop<T>> of SpanTraitExt<T> {
             Option::Some(item) => *item,
             Option::None => { return Option::None; },
         };
-        loop {
-            match self.pop_front() {
-                Option::Some(item) => { if *item > max {
+        while let Option::Some(item) = self
+            .pop_front() {
+                if *item > max {
                     index_of_max = index + 1;
                     max = *item
-                } },
-                Option::None => { break Option::Some(index_of_max); },
+                }
+                index += 1;
             };
-            index += 1;
-        }
+        Option::Some(index_of_max)
     }
 
     fn dedup<+PartialEq<T>>(mut self: Span<T>) -> Array<T> {
@@ -281,28 +270,23 @@ impl SpanImpl<T, +Copy<T>, +Drop<T>> of SpanTraitExt<T> {
         let mut last_value = self.pop_front().unwrap();
         let mut ret = array![*last_value];
 
-        loop {
-            match self.pop_front() {
-                Option::Some(v) => { if (last_value != v) {
+        while let Option::Some(v) = self
+            .pop_front() {
+                if (last_value != v) {
                     last_value = v;
                     ret.append(*v);
-                }; },
-                Option::None => { break; }
+                }
             };
-        };
 
         ret
     }
 
     fn unique<+PartialEq<T>>(mut self: Span<T>) -> Array<T> {
         let mut ret = array![];
-        loop {
-            match self.pop_front() {
-                Option::Some(v) => { if !ret.contains(*v) {
-                    ret.append(*v);
-                } },
-                Option::None => { break; }
-            };
+        while let Option::Some(v) = self.pop_front() {
+            if !ret.contains(*v) {
+                ret.append(*v);
+            }
         };
         ret
     }

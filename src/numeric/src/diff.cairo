@@ -14,15 +14,11 @@ fn diff<T, +PartialOrd<T>, +Sub<T>, +Copy<T>, +Drop<T>, +Zeroable<T>,>(
     // [Compute] Interpolation
     let mut prev_value = *sequence.pop_front().unwrap();
     let mut array = array![Zeroable::zero()];
-    loop {
-        match sequence.pop_front() {
-            Option::Some(current_value) => {
-                assert(*current_value >= prev_value, 'Sequence must be sorted');
-                array.append(*current_value - prev_value);
-                prev_value = *current_value;
-            },
-            Option::None => { break; },
+    while let Option::Some(current_value) = sequence
+        .pop_front() {
+            assert(*current_value >= prev_value, 'Sequence must be sorted');
+            array.append(*current_value - prev_value);
+            prev_value = *current_value;
         };
-    };
     array
 }

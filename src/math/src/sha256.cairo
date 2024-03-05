@@ -82,21 +82,17 @@ fn sha256(mut data: Array<u8>) -> Array<u8> {
 
 fn from_u32Array_to_u8Array(mut data: Span<u32>) -> Array<u8> {
     let mut result = array![];
-    loop {
-        match data.pop_front() {
-            Option::Some(val) => {
-                let mut res = (*val & 0xff000000) / 0x1000000;
-                result.append(res.try_into().unwrap());
-                res = (*val & 0xff0000) / 0x10000;
-                result.append(res.try_into().unwrap());
-                res = (*val & 0xff00) / 0x100;
-                result.append(res.try_into().unwrap());
-                res = *val & 0xff;
-                result.append(res.try_into().unwrap());
-            },
-            Option::None => { break; },
+    while let Option::Some(val) = data
+        .pop_front() {
+            let mut res = (*val & 0xff000000) / 0x1000000;
+            result.append(res.try_into().unwrap());
+            res = (*val & 0xff0000) / 0x10000;
+            result.append(res.try_into().unwrap());
+            res = (*val & 0xff00) / 0x100;
+            result.append(res.try_into().unwrap());
+            res = *val & 0xff;
+            result.append(res.try_into().unwrap());
         };
-    };
     result
 }
 
@@ -167,21 +163,17 @@ fn create_message_schedule(data: Span<u32>, i: usize) -> Span<u32> {
 
 fn from_u8Array_to_u32Array(mut data: Span<u8>) -> Array<u32> {
     let mut result = array![];
-    loop {
-        match data.pop_front() {
-            Option::Some(val1) => {
-                let val2 = data.pop_front().unwrap();
-                let val3 = data.pop_front().unwrap();
-                let val4 = data.pop_front().unwrap();
-                let mut value = (*val1).into() * 0x1000000;
-                value = value + (*val2).into() * 0x10000;
-                value = value + (*val3).into() * 0x100;
-                value = value + (*val4).into();
-                result.append(value);
-            },
-            Option::None => { break; },
+    while let Option::Some(val1) = data
+        .pop_front() {
+            let val2 = data.pop_front().unwrap();
+            let val3 = data.pop_front().unwrap();
+            let val4 = data.pop_front().unwrap();
+            let mut value = (*val1).into() * 0x1000000;
+            value = value + (*val2).into() * 0x10000;
+            value = value + (*val3).into() * 0x100;
+            value = value + (*val4).into();
+            result.append(value);
         };
-    };
     result
 }
 
