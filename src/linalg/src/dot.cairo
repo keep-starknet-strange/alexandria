@@ -14,10 +14,11 @@ fn dot<T, +Mul<T>, +AddEq<T>, +Zeroable<T>, +Copy<T>, +Drop<T>,>(
 
     // [Compute] Dot product in a loop
     let mut sum = Zeroable::zero();
-    while !xs.is_empty() {
-        let x = *xs.pop_front().unwrap();
-        let y = *ys.pop_front().unwrap();
-        sum += x * y;
-    };
+    while !xs
+        .is_empty() {
+            let x = *xs.pop_front().unwrap();
+            let y = *ys.pop_front().unwrap();
+            sum += x * y;
+        };
     sum
 }
