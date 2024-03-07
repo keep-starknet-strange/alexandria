@@ -259,9 +259,11 @@ impl i257Zeroable of Zeroable<i257> {
         i257_new(0, false)
     }
     fn is_zero(self: i257) -> bool {
+        assert(!self.is_negative, 'no negative zero');
         self.abs == 0
     }
     fn is_non_zero(self: i257) -> bool {
+        assert(!self.is_negative, 'no negative zero');
         self.abs != 0
     }
 }
