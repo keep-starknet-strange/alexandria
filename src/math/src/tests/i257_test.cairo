@@ -136,14 +136,17 @@ fn i257_test_mul() {
     assert!(!result.is_negative, "10 * 0 -> positive");
 }
 
-
 #[test]
 fn i257_test_is_zero() {
-    let a = i257 { abs: 0, is_negative: true };
-    let b = i257 { abs: 0, is_negative: false };
-
+    let a = i257 { abs: 0, is_negative: false };
     assert!(a.is_zero(), "should be true");
-    assert!(b.is_zero(), "should be true");
+}
+
+#[test]
+#[should_panic(expected: ('no negative zero',))]
+fn i257_test_is_zero_panic() {
+    let a = i257 { abs: 0, is_negative: true };
+    let _x = a.is_zero();
 }
 
 #[test]
