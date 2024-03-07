@@ -137,6 +137,19 @@ fn i257_test_mul() {
 }
 
 #[test]
+fn i257_test_is_zero() {
+    let a = i257 { abs: 0, is_negative: false };
+    assert!(a.is_zero(), "should be true");
+}
+
+#[test]
+#[should_panic(expected: ('no negative zero',))]
+fn i257_test_is_zero_panic() {
+    let a = i257 { abs: 0, is_negative: true };
+    let _x = a.is_zero();
+}
+
+#[test]
 fn i257_test_div_no_rem() {
     // Test division of positive integers
     let a = i257 { abs: 10, is_negative: false };

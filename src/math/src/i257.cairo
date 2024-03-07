@@ -1,3 +1,4 @@
+use core::zeroable::Zeroable;
 // ====================== INT 257 ======================
 
 // i257 represents a 129-bit integer.
@@ -259,10 +260,11 @@ impl i257Zeroable of Zeroable<i257> {
         i257_new(0, false)
     }
     fn is_zero(self: i257) -> bool {
-        self == Zeroable::zero()
+        assert(!self.is_negative, 'no negative zero');
+        self.abs == 0
     }
     fn is_non_zero(self: i257) -> bool {
-        self != Zeroable::zero()
+        !self.is_zero()
     }
 }
 
