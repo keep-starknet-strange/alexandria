@@ -10,10 +10,7 @@ fn format_byte_hex(byte: u8, ref f: Formatter) -> Result<(), Error> {
     if byte < 0x10 {
         // Add leading zero for single digit numbers
         let zero: ByteArray = "0";
-        let res = Display::fmt(@zero, ref f);
-        if res.is_err() {
-            return res;
-        }
+        Display::fmt(@zero, ref f)?;
     }
     Display::fmt(@byte.format_as_byte_array(base), ref f)
 }
@@ -22,10 +19,8 @@ impl BytesDebug of Debug<Bytes> {
     fn fmt(self: @Bytes, ref f: Formatter) -> Result<(), Error> {
         let mut i: usize = 0;
         let prefix: ByteArray = "0x";
-        let mut res = Display::fmt(@prefix, ref f);
-        if res.is_err() {
-            return res;
-        }
+        Display::fmt(@prefix, ref f)?;
+        let mut res: Result<(), Error> = Result::Ok(());
         while i < self.size() {
             let (new_i, value) = self.read_u8(i);
             res = format_byte_hex(value, ref f);
@@ -42,10 +37,8 @@ impl BytesDisplay of Display<Bytes> {
     fn fmt(self: @Bytes, ref f: Formatter) -> Result<(), Error> {
         let mut i: usize = 0;
         let prefix: ByteArray = "0x";
-        let mut res = Display::fmt(@prefix, ref f);
-        if res.is_err() {
-            return res;
-        }
+        Display::fmt(@prefix, ref f)?;
+        let mut res: Result<(), Error> = Result::Ok(());
         while i < self.size() {
             let (new_i, value) = self.read_u8(i);
             res = format_byte_hex(value, ref f);
