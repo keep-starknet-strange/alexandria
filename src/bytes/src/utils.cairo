@@ -21,14 +21,15 @@ impl BytesDebug of Debug<Bytes> {
         let prefix: ByteArray = "0x";
         Display::fmt(@prefix, ref f)?;
         let mut res: Result<(), Error> = Result::Ok(());
-        while i < self.size() {
-            let (new_i, value) = self.read_u8(i);
-            res = format_byte_hex(value, ref f);
-            if res.is_err() {
-                break;
-            }
-            i = new_i;
-        };
+        while i < self
+            .size() {
+                let (new_i, value) = self.read_u8(i);
+                res = format_byte_hex(value, ref f);
+                if res.is_err() {
+                    break;
+                }
+                i = new_i;
+            };
         res
     }
 }
@@ -39,14 +40,15 @@ impl BytesDisplay of Display<Bytes> {
         let prefix: ByteArray = "0x";
         Display::fmt(@prefix, ref f)?;
         let mut res: Result<(), Error> = Result::Ok(());
-        while i < self.size() {
-            let (new_i, value) = self.read_u8(i);
-            res = format_byte_hex(value, ref f);
-            if res.is_err() {
-                break;
-            }
-            i = new_i;
-        };
+        while i < self
+            .size() {
+                let (new_i, value) = self.read_u8(i);
+                res = format_byte_hex(value, ref f);
+                if res.is_err() {
+                    break;
+                }
+                i = new_i;
+            };
         res
     }
 }

@@ -165,17 +165,18 @@ impl BytesImpl of BytesTrait {
     fn to_byte_array(self: Bytes) -> ByteArray {
         let mut res: ByteArray = Default::default();
         let mut offset = 0;
-        while offset < self.size() {
-            if offset + 31 <= self.size() {
-                let (new_offset, value) = self.read_bytes31(offset);
-                res.append_word(value.into(), 31);
-                offset = new_offset;
-            } else {
-                let (new_offset, value) = self.read_u8(offset);
-                res.append_byte(value);
-                offset = new_offset;
-            }
-        };
+        while offset < self
+            .size() {
+                if offset + 31 <= self.size() {
+                    let (new_offset, value) = self.read_bytes31(offset);
+                    res.append_word(value.into(), 31);
+                    offset = new_offset;
+                } else {
+                    let (new_offset, value) = self.read_u8(offset);
+                    res.append_byte(value);
+                    offset = new_offset;
+                }
+            };
         res
     }
 

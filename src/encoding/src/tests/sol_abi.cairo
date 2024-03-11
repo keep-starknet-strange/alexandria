@@ -16,14 +16,15 @@ fn compare_bytes(actual: @Bytes, expected: @Bytes) -> bool {
         return false;
     }
     let mut i: usize = 0;
-    while i < actual.size() {
-        let (_, actual_val) = actual.read_u8(i);
-        let (_, expected_val) = expected.read_u8(i);
-        if actual_val != expected_val {
-            break;
-        }
-        i += 1;
-    };
+    while i < actual
+        .size() {
+            let (_, actual_val) = actual.read_u8(i);
+            let (_, expected_val) = expected.read_u8(i);
+            if actual_val != expected_val {
+                break;
+            }
+            i += 1;
+        };
     if i < actual.size() {
         return false;
     }
