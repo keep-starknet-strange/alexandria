@@ -104,7 +104,7 @@ fn interp_constant_right_test() {
 }
 
 #[test]
-#[should_panic()]
+#[should_panic(expected: ("Arrays must have the same len",))]
 #[available_gas(2000000)]
 fn interp_revert_len_mismatch() {
     let xs: Array::<u64> = array![3, 5];
@@ -113,7 +113,7 @@ fn interp_revert_len_mismatch() {
 }
 
 #[test]
-#[should_panic()]
+#[should_panic(expected: ("Array must have at least 2 elts",))]
 #[available_gas(2000000)]
 fn interp_revert_len_too_short() {
     let xs: Array::<u64> = array![3];

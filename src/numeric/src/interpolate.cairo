@@ -39,7 +39,7 @@ fn interpolate<
     x: T, xs: Span<T>, ys: Span<T>, interpolation: Interpolation, extrapolation: Extrapolation
 ) -> T {
     // [Check] Inputs
-    assert_eq!(xs.len(), ys.len());
+    assert!(xs.len() == ys.len(), "Arrays must have the same len");
     assert!(xs.len() >= 2, "Array must have at least 2 elts");
 
     // [Check] Extrapolation
@@ -112,7 +112,7 @@ fn interpolate_fast<
     x: T, xs: Span<T>, ys: Span<T>, interpolation: Interpolation, extrapolation: Extrapolation
 ) -> T {
     // [Check] Inputs
-    assert_eq!(xs.len(), ys.len());
+    assert!(xs.len() == ys.len(), "Arrays must have the same len");
     assert!(xs.len() >= 2, "Array must have at least 2 elts");
 
     // [Check] Extrapolation
