@@ -55,6 +55,7 @@ name = "alexandria_numeric"
 version = "0.1.0"
 dependencies = [
  "alexandria_math",
+ "alexandria_searching",
 ]
 
 [[package]]
