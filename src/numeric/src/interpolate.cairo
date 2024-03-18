@@ -1,17 +1,18 @@
+use alexandria_searching::binary_search::binary_search_closest as search;
 //! One-dimensional linear interpolation for monotonically increasing sample points.
 
 #[derive(Serde, Copy, Drop, PartialEq)]
 enum Interpolation {
-    Linear: (),
-    Nearest: (),
-    ConstantLeft: (),
-    ConstantRight: (),
+    Linear,
+    Nearest,
+    ConstantLeft,
+    ConstantRight,
 }
 
 #[derive(Serde, Copy, Drop, PartialEq)]
 enum Extrapolation {
-    Null: (),
-    Constant: (),
+    Null,
+    Constant,
 }
 
 /// Interpolate y(x) at x.
@@ -38,8 +39,8 @@ fn interpolate<
     x: T, xs: Span<T>, ys: Span<T>, interpolation: Interpolation, extrapolation: Extrapolation
 ) -> T {
     // [Check] Inputs
-    assert(xs.len() == ys.len(), 'Arrays must have the same len');
-    assert(xs.len() >= 2, 'Array must have at least 2 elts');
+    assert_eq!(xs.len(), ys.len());
+    assert!(xs.len() >= 2, "Array must have at least 2 elts");
 
     // [Check] Extrapolation
     if x <= *xs[0] {
@@ -58,7 +59,7 @@ fn interpolate<
     // [Compute] Interpolation, could be optimized with binary search
     let mut index = 0;
     loop {
-        assert(*xs[index + 1] > *xs[index], 'Abscissa must be sorted');
+        assert!(*xs[index + 1] > *xs[index], "Abscissa must be sorted");
 
         if x < *xs[index + 1] {
             break match interpolation {
@@ -96,8 +97,6 @@ fn interpolate<
     }
 }
 
-use alexandria_searching::binary_search::binary_search_closest as search;
-
 fn interpolate_fast<
     T,
     impl TPartialOrd: PartialOrd<T>,
@@ -113,8 +112,8 @@ fn interpolate_fast<
     x: T, xs: Span<T>, ys: Span<T>, interpolation: Interpolation, extrapolation: Extrapolation
 ) -> T {
     // [Check] Inputs
-    assert(xs.len() == ys.len(), 'Arrays must have the same len');
-    assert(xs.len() >= 2, 'Array must have at least 2 elts');
+    assert_eq!(xs.len(), ys.len());
+    assert!(xs.len() >= 2, "Array must have at least 2 elts");
 
     // [Check] Extrapolation
     if x <= *xs[0] {
@@ -135,8 +134,8 @@ fn interpolate_fast<
     // [Compute] Interpolation with binary search
     let index: u32 = search(xs, x).expect('search error');
 
-    assert(*xs[index + 1] > *xs[index], 'Abscissa must be sorted');
-    assert(x < *xs[index + 1], 'search error');
+    assert!(*xs[index + 1] > *xs[index], "Abscissa must be sorted");
+    assert!(x < *xs[index + 1], "search error");
 
     match interpolation {
         Interpolation::Linear => {
