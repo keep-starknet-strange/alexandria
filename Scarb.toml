@@ -20,7 +20,7 @@ homepage = "https://github.com/keep-starknet-strange/alexandria/"
 cairo-version = "2.6.3"
 
 [workspace.dependencies]
-starknet = "=2.6.3"
+starknet = "2.6.3"
 
 [workspace.tool.fmt]
 sort-module-level-items = true
