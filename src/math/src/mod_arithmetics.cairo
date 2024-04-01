@@ -126,3 +126,9 @@ fn pow_mod(mut base: u256, mut pow: u256, modulo: u256) -> u256 {
 
     result
 }
+
+fn equality_mod(a: u256, b: u256, modulo: u256) -> bool {
+    let (_, a_rem) = integer::U256DivRem::div_rem(a, modulo.try_into().unwrap());
+    let (_, b_rem) = integer::U256DivRem::div_rem(b, modulo.try_into().unwrap());
+    a_rem == b_rem
+}
