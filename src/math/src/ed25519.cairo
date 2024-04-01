@@ -1,10 +1,10 @@
-use core::box::BoxTrait;
-use core::array::SpanTrait;
 use alexandria_data_structures::array_ext::{ArrayTraitExt, SpanTraitExt};
 use alexandria_math::mod_arithmetics::{
     add_mod, sub_mod, mult_mod, div_mod, pow_mod, add_inverse_mod, equality_mod
 };
 use alexandria_math::sha512::{sha512, SHA512_LEN};
+use core::array::SpanTrait;
+use core::box::BoxTrait;
 use integer::u512;
 
 // As per RFC-8032: https://datatracker.ietf.org/doc/html/rfc8032#section-5.1.7
