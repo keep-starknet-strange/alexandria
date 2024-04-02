@@ -1,11 +1,12 @@
 use alexandria_data_structures::array_ext::ArrayTraitExt;
+use core::num::traits::Zero;
 
-trait ToAsciiTrait<T, U> {
+pub trait ToAsciiTrait<T, U> {
     fn to_ascii(self: T) -> U;
 }
 
 // converts integers into an array of its individual ascii values
-trait ToAsciiArrayTrait<T> {
+pub trait ToAsciiArrayTrait<T> {
     fn to_ascii_array(self: T) -> Array<felt252>;
     fn to_inverse_ascii_array(self: T) -> Array<felt252>;
 }
@@ -19,7 +20,7 @@ impl ToAsciiArrayTraitImpl<
     +Into<T, felt252>,
     +TryInto<felt252, T>,
     +TryInto<T, NonZero<T>>,
-    +Zeroable<T>,
+    +Zero<T>,
     +Drop<T>,
     +Copy<T>,
 > of ToAsciiArrayTrait<T> {
@@ -59,7 +60,7 @@ impl SmallIntegerToAsciiTraitImpl<
     +Into<T, felt252>,
     +TryInto<felt252, T>,
     +TryInto<T, NonZero<T>>,
-    +Zeroable<T>,
+    +Zero<T>,
     +Drop<T>,
     +Copy<T>,
 > of ToAsciiTrait<T, felt252> {
@@ -91,7 +92,7 @@ impl BigIntegerToAsciiTraitImpl<
     +Into<T, felt252>,
     +TryInto<felt252, T>,
     +TryInto<T, NonZero<T>>,
-    +Zeroable<T>,
+    +Zero<T>,
     +Drop<T>,
     +Copy<T>,
 > of ToAsciiTrait<T, Array<felt252>> {

@@ -1,5 +1,5 @@
 use alexandria_ascii::ToAsciiTrait;
-use integer::BoundedInt;
+use core::integer::BoundedInt;
 
 #[test]
 #[available_gas(2000000000)]
