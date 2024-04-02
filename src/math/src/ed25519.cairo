@@ -1,14 +1,15 @@
-use alexandria_data_structures::array_ext::ArrayTraitExt;
+use alexandria_data_structures::array_ext::SpanTraitExt;
 use alexandria_math::mod_arithmetics::{
     add_mod, sub_mod, mult_mod, div_mod, pow_mod, add_inverse_mod
 };
 use alexandria_math::sha512::{sha512, SHA512_LEN};
-use integer::u512;
+use core::integer::u512;
+use core::traits::TryInto;
 
 // As per RFC-8032: https://datatracker.ietf.org/doc/html/rfc8032#section-5.1.7
 // Variable namings in this function refer to naming in the RFC
 
-const p: u256 =
+pub const p: u256 =
     57896044618658097711785492504343953926634992332820282019728792003956564819949; // 2^255 - 19
 const d: u256 =
     37095705934669439343138083508754565189542113879843219016388785533085940283555; // d of Edwards255519, i.e. -121665/121666
@@ -21,20 +22,20 @@ const PUB_KEY_LEN: usize = 32;
 const SIG_LEN: usize = 64;
 
 #[derive(Drop, Copy)]
-struct Point {
-    x: u256,
-    y: u256
+pub struct Point {
+    pub x: u256,
+    pub y: u256
 }
 
 #[derive(Drop, Copy)]
-struct ExtendedHomogeneousPoint {
-    X: u256,
-    Y: u256,
-    Z: u256,
-    T: u256,
+pub struct ExtendedHomogeneousPoint {
+    pub X: u256,
+    pub Y: u256,
+    pub Z: u256,
+    pub T: u256,
 }
 
-trait PointDoubling<T> {
+pub trait PointDoubling<T> {
     fn double(self: T) -> T;
 }
 
@@ -159,7 +160,7 @@ impl SpanU8IntoU512 of Into<Span<u8>, u512> {
     }
 }
 
-impl SpanU8TryIntoPoint of TryInto<Span<u8>, Point> {
+pub impl SpanU8TryIntoPoint of TryInto<Span<u8>, Point> {
     fn try_into(mut self: Span<u8>) -> Option<Point> {
         let mut x = 0;
 
@@ -261,7 +262,7 @@ fn check_group_equation(
     lhs == rhs
 }
 
-fn verify_signature(msg: Span<u8>, signature: Span<u8>, pub_key: Span<u8>) -> bool {
+pub fn verify_signature(msg: Span<u8>, signature: Span<u8>, pub_key: Span<u8>) -> bool {
     if (pub_key.len() != PUB_KEY_LEN || signature.len() != SIG_LEN) {
         return false;
     }
@@ -283,11 +284,11 @@ fn verify_signature(msg: Span<u8>, signature: Span<u8>, pub_key: Span<u8>) -> bo
     let A_prime_ex: ExtendedHomogeneousPoint = A_prime.into();
 
     // k = SHA512(dom2(F, C) -> empty string || R -> half of sig || A -> pub_key || PH(M) -> identity function for msg)
-    let k: Array<u8> = sha512(r_string.snapshot.concat(pub_key.snapshot).concat(msg.snapshot));
+    let k: Array<u8> = sha512(r_string.concat(pub_key).span().concat(msg));
     let k_u512: u512 = k.span().into();
 
-    let l_non_zero: NonZero<u256> = integer::u256_try_as_non_zero(l).unwrap();
-    let (_, k_reduced) = integer::u512_safe_div_rem_by_u256(k_u512, l_non_zero);
+    let l_non_zero: NonZero<u256> = l.try_into().unwrap();
+    let (_, k_reduced) = core::integer::u512_safe_div_rem_by_u256(k_u512, l_non_zero);
 
     check_group_equation(S, R_extended, k_reduced, A_prime_ex)
 }

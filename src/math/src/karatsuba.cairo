@@ -1,5 +1,5 @@
 //! # Karatsuba Multiplication.
-use cmp::max;
+use core::cmp::max;
 use super::{pow, count_digits_of_base};
 
 /// Algorithm to multiply two numbers in O(n^1.6) running time
@@ -8,7 +8,7 @@ use super::{pow, count_digits_of_base};
 /// * `y` - Second number to multiply.
 /// # Returns
 /// * `u128` - The product between x and y
-fn multiply(x: u128, y: u128) -> u128 {
+pub fn multiply(x: u128, y: u128) -> u128 {
     if x < 10 {
         return x * y;
     }

@@ -5,7 +5,7 @@
 /// * `num` - The number to be checked.
 /// # Returns
 /// * `bool` - True if num is a perfect number, false otherwise.
-fn is_perfect_number(num: u128) -> bool {
+pub fn is_perfect_number(num: u128) -> bool {
     if num == 0 {
         return false;
     }
@@ -29,7 +29,7 @@ fn is_perfect_number(num: u128) -> bool {
 /// * `max` - The maximum value to check for perfect numbers.
 /// # Returns
 /// * `Array` - An array of perfect numbers up to the max value.
-fn perfect_numbers(max: u128) -> Array<u128> {
+pub fn perfect_numbers(max: u128) -> Array<u128> {
     let mut res = array![];
     let mut index = 1;
 

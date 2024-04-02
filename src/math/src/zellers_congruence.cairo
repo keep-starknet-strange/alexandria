@@ -18,7 +18,7 @@
 /// ```
 /// # TODO
 /// - Change the return type to `Result`
-fn day_of_week(mut date: u128, mut month: u128, mut year: u128) -> Option<u128> {
+pub fn day_of_week(mut date: u128, mut month: u128, mut year: u128) -> Option<u128> {
     // Check input parameters
     if !check_input_parameters(date, month, year) {
         return Option::None;
@@ -46,7 +46,7 @@ fn day_of_week(mut date: u128, mut month: u128, mut year: u128) -> Option<u128> 
 /// # Returns
 /// * `true` - If the input parameters are valid
 /// * `false` - If the input parameters are invalid
-fn check_input_parameters(date: u128, month: u128, year: u128) -> bool {
+pub fn check_input_parameters(date: u128, month: u128, year: u128) -> bool {
     // Check the date
     // Must be in the range 1 to 31
     if date < 1 {

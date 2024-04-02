@@ -1,4 +1,4 @@
-use integer::{u32_wrapping_add, BoundedInt};
+use core::integer::{u32_wrapping_add, BoundedInt};
 
 fn ch(x: u32, y: u32, z: u32) -> u32 {
     (x & y) ^ ((x ^ BoundedInt::<u32>::max().into()) & z)
@@ -44,7 +44,7 @@ fn ssig1(x: u32) -> u32 {
     result.try_into().unwrap()
 }
 
-fn sha256(mut data: Array<u8>) -> Array<u8> {
+pub fn sha256(mut data: Array<u8>) -> Array<u8> {
     let data_len: u64 = (data.len() * 8).into();
 
     // add one

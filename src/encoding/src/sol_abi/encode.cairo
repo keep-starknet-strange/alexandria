@@ -1,5 +1,4 @@
 use alexandria_bytes::{Bytes, BytesTrait};
-use alexandria_math::U256BitShift;
 use starknet::{ContractAddress, EthAddress};
 
 /// Encode selector trait meant to provide an interface similar to Solidity's
@@ -212,7 +211,7 @@ pub impl SolAbiEncodeEthAddress of SolAbiEncodeTrait<EthAddress> {
 
     fn encode_packed(mut self: Bytes, x: EthAddress) -> Bytes {
         let mut address256: u256 = x.address.into();
-        address256 = U256BitShift::shl(address256, 96); // 12 * 8
+        address256 = alexandria_math::U256BitShift::shl(address256, 96); // 12 * 8
         self.concat(@BytesTrait::new(20, array![address256.high, address256.low]));
         self
     }

@@ -6,7 +6,7 @@ use alexandria_math::fast_root::fast_sqrt;
 /// * `iter` - The number of iterations to run when sqrting the number, the higher the more accurate (usually 10 is enough)
 /// # Returns
 /// * `bool` - if the given number is prime
-fn is_prime(n: u128, iter: usize) -> bool {
+pub fn is_prime(n: u128, iter: usize) -> bool {
     if n <= 1 {
         return false;
     }
