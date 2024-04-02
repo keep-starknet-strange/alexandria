@@ -1,5 +1,5 @@
 use alexandria_bytes::{Bytes, BytesTrait};
-use alexandria_encoding::sol_abi::SolAbiEncodeAsTrait;
+use alexandria_encoding::sol_abi::encode_as::SolAbiEncodeAsTrait;
 
 /// Solidity Bytes Trait meant to provide an interface similar to Solidity's
 /// bytesX types, like `bytes1`, `bytes2`, `bytes3`, ..., `bytes32`. Acts as

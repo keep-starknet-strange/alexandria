@@ -1,11 +1,12 @@
 use alexandria_bytes::utils::{BytesDebug, BytesDisplay};
 use alexandria_bytes::{Bytes, BytesTrait};
 use alexandria_encoding::sol_abi::{
-    SolAbiEncodeTrait, SolAbiEncodeAsTrait, SolAbiEncodeSelectorTrait, SolAbiDecodeTrait,
-    SolBytesTrait
+    encode::SolAbiEncodeTrait, encode_as::SolAbiEncodeAsTrait, encode::SolAbiEncodeSelectorTrait,
+    decode::SolAbiDecodeTrait, sol_bytes::SolBytesTrait
 };
+use core::bytes_31;
 use core::to_byte_array::FormatAsByteArray;
-use starknet::{ContractAddress, eth_address::U256IntoEthAddress, EthAddress};
+use starknet::{ContractAddress, EthAddress};
 
 // Compare Bytes types up to the size of the data ( incase different values outside size range )
 fn compare_bytes(actual: @Bytes, expected: @Bytes) -> bool {
@@ -85,7 +86,7 @@ fn encode_test() {
         .encode(false)
         .encode(true)
         .encode(1234567890_felt252)
-        .encode(bytes31_const::<0xabcdefabcdefabcdefabcdefabcdefabcdef>())
+        .encode(0xabcdefabcdefabcdefabcdefabcdefabcdef)
         .encode(SolBytesTrait::bytes7(0xa0b0c0d0e0f))
         .encode(SolBytesTrait::bytes5(0x0000abcdef).to_byte_array())
         .encode(address)
@@ -120,6 +121,7 @@ fn encode_packed_test() {
         .expect('Couldn\'t convert to address');
     let eth_address: EthAddress = 0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF_u256.into();
     let bytesArray: ByteArray = SolBytesTrait::bytes5(0xa0aaabacad_u128).to_byte_array();
+    let bytes_31: bytes31 = 0x1234.try_into().unwrap();
     encoded = encoded
         .encode_packed(0x8_u8)
         .encode_packed(0xa7a8a9aaabacadaeaf_u128)
@@ -129,7 +131,7 @@ fn encode_packed_test() {
         .encode_packed(0x0fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbe_u256)
         .encode_packed(false)
         .encode_packed(true)
-        .encode_packed(bytes31_const::<0x1234>())
+        .encode_packed(bytes_31)
         .encode_packed(SolBytesTrait::bytes10(0x0102030405060708090a_u128))
         .encode_packed(0x1234567890_felt252)
         .encode_packed(address)
@@ -150,10 +152,11 @@ fn encoded_as_test() {
         .encode_as(5, 0xa0b1c2_u256);
     assert_eq!(encoded, expected, "Encode as failed");
 
+    let bytes_31: bytes31 = 0xaabbcc.try_into().unwrap();
     let mut encoded: Bytes = BytesTrait::new_empty();
     encoded = encoded
         .encode_as(3, SolBytesTrait::bytes10(0x10111213141516171910))
-        .encode_as(21, bytes31_const::<0xaabbcc>())
+        .encode_as(21, bytes_31)
         .encode_as(5, SolBytesTrait::bytes10(0x0000a0b1c2c3c4c5c6c8).to_byte_array());
     assert_eq!(encoded, expected, "Encode as from bytes failed");
 }
@@ -257,9 +260,8 @@ fn decode_test() {
     assert_eq!(offset, 256, "Offset after decode ByteArray failed");
 
     let decoded: bytes31 = encoded.decode(ref offset);
-    assert!(
-        decoded == bytes31_const::<0xa0aaab00000000000000000000000000ac>(), "Decode byte31 failed"
-    );
+    let bytes_31: bytes31 = 0xa0aaab00000000000000000000000000ac.try_into().unwrap();
+    assert!(decoded == bytes_31, "Decode byte31 failed");
     assert_eq!(offset, 288, "Offset after decode byte31 failed");
 
     let decoded: felt252 = encoded.decode(ref offset);
@@ -296,7 +298,7 @@ fn sol_bytes_test() {
         0x0000a0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2_u256
     );
     let bytesVal18: Bytes = SolBytesTrait::bytes18(0xa0a1a2a3a4a5a6a7a8a9aaabacadaeaf_u128);
-    let bytesVal3: Bytes = SolBytesTrait::bytes3(bytes31_const::<0xb0b1b2>());
+    let bytesVal3: Bytes = SolBytesTrait::bytes3(0xb0b1b2);
     let mut bytesValAcc: Bytes = BytesTrait::new_empty();
     bytesValAcc.concat(@bytesVal18);
     bytesValAcc.concat(@bytesVal3);

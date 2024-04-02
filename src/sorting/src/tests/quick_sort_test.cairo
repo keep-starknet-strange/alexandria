@@ -1,7 +1,5 @@
 use alexandria_data_structures::vec::{Felt252Vec, VecTrait};
 use alexandria_sorting::{is_equal, is_equal_vec, quick_sort};
-use core::option::OptionTrait;
-
 
 #[test]
 #[available_gas(20000000000000)]

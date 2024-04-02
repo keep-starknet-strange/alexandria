@@ -1,8 +1,5 @@
 use alexandria_encoding::rlp::{RLPError, RLPType, RLPTrait, RLPItem};
 
-use debug::PrintTrait;
-use result::ResultTrait;
-
 #[test]
 #[available_gas(99999999)]
 fn test_rlp_decode_type_byte() {

@@ -1,6 +1,6 @@
 use alexandria_bytes::{Bytes, BytesTrait};
-use alexandria_encoding::sol_abi::SolBytesTrait;
-use starknet::{ContractAddress, EthAddress, eth_address::U256IntoEthAddress};
+use alexandria_encoding::sol_abi::sol_bytes::SolBytesTrait;
+use starknet::{ContractAddress, EthAddress};
 
 /// Decode trait meant to provide an interface similar to Solidity's abi.decode
 /// function. It is meant to be used in a chain where the passed in `offset` is

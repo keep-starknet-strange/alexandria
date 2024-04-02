@@ -1,5 +1,5 @@
 use alexandria_encoding::reversible::{ReversibleBits, ReversibleBytes};
-use integer::u512;
+use core::integer::u512;
 
 #[test]
 #[available_gas(1000000)]
