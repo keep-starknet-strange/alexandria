@@ -1,8 +1,8 @@
-use core::array::SpanTrait;
+use core::num::traits::Zero;
 //! Kronecker product of two arrays
 
 #[derive(Drop, Copy, PartialEq)]
-enum KronError {
+pub enum KronError {
     UnequalLength,
 }
 
@@ -12,7 +12,7 @@ enum KronError {
 /// * `ys` - The second sequence of len L.
 /// # Returns
 /// * `Result<Array<T>, KronError>` - The Kronecker product.
-fn kron<T, +Mul<T>, +AddEq<T>, +Zeroable<T>, +Copy<T>, +Drop<T>,>(
+pub fn kron<T, +Mul<T>, +AddEq<T>, +Zero<T>, +Copy<T>, +Drop<T>,>(
     mut xs: Span<T>, mut ys: Span<T>
 ) -> Result<Array<T>, KronError> {
     // [Check] Inputs

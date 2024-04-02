@@ -38,7 +38,7 @@ use core::integer::{
 /// * `exp` - The exponent.
 /// # Returns
 /// * `T` - The result of base raised to the power of exp.
-fn pow<T, +Sub<T>, +Mul<T>, +Div<T>, +Rem<T>, +PartialEq<T>, +Into<u8, T>, +Drop<T>, +Copy<T>>(
+pub fn pow<T, +Sub<T>, +Mul<T>, +Div<T>, +Rem<T>, +PartialEq<T>, +Into<u8, T>, +Drop<T>, +Copy<T>>(
     base: T, exp: T
 ) -> T {
     if exp == 0_u8.into() {

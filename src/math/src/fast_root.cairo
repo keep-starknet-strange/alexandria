@@ -9,7 +9,7 @@ use super::pow;
 /// * ` iter ` - The number of iterations to run the algorithm
 /// # Returns
 /// * ` u128 ` - The root of x with rounding. (e.g., sqrt(5) = 2.24 -> 2, sqrt(7) = 2.65 -> 3)
-pub(crate) fn fast_nr_optimize(x: u128, r: u128, iter: usize) -> u128 {
+pub fn fast_nr_optimize(x: u128, r: u128, iter: usize) -> u128 {
     if x == 0 {
         return 0;
     }
