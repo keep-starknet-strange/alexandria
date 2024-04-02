@@ -27,7 +27,7 @@ abi.encode(v1, v2, v3, v4, v5);
 to the Cairo equivalent :
 
 ```rust
-use alexandria_bytes::{Bytes, BytesTrait};
+use alexandria_bytes::bytes::{Bytes, BytesTrait};
 use alexandria_encoding::sol_abi::{SolBytesTrait, SolAbiEncodeTrait};
 use starknet::{ContractAddress, eth_address::U256IntoEthAddress, EthAddress};
 
@@ -57,7 +57,7 @@ bytes memory encoded = ...
 to the Cairo equivalent :
 
 ```rust
-use alexandria_bytes::{Bytes, BytesTrait};
+use alexandria_bytes::bytes::{Bytes, BytesTrait};
 use alexandria_encoding::sol_abi::{SolBytesTrait, SolAbiDecodeTrait};
 use starknet::{ContractAddress, eth_address::U256IntoEthAddress, EthAddress};
 
@@ -92,7 +92,7 @@ bytes7 v3 = 0x01020304050607;
 can be done in Cairo like :
 
 ```rust
-use alexandria_bytes::{Bytes, BytesTrait};
+use alexandria_bytes::bytes::{Bytes, BytesTrait};
 use alexandria_encoding::sol_abi::SolBytesTrait;
 
 let v1: Bytes = SolBytesTrait::bytes3(0xabcdef_u128);

@@ -1,5 +1,5 @@
+use alexandria_bytes::bytes::{Bytes, BytesTrait};
 use alexandria_bytes::utils::{BytesDebug, BytesDisplay};
-use alexandria_bytes::{Bytes, BytesTrait};
 use alexandria_encoding::sol_abi::{
     encode::SolAbiEncodeTrait, encode_as::SolAbiEncodeAsTrait, encode::SolAbiEncodeSelectorTrait,
     decode::SolAbiDecodeTrait, sol_bytes::SolBytesTrait
