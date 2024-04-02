@@ -26,7 +26,7 @@
 
 /// Hasher trait.
 
-trait HasherTrait<T> {
+pub trait HasherTrait<T> {
     fn new() -> T;
     fn hash(ref self: T, data1: felt252, data2: felt252) -> felt252;
 }
@@ -35,30 +35,30 @@ trait HasherTrait<T> {
 // Hasher representations.
 
 #[derive(Drop, Copy)]
-struct Hasher {}
+pub struct Hasher {}
 
 /// Hasher impls.
 
-mod pedersen {
-    use hash::HashStateTrait;
+pub mod pedersen {
+    use core::hash::HashStateTrait;
     use super::{Hasher, HasherTrait};
 
-    impl PedersenHasherImpl of HasherTrait<Hasher> {
+    pub impl PedersenHasherImpl of HasherTrait<Hasher> {
         fn new() -> Hasher {
             Hasher {}
         }
         fn hash(ref self: Hasher, data1: felt252, data2: felt252) -> felt252 {
-            pedersen::pedersen(data1, data2)
+            core::pedersen::pedersen(data1, data2)
         }
     }
 }
 
-mod poseidon {
-    use hash::HashStateTrait;
-    use poseidon::hades_permutation;
+pub mod poseidon {
+    use core::hash::HashStateTrait;
+    use core::poseidon::hades_permutation;
     use super::{Hasher, HasherTrait};
 
-    impl PoseidonHasherImpl of HasherTrait<Hasher> {
+    pub impl PoseidonHasherImpl of HasherTrait<Hasher> {
         fn new() -> Hasher {
             Hasher {}
         }
@@ -72,12 +72,12 @@ mod poseidon {
 /// MerkleTree representation.
 
 #[derive(Drop)]
-struct MerkleTree<T> {
+pub struct MerkleTree<T> {
     hasher: T
 }
 
 /// MerkleTree trait.
-trait MerkleTreeTrait<T> {
+pub trait MerkleTreeTrait<T> {
     /// Create a new merkle tree instance.
     fn new() -> MerkleTree<T>;
     /// Compute the merkle root of a given proof.
@@ -91,7 +91,7 @@ trait MerkleTreeTrait<T> {
 }
 
 /// MerkleTree Legacy implementation.
-impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTrait<T> {
+pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTrait<T> {
     /// Create a new merkle tree instance.
     fn new() -> MerkleTree<T> {
         MerkleTree { hasher: HasherTrait::new() }

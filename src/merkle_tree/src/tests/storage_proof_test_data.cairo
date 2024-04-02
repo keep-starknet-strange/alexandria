@@ -2,7 +2,7 @@ use alexandria_merkle_tree::storage_proof::{
     ContractStateProof, ContractData, TrieNode, BinaryNode, EdgeNode
 };
 
-fn balance_proof() -> ContractStateProof {
+pub(crate) fn balance_proof() -> ContractStateProof {
     // func _balances(user : felt) -> (res : Uint256):
     // get_storage_var_address('_balances', 0x063c94d6B73eA2284338f464f86F33E12642149F763Cd8E76E035E8E6A5Bb0e6)
     // storage_address = 0x4ae51d08cd202d1472587dfe63dbf2d5ec767cbf4218b59b7ab71956780c6ee
@@ -291,7 +291,7 @@ fn balance_proof() -> ContractStateProof {
     }
 }
 
-fn total_balance_proof() -> ContractStateProof {
+pub(crate) fn total_balance_proof() -> ContractStateProof {
     // func _total_supply() -> (res : Uint256):
     // get_storage_var_address('_total_supply')
     // storage_address = 0x37a9774624a0e3e0d8e6b72bd35514f62b3e8e70fbaff4ed27181de4ffd4604;

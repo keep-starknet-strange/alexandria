@@ -1,39 +1,39 @@
-use hash::HashStateTrait;
-use pedersen::PedersenTrait;
-use poseidon::PoseidonTrait;
+use core::hash::HashStateTrait;
+use core::pedersen::PedersenTrait;
+use core::poseidon::PoseidonTrait;
 
 #[derive(Drop)]
-struct BinaryNode {
-    left: felt252,
-    right: felt252,
+pub struct BinaryNode {
+    pub left: felt252,
+    pub right: felt252,
 }
 
 #[derive(Drop, Copy)]
-struct EdgeNode {
-    child: felt252,
-    path: felt252,
-    length: u8,
+pub struct EdgeNode {
+    pub child: felt252,
+    pub path: felt252,
+    pub length: u8,
 }
 
 #[derive(Drop)]
-enum TrieNode {
+pub enum TrieNode {
     Binary: BinaryNode,
     Edge: EdgeNode,
 }
 
 #[derive(Destruct)]
-struct ContractData {
-    class_hash: felt252,
-    nonce: felt252,
-    contract_state_hash_version: felt252,
-    storage_proof: Array<TrieNode>
+pub struct ContractData {
+    pub class_hash: felt252,
+    pub nonce: felt252,
+    pub contract_state_hash_version: felt252,
+    pub storage_proof: Array<TrieNode>
 }
 
 #[derive(Destruct)]
-struct ContractStateProof {
-    class_commitment: felt252,
-    contract_proof: Array<TrieNode>,
-    contract_data: ContractData
+pub struct ContractStateProof {
+    pub class_commitment: felt252,
+    pub contract_proof: Array<TrieNode>,
+    pub contract_data: ContractData
 }
 
 /// Verify Starknet storage proof. For reference see:
@@ -47,7 +47,7 @@ struct ContractStateProof {
 /// * `proof` - `ContractStateProof` representing storage proof
 /// # Returns
 /// * `felt252` - `value` at `storage_address` if verified, panic otherwise.
-fn verify(
+pub fn verify(
     expected_state_commitment: felt252,
     contract_address: felt252,
     storage_address: felt252,
@@ -86,7 +86,7 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
     let expected_path_u256: u256 = expected_path.into();
 
     let leaf = *match nodes.pop_back().unwrap() {
-        TrieNode::Binary(_) => panic_with_felt252('invalid leaf type'),
+        TrieNode::Binary(_) => core::panic_with_felt252('invalid leaf type'),
         TrieNode::Edge(edge) => edge
     };
 
