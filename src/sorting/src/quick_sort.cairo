@@ -6,7 +6,7 @@ use alexandria_data_structures::vec::{Felt252Vec, VecTrait};
 /// * `Felt252Vec<T>` - Array to sort
 /// # Returns
 /// * `Felt252Vec<T>` - Sorted array
-fn quick_sort<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>, +Felt252DictValue<T>>(
+pub fn quick_sort<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>, +Felt252DictValue<T>>(
     mut array: Felt252Vec<T>
 ) -> Felt252Vec<T> {
     let array_size = array.len();
