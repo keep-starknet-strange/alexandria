@@ -1,4 +1,4 @@
-use alexandria_bytes::{Bytes, BytesTrait};
+use alexandria_bytes::bytes::{Bytes, BytesTrait};
 use core::traits::TryInto;
 use starknet::{ContractAddress, EthAddress};
 

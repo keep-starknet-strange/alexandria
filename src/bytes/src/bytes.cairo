@@ -3,6 +3,7 @@ use alexandria_bytes::utils::{
 };
 use alexandria_math::sha256::sha256;
 use alexandria_math::{U128BitShift, U256BitShift};
+use core::byte_array::ByteArrayTrait;
 use starknet::ContractAddress;
 
 /// Bytes is a dynamic array of u128, where each element contains 16 bytes.
@@ -31,12 +32,12 @@ const BYTES_PER_ELEMENT: usize = 16;
 ///  - size: the number of bytes in the Bytes
 ///  - data: the data of the Bytes
 #[derive(Drop, Clone, PartialEq, Serde)]
-struct Bytes {
-    size: usize,
-    data: Array<u128>
+pub struct Bytes {
+    pub size: usize, // TODO should prob be a fn instead of being able to access it 
+    pub data: Array<u128> // TODO should prob be a fn instead of being able to access it 
 }
 
-trait BytesTrait {
+pub trait BytesTrait {
     /// Create a Bytes from an array of u128
     fn new(size: usize, data: Array<u128>) -> Bytes;
     /// Create an empty Bytes
@@ -144,21 +145,15 @@ impl BytesImpl of BytesTrait {
         Bytes { size, data }
     }
 
+    // TODO this should prob just be impl Into
     fn from_byte_array(mut bytes: ByteArray) -> Bytes {
         let mut res = BytesTrait::new_empty();
-        loop {
-            match bytes.data.pop_front() {
-                Option::Some(val) => res.append_bytes31(val),
-                Option::None => { break; }
-            }
+        let mut len = 0;
+        while len < bytes.len() {
+            let val = bytes[len];
+            res.append_u8(val);
+            len += 1;
         };
-        // Last elem
-        if bytes.pending_word_len != 0 {
-            let mut val: u256 = bytes.pending_word.into();
-            // Only append the right-aligned bytes of the last word ( using specified length )
-            val = U256BitShift::shl(val, 8 * (32 - bytes.pending_word_len.into()));
-            res.concat(@BytesTrait::new(bytes.pending_word_len, array![val.high, val.low]));
-        }
         res
     }
 

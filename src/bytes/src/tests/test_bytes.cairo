@@ -1,5 +1,5 @@
+use alexandria_bytes::bytes::{Bytes, BytesTrait};
 use alexandria_bytes::utils::{BytesDebug, BytesDisplay};
-use alexandria_bytes::{Bytes, BytesTrait};
 use starknet::ContractAddress;
 
 #[test]
@@ -360,10 +360,10 @@ fn test_bytes_read_bytes31() {
     );
     let (offset, val) = bytes.read_bytes31(0);
     assert_eq!(offset, 31, "Offset after read_bytes31 failed");
-    assert!(
-        val == bytes31_const::<0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f>(),
-        "read_bytes31 test failed"
-    )
+    let byte31: bytes31 = 0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
+        .try_into()
+        .unwrap();
+    assert!(val == byte31, "read_bytes31 test failed")
 }
 
 #[test]

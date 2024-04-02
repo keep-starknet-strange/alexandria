@@ -1,9 +1,10 @@
-use alexandria_bytes::{Bytes, BytesTrait};
+use alexandria_bytes::bytes::{Bytes, BytesTrait};
 use alexandria_data_structures::array_ext::ArrayTraitExt;
 use core::fmt::{Debug, Display, Formatter, Error};
+use core::integer::u128_byte_reverse;
+use core::keccak::{cairo_keccak};
 use core::to_byte_array::{AppendFormattedToByteArray, FormatAsByteArray};
-use integer::u128_byte_reverse;
-use keccak::{u128_to_u64, u128_split as u128_split_to_u64, cairo_keccak};
+use core::traits::TryInto;
 
 fn format_byte_hex(byte: u8, ref f: Formatter) -> Result<(), Error> {
     let base: NonZero<u8> = 16_u8.try_into().unwrap();
@@ -15,7 +16,7 @@ fn format_byte_hex(byte: u8, ref f: Formatter) -> Result<(), Error> {
     Display::fmt(@byte.format_as_byte_array(base), ref f)
 }
 
-impl BytesDebug of Debug<Bytes> {
+pub impl BytesDebug of Debug<Bytes> {
     fn fmt(self: @Bytes, ref f: Formatter) -> Result<(), Error> {
         let mut i: usize = 0;
         let prefix: ByteArray = "0x";
@@ -34,7 +35,7 @@ impl BytesDebug of Debug<Bytes> {
     }
 }
 
-impl BytesDisplay of Display<Bytes> {
+pub impl BytesDisplay of Display<Bytes> {
     fn fmt(self: @Bytes, ref f: Formatter) -> Result<(), Error> {
         let mut i: usize = 0;
         let prefix: ByteArray = "0x";
@@ -56,7 +57,7 @@ impl BytesDisplay of Display<Bytes> {
 /// Computes the keccak256 of multiple uint128 values.
 /// The values are interpreted as big-endian.
 /// https://github.com/starkware-libs/cairo/blob/main/corelib/src/keccak.cairo
-fn keccak_u128s_be(mut input: Span<u128>, n_bytes: usize) -> u256 {
+pub fn keccak_u128s_be(mut input: Span<u128>, n_bytes: usize) -> u256 {
     let mut keccak_input = array![];
     let mut size = n_bytes;
     while let Option::Some(v) = input
@@ -95,20 +96,22 @@ fn u256_reverse_endian(input: u256) -> u256 {
 
 fn keccak_add_uint128_be(ref keccak_input: Array::<u64>, value: u128, value_size: usize) {
     if value_size == 16 {
-        let (high, low) = u128_split_to_u64(u128_byte_reverse(value));
-        keccak_input.append(low);
-        keccak_input.append(high);
+        let (high, low) = core::integer::u128_safe_divmod(
+            u128_byte_reverse(value), 0x10000000000000000_u128.try_into().unwrap()
+        );
+        keccak_input.append(low.try_into().unwrap());
+        keccak_input.append(high.try_into().unwrap());
     } else {
         let reversed_value = u128_byte_reverse(value);
         let (reversed_value, _) = u128_split(reversed_value, 16, value_size);
         if value_size <= 8 {
-            keccak_input.append(u128_to_u64(reversed_value));
+            keccak_input.append(reversed_value.try_into().unwrap());
         } else {
             let (high, low) = DivRem::div_rem(
                 reversed_value, u128_fast_pow2(64).try_into().expect('Division by 0')
             );
-            keccak_input.append(u128_to_u64(low));
-            keccak_input.append(u128_to_u64(high));
+            keccak_input.append(low.try_into().unwrap());
+            keccak_input.append(high.try_into().unwrap());
         }
     }
 }
@@ -132,7 +135,7 @@ fn update_u256_array_at(arr: @Array<u256>, index: usize, value: u256) -> Array<u
 
 /// Convert sha256 result(Array<u8>) to u256
 /// result length MUST be 32
-fn u8_array_to_u256(arr: Span<u8>) -> u256 {
+pub fn u8_array_to_u256(arr: Span<u8>) -> u256 {
     assert(arr.len() == 32, 'too large');
     let mut i = 0;
     let mut high = 0;
@@ -167,7 +170,7 @@ fn u64_array_slice(src: @Array<u64>, mut begin: usize, len: usize) -> Array<u64>
 /// * `len` - The length of the slice.
 /// # Returns
 /// * `Array<u128>` - The slice of the array.
-fn u128_array_slice(src: @Array<u128>, mut begin: usize, len: usize) -> Array<u128> {
+pub fn u128_array_slice(src: @Array<u128>, mut begin: usize, len: usize) -> Array<u128> {
     let mut slice = array![];
     let end = begin + len;
     while begin < end && begin < src.len() {
@@ -201,7 +204,7 @@ fn array_slice<T, impl TDrop: Drop<T>, impl TCopy: Copy<T>>(
 /// u128_split(0x01020304, 4, 0) -> (0, 0x01020304)
 /// u128_split(0x01020304, 4, 1) -> (0x01, 0x020304)
 /// u128_split(0x0001020304, 5, 1) -> (0x00, 0x01020304)
-fn u128_split(value: u128, value_size: usize, left_size: usize) -> (u128, u128) {
+pub fn u128_split(value: u128, value_size: usize, left_size: usize) -> (u128, u128) {
     assert(value_size <= 16, 'value_size can not be gt 16');
     assert(left_size <= value_size, 'size can not be gt value_size');
 
@@ -223,7 +226,7 @@ fn u128_split(value: u128, value_size: usize, left_size: usize) -> (u128, u128) 
 ///  - sub_value: the sub value of origin u128
 /// Examples:
 /// u128_sub_value(0x000001020304, 6, 1, 3) -> 0x000102
-fn read_sub_u128(value: u128, value_size: usize, offset: usize, size: usize) -> u128 {
+pub fn read_sub_u128(value: u128, value_size: usize, offset: usize, size: usize) -> u128 {
     assert(offset + size <= value_size, 'too long');
 
     if (value_size == 0) || (size == 0) {
@@ -249,7 +252,7 @@ fn read_sub_u128(value: u128, value_size: usize, offset: usize, size: usize) -> 
 /// Examples:
 /// u128_join(0x010203, 0xaabb, 2) -> 0x010203aabb
 /// u128_join(0x010203, 0, 2) -> 0x0102030000
-fn u128_join(left: u128, right: u128, right_size: usize) -> u128 {
+pub fn u128_join(left: u128, right: u128, right_size: usize) -> u128 {
     let left_size = u128_bytes_len(left);
     assert(left_size + right_size <= 16, 'left shift overflow');
     let shift = u128_fast_pow2(right_size * 8);

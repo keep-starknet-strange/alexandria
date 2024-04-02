@@ -1,4 +1,4 @@
-use alexandria_bytes::{Bytes, BytesTrait};
+use alexandria_bytes::bytes::{Bytes, BytesTrait};
 use alexandria_encoding::sol_abi::encode_as::SolAbiEncodeAsTrait;
 
 /// Solidity Bytes Trait meant to provide an interface similar to Solidity's

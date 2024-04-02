@@ -1,4 +1,4 @@
-use alexandria_bytes::{Bytes, BytesTrait};
+use alexandria_bytes::bytes::{Bytes, BytesTrait};
 use alexandria_encoding::sol_abi::sol_bytes::SolBytesTrait;
 use starknet::{ContractAddress, EthAddress};
 
