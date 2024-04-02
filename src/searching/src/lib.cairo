@@ -1,7 +1,7 @@
-mod binary_search;
-mod bm_search;
-mod dijkstra;
-mod levenshtein_distance;
+pub mod binary_search;
+pub mod bm_search;
+pub mod dijkstra;
+pub mod levenshtein_distance;
 
 #[cfg(test)]
 mod tests;

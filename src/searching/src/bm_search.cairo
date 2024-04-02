@@ -1,12 +1,12 @@
 // The Boyer-Moore string search algorithm
-use dict::Felt252DictTrait;
+use core::dict::Felt252DictTrait;
 
 /// Find `pattern` in `text` and return the index of every match.
 /// * `text` - The text to search in.
 /// * `pattern` - The pattern to search for.
 /// # Returns
 /// * `Array<usize>` - The index of every match.
-fn bm_search(text: @ByteArray, pattern: @ByteArray) -> Array<usize> {
+pub fn bm_search(text: @ByteArray, pattern: @ByteArray) -> Array<usize> {
     let mut positions: Array<usize> = array![]; // Array to store the indices of every match
     let text_len = text.len(); // Length of the text
     let pattern_len = pattern.len(); // Length of the pattern
@@ -17,7 +17,7 @@ fn bm_search(text: @ByteArray, pattern: @ByteArray) -> Array<usize> {
     }
 
     // Dictionary to store the last occurrence of each character in the pattern
-    let mut char_dict = felt252_dict_new::<usize>();
+    let mut char_dict = Default::default();
     let mut pattern_index = 0; // Index of the current character in the pattern
 
     // Build the character dictionary

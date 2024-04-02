@@ -1,5 +1,5 @@
 use alexandria_searching::dijkstra::{Graph, Node, GraphTrait};
-use nullable::FromNullableResult;
+use core::nullable::{FromNullableResult, match_nullable};
 
 
 #[test]
@@ -20,7 +20,7 @@ fn add_edge() {
     let val = graph.adj_nodes.get(source.into());
 
     let span = match match_nullable(val) {
-        FromNullableResult::Null => { panic_with_felt252('No value found') },
+        FromNullableResult::Null => { core::panic_with_felt252('No value found') },
         FromNullableResult::NotNull(val) => { val.unbox() },
     };
 
@@ -37,7 +37,7 @@ fn add_edge() {
     let val = graph.adj_nodes.get(2.into());
 
     let span = match match_nullable(val) {
-        FromNullableResult::Null => { panic_with_felt252('No value found') },
+        FromNullableResult::Null => { core::panic_with_felt252('No value found') },
         FromNullableResult::NotNull(val) => { val.unbox() },
     };
 
