@@ -112,19 +112,19 @@ mod AListHolder {
 mod tests {
     use AListHolder::{addressesContractMemberStateTrait, numbersContractMemberStateTrait};
     use alexandria_storage::list::{List, ListTrait};
-    use debug::PrintTrait;
     use starknet::{
-        ClassHash, ContractAddress, deploy_syscall, SyscallResultTrait,
-        testing::set_contract_address, storage_address_from_base, storage_address_to_felt252,
-        storage_base_address_from_felt252, StorageBaseAddress
+        ClassHash, ContractAddress, syscalls::deploy_syscall, SyscallResultTrait,
+        testing::set_contract_address,
+        storage_access::{
+            storage_base_address_from_felt252, storage_address_from_base, StorageBaseAddress
+        }
     };
     use super::{AListHolder, IAListHolderDispatcher, IAListHolderDispatcherTrait};
 
     impl StorageBaseAddressPartialEq of PartialEq<StorageBaseAddress> {
         fn eq(lhs: @StorageBaseAddress, rhs: @StorageBaseAddress) -> bool {
-            storage_address_to_felt252(
-                storage_address_from_base(*lhs)
-            ) == storage_address_to_felt252(storage_address_from_base(*rhs))
+            let left: felt252 = storage_address_from_base(*lhs).into();
+            left == storage_address_from_base(*rhs).into()
         }
 
         fn ne(lhs: @StorageBaseAddress, rhs: @StorageBaseAddress) -> bool {

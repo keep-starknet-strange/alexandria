@@ -1,22 +1,21 @@
-use integer::U32DivRem;
-use poseidon::poseidon_hash_span;
+use core::poseidon::poseidon_hash_span;
+use core::traits::DivRem;
 use starknet::storage_access::{
-    Store, StorageBaseAddress, storage_address_to_felt252, storage_address_from_base,
-    storage_base_address_from_felt252
+    Store, StorageBaseAddress, storage_address_from_base, storage_base_address_from_felt252
 };
-use starknet::{storage_read_syscall, storage_write_syscall, SyscallResult, SyscallResultTrait};
+use starknet::{SyscallResult, SyscallResultTrait};
 
 const POW2_8: u32 = 256; // 2^8
 
 #[derive(Drop)]
-struct List<T> {
-    address_domain: u32,
-    base: StorageBaseAddress,
-    len: u32, // number of elements in array
-    storage_size: u8
+pub struct List<T> {
+    pub address_domain: u32,
+    pub base: StorageBaseAddress,
+    pub len: u32, // number of elements in array
+    pub storage_size: u8
 }
 
-trait ListTrait<T> {
+pub trait ListTrait<T> {
     /// Instantiates a new List with the given base address.
     ///
     ///
@@ -152,7 +151,7 @@ trait ListTrait<T> {
 impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
     #[inline(always)]
     fn new(address_domain: u32, base: StorageBaseAddress) -> List<T> {
-        let storage_size: u8 = Store::<T>::size();
+        let storage_size = Store::<T>::size();
         List { address_domain, base, len: 0, storage_size }
     }
 
@@ -311,12 +310,10 @@ fn calculate_base_and_offset_for_index(
     list_base: StorageBaseAddress, index: u32, storage_size: u8
 ) -> (StorageBaseAddress, u8) {
     let max_elements = POW2_8 / storage_size.into();
-    let (key, offset) = U32DivRem::div_rem(index, max_elements.try_into().unwrap());
+    let (key, offset) = DivRem::div_rem(index, max_elements.try_into().unwrap());
 
     // hash the base address and the key which is the segment number
-    let addr_elements = array![
-        storage_address_to_felt252(storage_address_from_base(list_base)), key.into()
-    ];
+    let addr_elements = array![storage_address_from_base(list_base).into(), key.into()];
     let segment_base = storage_base_address_from_felt252(poseidon_hash_span(addr_elements.span()));
 
     (segment_base, offset.try_into().unwrap() * storage_size)
