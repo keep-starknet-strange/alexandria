@@ -90,7 +90,7 @@ impl PartialEqExtendedHomogeneousPoint of PartialEq<ExtendedHomogeneousPoint> {
 }
 
 impl SpanU8IntoU256 of Into<Span<u8>, u256> {
-    // Decode as little endian
+    /// Decode as little endian
     fn into(self: Span<u8>) -> u256 {
         if (self.len() > 32) {
             return 0;
@@ -187,10 +187,9 @@ impl U256TryIntoPoint of TryInto<u256, Point> {
         let mut y_le_span: Span<u8> = y_span.reverse().span();
 
         let last_byte = *y_le_span[31];
-        let mut normed = y_le_span.clone();
 
-        let _ = normed.pop_back();
-        let mut normed_array: Array<u8> = normed.dedup();
+        let _ = y_le_span.pop_back();
+        let mut normed_array: Array<u8> = y_le_span.dedup();
         normed_array.append(last_byte & ~0x80);
 
         let x_0: u256 = (last_byte.into() / 128) & 1; // bitshift of 255
