@@ -8,4 +8,4 @@ pub mod stack;
 
 #[cfg(test)]
 mod tests;
-mod vec;
+pub mod vec;
