@@ -1,10 +1,10 @@
 const ZERO_USIZE: usize = 0;
 
-struct Queue<T> {
+pub struct Queue<T> {
     elements: Array<T>,
 }
 
-trait QueueTrait<T> {
+pub trait QueueTrait<T> {
     fn new() -> Queue<T>;
     fn enqueue(ref self: Queue<T>, value: T);
     fn dequeue(ref self: Queue<T>) -> Option<T>;

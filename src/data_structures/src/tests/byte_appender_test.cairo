@@ -3,7 +3,7 @@ use alexandria_data_structures::tests::byte_reader_test::{
     test_array_8, test_array_16, test_array_16_neg, test_array_32, test_array_64, test_byte_array_8,
     test_byte_array_16, test_byte_array_16_neg, test_byte_array_32, test_byte_array_64
 };
-use integer::u512;
+use core::integer::u512;
 
 #[test]
 #[available_gas(1000000)]

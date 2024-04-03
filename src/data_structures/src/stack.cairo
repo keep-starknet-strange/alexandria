@@ -12,8 +12,9 @@
 //! Remove the item from the stack;
 //! let item = stack.pop();
 //! ```
+use core::nullable::NullableImpl;
 
-trait StackTrait<S, T> {
+pub trait StackTrait<S, T> {
     /// Creates a new Stack instance.
     fn new() -> S;
     /// Pushes a new value onto the stack.
@@ -28,7 +29,7 @@ trait StackTrait<S, T> {
     fn is_empty(self: @S) -> bool;
 }
 
-struct Felt252Stack<T> {
+pub struct Felt252Stack<T> {
     elements: Felt252Dict<T>,
     len: usize,
 }
@@ -103,7 +104,7 @@ impl Felt252StackImpl<
 }
 
 
-struct NullableStack<T> {
+pub struct NullableStack<T> {
     elements: Felt252Dict<Nullable<T>>,
     len: usize,
 }
@@ -122,7 +123,7 @@ impl NullableStackImpl<T, +Copy<T>, +Drop<T>,> of StackTrait<NullableStack<T>, T
     }
 
     fn push(ref self: NullableStack<T>, value: T) {
-        self.elements.insert(self.len.into(), nullable_from_box(BoxTrait::new(value)));
+        self.elements.insert(self.len.into(), NullableImpl::new(value));
         self.len += 1;
     }
 

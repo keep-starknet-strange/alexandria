@@ -1,6 +1,6 @@
 use alexandria_data_structures::byte_reader::ByteReader;
 
-impl SpanU8IntoBytearray of Into<Span<u8>, ByteArray> {
+pub impl SpanU8IntoBytearray of Into<Span<u8>, ByteArray> {
     #[inline]
     fn into(self: Span<u8>) -> ByteArray {
         let mut reader = self.reader();
@@ -21,7 +21,7 @@ impl ArrayU8IntoByteArray of Into<Array<u8>, ByteArray> {
     }
 }
 
-impl ByteArrayIntoArrayU8 of Into<ByteArray, Array<u8>> {
+pub impl ByteArrayIntoArrayU8 of Into<ByteArray, Array<u8>> {
     fn into(self: ByteArray) -> Array<u8> {
         let mut reader = self.reader();
         let mut result = array![];

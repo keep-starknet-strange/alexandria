@@ -1,13 +1,13 @@
-use bytes_31::{one_shift_left_bytes_u128, one_shift_left_bytes_felt252};
-use integer::u512;
+use core::integer::u512;
+use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 
 #[derive(Copy, Clone, Drop)]
-struct ByteReaderState<T> {
-    data: @T,
-    index: usize,
+pub struct ByteReaderState<T> {
+    pub data: @T,
+    pub index: usize,
 }
 
-trait ByteReader<T> {
+pub trait ByteReader<T> {
     /// Wraps the array of bytes in a ByteReader for sequential consumption of integers and/or bytes
     /// # Returns
     /// * `ByteReader` - The reader struct wrapping a read-only snapshot of this ByteArray
@@ -531,7 +531,7 @@ trait Len<T> {
 impl ArrayU8LenImpl of Len<Array<u8>> {
     #[inline]
     fn len(self: @Array<u8>) -> usize {
-        core::array::array_len::<u8>(self)
+        core::array::ArrayImpl::len(self)
     }
 }
 

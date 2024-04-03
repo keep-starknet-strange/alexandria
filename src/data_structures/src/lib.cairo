@@ -1,10 +1,10 @@
-mod array_ext;
-mod bit_array;
-mod byte_appender;
-mod byte_array_ext;
-mod byte_reader;
-mod queue;
-mod stack;
+pub mod array_ext;
+pub mod bit_array;
+pub mod byte_appender;
+pub mod byte_array_ext;
+pub mod byte_reader;
+pub mod queue;
+pub mod stack;
 
 #[cfg(test)]
 mod tests;

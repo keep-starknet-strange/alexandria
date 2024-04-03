@@ -1,3 +1,5 @@
+use core::integer::u32_wrapping_add;
+use core::nullable::NullableImpl;
 //! Vec implementation.
 //!
 //! # Example
@@ -12,7 +14,7 @@
 //! ...
 //! ```
 
-trait VecTrait<V, T> {
+pub trait VecTrait<V, T> {
     /// Creates a new V instance.
     /// Returns
     /// * V The new vec instance.
@@ -63,7 +65,7 @@ impl VecIndex<V, T, impl VecTraitImpl: VecTrait<V, T>> of Index<V, usize, T> {
     }
 }
 
-struct Felt252Vec<T> {
+pub struct Felt252Vec<T> {
     items: Felt252Dict<T>,
     len: usize,
 }
@@ -97,7 +99,7 @@ impl Felt252VecImpl<T, +Drop<T>, +Copy<T>, +Felt252DictValue<T>> of VecTrait<Fel
 
     fn push(ref self: Felt252Vec<T>, value: T) -> () {
         self.items.insert(self.len.into(), value);
-        self.len = integer::u32_wrapping_add(self.len, 1_usize);
+        self.len = u32_wrapping_add(self.len, 1_usize);
     }
 
     fn set(ref self: Felt252Vec<T>, index: usize, value: T) {
@@ -110,7 +112,7 @@ impl Felt252VecImpl<T, +Drop<T>, +Copy<T>, +Felt252DictValue<T>> of VecTrait<Fel
     }
 }
 
-struct NullableVec<T> {
+pub struct NullableVec<T> {
     items: Felt252Dict<Nullable<T>>,
     len: usize,
 }
@@ -140,13 +142,13 @@ impl NullableVecImpl<T, +Drop<T>, +Copy<T>> of VecTrait<NullableVec<T>, T> {
     }
 
     fn push(ref self: NullableVec<T>, value: T) -> () {
-        self.items.insert(self.len.into(), nullable_from_box(BoxTrait::new(value)));
-        self.len = integer::u32_wrapping_add(self.len, 1_usize);
+        self.items.insert(self.len.into(), NullableImpl::new(value));
+        self.len = u32_wrapping_add(self.len, 1_usize);
     }
 
     fn set(ref self: NullableVec<T>, index: usize, value: T) {
         assert(index < self.len(), 'Index out of bounds');
-        self.items.insert(index.into(), nullable_from_box(BoxTrait::new(value)));
+        self.items.insert(index.into(), NullableImpl::new(value));
     }
 
     fn len(self: @NullableVec<T>) -> usize {

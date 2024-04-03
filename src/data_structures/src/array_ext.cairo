@@ -1,4 +1,4 @@
-trait ArrayTraitExt<T> {
+pub trait ArrayTraitExt<T> {
     fn append_all(ref self: Array<T>, ref arr: Array<T>);
     fn pop_front_n(ref self: Array<T>, n: usize);
     fn reverse(self: @Array<T>) -> Array<T>;
@@ -15,7 +15,7 @@ trait ArrayTraitExt<T> {
     fn unique<+PartialEq<T>>(self: @Array<T>) -> Array<T>;
 }
 
-trait SpanTraitExt<T> {
+pub trait SpanTraitExt<T> {
     fn pop_front_n(ref self: Span<T>, n: usize);
     fn pop_back_n(ref self: Span<T>, n: usize);
     fn reverse(self: Span<T>) -> Array<T>;

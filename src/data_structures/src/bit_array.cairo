@@ -1,20 +1,20 @@
-use array::{serialize_array_helper, deserialize_array_helper};
-use byte_array::BYTES_IN_BYTES31_MINUS_ONE;
-use bytes_31::{
-    one_shift_left_bytes_u128, one_shift_left_bytes_felt252, bytes31, BYTES_IN_U128,
-    BYTES_IN_BYTES31,
-};
-use integer::u512;
-use serde::into_felt252_based::SerdeImpl;
+use core::bytes_31::{bytes31};
+use core::integer::u512;
+use core::serde::Serde;
+use core::serde::into_felt252_based::SerdeImpl;
 
 const SELECT_BIT: u128 = 0b10;
+const POW_2_128: felt252 = 0x100000000000000000000000000000000;
+const BYTES_IN_U128: usize = 16;
+const BYTES_IN_BYTES31: usize = 31;
+const BYTES_IN_BYTES31_MINUS_ONE: usize = BYTES_IN_BYTES31 - 1;
 
 #[derive(Clone, Drop)]
-struct BitArray {
-    data: Array<bytes31>,
-    current: felt252,
-    read_pos: usize,
-    write_pos: usize,
+pub struct BitArray {
+    pub data: Array<bytes31>,
+    pub current: felt252,
+    pub read_pos: usize,
+    pub write_pos: usize,
 }
 
 impl BitArrayDefaultImpl of Default<BitArray> {
@@ -23,7 +23,7 @@ impl BitArrayDefaultImpl of Default<BitArray> {
     }
 }
 
-trait BitArrayTrait {
+pub trait BitArrayTrait {
     /// Appends a single bit to the BitArray
     /// # Arguments
     /// `bit` - either true or false, representing a single bit to be appended
@@ -451,21 +451,15 @@ impl BitArrayIndexView of IndexView<BitArray, usize, bool> {
 
 impl BitArraySerde of Serde<BitArray> {
     fn serialize(self: @BitArray, ref output: Array<felt252>) {
-        self.len().serialize(ref output);
-        let bytes31_arr = self.data.span();
-        serialize_array_helper(bytes31_arr, ref output);
+        self.data.serialize(ref output);
         output.append(*self.current);
     }
 
     fn deserialize(ref serialized: Span<felt252>) -> Option<BitArray> {
-        let length = *serialized.pop_front()?;
-        let length: usize = length.try_into().unwrap();
-        let length_in_felts = length / 8 / BYTES_IN_BYTES31;
-        let bytes31_arr = deserialize_array_helper(
-            ref serialized, array![], length_in_felts.into()
-        )?;
+        let bytes31_arr = Serde::<Array<bytes31>>::deserialize(ref serialized)?;
+        let write_pos = bytes31_arr.len();
         let current = *serialized.pop_front()?;
-        Option::Some(BitArray { data: bytes31_arr, current, read_pos: 0, write_pos: length })
+        Option::Some(BitArray { data: bytes31_arr, current, read_pos: 0, write_pos })
     }
 }
 
@@ -489,7 +483,7 @@ fn shift_bit(number: usize) -> u8 {
     } else if number == 7 {
         0b10000000_u8
     } else {
-        panic_with_felt252('invalid shift')
+        core::panic_with_felt252('invalid shift')
     }
 }
 
@@ -502,4 +496,35 @@ fn select(word: felt252, byte_index: usize, bit_index: usize) -> bool {
         low / one_shift_left_bytes_u128(byte_index)
     };
     (shifted_bytes / shift_bit(bit_index).into()) % SELECT_BIT == 1
+}
+
+// TODO Remove all done, it was copied from Starkware's library. There must be a better way
+pub fn one_shift_left_bytes_felt252(n_bytes: usize) -> felt252 {
+    if n_bytes < BYTES_IN_U128 {
+        one_shift_left_bytes_u128(n_bytes).into()
+    } else {
+        one_shift_left_bytes_u128(n_bytes - BYTES_IN_U128).into() * POW_2_128
+    }
+}
+
+pub fn one_shift_left_bytes_u128(n_bytes: usize) -> u128 {
+    match n_bytes {
+        0 => 0x1,
+        1 => 0x100,
+        2 => 0x10000,
+        3 => 0x1000000,
+        4 => 0x100000000,
+        5 => 0x10000000000,
+        6 => 0x1000000000000,
+        7 => 0x100000000000000,
+        8 => 0x10000000000000000,
+        9 => 0x1000000000000000000,
+        10 => 0x100000000000000000000,
+        11 => 0x10000000000000000000000,
+        12 => 0x1000000000000000000000000,
+        13 => 0x100000000000000000000000000,
+        14 => 0x10000000000000000000000000000,
+        15 => 0x1000000000000000000000000000000,
+        _ => core::panic_with_felt252('n_bytes too big'),
+    }
 }
