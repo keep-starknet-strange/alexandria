@@ -315,7 +315,9 @@ fn test_serde_serialize() {
     ba.serialize(ref out);
     let length = out.pop_front().unwrap();
     let length: usize = length.try_into().unwrap();
-    assert(length == ba.len(), ba.len().into());
+    assert!(length == ba.len(), "len not equal");
+    // We gotta skip one now
+    out.pop_front().unwrap();
     let data: felt252 = out.pop_front().unwrap();
     let expected: felt252 = BoundedInt::<u128>::max().into() - 1;
     let expected = expected * one_shift_left_bytes_felt252(15);

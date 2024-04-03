@@ -451,13 +451,14 @@ impl BitArrayIndexView of IndexView<BitArray, usize, bool> {
 
 impl BitArraySerde of Serde<BitArray> {
     fn serialize(self: @BitArray, ref output: Array<felt252>) {
+        self.len().serialize(ref output);
         self.data.serialize(ref output);
         output.append(*self.current);
     }
 
     fn deserialize(ref serialized: Span<felt252>) -> Option<BitArray> {
+        let write_pos = Serde::<u32>::deserialize(ref serialized)?;
         let bytes31_arr = Serde::<Array<bytes31>>::deserialize(ref serialized)?;
-        let write_pos = bytes31_arr.len();
         let current = *serialized.pop_front()?;
         Option::Some(BitArray { data: bytes31_arr, current, read_pos: 0, write_pos })
     }
