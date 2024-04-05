@@ -40,7 +40,6 @@ pub struct Hasher {}
 /// Hasher impls.
 
 pub mod pedersen {
-    use core::hash::HashStateTrait;
     use super::{Hasher, HasherTrait};
 
     pub impl PedersenHasherImpl of HasherTrait<Hasher> {
@@ -54,7 +53,6 @@ pub mod pedersen {
 }
 
 pub mod poseidon {
-    use core::hash::HashStateTrait;
     use core::poseidon::hades_permutation;
     use super::{Hasher, HasherTrait};
 
