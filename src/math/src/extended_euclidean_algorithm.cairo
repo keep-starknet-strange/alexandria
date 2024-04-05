@@ -1,5 +1,5 @@
 //! # Extended Euclidean Algorithm.
-use core::integer::{u128_overflowing_sub, u128_overflowing_mul};
+use core::integer::{u128_overflowing_sub, u128_overflowing_mul, u128_wrapping_sub};
 
 /// Extended Euclidean Algorithm.
 /// # Arguments
@@ -36,9 +36,3 @@ fn update_step(ref a: u128, ref old_a: u128, quotient: u128) {
     old_a = temp;
 }
 
-pub fn u128_wrapping_sub(a: u128, b: u128) -> u128 implicits(RangeCheck) nopanic {
-    match u128_overflowing_sub(a, b) {
-        Result::Ok(x) => x,
-        Result::Err(x) => x,
-    }
-}

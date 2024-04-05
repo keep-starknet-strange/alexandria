@@ -1,6 +1,5 @@
-use alexandria_math::extended_euclidean_algorithm::{
-    extended_euclidean_algorithm, u128_wrapping_sub
-};
+use alexandria_math::extended_euclidean_algorithm::{extended_euclidean_algorithm,};
+use core::integer::u128_wrapping_sub;
 
 // Define a test case function to avoid code duplication.
 fn test_case(a: u128, b: u128, expected: (u128, u128, u128)) {
