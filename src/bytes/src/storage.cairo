@@ -49,7 +49,7 @@ pub impl BytesStore of Store<Bytes> {
 /// * The short string `Bytes` is used as the capacity argument of the sponge
 ///   construction (domain separation).
 fn inner_bytes_pointer(address: StorageAddress, chunk: felt252) -> StorageBaseAddress {
-    let (r, _, _) = core::poseidon::hades_permutation(address.into(), chunk, 'Bytes'_felt252);
+    let (r, _, _) = core::poseidon::hades_permutation(address.into(), chunk, 'Bytes');
     storage_base_address_from_felt252(r)
 }
 
