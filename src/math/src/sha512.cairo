@@ -102,7 +102,7 @@ fn ssig1(x: Word64) -> Word64 {
 pub fn fpow(mut base: u128, mut power: u128) -> u128 {
     // Return invalid input error
     if base == 0 {
-        core::panic_with_felt252('fpow::II')
+        panic!("fpow::II")
     }
 
     let mut base_u128: u256 = base.into();

@@ -10,7 +10,7 @@
 pub fn fast_power(base: u128, mut power: u128, modulus: u128) -> u128 {
     // Return invalid input error
     if base == 0 {
-        core::panic_with_felt252('II')
+        panic!("II")
     }
 
     if modulus == 1 {

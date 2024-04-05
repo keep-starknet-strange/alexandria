@@ -20,7 +20,7 @@ fn add_edge() {
     let val = graph.adj_nodes.get(source.into());
 
     let span = match match_nullable(val) {
-        FromNullableResult::Null => { core::panic_with_felt252('No value found') },
+        FromNullableResult::Null => { panic!("No value found") },
         FromNullableResult::NotNull(val) => { val.unbox() },
     };
 
@@ -37,7 +37,7 @@ fn add_edge() {
     let val = graph.adj_nodes.get(2.into());
 
     let span = match match_nullable(val) {
-        FromNullableResult::Null => { core::panic_with_felt252('No value found') },
+        FromNullableResult::Null => { panic!("No value found") },
         FromNullableResult::NotNull(val) => { val.unbox() },
     };
 
