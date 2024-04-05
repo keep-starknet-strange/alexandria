@@ -1,29 +1,5 @@
 use alexandria_searching::bm_search::bm_search;
 
-
-// Check if two arrays are equal.
-/// * `a` - The first array.
-/// * `b` - The second array.
-/// # Returns
-/// * `bool` - True if the arrays are equal, false otherwise.
-fn is_equal(mut a: Span<u32>, mut b: Span<u32>) -> bool {
-    if a.len() != b.len() {
-        return false;
-    }
-    loop {
-        match a.pop_front() {
-            Option::Some(val1) => {
-                let val2 = b.pop_front().unwrap();
-                if *val1 != *val2 {
-                    break false;
-                }
-            },
-            Option::None => { break true; },
-        };
-    }
-}
-
-
 #[test]
 #[available_gas(5000000)]
 fn bm_search_test_1() {
@@ -64,7 +40,7 @@ fn bm_search_test_1() {
 
     let positions = bm_search(@text, @pattern);
     let ground_truth: Array<usize> = array![1, 11, 20];
-    assert!(is_equal(positions.span(), ground_truth.span()), "invalid result");
+    assert!(positions.span() == ground_truth.span(), "invalid result");
 }
 
 #[test]
@@ -105,7 +81,7 @@ fn bm_search_test_2() {
 
     let positions = bm_search(@text, @pattern);
     let ground_truth: Array<usize> = array![];
-    assert!(is_equal(positions.span(), ground_truth.span()), "invalid result");
+    assert!(positions.span() == ground_truth.span(), "invalid result");
 }
 
 #[test]
@@ -146,5 +122,5 @@ fn bm_search_test_3() {
 
     let positions = bm_search(@text, @pattern);
     let ground_truth: Array<usize> = array![3, 13, 22];
-    assert!(is_equal(positions.span(), ground_truth.span()), "invalid result");
+    assert!(positions.span() == ground_truth.span(), "invalid result");
 }

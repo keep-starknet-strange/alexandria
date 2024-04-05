@@ -1,5 +1,29 @@
 use alexandria_data_structures::vec::{Felt252Vec, VecTrait};
-use alexandria_sorting::{is_equal, is_equal_vec, quick_sort};
+use alexandria_sorting::quick_sort;
+
+/// * `a` - The first Felt252Vec.
+/// * `b` - The second array.
+/// # Returns
+/// * `bool` - True if the arrays are equal, false otherwise.
+fn is_equal_vec(mut a: Felt252Vec<u32>, mut b: Span<u32>) -> bool {
+    if a.len() != b.len() {
+        return false;
+    }
+
+    let mut compare_id = 0;
+
+    loop {
+        if compare_id == b.len() {
+            break true;
+        }
+
+        if a[compare_id] != *b[compare_id] {
+            break false;
+        }
+
+        compare_id += 1;
+    }
+}
 
 #[test]
 #[available_gas(20000000000000)]
