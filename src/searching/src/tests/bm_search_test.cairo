@@ -40,7 +40,7 @@ fn bm_search_test_1() {
 
     let positions = bm_search(@text, @pattern);
     let ground_truth: Array<usize> = array![1, 11, 20];
-    assert!(positions.span() == ground_truth.span(), "invalid result");
+    assert_eq!(positions.span(), ground_truth.span(), "invalid result");
 }
 
 #[test]
@@ -81,7 +81,7 @@ fn bm_search_test_2() {
 
     let positions = bm_search(@text, @pattern);
     let ground_truth: Array<usize> = array![];
-    assert!(positions.span() == ground_truth.span(), "invalid result");
+    assert_eq!(positions.span(), ground_truth.span(), "invalid result");
 }
 
 #[test]
@@ -122,5 +122,5 @@ fn bm_search_test_3() {
 
     let positions = bm_search(@text, @pattern);
     let ground_truth: Array<usize> = array![3, 13, 22];
-    assert!(positions.span() == ground_truth.span(), "invalid result");
+    assert_eq!(positions.span(), ground_truth.span(), "invalid result");
 }

@@ -1,4 +1,4 @@
-use core::bytes_31::{bytes31};
+use core::bytes_31::bytes31;
 use core::integer::u512;
 use core::serde::Serde;
 use core::serde::into_felt252_based::SerdeImpl;
@@ -466,7 +466,7 @@ impl BitArraySerde of Serde<BitArray> {
 
 // helper
 #[inline(always)]
-fn shift_bit(number: usize) -> u8 {
+pub fn shift_bit(number: usize) -> u8 {
     if number == 0 {
         1_u8
     } else if number == 1 {
@@ -484,7 +484,7 @@ fn shift_bit(number: usize) -> u8 {
     } else if number == 7 {
         0b10000000_u8
     } else {
-        core::panic_with_felt252('invalid shift')
+        panic!("invalid shift")
     }
 }
 

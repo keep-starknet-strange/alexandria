@@ -150,8 +150,7 @@ impl BytesImpl of BytesTrait {
         let mut res = BytesTrait::new_empty();
         let mut len = 0;
         while len < bytes.len() {
-            let val = bytes[len];
-            res.append_u8(val);
+            res.append_u8(bytes[len]);
             len += 1;
         };
         res

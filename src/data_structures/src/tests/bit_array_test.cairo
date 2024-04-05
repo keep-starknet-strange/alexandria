@@ -1,29 +1,8 @@
-use alexandria_data_structures::bit_array::{BitArray, BitArrayTrait, one_shift_left_bytes_felt252};
+use alexandria_data_structures::bit_array::{
+    BitArray, BitArrayTrait, one_shift_left_bytes_felt252, shift_bit
+};
 use core::integer::BoundedInt;
 use core::integer::u512;
-
-// TODO Copied from STD LIB
-fn shift_bit(number: usize) -> u8 {
-    if number == 0 {
-        1_u8
-    } else if number == 1 {
-        0b10_u8
-    } else if number == 2 {
-        0b100_u8
-    } else if number == 3 {
-        0b1000_u8
-    } else if number == 4 {
-        0b10000_u8
-    } else if number == 5 {
-        0b100000_u8
-    } else if number == 6 {
-        0b1000000_u8
-    } else if number == 7 {
-        0b10000000_u8
-    } else {
-        core::panic_with_felt252('invalid shift')
-    }
-}
 
 #[test]
 #[available_gas(30000000)]

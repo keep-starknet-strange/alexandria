@@ -5,10 +5,10 @@ use core::integer::u128_wrapping_sub;
 fn test_case(a: u128, b: u128, expected: (u128, u128, u128)) {
     let (gcd, x, y) = extended_euclidean_algorithm(a, b);
     let (expected_gcd, expected_x, expected_y) = expected;
-    assert!(gcd == expected_gcd, "gcd is incorrect");
+    assert_eq!(gcd, expected_gcd, "gcd is incorrect");
 
-    assert!(x == expected_x, "x is incorrect");
-    assert!(y == expected_y, "y is incorrect");
+    assert_eq!(x, expected_x, "x is incorrect");
+    assert_eq!(y, expected_y, "y is incorrect");
 }
 
 #[test]
