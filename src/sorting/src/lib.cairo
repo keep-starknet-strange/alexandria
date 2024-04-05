@@ -4,5 +4,9 @@ pub mod quick_sort;
 
 #[cfg(test)]
 mod tests;
-use alexandria_data_structures::vec::{Felt252Vec, VecTrait};
+
+use bubble_sort::bubble_sort_elements;
+use merge_sort::merge;
+// use quick_sort::quick_sort; // Cannot do as name collide.
+
 

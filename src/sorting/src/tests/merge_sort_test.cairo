@@ -1,4 +1,4 @@
-use alexandria_sorting::merge_sort::merge;
+use alexandria_sorting::merge;
 
 #[test]
 #[available_gas(2000000000)]
