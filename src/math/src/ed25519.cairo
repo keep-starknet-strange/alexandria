@@ -291,13 +291,17 @@ fn check_group_equation(
 }
 
 fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> bool {
-    let r: u256 = *signature.get(0).unwrap().unbox();
+    if (signature.len() != 2) {
+        return false;
+    }
+
+    let r: u256 = *signature[0];
     let r_point: Option<Point> = r.try_into();
     if (r_point.is_none()) {
         return false;
     }
 
-    let s: u256 = *signature.get(1).unwrap().unbox();
+    let s: u256 = *signature[1];
     let s_span: Span<u8> = s.into();
     let reversed_s_span = s_span.reverse();
     let s: u256 = reversed_s_span.span().into();
