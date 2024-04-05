@@ -1,6 +1,6 @@
 use alexandria_data_structures::array_ext::SpanTraitExt;
 use alexandria_math::mod_arithmetics::{
-    add_mod, sub_mod, mult_mod, div_mod, pow_mod, add_inverse_mod
+    add_mod, sub_mod, mult_mod, div_mod, pow_mod, add_inverse_mod, equality_mod
 };
 use alexandria_math::sha512::{sha512, SHA512_LEN};
 use core::integer::u512;
@@ -16,10 +16,9 @@ const d: u256 =
 const l: u256 =
     7237005577332262213973186563042994240857116359379907606001950938285454250989; // 2^252 + 27742317777372353535851937790883648493
 
+const TWO_POW_8: u256 = 0x100;
+const TWO_POW_8_NON_ZERO: NonZero<u256> = 0x100;
 
-const PUB_KEY_LEN: usize = 32;
-
-const SIG_LEN: usize = 64;
 
 #[derive(Drop, Copy)]
 pub struct Point {
@@ -91,6 +90,7 @@ impl PartialEqExtendedHomogeneousPoint of PartialEq<ExtendedHomogeneousPoint> {
 }
 
 impl SpanU8IntoU256 of Into<Span<u8>, u256> {
+    /// Decode as little endian
     fn into(self: Span<u8>) -> u256 {
         if (self.len() > 32) {
             return 0;
@@ -149,6 +149,23 @@ impl SpanU8IntoU256 of Into<Span<u8>, u256> {
     }
 }
 
+impl U256IntoSpanU8 of Into<u256, Span<u8>> {
+    fn into(self: u256) -> Span<u8> {
+        let mut ret = array![];
+        let mut remaining_value = self;
+
+        let mut i: u8 = 0;
+        while (i < 32) {
+            let (temp_remaining, byte) = DivRem::div_rem(remaining_value, TWO_POW_8_NON_ZERO);
+            ret.append(byte.try_into().unwrap());
+            remaining_value = temp_remaining;
+            i += 1;
+        };
+
+        ret.span()
+    }
+}
+
 impl SpanU8IntoU512 of Into<Span<u8>, u512> {
     fn into(self: Span<u8>) -> u512 {
         let half_1 = self.slice(0, SHA512_LEN / 2);
@@ -160,37 +177,45 @@ impl SpanU8IntoU512 of Into<Span<u8>, u512> {
     }
 }
 
-pub impl SpanU8TryIntoPoint of TryInto<Span<u8>, Point> {
-    fn try_into(mut self: Span<u8>) -> Option<Point> {
+impl U256TryIntoPoint of TryInto<u256, Point> {
+    fn try_into(self: u256) -> Option<Point> {
         let mut x = 0;
+        let mut y_span: Span<u8> = self.into();
+        let mut y_le_span: Span<u8> = y_span.reverse().span();
 
-        let mut y: u256 = self.into();
+        let last_byte = *y_le_span[31];
+
+        let _ = y_le_span.pop_back();
+        let mut normed_array: Array<u8> = y_le_span.dedup();
+        normed_array.append(last_byte & ~0x80);
+
+        let x_0: u256 = (last_byte.into() / 128) & 1; // bitshift of 255
+
+        let y: u256 = normed_array.span().into();
         if (y >= p) {
             return Option::None;
         }
-        // bitshit of 255
-        let bitshift_255: u256 =
-            57896044618658097711785492504343953926634992332820282019728792003956564819968;
-        let x_0: u256 = y / bitshift_255; // bitshift of 255
-
-        y = (y & bitshift_255 - 1);
 
         let y_2 = pow_mod(y, 2, p);
         let u: u256 = sub_mod(y_2, 1, p);
         let v: u256 = add_mod(mult_mod(d, y_2, p), 1, p);
         let v_pow_3 = pow_mod(v, 3, p);
-        let v_pow_4 = pow_mod(v, 4, p);
-        let v_pow7: u256 = mult_mod(v_pow_3, v_pow_4, p);
-        let p_minus_5_div_8: u256 = div_mod(p - 5, 8, p);
+
+        let v_pow_7: u256 = pow_mod(v, 7, p);
+
+        let p_minus_5_div_8: u256 = div_mod(sub_mod(p, 5, p), 8, p);
+
         let u_times_v_power_3: u256 = mult_mod(u, v_pow_3, p);
 
         let x_candidate_root: u256 = mult_mod(
-            u_times_v_power_3, pow_mod(mult_mod(u, v_pow7, p), p_minus_5_div_8, p), p
+            u_times_v_power_3, pow_mod(mult_mod(u, v_pow_7, p), p_minus_5_div_8, p), p
         );
-        let x_times_v_squared: u256 = mult_mod(v, pow_mod(x_candidate_root, 2, p), p);
-        if (x_times_v_squared == u) {
+
+        let v_times_x_squared: u256 = mult_mod(v, pow_mod(x_candidate_root, 2, p), p);
+
+        if (equality_mod(v_times_x_squared, u, p)) {
             x = x_candidate_root;
-        } else if (x_times_v_squared == add_inverse_mod(u, p)) {
+        } else if (equality_mod(v_times_x_squared, add_inverse_mod(u, p), p)) {
             let p_minus_one_over_4: u256 = div_mod(sub_mod(p, 1, p), 4, p);
             x = mult_mod(x_candidate_root, pow_mod(2, p_minus_one_over_4, p), p);
         } else {
@@ -262,33 +287,48 @@ fn check_group_equation(
     lhs == rhs
 }
 
-pub fn verify_signature(msg: Span<u8>, signature: Span<u8>, pub_key: Span<u8>) -> bool {
-    if (pub_key.len() != PUB_KEY_LEN || signature.len() != SIG_LEN) {
+pub fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> bool {
+    if (signature.len() != 2) {
         return false;
     }
 
-    let r_string = signature.slice(0, SIG_LEN / 2);
-    let R_opt: Option<Point> = r_string.try_into();
-    if (R_opt.is_none()) {
+    let r: u256 = *signature[0];
+    let r_point: Option<Point> = r.try_into();
+    if (r_point.is_none()) {
         return false;
     }
+
+    let s: u256 = *signature[1];
+    let s_span: Span<u8> = s.into();
+    let reversed_s_span = s_span.reverse();
+    let s: u256 = reversed_s_span.span().into();
+    if (s >= l) {
+        return false;
+    }
+
     let A_prime_opt: Option<Point> = pub_key.try_into();
     if (A_prime_opt.is_none()) {
         return false;
     }
-    let R: Point = R_opt.unwrap();
-    let S: u256 = signature.slice(32, SIG_LEN / 2).into();
+
+    let R: Point = r_point.unwrap();
     let A_prime: Point = A_prime_opt.unwrap();
 
     let R_extended: ExtendedHomogeneousPoint = R.into();
     let A_prime_ex: ExtendedHomogeneousPoint = A_prime.into();
 
+    let r_bytes: Span<u8> = r.into();
+    let r_bytes = r_bytes.reverse().span();
+    let pub_key_bytes: Span<u8> = pub_key.into();
+    let pub_key_bytes = pub_key_bytes.reverse().span();
+
+    let hashable = r_bytes.concat(pub_key_bytes).span().concat(msg);
     // k = SHA512(dom2(F, C) -> empty string || R -> half of sig || A -> pub_key || PH(M) -> identity function for msg)
-    let k: Array<u8> = sha512(r_string.concat(pub_key).span().concat(msg));
+    let k: Array<u8> = sha512(hashable);
     let k_u512: u512 = k.span().into();
 
     let l_non_zero: NonZero<u256> = l.try_into().unwrap();
     let (_, k_reduced) = core::integer::u512_safe_div_rem_by_u256(k_u512, l_non_zero);
 
-    check_group_equation(S, R_extended, k_reduced, A_prime_ex)
+    check_group_equation(s, R_extended, k_reduced, A_prime_ex)
 }
