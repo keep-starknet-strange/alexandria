@@ -11,7 +11,7 @@ const POW2_8: u32 = 256; // 2^8
 pub struct List<T> {
     pub address_domain: u32,
     pub base: StorageBaseAddress,
-    pub len: u32, // number of elements in array
+    len: u32, // number of elements in array
     pub storage_size: u8
 }
 

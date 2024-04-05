@@ -22,7 +22,7 @@ trait IAListHolder<TContractState> {
 
 #[starknet::contract]
 mod AListHolder {
-    use alexandria_storage::list::{List, ListTrait};
+    use alexandria_storage::{List, ListTrait};
     use starknet::ContractAddress;
 
     #[storage]
@@ -111,7 +111,7 @@ mod AListHolder {
 #[cfg(test)]
 mod tests {
     use AListHolder::{addressesContractMemberStateTrait, numbersContractMemberStateTrait};
-    use alexandria_storage::list::{List, ListTrait};
+    use alexandria_storage::{List, ListTrait};
     use starknet::{
         ClassHash, ContractAddress, syscalls::deploy_syscall, SyscallResultTrait,
         testing::set_contract_address,
