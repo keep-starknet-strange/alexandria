@@ -86,7 +86,7 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
     let expected_path_u256: u256 = expected_path.into();
 
     let leaf = *match nodes.pop_back().unwrap() {
-        TrieNode::Binary(_) => panic!("invalid leaf type"),
+        TrieNode::Binary(_) => panic!("expected Edge got Leaf"),
         TrieNode::Edge(edge) => edge
     };
 
