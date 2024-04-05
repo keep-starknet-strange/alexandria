@@ -33,8 +33,8 @@ const BYTES_PER_ELEMENT: usize = 16;
 ///  - data: the data of the Bytes
 #[derive(Drop, Clone, PartialEq, Serde)]
 pub struct Bytes {
-    pub size: usize, // TODO should prob be a fn instead of being able to access it 
-    pub data: Array<u128> // TODO should prob be a fn instead of being able to access it 
+    size: usize,
+    pub data: Array<u128> // TODO should this be pub?
 }
 
 pub trait BytesTrait {

@@ -1,4 +1,4 @@
-use alexandria_bytes::bytes::{Bytes, BytesTrait};
+use alexandria_bytes::{Bytes, BytesTrait};
 use alexandria_data_structures::array_ext::ArrayTraitExt;
 use core::fmt::{Debug, Display, Formatter, Error};
 use core::integer::u128_byte_reverse;

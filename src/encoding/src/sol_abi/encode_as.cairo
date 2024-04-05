@@ -1,4 +1,4 @@
-use alexandria_bytes::bytes::{Bytes, BytesTrait};
+use alexandria_bytes::{Bytes, BytesTrait};
 use alexandria_math::{U128BitShift, U256BitShift};
 
 /// Encode trait for arbitrarily sized encodings, meant to allow easy bytesX
