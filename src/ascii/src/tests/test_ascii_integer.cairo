@@ -23,7 +23,7 @@ fn u256_to_ascii() {
     let ascii: Array<felt252> = 1157920892373161954235709850086_u256.to_ascii();
     assert_eq!(ascii.len(), 1, "u256 31 char wrong len");
     assert_eq!(*ascii.at(0), '1157920892373161954235709850086', "31 char u256 wrong felt");
-    // ---------------------------- 62 cahr u256 test --------------------------- //
+    // ---------------------------- 62 char u256 test --------------------------- //
     let ascii: Array<felt252> = 11579208923731619542357098500868790785326998466564056403945758_u256
         .to_ascii();
     assert_eq!(ascii.len(), 2, "u256 31 char wrong len");
@@ -59,10 +59,10 @@ fn u128_to_ascii() {
 fn u64_to_ascii() {
     // ------------------------------ max u64 test ------------------------------ //
     let num: u64 = BoundedInt::max();
-    assert_eq!(num.to_ascii(), '18446744073709551615', "incorect u64 max felt");
+    assert_eq!(num.to_ascii(), '18446744073709551615', "incorrect u64 max felt");
     // ------------------------------ min u64 test ------------------------------ //
     let num: u64 = BoundedInt::min();
-    assert_eq!(num.to_ascii(), '0', "incorect u64 min felt");
+    assert_eq!(num.to_ascii(), '0', "incorrect u64 min felt");
 }
 
 #[test]
@@ -70,10 +70,10 @@ fn u64_to_ascii() {
 fn u32_to_ascii() {
     // ------------------------------ max u32 test ------------------------------ //
     let num: u32 = BoundedInt::max();
-    assert_eq!(num.to_ascii(), '4294967295', "incorect u32 max felt");
+    assert_eq!(num.to_ascii(), '4294967295', "incorrect u32 max felt");
     // ------------------------------ min u32 test ------------------------------ //
     let num: u32 = BoundedInt::min();
-    assert_eq!(num.to_ascii(), '0', "incorect u32 min felt");
+    assert_eq!(num.to_ascii(), '0', "incorrect u32 min felt");
 }
 
 #[test]
@@ -81,10 +81,10 @@ fn u32_to_ascii() {
 fn u16_to_ascii() {
     // ------------------------------ max u16 test ------------------------------ //
     let num: u16 = BoundedInt::max();
-    assert_eq!(num.to_ascii(), '65535', "incorect u16 max felt");
+    assert_eq!(num.to_ascii(), '65535', "incorrect u16 max felt");
     // ------------------------------ min u16 test ------------------------------ //
     let num: u16 = BoundedInt::min();
-    assert_eq!(num.to_ascii(), '0', "incorect u16 min felt");
+    assert_eq!(num.to_ascii(), '0', "incorrect u16 min felt");
 }
 
 #[test]
@@ -92,8 +92,8 @@ fn u16_to_ascii() {
 fn u8_to_ascii() {
     // ------------------------------- max u8 test ------------------------------ //
     let num: u8 = BoundedInt::max();
-    assert_eq!(num.to_ascii(), '255', "incorect u8 max felt");
+    assert_eq!(num.to_ascii(), '255', "incorrect u8 max felt");
     // ------------------------------- min u8 test ------------------------------ //
     let num: u8 = BoundedInt::min();
-    assert_eq!(num.to_ascii(), '0', "incorect u8 min felt");
+    assert_eq!(num.to_ascii(), '0', "incorrect u8 min felt");
 }
