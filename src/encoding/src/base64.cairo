@@ -2,8 +2,6 @@ use alexandria_data_structures::array_ext::ArrayTraitExt;
 use alexandria_math::BitShift;
 use core::integer::BoundedInt;
 
-const U6_MAX: u128 = 0x3F;
-
 pub trait Encoder<T> {
     fn encode(data: T) -> Array<u8>;
 }
