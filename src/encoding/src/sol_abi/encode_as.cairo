@@ -70,7 +70,7 @@ pub impl SolAbiEncodeAsBytes of SolAbiEncodeAsTrait<Bytes> {
 
 pub impl SolAbiEncodeAsByteArray of SolAbiEncodeAsTrait<ByteArray> {
     fn encode_as(mut self: Bytes, byteSize: usize, x: ByteArray) -> Bytes {
-        let x: Bytes = BytesTrait::from_byte_array(x);
+        let x: Bytes = x.into();
         self.concat(@BytesTrait::new(byteSize, x.data));
         self
     }

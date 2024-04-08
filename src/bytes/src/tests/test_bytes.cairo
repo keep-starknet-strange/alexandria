@@ -697,7 +697,7 @@ fn test_byte_array_conversions() {
             0x3db2194a000000000000000000000000
         ]
     );
-    let byte_array = bytes.clone().to_byte_array();
-    let new_bytes = BytesTrait::from_byte_array(byte_array);
+    let byte_array: ByteArray = bytes.clone().into();
+    let new_bytes: Bytes = byte_array.into();
     assert_eq!(bytes, new_bytes, "byte <-> byte_array conversion failed");
 }

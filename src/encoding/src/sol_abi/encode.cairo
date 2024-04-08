@@ -175,13 +175,13 @@ pub impl SolAbiEncodeBytes of SolAbiEncodeTrait<Bytes> {
 pub impl SolAbiEncodeByteArray of SolAbiEncodeTrait<ByteArray> {
     fn encode(mut self: Bytes, x: ByteArray) -> Bytes {
         let x_len: usize = x.len();
-        self.concat(@BytesTrait::from_byte_array(x));
+        self.concat(@x.into());
         self.concat(@BytesTrait::zero(32 - (x_len % 32)));
         self
     }
 
     fn encode_packed(mut self: Bytes, x: ByteArray) -> Bytes {
-        self.concat(@BytesTrait::from_byte_array(x));
+        self.concat(@x.into());
         self
     }
 }

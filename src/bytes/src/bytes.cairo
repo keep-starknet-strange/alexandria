@@ -44,10 +44,6 @@ pub trait BytesTrait {
     fn new_empty() -> Bytes;
     /// Create a Bytes with size bytes 0
     fn zero(size: usize) -> Bytes;
-    /// Create a Bytes from ByteArray ( Array<bytes31> )
-    fn from_byte_array(bytes: ByteArray) -> Bytes;
-    /// Create a ByteArray from Bytes
-    fn to_byte_array(self: Bytes) -> ByteArray;
     /// Locate offset in Bytes
     fn locate(offset: usize) -> (usize, usize);
     /// Get Bytes size
@@ -143,35 +139,6 @@ impl BytesImpl of BytesTrait {
         };
 
         Bytes { size, data }
-    }
-
-    // TODO this should prob just be impl Into
-    fn from_byte_array(mut bytes: ByteArray) -> Bytes {
-        let mut res = BytesTrait::new_empty();
-        let mut len = 0;
-        while len < bytes.len() {
-            res.append_u8(bytes[len]);
-            len += 1;
-        };
-        res
-    }
-
-    fn to_byte_array(self: Bytes) -> ByteArray {
-        let mut res: ByteArray = Default::default();
-        let mut offset = 0;
-        while offset < self
-            .size() {
-                if offset + 31 <= self.size() {
-                    let (new_offset, value) = self.read_bytes31(offset);
-                    res.append_word(value.into(), 31);
-                    offset = new_offset;
-                } else {
-                    let (new_offset, value) = self.read_u8(offset);
-                    res.append_byte(value);
-                    offset = new_offset;
-                }
-            };
-        res
     }
 
     /// Locate offset in Bytes
@@ -573,5 +540,37 @@ impl BytesImpl of BytesTrait {
 
         let output: Array<u8> = sha256(hash_data);
         u8_array_to_u256(output.span())
+    }
+}
+
+pub impl ByteArrayIntoBytes of Into<ByteArray, Bytes> {
+    fn into(self: ByteArray) -> Bytes {
+        let mut res = BytesTrait::new_empty();
+        let mut len = 0;
+        while len < self.len() {
+            res.append_u8(self[len]);
+            len += 1;
+        };
+        res
+    }
+}
+
+pub impl BytesIntoByteArray of Into<Bytes, ByteArray> {
+    fn into(self: Bytes) -> ByteArray {
+        let mut res: ByteArray = Default::default();
+        let mut offset = 0;
+        while offset < self
+            .size() {
+                if offset + 31 <= self.size() {
+                    let (new_offset, value) = self.read_bytes31(offset);
+                    res.append_word(value.into(), 31);
+                    offset = new_offset;
+                } else {
+                    let (new_offset, value) = self.read_u8(offset);
+                    res.append_byte(value);
+                    offset = new_offset;
+                }
+            };
+        res
     }
 }

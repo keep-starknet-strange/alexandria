@@ -110,7 +110,7 @@ pub impl SolAbiDecodeByteArray of SolAbiDecodeTrait<ByteArray> {
     fn decode(self: @Bytes, ref offset: usize) -> ByteArray {
         let (new_offset, decodedBytes) = self.read_u256(offset);
         offset = new_offset;
-        SolBytesTrait::bytes32(decodedBytes).to_byte_array()
+        SolBytesTrait::bytes32(decodedBytes).into()
     }
 }
 
