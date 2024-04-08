@@ -499,7 +499,7 @@ fn select(word: felt252, byte_index: usize, bit_index: usize) -> bool {
     (shifted_bytes / shift_bit(bit_index).into()) % SELECT_BIT == 1
 }
 
-// TODO Remove all done, it was copied from Starkware's library. There must be a better way
+// TODO Copied from standard library as those aren't visible anymore
 pub fn one_shift_left_bytes_felt252(n_bytes: usize) -> felt252 {
     if n_bytes < BYTES_IN_U128 {
         one_shift_left_bytes_u128(n_bytes).into()
