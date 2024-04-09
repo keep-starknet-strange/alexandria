@@ -6,16 +6,37 @@ use core::num::traits::Zero;
 // The is_negative field is true for negative integers, and false for non-negative integers.
 #[derive(Serde, Copy, Drop, Hash)]
 pub struct i257 {
-    pub abs: u256,
-    pub is_negative: bool,
+    abs: u256,
+    is_negative: bool,
 }
 
 #[inline(always)]
+// TODO Later this should prob be updated to a trait 
+// To be used like I257Trait::new()
 pub fn i257_new(abs: u256, is_negative: bool) -> i257 {
     if abs == 0 {
         i257 { abs, is_negative: false }
     } else {
         i257 { abs, is_negative }
+    }
+}
+
+#[generate_trait]
+pub impl I257Impl of I257Trait {
+    fn new(abs: u256, is_negative: bool) -> i257 {
+        if abs == 0 {
+            i257 { abs, is_negative: false }
+        } else {
+            i257 { abs, is_negative }
+        }
+    }
+
+    fn is_negative(self: i257) -> bool {
+        self.is_negative
+    }
+
+    fn abs(self: i257) -> u256 {
+        self.abs
     }
 }
 
