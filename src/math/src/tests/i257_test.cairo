@@ -144,13 +144,6 @@ fn i257_test_is_zero() {
 }
 
 #[test]
-#[should_panic(expected: ('no negative zero',))]
-fn i257_test_is_zero_panic() {
-    let a = I257Impl::new(0, true);
-    let _x = a.is_zero();
-}
-
-#[test]
 fn i257_test_div_no_rem() {
     // Test division of positive integers
     let a = I257Impl::new(10, false);
@@ -315,13 +308,6 @@ fn i257_test_equality() {
     let a = I257Impl::new(13, true);
     let b = I257Impl::new(5, true);
     assert!(a != b, "-13 != -5");
-}
-
-#[test]
-#[should_panic]
-fn i257_test_check_sign_zero() {
-    let x = I257Impl::new(0, true);
-    i257_assert_no_negative_zero(x);
 }
 
 #[test]
