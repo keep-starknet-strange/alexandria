@@ -162,14 +162,14 @@ mod tests {
         assert_eq!(addresses_list.address_domain, 0, "Address domain should be 0");
         assert_eq!(addresses_list.len(), 0, "Initial length should be 0");
         assert_eq!(addresses_list.base.into(), addresses_address, "Base address mismatch");
-        assert_eq!(addresses_list.storage_size, 1, "Storage size should be 1");
+        assert_eq!(addresses_list.storage_size(), 1, "Storage size should be 1");
 
         let numbers_address = contract_state.numbers.address();
         let numbers_list = ListTrait::<u256>::new(0, numbers_address);
         assert_eq!(numbers_list.address_domain, 0, "Address domain should be 0");
         assert_eq!(numbers_list.len(), 0, "Initial length should be 0");
         assert_eq!(numbers_list.base.into(), numbers_address, "Base address mismatch");
-        assert_eq!(numbers_list.storage_size, 2, "Storage size should be 2");
+        assert_eq!(numbers_list.storage_size(), 2, "Storage size should be 2");
 
         // Check if both addresses and numbers lists are initialized to be empty
         assert_eq!(contract.do_get_len(), (0, 0), "Initial lengths should be 0");
@@ -212,7 +212,7 @@ mod tests {
         assert_eq!(empty_list.address_domain, 0, "Address domain should be 0");
         assert_eq!(empty_list.len(), 0, "Length should be 0");
         assert_eq!(empty_list.base.into(), storage_address, "Base address mismatch");
-        assert_eq!(empty_list.storage_size, 1, "Storage size should be 1");
+        assert_eq!(empty_list.storage_size(), 1, "Storage size should be 1");
     }
 
 
@@ -233,7 +233,7 @@ mod tests {
         assert_eq!(addresses_list.address_domain, 0, "Address domain should be 0");
         assert_eq!(addresses_list.len(), 2, "Length should be 2");
         assert_eq!(addresses_list.base.into(), addresses_address, "Base address mismatch");
-        assert_eq!(addresses_list.storage_size, 1, "Storage size should be 1");
+        assert_eq!(addresses_list.storage_size(), 1, "Storage size should be 1");
 
         let numbers_address = contract_state.numbers.address();
         let numbers_list = ListTrait::<u256>::fetch(0, numbers_address).expect('List fetch failed');

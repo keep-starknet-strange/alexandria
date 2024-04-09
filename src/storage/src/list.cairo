@@ -9,10 +9,9 @@ const POW2_8: u32 = 256; // 2^8
 
 #[derive(Drop)]
 pub struct List<T> {
-    pub address_domain: u32,
-    pub base: StorageBaseAddress,
+    pub(crate) address_domain: u32,
+    pub(crate) base: StorageBaseAddress,
     len: u32, // number of elements in array
-    pub storage_size: u8
 }
 
 pub trait ListTrait<T> {
@@ -146,13 +145,15 @@ pub trait ListTrait<T> {
     /// An `Array<T>` containing all the elements of the List, encapsulated
     /// in `SyscallResult`.
     fn array(self: @List<T>) -> SyscallResult<Array<T>>;
+
+
+    fn storage_size(self: @List<T>) -> u8;
 }
 
 impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
     #[inline(always)]
     fn new(address_domain: u32, base: StorageBaseAddress) -> List<T> {
-        let storage_size = Store::<T>::size();
-        List { address_domain, base, len: 0, storage_size }
+        List { address_domain, base, len: 0 }
     }
 
     #[inline(always)]
@@ -163,12 +164,12 @@ impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
     fn append_span(ref self: List<T>, mut span: Span<T>) -> SyscallResult<()> {
         let mut index = self.len;
         self.len += span.len();
-
+        let storage_size = self.storage_size();
         loop {
             match span.pop_front() {
                 Option::Some(v) => {
                     let (base, offset) = calculate_base_and_offset_for_index(
-                        self.base, index, self.storage_size
+                        self.base, index, storage_size
                     );
                     match Store::write_at_offset(self.address_domain, base, offset, *v) {
                         Result::Ok(_) => {},
@@ -193,7 +194,7 @@ impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
 
     fn append(ref self: List<T>, value: T) -> SyscallResult<u32> {
         let (base, offset) = calculate_base_and_offset_for_index(
-            self.base, self.len, self.storage_size
+            self.base, self.len, self.storage_size()
         );
         Store::write_at_offset(self.address_domain, base, offset, value)?;
 
@@ -210,7 +211,7 @@ impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
         }
 
         let (base, offset) = calculate_base_and_offset_for_index(
-            *self.base, index, *self.storage_size
+            *self.base, index, self.storage_size()
         );
         let t = Store::read_at_offset(*self.address_domain, base, offset)?;
         Result::Ok(Option::Some(t))
@@ -219,7 +220,7 @@ impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
     fn set(ref self: List<T>, index: u32, value: T) -> SyscallResult<()> {
         assert(index < self.len, 'List index out of bounds');
         let (base, offset) = calculate_base_and_offset_for_index(
-            self.base, index, self.storage_size
+            self.base, index, self.storage_size()
         );
         Store::write_at_offset(self.address_domain, base, offset, value)
     }
@@ -264,6 +265,10 @@ impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
             Result::Ok(_) => Result::Ok(array),
             Result::Err(e) => Result::Err(e)
         }
+    }
+
+    fn storage_size(self: @List<T>) -> u8 {
+        Store::<T>::size()
     }
 }
 
@@ -322,8 +327,7 @@ fn calculate_base_and_offset_for_index(
 impl ListStore<T, +Store<T>> of Store<List<T>> {
     fn read(address_domain: u32, base: StorageBaseAddress) -> SyscallResult<List<T>> {
         let len: u32 = Store::read(address_domain, base).unwrap_syscall();
-        let storage_size: u8 = Store::<T>::size();
-        Result::Ok(List { address_domain, base, len, storage_size })
+        Result::Ok(List { address_domain, base, len })
     }
 
     #[inline(always)]
@@ -335,8 +339,7 @@ impl ListStore<T, +Store<T>> of Store<List<T>> {
         address_domain: u32, base: StorageBaseAddress, offset: u8
     ) -> SyscallResult<List<T>> {
         let len: u32 = Store::read_at_offset(address_domain, base, offset).unwrap_syscall();
-        let storage_size: u8 = Store::<T>::size();
-        Result::Ok(List { address_domain, base, len, storage_size })
+        Result::Ok(List { address_domain, base, len })
     }
 
     #[inline(always)]
