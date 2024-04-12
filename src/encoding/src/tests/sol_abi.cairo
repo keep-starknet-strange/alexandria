@@ -13,9 +13,6 @@ fn compare_bytes(actual: @Bytes, expected: @Bytes) -> bool {
     if actual.size() != expected.size() {
         return false;
     }
-    if actual.data.len() != expected.data.len() {
-        return false;
-    }
     let mut i: usize = 0;
     while i < actual
         .size() {

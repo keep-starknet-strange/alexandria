@@ -34,8 +34,15 @@ const BYTES_PER_ELEMENT: usize = 16;
 #[derive(Drop, Clone, PartialEq, Serde)]
 pub struct Bytes {
     size: usize,
-    pub data: Array<u128> // TODO should this be pub?
+    data: Array<u128>
 }
+
+pub impl BytesIndex of IndexView<Bytes, usize, @u128> {
+    fn index(self: @Bytes, index: usize) -> @u128 {
+        self.data[index]
+    }
+}
+
 
 pub trait BytesTrait {
     /// Create a Bytes from an array of u128
@@ -48,6 +55,8 @@ pub trait BytesTrait {
     fn locate(offset: usize) -> (usize, usize);
     /// Get Bytes size
     fn size(self: @Bytes) -> usize;
+    /// Get data 
+    fn data(self: Bytes) -> Array<u128>;
     /// update specific value (1 bytes) at specific offset
     fn update_at(ref self: Bytes, offset: usize, value: u8);
     /// Read value with size bytes from Bytes, and packed into u128
@@ -156,6 +165,11 @@ impl BytesImpl of BytesTrait {
     #[inline(always)]
     fn size(self: @Bytes) -> usize {
         *self.size
+    }
+
+
+    fn data(self: Bytes) -> Array<u128> {
+        self.data
     }
 
     /// update specific value (1 bytes) at specific offset

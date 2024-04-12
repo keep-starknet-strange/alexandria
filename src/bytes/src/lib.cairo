@@ -4,4 +4,4 @@ pub mod bytes;
 mod tests;
 pub mod utils;
 
-pub use bytes::{Bytes, BytesTrait};
+pub use bytes::{Bytes, BytesTrait, BytesIndex};

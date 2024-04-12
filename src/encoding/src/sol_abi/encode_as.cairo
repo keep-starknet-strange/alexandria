@@ -63,7 +63,7 @@ pub impl SolAbiEncodeAsBytes31 of SolAbiEncodeAsTrait<bytes31> {
 
 pub impl SolAbiEncodeAsBytes of SolAbiEncodeAsTrait<Bytes> {
     fn encode_as(mut self: Bytes, byteSize: usize, x: Bytes) -> Bytes {
-        self.concat(@BytesTrait::new(byteSize, x.data));
+        self.concat(@BytesTrait::new(byteSize, x.data()));
         self
     }
 }
@@ -71,7 +71,7 @@ pub impl SolAbiEncodeAsBytes of SolAbiEncodeAsTrait<Bytes> {
 pub impl SolAbiEncodeAsByteArray of SolAbiEncodeAsTrait<ByteArray> {
     fn encode_as(mut self: Bytes, byteSize: usize, x: ByteArray) -> Bytes {
         let x: Bytes = x.into();
-        self.concat(@BytesTrait::new(byteSize, x.data));
+        self.concat(@BytesTrait::new(byteSize, x.data()));
         self
     }
 }
