@@ -37,17 +37,38 @@ pub enum TrieNode {
 
 #[derive(Destruct)]
 pub struct ContractData {
-    pub class_hash: felt252,
-    pub nonce: felt252,
-    pub contract_state_hash_version: felt252,
-    pub storage_proof: Array<TrieNode>
+    class_hash: felt252,
+    nonce: felt252,
+    contract_state_hash_version: felt252,
+    storage_proof: Array<TrieNode>
+}
+
+#[generate_trait]
+pub impl ContractDataImpl of ContractDataTrait {
+    fn new(
+        class_hash: felt252,
+        nonce: felt252,
+        contract_state_hash_version: felt252,
+        storage_proof: Array<TrieNode>
+    ) -> ContractData {
+        ContractData { class_hash, nonce, contract_state_hash_version, storage_proof }
+    }
 }
 
 #[derive(Destruct)]
 pub struct ContractStateProof {
-    pub class_commitment: felt252,
-    pub contract_proof: Array<TrieNode>,
-    pub contract_data: ContractData
+    class_commitment: felt252,
+    contract_proof: Array<TrieNode>,
+    contract_data: ContractData
+}
+
+#[generate_trait]
+pub impl ContractStateProofImpl of ContractStateProofTrait {
+    fn new(
+        class_commitment: felt252, contract_proof: Array<TrieNode>, contract_data: ContractData
+    ) -> ContractStateProof {
+        ContractStateProof { class_commitment, contract_proof, contract_data, }
+    }
 }
 
 /// Verify Starknet storage proof. For reference see:

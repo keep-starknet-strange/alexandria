@@ -1,5 +1,6 @@
 use alexandria_merkle_tree::storage_proof::{
-    ContractStateProof, ContractData, TrieNode, BinaryNode, EdgeNode, BinaryNodeImpl, EdgeNodeImpl
+    ContractStateProof, ContractData, TrieNode, BinaryNode, EdgeNode, BinaryNodeImpl, EdgeNodeImpl,
+    ContractStateProofImpl, ContractDataImpl
 };
 
 pub(crate) fn balance_proof() -> ContractStateProof {
@@ -10,7 +11,7 @@ pub(crate) fn balance_proof() -> ContractStateProof {
     //     0x00da114221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3 \
     //     0x4ae51d08cd202d1472587dfe63dbf2d5ec767cbf4218b59b7ab71956780c6ee
 
-    ContractStateProof {
+    ContractStateProofImpl::new(
         class_commitment: 0x5eed4c30c17df1a41905c9824f2a296b6f77e91f0f017290752a60fbb8f9ff7,
         contract_proof: array![
             TrieNode::Binary(
@@ -153,7 +154,7 @@ pub(crate) fn balance_proof() -> ContractStateProof {
                 )
             )
         ],
-        contract_data: ContractData {
+        contract_data: ContractDataImpl::new(
             class_hash: 0x1cb96b938da26c060d5fd807eef8b580c49490926393a5eeb408a89f84b9b46,
             nonce: 0x0,
             contract_state_hash_version: 0,
@@ -285,8 +286,8 @@ pub(crate) fn balance_proof() -> ContractStateProof {
                     )
                 )
             ],
-        }
-    }
+        )
+    )
 }
 
 pub(crate) fn total_balance_proof() -> ContractStateProof {
@@ -297,7 +298,7 @@ pub(crate) fn total_balance_proof() -> ContractStateProof {
     //     0x00da114221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3 \
     //     0x37a9774624a0e3e0d8e6b72bd35514f62b3e8e70fbaff4ed27181de4ffd4604
 
-    ContractStateProof {
+    ContractStateProofImpl::new(
         class_commitment: 0x5eed4c30c17df1a41905c9824f2a296b6f77e91f0f017290752a60fbb8f9ff7,
         contract_proof: array![
             TrieNode::Binary(
@@ -440,7 +441,7 @@ pub(crate) fn total_balance_proof() -> ContractStateProof {
                 )
             )
         ],
-        contract_data: ContractData {
+        contract_data: ContractDataImpl::new(
             class_hash: 0x1cb96b938da26c060d5fd807eef8b580c49490926393a5eeb408a89f84b9b46,
             nonce: 0x0,
             contract_state_hash_version: 0,
@@ -567,6 +568,6 @@ pub(crate) fn total_balance_proof() -> ContractStateProof {
                     )
                 )
             ],
-        }
-    }
+        )
+    )
 }
