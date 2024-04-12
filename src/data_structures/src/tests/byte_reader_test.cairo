@@ -468,9 +468,9 @@ fn test_clone_byte_array_reader() {
     let mut rd1 = ba.reader();
     let mut rd2 = rd1.clone();
     let a = rd1.read_u128().unwrap();
-    assert!(rd1.index != rd2.index, "indicies equal");
+    assert!(rd1.len() != rd2.len(), "indices equal");
     let b = rd2.read_u128().unwrap();
-    assert!(rd1.index == rd2.index, "indicies not equal");
+    assert!(rd1.len() == rd2.len(), "indices not equal");
     assert!(a == b, "copy ByteArrayReader failed");
 }
 
@@ -481,9 +481,9 @@ fn test_clone_array_of_bytes_reader() {
     let mut rd1 = ba.reader();
     let mut rd2 = rd1.clone();
     let a = rd1.read_u128().unwrap();
-    assert!(rd1.index != rd2.index, "indicies equal");
+    assert!(rd1.len() != rd2.len(), "indices equal");
     let b = rd2.read_u128().unwrap();
-    assert!(rd1.index == rd2.index, "indicies not equal");
+    assert!(rd1.len() == rd2.len(), "indices not equal");
     assert!(a == b, "copy ByteArrayReader failed");
 }
 

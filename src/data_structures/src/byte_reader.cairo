@@ -3,8 +3,8 @@ use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 
 #[derive(Copy, Clone, Drop)]
 pub struct ByteReaderState<T> {
-    pub data: @T,
-    pub index: usize,
+    pub(crate) data: @T,
+    index: usize,
 }
 
 pub trait ByteReader<T> {
