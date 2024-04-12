@@ -1,5 +1,5 @@
 use alexandria_merkle_tree::storage_proof::{
-    ContractStateProof, ContractData, TrieNode, BinaryNode, EdgeNode, BinaryNodeImpl
+    ContractStateProof, ContractData, TrieNode, BinaryNode, EdgeNode, BinaryNodeImpl, EdgeNodeImpl
 };
 
 pub(crate) fn balance_proof() -> ContractStateProof {
@@ -146,11 +146,11 @@ pub(crate) fn balance_proof() -> ContractStateProof {
                 )
             ),
             TrieNode::Edge(
-                EdgeNode {
-                    path: 0x221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3,
-                    length: 229,
-                    child: 0x1fe7bef4bd2a37b56eab84508f217fd2a85694bbeb95e98049faa0de0a2011c,
-                }
+                EdgeNodeImpl::new(
+                    0x221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3,
+                    229,
+                    0x1fe7bef4bd2a37b56eab84508f217fd2a85694bbeb95e98049faa0de0a2011c,
+                )
             )
         ],
         contract_data: ContractData {
@@ -267,11 +267,9 @@ pub(crate) fn balance_proof() -> ContractStateProof {
                     )
                 ),
                 TrieNode::Edge(
-                    EdgeNode {
-                        path: 0x3,
-                        length: 2,
-                        child: 0x1c5f3e73c9e969b9c5a621955d4813de68ca42a777fd4915ac5e71a73219893,
-                    }
+                    EdgeNodeImpl::new(
+                        0x1c5f3e73c9e969b9c5a621955d4813de68ca42a777fd4915ac5e71a73219893, 0x3, 2,
+                    )
                 ),
                 TrieNode::Binary(
                     BinaryNodeImpl::new(
@@ -280,11 +278,11 @@ pub(crate) fn balance_proof() -> ContractStateProof {
                     )
                 ),
                 TrieNode::Edge(
-                    EdgeNode {
-                        path: 0x108cd202d1472587dfe63dbf2d5ec767cbf4218b59b7ab71956780c6ee,
-                        length: 230,
-                        child: 0x78bc9be7c9e60005,
-                    }
+                    EdgeNodeImpl::new(
+                        0x78bc9be7c9e60005,
+                        0x108cd202d1472587dfe63dbf2d5ec767cbf4218b59b7ab71956780c6ee,
+                        230,
+                    )
                 )
             ],
         }
