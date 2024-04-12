@@ -1,6 +1,6 @@
 use alexandria_math::BitShift;
 
-trait UIntBytes<T> {
+pub trait UIntBytes<T> {
     fn from_bytes(input: Span<u8>) -> Option<T>;
     fn to_bytes(self: T) -> Span<u8>;
     fn bytes_used(self: T) -> u8;

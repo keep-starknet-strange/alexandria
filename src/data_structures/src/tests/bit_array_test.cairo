@@ -1,7 +1,8 @@
-use alexandria_data_structures::bit_array::{BitArray, BitArrayTrait, shift_bit};
-use bytes_31::one_shift_left_bytes_felt252;
-use integer::BoundedInt;
-use integer::u512;
+use alexandria_data_structures::bit_array::{
+    BitArray, BitArrayTrait, one_shift_left_bytes_felt252, shift_bit
+};
+use core::integer::BoundedInt;
+use core::integer::u512;
 
 #[test]
 #[available_gas(30000000)]
@@ -17,11 +18,11 @@ fn test_append_bit() {
         .try_into()
         .unwrap();
     let expected: Array<bytes31> = array![val, val,];
-    assert!(ba.data == expected, "illegal array");
     assert(
-        ba.current == 0xa * one_shift_left_bytes_felt252(30) * shift_bit(4).into(),
+        ba.current() == 0xa * one_shift_left_bytes_felt252(30) * shift_bit(4).into(),
         'expected current 0xa'
     );
+    assert!(ba.data() == expected, "illegal array");
 }
 
 #[test]
@@ -294,6 +295,8 @@ fn test_serde_serialize() {
     let length = out.pop_front().unwrap();
     let length: usize = length.try_into().unwrap();
     assert!(length == ba.len(), "len not equal");
+    // We gotta skip one now
+    out.pop_front().unwrap();
     let data: felt252 = out.pop_front().unwrap();
     let expected: felt252 = BoundedInt::<u128>::max().into() - 1;
     let expected = expected * one_shift_left_bytes_felt252(15);
@@ -327,12 +330,5 @@ fn test_serde_ser_deser() {
 // helpers
 fn sample_bit_array() -> BitArray {
     let sample: felt252 = BoundedInt::<u128>::max().into() - 1;
-    let u256 { low, high: _ } = sample.into();
-    let ba = BitArray {
-        data: array![],
-        current: low.into() * one_shift_left_bytes_felt252(15),
-        read_pos: 0,
-        write_pos: 8 * 16,
-    };
-    ba
+    BitArrayTrait::new(array![], sample * one_shift_left_bytes_felt252(15), 0, 8 * 16)
 }

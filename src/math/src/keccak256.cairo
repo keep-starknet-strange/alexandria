@@ -1,3 +1,4 @@
+use core::integer::u128_byte_reverse;
 use keccak::cairo_keccak;
 
 #[generate_trait]
@@ -29,8 +30,8 @@ impl U64Impl of U64Trait {
 
 /// Reverse the endianness of an u256
 fn reverse_endianness(value: u256) -> u256 {
-    let new_low = integer::u128_byte_reverse(value.high);
-    let new_high = integer::u128_byte_reverse(value.low);
+    let new_low = u128_byte_reverse(value.high);
+    let new_high = u128_byte_reverse(value.low);
     u256 { low: new_low, high: new_high }
 }
 
@@ -43,7 +44,7 @@ fn reverse_endianness(value: u256) -> u256 {
 /// # Returns
 ///
 /// A `u256` value representing the Keccak hash of the input bytes array.
-fn keccak256(mut self: Span<u8>) -> u256 {
+pub fn keccak256(mut self: Span<u8>) -> u256 {
     // Converts byte array to little endian 8 byte words array.
     let mut words64: Array<u64> = Default::default();
     while self

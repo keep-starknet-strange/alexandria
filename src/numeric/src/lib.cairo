@@ -1,9 +1,9 @@
-mod cumprod;
-mod cumsum;
-mod diff;
-mod integers;
-mod interpolate;
+pub mod cumprod;
+pub mod cumsum;
+pub mod diff;
+pub mod integers;
+pub mod interpolate;
 
 #[cfg(test)]
 mod tests;
-mod trapezoidal_rule;
+pub mod trapezoidal_rule;

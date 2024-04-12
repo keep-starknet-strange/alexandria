@@ -1,27 +1,38 @@
-use core::zeroable::Zeroable;
+use core::num::traits::Zero;
 // ====================== INT 257 ======================
 
 // i257 represents a 129-bit integer.
 // The abs field holds the absolute value of the integer.
 // The is_negative field is true for negative integers, and false for non-negative integers.
 #[derive(Serde, Copy, Drop, Hash)]
-struct i257 {
+pub struct i257 {
     abs: u256,
     is_negative: bool,
 }
 
-#[inline(always)]
-fn i257_new(abs: u256, is_negative: bool) -> i257 {
-    if abs == 0 {
-        i257 { abs, is_negative: false }
-    } else {
-        i257 { abs, is_negative }
+#[generate_trait]
+pub impl I257Impl of I257Trait {
+    #[inline(always)]
+    fn new(abs: u256, is_negative: bool) -> i257 {
+        if abs == 0 {
+            i257 { abs, is_negative: false }
+        } else {
+            i257 { abs, is_negative }
+        }
+    }
+
+    fn is_negative(self: i257) -> bool {
+        self.is_negative
+    }
+
+    fn abs(self: i257) -> u256 {
+        self.abs
     }
 }
 
 impl I128Default of Default<i257> {
     fn default() -> i257 {
-        Zeroable::zero()
+        Zero::zero()
     }
 }
 
@@ -33,8 +44,8 @@ impl i257Add of Add<i257> {
         // If both integers have the same sign, 
         // the sum of their absolute values can be returned.
         if lhs.is_negative == rhs.is_negative {
-            let sum = integer::u256_checked_add(lhs.abs, rhs.abs).expect('i257_add Overflow');
-            i257_new(sum, lhs.is_negative)
+            let sum = lhs.abs + rhs.abs;
+            I257Impl::new(sum, lhs.is_negative)
         } else {
             // If the integers have different signs, 
             // the larger absolute value is subtracted from the smaller one.
@@ -44,7 +55,7 @@ impl i257Add of Add<i257> {
                 (rhs, lhs)
             };
             let difference = larger.abs - smaller.abs;
-            i257_new(difference, larger.is_negative)
+            I257Impl::new(difference, larger.is_negative)
         }
     }
 }
@@ -68,7 +79,7 @@ impl i257Sub of Sub<i257> {
         }
 
         // The subtraction of `lhs` to `rhs` is achieved by negating `rhs` sign and adding it to `lhs`.
-        let neg_b = i257_new(rhs.abs, !rhs.is_negative);
+        let neg_b = I257Impl::new(rhs.abs, !rhs.is_negative);
         lhs + neg_b
     }
 }
@@ -90,8 +101,8 @@ impl i257Mul of Mul<i257> {
         // The sign of the product is the XOR of the signs of the operands.
         let is_negative = lhs.is_negative ^ rhs.is_negative;
         // The product is the product of the absolute values of the operands.
-        let abs = integer::u256_checked_mul(lhs.abs, rhs.abs).expect('i257_mul Overflow');
-        i257_new(abs, is_negative)
+        let abs = lhs.abs * rhs.abs;
+        I257Impl::new(abs, is_negative)
     }
 }
 
@@ -119,13 +130,13 @@ fn i257_div(lhs: i257, rhs: i257) -> i257 {
 
     if !is_negative {
         // If the operands are positive, the quotient is simply their absolute value quotient.
-        return i257_new(lhs.abs / rhs.abs, is_negative);
+        return I257Impl::new(lhs.abs / rhs.abs, is_negative);
     }
 
     // If the operands have different signs, rounding is necessary.
     // First, check if the quotient is an integer.
     if lhs.abs % rhs.abs == 0 {
-        return i257_new(lhs.abs / rhs.abs, is_negative);
+        return I257Impl::new(lhs.abs / rhs.abs, is_negative);
     }
 
     // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
@@ -134,9 +145,9 @@ fn i257_div(lhs: i257, rhs: i257) -> i257 {
 
     // Check the last digit to determine rounding direction.
     if last_digit <= 5 {
-        i257_new(quotient / 10, is_negative)
+        I257Impl::new(quotient / 10, is_negative)
     } else {
-        i257_new((quotient / 10) + 1, is_negative)
+        I257Impl::new((quotient / 10) + 1, is_negative)
     }
 }
 
@@ -189,7 +200,7 @@ impl i257RemEq of RemEq<i257> {
 // * `rhs` - The i257 divisor.
 // # Returns
 // * `(i257, i257)` - A tuple containing the quotient and the remainder of dividing `lhs` by `rhs`.
-fn i257_div_rem(lhs: i257, rhs: i257) -> (i257, i257) {
+pub fn i257_div_rem(lhs: i257, rhs: i257) -> (i257, i257) {
     let quotient = i257_div(lhs, rhs);
     let remainder = i257_rem(lhs, rhs);
     (quotient, remainder)
@@ -255,15 +266,15 @@ impl i257Neg of Neg<i257> {
     }
 }
 
-impl i257Zeroable of Zeroable<i257> {
+impl i257Zeroable of Zero<i257> {
     fn zero() -> i257 {
-        i257_new(0, false)
+        I257Impl::new(0, false)
     }
-    fn is_zero(self: i257) -> bool {
-        assert(!self.is_negative, 'no negative zero');
-        self.abs == 0
+    fn is_zero(self: @i257) -> bool {
+        assert(!*self.is_negative, 'no negative zero');
+        *self.abs == 0
     }
-    fn is_non_zero(self: i257) -> bool {
+    fn is_non_zero(self: @i257) -> bool {
         !self.is_zero()
     }
 }
@@ -273,7 +284,7 @@ impl i257Zeroable of Zeroable<i257> {
 // * `x` - The i257 integer to check.
 // # Panics
 // Panics if `x` is zero and is negative
-fn i257_assert_no_negative_zero(x: i257) {
+pub fn i257_assert_no_negative_zero(x: i257) {
     if x.abs == 0 {
         assert(!x.is_negative, 'negative zero');
     }
@@ -304,7 +315,7 @@ fn i257_max(lhs: i257, rhs: i257) -> i257 {
 
 fn i257_neg(x: i257) -> i257 {
     // The negation of an integer is obtained by flipping its is_negative.
-    i257_new(x.abs, !x.is_negative)
+    I257Impl::new(x.abs, !x.is_negative)
 }
 
 // Computes the minimum between two i257 integers.

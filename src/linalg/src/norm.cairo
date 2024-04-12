@@ -1,6 +1,7 @@
 //! Norm of an T array.
 use alexandria_math::fast_root::fast_nr_optimize;
 use alexandria_math::pow;
+use core::num::traits::Zero;
 
 /// Compute the norm for an T array.
 /// # Arguments
@@ -9,7 +10,7 @@ use alexandria_math::pow;
 /// * `iter` - The number of iterations to run the algorithm
 /// # Returns
 /// * `u128` - The norm for the array.
-fn norm<T, +Into<T, u128>, +Zeroable<T>, +Copy<T>>(
+pub fn norm<T, +Into<T, u128>, +Zero<T>, +Copy<T>, +Drop<T>>(
     mut xs: Span<T>, ord: u128, iter: usize
 ) -> u128 {
     let mut norm: u128 = 0;

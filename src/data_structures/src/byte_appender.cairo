@@ -1,13 +1,13 @@
 use alexandria_encoding::reversible::reversing;
-use byte_array::ByteArrayTrait;
-use bytes_31::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
-use integer::u512;
+use core::byte_array::ByteArrayTrait;
+use core::integer::u512;
+use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 
 /// Generic support trait for appending signed and unsigned integers onto byte storage.
 /// There are two functions, one for each of big and little endian byte order due to
 /// performance considerations. The byte reversal could be used in the naïve case when
 /// only one implementation is worthwhile.
-trait ByteAppenderSupportTrait<T> {
+pub trait ByteAppenderSupportTrait<T> {
     /// Appends `bytes` data of size `count` ordered in big endian
     /// # Arguments
     /// * `bytes` - big endian ordered bytes to append
@@ -61,7 +61,7 @@ impl ByteAppenderSupportByteArrayImpl of ByteAppenderSupportTrait<ByteArray> {
     }
 }
 
-trait ByteAppender<T> {
+pub trait ByteAppender<T> {
     /// Appends an unsigned 16 bit integer encoded in big endian
     /// # Arguments
     /// * `word` - a 16 bit unsigned integer typed as u16

@@ -6,7 +6,7 @@ use super::{count_digits_of_base, pow};
 /// * `num` - The number to be evaluated.
 /// # Returns
 /// * `bool` - A boolean value indicating is Armstrong Number.
-fn is_armstrong_number(mut num: u128) -> bool {
+pub fn is_armstrong_number(mut num: u128) -> bool {
     let mut original_num = num;
     let digits = count_digits_of_base(num, 10);
     loop {

@@ -1,16 +1,15 @@
-use alexandria_data_structures::array_ext::{ArrayTraitExt, SpanTraitExt};
+use alexandria_data_structures::array_ext::SpanTraitExt;
 use alexandria_math::mod_arithmetics::{
     add_mod, sub_mod, mult_mod, div_mod, pow_mod, add_inverse_mod, equality_mod
 };
 use alexandria_math::sha512::{sha512, SHA512_LEN};
-use core::array::SpanTrait;
-use core::box::BoxTrait;
-use integer::u512;
+use core::integer::u512;
+use core::traits::TryInto;
 
 // As per RFC-8032: https://datatracker.ietf.org/doc/html/rfc8032#section-5.1.7
 // Variable namings in this function refer to naming in the RFC
 
-const p: u256 =
+pub const p: u256 =
     57896044618658097711785492504343953926634992332820282019728792003956564819949; // 2^255 - 19
 const d: u256 =
     37095705934669439343138083508754565189542113879843219016388785533085940283555; // d of Edwards255519, i.e. -121665/121666
@@ -18,23 +17,24 @@ const l: u256 =
     7237005577332262213973186563042994240857116359379907606001950938285454250989; // 2^252 + 27742317777372353535851937790883648493
 
 const TWO_POW_8: u256 = 0x100;
+const TWO_POW_8_NON_ZERO: NonZero<u256> = 0x100;
 
 
 #[derive(Drop, Copy)]
-struct Point {
+pub struct Point {
     x: u256,
     y: u256
 }
 
 #[derive(Drop, Copy)]
-struct ExtendedHomogeneousPoint {
+pub struct ExtendedHomogeneousPoint {
     X: u256,
     Y: u256,
     Z: u256,
     T: u256,
 }
 
-trait PointDoubling<T> {
+pub trait PointDoubling<T> {
     fn double(self: T) -> T;
 }
 
@@ -153,13 +153,10 @@ impl U256IntoSpanU8 of Into<u256, Span<u8>> {
     fn into(self: u256) -> Span<u8> {
         let mut ret = array![];
         let mut remaining_value = self;
-        let two_pow_8_non_zero = TWO_POW_8.try_into().unwrap();
 
         let mut i: u8 = 0;
         while (i < 32) {
-            let (temp_remaining, byte) = integer::U256DivRem::div_rem(
-                remaining_value, two_pow_8_non_zero
-            );
+            let (temp_remaining, byte) = DivRem::div_rem(remaining_value, TWO_POW_8_NON_ZERO);
             ret.append(byte.try_into().unwrap());
             remaining_value = temp_remaining;
             i += 1;
@@ -290,7 +287,7 @@ fn check_group_equation(
     lhs == rhs
 }
 
-fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> bool {
+pub fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> bool {
     if (signature.len() != 2) {
         return false;
     }
@@ -325,13 +322,13 @@ fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> bool
     let pub_key_bytes: Span<u8> = pub_key.into();
     let pub_key_bytes = pub_key_bytes.reverse().span();
 
-    let hashable = r_bytes.snapshot.concat(pub_key_bytes.snapshot).concat(msg.snapshot);
+    let hashable = r_bytes.concat(pub_key_bytes).span().concat(msg);
     // k = SHA512(dom2(F, C) -> empty string || R -> half of sig || A -> pub_key || PH(M) -> identity function for msg)
     let k: Array<u8> = sha512(hashable);
     let k_u512: u512 = k.span().into();
 
-    let l_non_zero: NonZero<u256> = integer::u256_try_as_non_zero(l).unwrap();
-    let (_, k_reduced) = integer::u512_safe_div_rem_by_u256(k_u512, l_non_zero);
+    let l_non_zero: NonZero<u256> = l.try_into().unwrap();
+    let (_, k_reduced) = core::integer::u512_safe_div_rem_by_u256(k_u512, l_non_zero);
 
     check_group_equation(s, R_extended, k_reduced, A_prime_ex)
 }

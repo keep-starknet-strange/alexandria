@@ -5,7 +5,7 @@
 /// * `arr` - Array to sort
 /// # Returns
 /// * `Array<T>` - Sorted array
-fn merge<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(mut arr: Array<T>) -> Array<T> {
+pub fn merge<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(mut arr: Array<T>) -> Array<T> {
     let len = arr.len();
     if len <= 1 {
         return arr;

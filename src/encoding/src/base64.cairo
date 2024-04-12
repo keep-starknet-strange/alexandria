@@ -1,20 +1,16 @@
 use alexandria_data_structures::array_ext::ArrayTraitExt;
 use alexandria_math::BitShift;
-use core::array::ArrayTrait;
-use core::option::OptionTrait;
-use integer::BoundedInt;
+use core::integer::BoundedInt;
 
-const U6_MAX: u128 = 0x3F;
-
-trait Encoder<T> {
+pub trait Encoder<T> {
     fn encode(data: T) -> Array<u8>;
 }
 
-trait Decoder<T> {
+pub trait Decoder<T> {
     fn decode(data: T) -> Array<u8>;
 }
 
-impl Base64Encoder of Encoder<Array<u8>> {
+pub impl Base64Encoder of Encoder<Array<u8>> {
     fn encode(data: Array<u8>) -> Array<u8> {
         let mut char_set = get_base64_char_set();
         char_set.append('+');
@@ -23,7 +19,7 @@ impl Base64Encoder of Encoder<Array<u8>> {
     }
 }
 
-impl Base64UrlEncoder of Encoder<Array<u8>> {
+pub impl Base64UrlEncoder of Encoder<Array<u8>> {
     fn encode(data: Array<u8>) -> Array<u8> {
         let mut char_set = get_base64_char_set();
         char_set.append('-');
@@ -32,7 +28,7 @@ impl Base64UrlEncoder of Encoder<Array<u8>> {
     }
 }
 
-impl Base64FeltEncoder of Encoder<felt252> {
+pub impl Base64FeltEncoder of Encoder<felt252> {
     fn encode(data: felt252) -> Array<u8> {
         let mut char_set = get_base64_char_set();
         char_set.append('+');
@@ -41,7 +37,7 @@ impl Base64FeltEncoder of Encoder<felt252> {
     }
 }
 
-impl Base64UrlFeltEncoder of Encoder<felt252> {
+pub impl Base64UrlFeltEncoder of Encoder<felt252> {
     fn encode(data: felt252) -> Array<u8> {
         let mut char_set = get_base64_char_set();
         char_set.append('-');
@@ -50,7 +46,7 @@ impl Base64UrlFeltEncoder of Encoder<felt252> {
     }
 }
 
-fn encode_u8_array(mut bytes: Array<u8>, base64_chars: Span<u8>) -> Array<u8> {
+pub fn encode_u8_array(mut bytes: Array<u8>, base64_chars: Span<u8>) -> Array<u8> {
     let mut result = array![];
     if bytes.len() == 0 {
         return result;
@@ -99,7 +95,7 @@ fn encode_u8_array(mut bytes: Array<u8>, base64_chars: Span<u8>) -> Array<u8> {
     result
 }
 
-fn encode_felt(self: felt252, base64_chars: Span<u8>) -> Array<u8> {
+pub fn encode_felt(self: felt252, base64_chars: Span<u8>) -> Array<u8> {
     let mut result = array![];
 
     let mut num: u256 = self.into();
@@ -139,13 +135,13 @@ fn encode_felt(self: felt252, base64_chars: Span<u8>) -> Array<u8> {
     result
 }
 
-impl Base64Decoder of Decoder<Array<u8>> {
+pub impl Base64Decoder of Decoder<Array<u8>> {
     fn decode(data: Array<u8>) -> Array<u8> {
         inner_decode(data)
     }
 }
 
-impl Base64UrlDecoder of Decoder<Array<u8>> {
+pub impl Base64UrlDecoder of Decoder<Array<u8>> {
     fn decode(mut data: Array<u8>) -> Array<u8> {
         inner_decode(data)
     }

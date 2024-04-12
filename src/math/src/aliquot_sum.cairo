@@ -5,7 +5,7 @@
 /// * `number` - The number to calculate the aliquot sum for.
 /// # Returns
 /// * `felt252` - The aliquot sum of the input number.
-fn aliquot_sum(number: u128) -> u128 {
+pub fn aliquot_sum(number: u128) -> u128 {
     if number == 0 {
         return 0;
     }

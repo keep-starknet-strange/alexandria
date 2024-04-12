@@ -1,5 +1,5 @@
 use alexandria_data_structures::byte_reader::ByteReader;
-use integer::u512;
+use core::integer::u512;
 
 #[test]
 #[available_gas(1000000)]
@@ -468,9 +468,9 @@ fn test_clone_byte_array_reader() {
     let mut rd1 = ba.reader();
     let mut rd2 = rd1.clone();
     let a = rd1.read_u128().unwrap();
-    assert!(rd1.index != rd2.index, "indicies equal");
+    assert!(rd1.len() != rd2.len(), "indices equal");
     let b = rd2.read_u128().unwrap();
-    assert!(rd1.index == rd2.index, "indicies not equal");
+    assert!(rd1.len() == rd2.len(), "indices not equal");
     assert!(a == b, "copy ByteArrayReader failed");
 }
 
@@ -481,9 +481,9 @@ fn test_clone_array_of_bytes_reader() {
     let mut rd1 = ba.reader();
     let mut rd2 = rd1.clone();
     let a = rd1.read_u128().unwrap();
-    assert!(rd1.index != rd2.index, "indicies equal");
+    assert!(rd1.len() != rd2.len(), "indices equal");
     let b = rd2.read_u128().unwrap();
-    assert!(rd1.index == rd2.index, "indicies not equal");
+    assert!(rd1.len() == rd2.len(), "indices not equal");
     assert!(a == b, "copy ByteArrayReader failed");
 }
 
@@ -500,39 +500,39 @@ fn test_byte_array_reader_equals_array_of_bytes_reader() {
 }
 
 // helpers
-fn test_byte_array_8() -> ByteArray {
+pub fn test_byte_array_8() -> ByteArray {
     let mut ba1 = Default::default();
     ba1.append_word(0x0102030405060708, 8);
     ba1
 }
 
-fn test_byte_array_16() -> ByteArray {
+pub fn test_byte_array_16() -> ByteArray {
     let mut ba1 = Default::default();
     ba1.append_word(0x0102030405060708090a0b0c0d0e0f10, 16);
     ba1
 }
 
-fn test_byte_array_32() -> ByteArray {
+pub fn test_byte_array_32() -> ByteArray {
     let mut ba1 = Default::default();
     ba1.append_word(0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f, 31);
     ba1.append_word(0x20, 1);
     ba1
 }
 
-fn test_byte_array_32_neg() -> ByteArray {
+pub fn test_byte_array_32_neg() -> ByteArray {
     let mut ba1 = Default::default();
     ba1.append_word(0xfffefdfcfbfaf9f8f7f6f5f4f3f2f1f0efeeedecebeae9e8e7e6e5e4e3e2e1, 31);
     ba1.append_word(0xe0, 1);
     ba1
 }
 
-fn test_byte_array_16_neg() -> ByteArray {
+pub fn test_byte_array_16_neg() -> ByteArray {
     let mut ba1 = Default::default();
     ba1.append_word(0xfffffffffffffffffffffffffffffffe, 16);
     ba1
 }
 
-fn test_byte_array_64() -> ByteArray {
+pub fn test_byte_array_64() -> ByteArray {
     let mut ba1 = Default::default();
     ba1.append_word(0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f, 31);
     ba1.append_word(0x202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e, 31);
@@ -540,15 +540,15 @@ fn test_byte_array_64() -> ByteArray {
     ba1
 }
 
-fn test_array_8() -> Array<u8> {
+pub fn test_array_8() -> Array<u8> {
     array![1, 2, 3, 4, 5, 6, 7, 8]
 }
 
-fn test_array_16() -> Array<u8> {
+pub fn test_array_16() -> Array<u8> {
     array![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 }
 
-fn test_array_32() -> Array<u8> {
+pub fn test_array_32() -> Array<u8> {
     array![
         1,
         2,
@@ -585,7 +585,7 @@ fn test_array_32() -> Array<u8> {
     ]
 }
 
-fn test_array_32_neg() -> Array<u8> {
+pub fn test_array_32_neg() -> Array<u8> {
     array![
         0xff,
         0xfe,
@@ -622,7 +622,7 @@ fn test_array_32_neg() -> Array<u8> {
     ]
 }
 
-fn test_array_16_neg() -> Array<u8> {
+pub fn test_array_16_neg() -> Array<u8> {
     array![
         0xff,
         0xff,
@@ -643,7 +643,7 @@ fn test_array_16_neg() -> Array<u8> {
     ]
 }
 
-fn test_array_64() -> Array<u8> {
+pub fn test_array_64() -> Array<u8> {
     array![
         1,
         2,

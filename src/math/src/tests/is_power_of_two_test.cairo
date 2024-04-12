@@ -27,5 +27,5 @@ fn is_power_of_two_test_4() {
 #[test]
 #[available_gas(200000)]
 fn is_power_of_two_test_5() {
-    assert!(is_power_of_two(0) == false, "invalid result");
+    assert_eq!(is_power_of_two(0), false, "invalid result");
 }

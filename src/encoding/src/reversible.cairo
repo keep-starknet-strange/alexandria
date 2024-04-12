@@ -1,10 +1,11 @@
-use integer::u512;
+use core::integer::u512;
+use core::num::traits::Zero;
 
 const SELECT_BYTE: u16 = 0x100;
 const SELECT_BIT: u8 = 0b10;
 
 /// Implies that there is an underlying byte order for type T that can be reversed
-trait ReversibleBytes<T> {
+pub trait ReversibleBytes<T> {
     /// Reverses the byte order or endianness of `self`.
     /// For example, the word `0x1122_u16` is reversed into `0x2211_u16`.
     /// # Returns
@@ -13,7 +14,7 @@ trait ReversibleBytes<T> {
 }
 
 /// Implies that there is an underlying bit order for type T that can be reversed
-trait ReversibleBits<T> {
+pub trait ReversibleBits<T> {
     /// Reverses the underlying ordering of the bit representation of `self`.
     /// For example, the word `0b10111010_u8` is reversed into `0b01011101`.
     /// # Returns
@@ -22,10 +23,10 @@ trait ReversibleBits<T> {
 }
 
 #[inline]
-fn reversing<
+pub fn reversing<
     T,
     +Copy<T>,
-    +Zeroable<T>,
+    +Zero<T>,
     +TryInto<T, NonZero<T>>,
     +DivRem<T>,
     +Drop<T>,
@@ -35,12 +36,12 @@ fn reversing<
 >(
     word: T, size: usize, step: T
 ) -> (T, T) {
-    let result = Zeroable::zero();
+    let result = Zero::zero();
     reversing_partial_result(word, result, size, step)
 }
 
 #[inline]
-fn reversing_partial_result<
+pub fn reversing_partial_result<
     T, +Copy<T>, +DivRem<T>, +TryInto<T, NonZero<T>>, +Drop<T>, +MulEq<T>, +Rem<T>, +AddEq<T>
 >(
     mut word: T, mut onto: T, size: usize, step: T

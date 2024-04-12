@@ -1,3 +1,4 @@
+use core::num::traits::Zero;
 //! Integrate using the composite trapezoidal rule
 
 /// Integrate y(x).
@@ -6,10 +7,9 @@
 /// * `ys` - The ordinate sequence of len L.
 /// # Returns
 /// * `T` - The approximate integral.
-fn trapezoidal_rule<
+pub fn trapezoidal_rule<
     T,
     +PartialOrd<T>,
-    +NumericLiteral<T>,
     +Add<T>,
     +AddEq<T>,
     +Sub<T>,
@@ -17,7 +17,7 @@ fn trapezoidal_rule<
     +Div<T>,
     +Copy<T>,
     +Drop<T>,
-    +Zeroable<T>,
+    +Zero<T>,
     +Into<u8, T>,
 >(
     xs: Span<T>, ys: Span<T>
@@ -28,7 +28,7 @@ fn trapezoidal_rule<
 
     // [Compute] Trapezoidal rule
     let mut index = 0;
-    let mut value = Zeroable::zero();
+    let mut value = Zero::zero();
     while index
         + 1 != xs
             .len() {

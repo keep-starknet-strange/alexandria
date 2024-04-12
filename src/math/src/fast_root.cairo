@@ -9,7 +9,7 @@ use super::pow;
 /// * ` iter ` - The number of iterations to run the algorithm
 /// # Returns
 /// * ` u128 ` - The root of x with rounding. (e.g., sqrt(5) = 2.24 -> 2, sqrt(7) = 2.65 -> 3)
-fn fast_nr_optimize(x: u128, r: u128, iter: usize) -> u128 {
+pub fn fast_nr_optimize(x: u128, r: u128, iter: usize) -> u128 {
     if x == 0 {
         return 0;
     }
@@ -36,7 +36,7 @@ fn fast_nr_optimize(x: u128, r: u128, iter: usize) -> u128 {
 /// * ` iter ` - The number of iterations to run the algorithm
 /// # Returns
 /// * ` u128 ` - The sqrt of x with rounding (e.g., sqrt(5) = 2.24 -> 2, sqrt(7) = 2.65 -> 3)
-fn fast_sqrt(x: u128, iter: usize) -> u128 {
+pub fn fast_sqrt(x: u128, iter: usize) -> u128 {
     fast_nr_optimize(x, 2, iter)
 }
 
@@ -46,7 +46,7 @@ fn fast_sqrt(x: u128, iter: usize) -> u128 {
 /// * ` iter ` - The number of iterations to run the algorithm
 /// # Returns
 /// * ` u128 ` - The cubic root of x with rounding (e.g., cbrt(4) = 1.59 -> 2, cbrt(5) = 1.71 -> 2)
-fn fast_cbrt(x: u128, iter: usize) -> u128 {
+pub fn fast_cbrt(x: u128, iter: usize) -> u128 {
     fast_nr_optimize(x, 3, iter)
 }
 
@@ -56,7 +56,7 @@ fn fast_cbrt(x: u128, iter: usize) -> u128 {
 /// * ` b ` - The divisor
 /// # Returns
 /// * ` u128 ` - The result of the division with rounding (e.g., 5/3 = 2, 7/3 = 2, 8/3 = 3)
-fn round_div(a: u128, b: u128) -> u128 {
+pub fn round_div(a: u128, b: u128) -> u128 {
     let remained = a % b;
     if b - remained <= remained {
         return a / b + 1;

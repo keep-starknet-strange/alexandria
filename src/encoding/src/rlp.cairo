@@ -3,7 +3,7 @@ use alexandria_numeric::integers::UIntBytes;
 
 // Possible RLP errors
 #[derive(Drop, Copy, PartialEq)]
-enum RLPError {
+pub enum RLPError {
     EmptyInput,
     InputTooShort,
     PayloadTooLong
@@ -11,19 +11,19 @@ enum RLPError {
 
 // Possible RLP types
 #[derive(Drop, PartialEq)]
-enum RLPType {
+pub enum RLPType {
     String,
     List
 }
 
 #[derive(Drop, Copy, PartialEq)]
-enum RLPItem {
+pub enum RLPItem {
     String: Span<u8>,
     List: Span<RLPItem>
 }
 
 #[generate_trait]
-impl RLPImpl of RLPTrait {
+pub impl RLPImpl of RLPTrait {
     /// Returns RLPType from the leading byte with
     /// its offset in the array as well as its size.
     ///

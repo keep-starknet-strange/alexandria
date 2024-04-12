@@ -1,5 +1,5 @@
 //! # Extended Euclidean Algorithm.
-use integer::{u128_overflowing_sub, u128_overflowing_mul};
+use core::integer::{u128_overflowing_sub, u128_overflowing_mul, u128_wrapping_sub};
 
 /// Extended Euclidean Algorithm.
 /// # Arguments
@@ -9,7 +9,7 @@ use integer::{u128_overflowing_sub, u128_overflowing_mul};
 /// * `gcd` - Greatest common divisor.
 /// * `x` - First Bezout coefficient.
 /// * `y` - Second Bezout coefficient.
-fn extended_euclidean_algorithm(a: u128, b: u128) -> (u128, u128, u128) {
+pub fn extended_euclidean_algorithm(a: u128, b: u128) -> (u128, u128, u128) {
     // Initialize variables.
     let mut old_r = a;
     let mut rem = b;
@@ -36,9 +36,3 @@ fn update_step(ref a: u128, ref old_a: u128, quotient: u128) {
     old_a = temp;
 }
 
-fn u128_wrapping_sub(a: u128, b: u128) -> u128 implicits(RangeCheck) nopanic {
-    match u128_overflowing_sub(a, b) {
-        Result::Ok(x) => x,
-        Result::Err(x) => x,
-    }
-}

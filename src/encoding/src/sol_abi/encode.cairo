@@ -1,5 +1,5 @@
 use alexandria_bytes::{Bytes, BytesTrait};
-use alexandria_math::U256BitShift;
+use core::traits::TryInto;
 use starknet::{ContractAddress, EthAddress};
 
 /// Encode selector trait meant to provide an interface similar to Solidity's
@@ -175,13 +175,13 @@ pub impl SolAbiEncodeBytes of SolAbiEncodeTrait<Bytes> {
 pub impl SolAbiEncodeByteArray of SolAbiEncodeTrait<ByteArray> {
     fn encode(mut self: Bytes, x: ByteArray) -> Bytes {
         let x_len: usize = x.len();
-        self.concat(@BytesTrait::from_byte_array(x));
+        self.concat(@x.into());
         self.concat(@BytesTrait::zero(32 - (x_len % 32)));
         self
     }
 
     fn encode_packed(mut self: Bytes, x: ByteArray) -> Bytes {
-        self.concat(@BytesTrait::from_byte_array(x));
+        self.concat(@x.into());
         self
     }
 }
@@ -206,13 +206,15 @@ pub impl SolAbiEncodeStarknetAddress of SolAbiEncodeTrait<ContractAddress> {
 
 pub impl SolAbiEncodeEthAddress of SolAbiEncodeTrait<EthAddress> {
     fn encode(mut self: Bytes, x: EthAddress) -> Bytes {
-        self.append_u256(x.address.into());
+        let x: felt252 = x.into();
+        self.append_u256(x.into());
         self
     }
 
     fn encode_packed(mut self: Bytes, x: EthAddress) -> Bytes {
-        let mut address256: u256 = x.address.into();
-        address256 = U256BitShift::shl(address256, 96); // 12 * 8
+        let x: felt252 = x.into();
+        let mut address256: u256 = x.into();
+        address256 = alexandria_math::U256BitShift::shl(address256, 96); // 12 * 8
         self.concat(@BytesTrait::new(20, array![address256.high, address256.low]));
         self
     }

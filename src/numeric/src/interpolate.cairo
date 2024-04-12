@@ -1,8 +1,9 @@
 use alexandria_searching::binary_search::binary_search_closest as search;
+use core::num::traits::Zero;
 //! One-dimensional linear interpolation for monotonically increasing sample points.
 
 #[derive(Serde, Copy, Drop, PartialEq)]
-enum Interpolation {
+pub enum Interpolation {
     Linear,
     Nearest,
     ConstantLeft,
@@ -10,7 +11,7 @@ enum Interpolation {
 }
 
 #[derive(Serde, Copy, Drop, PartialEq)]
-enum Extrapolation {
+pub enum Extrapolation {
     Null,
     Constant,
 }
@@ -24,17 +25,8 @@ enum Extrapolation {
 /// * `extrapolation` - The extrapolation method to use.
 /// # Returns
 /// * `T` - The interpolated y at x.
-fn interpolate<
-    T,
-    +PartialOrd<T>,
-    +NumericLiteral<T>,
-    +Add<T>,
-    +Sub<T>,
-    +Mul<T>,
-    +Div<T>,
-    +Zeroable<T>,
-    +Copy<T>,
-    +Drop<T>,
+pub fn interpolate<
+    T, +PartialOrd<T>, +Add<T>, +Sub<T>, +Mul<T>, +Div<T>, +Zero<T>, +Copy<T>, +Drop<T>,
 >(
     x: T, xs: Span<T>, ys: Span<T>, interpolation: Interpolation, extrapolation: Extrapolation
 ) -> T {
@@ -45,13 +37,13 @@ fn interpolate<
     // [Check] Extrapolation
     if x <= *xs[0] {
         return match extrapolation {
-            Extrapolation::Null => Zeroable::zero(),
+            Extrapolation::Null => Zero::zero(),
             Extrapolation::Constant => *ys[0],
         };
     }
     if x >= *xs[xs.len() - 1] {
         return match extrapolation {
-            Extrapolation::Null => Zeroable::zero(),
+            Extrapolation::Null => Zero::zero(),
             Extrapolation::Constant => *ys[xs.len() - 1],
         };
     }
@@ -97,17 +89,8 @@ fn interpolate<
     }
 }
 
-fn interpolate_fast<
-    T,
-    impl TPartialOrd: PartialOrd<T>,
-    impl TNumericLiteral: NumericLiteral<T>,
-    impl TAdd: Add<T>,
-    impl TSub: Sub<T>,
-    impl TMul: Mul<T>,
-    impl TDiv: Div<T>,
-    impl TZeroable: Zeroable<T>,
-    impl TCopy: Copy<T>,
-    impl TDrop: Drop<T>,
+pub fn interpolate_fast<
+    T, +PartialOrd<T>, +Add<T>, +Sub<T>, +Mul<T>, +Div<T>, +Zero<T>, +Copy<T>, +Drop<T>,
 >(
     x: T, xs: Span<T>, ys: Span<T>, interpolation: Interpolation, extrapolation: Extrapolation
 ) -> T {
@@ -118,14 +101,14 @@ fn interpolate_fast<
     // [Check] Extrapolation
     if x <= *xs[0] {
         let y = match extrapolation {
-            Extrapolation::Null => Zeroable::zero(),
+            Extrapolation::Null => Zero::zero(),
             Extrapolation::Constant => *ys[0],
         };
         return y;
     }
     if x >= *xs[xs.len() - 1] {
         let y = match extrapolation {
-            Extrapolation::Null => Zeroable::zero(),
+            Extrapolation::Null => Zero::zero(),
             Extrapolation::Constant => *ys[xs.len() - 1],
         };
         return y;

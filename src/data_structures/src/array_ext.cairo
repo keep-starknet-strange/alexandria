@@ -1,4 +1,4 @@
-trait ArrayTraitExt<T> {
+pub trait ArrayTraitExt<T> {
     fn append_all(ref self: Array<T>, ref arr: Array<T>);
     fn pop_front_n(ref self: Array<T>, n: usize);
     fn reverse(self: @Array<T>) -> Array<T>;
@@ -15,12 +15,12 @@ trait ArrayTraitExt<T> {
     fn unique<+PartialEq<T>>(self: @Array<T>) -> Array<T>;
 }
 
-trait SpanTraitExt<T> {
+pub trait SpanTraitExt<T> {
     fn pop_front_n(ref self: Span<T>, n: usize);
     fn pop_back_n(ref self: Span<T>, n: usize);
     fn reverse(self: Span<T>) -> Array<T>;
     fn contains<+PartialEq<T>>(self: Span<T>, item: T) -> bool;
-    fn concat(self: Span<T>, a: Span<T>) -> Span<T>;
+    fn concat(self: Span<T>, a: Span<T>) -> Array<T>;
     fn index_of<+PartialEq<T>>(self: Span<T>, item: T) -> Option<usize>;
     fn occurrences_of<+PartialEq<T>>(self: Span<T>, item: T) -> usize;
     fn min<+PartialEq<T>, +PartialOrd<T>>(self: Span<T>) -> Option<T>;
@@ -159,7 +159,7 @@ impl SpanImpl<T, +Copy<T>, +Drop<T>> of SpanTraitExt<T> {
         }
     }
 
-    fn concat(self: Span<T>, a: Span<T>) -> Span<T> {
+    fn concat(self: Span<T>, a: Span<T>) -> Array<T> {
         let mut ret = array![];
         let mut i = 0;
 
@@ -172,7 +172,7 @@ impl SpanImpl<T, +Copy<T>, +Drop<T>> of SpanTraitExt<T> {
             ret.append(*a[i]);
             i += 1;
         };
-        ret.span()
+        ret
     }
 
     fn index_of<+PartialEq<T>>(mut self: Span<T>, item: T) -> Option<usize> {

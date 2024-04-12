@@ -1,3 +1,4 @@
+use core::num::traits::Zero;
 //! The discrete difference of the elements.
 
 /// Compute the discrete difference of a sorted sequence.
@@ -5,7 +6,7 @@
 /// * `sequence` - The sorted sequence to operate.
 /// # Returns
 /// * `Array<T>` - The discrete difference of sorted sequence.
-fn diff<T, +PartialOrd<T>, +Sub<T>, +Copy<T>, +Drop<T>, +Zeroable<T>,>(
+pub fn diff<T, +PartialOrd<T>, +Sub<T>, +Copy<T>, +Drop<T>, +Zero<T>,>(
     mut sequence: Span<T>
 ) -> Array<T> {
     // [Check] Inputs
@@ -13,7 +14,7 @@ fn diff<T, +PartialOrd<T>, +Sub<T>, +Copy<T>, +Drop<T>, +Zeroable<T>,>(
 
     // [Compute] Interpolation
     let mut prev_value = *sequence.pop_front().unwrap();
-    let mut array = array![Zeroable::zero()];
+    let mut array = array![Zero::zero()];
     while let Option::Some(current_value) = sequence
         .pop_front() {
             assert(*current_value >= prev_value, 'Sequence must be sorted');

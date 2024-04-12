@@ -1,27 +1,44 @@
-use nullable::FromNullableResult;
+use core::nullable::{FromNullableResult, match_nullable};
 //! Dijkstra algorithm using priority queue
 
 #[derive(Copy, Drop)]
-struct Node {
+pub struct Node {
     source: u32,
     dest: u32,
     weight: u128
 }
 
+#[generate_trait]
+pub impl NodeGetters of NodeGettersTrait {
+    fn weight(self: @Node) -> @u128 {
+        self.weight
+    }
+
+    fn dest(self: @Node) -> @u32 {
+        self.dest
+    }
+
+    fn source(self: @Node) -> @u32 {
+        self.source
+    }
+}
+
 /// Graph representation.
-struct Graph<T> {
-    nodes: Array<Node>,
+pub struct Graph<T> {
+    pub(crate) nodes: Array<Node>,
     adj_nodes: Felt252Dict<T>,
 }
 
 /// Graph trait.
-trait GraphTrait {
+pub trait GraphTrait {
     /// Create a new graph instance.
     fn new() -> Graph<Nullable<Span<Node>>>;
     /// add an edge to graph
     fn add_edge(ref self: Graph<Nullable<Span<Node>>>, source: u32, dest: u32, weight: u128);
     /// return shortest path from s
     fn shortest_path(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u128>;
+    /// return shortest path from s
+    fn adj_nodes(ref self: Graph<Nullable<Span<Node>>>, source: felt252) -> Nullable<Span<Node>>;
 }
 
 impl DestructGraph<T, +Drop<T>, +Felt252DictValue<T>> of Destruct<Graph<T>> {
@@ -60,15 +77,20 @@ impl GraphImpl of GraphTrait {
         // add node
         self.nodes.append(node);
         // add adj node
-        self.adj_nodes.insert(source.into(), nullable_from_box(BoxTrait::new(nodes.span())));
+        self.adj_nodes.insert(source.into(), NullableTrait::new(nodes.span()));
     }
 
     fn shortest_path(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u128> {
         dijkstra(ref self, source)
     }
+
+
+    fn adj_nodes(ref self: Graph<Nullable<Span<Node>>>, source: felt252) -> Nullable<Span<Node>> {
+        self.adj_nodes.get(source)
+    }
 }
 
-fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u128> {
+pub fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u128> {
     let mut priority_queue = array![];
     let mut visited_node = array![];
     let mut dist: Felt252Dict<u128> = Default::default();

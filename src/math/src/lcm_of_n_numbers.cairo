@@ -2,7 +2,7 @@
 use alexandria_math::gcd_of_n_numbers::gcd_two_numbers;
 
 #[derive(Drop, Copy, PartialEq)]
-enum LCMError {
+pub enum LCMError {
     EmptyInput,
 }
 
@@ -11,7 +11,7 @@ enum LCMError {
 /// * `n` - The array of numbers to calculate the lcm for
 /// # Returns
 /// * `Result<T, LCMError>` - The lcm of input numbers
-fn lcm<T, +Into<T, u128>, +Into<u128, T>, +Mul<T>, +Div<T>, +Copy<T>, +Drop<T>>(
+pub fn lcm<T, +Into<T, u128>, +Into<u128, T>, +Mul<T>, +Div<T>, +Copy<T>, +Drop<T>>(
     mut n: Span<T>
 ) -> Result<T, LCMError> {
     // Return empty input error

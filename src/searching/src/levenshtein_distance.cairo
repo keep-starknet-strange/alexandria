@@ -1,12 +1,12 @@
 // The Levenshtein Distance
-use dict::Felt252DictTrait;
+use core::dict::Felt252DictTrait;
 
 /// Compute the edit distance between two byte arrays
 /// * `arr1` - The first byte array.
 /// * `arr2` - The second byte array.
 /// # Returns
 /// * `usize` - The edit distance between the two byte arrays.
-fn levenshtein_distance(arr1: @ByteArray, arr2: @ByteArray) -> usize {
+pub fn levenshtein_distance(arr1: @ByteArray, arr2: @ByteArray) -> usize {
     // Get the lengths of both arrays
     let arr1_len = arr1.len();
     let arr2_len = arr2.len();
@@ -17,7 +17,7 @@ fn levenshtein_distance(arr1: @ByteArray, arr2: @ByteArray) -> usize {
     }
 
     // Initialize a dictionary to store previous distances, with keys and values as indices
-    let mut prev_distances = felt252_dict_new::<usize>();
+    let mut prev_distances = Default::default();
     let mut index: usize = 0;
     // Break the loop when index equals the length of the first array plus 1
     while index != arr1_len + 1 {

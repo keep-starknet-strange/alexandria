@@ -1,11 +1,12 @@
 use alexandria_data_structures::array_ext::ArrayTraitExt;
+use core::num::traits::Zero;
 
-trait ToAsciiTrait<T, U> {
+pub trait ToAsciiTrait<T, U> {
     fn to_ascii(self: T) -> U;
 }
 
 // converts integers into an array of its individual ascii values
-trait ToAsciiArrayTrait<T> {
+pub trait ToAsciiArrayTrait<T> {
     fn to_ascii_array(self: T) -> Array<felt252>;
     fn to_inverse_ascii_array(self: T) -> Array<felt252>;
 }
@@ -19,7 +20,7 @@ impl ToAsciiArrayTraitImpl<
     +Into<T, felt252>,
     +TryInto<felt252, T>,
     +TryInto<T, NonZero<T>>,
-    +Zeroable<T>,
+    +Zero<T>,
     +Drop<T>,
     +Copy<T>,
 > of ToAsciiArrayTrait<T> {
@@ -59,7 +60,7 @@ impl SmallIntegerToAsciiTraitImpl<
     +Into<T, felt252>,
     +TryInto<felt252, T>,
     +TryInto<T, NonZero<T>>,
-    +Zeroable<T>,
+    +Zero<T>,
     +Drop<T>,
     +Copy<T>,
 > of ToAsciiTrait<T, felt252> {
@@ -91,7 +92,7 @@ impl BigIntegerToAsciiTraitImpl<
     +Into<T, felt252>,
     +TryInto<felt252, T>,
     +TryInto<T, NonZero<T>>,
-    +Zeroable<T>,
+    +Zero<T>,
     +Drop<T>,
     +Copy<T>,
 > of ToAsciiTrait<T, Array<felt252>> {
@@ -174,33 +175,26 @@ impl U256ToAsciiTraitImpl of ToAsciiTrait<u256, Array<felt252>> {
         let mut inverse_ascii_arr = self.to_inverse_ascii_array().span();
         let mut index = 0;
         let mut ascii: felt252 = 0;
-        loop {
-            match inverse_ascii_arr.pop_back() {
-                Option::Some(val) => {
-                    let new_ascii = ascii * 256 + *val;
-                    // if index is currently at 30 it means we have processed the number for index 31
-                    // this means we have reached the max size of felt252 at 31 characters
-                    // so we append the current ascii and reset the ascii to 0
-                    // do the same at index 61 as well because max u256 is 78 characters
-                    ascii =
-                        if index == 30 || index == 61 {
-                            data.append(new_ascii);
-                            0
-                        } else {
-                            new_ascii
-                        };
-                },
-                Option::None(_) => {
-                    // if ascii is 0 it means we have already appended the first ascii
-                    // and there's no need to append it again
-                    if ascii.is_non_zero() {
-                        data.append(ascii);
-                    }
-                    break;
-                },
+        while let Option::Some(val) = inverse_ascii_arr
+            .pop_back() {
+                let new_ascii = ascii * 256 + *val;
+                // if index is currently at 30 it means we have processed the number for index 31
+                // this means we have reached the max size of felt252 at 31 characters
+                // so we append the current ascii and reset the ascii to 0
+                // do the same at index 61 as well because max u256 is 78 characters
+                ascii =
+                    if index == 30 || index == 61 {
+                        data.append(new_ascii);
+                        0
+                    } else {
+                        new_ascii
+                    };
+                index += 1;
             };
-            index += 1;
-        };
+
+        if ascii.is_non_zero() {
+            data.append(ascii);
+        }
         data
     }
 }

@@ -1,5 +1,5 @@
 use alexandria_math::{count_digits_of_base, pow, BitShift, BitRotate, WrappingMath};
-use integer::BoundedInt;
+use core::integer::BoundedInt;
 
 // Test power function
 #[test]

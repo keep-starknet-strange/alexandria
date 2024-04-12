@@ -1,39 +1,74 @@
-use hash::HashStateTrait;
-use pedersen::PedersenTrait;
-use poseidon::PoseidonTrait;
+use core::hash::HashStateTrait;
+use core::pedersen::PedersenTrait;
+use core::poseidon::PoseidonTrait;
 
 #[derive(Drop)]
-struct BinaryNode {
+pub struct BinaryNode {
     left: felt252,
     right: felt252,
 }
 
+#[generate_trait]
+pub impl BinaryNodeImpl of BinaryNodeTrait {
+    fn new(left: felt252, right: felt252) -> BinaryNode {
+        BinaryNode { left, right }
+    }
+}
+
 #[derive(Drop, Copy)]
-struct EdgeNode {
-    child: felt252,
+pub struct EdgeNode {
     path: felt252,
+    child: felt252,
     length: u8,
 }
 
+#[generate_trait]
+pub impl EdgeNodeImpl of EdgeNodeTrait {
+    fn new(path: felt252, child: felt252, length: u8) -> EdgeNode {
+        EdgeNode { path, child, length }
+    }
+}
+
 #[derive(Drop)]
-enum TrieNode {
+pub enum TrieNode {
     Binary: BinaryNode,
     Edge: EdgeNode,
 }
 
 #[derive(Destruct)]
-struct ContractData {
+pub struct ContractData {
     class_hash: felt252,
     nonce: felt252,
     contract_state_hash_version: felt252,
     storage_proof: Array<TrieNode>
 }
 
+#[generate_trait]
+pub impl ContractDataImpl of ContractDataTrait {
+    fn new(
+        class_hash: felt252,
+        nonce: felt252,
+        contract_state_hash_version: felt252,
+        storage_proof: Array<TrieNode>
+    ) -> ContractData {
+        ContractData { class_hash, nonce, contract_state_hash_version, storage_proof }
+    }
+}
+
 #[derive(Destruct)]
-struct ContractStateProof {
+pub struct ContractStateProof {
     class_commitment: felt252,
     contract_proof: Array<TrieNode>,
     contract_data: ContractData
+}
+
+#[generate_trait]
+pub impl ContractStateProofImpl of ContractStateProofTrait {
+    fn new(
+        class_commitment: felt252, contract_proof: Array<TrieNode>, contract_data: ContractData
+    ) -> ContractStateProof {
+        ContractStateProof { class_commitment, contract_proof, contract_data, }
+    }
 }
 
 /// Verify Starknet storage proof. For reference see:
@@ -47,7 +82,7 @@ struct ContractStateProof {
 /// * `proof` - `ContractStateProof` representing storage proof
 /// # Returns
 /// * `felt252` - `value` at `storage_address` if verified, panic otherwise.
-fn verify(
+pub fn verify(
     expected_state_commitment: felt252,
     contract_address: felt252,
     storage_address: felt252,
@@ -86,7 +121,7 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
     let expected_path_u256: u256 = expected_path.into();
 
     let leaf = *match nodes.pop_back().unwrap() {
-        TrieNode::Binary(_) => panic_with_felt252('invalid leaf type'),
+        TrieNode::Binary(_) => panic!("expected Edge got Leaf"),
         TrieNode::Edge(edge) => edge
     };
 

@@ -5,7 +5,7 @@
 /// * `array` - Array to sort
 /// # Returns
 /// * `Array<usize>` - Sorted array
-fn bubble_sort_elements<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>>(
+pub fn bubble_sort_elements<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>>(
     mut array: Array<T>, asc: bool
 ) -> Array<T> {
     if array.len() <= 1 {

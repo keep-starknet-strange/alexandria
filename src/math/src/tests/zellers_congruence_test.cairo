@@ -9,7 +9,7 @@ fn test_case(day: u128, month: u128, year: u128, expected: u128, error_expected:
     } // Otherwise, unwrap the day and check it
     else {
         let day = day.unwrap();
-        assert!(day == expected, "day is invalid");
+        assert_eq!(day, expected, "day is invalid");
     }
 }
 

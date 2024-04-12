@@ -1,35 +1,36 @@
-use integer::{u64_wrapping_add, bitwise, BoundedInt};
+use core::integer::{u64_wrapping_add, BoundedInt};
+use core::traits::{BitAnd, BitXor, BitOr};
 use super::BitShift;
 
 // Variable naming is compliant to RFC-6234 (https://datatracker.ietf.org/doc/html/rfc6234)
 
-const SHA512_LEN: usize = 64;
+pub const SHA512_LEN: usize = 64;
 
-const U64_BIT_NUM: u64 = 64;
+pub const U64_BIT_NUM: u64 = 64;
 
 #[derive(Drop, Copy)]
-struct Word64 {
-    data: u64,
+pub struct Word64 {
+    pub data: u64,
 }
 
 impl WordBitAnd of BitAnd<Word64> {
     fn bitand(lhs: Word64, rhs: Word64) -> Word64 {
-        let (v, _, _) = bitwise(lhs.data.into(), rhs.data.into());
-        Word64 { data: v.try_into().unwrap() }
+        let data = BitAnd::bitand(lhs.data, rhs.data);
+        Word64 { data }
     }
 }
 
 impl WordBitXor of BitXor<Word64> {
     fn bitxor(lhs: Word64, rhs: Word64) -> Word64 {
-        let (_, v, _) = bitwise(lhs.data.into(), rhs.data.into());
-        Word64 { data: v.try_into().unwrap() }
+        let data = BitXor::bitxor(lhs.data, rhs.data);
+        Word64 { data }
     }
 }
 
 impl WordBitOr of BitOr<Word64> {
     fn bitor(lhs: Word64, rhs: Word64) -> Word64 {
-        let (_, _, v) = bitwise(lhs.data.into(), rhs.data.into());
-        Word64 { data: v.try_into().unwrap() }
+        let data = BitOr::bitor(lhs.data, rhs.data);
+        Word64 { data }
     }
 }
 
@@ -45,33 +46,31 @@ impl WordAdd of Add<Word64> {
     }
 }
 
-trait WordOperations<T> {
+pub trait WordOperations<T> {
     fn shr(self: T, n: u64) -> T;
     fn shl(self: T, n: u64) -> T;
     fn rotr(self: T, n: u64) -> T;
     fn rotl(self: T, n: u64) -> T;
 }
 
-impl Word64WordOperations of WordOperations<Word64> {
+pub impl Word64WordOperations of WordOperations<Word64> {
     fn shr(self: Word64, n: u64) -> Word64 {
-        Word64 { data: math_shr_u64(self.data.into(), n.into()) }
+        Word64 { data: math_shr_u64(self.data, n) }
     }
     fn shl(self: Word64, n: u64) -> Word64 {
-        Word64 { data: math_shl_u64(self.data.into(), n.into()) }
+        Word64 { data: math_shl_u64(self.data, n) }
     }
     fn rotr(self: Word64, n: u64) -> Word64 {
-        let (_, _, or) = bitwise(
-            math_shr_u64(self.data.into(), n.into()).into(),
-            math_shl_u64(self.data.into(), (U64_BIT_NUM - n.into())).into()
+        let data = BitOr::bitor(
+            math_shr_u64(self.data, n), math_shl_u64(self.data, (U64_BIT_NUM - n))
         );
-        Word64 { data: or.try_into().unwrap() }
+        Word64 { data }
     }
     fn rotl(self: Word64, n: u64) -> Word64 {
-        let (_, _, or) = bitwise(
-            math_shl_u64(self.data.into(), n.into()).into(),
-            math_shr_u64(self.data.into(), (U64_BIT_NUM - n.into())).into()
+        let data = BitOr::bitor(
+            math_shl_u64(self.data, n), math_shr_u64(self.data, (U64_BIT_NUM - n))
         );
-        Word64 { data: or.try_into().unwrap() }
+        Word64 { data }
     }
 }
 
@@ -100,11 +99,9 @@ fn ssig1(x: Word64) -> Word64 {
     x.rotr(19) ^ x.rotr(61) ^ x.shr(6)
 }
 
-fn fpow(mut base: u128, mut power: u128) -> u128 {
+pub fn fpow(mut base: u128, mut power: u128) -> u128 {
     // Return invalid input error
-    if base == 0 {
-        panic_with_felt252('II')
-    }
+    assert!(base != 0, "fpow: invalid input");
 
     let mut base_u128: u256 = base.into();
     let mut result: u256 = 1;
@@ -269,7 +266,7 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
     array![h_0, h_1, h_2, h_3, h_4, h_5, h_6, h_7]
 }
 
-fn sha512(mut data: Array<u8>) -> Array<u8> {
+pub fn sha512(mut data: Array<u8>) -> Array<u8> {
     let bit_numbers: u128 = (data.len() * 8).into();
     let bit_numbers = bit_numbers & BoundedInt::<u64>::max().into();
 

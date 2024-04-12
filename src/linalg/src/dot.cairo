@@ -1,3 +1,4 @@
+use core::num::traits::Zero;
 //! Dot product of two arrays
 
 /// Compute the dot product for 2 given arrays.
@@ -6,14 +7,14 @@
 /// * `ys` - The second sequence of len L.
 /// # Returns
 /// * `sum` - The dot product.
-fn dot<T, +Mul<T>, +AddEq<T>, +Zeroable<T>, +Copy<T>, +Drop<T>,>(
+pub fn dot<T, +Mul<T>, +AddEq<T>, +Zero<T>, +Copy<T>, +Drop<T>,>(
     mut xs: Span<T>, mut ys: Span<T>
 ) -> T {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');
 
     // [Compute] Dot product in a loop
-    let mut sum = Zeroable::zero();
+    let mut sum = Zero::zero();
     while !xs
         .is_empty() {
             let x = *xs.pop_front().unwrap();

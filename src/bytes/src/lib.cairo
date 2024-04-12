@@ -1,7 +1,7 @@
-mod bytes;
+pub mod bytes;
 
 #[cfg(test)]
 mod tests;
-mod utils;
+pub mod utils;
 
-use bytes::{Bytes, BytesTrait};
+pub use bytes::{Bytes, BytesTrait, BytesIndex};

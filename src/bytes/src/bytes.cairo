@@ -3,6 +3,7 @@ use alexandria_bytes::utils::{
 };
 use alexandria_math::sha256::sha256;
 use alexandria_math::{U128BitShift, U256BitShift};
+use core::byte_array::ByteArrayTrait;
 use starknet::ContractAddress;
 
 /// Bytes is a dynamic array of u128, where each element contains 16 bytes.
@@ -31,26 +32,31 @@ const BYTES_PER_ELEMENT: usize = 16;
 ///  - size: the number of bytes in the Bytes
 ///  - data: the data of the Bytes
 #[derive(Drop, Clone, PartialEq, Serde)]
-struct Bytes {
+pub struct Bytes {
     size: usize,
     data: Array<u128>
 }
 
-trait BytesTrait {
+pub impl BytesIndex of IndexView<Bytes, usize, @u128> {
+    fn index(self: @Bytes, index: usize) -> @u128 {
+        self.data[index]
+    }
+}
+
+
+pub trait BytesTrait {
     /// Create a Bytes from an array of u128
     fn new(size: usize, data: Array<u128>) -> Bytes;
     /// Create an empty Bytes
     fn new_empty() -> Bytes;
     /// Create a Bytes with size bytes 0
     fn zero(size: usize) -> Bytes;
-    /// Create a Bytes from ByteArray ( Array<bytes31> )
-    fn from_byte_array(bytes: ByteArray) -> Bytes;
-    /// Create a ByteArray from Bytes
-    fn to_byte_array(self: Bytes) -> ByteArray;
     /// Locate offset in Bytes
     fn locate(offset: usize) -> (usize, usize);
     /// Get Bytes size
     fn size(self: @Bytes) -> usize;
+    /// Get data 
+    fn data(self: Bytes) -> Array<u128>;
     /// update specific value (1 bytes) at specific offset
     fn update_at(ref self: Bytes, offset: usize, value: u8);
     /// Read value with size bytes from Bytes, and packed into u128
@@ -144,42 +150,6 @@ impl BytesImpl of BytesTrait {
         Bytes { size, data }
     }
 
-    fn from_byte_array(mut bytes: ByteArray) -> Bytes {
-        let mut res = BytesTrait::new_empty();
-        loop {
-            match bytes.data.pop_front() {
-                Option::Some(val) => res.append_bytes31(val),
-                Option::None => { break; }
-            }
-        };
-        // Last elem
-        if bytes.pending_word_len != 0 {
-            let mut val: u256 = bytes.pending_word.into();
-            // Only append the right-aligned bytes of the last word ( using specified length )
-            val = U256BitShift::shl(val, 8 * (32 - bytes.pending_word_len.into()));
-            res.concat(@BytesTrait::new(bytes.pending_word_len, array![val.high, val.low]));
-        }
-        res
-    }
-
-    fn to_byte_array(self: Bytes) -> ByteArray {
-        let mut res: ByteArray = Default::default();
-        let mut offset = 0;
-        while offset < self
-            .size() {
-                if offset + 31 <= self.size() {
-                    let (new_offset, value) = self.read_bytes31(offset);
-                    res.append_word(value.into(), 31);
-                    offset = new_offset;
-                } else {
-                    let (new_offset, value) = self.read_u8(offset);
-                    res.append_byte(value);
-                    offset = new_offset;
-                }
-            };
-        res
-    }
-
     /// Locate offset in Bytes
     /// Arguments:
     ///  - offset: the offset in Bytes
@@ -195,6 +165,11 @@ impl BytesImpl of BytesTrait {
     #[inline(always)]
     fn size(self: @Bytes) -> usize {
         *self.size
+    }
+
+
+    fn data(self: Bytes) -> Array<u128> {
+        self.data
     }
 
     /// update specific value (1 bytes) at specific offset
@@ -579,5 +554,37 @@ impl BytesImpl of BytesTrait {
 
         let output: Array<u8> = sha256(hash_data);
         u8_array_to_u256(output.span())
+    }
+}
+
+pub impl ByteArrayIntoBytes of Into<ByteArray, Bytes> {
+    fn into(self: ByteArray) -> Bytes {
+        let mut res = BytesTrait::new_empty();
+        let mut len = 0;
+        while len < self.len() {
+            res.append_u8(self[len]);
+            len += 1;
+        };
+        res
+    }
+}
+
+pub impl BytesIntoByteArray of Into<Bytes, ByteArray> {
+    fn into(self: Bytes) -> ByteArray {
+        let mut res: ByteArray = Default::default();
+        let mut offset = 0;
+        while offset < self
+            .size() {
+                if offset + 31 <= self.size() {
+                    let (new_offset, value) = self.read_bytes31(offset);
+                    res.append_word(value.into(), 31);
+                    offset = new_offset;
+                } else {
+                    let (new_offset, value) = self.read_u8(offset);
+                    res.append_byte(value);
+                    offset = new_offset;
+                }
+            };
+        res
     }
 }

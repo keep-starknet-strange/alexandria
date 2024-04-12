@@ -9,7 +9,7 @@ use core::traits::TryInto;
 // * `u64` - sin(x) * 1e8
 // # Example
 // * fast_sin(3000000000) = (true, 50000000)
-fn fast_sin_inner(x: u64) -> (bool, u64) {
+pub fn fast_sin_inner(x: u64) -> (bool, u64) {
     let multipier = 100000000_u64;
     let hollyst: u64 = 1745329_u64;
     let sin_table = array![
@@ -67,7 +67,7 @@ fn fast_sin_inner(x: u64) -> (bool, u64) {
 // * `i64` - sin(x) * 1e8
 // # Example
 // * fast_sin(3000000000) = 50000000
-fn fast_sin(x: i64) -> i64 {
+pub fn fast_sin(x: i64) -> i64 {
     let mut a = x;
     if x < 0 {
         a = -x;
@@ -94,7 +94,7 @@ fn fast_sin(x: i64) -> i64 {
 // * `i64` - cos(x) * 1e8
 // # Example
 // * fast_cos(6000000000) = 50000000
-fn fast_cos(x: i64) -> i64 {
+pub fn fast_cos(x: i64) -> i64 {
     let mut a = x + consteval_int!(90_i64 * 100000000_i64);
     if x < 0 {
         a = -x;
@@ -117,7 +117,7 @@ fn fast_cos(x: i64) -> i64 {
 // * `i64` - tan(x) * 1e8
 // # Example
 // * fast_tan(4500000000) = 100000000
-fn fast_tan(x: i64) -> i64 {
+pub fn fast_tan(x: i64) -> i64 {
     let multipier = 100000000_u64;
     let mut a = x;
     if x < 0 {

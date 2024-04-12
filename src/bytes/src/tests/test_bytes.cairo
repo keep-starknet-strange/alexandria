@@ -1,18 +1,18 @@
 use alexandria_bytes::utils::{BytesDebug, BytesDisplay};
-use alexandria_bytes::{Bytes, BytesTrait};
+use alexandria_bytes::{Bytes, BytesTrait, BytesIndex};
 use starknet::ContractAddress;
 
 #[test]
 #[available_gas(20000000)]
 fn test_bytes_zero() {
     let bytes = BytesTrait::zero(1);
-    assert_eq!(bytes.size, 1, "invalid size");
-    assert_eq!(*bytes.data[0], 0, "invalid value");
+    assert_eq!(bytes.size(), 1, "invalid size");
+    assert_eq!(*bytes[0], 0, "invalid value");
 
     let bytes = BytesTrait::zero(17);
-    assert_eq!(bytes.size, 17, "invalid size");
-    assert_eq!(*bytes.data[0], 0, "invalid value");
-    assert_eq!(*bytes.data[1], 0, "invalid value");
+    assert_eq!(bytes.size(), 17, "invalid size");
+    assert_eq!(*bytes[0], 0, "invalid value");
+    assert_eq!(*bytes[1], 0, "invalid value");
     let (_, value) = bytes.read_u8(15);
     assert_eq!(value, 0, "invalid value");
     let (_, value) = bytes.read_u8(0);
@@ -35,24 +35,24 @@ fn test_bytes_update() {
     let mut bytes = BytesTrait::new(5, array![0x01020304050000000000000000000000]);
 
     bytes.update_at(0, 0x05);
-    assert_eq!(bytes.size, 5, "update_size1");
-    assert_eq!(*bytes.data[0], 0x05020304050000000000000000000000, "update_value_1");
+    assert_eq!(bytes.size(), 5, "update_size1");
+    assert_eq!(*bytes[0], 0x05020304050000000000000000000000, "update_value_1");
 
     bytes.update_at(1, 0x06);
-    assert_eq!(bytes.size, 5, "update_size2");
-    assert_eq!(*bytes.data[0], 0x05060304050000000000000000000000, "update_value_2");
+    assert_eq!(bytes.size(), 5, "update_size2");
+    assert_eq!(*bytes[0], 0x05060304050000000000000000000000, "update_value_2");
 
     bytes.update_at(2, 0x07);
-    assert_eq!(bytes.size, 5, "update_size3");
-    assert_eq!(*bytes.data[0], 0x05060704050000000000000000000000, "update_value_3");
+    assert_eq!(bytes.size(), 5, "update_size3");
+    assert_eq!(*bytes[0], 0x05060704050000000000000000000000, "update_value_3");
 
     bytes.update_at(3, 0x08);
-    assert_eq!(bytes.size, 5, "update_size4");
-    assert_eq!(*bytes.data[0], 0x05060708050000000000000000000000, "update_value_4");
+    assert_eq!(bytes.size(), 5, "update_size4");
+    assert_eq!(*bytes[0], 0x05060708050000000000000000000000, "update_value_4");
 
     bytes.update_at(4, 0x09);
-    assert_eq!(bytes.size, 5, "update_size5");
-    assert_eq!(*bytes.data[0], 0x05060708090000000000000000000000, "update_value_5");
+    assert_eq!(bytes.size(), 5, "update_size5");
+    assert_eq!(*bytes[0], 0x05060708090000000000000000000000, "update_value_5");
 
     let mut bytes = BytesTrait::new(
         42,
@@ -64,16 +64,16 @@ fn test_bytes_update() {
     );
 
     bytes.update_at(16, 0x16);
-    assert_eq!(bytes.size, 42, "update_size6");
-    assert_eq!(*bytes.data[0], 0x01020304050607080910111213141516, "update_value_6");
-    assert_eq!(*bytes.data[1], 0x16020304050607080910111213141516, "update_value_7");
-    assert_eq!(*bytes.data[2], 0x01020304050607080910000000000000, "update_value_8");
+    assert_eq!(bytes.size(), 42, "update_size6");
+    assert_eq!(*bytes[0], 0x01020304050607080910111213141516, "update_value_6");
+    assert_eq!(*bytes[1], 0x16020304050607080910111213141516, "update_value_7");
+    assert_eq!(*bytes[2], 0x01020304050607080910000000000000, "update_value_8");
 
     bytes.update_at(15, 0x01);
-    assert_eq!(bytes.size, 42, "update_size7");
-    assert_eq!(*bytes.data[0], 0x01020304050607080910111213141501, "update_value_9");
-    assert_eq!(*bytes.data[1], 0x16020304050607080910111213141516, "update_value_10");
-    assert_eq!(*bytes.data[2], 0x01020304050607080910000000000000, "update_value_11");
+    assert_eq!(bytes.size(), 42, "update_size7");
+    assert_eq!(*bytes[0], 0x01020304050607080910111213141501, "update_value_9");
+    assert_eq!(*bytes[1], 0x16020304050607080910111213141516, "update_value_10");
+    assert_eq!(*bytes[2], 0x01020304050607080910000000000000, "update_value_11");
 }
 
 #[test]
@@ -360,10 +360,10 @@ fn test_bytes_read_bytes31() {
     );
     let (offset, val) = bytes.read_bytes31(0);
     assert_eq!(offset, 31, "Offset after read_bytes31 failed");
-    assert!(
-        val == bytes31_const::<0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f>(),
-        "read_bytes31 test failed"
-    )
+    let byte31: bytes31 = 0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
+        .try_into()
+        .unwrap();
+    assert!(val == byte31, "read_bytes31 test failed")
 }
 
 #[test]
@@ -419,7 +419,7 @@ fn test_bytes_read_bytes() {
     let bytes = BytesTrait::new(46, array);
 
     let (new_offset, sub_bytes) = bytes.read_bytes(4, 37);
-    let sub_bytes_data = @sub_bytes.data;
+    let sub_bytes_data = @sub_bytes;
     assert_eq!(new_offset, 41, "read_bytes_offset");
     assert_eq!(sub_bytes.size(), 37, "read_bytes_size");
     assert_eq!(*sub_bytes_data[0], 0x05060708091011121314015401855d77, "read_bytes_value_1");
@@ -427,21 +427,21 @@ fn test_bytes_read_bytes() {
     assert_eq!(*sub_bytes_data[2], 0x6c2e0e04e10000000000000000000000, "read_bytes_value_3");
 
     let (new_offset, sub_bytes) = bytes.read_bytes(0, 14);
-    let sub_bytes_data = @sub_bytes.data;
+    let sub_bytes_data = @sub_bytes;
     assert_eq!(new_offset, 14, "read_bytes_offset");
     assert_eq!(sub_bytes.size(), 14, "read_bytes_size");
     assert_eq!(*sub_bytes_data[0], 0x01020304050607080910111213140000, "read_bytes_value_4");
 
     // read first byte
     let (new_offset, sub_bytes) = bytes.read_bytes(0, 1);
-    let sub_bytes_data = @sub_bytes.data;
+    let sub_bytes_data = @sub_bytes;
     assert_eq!(new_offset, 1, "read_bytes_offset");
     assert_eq!(sub_bytes.size(), 1, "read_bytes_size");
     assert_eq!(*sub_bytes_data[0], 0x01000000000000000000000000000000, "read_bytes_value_5");
 
     // read last byte
     let (new_offset, sub_bytes) = bytes.read_bytes(45, 1);
-    let sub_bytes_data = @sub_bytes.data;
+    let sub_bytes_data = @sub_bytes;
     assert_eq!(new_offset, 46, "read_bytes_offset");
     assert_eq!(sub_bytes.size(), 1, "read_bytes_size");
     assert_eq!(*sub_bytes_data[0], 0x4f000000000000000000000000000000, "read_bytes_value_6");
@@ -454,96 +454,86 @@ fn test_bytes_append() {
 
     // append_u128_packed
     bytes.append_u128_packed(0x101112131415161718, 9);
-    let Bytes { size, mut data } = bytes;
-    assert_eq!(size, 9, "append_u128_packed_1_size");
-    assert_eq!(*data[0], 0x10111213141516171800000000000000, "append_u128_packed_1_value_1");
-    bytes = Bytes { size: size, data: data };
+    assert_eq!(bytes.size(), 9, "append_u128_packed_1_size");
+    assert_eq!(*bytes[0], 0x10111213141516171800000000000000, "append_u128_packed_1_value_1");
+    bytes = BytesTrait::new(bytes.size(), bytes.data());
 
     bytes.append_u128_packed(0x101112131415161718, 9);
-    let Bytes { size, mut data } = bytes;
-    assert_eq!(size, 18, "append_u128_packed_2_size");
-    assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_u128_packed_2_value_1");
-    assert_eq!(*data[1], 0x17180000000000000000000000000000, "append_u128_packed_2_value_2");
-    bytes = Bytes { size: size, data: data };
+    assert_eq!(bytes.size(), 18, "append_u128_packed_2_size");
+    assert_eq!(*bytes[0], 0x10111213141516171810111213141516, "append_u128_packed_2_value_1");
+    assert_eq!(*bytes[1], 0x17180000000000000000000000000000, "append_u128_packed_2_value_2");
+    bytes = BytesTrait::new(bytes.size(), bytes.data());
 
     // append_u8
     bytes.append_u8(0x01);
-    let Bytes { size, mut data } = bytes;
-    assert_eq!(size, 19, "append_u8_size");
-    assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_u8_value_1");
-    assert_eq!(*data[1], 0x17180100000000000000000000000000, "append_u8_value_2");
-    bytes = Bytes { size: size, data: data };
+    assert_eq!(bytes.size(), 19, "append_u8_size");
+    assert_eq!(*bytes[0], 0x10111213141516171810111213141516, "append_u8_value_1");
+    assert_eq!(*bytes[1], 0x17180100000000000000000000000000, "append_u8_value_2");
+    bytes = BytesTrait::new(bytes.size(), bytes.data());
 
     // append_u16
     bytes.append_u16(0x0102);
-    let Bytes { size, mut data } = bytes;
-    assert_eq!(size, 21, "append_u16_size");
-    assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_u16_value_1");
-    assert_eq!(*data[1], 0x17180101020000000000000000000000, "append_u16_value_2");
-    bytes = Bytes { size: size, data: data };
+    assert_eq!(bytes.size(), 21, "append_u16_size");
+    assert_eq!(*bytes[0], 0x10111213141516171810111213141516, "append_u16_value_1");
+    assert_eq!(*bytes[1], 0x17180101020000000000000000000000, "append_u16_value_2");
+    bytes = BytesTrait::new(bytes.size(), bytes.data());
 
     // append_u32
     bytes.append_u32(0x01020304);
-    let Bytes { size, mut data } = bytes;
-    assert_eq!(size, 25, "append_u32_size");
-    assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_u32_value_1");
-    assert_eq!(*data[1], 0x17180101020102030400000000000000, "append_u32_value_2");
-    bytes = Bytes { size: size, data: data };
+    assert_eq!(bytes.size(), 25, "append_u32_size");
+    assert_eq!(*bytes[0], 0x10111213141516171810111213141516, "append_u32_value_1");
+    assert_eq!(*bytes[1], 0x17180101020102030400000000000000, "append_u32_value_2");
+    bytes = BytesTrait::new(bytes.size(), bytes.data());
 
     // append_usize
     bytes.append_usize(0x01);
-    let Bytes { size, mut data } = bytes;
-    assert_eq!(size, 29, "append_usize_size");
-    assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_usize_value_1");
-    assert_eq!(*data[1], 0x17180101020102030400000001000000, "append_usize_value_2");
-    bytes = Bytes { size: size, data: data };
+    assert_eq!(bytes.size(), 29, "append_usize_size");
+    assert_eq!(*bytes[0], 0x10111213141516171810111213141516, "append_usize_value_1");
+    assert_eq!(*bytes[1], 0x17180101020102030400000001000000, "append_usize_value_2");
+    bytes = BytesTrait::new(bytes.size(), bytes.data());
 
     // append_u64
     bytes.append_u64(0x030405060708);
-    let Bytes { size, mut data } = bytes;
-    assert_eq!(size, 37, "append_u64_size");
-    assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_u64_value_1");
-    assert_eq!(*data[1], 0x17180101020102030400000001000003, "append_u64_value_2");
-    assert_eq!(*data[2], 0x04050607080000000000000000000000, "append_u64_value_3");
-    bytes = Bytes { size: size, data: data };
+    assert_eq!(bytes.size(), 37, "append_u64_size");
+    assert_eq!(*bytes[0], 0x10111213141516171810111213141516, "append_u64_value_1");
+    assert_eq!(*bytes[1], 0x17180101020102030400000001000003, "append_u64_value_2");
+    assert_eq!(*bytes[2], 0x04050607080000000000000000000000, "append_u64_value_3");
+    bytes = BytesTrait::new(bytes.size(), bytes.data());
 
     // append_u128
     bytes.append_u128(0x101112131415161718);
-    let Bytes { size, mut data } = bytes;
-    assert_eq!(size, 53, "append_u128_size");
-    assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_u128_value_1");
-    assert_eq!(*data[1], 0x17180101020102030400000001000003, "append_u128_value_2");
-    assert_eq!(*data[2], 0x04050607080000000000000010111213, "append_u128_value_3");
-    assert_eq!(*data[3], 0x14151617180000000000000000000000, "append_u128_value_4");
-    bytes = Bytes { size: size, data: data };
+    assert_eq!(bytes.size(), 53, "append_u128_size");
+    assert_eq!(*bytes[0], 0x10111213141516171810111213141516, "append_u128_value_1");
+    assert_eq!(*bytes[1], 0x17180101020102030400000001000003, "append_u128_value_2");
+    assert_eq!(*bytes[2], 0x04050607080000000000000010111213, "append_u128_value_3");
+    assert_eq!(*bytes[3], 0x14151617180000000000000000000000, "append_u128_value_4");
+    bytes = BytesTrait::new(bytes.size(), bytes.data());
 
     // append_u256
     bytes.append_u256(u256 { low: 0x01020304050607, high: 0x010203040506070809 });
-    let Bytes { size, mut data } = bytes;
-    assert_eq!(size, 85, "append_u256_size");
-    assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_u256_value_1");
-    assert_eq!(*data[1], 0x17180101020102030400000001000003, "append_u256_value_2");
-    assert_eq!(*data[2], 0x04050607080000000000000010111213, "append_u256_value_3");
-    assert_eq!(*data[3], 0x14151617180000000000000001020304, "append_u256_value_4");
-    assert_eq!(*data[4], 0x05060708090000000000000000000102, "append_u256_value_5");
-    assert_eq!(*data[5], 0x03040506070000000000000000000000, "append_u256_value_6");
-    bytes = Bytes { size: size, data: data };
+    assert_eq!(bytes.size(), 85, "append_u256_size");
+    assert_eq!(*bytes[0], 0x10111213141516171810111213141516, "append_u256_value_1");
+    assert_eq!(*bytes[1], 0x17180101020102030400000001000003, "append_u256_value_2");
+    assert_eq!(*bytes[2], 0x04050607080000000000000010111213, "append_u256_value_3");
+    assert_eq!(*bytes[3], 0x14151617180000000000000001020304, "append_u256_value_4");
+    assert_eq!(*bytes[4], 0x05060708090000000000000000000102, "append_u256_value_5");
+    assert_eq!(*bytes[5], 0x03040506070000000000000000000000, "append_u256_value_6");
+    bytes = BytesTrait::new(bytes.size(), bytes.data());
 
     // append_address
     let address = 0x015401855d7796176b05d160196ff92381eb7910f5446c2e0e04e13db2194a4f
         .try_into()
         .unwrap();
     bytes.append_address(address);
-    let Bytes { size, mut data } = bytes;
-    assert_eq!(size, 117, "append_address_size");
-    assert_eq!(*data[0], 0x10111213141516171810111213141516, "append_address_value_1");
-    assert_eq!(*data[1], 0x17180101020102030400000001000003, "append_address_value_2");
-    assert_eq!(*data[2], 0x04050607080000000000000010111213, "append_address_value_3");
-    assert_eq!(*data[3], 0x14151617180000000000000001020304, "append_address_value_4");
-    assert_eq!(*data[4], 0x05060708090000000000000000000102, "append_address_value_5");
-    assert_eq!(*data[5], 0x0304050607015401855d7796176b05d1, "append_address_value_6");
-    assert_eq!(*data[6], 0x60196ff92381eb7910f5446c2e0e04e1, "append_address_value_7");
-    assert_eq!(*data[7], 0x3db2194a4f0000000000000000000000, "append_address_value_8");
+    assert_eq!(bytes.size(), 117, "append_address_size");
+    assert_eq!(*bytes[0], 0x10111213141516171810111213141516, "append_address_value_1");
+    assert_eq!(*bytes[1], 0x17180101020102030400000001000003, "append_address_value_2");
+    assert_eq!(*bytes[2], 0x04050607080000000000000010111213, "append_address_value_3");
+    assert_eq!(*bytes[3], 0x14151617180000000000000001020304, "append_address_value_4");
+    assert_eq!(*bytes[4], 0x05060708090000000000000000000102, "append_address_value_5");
+    assert_eq!(*bytes[5], 0x0304050607015401855d7796176b05d1, "append_address_value_6");
+    assert_eq!(*bytes[6], 0x60196ff92381eb7910f5446c2e0e04e1, "append_address_value_7");
+    assert_eq!(*bytes[7], 0x3db2194a4f0000000000000000000000, "append_address_value_8");
 }
 
 #[test]
@@ -569,55 +559,53 @@ fn test_bytes_concat() {
     let other = BytesTrait::new(46, array);
 
     bytes.concat(@other);
-    let Bytes { size, mut data } = bytes;
-    assert_eq!(size, 163, "concat_size");
-    assert_eq!(*data[0], 0x10111213141516171810111213141516, "concat_value_1");
-    assert_eq!(*data[1], 0x17180101020102030400000001000003, "concat_value_2");
-    assert_eq!(*data[2], 0x04050607080000000000000010111213, "concat_value_3");
-    assert_eq!(*data[3], 0x14151617180000000000000001020304, "concat_value_4");
-    assert_eq!(*data[4], 0x05060708090000000000000000000102, "concat_value_5");
-    assert_eq!(*data[5], 0x0304050607015401855d7796176b05d1, "concat_value_6");
-    assert_eq!(*data[6], 0x60196ff92381eb7910f5446c2e0e04e1, "concat_value_7");
-    assert_eq!(*data[7], 0x3db2194a4f0102030405060708091011, "concat_value_8");
-    assert_eq!(*data[8], 0x121314015401855d7796176b05d16019, "concat_value_9");
-    assert_eq!(*data[9], 0x6ff92381eb7910f5446c2e0e04e13db2, "concat_value_10");
-    assert_eq!(*data[10], 0x194a4f00000000000000000000000000, "concat_value_11");
-    bytes = Bytes { size: size, data: data };
+    assert_eq!(bytes.size(), 163, "concat_size");
+    assert_eq!(*bytes[0], 0x10111213141516171810111213141516, "concat_value_1");
+    assert_eq!(*bytes[1], 0x17180101020102030400000001000003, "concat_value_2");
+    assert_eq!(*bytes[2], 0x04050607080000000000000010111213, "concat_value_3");
+    assert_eq!(*bytes[3], 0x14151617180000000000000001020304, "concat_value_4");
+    assert_eq!(*bytes[4], 0x05060708090000000000000000000102, "concat_value_5");
+    assert_eq!(*bytes[5], 0x0304050607015401855d7796176b05d1, "concat_value_6");
+    assert_eq!(*bytes[6], 0x60196ff92381eb7910f5446c2e0e04e1, "concat_value_7");
+    assert_eq!(*bytes[7], 0x3db2194a4f0102030405060708091011, "concat_value_8");
+    assert_eq!(*bytes[8], 0x121314015401855d7796176b05d16019, "concat_value_9");
+    assert_eq!(*bytes[9], 0x6ff92381eb7910f5446c2e0e04e13db2, "concat_value_10");
+    assert_eq!(*bytes[10], 0x194a4f00000000000000000000000000, "concat_value_11");
+    bytes = BytesTrait::new(bytes.size(), bytes.data());
 
     // empty bytes concat
     let mut empty_bytes = BytesTrait::new_empty();
     empty_bytes.concat(@bytes);
-    let Bytes { size, data } = empty_bytes;
 
-    assert_eq!(size, 163, "concat_size");
-    assert_eq!(*data[0], 0x10111213141516171810111213141516, "concat_value_1");
-    assert_eq!(*data[1], 0x17180101020102030400000001000003, "concat_value_2");
-    assert_eq!(*data[2], 0x04050607080000000000000010111213, "concat_value_3");
-    assert_eq!(*data[3], 0x14151617180000000000000001020304, "concat_value_4");
-    assert_eq!(*data[4], 0x05060708090000000000000000000102, "concat_value_5");
-    assert_eq!(*data[5], 0x0304050607015401855d7796176b05d1, "concat_value_6");
-    assert_eq!(*data[6], 0x60196ff92381eb7910f5446c2e0e04e1, "concat_value_7");
-    assert_eq!(*data[7], 0x3db2194a4f0102030405060708091011, "concat_value_8");
-    assert_eq!(*data[8], 0x121314015401855d7796176b05d16019, "concat_value_9");
-    assert_eq!(*data[9], 0x6ff92381eb7910f5446c2e0e04e13db2, "concat_value_10");
-    assert_eq!(*data[10], 0x194a4f00000000000000000000000000, "concat_value_11");
+    assert_eq!(bytes.size(), 163, "concat_size");
+    assert_eq!(*bytes[0], 0x10111213141516171810111213141516, "concat_value_1");
+    assert_eq!(*bytes[1], 0x17180101020102030400000001000003, "concat_value_2");
+    assert_eq!(*bytes[2], 0x04050607080000000000000010111213, "concat_value_3");
+    assert_eq!(*bytes[3], 0x14151617180000000000000001020304, "concat_value_4");
+    assert_eq!(*bytes[4], 0x05060708090000000000000000000102, "concat_value_5");
+    assert_eq!(*bytes[5], 0x0304050607015401855d7796176b05d1, "concat_value_6");
+    assert_eq!(*bytes[6], 0x60196ff92381eb7910f5446c2e0e04e1, "concat_value_7");
+    assert_eq!(*bytes[7], 0x3db2194a4f0102030405060708091011, "concat_value_8");
+    assert_eq!(*bytes[8], 0x121314015401855d7796176b05d16019, "concat_value_9");
+    assert_eq!(*bytes[9], 0x6ff92381eb7910f5446c2e0e04e13db2, "concat_value_10");
+    assert_eq!(*bytes[10], 0x194a4f00000000000000000000000000, "concat_value_11");
 
     // concat empty_bytes
     let empty_bytes = BytesTrait::new_empty();
     bytes.concat(@empty_bytes);
 
-    assert_eq!(size, 163, "concat_size");
-    assert_eq!(*data[0], 0x10111213141516171810111213141516, "concat_value_1");
-    assert_eq!(*data[1], 0x17180101020102030400000001000003, "concat_value_2");
-    assert_eq!(*data[2], 0x04050607080000000000000010111213, "concat_value_3");
-    assert_eq!(*data[3], 0x14151617180000000000000001020304, "concat_value_4");
-    assert_eq!(*data[4], 0x05060708090000000000000000000102, "concat_value_5");
-    assert_eq!(*data[5], 0x0304050607015401855d7796176b05d1, "concat_value_6");
-    assert_eq!(*data[6], 0x60196ff92381eb7910f5446c2e0e04e1, "concat_value_7");
-    assert_eq!(*data[7], 0x3db2194a4f0102030405060708091011, "concat_value_8");
-    assert_eq!(*data[8], 0x121314015401855d7796176b05d16019, "concat_value_9");
-    assert_eq!(*data[9], 0x6ff92381eb7910f5446c2e0e04e13db2, "concat_value_10");
-    assert_eq!(*data[10], 0x194a4f00000000000000000000000000, "concat_value_11");
+    assert_eq!(bytes.size(), 163, "concat_size");
+    assert_eq!(*bytes[0], 0x10111213141516171810111213141516, "concat_value_1");
+    assert_eq!(*bytes[1], 0x17180101020102030400000001000003, "concat_value_2");
+    assert_eq!(*bytes[2], 0x04050607080000000000000010111213, "concat_value_3");
+    assert_eq!(*bytes[3], 0x14151617180000000000000001020304, "concat_value_4");
+    assert_eq!(*bytes[4], 0x05060708090000000000000000000102, "concat_value_5");
+    assert_eq!(*bytes[5], 0x0304050607015401855d7796176b05d1, "concat_value_6");
+    assert_eq!(*bytes[6], 0x60196ff92381eb7910f5446c2e0e04e1, "concat_value_7");
+    assert_eq!(*bytes[7], 0x3db2194a4f0102030405060708091011, "concat_value_8");
+    assert_eq!(*bytes[8], 0x121314015401855d7796176b05d16019, "concat_value_9");
+    assert_eq!(*bytes[9], 0x6ff92381eb7910f5446c2e0e04e13db2, "concat_value_10");
+    assert_eq!(*bytes[10], 0x194a4f00000000000000000000000000, "concat_value_11");
 }
 
 #[test]
@@ -709,7 +697,7 @@ fn test_byte_array_conversions() {
             0x3db2194a000000000000000000000000
         ]
     );
-    let byte_array = bytes.clone().to_byte_array();
-    let new_bytes = BytesTrait::from_byte_array(byte_array);
+    let byte_array: ByteArray = bytes.clone().into();
+    let new_bytes: Bytes = byte_array.into();
     assert_eq!(bytes, new_bytes, "byte <-> byte_array conversion failed");
 }
