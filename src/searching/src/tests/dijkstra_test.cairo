@@ -1,4 +1,4 @@
-use alexandria_searching::dijkstra::{Graph, Node, GraphTrait};
+use alexandria_searching::dijkstra::{Graph, Node, GraphTrait, NodeGetters};
 use core::nullable::{FromNullableResult, match_nullable};
 
 
@@ -17,7 +17,7 @@ fn add_edge() {
     GraphTrait::add_edge(ref graph, 2, 3, 3);
 
     assert_eq!(graph.nodes.len(), 6, "wrong node number");
-    let val = graph.adj_nodes.get(source.into());
+    let val = graph.adj_nodes(source.into());
 
     let span = match match_nullable(val) {
         FromNullableResult::Null => { panic!("No value found") },
@@ -27,14 +27,14 @@ fn add_edge() {
     assert_eq!(span.len(), 4, "wrong nb of adj edge for node 0");
 
     let new_node = *span.get(1).unwrap().unbox();
-    assert_eq!(new_node.dest, dest + 1, "Wrong dest in adj edge");
-    assert_eq!(new_node.weight, weight + 1, "Wrong weight in adj edge");
+    assert_eq!(*new_node.dest(), dest + 1, "Wrong dest in adj edge");
+    assert_eq!(*new_node.weight(), weight + 1, "Wrong weight in adj edge");
 
     let new_node = *span.get(3).unwrap().unbox();
-    assert_eq!(new_node.dest, dest + 3, "Wrong dest in adj edge");
-    assert_eq!(new_node.weight, weight + 3, "Wrong weight in adj edge");
+    assert_eq!(*new_node.dest(), dest + 3, "Wrong dest in adj edge");
+    assert_eq!(*new_node.weight(), weight + 3, "Wrong weight in adj edge");
 
-    let val = graph.adj_nodes.get(2.into());
+    let val = graph.adj_nodes(2.into());
 
     let span = match match_nullable(val) {
         FromNullableResult::Null => { panic!("No value found") },

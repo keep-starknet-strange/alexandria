@@ -3,15 +3,30 @@ use core::nullable::{FromNullableResult, match_nullable};
 
 #[derive(Copy, Drop)]
 pub struct Node {
-    pub source: u32,
-    pub dest: u32,
-    pub weight: u128
+    source: u32,
+    dest: u32,
+    weight: u128
+}
+
+#[generate_trait]
+pub impl NodeGetters of NodeGettersTrait {
+    fn weight(self: @Node) -> @u128 {
+        self.weight
+    }
+
+    fn dest(self: @Node) -> @u32 {
+        self.dest
+    }
+
+    fn source(self: @Node) -> @u32 {
+        self.source
+    }
 }
 
 /// Graph representation.
 pub struct Graph<T> {
-    pub nodes: Array<Node>,
-    pub adj_nodes: Felt252Dict<T>,
+    pub(crate) nodes: Array<Node>,
+    adj_nodes: Felt252Dict<T>,
 }
 
 /// Graph trait.
@@ -22,6 +37,8 @@ pub trait GraphTrait {
     fn add_edge(ref self: Graph<Nullable<Span<Node>>>, source: u32, dest: u32, weight: u128);
     /// return shortest path from s
     fn shortest_path(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u128>;
+    /// return shortest path from s
+    fn adj_nodes(ref self: Graph<Nullable<Span<Node>>>, source: felt252) -> Nullable<Span<Node>>;
 }
 
 impl DestructGraph<T, +Drop<T>, +Felt252DictValue<T>> of Destruct<Graph<T>> {
@@ -65,6 +82,11 @@ impl GraphImpl of GraphTrait {
 
     fn shortest_path(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u128> {
         dijkstra(ref self, source)
+    }
+
+
+    fn adj_nodes(ref self: Graph<Nullable<Span<Node>>>, source: felt252) -> Nullable<Span<Node>> {
+        self.adj_nodes.get(source)
     }
 }
 
