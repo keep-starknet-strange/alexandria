@@ -541,6 +541,6 @@ pub fn one_shift_left_bytes_u128(n_bytes: usize) -> u128 {
         13 => 0x100000000000000000000000000,
         14 => 0x10000000000000000000000000000,
         15 => 0x1000000000000000000000000000000,
-        _ => core::panic_with_felt252('n_bytes too big'),
+        _ => panic!("n_bytes too big"),
     }
 }

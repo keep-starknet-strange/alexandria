@@ -8,10 +8,7 @@
 // * ` u128 ` - The result of ( base ^ power ) mod modulus
 
 pub fn fast_power(base: u128, mut power: u128, modulus: u128) -> u128 {
-    // Return invalid input error
-    if base == 0 {
-        panic!("II")
-    }
+    assert!(base != 0, "fast_power: invalid input");
 
     if modulus == 1 {
         return 0;

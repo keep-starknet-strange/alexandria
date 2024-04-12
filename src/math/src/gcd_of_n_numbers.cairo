@@ -7,9 +7,8 @@
 // * `felt252` - The gcd of input numbers
 pub fn gcd(mut n: Span<u128>) -> u128 {
     // Return empty input error
-    if n.is_empty() {
-        panic!("gcd-empty")
-    }
+    assert!(!n.is_empty(), "gcd-empty");
+
     let mut a = *n.pop_front().unwrap();
     while let Option::Some(b) = n.pop_front() {
         a = gcd_two_numbers(a, *b);

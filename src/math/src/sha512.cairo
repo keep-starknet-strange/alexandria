@@ -101,9 +101,7 @@ fn ssig1(x: Word64) -> Word64 {
 
 pub fn fpow(mut base: u128, mut power: u128) -> u128 {
     // Return invalid input error
-    if base == 0 {
-        panic!("fpow::II")
-    }
+    assert!(base != 0, "fpow: invalid input");
 
     let mut base_u128: u256 = base.into();
     let mut result: u256 = 1;
