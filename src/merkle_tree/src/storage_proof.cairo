@@ -4,8 +4,15 @@ use core::poseidon::PoseidonTrait;
 
 #[derive(Drop)]
 pub struct BinaryNode {
-    pub left: felt252,
-    pub right: felt252,
+    left: felt252,
+    right: felt252,
+}
+
+#[generate_trait]
+pub impl BinaryNodeImpl of BinaryNodeTrait {
+    fn new(left: felt252, right: felt252) -> BinaryNode {
+        BinaryNode { left, right }
+    }
 }
 
 #[derive(Drop, Copy)]
