@@ -17,15 +17,15 @@ pub impl BinaryNodeImpl of BinaryNodeTrait {
 
 #[derive(Drop, Copy)]
 pub struct EdgeNode {
-    child: felt252,
     path: felt252,
+    child: felt252,
     length: u8,
 }
 
 #[generate_trait]
 pub impl EdgeNodeImpl of EdgeNodeTrait {
-    fn new(child: felt252, path: felt252, length: u8) -> EdgeNode {
-        EdgeNode { child, path, length }
+    fn new(path: felt252, child: felt252, length: u8) -> EdgeNode {
+        EdgeNode { path, child, length }
     }
 }
 

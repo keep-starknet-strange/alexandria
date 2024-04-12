@@ -148,8 +148,8 @@ pub(crate) fn balance_proof() -> ContractStateProof {
             TrieNode::Edge(
                 EdgeNodeImpl::new(
                     0x221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3,
-                    229,
                     0x1fe7bef4bd2a37b56eab84508f217fd2a85694bbeb95e98049faa0de0a2011c,
+                    229
                 )
             )
         ],
@@ -268,7 +268,7 @@ pub(crate) fn balance_proof() -> ContractStateProof {
                 ),
                 TrieNode::Edge(
                     EdgeNodeImpl::new(
-                        0x1c5f3e73c9e969b9c5a621955d4813de68ca42a777fd4915ac5e71a73219893, 0x3, 2,
+                        0x3, 0x1c5f3e73c9e969b9c5a621955d4813de68ca42a777fd4915ac5e71a73219893, 2,
                     )
                 ),
                 TrieNode::Binary(
@@ -279,8 +279,8 @@ pub(crate) fn balance_proof() -> ContractStateProof {
                 ),
                 TrieNode::Edge(
                     EdgeNodeImpl::new(
-                        0x78bc9be7c9e60005,
                         0x108cd202d1472587dfe63dbf2d5ec767cbf4218b59b7ab71956780c6ee,
+                        0x78bc9be7c9e60005,
                         230,
                     )
                 )
@@ -433,11 +433,11 @@ pub(crate) fn total_balance_proof() -> ContractStateProof {
                 )
             ),
             TrieNode::Edge(
-                EdgeNode {
-                    path: 0x221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3,
-                    length: 229,
-                    child: 0x1fe7bef4bd2a37b56eab84508f217fd2a85694bbeb95e98049faa0de0a2011c,
-                }
+                EdgeNodeImpl::new(
+                    0x221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3,
+                    0x1fe7bef4bd2a37b56eab84508f217fd2a85694bbeb95e98049faa0de0a2011c,
+                    229
+                )
             )
         ],
         contract_data: ContractData {
@@ -560,11 +560,11 @@ pub(crate) fn total_balance_proof() -> ContractStateProof {
                     )
                 ),
                 TrieNode::Edge(
-                    EdgeNode {
-                        path: 0x74624a0e3e0d8e6b72bd35514f62b3e8e70fbaff4ed27181de4ffd4604,
-                        length: 232,
-                        child: 0x275077fb6c1316d13a907,
-                    }
+                    EdgeNodeImpl::new(
+                        0x74624a0e3e0d8e6b72bd35514f62b3e8e70fbaff4ed27181de4ffd4604,
+                        0x275077fb6c1316d13a907,
+                        232
+                    )
                 )
             ],
         }
