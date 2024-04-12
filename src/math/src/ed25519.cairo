@@ -22,16 +22,16 @@ const TWO_POW_8_NON_ZERO: NonZero<u256> = 0x100;
 
 #[derive(Drop, Copy)]
 pub struct Point {
-    pub x: u256,
-    pub y: u256
+    x: u256,
+    y: u256
 }
 
 #[derive(Drop, Copy)]
 pub struct ExtendedHomogeneousPoint {
-    pub X: u256,
-    pub Y: u256,
-    pub Z: u256,
-    pub T: u256,
+    X: u256,
+    Y: u256,
+    Z: u256,
+    T: u256,
 }
 
 pub trait PointDoubling<T> {
