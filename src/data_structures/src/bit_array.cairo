@@ -11,10 +11,10 @@ const BYTES_IN_BYTES31_MINUS_ONE: usize = BYTES_IN_BYTES31 - 1;
 
 #[derive(Clone, Drop)]
 pub struct BitArray {
-    pub data: Array<bytes31>,
-    pub current: felt252,
-    pub read_pos: usize,
-    pub write_pos: usize,
+    data: Array<bytes31>,
+    current: felt252,
+    read_pos: usize,
+    write_pos: usize,
 }
 
 impl BitArrayDefaultImpl of Default<BitArray> {
@@ -24,6 +24,9 @@ impl BitArrayDefaultImpl of Default<BitArray> {
 }
 
 pub trait BitArrayTrait {
+    fn new(data: Array<bytes31>, current: felt252, read_pos: usize, write_pos: usize,) -> BitArray;
+    fn current(self: @BitArray) -> felt252;
+    fn data(self: BitArray) -> Array<bytes31>;
     /// Appends a single bit to the BitArray
     /// # Arguments
     /// `bit` - either true or false, representing a single bit to be appended
@@ -121,6 +124,18 @@ pub trait BitArrayTrait {
 }
 
 impl BitArrayImpl of BitArrayTrait {
+    fn new(data: Array<bytes31>, current: felt252, read_pos: usize, write_pos: usize,) -> BitArray {
+        BitArray { data, current, read_pos, write_pos, }
+    }
+
+    fn current(self: @BitArray) -> felt252 {
+        *self.current
+    }
+
+    fn data(self: BitArray) -> Array<bytes31> {
+        self.data
+    }
+
     fn append_bit(ref self: BitArray, bit: bool) {
         let (byte_number, bit_offset) = DivRem::div_rem(
             self.write_pos, 8_usize.try_into().unwrap()

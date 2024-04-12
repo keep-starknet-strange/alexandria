@@ -18,11 +18,11 @@ fn test_append_bit() {
         .try_into()
         .unwrap();
     let expected: Array<bytes31> = array![val, val,];
-    assert!(ba.data == expected, "illegal array");
     assert(
-        ba.current == 0xa * one_shift_left_bytes_felt252(30) * shift_bit(4).into(),
+        ba.current() == 0xa * one_shift_left_bytes_felt252(30) * shift_bit(4).into(),
         'expected current 0xa'
     );
+    assert!(ba.data() == expected, "illegal array");
 }
 
 #[test]
@@ -330,10 +330,5 @@ fn test_serde_ser_deser() {
 // helpers
 fn sample_bit_array() -> BitArray {
     let sample: felt252 = BoundedInt::<u128>::max().into() - 1;
-    BitArray {
-        data: array![],
-        current: sample * one_shift_left_bytes_felt252(15),
-        read_pos: 0,
-        write_pos: 8 * 16,
-    }
+    BitArrayTrait::new(array![], sample * one_shift_left_bytes_felt252(15), 0, 8 * 16)
 }
