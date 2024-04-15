@@ -33,12 +33,8 @@ pub trait SpanTraitExt<T> {
 
 impl ArrayImpl<T, +Copy<T>, +Drop<T>> of ArrayTraitExt<T> {
     fn append_all(ref self: Array<T>, ref arr: Array<T>) {
-        match arr.pop_front() {
-            Option::Some(v) => {
-                self.append(v);
-                self.append_all(ref arr);
-            },
-            Option::None => (),
+        while let Option::Some(item) = arr.pop_front() {
+            self.append(item);
         }
     }
 
@@ -63,16 +59,14 @@ impl ArrayImpl<T, +Copy<T>, +Drop<T>> of ArrayTraitExt<T> {
     fn concat(self: @Array<T>, a: @Array<T>) -> Array<T> {
         // Can't do self.span().concat(a);
         let mut ret = array![];
-        let mut i = 0;
+        let mut self = self.span();
 
-        while (i != self.len()) {
-            ret.append(*self[i]);
-            i += 1;
+        while let Option::Some(item) = self.pop_front() {
+            ret.append(*item);
         };
-        i = 0;
-        while (i != a.len()) {
-            ret.append(*a[i]);
-            i += 1;
+        let mut a = a.span();
+        while let Option::Some(item) = a.pop_front() {
+            ret.append(*item);
         };
         ret
     }
@@ -159,18 +153,14 @@ impl SpanImpl<T, +Copy<T>, +Drop<T>> of SpanTraitExt<T> {
         }
     }
 
-    fn concat(self: Span<T>, a: Span<T>) -> Array<T> {
+    fn concat(mut self: Span<T>, mut a: Span<T>) -> Array<T> {
         let mut ret = array![];
-        let mut i = 0;
 
-        while (i != self.len()) {
-            ret.append(*self[i]);
-            i += 1;
+        while let Option::Some(item) = self.pop_front() {
+            ret.append(*item);
         };
-        i = 0;
-        while (i != a.len()) {
-            ret.append(*a[i]);
-            i += 1;
+        while let Option::Some(item) = a.pop_front() {
+            ret.append(*item);
         };
         ret
     }
