@@ -7,7 +7,7 @@ use core::byte_array::ByteArrayTrait;
 use starknet::ContractAddress;
 
 /// Bytes is a dynamic array of u128, where each element contains 16 bytes.
-const BYTES_PER_ELEMENT: usize = 16;
+pub const BYTES_PER_ELEMENT: usize = 16;
 
 /// Note that:   In Bytes, there are many variables about size and length.
 ///              We use size to represent the number of bytes in Bytes.
