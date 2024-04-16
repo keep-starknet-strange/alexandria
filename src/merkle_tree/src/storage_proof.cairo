@@ -2,7 +2,7 @@ use core::hash::HashStateTrait;
 use core::pedersen::PedersenTrait;
 use core::poseidon::PoseidonTrait;
 
-#[derive(Drop)]
+#[derive(Drop, Serde)]
 pub struct BinaryNode {
     left: felt252,
     right: felt252,
@@ -15,7 +15,7 @@ pub impl BinaryNodeImpl of BinaryNodeTrait {
     }
 }
 
-#[derive(Drop, Copy)]
+#[derive(Drop, Copy, Serde)]
 pub struct EdgeNode {
     path: felt252,
     child: felt252,
@@ -29,13 +29,13 @@ pub impl EdgeNodeImpl of EdgeNodeTrait {
     }
 }
 
-#[derive(Drop)]
+#[derive(Drop, Serde)]
 pub enum TrieNode {
     Binary: BinaryNode,
     Edge: EdgeNode,
 }
 
-#[derive(Destruct)]
+#[derive(Destruct, Serde)]
 pub struct ContractData {
     class_hash: felt252,
     nonce: felt252,
@@ -55,7 +55,7 @@ pub impl ContractDataImpl of ContractDataTrait {
     }
 }
 
-#[derive(Destruct)]
+#[derive(Destruct, Serde)]
 pub struct ContractStateProof {
     class_commitment: felt252,
     contract_proof: Array<TrieNode>,
