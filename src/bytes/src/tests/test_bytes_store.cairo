@@ -31,8 +31,8 @@ mod ABytesStore {
 mod tests {
     use alexandria_bytes::utils::{BytesDebug, BytesDisplay};
     use alexandria_bytes::{Bytes, BytesTrait, BytesStore};
-    use starknet::{ClassHash, ContractAddress, SyscallResultTrait,};
     use starknet::syscalls::deploy_syscall;
+    use starknet::{ClassHash, ContractAddress, SyscallResultTrait,};
     use super::{ABytesStore, IABytesStoreDispatcher, IABytesStoreDispatcherTrait};
 
     fn deploy() -> IABytesStoreDispatcher {
