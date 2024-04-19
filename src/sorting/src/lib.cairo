@@ -1,13 +1,13 @@
-pub mod bubble_sort;
+mod bubble_sort;
 pub mod interface;
-pub mod merge_sort;
+mod merge_sort;
 pub mod quick_sort;
 #[cfg(test)]
 mod tests;
 
-pub use bubble_sort::BubbleSortImpl;
+pub use bubble_sort::BubbleSort;
 pub use interface::Sortable;
-use merge_sort::merge;
+pub use merge_sort::MergeSort;
 // use quick_sort::quick_sort; // Cannot do as name collide.
 
 

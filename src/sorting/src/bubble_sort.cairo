@@ -8,9 +8,12 @@
 use super::Sortable;
 
 pub impl BubbleSort of Sortable {
-    fn sort<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>>(mut array: Array<T>) -> Array<T> {
-        if array.len() <= 1 {
-            return array;
+    fn sort<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(mut array: Span<T>) -> Array<T> {
+        if array.len() == 0 {
+            return array![];
+        }
+        if array.len() == 1 {
+            return array![*array[0]];
         }
         let mut idx1 = 0;
         let mut idx2 = 1;
@@ -23,7 +26,7 @@ pub impl BubbleSort of Sortable {
                 if sorted_iteration {
                     break;
                 }
-                array = sorted_array;
+                array = sorted_array.span();
                 sorted_array = array![];
                 idx1 = 0;
                 idx2 = 1;
