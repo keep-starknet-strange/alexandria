@@ -29,6 +29,10 @@ The Armstrong number algorithm is used to determine if a number is an Armstrong 
 The algorithm is used for problem-solving and mathematical puzzles, and has applications in number theory, discrete mathematics, and computer science, as well as in generating strong encryption keys.
 By identifying Armstrong numbers, the algorithm provides insight into the properties of numbers and can be used in various applications in mathematics and computer science.
 
+## [Bitmap](./src/bitmap.cairo)
+
+Bitmap function to manage, search and manipulate bits efficiently.
+
 ## [Collatz sequence](./src/collatz_sequence.cairo)
 The Collatz sequence number algorithm is a mathematical algorithm used to generate the Collatz sequence of a given positive integer.
 The purpose of the Collatz sequence number algorithm is to explore the behavior of the Collatz conjecture, which is a famous unsolved problem in mathematics. The conjecture states that for any positive integer, the Collatz sequence will eventually reach the number 1. The Collatz sequence number algorithm is used to generate and study these sequences, which have applications in various areas of mathematics and computer science.
