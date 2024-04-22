@@ -1,13 +1,14 @@
 //! # Fast power algorithm
 
-// Calculate the base ^ power 
-// using the fast powering algorithm
-// # Arguments
-// * ` base ` - The base of the exponentiation 
-// * ` power ` - The power of the exponentiation 
-// * ` modulus ` - The modulus used in the calculation
-// # Returns
-// * ` T ` - The result of ( base ^ power ) mod modulus
+/// Calculate the base ^ power 
+/// using the fast powering algorithm
+/// # Arguments
+/// * ` base ` - The base of the exponentiation 
+/// * ` power ` - The power of the exponentiation 
+/// # Returns
+/// * ` T ` - The result of base ^ power
+/// # Panics
+/// * ` base ` is 0
 pub fn fast_power<
     T,
     +Div<T>,
@@ -38,17 +39,19 @@ pub fn fast_power<
         base *= base;
     };
 
-    result.try_into().expect('value cant be larger than u128')
+    result.try_into().expect('too large to fit output type')
 }
 
-// Calculate the ( base ^ power ) mod modulus
-// using the fast powering algorithm
-// # Arguments
-// * ` base ` - The base of the exponentiation 
-// * ` power ` - The power of the exponentiation 
-// * ` modulus ` - The modulus used in the calculation
-// # Returns
-// * ` u128 ` - The result of ( base ^ power ) mod modulus
+/// Calculate the ( base ^ power ) mod modulus
+/// using the fast powering algorithm
+/// # Arguments
+/// * ` base ` - The base of the exponentiation 
+/// * ` power ` - The power of the exponentiation 
+/// * ` modulus ` - The modulus used in the calculation
+/// # Returns
+/// * ` T ` - The result of ( base ^ power ) mod modulus
+/// # Panics
+/// * ` base ` is 0
 pub fn fast_power_mod<
     T,
     +Div<T>,
@@ -84,5 +87,5 @@ pub fn fast_power_mod<
         base = (base * base) % modulus;
     };
 
-    result.try_into().expect('value cant be larger than u128')
+    result.try_into().expect('too large to fit output type')
 }
