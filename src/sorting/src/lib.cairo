@@ -6,8 +6,7 @@ pub mod quick_sort;
 mod tests;
 
 pub use bubble_sort::BubbleSort;
-pub use interface::Sortable;
+pub use interface::{Sortable, SortableVec};
 pub use merge_sort::MergeSort;
-// use quick_sort::quick_sort; // Cannot do as name collide.
-
+pub use quick_sort::QuickSort;
 

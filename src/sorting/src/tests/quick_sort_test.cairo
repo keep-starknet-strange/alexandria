@@ -1,5 +1,5 @@
 use alexandria_data_structures::vec::{Felt252Vec, VecTrait};
-use alexandria_sorting::quick_sort;
+use alexandria_sorting::QuickSort;
 
 /// * `a` - The first Felt252Vec.
 /// * `b` - The second array.
@@ -37,7 +37,7 @@ fn quicksort_test() {
     data.push(0);
     let correct = array![0_u32, 1, 2, 3, 4, 5];
 
-    let sorted = quick_sort::quick_sort(data);
+    let sorted = QuickSort::sort(data);
 
     assert!(is_equal_vec(sorted, correct.span()), "invalid result");
 }
@@ -49,7 +49,7 @@ fn quicksort_test_empty() {
     let data = VecTrait::<Felt252Vec, u32>::new();
     let correct = array![];
 
-    let sorted = quick_sort::quick_sort(data);
+    let sorted = QuickSort::sort(data);
 
     assert!(is_equal_vec(sorted, correct.span()), "invalid result");
 }
@@ -61,7 +61,7 @@ fn quicksort_test_one_element() {
     data.push(2);
     let correct = array![2_u32];
 
-    let sorted = quick_sort::quick_sort(data);
+    let sorted = QuickSort::sort(data);
 
     assert!(is_equal_vec(sorted, correct.span()), "invalid result");
 }
@@ -76,7 +76,7 @@ fn quicksort_test_pre_sorted() {
     data.push(4);
     let correct = array![1_u32, 2, 3, 4];
 
-    let sorted = quick_sort::quick_sort(data);
+    let sorted = QuickSort::sort(data);
 
     assert!(is_equal_vec(sorted, correct.span()), "invalid result");
 }
@@ -91,7 +91,7 @@ fn quicksort_test_pre_sorted_decreasing() {
     data.push(1);
     let correct = array![1_u32, 2, 3, 4];
 
-    let sorted = quick_sort::quick_sort(data);
+    let sorted = QuickSort::sort(data);
 
     assert!(is_equal_vec(sorted, correct.span()), "invalid result");
 }
@@ -106,7 +106,7 @@ fn quicksort_test_pre_sorted_2_same_values() {
     data.push(4);
     let correct = array![1_u32, 2, 2, 4];
 
-    let sorted = quick_sort::quick_sort(data);
+    let sorted = QuickSort::sort(data);
 
     assert!(is_equal_vec(sorted, correct.span()), "invalid result");
 }
@@ -121,7 +121,7 @@ fn quicksort_test_2_same_values() {
     data.push(2);
     let correct = array![1_u32, 2, 2, 4];
 
-    let sorted = quick_sort::quick_sort(data);
+    let sorted = QuickSort::sort(data);
 
     assert!(is_equal_vec(sorted, correct.span()), "invalid result");
 }
