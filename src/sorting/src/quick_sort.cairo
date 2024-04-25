@@ -6,20 +6,24 @@ use alexandria_data_structures::vec::{Felt252Vec, VecTrait};
 /// * `Felt252Vec<T>` - Array to sort
 /// # Returns
 /// * `Felt252Vec<T>` - Sorted array
-pub fn quick_sort<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>, +Felt252DictValue<T>>(
-    mut array: Felt252Vec<T>
-) -> Felt252Vec<T> {
-    let array_size = array.len();
-    if array_size <= 1 {
+
+use super::SortableVec;
+
+pub impl QuickSort of SortableVec {
+    fn sort<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +Felt252DictValue<T>>(
+        mut array: Felt252Vec<T>
+    ) -> Felt252Vec<T> {
+        let array_size = array.len();
+        if array_size <= 1 {
+            return array;
+        }
+        quick_sort_range(ref array, 0, array_size - 1);
+
         return array;
     }
-    quick_sort_range(ref array, 0, array_size - 1);
-
-    return array;
 }
 
-
-fn quick_sort_range<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +PartialEq<T>, +Felt252DictValue<T>>(
+fn quick_sort_range<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +Felt252DictValue<T>>(
     ref array: Felt252Vec<T>, left: usize, right: usize
 ) {
     if left >= right {
