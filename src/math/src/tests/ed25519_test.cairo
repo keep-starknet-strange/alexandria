@@ -1,4 +1,4 @@
-use alexandria_math::ed25519::verify_signature;
+use alexandria_math::ed25519::{verify_signature};
 
 // Public keys and signatures were generated with JS library Noble (https://github.com/paulmillr/noble-ed25519)
 
@@ -69,7 +69,7 @@ fn verify_signature_invalid() {
     let s_sign: u256 = 0x68e015fa8775659d1f40a01e1f69b8af4409046f4dc8ff02cdb04fdc3585eb01;
     let signature = array![r_sign, s_sign];
 
-    assert!(!verify_signature(msg, signature.span(), pub_key), "Invalid signature");
+    assert!(!verify_signature(msg, signature.span(), pub_key), "Signature should be invalid");
 }
 
 #[test]

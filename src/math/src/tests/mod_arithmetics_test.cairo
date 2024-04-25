@@ -1,4 +1,5 @@
 use alexandria_math::mod_arithmetics::{add_mod, sub_mod, mult_mod, div_mod, pow_mod};
+use core::traits::TryInto;
 
 const p: u256 =
     57896044618658097711785492504343953926634992332820282019728792003956564819949; // 2^255 - 19
@@ -9,14 +10,15 @@ const pow_256_minus_1: u256 =
 #[test]
 #[available_gas(500000000)]
 fn add_mod_p_test() {
-    assert_eq!(add_mod(p, p, p), 0, "Incorrect result");
-    assert_eq!(add_mod(p, 1, p), 1, "Incorrect result");
-    assert_eq!(add_mod(1, p, p), 1, "Incorrect result");
-    assert_eq!(add_mod(10, 30, p), 40, "Incorrect result");
-    assert_eq!(add_mod(0, 0, p), 0, "Incorrect result");
-    assert_eq!(add_mod(0, 1, p), 1, "Incorrect result");
-    assert_eq!(add_mod(1, 0, p), 1, "Incorrect result");
-    assert_eq!(add_mod(pow_256_minus_1, 1, p), 38, "Incorrect result");
+    let prime_non_zero = p.try_into().unwrap();
+
+    assert_eq!(add_mod(p, p, prime_non_zero), 0, "Incorrect result");
+    assert_eq!(add_mod(p, 1, prime_non_zero), 1, "Incorrect result");
+    assert_eq!(add_mod(1, p, prime_non_zero), 1, "Incorrect result");
+    assert_eq!(add_mod(10, 30, prime_non_zero), 40, "Incorrect result");
+    assert_eq!(add_mod(0, 0, prime_non_zero), 0, "Incorrect result");
+    assert_eq!(add_mod(0, 1, prime_non_zero), 1, "Incorrect result");
+    assert_eq!(add_mod(1, 0, prime_non_zero), 1, "Incorrect result");
 }
 
 #[test]
@@ -76,14 +78,15 @@ fn sub_mod_2_test() {
 #[test]
 #[available_gas(500000000)]
 fn mult_mod_test() {
-    assert_eq!(mult_mod(p, p, p), 0, "Incorrect result");
-    assert_eq!(mult_mod(p, 1, p), 0, "Incorrect result");
-    assert_eq!(mult_mod(1, p, p), 0, "Incorrect result");
-    assert_eq!(mult_mod(10, 30, p), 300, "Incorrect result");
-    assert_eq!(mult_mod(0, 0, p), 0, "Incorrect result");
-    assert_eq!(mult_mod(0, 1, p), 0, "Incorrect result");
-    assert_eq!(mult_mod(1, 0, p), 0, "Incorrect result");
-    assert_eq!(mult_mod(pow_256_minus_1, 1, p), 37, "Incorrect result");
+    let prime_non_zero = p.try_into().unwrap();
+    assert_eq!(mult_mod(p, p, prime_non_zero), 0, "Incorrect result");
+    assert_eq!(mult_mod(p, 1, prime_non_zero), 0, "Incorrect result");
+    assert_eq!(mult_mod(1, p, prime_non_zero), 0, "Incorrect result");
+    assert_eq!(mult_mod(10, 30, prime_non_zero), 300, "Incorrect result");
+    assert_eq!(mult_mod(0, 0, prime_non_zero), 0, "Incorrect result");
+    assert_eq!(mult_mod(0, 1, prime_non_zero), 0, "Incorrect result");
+    assert_eq!(mult_mod(1, 0, prime_non_zero), 0, "Incorrect result");
+    assert_eq!(mult_mod(pow_256_minus_1, 1, prime_non_zero), 37, "Incorrect result");
 }
 
 #[test]
@@ -115,27 +118,29 @@ fn mult_mod_2_test() {
 #[test]
 #[available_gas(500000000)]
 fn div_mod_test() {
+    let prime_non_zero = p.try_into().unwrap();
     let div_10_30_mod_p =
         38597363079105398474523661669562635951089994888546854679819194669304376546633;
-    assert_eq!(div_mod(p, 1, p), 0, "Incorrect result");
-    assert_eq!(div_mod(30, 10, p), 3, "Incorrect result");
-    assert_eq!(div_mod(10, 30, p), div_10_30_mod_p, "Incorrect result");
+    assert_eq!(div_mod(p, 1, prime_non_zero), 0, "Incorrect result");
+    assert_eq!(div_mod(30, 10, prime_non_zero), 3, "Incorrect result");
+    assert_eq!(div_mod(10, 30, prime_non_zero), div_10_30_mod_p, "Incorrect result");
 }
 
 #[test]
 #[available_gas(500000000)]
 fn pow_mod_test() {
-    assert_eq!(pow_mod(2, 4, p), 16, "Incorrect result");
-    assert_eq!(pow_mod(2, 256, p), 38, "Incorrect result");
-    assert_eq!(pow_mod(2, 260, p), 608, "Incorrect result");
+    let prime_non_zero = p.try_into().unwrap();
+    assert_eq!(pow_mod(2, 4, prime_non_zero), 16, "Incorrect result");
+    assert_eq!(pow_mod(2, 256, prime_non_zero), 38, "Incorrect result");
+    assert_eq!(pow_mod(2, 260, prime_non_zero), 608, "Incorrect result");
     assert(
         pow_mod(
-            10, 260, p
+            10, 260, prime_non_zero
         ) == 17820046977743035104984469918379927979184337110507416960697246160624073120874,
         'Incorrect result'
     );
-    assert_eq!(pow_mod(4, 174, p), 188166885971377801784666882048, "Incorrect result");
-    assert_eq!(pow_mod(100, p, p), 100, "Incorrect result");
+    assert_eq!(pow_mod(4, 174, prime_non_zero), 188166885971377801784666882048, "Incorrect result");
+    assert_eq!(pow_mod(100, p, prime_non_zero), 100, "Incorrect result");
 }
 
 #[test]
