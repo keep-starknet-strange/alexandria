@@ -1,13 +1,14 @@
-use core::array::ArrayTrait;
-use core::option::OptionTrait;
 use alexandria_data_structures::array_ext::SpanTraitExt;
 use alexandria_math::mod_arithmetics::{
     add_mod, sub_mod, mult_mod, div_mod, pow_mod, add_inverse_mod, equality_mod
 };
-use alexandria_math::sha512::{sha512, SHA512_LEN};
-use core::integer::u512;
-use core::traits::TryInto;
 use alexandria_math::pow;
+use alexandria_math::sha512::{sha512, SHA512_LEN};
+use core::array::ArrayTrait;
+use core::integer::u512;
+use core::option::OptionTrait;
+use core::traits::Div;
+use core::traits::TryInto;
 
 // As per RFC-8032: https://datatracker.ietf.org/doc/html/rfc8032#section-5.1.7
 // Variable namings in this function refer to naming in the RFC
@@ -45,7 +46,6 @@ pub struct ExtendedHomogeneousPoint {
 pub trait PointDoubling<T> {
     fn double(self: T) -> T;
 }
-use core::traits::Div;
 
 impl PointDoublingExtendedHomogeneousPoint of PointDoubling<ExtendedHomogeneousPoint> {
     fn double(self: ExtendedHomogeneousPoint) -> ExtendedHomogeneousPoint {

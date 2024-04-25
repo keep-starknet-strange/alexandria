@@ -1,6 +1,6 @@
+use core::integer::{u512, u512_safe_div_rem_by_u256, u256_wide_mul};
 use core::option::OptionTrait;
 use core::traits::TryInto;
-use core::integer::{u512, u512_safe_div_rem_by_u256, u256_wide_mul};
 
 /// Function that performs modular addition. Will panick if result is > u256 max
 /// # Arguments
