@@ -306,30 +306,6 @@ impl PointIntoExtendedHomogeneousPoint of Into<Point, ExtendedHomogeneousPoint> 
     }
 }
 
-fn get_table(P: ExtendedHomogeneousPoint) -> Span<ExtendedHomogeneousPoint> {
-    let mut table = array![];
-    let mut i = 0;
-
-    let two_pow_w = pow(2, w);
-
-    while (i < two_pow_w) {
-        let k_i = point_mult_double_and_add(i, P);
-        table.append(k_i);
-        i += 1;
-    };
-
-    table.span()
-}
-
-fn point_double_repeat(mut P: ExtendedHomogeneousPoint, mut w: u256) -> ExtendedHomogeneousPoint {
-    let mut i = 0;
-    while (i < w) {
-        P = P.double();
-        i += 1;
-    };
-    P
-}
-
 /// Function that performs point multiplication for an Elliptic Curve point using the double and add method.
 /// # Arguments
 /// * `scalar` - Scalar such that scalar * P = P + P + P + ... + P.
@@ -352,61 +328,6 @@ pub fn point_mult_double_and_add(
         }
         P = P.double();
         scalar = scalar / 2;
-    };
-    Q
-}
-
-fn count_bits(mut number: u256) -> u256 {
-    let mut count = 0;
-    if (number == 0) {
-        return 1;
-    }
-    while (number > 0) {
-        number /= 2;
-        count += 1;
-    };
-    count
-}
-
-fn get_msg_groups(number: u256) -> Array<u32> {
-    let num_bits = count_bits(number);
-    let num_groups = (num_bits + w - 1) / w;
-
-    let mut ret: Array<u32> = array![];
-
-    let mut i = 0;
-    while (i < num_groups) {
-        let shifted = number / pow(2, (w * (num_groups - 1 - i)));
-        let group = shifted & ((1 * pow(2, w)) - 1);
-        ret.append(group.try_into().unwrap());
-        i += 1;
-    };
-    ret
-}
-
-/// Function that performs point multiplication for an Elliptic Curve point using the double and add method.
-/// # Arguments
-/// * `scalar` - Scalar such that scalar * P = P + P + P + ... + P.
-/// * `P` - Elliptic Curve point in the Extended Homogeneous form.
-/// # Returns
-/// * `u256` - Resulting point in the Extended Homogeneous form.
-pub fn point_mult(mut scalar: u256, mut P: ExtendedHomogeneousPoint) -> ExtendedHomogeneousPoint {
-    let prime_non_zero = p.try_into().unwrap();
-    let mut Q = ExtendedHomogeneousPoint {
-        X: 0, Y: 1, Z: 1, T: 0, prime: p, prime_non_zero: prime_non_zero
-    };
-
-    let precalculated_table = get_table(P);
-    let ms = get_msg_groups(scalar);
-
-    let mut i = 0;
-    while (i < ms.len()) {
-        let bits = *ms[i];
-        Q = point_double_repeat(Q, w);
-        if (bits > 0) {
-            Q = Q + *precalculated_table.at(bits.try_into().unwrap());
-        }
-        i += 1;
     };
     Q
 }
