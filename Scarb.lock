@@ -6,6 +6,7 @@ name = "alexandria_ascii"
 version = "0.1.0"
 dependencies = [
  "alexandria_data_structures",
+ "snforge_std",
 ]
 
 [[package]]
@@ -14,6 +15,7 @@ version = "0.1.0"
 dependencies = [
  "alexandria_data_structures",
  "alexandria_math",
+ "snforge_std",
 ]
 
 [[package]]
@@ -21,6 +23,7 @@ name = "alexandria_data_structures"
 version = "0.2.0"
 dependencies = [
  "alexandria_encoding",
+ "snforge_std",
 ]
 
 [[package]]
@@ -30,6 +33,7 @@ dependencies = [
  "alexandria_bytes",
  "alexandria_math",
  "alexandria_numeric",
+ "snforge_std",
 ]
 
 [[package]]
@@ -37,6 +41,7 @@ name = "alexandria_linalg"
 version = "0.1.0"
 dependencies = [
  "alexandria_math",
+ "snforge_std",
 ]
 
 [[package]]
@@ -44,11 +49,15 @@ name = "alexandria_math"
 version = "0.2.0"
 dependencies = [
  "alexandria_data_structures",
+ "snforge_std",
 ]
 
 [[package]]
 name = "alexandria_merkle_tree"
 version = "0.1.0"
+dependencies = [
+ "snforge_std",
+]
 
 [[package]]
 name = "alexandria_numeric"
@@ -56,6 +65,7 @@ version = "0.1.0"
 dependencies = [
  "alexandria_math",
  "alexandria_searching",
+ "snforge_std",
 ]
 
 [[package]]
@@ -63,6 +73,7 @@ name = "alexandria_searching"
 version = "0.1.0"
 dependencies = [
  "alexandria_data_structures",
+ "snforge_std",
 ]
 
 [[package]]
@@ -70,12 +81,24 @@ name = "alexandria_sorting"
 version = "0.1.0"
 dependencies = [
  "alexandria_data_structures",
+ "snforge_std",
 ]
 
 [[package]]
 name = "alexandria_storage"
 version = "0.3.0"
+dependencies = [
+ "snforge_std",
+]
 
 [[package]]
 name = "alexandria_utils"
 version = "0.1.0"
+dependencies = [
+ "snforge_std",
+]
+
+[[package]]
+name = "snforge_std"
+version = "0.22.0"
+source = "git+https://github.com/foundry-rs/starknet-foundry.git?tag=v0.22.0#9b215944c6c5871c738381b4ded61bbf06e7ba35"

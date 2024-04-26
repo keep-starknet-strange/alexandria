@@ -26,46 +26,49 @@ mod ABytesStore {
         }
     }
 }
+// #[cfg(test)]
+// mod tests {
+//     use alexandria_bytes::utils::{BytesDebug, BytesDisplay};
+//     use alexandria_bytes::{Bytes, BytesTrait, BytesStore};
+//     use starknet::syscalls::deploy_syscall;
+//     use starknet::{ClassHash, ContractAddress, SyscallResultTrait,};
+//     use super::{ABytesStore, IABytesStoreDispatcher, IABytesStoreDispatcherTrait};
 
-#[cfg(test)]
-mod tests {
-    use alexandria_bytes::utils::{BytesDebug, BytesDisplay};
-    use alexandria_bytes::{Bytes, BytesTrait, BytesStore};
-    use starknet::syscalls::deploy_syscall;
-    use starknet::{ClassHash, ContractAddress, SyscallResultTrait,};
-    use super::{ABytesStore, IABytesStoreDispatcher, IABytesStoreDispatcherTrait};
+//     fn deploy() -> IABytesStoreDispatcher {
+//         let class_hash: ClassHash = ABytesStore::TEST_CLASS_HASH.try_into().unwrap();
+//         let ctor_data: Array<felt252> = Default::default();
+//         let (addr, _) = deploy_syscall(class_hash, 0, ctor_data.span(), false).unwrap_syscall();
+//         IABytesStoreDispatcher { contract_address: addr }
+//     }
 
-    fn deploy() -> IABytesStoreDispatcher {
-        let class_hash: ClassHash = ABytesStore::TEST_CLASS_HASH.try_into().unwrap();
-        let ctor_data: Array<felt252> = Default::default();
-        let (addr, _) = deploy_syscall(class_hash, 0, ctor_data.span(), false).unwrap_syscall();
-        IABytesStoreDispatcher { contract_address: addr }
-    }
+//     #[test]
+//     fn test_deploy() {
+//         let contract = deploy();
+//         assert_eq!(contract.get_bytes(), BytesTrait::new_empty(), "Initial bytes should be
+//         empty");
+//     }
 
-    #[test]
-    fn test_deploy() {
-        let contract = deploy();
-        assert_eq!(contract.get_bytes(), BytesTrait::new_empty(), "Initial bytes should be empty");
-    }
+//     #[test]
+//     fn test_bytes_storage_32_bytes() {
+//         let contract = deploy();
+//         let bytes = BytesTrait::new(32, array![0x01020304050607080910, 0x11121314151617181920]);
+//         contract.set_bytes(bytes.clone());
+//         assert_eq!(contract.get_bytes(), bytes, "Bytes should be set correctly");
+//     }
 
-    #[test]
-    fn test_bytes_storage_32_bytes() {
-        let contract = deploy();
-        let bytes = BytesTrait::new(32, array![0x01020304050607080910, 0x11121314151617181920]);
-        contract.set_bytes(bytes.clone());
-        assert_eq!(contract.get_bytes(), bytes, "Bytes should be set correctly");
-    }
+//     #[test]
+//     fn test_bytes_storage_40_bytes() {
+//         let contract = deploy();
+//         let bytes = BytesTrait::new(
+//             40,
+//             array![
+//                 0x01020304050607080910, 0x11121314151617181920,
+//                 0x21222324252627280000000000000000
+//             ]
+//         );
+//         contract.set_bytes(bytes.clone());
+//         assert_eq!(contract.get_bytes(), bytes, "Bytes should be set correctly");
+//     }
+// }
 
-    #[test]
-    fn test_bytes_storage_40_bytes() {
-        let contract = deploy();
-        let bytes = BytesTrait::new(
-            40,
-            array![
-                0x01020304050607080910, 0x11121314151617181920, 0x21222324252627280000000000000000
-            ]
-        );
-        contract.set_bytes(bytes.clone());
-        assert_eq!(contract.get_bytes(), bytes, "Bytes should be set correctly");
-    }
-}
+

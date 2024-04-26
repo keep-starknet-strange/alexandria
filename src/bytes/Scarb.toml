@@ -12,3 +12,4 @@ fmt.workspace = true
 alexandria_math = { path = "../math" }
 alexandria_data_structures = { path = "../data_structures" }
 starknet.workspace = true
+snforge_std.workspace = true

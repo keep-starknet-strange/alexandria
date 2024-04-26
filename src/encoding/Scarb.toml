@@ -9,6 +9,7 @@ edition = "2023_11"
 fmt.workspace = true
 
 [dependencies]
+snforge_std.workspace = true
 alexandria_math = { path = "../math" }
 alexandria_numeric = { path = "../numeric" }
 alexandria_bytes = { path = "../bytes" }

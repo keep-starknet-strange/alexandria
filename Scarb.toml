@@ -21,6 +21,7 @@ cairo-version = "2.6.3"
 
 [workspace.dependencies]
 starknet = "2.6.3"
+snforge_std = { git = "https://github.com/foundry-rs/starknet-foundry.git", tag = "v0.22.0" }
 
 [workspace.tool.fmt]
 sort-module-level-items = true

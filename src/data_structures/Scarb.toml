@@ -10,3 +10,4 @@ fmt.workspace = true
 
 [dependencies]
 alexandria_encoding = { path = "../encoding" }
+snforge_std.workspace = true

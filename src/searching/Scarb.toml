@@ -10,4 +10,5 @@ fmt.workspace = true
 
 [dependencies]
 # dependency due to VecTrait usage in dijkstra.cairo
+snforge_std.workspace = true
 alexandria_data_structures = { path = "../data_structures" }

@@ -11,3 +11,4 @@ fmt.workspace = true
 [dependencies]
 # dependency due to ArrayTraitExt::concat in ed25519.cairo
 alexandria_data_structures = { path = "../data_structures" }
+snforge_std.workspace = true

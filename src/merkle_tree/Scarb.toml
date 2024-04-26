@@ -5,5 +5,8 @@ description = "Merkle tree related stuff"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/src/merkle_tree"
 edition = "2023_11"
 
+[dependencies]
+snforge_std.workspace = true
+
 [tool]
 fmt.workspace = true

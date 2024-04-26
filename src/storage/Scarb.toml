@@ -9,4 +9,5 @@ edition = "2023_11"
 fmt.workspace = true
 
 [dependencies]
+snforge_std.workspace = true
 starknet.workspace = true
