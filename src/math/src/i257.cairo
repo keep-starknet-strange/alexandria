@@ -266,7 +266,7 @@ impl i257Neg of Neg<i257> {
     }
 }
 
-impl i257Zeroable of Zero<i257> {
+pub impl i257Zeroable of Zero<i257> {
     fn zero() -> i257 {
         I257Impl::new(0, false)
     }
