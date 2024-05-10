@@ -36,15 +36,15 @@ impl U32BytesImpl of UIntBytes<u32> {
     /// # Returns
     /// * The bytes array representation of the value.
     fn to_bytes(mut self: u32) -> Span<u8> {
-        let mut bytes_used: u32 = self.bytes_used().into();
-        let mut bytes: Array<u8> = array![];
-        while bytes_used != 0 {
-            bytes_used -= 1;
-            let val = BitShift::shr(self, 8 * bytes_used);
-            bytes.append((val & 0xFF).try_into().unwrap());
-        };
-
-        bytes.span()
+        let val0: u8 = (self & 0xFF).try_into().unwrap();
+        let val1 = self & 0xFF00;
+        let val2 = self & 0xFF0000;
+        let val3 = self & 0xFF000000;
+        if val3 != 0 {
+            return array![
+                val3.try_into().unwrap(), val2.try_into().unwrap(), val1.try_into().unwrap(), val0
+            ];
+        }
     }
 
     /// Returns the number of bytes used to represent a `u32` value.
