@@ -13,7 +13,7 @@ impl U32BytesImpl of UIntBytes<u32> {
     /// # Returns
     /// * Option::Some(u32) if the operation succeeds
     /// * Option::None otherwise
-    fn from_bytes(input: Span<u8>) -> Option<u32> {
+    fn from_bytes(mut input: Span<u8>) -> Option<u32> {
         let len = input.len();
         if len == 0 {
             return Option::None;
@@ -21,15 +21,12 @@ impl U32BytesImpl of UIntBytes<u32> {
         if len > 4 {
             return Option::None;
         }
-        let offset: u32 = len - 1;
         let mut result: u32 = 0;
-        let mut i: u32 = 0;
-        while i != len {
-            let byte: u32 = (*input[i]).into();
-            result += BitShift::shl(byte, 8 * (offset - i));
-
-            i += 1;
-        };
+        while let Option::Some(byte) = input
+            .pop_front() {
+                let byte: u32 = (*byte).into();
+                result = result * 0x100 + byte;
+            };
         Option::Some(result)
     }
 
@@ -39,13 +36,12 @@ impl U32BytesImpl of UIntBytes<u32> {
     /// # Returns
     /// * The bytes array representation of the value.
     fn to_bytes(mut self: u32) -> Span<u8> {
-        let bytes_used: u32 = self.bytes_used().into();
-        let mut bytes: Array<u8> = Default::default();
-        let mut i = 0;
-        while i != bytes_used {
-            let val = BitShift::shr(self, 8 * (bytes_used.try_into().unwrap() - i - 1));
+        let mut bytes_used: u32 = self.bytes_used().into();
+        let mut bytes: Array<u8> = array![];
+        while bytes_used != 0 {
+            bytes_used -= 1;
+            let val = BitShift::shr(self, 8 * bytes_used);
             bytes.append((val & 0xFF).try_into().unwrap());
-            i += 1;
         };
 
         bytes.span()
