@@ -266,13 +266,17 @@ impl i257Neg of Neg<i257> {
     }
 }
 
-impl i257Zeroable of Zero<i257> {
+pub impl i257Zeroable of Zero<i257> {
     fn zero() -> i257 {
         I257Impl::new(0, false)
     }
     fn is_zero(self: @i257) -> bool {
-        assert(!*self.is_negative, 'no negative zero');
-        *self.abs == 0
+        if *self.abs == 0 {
+            assert(!*self.is_negative, 'no negative zero');
+            true
+        } else {
+            false
+        }
     }
     fn is_non_zero(self: @i257) -> bool {
         !self.is_zero()
