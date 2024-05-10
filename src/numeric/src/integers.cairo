@@ -3,7 +3,6 @@ use alexandria_math::BitShift;
 pub trait UIntBytes<T> {
     fn from_bytes(input: Span<u8>) -> Option<T>;
     fn to_bytes(self: T) -> Span<u8>;
-    fn bytes_used(self: T) -> u8;
 }
 
 impl U32BytesImpl of UIntBytes<u32> {
@@ -42,31 +41,24 @@ impl U32BytesImpl of UIntBytes<u32> {
         let val3 = self & 0xFF000000;
         if val3 != 0 {
             return array![
-                val3.try_into().unwrap(), val2.try_into().unwrap(), val1.try_into().unwrap(), val0
-            ];
+                (val3 / 0x1000000).try_into().unwrap(),
+                (val2 / 0x10000).try_into().unwrap(),
+                (val1 / 0x100).try_into().unwrap(),
+                val0
+            ]
+                .span();
         }
-    }
 
-    /// Returns the number of bytes used to represent a `u32` value.
-    /// # Arguments
-    /// * `self` - The value to check.
-    /// # Returns
-    /// The number of bytes used to represent the value.
-    fn bytes_used(self: u32) -> u8 {
-        if self < 0x10000 { // 256^2
-            if self < 0x100 { // 256^1
-                if self == 0 {
-                    return 0;
-                } else {
-                    return 1;
-                };
-            }
-            return 2;
-        } else {
-            if self < 0x1000000 { // 256^6
-                return 3;
-            }
-            return 4;
+        if val2 != 0 {
+            return array![
+                (val2 / 0x10000).try_into().unwrap(), (val1 / 0x100).try_into().unwrap(), val0
+            ]
+                .span();
         }
+
+        if val1 != 0 {
+            return array![(val1 / 0x100).try_into().unwrap(), val0].span();
+        }
+        array![val0].span()
     }
 }
