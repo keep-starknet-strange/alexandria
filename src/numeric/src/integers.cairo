@@ -3,7 +3,6 @@ use alexandria_math::BitShift;
 pub trait UIntBytes<T> {
     fn from_bytes(input: Span<u8>) -> Option<T>;
     fn to_bytes(self: T) -> Span<u8>;
-    fn bytes_used(self: T) -> u8;
 }
 
 impl U32BytesImpl of UIntBytes<u32> {
@@ -13,7 +12,7 @@ impl U32BytesImpl of UIntBytes<u32> {
     /// # Returns
     /// * Option::Some(u32) if the operation succeeds
     /// * Option::None otherwise
-    fn from_bytes(input: Span<u8>) -> Option<u32> {
+    fn from_bytes(mut input: Span<u8>) -> Option<u32> {
         let len = input.len();
         if len == 0 {
             return Option::None;
@@ -21,15 +20,12 @@ impl U32BytesImpl of UIntBytes<u32> {
         if len > 4 {
             return Option::None;
         }
-        let offset: u32 = len - 1;
         let mut result: u32 = 0;
-        let mut i: u32 = 0;
-        while i != len {
-            let byte: u32 = (*input[i]).into();
-            result += BitShift::shl(byte, 8 * (offset - i));
-
-            i += 1;
-        };
+        while let Option::Some(byte) = input
+            .pop_front() {
+                let byte: u32 = (*byte).into();
+                result = result * 0x100 + byte;
+            };
         Option::Some(result)
     }
 
@@ -39,38 +35,30 @@ impl U32BytesImpl of UIntBytes<u32> {
     /// # Returns
     /// * The bytes array representation of the value.
     fn to_bytes(mut self: u32) -> Span<u8> {
-        let bytes_used: u32 = self.bytes_used().into();
-        let mut bytes: Array<u8> = Default::default();
-        let mut i = 0;
-        while i != bytes_used {
-            let val = BitShift::shr(self, 8 * (bytes_used.try_into().unwrap() - i - 1));
-            bytes.append((val & 0xFF).try_into().unwrap());
-            i += 1;
-        };
-
-        bytes.span()
-    }
-
-    /// Returns the number of bytes used to represent a `u32` value.
-    /// # Arguments
-    /// * `self` - The value to check.
-    /// # Returns
-    /// The number of bytes used to represent the value.
-    fn bytes_used(self: u32) -> u8 {
-        if self < 0x10000 { // 256^2
-            if self < 0x100 { // 256^1
-                if self == 0 {
-                    return 0;
-                } else {
-                    return 1;
-                };
-            }
-            return 2;
-        } else {
-            if self < 0x1000000 { // 256^6
-                return 3;
-            }
-            return 4;
+        let val0: u8 = (self & 0xFF).try_into().unwrap();
+        let val1 = self & 0xFF00;
+        let val2 = self & 0xFF0000;
+        let val3 = self & 0xFF000000;
+        if val3 != 0 {
+            return array![
+                (val3 / 0x1000000).try_into().unwrap(),
+                (val2 / 0x10000).try_into().unwrap(),
+                (val1 / 0x100).try_into().unwrap(),
+                val0
+            ]
+                .span();
         }
+
+        if val2 != 0 {
+            return array![
+                (val2 / 0x10000).try_into().unwrap(), (val1 / 0x100).try_into().unwrap(), val0
+            ]
+                .span();
+        }
+
+        if val1 != 0 {
+            return array![(val1 / 0x100).try_into().unwrap(), val0].span();
+        }
+        array![val0].span()
     }
 }
