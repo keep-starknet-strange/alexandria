@@ -24,6 +24,8 @@ fn sub_wo_mod(mut a: u256, mut b: u256, modulo: u256) -> u256 {
 
 pub const p: u256 =
     57896044618658097711785492504343953926634992332820282019728792003956564819949; // 2^255 - 19
+pub const p2x: u256 =
+    115792089237316195423570985008687907853269984665640564039457584007913129639898; // 2^255 - 19
 pub const a: u256 =
     57896044618658097711785492504343953926634992332820282019728792003956564819948; // - 1
 pub const c: u256 = 3;
@@ -59,6 +61,58 @@ pub struct ExtendedHomogeneousPoint {
 pub trait PointOperations<T> {
     fn double(self: T, prime_nz: NonZero<u256>) -> T;
     fn add(self: T, rhs: T, prime_nz: NonZero<u256>) -> T;
+}
+
+impl PointDoublingPoint of PointOperations<Point> {
+    // Implements Equation , https://eprint.iacr.org/2008/522.pdf
+    fn double(self: Point, prime_nz: NonZero<u256>) -> Point {
+        let Point { x, y } = self;
+
+        let xy = mult_mod(x, y, prime_nz);
+        let x2 = mult_mod(x, x, prime_nz);
+        let y2 = mult_mod(y, y, prime_nz);
+
+        // ax^2 + y^2, a is -1
+        let ax2_y2 = sub_wo_mod(y2, x2, p);
+
+        // 1 / (ax^2 + y^2)
+        let ax2_y2_inv: u256 = u256_inv_mod(ax2_y2, prime_nz).unwrap().into();
+
+        // 1 / (2 - (ax^2 + y^2))
+        let two_sub_ax2_y2_inv: u256 = u256_inv_mod(2 + p2x - ax2_y2, prime_nz).unwrap().into();
+
+        // x3 = (2xy) / (ax^2 + y^2)
+        let x = mult_mod((xy + xy), ax2_y2_inv, prime_nz);
+
+        // y3 = (x^2 + y^2) / (2 - ax^2 - y^2)
+        let y = mult_mod((x2 + y2), two_sub_ax2_y2_inv, prime_nz);
+
+        Point { x, y }
+    }
+
+    // Implements Equation 1, https://eprint.iacr.org/2008/522.pdf
+    fn add(self: Point, rhs: Point, prime_nz: NonZero<u256>) -> Point {
+        let Point { x: x1, y: y1 } = self;
+        let Point { x: x2, y: y2 } = rhs;
+
+        let x1x2 = mult_mod(x1, x2, prime_nz);
+        let y1y2 = mult_mod(y1, y2, prime_nz);
+
+        let x1y2_512 = u256_wide_mul(x1, y2);
+        let x2y1_512 = u256_wide_mul(x2, y1);
+        let dx1x2y1y2 = mult_mod(d, mult_mod(x1x2, y1y2, prime_nz), prime_nz);
+
+        let one_dx1x2y1y2_inv: u256 = u256_inv_mod(1 + dx1x2y1y2, prime_nz).unwrap().into();
+        let one_sub_dx1x2y1y2_inv: u256 = u256_inv_mod(1 + p - dx1x2y1y2, prime_nz).unwrap().into();
+
+        // x = (x1y2 + x2y1) / (1 + d*x1x2*y1y2)
+        let (_, x1y2_x2y1) = u512_safe_div_rem_by_u256(u512_add(x1y2_512, x2y1_512), prime_nz);
+        let x = mult_mod(x1y2_x2y1, one_dx1x2y1y2_inv, prime_nz);
+
+        // y = (y1y2 - ax1x2) / (1 - d*x1x2*y1y2), a = -1
+        let y = mult_mod(y1y2 + x1x2, one_sub_dx1x2y1y2_inv, prime_nz);
+        Point { x, y }
+    }
 }
 
 impl PointDoublingExtendedHomogeneousPoint of PointOperations<ExtendedHomogeneousPoint> {
@@ -121,6 +175,15 @@ impl PartialEqExtendedHomogeneousPoint of PartialEq<ExtendedHomogeneousPoint> {
             mult_mod(*lhs.Y, *rhs.Z, prime_nz) == mult_mod(*rhs.Y, *lhs.Z, prime_nz)
     }
     fn ne(lhs: @ExtendedHomogeneousPoint, rhs: @ExtendedHomogeneousPoint) -> bool {
+        lhs != rhs
+    }
+}
+
+impl PartialEqPoint of PartialEq<Point> {
+    fn eq(lhs: @Point, rhs: @Point) -> bool {
+        *lhs.x == *rhs.x && *lhs.y == *rhs.y
+    }
+    fn ne(lhs: @Point, rhs: @Point) -> bool {
         lhs != rhs
     }
 }
@@ -289,11 +352,8 @@ impl PointIntoExtendedHomogeneousPoint of Into<Point, ExtendedHomogeneousPoint> 
 /// * `P` - Elliptic Curve point in the Extended Homogeneous form.
 /// # Returns
 /// * `u256` - Resulting point in the Extended Homogeneous form.
-pub fn point_mult_double_and_add(
-    mut scalar: u256, mut P: ExtendedHomogeneousPoint, prime_nz: NonZero<u256>
-) -> ExtendedHomogeneousPoint {
-    let mut Q = ExtendedHomogeneousPoint { X: 0, Y: 1, Z: 1, T: 0, // neutral element
-     };
+pub fn point_mult_double_and_add(mut scalar: u256, mut P: Point, prime_nz: NonZero<u256>) -> Point {
+    let mut Q = Point { x: 0, y: 1 }; // neutral element
     let zero = 0;
 
     // Double and add method
@@ -316,23 +376,19 @@ pub fn point_mult_double_and_add(
 /// * `A_prime` - Result of point decoding of the public key in Extended Homogeneous form.
 /// # Returns
 /// * `bool` - true if the signature fits to the message and the public key, false otherwise.
-fn check_group_equation(
-    S: u256, R: ExtendedHomogeneousPoint, k: u256, A_prime: ExtendedHomogeneousPoint
-) -> bool {
+fn check_group_equation(S: u256, R: Point, k: u256, A_prime: Point) -> bool {
     // (X(P),Y(P)) of edwards25519 in https://datatracker.ietf.org/doc/html/rfc7748
-    let B: ExtendedHomogeneousPoint = ExtendedHomogeneousPoint {
-        X: 15112221349535400772501151409588531511454012693041857206046113283949847762202,
-        Y: 46316835694926478169428394003475163141307993866256225615783033603165251855960,
-        Z: 1,
-        T: 46827403850823179245072216630277197565144205554125654976674165829533817101731,
+    let B: Point = Point {
+        x: 15112221349535400772501151409588531511454012693041857206046113283949847762202,
+        y: 46316835694926478169428394003475163141307993866256225615783033603165251855960,
     };
 
     let prime_nz = prime_non_zero;
 
     // Check group equation [S]B = R + [k]A'
-    let lhs: ExtendedHomogeneousPoint = point_mult_double_and_add(S, B, prime_nz);
-    let kA: ExtendedHomogeneousPoint = point_mult_double_and_add(k, A_prime, prime_nz);
-    let rhs: ExtendedHomogeneousPoint = R.add(kA, prime_nz);
+    let lhs: Point = point_mult_double_and_add(S, B, prime_nz);
+    let kA: Point = point_mult_double_and_add(k, A_prime, prime_nz);
+    let rhs: Point = R.add(kA, prime_nz);
     lhs == rhs
 }
 
@@ -363,9 +419,6 @@ pub fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> 
     let R: Point = r_point.unwrap();
     let A_prime: Point = A_prime_opt.unwrap();
 
-    let R_extended: ExtendedHomogeneousPoint = R.into();
-    let A_prime_ex: ExtendedHomogeneousPoint = A_prime.into();
-
     let r_bytes: Span<u8> = r.into();
     let r_bytes = r_bytes.reverse().span();
     let pub_key_bytes: Span<u8> = pub_key.into();
@@ -379,5 +432,5 @@ pub fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> 
     let l_non_zero: NonZero<u256> = l.try_into().unwrap();
     let (_, k_reduced) = core::integer::u512_safe_div_rem_by_u256(k_u512, l_non_zero);
 
-    check_group_equation(s, R_extended, k_reduced, A_prime_ex)
+    check_group_equation(s, R, k_reduced, A_prime)
 }
