@@ -1,9 +1,8 @@
 use alexandria_data_structures::array_ext::SpanTraitExt;
-use alexandria_math::u512_arithmetics::u512_add;
+use alexandria_math::u512_arithmetics::{u512_add, u512_sub};
 use alexandria_math::mod_arithmetics::{
-    add_mod, sub_mod, mult_mod, div_mod, pow_mod, add_inverse_mod, equality_mod
+    add_mod, sub_mod, mult_mod, sqr_mod, div_mod, pow_mod, equality_mod
 };
-use alexandria_math::pow;
 use alexandria_math::sha512::{sha512, SHA512_LEN};
 use core::array::ArrayTrait;
 use core::integer::{
@@ -18,8 +17,24 @@ use core::traits::TryInto;
 // As per RFC-8032: https://datatracker.ietf.org/doc/html/rfc8032#section-5.1.7
 // Variable namings in this function refer to naming in the RFC
 
-fn sub_wo_mod(mut a: u256, mut b: u256, modulo: u256) -> u256 {
-    a + p - b
+#[inline(always)]
+fn sub_wo_mod(a: u256, b: u256, modulo: u256) -> u256 {
+    a + modulo - b
+}
+
+#[inline(always)]
+fn sub_wo_mod_u512(a: u512, b: u512, modulo: u256) -> u512 {
+    u512_sub(
+        if b.limb3 < a.limb3 {
+            a
+        } else {
+            // Add p to high limbs of a to avoid overflow when subbing b
+            let u512 { limb0, limb1, limb2: low, limb3: high } = a;
+            let u256 { low: limb2, high: limb3 } = u256 { low, high } + modulo;
+            u512 { limb0, limb1, limb2, limb3 }
+        },
+        b
+    )
 }
 
 pub const p: u256 =
@@ -36,18 +51,19 @@ pub const d2x: u256 =
 pub const l: u256 =
     7237005577332262213973186563042994240857116359379907606001950938285454250989; // 2^252 + 27742317777372353535851937790883648493
 
-const prime: u256 = 57896044618658097711785492504343953926634992332820282019728792003956564819949;
-const prime_non_zero: NonZero<u256> =
+pub const prime: u256 =
     57896044618658097711785492504343953926634992332820282019728792003956564819949;
-const w: u256 = 4;
+pub const prime_non_zero: NonZero<u256> =
+    57896044618658097711785492504343953926634992332820282019728792003956564819949;
+pub const w: u256 = 4;
 
 const TWO_POW_8_NON_ZERO: NonZero<u256> = 0x100;
 
 
 #[derive(Drop, Copy)]
 pub struct Point {
-    x: u256,
-    y: u256,
+    pub x: u256,
+    pub y: u256,
 }
 
 #[derive(Drop, Copy)]
@@ -64,13 +80,13 @@ pub trait PointOperations<T> {
 }
 
 impl PointDoublingPoint of PointOperations<Point> {
-    // Implements Equation , https://eprint.iacr.org/2008/522.pdf
+    // Implements Equation 2, https://eprint.iacr.org/2008/522.pdf
     fn double(self: Point, prime_nz: NonZero<u256>) -> Point {
         let Point { x, y } = self;
 
         let xy = mult_mod(x, y, prime_nz);
-        let x2 = mult_mod(x, x, prime_nz);
-        let y2 = mult_mod(y, y, prime_nz);
+        let x2 = sqr_mod(x, prime_nz);
+        let y2 = sqr_mod(y, prime_nz);
 
         // ax^2 + y^2, a is -1
         let ax2_y2 = sub_wo_mod(y2, x2, p);
@@ -90,27 +106,40 @@ impl PointDoublingPoint of PointOperations<Point> {
         Point { x, y }
     }
 
-    // Implements Equation 1, https://eprint.iacr.org/2008/522.pdf
+    // Implements Equation 3, https://eprint.iacr.org/2008/522.pdf
     fn add(self: Point, rhs: Point, prime_nz: NonZero<u256>) -> Point {
         let Point { x: x1, y: y1 } = self;
         let Point { x: x2, y: y2 } = rhs;
 
-        let x1x2 = mult_mod(x1, x2, prime_nz);
-        let y1y2 = mult_mod(y1, y2, prime_nz);
-
+        let x1y1 = mult_mod(x1, y1, prime_nz);
+        let x2y2 = mult_mod(x2, y2, prime_nz);
+        let y1y2_512 = u256_wide_mul(y1, y2);
+        let x1x2_512 = u256_wide_mul(x1, x2);
         let x1y2_512 = u256_wide_mul(x1, y2);
-        let x2y1_512 = u256_wide_mul(x2, y1);
-        let dx1x2y1y2 = mult_mod(d, mult_mod(x1x2, y1y2, prime_nz), prime_nz);
+        let y1x2_512 = u256_wide_mul(y1, x2);
 
-        let one_dx1x2y1y2_inv: u256 = u256_inv_mod(1 + dx1x2y1y2, prime_nz).unwrap().into();
-        let one_sub_dx1x2y1y2_inv: u256 = u256_inv_mod(1 + p - dx1x2y1y2, prime_nz).unwrap().into();
+        // y1y2 + ax1x2 = y1y2 - x1x2, a  = -1
+        let (_, y1y2_ax1x2) = u512_safe_div_rem_by_u256(
+            sub_wo_mod_u512(y1y2_512, x1x2_512, p), prime_nz
+        );
 
-        // x = (x1y2 + x2y1) / (1 + d*x1x2*y1y2)
-        let (_, x1y2_x2y1) = u512_safe_div_rem_by_u256(u512_add(x1y2_512, x2y1_512), prime_nz);
-        let x = mult_mod(x1y2_x2y1, one_dx1x2y1y2_inv, prime_nz);
+        // 1 / (y1y2 + ax1x2)
+        let y1y2_ax1x2_inv = u256_inv_mod(y1y2_ax1x2, prime_nz).unwrap().into();
 
-        // y = (y1y2 - ax1x2) / (1 - d*x1x2*y1y2), a = -1
-        let y = mult_mod(y1y2 + x1x2, one_sub_dx1x2y1y2_inv, prime_nz);
+        // x1y2 − y1x2
+        let (_, x1y2_sub_y1x2) = u512_safe_div_rem_by_u256(
+            sub_wo_mod_u512(x1y2_512, y1x2_512, p), prime_nz
+        );
+
+        // 1 / (x1y2 − y1x2)
+        let x1y2_sub_y1x2_inv = u256_inv_mod(x1y2_sub_y1x2, prime_nz).unwrap().into();
+
+        // x = (x1y1 + x2y2) / (y1y2 + ax1x2)
+        let x = mult_mod(x1y1 + x2y2, y1y2_ax1x2_inv, prime_nz);
+
+        // y = (x1y1 − x2y2) / (x1y2 − y1x2)
+        let y = mult_mod(sub_wo_mod(x1y1, x2y2, p), x1y2_sub_y1x2_inv, prime_nz);
+
         Point { x, y }
     }
 }
