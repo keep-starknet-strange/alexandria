@@ -1,4 +1,4 @@
-use alexandria_math::ed25519::{verify_signature};
+use alexandria_math::ed25519::{verify_signature, Point, PointOperations, prime_non_zero};
 
 // Public keys and signatures were generated with JS library Noble (https://github.com/paulmillr/noble-ed25519)
 
@@ -85,4 +85,21 @@ fn verify_signature_invalid_length() {
 
     assert!(!verify_signature(msg, signature.span(), pub_key), "Invalid signature");
     assert!(!verify_signature(msg, array![r_sign].span(), pub_key), "Invalid signature");
+}
+
+#[test]
+fn affine_point_op() {
+    let p1 = Point {
+        x: 46706390780465557264338673484185971070529246228527338942042475661633188627656,
+        y: 15299170165656271974649334809062094114079726227711063015095704409550798436788
+    };
+    let p2 = Point {
+        x: 26148317933504540005443173402042326458672162458767831815669826413036406984486,
+        y: 30850316547316149219369061290562558254923949145644564178378051444253659681385
+    };
+    let res = Point {
+        x: 34426924428514608760437100447421064591311588584549077394333265447466212246087,
+        y: 29872771498517479181395568267318965384440757492476580330810382845026939417492
+    };
+    assert(res == p1.add(p2, prime_non_zero), 'incorrect point addition');
 }
