@@ -1,4 +1,4 @@
-use alexandria_math::mod_arithmetics::{add_mod, sub_mod, mult_mod, div_mod, pow_mod};
+use alexandria_math::mod_arithmetics::{add_mod, sub_mod, mult_mod, sqr_mod, div_mod, pow_mod};
 use core::traits::TryInto;
 
 const p: u256 =
@@ -113,6 +113,22 @@ fn mult_mod_2_test() {
     assert_eq!(mult_mod(0, 1, 2), 0, "Incorrect result");
     assert_eq!(mult_mod(1, 0, 2), 0, "Incorrect result");
     assert_eq!(mult_mod(pow_256_minus_1, 1, 2), 1, "Incorrect result");
+}
+
+#[test]
+#[available_gas(500000000)]
+fn sqr_mod_test() {
+    assert_eq!(sqr_mod(p, 2), 1, "Incorrect result");
+    assert_eq!(
+        sqr_mod(p, pow_256_minus_1),
+        mult_mod(p, p, pow_256_minus_1.try_into().unwrap()),
+        "Incorrect result"
+    );
+    assert_eq!(
+        sqr_mod(pow_256_minus_1, p),
+        mult_mod(pow_256_minus_1, pow_256_minus_1, p.try_into().unwrap()),
+        "Incorrect result"
+    );
 }
 
 #[test]
