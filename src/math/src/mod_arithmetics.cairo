@@ -112,9 +112,8 @@ pub fn u256_wide_sqr(a: u256) -> u512 nopanic {
 /// # Returns
 /// * `u256` - result of modular multiplication
 #[inline(always)]
-pub fn sqr_mod(a: u256, modulo: u256) -> u256 {
+pub fn sqr_mod(a: u256, mod_non_zero: NonZero<u256>) -> u256 {
     let mult: u512 = u256_wide_sqr(a);
-    let mod_non_zero: NonZero<u256> = modulo.try_into().unwrap();
     let (_, rem_u256) = u512_safe_div_rem_by_u256(mult, mod_non_zero);
     rem_u256
 }

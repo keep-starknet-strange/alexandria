@@ -120,12 +120,12 @@ fn mult_mod_2_test() {
 fn sqr_mod_test() {
     assert_eq!(sqr_mod(p, 2), 1, "Incorrect result");
     assert_eq!(
-        sqr_mod(p, pow_256_minus_1),
+        sqr_mod(p, pow_256_minus_1.try_into().unwrap()),
         mult_mod(p, p, pow_256_minus_1.try_into().unwrap()),
         "Incorrect result"
     );
     assert_eq!(
-        sqr_mod(pow_256_minus_1, p),
+        sqr_mod(pow_256_minus_1, p.try_into().unwrap()),
         mult_mod(pow_256_minus_1, pow_256_minus_1, p.try_into().unwrap()),
         "Incorrect result"
     );
