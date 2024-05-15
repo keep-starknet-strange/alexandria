@@ -22,6 +22,7 @@ pub mod sha512;
 #[cfg(test)]
 mod tests;
 pub mod trigonometry;
+pub mod u512_arithmetics;
 pub mod wad_ray_math;
 pub mod zellers_congruence;
 
