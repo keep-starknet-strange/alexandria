@@ -1,14 +1,19 @@
 use alexandria_data_structures::array_ext::SpanTraitExt;
+use alexandria_math::u512_arithmetics::u512_add;
 use alexandria_math::mod_arithmetics::{
     add_mod, sub_mod, mult_mod, div_mod, pow_mod, add_inverse_mod, equality_mod
 };
 use alexandria_math::pow;
 use alexandria_math::sha512::{sha512, SHA512_LEN};
 use core::array::ArrayTrait;
-use core::integer::{u512, u512_safe_div_rem_by_u256, u256_wide_mul};
+use core::integer::{
+    u512, u512_safe_div_rem_by_u256, u256_wide_mul, u256_overflowing_add, u256_overflow_sub,
+};
+use core::math::u256_inv_mod;
 use core::option::OptionTrait;
 use core::traits::Div;
 use core::traits::TryInto;
+
 
 // As per RFC-8032: https://datatracker.ietf.org/doc/html/rfc8032#section-5.1.7
 // Variable namings in this function refer to naming in the RFC
@@ -19,12 +24,14 @@ fn sub_wo_mod(mut a: u256, mut b: u256, modulo: u256) -> u256 {
 
 pub const p: u256 =
     57896044618658097711785492504343953926634992332820282019728792003956564819949; // 2^255 - 19
-const a: u256 =
+pub const a: u256 =
     57896044618658097711785492504343953926634992332820282019728792003956564819948; // - 1
-const c: u256 = 3;
-const d: u256 =
+pub const c: u256 = 3;
+pub const d: u256 =
     37095705934669439343138083508754565189542113879843219016388785533085940283555; // d of Edwards255519, i.e. -121665/121666
-const l: u256 =
+pub const d2x: u256 =
+    74191411869338878686276167017509130379084227759686438032777571066171880567110; // d of Edwards255519, i.e. -121665/121666
+pub const l: u256 =
     7237005577332262213973186563042994240857116359379907606001950938285454250989; // 2^252 + 27742317777372353535851937790883648493
 
 const prime: u256 = 57896044618658097711785492504343953926634992332820282019728792003956564819949;
@@ -56,50 +63,52 @@ pub trait PointOperations<T> {
 
 impl PointDoublingExtendedHomogeneousPoint of PointOperations<ExtendedHomogeneousPoint> {
     fn double(self: ExtendedHomogeneousPoint, prime_nz: NonZero<u256>) -> ExtendedHomogeneousPoint {
-        let A: u256 = mult_mod(self.X, self.X, prime_nz);
-        let B: u256 = mult_mod(self.Y, self.Y, prime_nz);
-        let C: u256 = mult_mod(2, mult_mod(self.Z, self.Z, prime_nz), prime_nz);
-        let D: u256 = add_inverse_mod(A, prime);
-        let x_1_y_1 = add_mod(self.X, self.Y, prime);
-        let x_1_squared: u256 = mult_mod(x_1_y_1, x_1_y_1, prime_nz);
-        let E: u256 = sub_mod(sub_mod(x_1_squared, A, p), B, p);
-        let G: u256 = add_mod(D, B, prime);
-        let F: u256 = sub_mod(G, C, prime);
-        let H: u256 = sub_mod(D, B, prime);
+        let ExtendedHomogeneousPoint { X, Y, Z, T: _ } = self;
+        let A: u256 = mult_mod(X, X, prime_nz);
+        let B: u256 = mult_mod(Y, Y, prime_nz);
+        let C: u256 = mult_mod(Z + Z, Z, prime_nz);
+
+        let H: u256 = A + B;
+        let temp = X + Y;
+        let (mut E, mut overflow) = u256_overflow_sub(H, mult_mod(temp, temp, prime_nz));
+        if overflow {
+            let (E_fix, _) = u256_overflowing_add(E, p);
+            E = E_fix;
+        }
+        let G: u256 = sub_wo_mod(A, B, p);
+        let (mut F, overflow) = u256_overflowing_add(C, G);
+        if overflow {
+            let (F_fix, _) = u256_overflow_sub(F, p);
+            F = F_fix;
+        }
         ExtendedHomogeneousPoint {
             X: mult_mod(E, F, prime_nz),
             Y: mult_mod(G, H, prime_nz),
             T: mult_mod(E, H, prime_nz),
-            Z: mult_mod(F, G, prime_nz),
+            Z: mult_mod(F, G, prime_nz)
         }
     }
 
     fn add(
         self: ExtendedHomogeneousPoint, rhs: ExtendedHomogeneousPoint, prime_nz: NonZero<u256>
     ) -> ExtendedHomogeneousPoint {
-        let lhs = self;
-        let A: u256 = mult_mod(
-            sub_mod(lhs.Y, lhs.X, prime), sub_mod(rhs.Y, rhs.X, prime), prime_nz
-        );
-        let B: u256 = mult_mod(
-            add_mod(lhs.Y, lhs.X, prime), add_mod(rhs.Y, rhs.X, prime), prime_nz
-        );
-        let C: u256 = mult_mod(
-            mult_mod(mult_mod(lhs.T, 2, prime_nz), d, prime_nz), rhs.T, prime_nz
-        );
-        let D: u256 = mult_mod(mult_mod(lhs.Z, 2, prime_nz), rhs.Z, prime_nz);
+        let ExtendedHomogeneousPoint { X: lX, Y: lY, Z: lZ, T: lT } = self;
+        let ExtendedHomogeneousPoint { X: rX, Y: rY, Z: rZ, T: rT } = rhs;
+        let A: u256 = mult_mod(sub_wo_mod(lY, lX, p), sub_wo_mod(rY, rX, p), prime_nz);
+        let B: u256 = mult_mod(lY + lX, rY + rX, prime_nz);
+        let C: u256 = mult_mod(mult_mod(lT, d2x, prime_nz), rT, prime_nz);
+        let D: u256 = mult_mod(lZ + lZ, rZ, prime_nz);
+        let E: u256 = sub_wo_mod(B, A, p);
+        let F: u256 = sub_wo_mod(D, C, p);
+        let G: u256 = D + C;
+        let H: u256 = B + A;
 
-        let E: u256 = sub_mod(B, A, prime);
-        let F: u256 = sub_mod(D, C, prime);
-        let G: u256 = add_mod(D, C, prime);
-        let H: u256 = add_mod(B, A, prime);
-
-        let X_3 = mult_mod(E, F, prime_nz);
-        let Y_3 = mult_mod(G, H, prime_nz);
-        let T_3 = mult_mod(E, H, prime_nz);
-        let Z_3 = mult_mod(F, G, prime_nz);
-
-        ExtendedHomogeneousPoint { X: X_3, Y: Y_3, T: T_3, Z: Z_3, }
+        ExtendedHomogeneousPoint {
+            X: mult_mod(E, F, prime_nz),
+            Y: mult_mod(G, H, prime_nz),
+            T: mult_mod(E, H, prime_nz),
+            Z: mult_mod(F, G, prime_nz),
+        }
     }
 }
 
@@ -246,7 +255,7 @@ impl U256TryIntoPoint of TryInto<u256, Point> {
 
         if (equality_mod(v_times_x_squared, u, p)) {
             x = x_candidate_root;
-        } else if (equality_mod(v_times_x_squared, add_inverse_mod(u, p), p)) {
+        } else if (equality_mod(v_times_x_squared, p - u, p)) {
             let p_minus_one_over_4: u256 = div_mod(sub_mod(p, 1, p), 4, prime_nz);
             x = mult_mod(x_candidate_root, pow_mod(2, p_minus_one_over_4, prime_nz), prime_nz);
         } else {
