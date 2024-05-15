@@ -1,6 +1,8 @@
 use core::integer::{u512, u512_safe_div_rem_by_u256, u256_wide_mul};
+use core::option::OptionTrait;
+use core::traits::TryInto;
 
-/// Function that performs modular addition.
+/// Function that performs modular addition. Will panick if result is > u256 max
 /// # Arguments
 /// * `a` - Left hand side of addition.
 /// * `b` - Right hand side of addition.
@@ -9,15 +11,7 @@ use core::integer::{u512, u512_safe_div_rem_by_u256, u256_wide_mul};
 /// * `u256` - result of modular addition
 #[inline(always)]
 pub fn add_mod(a: u256, b: u256, modulo: u256) -> u256 {
-    let mod_non_zero: NonZero<u256> = modulo.try_into().unwrap();
-    let low: u256 = a.low.into() + b.low.into();
-    let high: u256 = a.high.into() + b.high.into();
-    let carry: u256 = low.high.into() + high.low.into();
-    let add_u512: u512 = u512 {
-        limb0: low.low, limb1: carry.low, limb2: carry.high + high.high, limb3: 0
-    };
-    let (_, res) = u512_safe_div_rem_by_u256(add_u512, mod_non_zero);
-    res
+    (a + b) % modulo
 }
 
 /// Function that return the modular multiplicative inverse. Disclaimer: this function should only be used with a prime modulo.
@@ -27,10 +21,8 @@ pub fn add_mod(a: u256, b: u256, modulo: u256) -> u256 {
 /// # Returns
 /// * `u256` - modular multiplicative inverse
 #[inline(always)]
-pub fn mult_inverse(b: u256, modulo: u256) -> u256 {
-    math::u256_inv_mod(b, modulo.try_into().expect('inverse non zero'))
-        .expect('inverse non zero')
-        .into()
+pub fn mult_inverse(b: u256, mod_non_zero: NonZero<u256>) -> u256 {
+    math::u256_inv_mod(b, mod_non_zero).expect('inverse non zero').into()
 }
 
 /// Function that return the modular additive inverse.
@@ -74,9 +66,8 @@ pub fn sub_mod(mut a: u256, mut b: u256, modulo: u256) -> u256 {
 /// # Returns
 /// * `u256` - result of modular multiplication
 #[inline(always)]
-pub fn mult_mod(a: u256, b: u256, modulo: u256) -> u256 {
+pub fn mult_mod(a: u256, b: u256, mod_non_zero: NonZero<u256>) -> u256 {
     let mult: u512 = u256_wide_mul(a, b);
-    let mod_non_zero: NonZero<u256> = modulo.try_into().unwrap();
     let (_, rem_u256) = u512_safe_div_rem_by_u256(mult, mod_non_zero);
     rem_u256
 }
@@ -89,10 +80,9 @@ pub fn mult_mod(a: u256, b: u256, modulo: u256) -> u256 {
 /// # Returns
 /// * `u256` - result of modular division
 #[inline(always)]
-pub fn div_mod(a: u256, b: u256, modulo: u256) -> u256 {
-    let modulo_nz = modulo.try_into().expect('0 modulo');
-    let inv = math::u256_inv_mod(b, modulo_nz).unwrap().into();
-    math::u256_mul_mod_n(a, inv, modulo_nz)
+pub fn div_mod(a: u256, b: u256, mod_non_zero: NonZero<u256>) -> u256 {
+    let inv = math::u256_inv_mod(b, mod_non_zero).unwrap().into();
+    math::u256_mul_mod_n(a, inv, mod_non_zero)
 }
 
 /// Function that performs modular exponentiation.
@@ -102,23 +92,16 @@ pub fn div_mod(a: u256, b: u256, modulo: u256) -> u256 {
 /// * `modulo` - modulo.
 /// # Returns
 /// * `u256` - result of modular exponentiation
-pub fn pow_mod(mut base: u256, mut pow: u256, modulo: u256) -> u256 {
+pub fn pow_mod(mut base: u256, mut pow: u256, mod_non_zero: NonZero<u256>) -> u256 {
     let mut result: u256 = 1;
-    let mod_non_zero: NonZero<u256> = modulo.try_into().unwrap();
-    let mut mult: u512 = u512 { limb0: 0_u128, limb1: 0_u128, limb2: 0_u128, limb3: 0_u128 };
-
     while (pow != 0) {
         if ((pow & 1) > 0) {
-            mult = u256_wide_mul(result, base);
-            let (_, res_u256,) = u512_safe_div_rem_by_u256(mult, mod_non_zero);
-            result = res_u256;
+            result = mult_mod(result, base, mod_non_zero);
         }
 
         pow = pow / 2;
 
-        mult = u256_wide_mul(base, base);
-        let (_, base_u256) = u512_safe_div_rem_by_u256(mult, mod_non_zero);
-        base = base_u256;
+        base = mult_mod(base, base, mod_non_zero);
     };
 
     result
