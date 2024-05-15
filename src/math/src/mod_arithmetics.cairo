@@ -95,12 +95,11 @@ pub fn div_mod(a: u256, b: u256, mod_non_zero: NonZero<u256>) -> u256 {
 pub fn pow_mod(mut base: u256, mut pow: u256, mod_non_zero: NonZero<u256>) -> u256 {
     let mut result: u256 = 1;
     while (pow != 0) {
-        if ((pow & 1) > 0) {
+        let (q, r) = DivRem::div_rem(pow, 2);
+        if r == 1 {
             result = mult_mod(result, base, mod_non_zero);
         }
-
-        pow = pow / 2;
-
+        pow = q;
         base = mult_mod(base, base, mod_non_zero);
     };
 
