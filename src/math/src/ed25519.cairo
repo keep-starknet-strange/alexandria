@@ -1,9 +1,7 @@
 use alexandria_data_structures::array_ext::SpanTraitExt;
-use alexandria_math::u512_arithmetics::{u512_add, u512_sub};
-use alexandria_math::mod_arithmetics::{
-    add_mod, sub_mod, mult_mod, sqr_mod, div_mod, pow_mod, equality_mod
-};
+use alexandria_math::mod_arithmetics::{mult_mod, sqr_mod, div_mod, pow_mod, equality_mod};
 use alexandria_math::sha512::{sha512, SHA512_LEN};
+use alexandria_math::u512_arithmetics::{u512_add, u512_sub};
 use core::array::ArrayTrait;
 use core::integer::{
     u512, u512_safe_div_rem_by_u256, u256_wide_mul, u256_overflowing_add, u256_overflow_sub,
@@ -326,14 +324,17 @@ impl U256TryIntoPoint of TryInto<u256, Point> {
 
         let prime_nz = prime_non_zero;
 
-        let y_2 = pow_mod(y, 2, prime_nz);
-        let u: u256 = sub_mod(y_2, 1, p);
-        let v: u256 = add_mod(mult_mod(d, y_2, prime_nz), 1, p);
-        let v_pow_3 = pow_mod(v, 3, prime_nz);
+        let y_2 = sqr_mod(y, prime_nz);
+        let u: u256 = y_2 - 1;
+        let v: u256 = mult_mod(d, y_2, prime_nz) + 1;
 
-        let v_pow_7: u256 = pow_mod(v, 7, prime_nz);
+        // v^7 = v^2 * v
+        let v_pow_3 = mult_mod(v, sqr_mod(v, prime_nz), prime_nz);
 
-        let p_minus_5_div_8: u256 = div_mod(sub_mod(p, 5, p), 8, prime_nz);
+        // v^7 = v^3^2 * v
+        let v_pow_7: u256 = mult_mod(v, sqr_mod(v_pow_3, prime_nz), prime_nz);
+
+        let p_minus_5_div_8: u256 = div_mod(p - 5, 8, prime_nz);
 
         let u_times_v_power_3: u256 = mult_mod(u, v_pow_3, prime_nz);
 
@@ -343,12 +344,12 @@ impl U256TryIntoPoint of TryInto<u256, Point> {
             prime_nz
         );
 
-        let v_times_x_squared: u256 = mult_mod(v, pow_mod(x_candidate_root, 2, prime_nz), prime_nz);
+        let v_times_x_squared: u256 = mult_mod(v, sqr_mod(x_candidate_root, prime_nz), prime_nz);
 
-        if (equality_mod(v_times_x_squared, u, p)) {
+        if (v_times_x_squared == u) {
             x = x_candidate_root;
-        } else if (equality_mod(v_times_x_squared, p - u, p)) {
-            let p_minus_one_over_4: u256 = div_mod(sub_mod(p, 1, p), 4, prime_nz);
+        } else if (v_times_x_squared == p - u) {
+            let p_minus_one_over_4: u256 = div_mod(p - 1, 4, prime_nz);
             x = mult_mod(x_candidate_root, pow_mod(2, p_minus_one_over_4, prime_nz), prime_nz);
         } else {
             return Option::None;
