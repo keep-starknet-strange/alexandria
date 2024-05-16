@@ -103,25 +103,49 @@ pub fn fpow(mut base: u128, mut power: u128) -> u128 {
     // Return invalid input error
     assert!(base != 0, "fpow: invalid input");
 
-    let mut base_u128: u256 = base.into();
-    let mut result: u256 = 1;
+    let mut result = 1;
     while (power != 0) {
-        if power % 2 != 0 {
-            result = (result * base_u128);
+        let (q, r) = DivRem::div_rem(power, 2);
+        if r == 1 {
+            result = (result * base);
         }
-        base_u128 = (base_u128 * base_u128);
-        power = power / 2;
+        base = base * base;
+        power = q;
     };
 
-    result.try_into().unwrap()
+    result
+}
+
+// uses cache for faster powers of 2 in a u128
+pub fn two_pow(mut power: u128) -> u128 {
+    let two_squarings: Array<u128> = array![
+        0x2, 0x4, 0x10, 0x100, 0x10000, 0x100000000, 0x10000000000000000
+    ];
+
+    let mut i = 0;
+    let mut result = 1;
+    while (power != 0) {
+        let (q, r) = DivRem::div_rem(power, 2);
+        if r == 1 {
+            result = result * *two_squarings[i];
+        }
+        i = i + 1;
+        power = q;
+    };
+
+    result
 }
 
 fn math_shl(x: u128, n: u128) -> u128 {
-    x * fpow(2, n) % BoundedInt::max()
+    x * two_pow(n) % BoundedInt::max()
 }
 
 fn math_shr(x: u128, n: u128) -> u128 {
-    x / fpow(2, n) % BoundedInt::max()
+    x / two_pow(n) % BoundedInt::max()
+}
+
+fn math_shr_precomputed(x: u128, two_power_n: u128) -> u128 {
+    x / two_power_n % BoundedInt::max()
 }
 
 fn math_shl_u64(x: u64, n: u64) -> u64 {
