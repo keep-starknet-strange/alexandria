@@ -11,10 +11,9 @@ use core::option::OptionTrait;
 use core::traits::Div;
 use core::traits::TryInto;
 
-
-// As per RFC-8032: https://datatracker.ietf.org/doc/html/rfc8032#section-5.1.7
-// Variable namings in this function refer to naming in the RFC
-
+// Subtraction without modulo operation
+// assumes a, b < modulo
+// For result x: u256, 0 <= x < 2 * modulo
 #[inline(always)]
 fn sub_wo_mod(a: u256, b: u256, modulo: u256) -> u256 {
     a + modulo - b
@@ -24,9 +23,11 @@ fn sub_wo_mod(a: u256, b: u256, modulo: u256) -> u256 {
 fn sub_wo_mod_u512(a: u512, b: u512, modulo: u256) -> u512 {
     u512_sub(
         if b.limb3 < a.limb3 {
+            // If highest limb of b is smaller than a, a - b is safe
             a
         } else {
-            // Add p to high limbs of a to avoid overflow when subbing b
+            // If highest limb of b is NOT smaller than a, a - b overflows,
+            // Add p to high limbs of a to avoid overflow
             let u512 { limb0, limb1, limb2: low, limb3: high } = a;
             let u256 { low: limb2, high: limb3 } = u256 { low, high } + modulo;
             u512 { limb0, limb1, limb2, limb3 }
@@ -35,24 +36,24 @@ fn sub_wo_mod_u512(a: u512, b: u512, modulo: u256) -> u512 {
     )
 }
 
-pub const p: u256 =
-    57896044618658097711785492504343953926634992332820282019728792003956564819949; // 2^255 - 19
-pub const p2x: u256 =
-    115792089237316195423570985008687907853269984665640564039457584007913129639898; // 2^255 - 19
-pub const a: u256 =
-    57896044618658097711785492504343953926634992332820282019728792003956564819948; // - 1
-pub const c: u256 = 3;
-pub const d: u256 =
-    37095705934669439343138083508754565189542113879843219016388785533085940283555; // d of Edwards255519, i.e. -121665/121666
-pub const d2x: u256 =
-    74191411869338878686276167017509130379084227759686438032777571066171880567110; // d of Edwards255519, i.e. -121665/121666
-pub const l: u256 =
-    7237005577332262213973186563042994240857116359379907606001950938285454250989; // 2^252 + 27742317777372353535851937790883648493
+// As per RFC-8032: https://datatracker.ietf.org/doc/html/rfc8032#section-5.1.7
+// Variable namings in this function refer to naming in the RFC
 
-pub const prime: u256 =
-    57896044618658097711785492504343953926634992332820282019728792003956564819949;
-pub const prime_non_zero: NonZero<u256> =
-    57896044618658097711785492504343953926634992332820282019728792003956564819949;
+// p = 2^255 - 19
+pub const p: u256 = 0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffed;
+pub const p_non_zero: NonZero<u256> =
+    0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffed;
+// p2x = 2p = (2^255 - 19) * 2
+pub const p2x: u256 = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffda;
+// a = -1
+pub const a: u256 = 0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffec;
+pub const c: u256 = 3;
+// d of Edwards255519, i.e. -121665/121666
+pub const d: u256 = 0x52036cee2b6ffe738cc740797779e89800700a4d4141d8ab75eb4dca135978a3;
+// d2x = 2d = -121665/121666 * 2
+pub const d2x: u256 = 0xa406d9dc56dffce7198e80f2eef3d13000e0149a8283b156ebd69b9426b2f146;
+// l = 2^252 + 27742317777372353535851937790883648493
+pub const l: u256 = 0x1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ed;
 pub const w: u256 = 4;
 
 const TWO_POW_8_NON_ZERO: NonZero<u256> = 0x100;
@@ -90,9 +91,11 @@ impl PointDoublingPoint of PointOperations<Point> {
         let ax2_y2 = sub_wo_mod(y2, x2, p);
 
         // 1 / (ax^2 + y^2)
+        // co-prime inputs, safe to unwrap
         let ax2_y2_inv: u256 = u256_inv_mod(ax2_y2, prime_nz).unwrap().into();
 
         // 1 / (2 - (ax^2 + y^2))
+        // co-prime inputs, safe to unwrap
         let two_sub_ax2_y2_inv: u256 = u256_inv_mod(2 + p2x - ax2_y2, prime_nz).unwrap().into();
 
         // x3 = (2xy) / (ax^2 + y^2)
@@ -122,6 +125,7 @@ impl PointDoublingPoint of PointOperations<Point> {
         );
 
         // 1 / (y1y2 + ax1x2)
+        // co-prime inputs, safe to unwrap
         let y1y2_ax1x2_inv = u256_inv_mod(y1y2_ax1x2, prime_nz).unwrap().into();
 
         // x1y2 − y1x2
@@ -130,6 +134,7 @@ impl PointDoublingPoint of PointOperations<Point> {
         );
 
         // 1 / (x1y2 − y1x2)
+        // co-prime inputs, safe to unwrap
         let x1y2_sub_y1x2_inv = u256_inv_mod(x1y2_sub_y1x2, prime_nz).unwrap().into();
 
         // x = (x1y1 + x2y2) / (y1y2 + ax1x2)
@@ -195,7 +200,7 @@ impl PointDoublingExtendedHomogeneousPoint of PointOperations<ExtendedHomogeneou
 
 impl PartialEqExtendedHomogeneousPoint of PartialEq<ExtendedHomogeneousPoint> {
     fn eq(lhs: @ExtendedHomogeneousPoint, rhs: @ExtendedHomogeneousPoint) -> bool {
-        let prime_nz = prime_non_zero;
+        let prime_nz = p_non_zero;
         // lhs.X * rhs.Z == rhs.X * lhs.Z
         mult_mod(*lhs.X, *rhs.Z, prime_nz) == mult_mod(*rhs.X, *lhs.Z, prime_nz)
             && // lhs.Y * rhs.Z == rhs.Y * lhs.Z
@@ -322,7 +327,7 @@ impl U256TryIntoPoint of TryInto<u256, Point> {
             return Option::None;
         }
 
-        let prime_nz = prime_non_zero;
+        let prime_nz = p_non_zero;
 
         let y_2 = sqr_mod(y, prime_nz);
         let u: u256 = y_2 - 1;
@@ -371,7 +376,7 @@ impl U256TryIntoPoint of TryInto<u256, Point> {
 impl PointIntoExtendedHomogeneousPoint of Into<Point, ExtendedHomogeneousPoint> {
     fn into(self: Point) -> ExtendedHomogeneousPoint {
         ExtendedHomogeneousPoint {
-            X: self.x, Y: self.y, Z: 1, T: mult_mod(self.x, self.y, prime_non_zero),
+            X: self.x, Y: self.y, Z: 1, T: mult_mod(self.x, self.y, p_non_zero),
         }
     }
 }
@@ -379,9 +384,10 @@ impl PointIntoExtendedHomogeneousPoint of Into<Point, ExtendedHomogeneousPoint> 
 /// Function that performs point multiplication for an Elliptic Curve point using the double and add method.
 /// # Arguments
 /// * `scalar` - Scalar such that scalar * P = P + P + P + ... + P.
-/// * `P` - Elliptic Curve point in the Extended Homogeneous form.
+/// * `P` - Elliptic Curve point
+/// * `prime_nz` - Field prime in NonZero form.
 /// # Returns
-/// * `u256` - Resulting point in the Extended Homogeneous form.
+/// * `u256` - Resulting point
 pub fn point_mult_double_and_add(mut scalar: u256, mut P: Point, prime_nz: NonZero<u256>) -> Point {
     let mut Q = Point { x: 0, y: 1 }; // neutral element
     let zero = 0;
@@ -401,9 +407,9 @@ pub fn point_mult_double_and_add(mut scalar: u256, mut P: Point, prime_nz: NonZe
 /// Function that checks the equality [S]B = R + [k]A'
 /// # Arguments
 /// * `S` - Scalar coming from the second half of the signature.
-/// * `R` - Result of point decoding of the first half of the signature in Extended Homogeneous form.
-/// * `k` - SHA512(dom2(F, C) || R || A || PH(M)) interpreted as a scalar.
-/// * `A_prime` - Result of point decoding of the public key in Extended Homogeneous form.
+/// * `R` - Result of point decoding of the first half of the signature
+/// * `k` - SHA512(dom2(F, C) || R || A || PH(M)) interpreted as a scalar
+/// * `A_prime` - Result of point decoding of the public key
 /// # Returns
 /// * `bool` - true if the signature fits to the message and the public key, false otherwise.
 fn check_group_equation(S: u256, R: Point, k: u256, A_prime: Point) -> bool {
@@ -413,7 +419,7 @@ fn check_group_equation(S: u256, R: Point, k: u256, A_prime: Point) -> bool {
         y: 46316835694926478169428394003475163141307993866256225615783033603165251855960,
     };
 
-    let prime_nz = prime_non_zero;
+    let prime_nz = p_non_zero;
 
     // Check group equation [S]B = R + [k]A'
     let lhs: Point = point_mult_double_and_add(S, B, prime_nz);

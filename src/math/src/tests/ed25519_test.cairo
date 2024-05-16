@@ -1,4 +1,4 @@
-use alexandria_math::ed25519::{verify_signature, Point, PointOperations, prime_non_zero};
+use alexandria_math::ed25519::{verify_signature, Point, PointOperations, p_non_zero};
 
 // Public keys and signatures were generated with JS library Noble (https://github.com/paulmillr/noble-ed25519)
 
@@ -101,5 +101,5 @@ fn affine_point_op() {
         x: 34426924428514608760437100447421064591311588584549077394333265447466212246087,
         y: 29872771498517479181395568267318965384440757492476580330810382845026939417492
     };
-    assert(res == p1.add(p2, prime_non_zero), 'incorrect point addition');
+    assert(res == p1.add(p2, p_non_zero), 'incorrect point addition');
 }
