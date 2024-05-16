@@ -116,6 +116,7 @@ pub fn fpow(mut base: u128, mut power: u128) -> u128 {
     result
 }
 
+// uses cache for faster powers of 2 in a u128
 pub fn two_pow(mut power: u128) -> u128 {
     let two_squarings: Array<u128> = array![
         0x2, 0x4, 0x10, 0x100, 0x10000, 0x100000000, 0x10000000000000000
