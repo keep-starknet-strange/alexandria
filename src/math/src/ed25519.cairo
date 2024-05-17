@@ -65,14 +65,6 @@ pub struct Point {
     pub y: u256,
 }
 
-#[derive(Drop, Copy)]
-pub struct ExtendedHomogeneousPoint {
-    pub X: u256,
-    pub Y: u256,
-    pub Z: u256,
-    pub T: u256,
-}
-
 pub trait PointOperations<T> {
     fn double(self: T, prime_nz: NonZero<u256>) -> T;
     fn add(self: T, rhs: T, prime_nz: NonZero<u256>) -> T;
@@ -144,70 +136,6 @@ impl PointDoublingPoint of PointOperations<Point> {
         let y = mult_mod(sub_wo_mod(x1y1, x2y2, p), x1y2_sub_y1x2_inv, prime_nz);
 
         Point { x, y }
-    }
-}
-
-impl PointDoublingExtendedHomogeneousPoint of PointOperations<ExtendedHomogeneousPoint> {
-    fn double(self: ExtendedHomogeneousPoint, prime_nz: NonZero<u256>) -> ExtendedHomogeneousPoint {
-        let ExtendedHomogeneousPoint { X, Y, Z, T: _ } = self;
-        let A: u256 = mult_mod(X, X, prime_nz);
-        let B: u256 = mult_mod(Y, Y, prime_nz);
-        let C: u256 = mult_mod(Z + Z, Z, prime_nz);
-
-        let H: u256 = A + B;
-        let temp = X + Y;
-        let (mut E, mut overflow) = u256_overflow_sub(H, mult_mod(temp, temp, prime_nz));
-        if overflow {
-            let (E_fix, _) = u256_overflowing_add(E, p);
-            E = E_fix;
-        }
-        let G: u256 = sub_wo_mod(A, B, p);
-        let (mut F, overflow) = u256_overflowing_add(C, G);
-        if overflow {
-            let (F_fix, _) = u256_overflow_sub(F, p);
-            F = F_fix;
-        }
-        ExtendedHomogeneousPoint {
-            X: mult_mod(E, F, prime_nz),
-            Y: mult_mod(G, H, prime_nz),
-            T: mult_mod(E, H, prime_nz),
-            Z: mult_mod(F, G, prime_nz)
-        }
-    }
-
-    fn add(
-        self: ExtendedHomogeneousPoint, rhs: ExtendedHomogeneousPoint, prime_nz: NonZero<u256>
-    ) -> ExtendedHomogeneousPoint {
-        let ExtendedHomogeneousPoint { X: lX, Y: lY, Z: lZ, T: lT } = self;
-        let ExtendedHomogeneousPoint { X: rX, Y: rY, Z: rZ, T: rT } = rhs;
-        let A: u256 = mult_mod(sub_wo_mod(lY, lX, p), sub_wo_mod(rY, rX, p), prime_nz);
-        let B: u256 = mult_mod(lY + lX, rY + rX, prime_nz);
-        let C: u256 = mult_mod(mult_mod(lT, d2x, prime_nz), rT, prime_nz);
-        let D: u256 = mult_mod(lZ + lZ, rZ, prime_nz);
-        let E: u256 = sub_wo_mod(B, A, p);
-        let F: u256 = sub_wo_mod(D, C, p);
-        let G: u256 = D + C;
-        let H: u256 = B + A;
-
-        ExtendedHomogeneousPoint {
-            X: mult_mod(E, F, prime_nz),
-            Y: mult_mod(G, H, prime_nz),
-            T: mult_mod(E, H, prime_nz),
-            Z: mult_mod(F, G, prime_nz),
-        }
-    }
-}
-
-impl PartialEqExtendedHomogeneousPoint of PartialEq<ExtendedHomogeneousPoint> {
-    fn eq(lhs: @ExtendedHomogeneousPoint, rhs: @ExtendedHomogeneousPoint) -> bool {
-        let prime_nz = p_non_zero;
-        // lhs.X * rhs.Z == rhs.X * lhs.Z
-        mult_mod(*lhs.X, *rhs.Z, prime_nz) == mult_mod(*rhs.X, *lhs.Z, prime_nz)
-            && // lhs.Y * rhs.Z == rhs.Y * lhs.Z
-            mult_mod(*lhs.Y, *rhs.Z, prime_nz) == mult_mod(*rhs.Y, *lhs.Z, prime_nz)
-    }
-    fn ne(lhs: @ExtendedHomogeneousPoint, rhs: @ExtendedHomogeneousPoint) -> bool {
-        lhs != rhs
     }
 }
 
@@ -370,14 +298,6 @@ impl U256TryIntoPoint of TryInto<u256, Point> {
         }
 
         Option::Some(Point { x: x, y: y, })
-    }
-}
-
-impl PointIntoExtendedHomogeneousPoint of Into<Point, ExtendedHomogeneousPoint> {
-    fn into(self: Point) -> ExtendedHomogeneousPoint {
-        ExtendedHomogeneousPoint {
-            X: self.x, Y: self.y, Z: 1, T: mult_mod(self.x, self.y, p_non_zero),
-        }
     }
 }
 
