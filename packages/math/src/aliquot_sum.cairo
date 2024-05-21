@@ -13,7 +13,7 @@ pub fn aliquot_sum(number: u128) -> u128 {
     let limit = (number / 2) + 1;
     let mut index = 2;
     let mut res = 1;
-    while (index != limit) {
+    while (index < limit) {
         if number % index == 0 {
             res = res + index;
         }
