@@ -222,7 +222,9 @@ mod pop_front_n {
     #[available_gas(2000000)]
     fn of_u128() {
         let mut arr = get_u128_array();
+
         arr.pop_front_n(2);
+
         assert_eq!(arr.len(), 1);
         assert_eq!(*arr[0], 84);
     }
@@ -267,7 +269,78 @@ mod pop_front_n {
     #[available_gas(2000000)]
     fn more_then_len() {
         let mut arr = get_felt252_array();
+
         arr.pop_front_n(4);
+
+        assert!(arr.is_empty());
+    }
+}
+
+mod remove_front_n {
+    use super::{ArrayTraitExt, get_u128_array, get_felt252_array};
+
+    #[test]
+    #[available_gas(2000000)]
+    fn of_felt() {
+        let mut arr = get_felt252_array();
+
+        arr.remove_front_n(2);
+
+        assert_eq!(arr.len(), 1);
+        assert_eq!(*arr[0], 84);
+    }
+
+    #[test]
+    #[available_gas(2000000)]
+    fn of_u128() {
+        let mut arr = get_u128_array();
+
+        arr.remove_front_n(2);
+
+        assert_eq!(arr.len(), 1);
+        assert_eq!(*arr[0], 84);
+    }
+
+    #[test]
+    #[available_gas(2000000)]
+    fn empty_array() {
+        let mut arr: Array<felt252> = array![];
+
+        arr.remove_front_n(2);
+
+        assert!(arr.is_empty());
+    }
+
+    #[test]
+    #[available_gas(2000000)]
+    fn remove_zero() {
+        let mut arr = get_felt252_array();
+
+        arr.remove_front_n(0);
+
+        assert_eq!(arr.len(), 3);
+        assert_eq!(arr[0], @21);
+        assert_eq!(arr[1], @42);
+        assert_eq!(arr[2], @84);
+    }
+
+    #[test]
+    #[available_gas(2000000)]
+    fn exact_len() {
+        let mut arr = get_felt252_array();
+
+        arr.remove_front_n(3);
+
+        assert!(arr.is_empty());
+    }
+
+    #[test]
+    #[available_gas(2000000)]
+    fn more_then_len() {
+        let mut arr = get_felt252_array();
+
+        arr.remove_front_n(4);
+
         assert!(arr.is_empty());
     }
 }

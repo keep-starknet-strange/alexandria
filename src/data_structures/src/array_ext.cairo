@@ -7,6 +7,8 @@ pub trait ArrayTraitExt<T> {
     fn extend_from_span<+Drop<T>>(ref self: Array<T>, other: Span<T>);
     /// Removes up to `n` elements from the front of `self` and returns them in a new array.
     fn pop_front_n(ref self: Array<T>, n: usize) -> Array<T>;
+    /// Removes up to `n` elements from the front of `self`.
+    fn remove_front_n(ref self: Array<T>, n: usize);
     /// Clones and appends all the elements of `self` and then `other` in a single new array. 
     fn concat(self: @Array<T>, other: @Array<T>) -> Array<T>;
     /// Return a new array containing the elements of `self` in a reversed order.
@@ -59,6 +61,15 @@ impl ArrayImpl<T, +Clone<T>, +Drop<T>> of ArrayTraitExt<T> {
         };
 
         res
+    }
+
+    fn remove_front_n(ref self: Array<T>, mut n: usize) {
+        while (n != 0) {
+            match self.pop_front() {
+                Option::Some(_) => { n -= 1; },
+                Option::None => { break; },
+            };
+        }
     }
 
     fn concat(self: @Array<T>, other: @Array<T>) -> Array<T> {

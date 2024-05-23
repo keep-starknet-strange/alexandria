@@ -9,6 +9,10 @@ pub trait SpanTraitExt<T> {
     fn pop_front_n(ref self: Span<T>, n: usize) -> Span<T>;
     /// Removes up to `n` elements from the back of `self` and returns them in a new span.
     fn pop_back_n(ref self: Span<T>, n: usize) -> Span<T>;
+    /// Removes up to `n` elements from the front of `self`.
+    fn remove_front_n(ref self: Span<T>, n: usize);
+    /// Removes up to `n` elements from the back of `self`.
+    fn remove_back_n(ref self: Span<T>, n: usize);
     /// Clones and appends all the elements of `self` and then `other` in a single new array. 
     fn concat(self: Span<T>, other: Span<T>) -> Array<T>;
     /// Return a new array containing the elements of `self` in a reversed order.
@@ -61,6 +65,28 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
         self = self.slice(0, separator);
 
         res
+    }
+
+    fn remove_front_n(ref self: Span<T>, mut n: usize) {
+        let span_len = self.len();
+        let separator = min(n, span_len);
+
+        self = self.slice(separator, span_len - separator);
+    }
+
+    fn remove_back_n(ref self: Span<T>, mut n: usize) {
+        let span_len = self.len();
+        // Saturating substraction
+        let separator = {
+            let (value, overflow) = span_len.overflowing_sub(n);
+            if overflow {
+                0
+            } else {
+                value
+            }
+        };
+
+        self = self.slice(0, separator);
     }
 
     fn concat(mut self: Span<T>, mut other: Span<T>) -> Array<T> {
