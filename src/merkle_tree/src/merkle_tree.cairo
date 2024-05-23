@@ -181,13 +181,12 @@ fn compute_proof<T, +HasherTrait<T>, +Drop<T>>(
         proof.append(*nodes.at(index - 1));
     }
 
-    // Compute next level
-    let next_level: Array<felt252> = get_next_level(nodes.span(), ref hasher);
-
-    // Break if we have reached the top of the tree
-    if next_level.len() == 1 {
+    // Break if we have reached the top of the tree (next_level would be root)
+    if nodes.len() == 2 {
         return;
     }
+    // Compute next level
+    let next_level: Array<felt252> = get_next_level(nodes.span(), ref hasher);
 
     compute_proof(next_level, hasher, index / 2, ref proof)
 }
