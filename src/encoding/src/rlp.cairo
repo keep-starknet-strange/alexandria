@@ -88,7 +88,9 @@ pub impl RLPImpl of RLPTrait {
         let item = input.pop_front().unwrap();
 
         match item {
-            RLPItem::String(string) => { output.concat_span(RLPTrait::encode_string(*string)?); },
+            RLPItem::String(string) => {
+                output.extend_from_span(RLPTrait::encode_string(*string)?);
+            },
             RLPItem::List(list) => {
                 if (*list).len() == 0 {
                     output.append(0xc0);
@@ -100,18 +102,18 @@ pub impl RLPImpl of RLPTrait {
                         // The payload length being a u32, the length in bytes
                         // will maximum be equal to 4, making the unwrap safe
                         output.append(0xf7 + len_in_bytes.len().try_into().unwrap());
-                        output.concat_span(len_in_bytes);
+                        output.extend_from_span(len_in_bytes);
                     } else {
                         // Safe to unwrap because payload_len<55
                         output.append(0xc0 + payload_len.try_into().unwrap());
                     }
-                    output.concat_span(payload);
+                    output.extend_from_span(payload);
                 }
             }
         }
 
         if input.len() > 0 {
-            output.concat_span(RLPTrait::encode(input)?);
+            output.extend_from_span(RLPTrait::encode(input)?);
         }
 
         Result::Ok(output.span())
@@ -132,7 +134,7 @@ pub impl RLPImpl of RLPTrait {
             let mut encoding: Array<u8> = Default::default();
             // Safe to unwrap because len<56
             encoding.append(0x80 + len.try_into().unwrap());
-            encoding.concat_span(input);
+            encoding.extend_from_span(input);
             return Result::Ok(encoding.span());
         } else {
             let mut encoding: Array<u8> = Default::default();
@@ -142,8 +144,8 @@ pub impl RLPImpl of RLPTrait {
             // will maximum be equal to 4, making the unwrap safe
             let prefix = 0xb7 + len_bytes_count.try_into().unwrap();
             encoding.append(prefix);
-            encoding.concat_span(len_as_bytes);
-            encoding.concat_span(input);
+            encoding.extend_from_span(len_as_bytes);
+            encoding.extend_from_span(input);
             return Result::Ok(encoding.span());
         }
     }
@@ -188,7 +190,7 @@ pub impl RLPImpl of RLPTrait {
         let total_item_len = len + offset;
         if total_item_len < input_len {
             output
-                .concat_span(
+                .extend_from_span(
                     RLPTrait::decode(input.slice(total_item_len, input_len - total_item_len))?
                 );
         }

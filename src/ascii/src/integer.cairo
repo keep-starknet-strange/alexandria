@@ -26,7 +26,7 @@ impl ToAsciiArrayTraitImpl<
 > of ToAsciiArrayTrait<T> {
     fn to_ascii_array(self: T) -> Array<felt252> {
         let mut new_arr = self.to_inverse_ascii_array();
-        new_arr.reverse()
+        new_arr.reversed()
     }
 
     fn to_inverse_ascii_array(self: T) -> Array<felt252> {
@@ -142,7 +142,7 @@ impl BigIntegerToAsciiTraitImpl<
 impl U256ToAsciiArrayTraitImpl of ToAsciiArrayTrait<u256> {
     fn to_ascii_array(self: u256) -> Array<felt252> {
         let mut new_arr = self.to_inverse_ascii_array();
-        new_arr.reverse();
+        new_arr.reversed();
         new_arr
     }
 
