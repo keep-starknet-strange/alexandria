@@ -161,6 +161,7 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
         }
 
         compute_proof(leaves, self.hasher, index, ref proof);
+
         proof.span()
     }
 }
@@ -174,14 +175,14 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
 fn compute_proof<T, +HasherTrait<T>, +Drop<T>>(
     mut nodes: Array<felt252>, mut hasher: T, index: u32, ref proof: Array<felt252>
 ) {
-    // Compute next level
-    let next_level: Array<felt252> = get_next_level(nodes.span(), ref hasher);
-
     if index % 2 == 0 {
         proof.append(*nodes.at(index + 1));
     } else {
         proof.append(*nodes.at(index - 1));
     }
+
+    // Compute next level
+    let next_level: Array<felt252> = get_next_level(nodes.span(), ref hasher);
 
     // Break if we have reached the top of the tree
     if next_level.len() == 1 {
