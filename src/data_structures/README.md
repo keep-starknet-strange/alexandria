@@ -1,6 +1,10 @@
 # Data structures
+
 ## [Array extension](./src/array_ext.cairo)
 A collection of handy functions to help with array manipulation.
+
+## [Span extension](./src/span_ext.cairo)
+A collection of handy functions to help with span manipulation.
 
 ## [Queue](./src/queue.cairo)
 
