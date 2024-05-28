@@ -9,17 +9,17 @@ pub const SHA512_LEN: usize = 64;
 pub const U64_BIT_NUM: u64 = 64;
 
 // Powers of two to avoid recomputing
-pub const TWO_56: u64 = 0x100000000000000;
-pub const TWO_48: u64 = 0x1000000000000;
-pub const TWO_40: u64 = 0x10000000000;
-pub const TWO_32: u64 = 0x100000000;
-pub const TWO_24: u64 = 0x1000000;
-pub const TWO_16: u64 = 0x10000;
-pub const TWO_8: u64 = 0x100;
-pub const TWO_4: u64 = 0x10;
-pub const TWO_2: u64 = 0x4;
-pub const TWO_1: u64 = 0x2;
-pub const TWO_0: u64 = 0x1;
+pub const TWO_POW_56: u64 = 0x100000000000000;
+pub const TWO_POW_48: u64 = 0x1000000000000;
+pub const TWO_POW_40: u64 = 0x10000000000;
+pub const TWO_POW_32: u64 = 0x100000000;
+pub const TWO_POW_24: u64 = 0x1000000;
+pub const TWO_POW_16: u64 = 0x10000;
+pub const TWO_POW_8: u64 = 0x100;
+pub const TWO_POW_4: u64 = 0x10;
+pub const TWO_POW_2: u64 = 0x4;
+pub const TWO_POW_1: u64 = 0x2;
+pub const TWO_POW_0: u64 = 0x1;
 
 // Max u8 and u64 for bitwise operations
 pub const MAX_U8: u64 = 0xff;
@@ -183,10 +183,10 @@ pub fn fpow(mut base: u128, mut power: u128) -> u128 {
 }
 
 // Uses cache for faster powers of 2 in a u128
-// Uses TWO_* constants
+// Uses TWO_POW_* constants
 // Generic T to use with both u128 and u64
 pub fn two_pow<T, +DivRem<T>, +Mul<T>, +Into<u64, T>, +Drop<T>>(mut power: u64) -> T {
-    let two_squarings = array![TWO_1, TWO_2, TWO_4, TWO_8, TWO_16, TWO_32,];
+    let two_squarings = array![TWO_POW_1, TWO_POW_2, TWO_POW_4, TWO_POW_8, TWO_POW_16, TWO_POW_32,];
     let mut i = 0;
     let mut result: T = 1_u64.into();
     while (power != 0) {
@@ -278,21 +278,22 @@ fn from_WordArray_to_u8array(data: Span<Word64>) -> Array<u8> {
     let mut i = 0;
     // Use precomputed powers of 2 for shift right to avoid recomputation
     while (i != data.len()) {
-        let mut res: u128 = math_shr_precomputed((*data.at(i).data).into(), TWO_56.into()) & max_u8;
+        let mut res: u128 = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_56.into())
+            & max_u8;
         arr.append(res.try_into().unwrap());
-        res = math_shr_precomputed((*data.at(i).data).into(), TWO_48.into()) & max_u8;
+        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_48.into()) & max_u8;
         arr.append(res.try_into().unwrap());
-        res = math_shr_precomputed((*data.at(i).data).into(), TWO_40.into()) & max_u8;
+        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_40.into()) & max_u8;
         arr.append(res.try_into().unwrap());
-        res = math_shr_precomputed((*data.at(i).data).into(), TWO_32.into()) & max_u8;
+        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_32.into()) & max_u8;
         arr.append(res.try_into().unwrap());
-        res = math_shr_precomputed((*data.at(i).data).into(), TWO_24.into()) & max_u8;
+        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_24.into()) & max_u8;
         arr.append(res.try_into().unwrap());
-        res = math_shr_precomputed((*data.at(i).data).into(), TWO_16.into()) & max_u8;
+        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_16.into()) & max_u8;
         arr.append(res.try_into().unwrap());
-        res = math_shr_precomputed((*data.at(i).data).into(), TWO_8.into()) & max_u8;
+        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_8.into()) & max_u8;
         arr.append(res.try_into().unwrap());
-        res = math_shr_precomputed((*data.at(i).data).into(), TWO_0.into()) & max_u8;
+        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_0.into()) & max_u8;
         arr.append(res.try_into().unwrap());
         i += 1;
     };
@@ -372,8 +373,9 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
 }
 
 pub fn sha512(mut data: Array<u8>) -> Array<u8> {
-    let bit_numbers: u128 = (data.len() * 8).into();
-    let bit_numbers = bit_numbers & BoundedInt::<u64>::max().into();
+    let bit_numbers: u128 = data.len().into() * 8;
+    // any u32 * 8 fits in u64
+    // let bit_numbers = bit_numbers & BoundedInt::<u64>::max().into();
 
     let max_u8: u128 = MAX_U8.into();
     let mut msg_len = data.len();
@@ -385,21 +387,21 @@ pub fn sha512(mut data: Array<u8>) -> Array<u8> {
 
     // add length to the end
     // Use precomputed powers of 2 for shift right to avoid recomputation
-    let mut res: u128 = math_shr_precomputed(bit_numbers, TWO_56.into()) & max_u8;
+    let mut res: u128 = math_shr_precomputed(bit_numbers, TWO_POW_56.into()) & max_u8;
     data.append(res.try_into().unwrap());
-    res = math_shr_precomputed(bit_numbers, TWO_48.into()) & max_u8;
+    res = math_shr_precomputed(bit_numbers, TWO_POW_48.into()) & max_u8;
     data.append(res.try_into().unwrap());
-    res = math_shr_precomputed(bit_numbers, TWO_40.into()) & max_u8;
+    res = math_shr_precomputed(bit_numbers, TWO_POW_40.into()) & max_u8;
     data.append(res.try_into().unwrap());
-    res = math_shr_precomputed(bit_numbers, TWO_32.into()) & max_u8;
+    res = math_shr_precomputed(bit_numbers, TWO_POW_32.into()) & max_u8;
     data.append(res.try_into().unwrap());
-    res = math_shr_precomputed(bit_numbers, TWO_24.into()) & max_u8;
+    res = math_shr_precomputed(bit_numbers, TWO_POW_24.into()) & max_u8;
     data.append(res.try_into().unwrap());
-    res = math_shr_precomputed(bit_numbers, TWO_16.into()) & max_u8;
+    res = math_shr_precomputed(bit_numbers, TWO_POW_16.into()) & max_u8;
     data.append(res.try_into().unwrap());
-    res = math_shr_precomputed(bit_numbers, TWO_8.into()) & max_u8;
+    res = math_shr_precomputed(bit_numbers, TWO_POW_8.into()) & max_u8;
     data.append(res.try_into().unwrap());
-    res = math_shr_precomputed(bit_numbers, TWO_0.into()) & max_u8;
+    res = math_shr_precomputed(bit_numbers, TWO_POW_0.into()) & max_u8;
     data.append(res.try_into().unwrap());
 
     msg_len = data.len();
