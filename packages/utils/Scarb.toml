@@ -1,0 +1,12 @@
+[package]
+name = "alexandria_utils"
+version = "0.1.0"
+description = "Cairo utilities"
+homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/utils"
+edition = "2023_11"
+
+[tool]
+fmt.workspace = true
+
+[dependencies]
+starknet.workspace = true

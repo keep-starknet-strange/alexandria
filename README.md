@@ -59,16 +59,16 @@ Current version can be found in the [toml file](./Scarb.toml)
 
 This repository is composed of multiple crates:
 
-- [ASCII](./src/ascii/README.md)
-- [Data Structures](./src/data_structures/README.md)
-- [Encoding](./src/encoding/README.md)
-- [Linalg](./src/linalg/README.md)
-- [Math](./src/math/README.md)
-- [Numeric](./src/numeric/README.md)
-- [Searching](./src/searching/README.md)
-- [Sorting](./src/sorting/README.md)
-- [Storage](./src/storage/README.md)
-- [Bytes](./src/bytes/README.md)
+- [ASCII](./packages/ascii/README.md)
+- [Data Structures](./packages/data_structures/README.md)
+- [Encoding](./packages/encoding/README.md)
+- [Linalg](./packages/linalg/README.md)
+- [Math](./packages/math/README.md)
+- [Numeric](./packages/numeric/README.md)
+- [Searching](./packages/searching/README.md)
+- [Sorting](./packages/sorting/README.md)
+- [Storage](./packages/storage/README.md)
+- [Bytes](./packages/bytes/README.md)
 
 ## Getting Started
 

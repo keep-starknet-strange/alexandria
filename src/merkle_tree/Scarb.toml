@@ -1,9 +1,0 @@
-[package]
-name = "alexandria_merkle_tree"
-version = "0.1.0"
-description = "Merkle tree related stuff"
-homepage = "https://github.com/keep-starknet-strange/alexandria/tree/src/merkle_tree"
-edition = "2023_11"
-
-[tool]
-fmt.workspace = true

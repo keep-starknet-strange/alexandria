@@ -1,17 +1,17 @@
 [workspace]
 members = [
-  "src/data_structures",
-  "src/encoding",
-  "src/linalg",
-  "src/math",
-  "src/merkle_tree",
-  "src/numeric",
-  "src/searching",
-  "src/sorting",
-  "src/storage",
-  "src/ascii",
-  "src/bytes",
-  "src/utils",
+  "packages/data_structures",
+  "packages/encoding",
+  "packages/linalg",
+  "packages/math",
+  "packages/merkle_tree",
+  "packages/numeric",
+  "packages/searching",
+  "packages/sorting",
+  "packages/storage",
+  "packages/ascii",
+  "packages/bytes",
+  "packages/utils",
 ]
 name = "alexandria"
 version = "0.1.0"
