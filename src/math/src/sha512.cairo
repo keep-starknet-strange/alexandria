@@ -295,27 +295,25 @@ fn from_u8Array_to_WordArray(data: Array<u8>) -> Array<Word64> {
 
 fn from_WordArray_to_u8array(data: Span<Word64>) -> Array<u8> {
     let mut arr: Array<u8> = array![];
-    let max_u8: u128 = MAX_U8.into();
 
     let mut i = 0;
     // Use precomputed powers of 2 for shift right to avoid recomputation
     while (i != data.len()) {
-        let mut res: u128 = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_56.into())
-            & max_u8;
+        let mut res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_56) & MAX_U8;
         arr.append(res.try_into().unwrap());
-        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_48.into()) & max_u8;
+        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_48) & MAX_U8;
         arr.append(res.try_into().unwrap());
-        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_40.into()) & max_u8;
+        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_40) & MAX_U8;
         arr.append(res.try_into().unwrap());
-        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_32.into()) & max_u8;
+        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_32) & MAX_U8;
         arr.append(res.try_into().unwrap());
-        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_24.into()) & max_u8;
+        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_24) & MAX_U8;
         arr.append(res.try_into().unwrap());
-        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_16.into()) & max_u8;
+        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_16) & MAX_U8;
         arr.append(res.try_into().unwrap());
-        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_8.into()) & max_u8;
+        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_8) & MAX_U8;
         arr.append(res.try_into().unwrap());
-        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_0.into()) & max_u8;
+        res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_0) & MAX_U8;
         arr.append(res.try_into().unwrap());
         i += 1;
     };
