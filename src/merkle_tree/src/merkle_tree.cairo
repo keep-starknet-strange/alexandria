@@ -154,12 +154,20 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
         ref self: MerkleTree<T>, mut leaves: Array<felt252>, index: u32
     ) -> Span<felt252> {
         let mut proof: Array<felt252> = array![];
+
+        // As we require an even number of nodes, if odd number of nodes => add a null virtual leaf
+        if leaves.len() % 2 != 0 {
+            leaves.append(0);
+        }
+
         compute_proof(leaves, self.hasher, index, ref proof);
+
         proof.span()
     }
 }
 
 /// Helper function to compute a merkle proof of given leaves and at a given index.
+/// Should only be used with an even number of leaves.
 /// # Arguments
 /// * `nodes` - The sorted nodes.
 /// * `index` - The index of the given.
@@ -168,36 +176,20 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
 fn compute_proof<T, +HasherTrait<T>, +Drop<T>>(
     mut nodes: Array<felt252>, mut hasher: T, index: u32, ref proof: Array<felt252>
 ) {
-    // Break if we have reached the top of the tree
-    if nodes.len() == 1 {
+    if index % 2 == 0 {
+        proof.append(*nodes.at(index + 1));
+    } else {
+        proof.append(*nodes.at(index - 1));
+    }
+
+    // Break if we have reached the top of the tree (next_level would be root)
+    if nodes.len() == 2 {
         return;
     }
-
-    // If odd number of nodes, add a null virtual leaf
-    if nodes.len() % 2 != 0 {
-        nodes.append(0);
-    }
-
     // Compute next level
     let next_level: Array<felt252> = get_next_level(nodes.span(), ref hasher);
 
-    // Find neighbor node
-    let mut index_parent = 0;
-    let mut i = 0;
-    loop {
-        if i == index {
-            index_parent = i / 2;
-            if i % 2 == 0 {
-                proof.append(*nodes.at(i + 1));
-            } else {
-                proof.append(*nodes.at(i - 1));
-            }
-            break;
-        }
-        i += 1;
-    };
-
-    compute_proof(next_level, hasher, index_parent, ref proof)
+    compute_proof(next_level, hasher, index / 2, ref proof)
 }
 
 /// Helper function to compute the next layer of a merkle tree providing a layer of nodes.
