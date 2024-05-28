@@ -155,7 +155,7 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
     ) -> Span<felt252> {
         let mut proof: Array<felt252> = array![];
 
-        // If odd number of nodes, add a null virtual leaf
+        // As we require an even number of nodes, if odd number of nodes => add a null virtual leaf
         if leaves.len() % 2 != 0 {
             leaves.append(0);
         }
@@ -167,6 +167,7 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
 }
 
 /// Helper function to compute a merkle proof of given leaves and at a given index.
+/// Should only be used with an even number of leaves.
 /// # Arguments
 /// * `nodes` - The sorted nodes.
 /// * `index` - The index of the given.
