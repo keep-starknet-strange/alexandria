@@ -255,16 +255,17 @@ fn from_u8Array_to_WordArray(data: Array<u8>) -> Array<Word64> {
     let mut i = 0;
 
     // Use precomputed powers of 2 for shift left to avoid recomputation
+    // Safe to use u64 coz we shift u8 to the left by max 56 bits in u64
     while (i < data.len()) {
-        let new_word: u128 = math_shl_precomputed::<u128>((*data[i + 0]).into(), TWO_56.into())
-            + math_shl_precomputed((*data[i + 1]).into(), TWO_48.into())
-            + math_shl_precomputed((*data[i + 2]).into(), TWO_40.into())
-            + math_shl_precomputed((*data[i + 3]).into(), TWO_32.into())
-            + math_shl_precomputed((*data[i + 4]).into(), TWO_24.into())
-            + math_shl_precomputed((*data[i + 5]).into(), TWO_16.into())
-            + math_shl_precomputed((*data[i + 6]).into(), TWO_8.into())
-            + math_shl_precomputed((*data[i + 7]).into(), TWO_0.into());
-        new_arr.append(Word64 { data: new_word.try_into().unwrap() });
+        let new_word: u64 = math_shl_precomputed::<u64>((*data[i + 0]).into(), TWO_56)
+            + math_shl_precomputed((*data[i + 1]).into(), TWO_48)
+            + math_shl_precomputed((*data[i + 2]).into(), TWO_40)
+            + math_shl_precomputed((*data[i + 3]).into(), TWO_32)
+            + math_shl_precomputed((*data[i + 4]).into(), TWO_24)
+            + math_shl_precomputed((*data[i + 5]).into(), TWO_16)
+            + math_shl_precomputed((*data[i + 6]).into(), TWO_8)
+            + math_shl_precomputed((*data[i + 7]).into(), TWO_0);
+        new_arr.append(Word64 { data: new_word });
         i += 8;
     };
     new_arr
