@@ -16,7 +16,7 @@ fn bytes_be(val: felt252) -> Array<u8> {
     while (result.len() < 32) {
         result.append(0);
     };
-    result = result.reverse();
+    result = result.reversed();
     result
 }
 

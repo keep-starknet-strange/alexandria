@@ -130,7 +130,7 @@ pub fn encode_felt(self: felt252, base64_chars: Span<u8>) -> Array<u8> {
     while (result.len() < 43) {
         result.append('A');
     };
-    result = result.reverse();
+    result = result.reversed();
     result.append('=');
     result
 }

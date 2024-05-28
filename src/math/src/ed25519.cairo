@@ -1,4 +1,4 @@
-use alexandria_data_structures::array_ext::SpanTraitExt;
+use alexandria_data_structures::span_ext::SpanTraitExt;
 use alexandria_math::mod_arithmetics::{mult_mod, sqr_mod, div_mod, pow_mod, equality_mod};
 use alexandria_math::sha512::{sha512, SHA512_LEN};
 use alexandria_math::u512_arithmetics::{u512_add, u512_sub};
@@ -312,7 +312,7 @@ impl U256TryIntoPoint of TryInto<u256, Point> {
     fn try_into(self: u256) -> Option<Point> {
         let mut x = 0;
         let mut y_span: Span<u8> = self.into();
-        let mut y_le_span: Span<u8> = y_span.reverse().span();
+        let mut y_le_span: Span<u8> = y_span.reversed().span();
 
         let last_byte = *y_le_span[31];
 
@@ -441,7 +441,7 @@ pub fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> 
 
     let s: u256 = *signature[1];
     let s_span: Span<u8> = s.into();
-    let reversed_s_span = s_span.reverse();
+    let reversed_s_span = s_span.reversed();
     let s: u256 = reversed_s_span.span().into();
     if (s >= l) {
         return false;
@@ -456,9 +456,9 @@ pub fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> 
     let A_prime: Point = A_prime_opt.unwrap();
 
     let r_bytes: Span<u8> = r.into();
-    let r_bytes = r_bytes.reverse().span();
+    let r_bytes = r_bytes.reversed().span();
     let pub_key_bytes: Span<u8> = pub_key.into();
-    let pub_key_bytes = pub_key_bytes.reverse().span();
+    let pub_key_bytes = pub_key_bytes.reversed().span();
 
     let hashable = r_bytes.concat(pub_key_bytes).span().concat(msg);
     // k = SHA512(dom2(F, C) -> empty string || R -> half of sig || A -> pub_key || PH(M) -> identity function for msg)
