@@ -21,6 +21,28 @@ pub const TWO_POW_2: u64 = 0x4;
 pub const TWO_POW_1: u64 = 0x2;
 pub const TWO_POW_0: u64 = 0x1;
 
+const TWO_POW_7: u64 = 0x80;
+const TWO_POW_14: u64 = 0x4000;
+const TWO_POW_18: u64 = 0x40000;
+const TWO_POW_19: u64 = 0x80000;
+const TWO_POW_28: u64 = 0x10000000;
+const TWO_POW_34: u64 = 0x400000000;
+const TWO_POW_39: u64 = 0x8000000000;
+const TWO_POW_41: u64 = 0x20000000000;
+const TWO_POW_61: u64 = 0x2000000000000000;
+
+const TWO_POW_64_MINUS_1: u64 = 0x8000000000000000;
+const TWO_POW_64_MINUS_6: u64 = 0x40;
+const TWO_POW_64_MINUS_8: u64 = 0x100000000000000;
+const TWO_POW_64_MINUS_14: u64 = 0x4000000000000;
+const TWO_POW_64_MINUS_18: u64 = 0x400000000000;
+const TWO_POW_64_MINUS_19: u64 = 0x200000000000;
+const TWO_POW_64_MINUS_28: u64 = 0x1000000000;
+const TWO_POW_64_MINUS_34: u64 = 0x40000000;
+const TWO_POW_64_MINUS_39: u64 = 0x2000000;
+const TWO_POW_64_MINUS_41: u64 = 0x800000;
+const TWO_POW_64_MINUS_61: u64 = 0x8;
+
 // Max u8 and u64 for bitwise operations
 pub const MAX_U8: u64 = 0xff;
 pub const MAX_U64: u128 = 0xffffffffffffffff;
@@ -132,36 +154,36 @@ fn maj(x: Word64, y: Word64, z: Word64) -> Word64 {
 /// Using precomputed values to avoid recomputation
 fn bsig0(x: Word64) -> Word64 {
     // x.rotr(28) ^ x.rotr(34) ^ x.rotr(39)
-    x.rotr_precomputed(0x10000000, 0x1000000000) // 2 ** 28, 2 ** (64 - 28)
-        ^ x.rotr_precomputed(0x400000000, 0x40000000) // 2 ** 34, 2 ** (64 - 34)
-        ^ x.rotr_precomputed(0x8000000000, 0x2000000) // 2 ** 39, 2 ** (64 - 39)
+    x.rotr_precomputed(TWO_POW_28, TWO_POW_64_MINUS_28)
+        ^ x.rotr_precomputed(TWO_POW_34, TWO_POW_64_MINUS_34)
+        ^ x.rotr_precomputed(TWO_POW_39, TWO_POW_64_MINUS_39)
 }
 
 /// Performs x.rotr(14) ^ x.rotr(18) ^ x.rotr(41),
 /// Using precomputed values to avoid recomputation
 fn bsig1(x: Word64) -> Word64 {
     // x.rotr(14) ^ x.rotr(18) ^ x.rotr(41)
-    x.rotr_precomputed(0x4000, 0x4000000000000) // 2 ** 14, 2 ** (64 - 14)
-        ^ x.rotr_precomputed(0x40000, 0x400000000000) // 2 ** 18, 2 ** (64 - 18)
-        ^ x.rotr_precomputed(0x20000000000, 0x800000) // 2 ** 41, 2 ** (64 - 41)
+    x.rotr_precomputed(TWO_POW_14, TWO_POW_64_MINUS_14)
+        ^ x.rotr_precomputed(TWO_POW_18, TWO_POW_64_MINUS_18)
+        ^ x.rotr_precomputed(TWO_POW_41, TWO_POW_64_MINUS_41)
 }
 
 /// Performs x.rotr(1) ^ x.rotr(8) ^ x.shr(7),
 /// Using precomputed values to avoid recomputation
 fn ssig0(x: Word64) -> Word64 {
     // x.rotr(1) ^ x.rotr(8) ^ x.shr(7)
-    x.rotr_precomputed(0x2, 0x8000000000000000) // 2 ** 1, 2 ** (64 - 1)
-        ^ x.rotr_precomputed(0x100, 0x100000000000000) // 2 ** 8, 2 ** (64 - 8)
-        ^ math_shr_precomputed::<u64>(x.data.into(), 128).into() // 2 ** 7
+    x.rotr_precomputed(TWO_POW_1, TWO_POW_64_MINUS_1)
+        ^ x.rotr_precomputed(TWO_POW_8, TWO_POW_64_MINUS_8)
+        ^ math_shr_precomputed::<u64>(x.data.into(), TWO_POW_7).into() // 2 ** 7
 }
 
 /// Performs x.rotr(19) ^ x.rotr(61) ^ x.shr(6),
 /// Using precomputed values to avoid recomputation
 fn ssig1(x: Word64) -> Word64 {
     // x.rotr(19) ^ x.rotr(61) ^ x.shr(6)
-    x.rotr_precomputed(0x80000, 0x200000000000) // 2 ** 19, 2 ** (64 - 19)
-        ^ x.rotr_precomputed(0x2000000000000000, 0x8) // 2 ** 61, 2 ** (64 - 61)
-        ^ math_shr_precomputed::<u64>(x.data, 0x40).into() // 2 ** 6
+    x.rotr_precomputed(TWO_POW_19, TWO_POW_64_MINUS_19)
+        ^ x.rotr_precomputed(TWO_POW_61, TWO_POW_64_MINUS_61)
+        ^ math_shr_precomputed::<u64>(x.data, TWO_POW_64_MINUS_6).into() // 2 ** 6
 }
 
 /// Calculates base ** power
@@ -257,14 +279,14 @@ fn from_u8Array_to_WordArray(data: Array<u8>) -> Array<Word64> {
     // Use precomputed powers of 2 for shift left to avoid recomputation
     // Safe to use u64 coz we shift u8 to the left by max 56 bits in u64
     while (i < data.len()) {
-        let new_word: u64 = math_shl_precomputed::<u64>((*data[i + 0]).into(), TWO_56)
-            + math_shl_precomputed((*data[i + 1]).into(), TWO_48)
-            + math_shl_precomputed((*data[i + 2]).into(), TWO_40)
-            + math_shl_precomputed((*data[i + 3]).into(), TWO_32)
-            + math_shl_precomputed((*data[i + 4]).into(), TWO_24)
-            + math_shl_precomputed((*data[i + 5]).into(), TWO_16)
-            + math_shl_precomputed((*data[i + 6]).into(), TWO_8)
-            + math_shl_precomputed((*data[i + 7]).into(), TWO_0);
+        let new_word: u64 = math_shl_precomputed::<u64>((*data[i + 0]).into(), TWO_POW_56)
+            + math_shl_precomputed((*data[i + 1]).into(), TWO_POW_48)
+            + math_shl_precomputed((*data[i + 2]).into(), TWO_POW_40)
+            + math_shl_precomputed((*data[i + 3]).into(), TWO_POW_32)
+            + math_shl_precomputed((*data[i + 4]).into(), TWO_POW_24)
+            + math_shl_precomputed((*data[i + 5]).into(), TWO_POW_16)
+            + math_shl_precomputed((*data[i + 6]).into(), TWO_POW_8)
+            + math_shl_precomputed((*data[i + 7]).into(), TWO_POW_0);
         new_arr.append(Word64 { data: new_word });
         i += 8;
     };
