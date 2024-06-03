@@ -1,0 +1,12 @@
+[package]
+name = "alexandria_storage"
+version = "0.3.0"
+description = "Starknet storage utilities"
+homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/storage"
+edition = "2023_11"
+
+[tool]
+fmt.workspace = true
+
+[dependencies]
+starknet.workspace = true
