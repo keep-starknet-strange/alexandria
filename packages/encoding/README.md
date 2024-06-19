@@ -1,10 +1,10 @@
 # Encoding
 
-## [Base64](./packages/base64.cairo)
+## [Base64](./src/base64.cairo)
 
 Base64 is a binary-to-text encoding scheme used for transferring binary data safely over media designed for text. It divides input data into 3-byte blocks, each converted into 4 ASCII characters using a specific index table. If input bytes aren't divisible by three, it's padded with '=' characters. The process is reversed for decoding.
 
-## [Solidity ABI](./packages/sol_abi.cairo)
+## [Solidity ABI](./src/sol_abi.cairo)
 
 **sol_abi** is a wrapper around `alexandria_bytes::Bytes` providing easy to use interfaces to mimic Solidity's `abi` functions.
 
@@ -63,7 +63,7 @@ use starknet::{ContractAddress, eth_address::U256IntoEthAddress, EthAddress};
 
 fn main() {
     let encoded: Bytes = ...
-    
+
     let mut offset = 0;
     let o1: u8 = encoded.decode(ref offset);
     let o2: u128 = encoded.decode(ref offset);
