@@ -12,24 +12,22 @@ generate_gas_report() {
         exit 1
     fi
 
-    echo "{" > gas_report.json
-    echo "$gas_data" | while read -r test_name gas_used; do
-        echo "  \"$test_name\": $gas_used," >> gas_report.json
-    done
-    sed -i '' -e '$ s/,$//' gas_report.json 2>/dev/null || sed -i '$ s/,$//' gas_report.json
-    echo "}" >> gas_report.json
-
     local increased_gas=false
     local increased_tests=()
-    while read -r line; do
-        test_name=$(echo "$line" | cut -d':' -f1 | tr -d ' "')
-        gas_used=$(echo "$line" | cut -d':' -f2 | tr -d ' ,')
-        old_gas=$(grep "\"$test_name\":" gas_report.json.bak | cut -d':' -f2 | tr -d ' ,')
+
+    while read -r test_name gas_used; do
+        old_gas=$(grep "\"$test_name\":" gas_report.json 2>/dev/null | cut -d':' -f2 | tr -d ' ,}')
         if [ -n "$old_gas" ] && [ "$gas_used" -gt "$old_gas" ]; then
             increased_tests+=("$test_name (Old: $old_gas, New: $gas_used)")
             increased_gas=true
         fi
-    done < <(sed '1d;$d' gas_report.json)
+        echo "  \"$test_name\": $gas_used," >> new_gas_report.json
+    done <<< "$gas_data"
+
+    echo "{" > gas_report.json
+    sed '$ s/,$//' new_gas_report.json >> gas_report.json
+    echo "}" >> gas_report.json
+    rm new_gas_report.json
 
     if [ "$increased_gas" = true ]; then
         echo "Gas usage has increased in the following tests:"
