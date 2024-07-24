@@ -1,5 +1,7 @@
 use core::nullable::NullableImpl;
 use core::num::traits::OverflowingAdd;
+use core::ops::index::Index;
+
 //! Vec implementation.
 //!
 //! # Example
@@ -58,7 +60,9 @@ pub trait VecTrait<V, T> {
     fn len(self: @V) -> usize;
 }
 
-impl VecIndex<V, T, +VecTrait<V, T>> of Index<V, usize, T> {
+impl VecIndex<V, T, +VecTrait<V, T>> of Index<V, usize> {
+    type Target = T;
+
     #[inline(always)]
     fn index(ref self: V, index: usize) -> T {
         self.at(index)

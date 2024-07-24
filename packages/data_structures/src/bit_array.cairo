@@ -97,7 +97,7 @@ pub trait BitArrayTrait {
     /// # Returns
     /// `Option<u256>` - If there are `length` bits remaining, the word is returned as u256
     fn read_word_le_u256(ref self: BitArray, length: usize) -> Option<u256>;
-    /// Reads a single word of the specified length upto 512 bits in little endian representation.
+    /// Reads a single word of the specified length up to 512 bits in little endian representation.
     /// For words shorter than (or equal to) 256 bits consider the other read calls instead.
     /// # Arguments
     /// `length` - The bit length of the word to read, max 512
