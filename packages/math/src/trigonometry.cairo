@@ -49,7 +49,6 @@ const cos_table: [
 // # Example
 // * fast_sin(3000000000) = (true, 50000000)
 pub fn fast_sin_inner(x: u64) -> (bool, u64) {
-    let multiplier = 100000000_u64;
     let hollyst: u64 = 1745329_u64;
 
     let mut a = x % FAST_360;
@@ -65,11 +64,11 @@ pub fn fast_sin_inner(x: u64) -> (bool, u64) {
 
     let i: usize = (a / FAST_10).try_into().unwrap();
     let j = a - i.into() * FAST_10;
-    let int_j: usize = (j / multiplier).try_into().unwrap();
+    let int_j: usize = (j / BASE).try_into().unwrap();
 
-    let y = *sin_table.span()[i] * *cos_table.span()[int_j] / multiplier
-        + ((j * hollyst) / multiplier) * *sin_table.span()[9
-        - i] / multiplier;
+    let y = *sin_table.span()[i] * *cos_table.span()[int_j] / BASE
+        + ((j * hollyst) / BASE) * *sin_table.span()[9
+        - i] / BASE;
 
     return (sig, y);
 }
@@ -133,7 +132,6 @@ pub fn fast_cos(x: i64) -> i64 {
 // # Example
 // * fast_tan(4500000000) = 100000000
 pub fn fast_tan(x: i64) -> i64 {
-    let multiplier = 100000000_u64;
     let mut a = x;
     if x < 0 {
         a = -x;
@@ -146,7 +144,7 @@ pub fn fast_tan(x: i64) -> i64 {
     if x < 0 {
         sig = !sig;
     }
-    let result_u64 = result_u64_sin * multiplier / result_u64_cos;
+    let result_u64 = result_u64_sin * BASE / result_u64_cos;
     let result: i64 = result_u64.try_into().unwrap();
     if sig {
         return result;
