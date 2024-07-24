@@ -1,4 +1,5 @@
-use core::integer::{u64_wrapping_add, BoundedInt};
+use core::integer::BoundedInt;
+use core::num::traits::WrappingAdd;
 use core::traits::{BitAnd, BitXor, BitOr};
 use super::BitShift;
 
@@ -81,7 +82,7 @@ impl WordBitNot of BitNot<Word64> {
 
 impl WordAdd of Add<Word64> {
     fn add(lhs: Word64, rhs: Word64) -> Word64 {
-        Word64 { data: u64_wrapping_add(lhs.data, rhs.data) }
+        Word64 { data: lhs.data.wrapping_add(rhs.data) }
     }
 }
 

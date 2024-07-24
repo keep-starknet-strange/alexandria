@@ -88,16 +88,16 @@ fn inner_read_bytes(address_domain: u32, address: StorageAddress) -> SyscallResu
         data.append(value);
         remaining_full_words -= 1;
 
-        let (index_in_chunk, did_overflow) = index_in_chunk.overflowing_add(1);
+        let (tmp, did_overflow) = index_in_chunk.overflowing_add(1);
         if did_overflow {
             // After reading 256 `uint128`s `index_in_chunk` will overflow and we move to the
             // next chunk.
             chunk += 1;
             chunk_base = inner_bytes_pointer(address, chunk);
-            0
+            index_in_chunk = 0;
         } else {
-            index_in_chunk
-        };
+            index_in_chunk = tmp;
+        }
     }?;
     if last_word_len != 0 {
         let last_word = starknet::syscalls::storage_read_syscall(
@@ -133,16 +133,16 @@ fn inner_write_bytes(
             Result::Ok(_) => {},
             Result::Err(err) => { break Result::Err(err); },
         };
-        let (index_in_chunk, did_overflow) = index_in_chunk.overflowing_add(1);
+        let (tmp, did_overflow) = index_in_chunk.overflowing_add(1);
         if did_overflow {
-            // After reading 256 `uint128`s `index_in_chunk` will overflow and we move to the
+            // After writing 256 `uint128`s `index_in_chunk` will overflow and we move to the
             // next chunk.
             chunk += 1;
             chunk_base = inner_bytes_pointer(address, chunk);
-            0
+            index_in_chunk = 0;
         } else {
-            index_in_chunk
-        };
+            index_in_chunk = tmp;
+        }
     }?;
     Result::Ok(())
 }

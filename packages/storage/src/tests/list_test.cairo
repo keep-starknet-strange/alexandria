@@ -110,8 +110,11 @@ mod AListHolder {
 
 #[cfg(test)]
 mod tests {
-    use AListHolder::{addressesContractMemberStateTrait, numbersContractMemberStateTrait};
     use alexandria_storage::{List, ListTrait};
+    use core::option::OptionTrait;
+    use core::starknet::storage::StorageAsPointer;
+    use core::starknet::storage::StorageBaseTrait;
+    use core::traits::TryInto;
     use starknet::{
         ClassHash, ContractAddress, syscalls::deploy_syscall, SyscallResultTrait,
         testing::set_contract_address,
@@ -128,7 +131,7 @@ mod tests {
         }
 
         fn ne(lhs: @StorageBaseAddress, rhs: @StorageBaseAddress) -> bool {
-            !StorageBaseAddressPartialEq::eq(lhs, rhs)
+            !Self::eq(lhs, rhs)
         }
     }
 
@@ -157,14 +160,14 @@ mod tests {
         set_contract_address(contract.contract_address);
         let contract_state = AListHolder::unsafe_new_contract_state();
 
-        let addresses_address = contract_state.addresses.address();
+        let addresses_address = contract_state.storage_base().addresses.as_ptr().address;
         let addresses_list = ListTrait::<ContractAddress>::new(0, addresses_address);
         assert_eq!(addresses_list.address_domain, 0, "Address domain should be 0");
         assert_eq!(addresses_list.len(), 0, "Initial length should be 0");
         assert_eq!(addresses_list.base.into(), addresses_address, "Base address mismatch");
         assert_eq!(addresses_list.storage_size(), 1, "Storage size should be 1");
 
-        let numbers_address = contract_state.numbers.address();
+        let numbers_address = contract_state.storage_base().numbers.as_ptr().address;
         let numbers_list = ListTrait::<u256>::new(0, numbers_address);
         assert_eq!(numbers_list.address_domain, 0, "Address domain should be 0");
         assert_eq!(numbers_list.len(), 0, "Initial length should be 0");
@@ -183,10 +186,10 @@ mod tests {
         set_contract_address(contract.contract_address);
         let contract_state = AListHolder::unsafe_new_contract_state();
 
-        let addresses_address = contract_state.addresses.address();
+        let addresses_address = contract_state.storage_base().addresses.as_ptr().address;
         let mut addresses_list = ListTrait::<ContractAddress>::new(0, addresses_address);
 
-        let numbers_address = contract_state.numbers.address();
+        let numbers_address = contract_state.storage_base().numbers.as_ptr().address;
         let mut numbers_list = ListTrait::<u256>::new(0, numbers_address);
 
         let _ = addresses_list.append(mock_addr());
@@ -227,7 +230,7 @@ mod tests {
         assert_eq!(contract.do_append(mock_addr, 10), (0, 0), "1st append idx");
         assert_eq!(contract.do_append(mock_addr, 20), (1, 1), "2nd append idx");
 
-        let addresses_address = contract_state.addresses.address();
+        let addresses_address = contract_state.storage_base().addresses.as_ptr().address;
         let addresses_list = ListTrait::<ContractAddress>::fetch(0, addresses_address)
             .expect('List fetch failed');
         assert_eq!(addresses_list.address_domain, 0, "Address domain should be 0");
@@ -235,7 +238,7 @@ mod tests {
         assert_eq!(addresses_list.base.into(), addresses_address, "Base address mismatch");
         assert_eq!(addresses_list.storage_size(), 1, "Storage size should be 1");
 
-        let numbers_address = contract_state.numbers.address();
+        let numbers_address = contract_state.storage_base().numbers.as_ptr().address;
         let numbers_list = ListTrait::<u256>::fetch(0, numbers_address).expect('List fetch failed');
         assert_eq!(numbers_list.address_domain, 0, "Address domain should be 0");
         assert_eq!(numbers_list.len(), 2, "Length should be 2");

@@ -3,9 +3,9 @@ use alexandria_math::mod_arithmetics::{mult_mod, sqr_mod, div_mod, pow_mod, equa
 use alexandria_math::sha512::{sha512, SHA512_LEN};
 use alexandria_math::u512_arithmetics::{u512_add, u512_sub};
 use core::array::ArrayTrait;
-use core::integer::{u512, u512_safe_div_rem_by_u256, u256_wide_mul,};
+use core::integer::{u512, u512_safe_div_rem_by_u256};
 use core::math::u256_inv_mod;
-use core::num::traits::OverflowingMul;
+use core::num::traits::{OverflowingMul, WideMul};
 use core::option::OptionTrait;
 use core::traits::Div;
 use core::traits::TryInto;
@@ -105,10 +105,10 @@ impl PointDoublingPoint of PointOperations<Point> {
 
         let x1y1 = mult_mod(x1, y1, prime_nz);
         let x2y2 = mult_mod(x2, y2, prime_nz);
-        let y1y2_512 = u256_wide_mul(y1, y2);
-        let x1x2_512 = u256_wide_mul(x1, x2);
-        let x1y2_512 = u256_wide_mul(x1, y2);
-        let y1x2_512 = u256_wide_mul(y1, x2);
+        let y1y2_512 = WideMul::wide_mul(y1, y2);
+        let x1x2_512 = WideMul::wide_mul(x1, x2);
+        let x1y2_512 = WideMul::wide_mul(x1, y2);
+        let y1x2_512 = WideMul::wide_mul(y1, x2);
 
         // y1y2 + ax1x2 = y1y2 - x1x2, a  = -1
         let (_, y1y2_ax1x2) = u512_safe_div_rem_by_u256(
