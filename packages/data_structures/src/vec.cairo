@@ -58,7 +58,7 @@ pub trait VecTrait<V, T> {
     fn len(self: @V) -> usize;
 }
 
-impl VecIndex<V, T, impl VecTraitImpl: VecTrait<V, T>> of Index<V, usize, T> {
+impl VecIndex<V, T, +VecTrait<V, T>> of Index<V, usize, T> {
     #[inline(always)]
     fn index(ref self: V, index: usize) -> T {
         self.at(index)

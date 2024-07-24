@@ -1,22 +1,18 @@
 // Internal imports
 use alexandria_data_structures::vec::{Felt252Vec, NullableVec, VecTrait};
 
-fn vec_new_test<V, T, impl Vec: VecTrait<V, T>>(vec: @V) {
+fn vec_new_test<V, T, +VecTrait<V, T>>(vec: @V) {
     assert!(vec.len() == 0, "vec length should be 0");
 }
 
-fn vec_len_test<
-    V, T, impl Vec: VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, impl SDestruct: Destruct<V>
->(
+fn vec_len_test<V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>>(
     ref vec: V, val_1: T
 ) {
     vec.push(val_1);
     assert!(vec.len() == 1, "vec length should be 1");
 }
 
-fn vec_get_test<
-    V, T, impl Vec: VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, impl SDestruct: Destruct<V>
->(
+fn vec_get_test<V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>>(
     ref vec: V, val_1: T
 ) {
     vec.push(val_1);
@@ -24,9 +20,7 @@ fn vec_get_test<
     assert!(vec.get(1).is_none(), "vec get should return none");
 }
 
-fn vec_at_test<
-    V, T, impl Vec: VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, impl SDestruct: Destruct<V>
->(
+fn vec_at_test<V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>>(
     ref vec: V, val_1: T
 ) {
     vec.push(val_1);
@@ -34,16 +28,14 @@ fn vec_at_test<
 }
 
 fn vec_at_out_of_bounds_test<
-    V, T, impl Vec: VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, impl SDestruct: Destruct<V>
+    V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>
 >(
     ref vec: V
 ) {
     vec.at(0);
 }
 
-fn vec_push_test<
-    V, T, impl Vec: VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, impl SDestruct: Destruct<V>
->(
+fn vec_push_test<V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>>(
     ref vec: V, val_1: T
 ) {
     vec.push(val_1);
@@ -51,9 +43,7 @@ fn vec_push_test<
     assert!(vec.at(0) == val_1, "vec get should return val_1");
 }
 
-fn vec_set_test<
-    V, T, impl Vec: VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, impl SDestruct: Destruct<V>
->(
+fn vec_set_test<V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>>(
     ref vec: V, val_1: T, val_2: T
 ) {
     vec.push(val_1);
@@ -63,7 +53,7 @@ fn vec_set_test<
 }
 
 fn vec_set_test_expect_error<
-    V, T, impl Vec: VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, impl SDestruct: Destruct<V>
+    V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>
 >(
     ref vec: V, val_1: T, val_2: T
 ) {
@@ -72,14 +62,7 @@ fn vec_set_test_expect_error<
 }
 
 fn vec_index_trait_test<
-    V,
-    T,
-    impl Vec: VecTrait<V, T>,
-    +Drop<T>,
-    +Copy<T>,
-    +PartialEq<T>,
-    impl SDestruct: Destruct<V>,
-    impl VIndex: Index<V, usize, T>
+    V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>, +Index<V, usize, T>
 >(
     ref vec: V, val_1: T, val_2: T
 ) {
@@ -90,14 +73,7 @@ fn vec_index_trait_test<
 }
 
 fn vec_index_trait_out_of_bounds_test<
-    V,
-    T,
-    impl Vec: VecTrait<V, T>,
-    +Drop<T>,
-    +Copy<T>,
-    +PartialEq<T>,
-    impl SDestruct: Destruct<V>,
-    impl VIndex: Index<V, usize, T>
+    V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>, +Index<V, usize, T>
 >(
     ref vec: V, val_1: T
 ) {

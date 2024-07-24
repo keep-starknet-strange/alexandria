@@ -175,9 +175,7 @@ pub fn u128_array_slice(src: @Array<u128>, mut begin: usize, len: usize) -> Arra
     slice
 }
 
-fn array_slice<T, impl TDrop: Drop<T>, impl TCopy: Copy<T>>(
-    src: @Array<T>, mut begin: usize, len: usize
-) -> Array<T> {
+fn array_slice<T, +Drop<T>, +Copy<T>>(src: @Array<T>, mut begin: usize, len: usize) -> Array<T> {
     let mut slice = array![];
     let end = begin + len;
     while begin < end && begin < src.len() {

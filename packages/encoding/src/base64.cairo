@@ -10,6 +10,8 @@ pub trait Decoder<T> {
     fn decode(data: T) -> Array<u8>;
 }
 
+// TODO Check what can be turned into a generic?
+
 pub impl Base64Encoder of Encoder<Array<u8>> {
     fn encode(data: Array<u8>) -> Array<u8> {
         let mut char_set = get_base64_char_set();
