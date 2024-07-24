@@ -1,6 +1,6 @@
 use core::nullable::NullableImpl;
-use core::num::traits::OverflowingAdd;
-use core::ops::index::Index;
+use core::num::traits::WrappingAdd;
+// use core::ops::index::Index;
 
 //! Vec implementation.
 //!
@@ -60,9 +60,7 @@ pub trait VecTrait<V, T> {
     fn len(self: @V) -> usize;
 }
 
-impl VecIndex<V, T, +VecTrait<V, T>> of Index<V, usize> {
-    type Target = T;
-
+impl VecIndex<V, T, +VecTrait<V, T>> of Index<V, usize, T> {
     #[inline(always)]
     fn index(ref self: V, index: usize) -> T {
         self.at(index)
@@ -103,8 +101,7 @@ impl Felt252VecImpl<T, +Drop<T>, +Copy<T>, +Felt252DictValue<T>> of VecTrait<Fel
 
     fn push(ref self: Felt252Vec<T>, value: T) {
         self.items.insert(self.len.into(), value);
-        let (new_len, _) = self.len.overflowing_add(1);
-        self.len = new_len;
+        self.len = self.len.wrapping_add(1);
     }
 
     fn set(ref self: Felt252Vec<T>, index: usize, value: T) {
@@ -148,8 +145,7 @@ impl NullableVecImpl<T, +Drop<T>, +Copy<T>> of VecTrait<NullableVec<T>, T> {
 
     fn push(ref self: NullableVec<T>, value: T) {
         self.items.insert(self.len.into(), NullableImpl::new(value));
-        let (new_len, _) = self.len.overflowing_add(1);
-        self.len = new_len;
+        self.len = self.len.wrapping_add(1);
     }
 
     fn set(ref self: NullableVec<T>, index: usize, value: T) {
