@@ -7,6 +7,38 @@ const FAST_360: u64 = 360 * BASE;
 const FAST_180: u64 = 180 * BASE;
 const FAST_90: u64 = 90 * BASE;
 const FAST_10: u64 = 10 * BASE;
+
+// TODO Check if more gas efficient?
+const sin_table: [
+    u64
+    ; 10] = [
+    0_u64, // sin(0)
+    17364818_u64, // sin(10)
+    34202014_u64, // sin(20)
+    50000000_u64, // sin(30)
+    64278761_u64, // sin(40)
+    76604444_u64, // sin(50)
+    86602540_u64, // sin(60)
+    93969262_u64, // sin(70)
+    98480775_u64, // sin(80)
+    100000000_u64 // sin(90)
+];
+
+const cos_table: [
+    u64
+    ; 10] = [
+    100000000_u64, // cos(0)
+    99984769_u64, // cos(1)
+    99939082_u64, // cos(2)
+    99862953_u64, // cos(3)
+    99756405_u64, // cos(4)
+    99619470_u64, // cos(5)
+    99452190_u64, // cos(6)
+    99254615_u64, // cos(7)
+    99026807_u64, // cos(8)
+    98768834_u64, // cos(9)
+];
+
 // Calculate fast sin(x)
 // Since there is no float in cairo, we multiply every number by 1e8
 // # Arguments
@@ -16,34 +48,9 @@ const FAST_10: u64 = 10 * BASE;
 // * `u64` - sin(x) * 1e8
 // # Example
 // * fast_sin(3000000000) = (true, 50000000)
-// TODO CHECK where DW can be used
 pub fn fast_sin_inner(x: u64) -> (bool, u64) {
     let multiplier = 100000000_u64;
     let hollyst: u64 = 1745329_u64;
-    let sin_table = array![
-        0_u64, // sin(0)
-        17364818_u64, // sin(10)
-        34202014_u64, // sin(20)
-        50000000_u64, // sin(30)
-        64278761_u64, // sin(40)
-        76604444_u64, // sin(50)
-        86602540_u64, // sin(60)
-        93969262_u64, // sin(70)
-        98480775_u64, // sin(80)
-        100000000_u64 // sin(90)
-    ];
-    let cos_table = array![
-        100000000_u64, // cos(0)
-        99984769_u64, // cos(1)
-        99939082_u64, // cos(2)
-        99862953_u64, // cos(3)
-        99756405_u64, // cos(4)
-        99619470_u64, // cos(5)
-        99452190_u64, // cos(6)
-        99254615_u64, // cos(7)
-        99026807_u64, // cos(8)
-        98768834_u64, // cos(9)
-    ];
 
     let mut a = x % FAST_360;
     let mut sig = true;
@@ -60,8 +67,8 @@ pub fn fast_sin_inner(x: u64) -> (bool, u64) {
     let j = a - i.into() * FAST_10;
     let int_j: usize = (j / multiplier).try_into().unwrap();
 
-    let y = *sin_table[i] * *cos_table[int_j] / multiplier
-        + ((j * hollyst) / multiplier) * *sin_table[9
+    let y = *sin_table.span()[i] * *cos_table.span()[int_j] / multiplier
+        + ((j * hollyst) / multiplier) * *sin_table.span()[9
         - i] / multiplier;
 
     return (sig, y);

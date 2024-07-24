@@ -205,13 +205,18 @@ pub fn fpow(mut base: u128, mut power: u128) -> u128 {
     result
 }
 
+const two_squarings: [
+    u64
+    ; 6] = [
+    TWO_POW_1, TWO_POW_2, TWO_POW_4, TWO_POW_8, TWO_POW_16, TWO_POW_32
+];
 // Uses cache for faster powers of 2 in a u128
 // Uses TWO_POW_* constants
 // Generic T to use with both u128 and u64
 pub fn two_pow<T, +DivRem<T>, +Mul<T>, +Into<u64, T>, +Drop<T>>(mut power: u64) -> T {
-    let two_squarings = array![TWO_POW_1, TWO_POW_2, TWO_POW_4, TWO_POW_8, TWO_POW_16, TWO_POW_32,];
     let mut i = 0;
     let mut result: T = 1_u64.into();
+    let two_squarings = two_squarings.span();
     while (power != 0) {
         let (q, r) = DivRem::div_rem(power, 2);
         if r == 1 {
