@@ -8,7 +8,6 @@ const FAST_180: u64 = 180 * BASE;
 const FAST_90: u64 = 90 * BASE;
 const FAST_10: u64 = 10 * BASE;
 
-// TODO Check if more gas efficient?
 const sin_table: [
     u64
     ; 10] = [
