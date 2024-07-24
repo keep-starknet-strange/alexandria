@@ -1,5 +1,5 @@
 //! # Extended Euclidean Algorithm.
-use core::integer::{u128_overflowing_sub, u128_overflowing_mul, u128_wrapping_sub};
+use core::num::traits::{OverflowingMul, OverflowingSub};
 
 /// Extended Euclidean Algorithm.
 /// # Arguments
@@ -31,8 +31,9 @@ pub fn extended_euclidean_algorithm(a: u128, b: u128) -> (u128, u128, u128) {
 /// Update the step of the extended Euclidean algorithm.
 fn update_step(ref a: u128, ref old_a: u128, quotient: u128) {
     let temp = a;
-    let (bottom, _) = u128_overflowing_mul(quotient, temp);
-    a = u128_wrapping_sub(old_a, bottom);
+    let (bottom, _) = quotient.overflowing_mul(temp);
+    let (a_tmp, _) = old_a.overflowing_sub(bottom);
+    a = a_tmp;
     old_a = temp;
 }
 

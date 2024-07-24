@@ -25,10 +25,7 @@ pub mod trigonometry;
 pub mod u512_arithmetics;
 pub mod wad_ray_math;
 pub mod zellers_congruence;
-use core::integer::{
-    u8_wide_mul, u16_wide_mul, u32_wide_mul, u64_wide_mul, u128_wide_mul, BoundedInt,
-    u256_overflow_mul
-};
+use core::integer::BoundedInt;
 use core::num::traits::{WrappingAdd, WrappingSub, WrappingMul, WideMul, OverflowingMul};
 
 /// Raise a number to a power.
@@ -73,7 +70,7 @@ pub trait BitShift<T> {
 
 pub impl U8BitShift of BitShift<u8> {
     fn shl(x: u8, n: u8) -> u8 {
-        (u8_wide_mul(x, pow(2, n)) & BoundedInt::<u8>::max().into()).try_into().unwrap()
+        (WideMul::wide_mul(x, pow(2, n)) & BoundedInt::<u8>::max().into()).try_into().unwrap()
     }
 
     fn shr(x: u8, n: u8) -> u8 {
@@ -83,7 +80,7 @@ pub impl U8BitShift of BitShift<u8> {
 
 pub impl U16BitShift of BitShift<u16> {
     fn shl(x: u16, n: u16) -> u16 {
-        (u16_wide_mul(x, pow(2, n)) & BoundedInt::<u16>::max().into()).try_into().unwrap()
+        (WideMul::wide_mul(x, pow(2, n)) & BoundedInt::<u16>::max().into()).try_into().unwrap()
     }
 
     fn shr(x: u16, n: u16) -> u16 {
@@ -93,7 +90,7 @@ pub impl U16BitShift of BitShift<u16> {
 
 pub impl U32BitShift of BitShift<u32> {
     fn shl(x: u32, n: u32) -> u32 {
-        (u32_wide_mul(x, pow(2, n)) & BoundedInt::<u32>::max().into()).try_into().unwrap()
+        (WideMul::wide_mul(x, pow(2, n)) & BoundedInt::<u32>::max().into()).try_into().unwrap()
     }
 
     fn shr(x: u32, n: u32) -> u32 {
@@ -103,7 +100,7 @@ pub impl U32BitShift of BitShift<u32> {
 
 pub impl U64BitShift of BitShift<u64> {
     fn shl(x: u64, n: u64) -> u64 {
-        (u64_wide_mul(x, pow(2, n)) & BoundedInt::<u64>::max().into()).try_into().unwrap()
+        (WideMul::wide_mul(x, pow(2, n)) & BoundedInt::<u64>::max().into()).try_into().unwrap()
     }
 
     fn shr(x: u64, n: u64) -> u64 {
@@ -113,8 +110,7 @@ pub impl U64BitShift of BitShift<u64> {
 
 pub impl U128BitShift of BitShift<u128> {
     fn shl(x: u128, n: u128) -> u128 {
-        let (_, bottom_word) = u128_wide_mul(x, pow(2, n));
-        bottom_word
+        WideMul::wide_mul(x, pow(2, n)).low
     }
 
     fn shr(x: u128, n: u128) -> u128 {
@@ -154,7 +150,7 @@ trait BitRotate<T> {
 
 pub impl U8BitRotate of BitRotate<u8> {
     fn rotate_left(x: u8, n: u8) -> u8 {
-        let word = u8_wide_mul(x, pow(2, n));
+        let word = WideMul::wide_mul(x, pow(2, n));
         let (quotient, remainder) = DivRem::div_rem(word, 0x100_u16.try_into().unwrap());
         (quotient + remainder).try_into().unwrap()
     }
@@ -168,7 +164,7 @@ pub impl U8BitRotate of BitRotate<u8> {
 
 pub impl U16BitRotate of BitRotate<u16> {
     fn rotate_left(x: u16, n: u16) -> u16 {
-        let word = u16_wide_mul(x, pow(2, n));
+        let word = WideMul::wide_mul(x, pow(2, n));
         let (quotient, remainder) = DivRem::div_rem(word, 0x10000_u32.try_into().unwrap());
         (quotient + remainder).try_into().unwrap()
     }
@@ -182,7 +178,7 @@ pub impl U16BitRotate of BitRotate<u16> {
 
 pub impl U32BitRotate of BitRotate<u32> {
     fn rotate_left(x: u32, n: u32) -> u32 {
-        let word = u32_wide_mul(x, pow(2, n));
+        let word = WideMul::wide_mul(x, pow(2, n));
         let (quotient, remainder) = DivRem::div_rem(word, 0x100000000_u64.try_into().unwrap());
         (quotient + remainder).try_into().unwrap()
     }
@@ -196,7 +192,7 @@ pub impl U32BitRotate of BitRotate<u32> {
 
 pub impl U64BitRotate of BitRotate<u64> {
     fn rotate_left(x: u64, n: u64) -> u64 {
-        let word = u64_wide_mul(x, pow(2, n));
+        let word = WideMul::wide_mul(x, pow(2, n));
         let (quotient, remainder) = DivRem::div_rem(
             word, 0x10000000000000000_u128.try_into().unwrap()
         );
@@ -212,8 +208,7 @@ pub impl U64BitRotate of BitRotate<u64> {
 
 pub impl U128BitRotate of BitRotate<u128> {
     fn rotate_left(x: u128, n: u128) -> u128 {
-        let (high, low) = u128_wide_mul(x, pow(2, n));
-        let word = u256 { low, high };
+        let word = WideMul::wide_mul(x, pow(2, n));
         let (quotient, remainder) = DivRem::div_rem(
             word, u256 { low: 0, high: 1 }.try_into().unwrap()
         );
