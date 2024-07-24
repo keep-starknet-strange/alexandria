@@ -3,10 +3,9 @@ use alexandria_math::mod_arithmetics::{mult_mod, sqr_mod, div_mod, pow_mod, equa
 use alexandria_math::sha512::{sha512, SHA512_LEN};
 use alexandria_math::u512_arithmetics::{u512_add, u512_sub};
 use core::array::ArrayTrait;
-use core::integer::{
-    u512, u512_safe_div_rem_by_u256, u256_wide_mul, u256_overflowing_add, u256_overflow_sub,
-};
+use core::integer::{u512, u512_safe_div_rem_by_u256, u256_wide_mul,};
 use core::math::u256_inv_mod;
+use core::num::traits::OverflowingMul;
 use core::option::OptionTrait;
 use core::traits::Div;
 use core::traits::TryInto;
@@ -301,7 +300,8 @@ impl U256TryIntoPoint of TryInto<u256, Point> {
     }
 }
 
-/// Function that performs point multiplication for an Elliptic Curve point using the double and add method.
+/// Function that performs point multiplication for an Elliptic Curve point using the double and add
+/// method.
 /// # Arguments
 /// * `scalar` - Scalar such that scalar * P = P + P + P + ... + P.
 /// * `P` - Elliptic Curve point
@@ -381,7 +381,8 @@ pub fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> 
     let pub_key_bytes = pub_key_bytes.reversed().span();
 
     let hashable = r_bytes.concat(pub_key_bytes).span().concat(msg);
-    // k = SHA512(dom2(F, C) -> empty string || R -> half of sig || A -> pub_key || PH(M) -> identity function for msg)
+    // k = SHA512(dom2(F, C) -> empty string || R -> half of sig || A -> pub_key || PH(M) ->
+    // identity function for msg)
     let k: Array<u8> = sha512(hashable);
     let k_u512: u512 = k.span().into();
 

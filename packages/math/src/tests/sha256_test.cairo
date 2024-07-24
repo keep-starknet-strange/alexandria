@@ -86,9 +86,11 @@ fn sha256_random_data_test() {
 #[test]
 #[available_gas(2000000000)]
 fn sha256_lorem_ipsum_test() {
-    // Lorem ipsum, or lsipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs.
-    // The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of
-    // Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with
+    // Lorem ipsum, or lsipsum as it is sometimes known, is dummy text used in laying out print,
+    // graphic or web designs.
+    // The passage is attributed to an unknown typesetter in the 15th century who is thought to have
+    // scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It
+    // usually begins with
     let mut input = array![];
     input.append('L');
     input.append('o');

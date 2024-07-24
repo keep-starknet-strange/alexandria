@@ -12,3 +12,6 @@ fmt.workspace = true
 alexandria_math = { path = "../math" }
 alexandria_data_structures = { path = "../data_structures" }
 starknet.workspace = true
+
+[dev-dependencies]
+cairo_test = "2.7.0-rc.3"

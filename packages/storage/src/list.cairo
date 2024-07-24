@@ -278,16 +278,19 @@ impl AListIndexViewImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of IndexView<List<T>, 
     }
 }
 
-// this functions finds the StorageBaseAddress of a "storage segment" (a continuous space of 256 storage slots)
+// this functions finds the StorageBaseAddress of a "storage segment" (a continuous space of 256
+// storage slots)
 // and an offset into that segment where a value at `index` is stored
 // each segment can hold up to `256 // storage_size` elements
 //
 // the way how the address is calculated is very similar to how a LegacyHash map works:
 //
 // first we take the `list_base` address which is derived from the name of the storage variable
-// then we hash it with a `key` which is the number of the segment where the element at `index` belongs (from 0 upwards)
+// then we hash it with a `key` which is the number of the segment where the element at `index`
+// belongs (from 0 upwards)
 // we hash these two values: H(list_base, key) to the the `segment_base` address
-// finally, we calculate the offset into this segment, taking into account the size of the elements held in the array
+// finally, we calculate the offset into this segment, taking into account the size of the elements
+// held in the array
 //
 // by way of example:
 //

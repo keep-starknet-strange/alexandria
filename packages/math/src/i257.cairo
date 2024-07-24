@@ -41,13 +41,13 @@ impl i257Add of Add<i257> {
     fn add(lhs: i257, rhs: i257) -> i257 {
         i257_assert_no_negative_zero(lhs);
         i257_assert_no_negative_zero(rhs);
-        // If both integers have the same sign, 
+        // If both integers have the same sign,
         // the sum of their absolute values can be returned.
         if lhs.is_negative == rhs.is_negative {
             let sum = lhs.abs + rhs.abs;
             I257Impl::new(sum, lhs.is_negative)
         } else {
-            // If the integers have different signs, 
+            // If the integers have different signs,
             // the larger absolute value is subtracted from the smaller one.
             let (larger, smaller) = if lhs.abs >= rhs.abs {
                 (lhs, rhs)
@@ -78,7 +78,8 @@ impl i257Sub of Sub<i257> {
             return lhs;
         }
 
-        // The subtraction of `lhs` to `rhs` is achieved by negating `rhs` sign and adding it to `lhs`.
+        // The subtraction of `lhs` to `rhs` is achieved by negating `rhs` sign and adding it to
+        // `lhs`.
         let neg_b = I257Impl::new(rhs.abs, !rhs.is_negative);
         lhs + neg_b
     }
@@ -139,7 +140,8 @@ fn i257_div(lhs: i257, rhs: i257) -> i257 {
         return I257Impl::new(lhs.abs / rhs.abs, is_negative);
     }
 
-    // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
+    // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point
+    // over.
     let quotient = (lhs.abs * 10) / rhs.abs;
     let last_digit = quotient % 10;
 

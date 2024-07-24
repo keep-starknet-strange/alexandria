@@ -1,6 +1,6 @@
 use core::array::SpanTrait;
 use core::num::traits::Zero;
-use core::option::OptionTrait;
+use core::ops::{MulAssign, AddAssign};
 //! Integrate using the composite trapezoidal rule
 
 /// Integrate y(x).
@@ -13,7 +13,7 @@ pub fn trapezoidal_rule<
     T,
     +PartialOrd<T>,
     +Add<T>,
-    +AddEq<T>,
+    +AddAssign<T, T>,
     +Sub<T>,
     +Mul<T>,
     +Div<T>,
@@ -32,13 +32,12 @@ pub fn trapezoidal_rule<
     let mut prev_x = *xs.pop_front().unwrap();
     let mut prev_y = *ys.pop_front().unwrap();
     let mut value = Zero::zero();
-    while let Option::Some(next_x) = xs
-        .pop_front() {
-            assert(*next_x > prev_x, 'Abscissa must be sorted');
-            let next_y = *ys.pop_front().unwrap();
-            value += (*next_x - prev_x) * (prev_y + next_y);
-            prev_x = *next_x;
-            prev_y = next_y;
-        };
+    while let Option::Some(next_x) = xs.pop_front() {
+        assert(*next_x > prev_x, 'Abscissa must be sorted');
+        let next_y = *ys.pop_front().unwrap();
+        value += (*next_x - prev_x) * (prev_y + next_y);
+        prev_x = *next_x;
+        prev_y = next_y;
+    };
     value / Into::into(2_u8)
 }

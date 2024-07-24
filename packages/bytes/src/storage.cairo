@@ -1,8 +1,9 @@
 use alexandria_bytes::bytes::{Bytes, BytesTrait, BYTES_PER_ELEMENT};
+use core::num::traits::OverflowingAdd;
 use starknet::SyscallResult;
 use starknet::storage_access::{
     Store, StorageAddress, StorageBaseAddress, storage_address_from_base,
-    storage_base_address_from_felt252, storage_address_from_base_and_offset
+    storage_base_address_from_felt252, storage_address_from_base_and_offset,
 };
 
 /// Store for a `Bytes` object.
@@ -86,15 +87,16 @@ fn inner_read_bytes(address_domain: u32, address: StorageAddress) -> SyscallResu
         };
         data.append(value);
         remaining_full_words -= 1;
-        index_in_chunk = match core::integer::u8_overflowing_add(index_in_chunk, 1) {
-            Result::Ok(x) => x,
-            Result::Err(_) => {
-                // After reading 256 `uint128`s `index_in_chunk` will overflow and we move to the
-                // next chunk.
-                chunk += 1;
-                chunk_base = inner_bytes_pointer(address, chunk);
-                0
-            },
+
+        let (index_in_chunk, did_overflow) = index_in_chunk.overflowing_add(1);
+        if did_overflow {
+            // After reading 256 `uint128`s `index_in_chunk` will overflow and we move to the
+            // next chunk.
+            chunk += 1;
+            chunk_base = inner_bytes_pointer(address, chunk);
+            0
+        } else {
+            index_in_chunk
         };
     }?;
     if last_word_len != 0 {
@@ -131,15 +133,15 @@ fn inner_write_bytes(
             Result::Ok(_) => {},
             Result::Err(err) => { break Result::Err(err); },
         };
-        index_in_chunk = match core::integer::u8_overflowing_add(index_in_chunk, 1) {
-            Result::Ok(x) => x,
-            Result::Err(_) => {
-                // After writing 256 `uint128`s `index_in_chunk` will overflow and we move to the
-                // next chunk.
-                chunk += 1;
-                chunk_base = inner_bytes_pointer(address, chunk);
-                0
-            },
+        let (index_in_chunk, did_overflow) = index_in_chunk.overflowing_add(1);
+        if did_overflow {
+            // After reading 256 `uint128`s `index_in_chunk` will overflow and we move to the
+            // next chunk.
+            chunk += 1;
+            chunk_base = inner_bytes_pointer(address, chunk);
+            0
+        } else {
+            index_in_chunk
         };
     }?;
     Result::Ok(())

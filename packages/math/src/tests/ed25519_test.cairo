@@ -1,6 +1,7 @@
 use alexandria_math::ed25519::{verify_signature, Point, PointOperations, p_non_zero};
 
-// Public keys and signatures were generated with JS library Noble (https://github.com/paulmillr/noble-ed25519)
+// Public keys and signatures were generated with JS library Noble
+// (https://github.com/paulmillr/noble-ed25519)
 
 #[test]
 #[available_gas(3200000000)]

@@ -101,7 +101,7 @@ pub fn encode_felt(self: felt252, base64_chars: Span<u8>) -> Array<u8> {
     let mut num: u256 = self.into();
     if num != 0 {
         let (quotient, remainder) = DivRem::div_rem(num, 65536_u256.try_into().unwrap());
-        // Safe since 'remainder' is always less than 65536 (2^16), 
+        // Safe since 'remainder' is always less than 65536 (2^16),
         // which is within the range of usize (less than 2^32).
         let remainder: usize = remainder.try_into().unwrap();
         let r3 = (remainder / 1024) & 63;
@@ -114,7 +114,7 @@ pub fn encode_felt(self: felt252, base64_chars: Span<u8>) -> Array<u8> {
     }
     while (num != 0) {
         let (quotient, remainder) = DivRem::div_rem(num, 16777216_u256.try_into().unwrap());
-        // Safe since 'remainder' is always less than 16777216 (2^24), 
+        // Safe since 'remainder' is always less than 16777216 (2^24),
         // which is within the range of usize (less than 2^32).
         let remainder: usize = remainder.try_into().unwrap();
         let r4 = remainder / 262144;

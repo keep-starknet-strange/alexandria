@@ -10,3 +10,6 @@ fmt.workspace = true
 
 [dependencies]
 alexandria_math = { path = "../math" }
+
+[dev-dependencies]
+cairo_test = "2.7.0-rc.3"

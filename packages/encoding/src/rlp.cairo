@@ -88,14 +88,12 @@ pub impl RLPImpl of RLPTrait {
         let item = input.pop_front().unwrap();
 
         match item {
-            RLPItem::String(string) => {
-                output.extend_from_span(RLPTrait::encode_string(*string)?);
-            },
+            RLPItem::String(string) => { output.extend_from_span(Self::encode_string(*string)?); },
             RLPItem::List(list) => {
                 if (*list).len() == 0 {
                     output.append(0xc0);
                 } else {
-                    let payload = RLPTrait::encode(*list)?;
+                    let payload = Self::encode(*list)?;
                     let payload_len = payload.len();
                     if payload_len > 55 {
                         let len_in_bytes = payload_len.to_bytes();
@@ -113,7 +111,7 @@ pub impl RLPImpl of RLPTrait {
         }
 
         if input.len() > 0 {
-            output.extend_from_span(RLPTrait::encode(input)?);
+            output.extend_from_span(Self::encode(input)?);
         }
 
         Result::Ok(output.span())
@@ -163,7 +161,7 @@ pub impl RLPImpl of RLPTrait {
         let mut output: Array<RLPItem> = Default::default();
         let input_len = input.len();
 
-        let (rlp_type, offset, len) = RLPTrait::decode_type(input)?;
+        let (rlp_type, offset, len) = Self::decode_type(input)?;
 
         if input_len < offset + len {
             return Result::Err(RLPError::InputTooShort);
@@ -179,7 +177,7 @@ pub impl RLPImpl of RLPTrait {
             },
             RLPType::List => {
                 if len > 0 {
-                    let res = RLPTrait::decode(input.slice(offset, len))?;
+                    let res = Self::decode(input.slice(offset, len))?;
                     output.append(RLPItem::List(res));
                 } else {
                     output.append(RLPItem::List(array![].span()));
@@ -191,7 +189,7 @@ pub impl RLPImpl of RLPTrait {
         if total_item_len < input_len {
             output
                 .extend_from_span(
-                    RLPTrait::decode(input.slice(total_item_len, input_len - total_item_len))?
+                    Self::decode(input.slice(total_item_len, input_len - total_item_len))?
                 );
         }
 

@@ -21,11 +21,10 @@ impl U32BytesImpl of UIntBytes<u32> {
             return Option::None;
         }
         let mut result: u32 = 0;
-        while let Option::Some(byte) = input
-            .pop_front() {
-                let byte: u32 = (*byte).into();
-                result = result * 0x100 + byte;
-            };
+        while let Option::Some(byte) = input.pop_front() {
+            let byte: u32 = (*byte).into();
+            result = result * 0x100 + byte;
+        };
         Option::Some(result)
     }
 

@@ -14,15 +14,14 @@ fn compare_bytes(actual: @Bytes, expected: @Bytes) -> bool {
         return false;
     }
     let mut i: usize = 0;
-    while i < actual
-        .size() {
-            let (_, actual_val) = actual.read_u8(i);
-            let (_, expected_val) = expected.read_u8(i);
-            if actual_val != expected_val {
-                break;
-            }
-            i += 1;
-        };
+    while i < actual.size() {
+        let (_, actual_val) = actual.read_u8(i);
+        let (_, expected_val) = expected.read_u8(i);
+        if actual_val != expected_val {
+            break;
+        }
+        i += 1;
+    };
     if i < actual.size() {
         return false;
     }
@@ -162,7 +161,7 @@ fn encoded_as_test() {
 
 #[test]
 fn selector_test() {
-    // selector for : transfer(address,uint256) 
+    // selector for : transfer(address,uint256)
     let expected: Bytes = BytesTrait::new(4, array![0xa9059cbb000000000000000000000000]);
     let mut encoded: Bytes = BytesTrait::new_empty();
     encoded = encoded.encode_selector(0xa9059cbb_u32);

@@ -32,7 +32,7 @@ fn test_at() {
     let mut index: usize = 0;
     loop {
         if index == 8 * 16 - 1 {
-            // last value 
+            // last value
             assert!(ba[index] == false, "expected false");
             break;
         }

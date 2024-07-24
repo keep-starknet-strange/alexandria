@@ -1,4 +1,5 @@
 use core::num::traits::Zero;
+use core::ops::AddAssign;
 //! Dot product of two arrays
 
 /// Compute the dot product for 2 given arrays.
@@ -7,7 +8,7 @@ use core::num::traits::Zero;
 /// * `ys` - The second sequence of len L.
 /// # Returns
 /// * `sum` - The dot product.
-pub fn dot<T, +Mul<T>, +AddEq<T>, +Zero<T>, +Copy<T>, +Drop<T>,>(
+pub fn dot<T, +Mul<T>, +AddAssign<T, T>, +Zero<T>, +Copy<T>, +Drop<T>,>(
     mut xs: Span<T>, mut ys: Span<T>
 ) -> T {
     // [Check] Inputs
@@ -15,11 +16,10 @@ pub fn dot<T, +Mul<T>, +AddEq<T>, +Zero<T>, +Copy<T>, +Drop<T>,>(
 
     // [Compute] Dot product in a loop
     let mut sum = Zero::zero();
-    while !xs
-        .is_empty() {
-            let x = *xs.pop_front().unwrap();
-            let y = *ys.pop_front().unwrap();
-            sum += x * y;
-        };
+    while !xs.is_empty() {
+        let x = *xs.pop_front().unwrap();
+        let y = *ys.pop_front().unwrap();
+        sum += x * y;
+    };
     sum
 }

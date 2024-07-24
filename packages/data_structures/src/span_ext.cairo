@@ -13,7 +13,7 @@ pub trait SpanTraitExt<T> {
     fn remove_front_n(ref self: Span<T>, n: usize);
     /// Removes up to `n` elements from the back of `self`.
     fn remove_back_n(ref self: Span<T>, n: usize);
-    /// Clones and appends all the elements of `self` and then `other` in a single new array. 
+    /// Clones and appends all the elements of `self` and then `other` in a single new array.
     fn concat(self: Span<T>, other: Span<T>) -> Array<T>;
     /// Return a new array containing the elements of `self` in a reversed order.
     fn reversed(self: Span<T>) -> Array<T>;
@@ -21,7 +21,7 @@ pub trait SpanTraitExt<T> {
     fn contains<+PartialEq<T>>(self: Span<T>, item: @T) -> bool;
     /// Searches for an element the span, returning its index.
     fn position<+PartialEq<T>>(self: Span<T>, item: @T) -> Option<usize>;
-    /// Returns the number of elements in the span with the given value.  
+    /// Returns the number of elements in the span with the given value.
     fn occurrences<+PartialEq<T>>(self: Span<T>, item: @T) -> usize;
     /// Returns the minimum element of a span.
     fn min<+PartialOrd<@T>>(self: Span<T>) -> Option<T>;
@@ -31,7 +31,7 @@ pub trait SpanTraitExt<T> {
     fn max<+PartialOrd<@T>>(self: Span<T>) -> Option<T>;
     /// Returns the position of the maximum element of a span.
     fn max_position<+PartialOrd<@T>>(self: Span<T>) -> Option<usize>;
-    /// Returns a new array, cloned from `self` but removes consecutive repeated elements. 
+    /// Returns a new array, cloned from `self` but removes consecutive repeated elements.
     /// If the span is sorted, this removes all duplicates.
     fn dedup<+PartialEq<T>>(self: Span<T>) -> Array<T>;
     /// Returns a new array, cloned from `self` but without any duplicate.
@@ -166,14 +166,13 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
             Option::Some(item) => item,
             Option::None => { return Option::None; },
         };
-        while let Option::Some(item) = self
-            .pop_front() {
-                if item < min {
-                    min_position = index + 1;
-                    min = item;
-                }
-                index += 1;
-            };
+        while let Option::Some(item) = self.pop_front() {
+            if item < min {
+                min_position = index + 1;
+                min = item;
+            }
+            index += 1;
+        };
 
         Option::Some(min_position)
     }
@@ -201,14 +200,13 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
             Option::None => { return Option::None; },
         };
 
-        while let Option::Some(item) = self
-            .pop_front() {
-                if item > max {
-                    max_position = index + 1;
-                    max = item
-                }
-                index += 1;
-            };
+        while let Option::Some(item) = self.pop_front() {
+            if item > max {
+                max_position = index + 1;
+                max = item
+            }
+            index += 1;
+        };
 
         Option::Some(max_position)
     }
@@ -222,13 +220,12 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
         let mut last_value = self.pop_front().unwrap();
         let mut ret = array![last_value.clone()];
 
-        while let Option::Some(v) = self
-            .pop_front() {
-                if (last_value != v) {
-                    last_value = v;
-                    ret.append(v.clone());
-                }
-            };
+        while let Option::Some(v) = self.pop_front() {
+            if (last_value != v) {
+                last_value = v;
+                ret.append(v.clone());
+            }
+        };
 
         ret
     }
@@ -236,12 +233,11 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
     fn unique<+PartialEq<T>>(mut self: Span<T>) -> Array<T> {
         let mut ret = array![];
 
-        while let Option::Some(v) = self
-            .pop_front() {
-                if !ret.span().contains(v) {
-                    ret.append(v.clone());
-                }
-            };
+        while let Option::Some(v) = self.pop_front() {
+            if !ret.span().contains(v) {
+                ret.append(v.clone());
+            }
+        };
 
         ret
     }

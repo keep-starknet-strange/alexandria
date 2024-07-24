@@ -21,15 +21,14 @@ pub impl BytesDebug of Debug<Bytes> {
         let prefix: ByteArray = "0x";
         Display::fmt(@prefix, ref f)?;
         let mut res: Result<(), Error> = Result::Ok(());
-        while i < self
-            .size() {
-                let (new_i, value) = self.read_u8(i);
-                res = format_byte_hex(value, ref f);
-                if res.is_err() {
-                    break;
-                }
-                i = new_i;
-            };
+        while i < self.size() {
+            let (new_i, value) = self.read_u8(i);
+            res = format_byte_hex(value, ref f);
+            if res.is_err() {
+                break;
+            }
+            i = new_i;
+        };
         res
     }
 }
@@ -40,15 +39,14 @@ pub impl BytesDisplay of Display<Bytes> {
         let prefix: ByteArray = "0x";
         Display::fmt(@prefix, ref f)?;
         let mut res: Result<(), Error> = Result::Ok(());
-        while i < self
-            .size() {
-                let (new_i, value) = self.read_u8(i);
-                res = format_byte_hex(value, ref f);
-                if res.is_err() {
-                    break;
-                }
-                i = new_i;
-            };
+        while i < self.size() {
+            let (new_i, value) = self.read_u8(i);
+            res = format_byte_hex(value, ref f);
+            if res.is_err() {
+                break;
+            }
+            i = new_i;
+        };
         res
     }
 }
@@ -59,12 +57,11 @@ pub impl BytesDisplay of Display<Bytes> {
 pub fn keccak_u128s_be(mut input: Span<u128>, n_bytes: usize) -> u256 {
     let mut keccak_input = array![];
     let mut size = n_bytes;
-    while let Option::Some(v) = input
-        .pop_front() {
-            let value_size = uint_min(size, 16);
-            keccak_add_uint128_be(ref keccak_input, *v, value_size);
-            size -= value_size;
-        };
+    while let Option::Some(v) = input.pop_front() {
+        let value_size = uint_min(size, 16);
+        keccak_add_uint128_be(ref keccak_input, *v, value_size);
+        size -= value_size;
+    };
 
     let aligned = n_bytes % 8 == 0;
     if aligned {
@@ -120,15 +117,14 @@ fn update_u256_array_at(arr: @Array<u256>, index: usize, value: u256) -> Array<u
     let mut new_arr = array![];
     let mut i = 0;
 
-    while i != arr
-        .len() {
-            if i == index {
-                new_arr.append(value);
-            } else {
-                new_arr.append(*arr[i]);
-            }
-            i += 1;
-        };
+    while i != arr.len() {
+        if i == index {
+            new_arr.append(value);
+        } else {
+            new_arr.append(*arr[i]);
+        }
+        i += 1;
+    };
     new_arr
 }
 

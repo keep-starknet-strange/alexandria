@@ -12,3 +12,6 @@ fmt.workspace = true
 alexandria_math = { path = "../math" }
 alexandria_numeric = { path = "../numeric" }
 alexandria_bytes = { path = "../bytes" }
+
+[dev-dependencies]
+cairo_test = "2.7.0-rc.3"

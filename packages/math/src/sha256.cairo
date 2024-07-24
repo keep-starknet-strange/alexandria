@@ -1,4 +1,5 @@
-use core::integer::{u32_wrapping_add, BoundedInt};
+use core::integer::BoundedInt;
+use core::num::traits::OverflowingAdd;
 
 fn ch(x: u32, y: u32, z: u32) -> u32 {
     (x & y) ^ ((x ^ BoundedInt::<u32>::max().into()) & z)
@@ -82,17 +83,16 @@ pub fn sha256(mut data: Array<u8>) -> Array<u8> {
 
 fn from_u32Array_to_u8Array(mut data: Span<u32>) -> Array<u8> {
     let mut result = array![];
-    while let Option::Some(val) = data
-        .pop_front() {
-            let mut res = (*val & 0xff000000) / 0x1000000;
-            result.append(res.try_into().unwrap());
-            res = (*val & 0xff0000) / 0x10000;
-            result.append(res.try_into().unwrap());
-            res = (*val & 0xff00) / 0x100;
-            result.append(res.try_into().unwrap());
-            res = *val & 0xff;
-            result.append(res.try_into().unwrap());
-        };
+    while let Option::Some(val) = data.pop_front() {
+        let mut res = (*val & 0xff000000) / 0x1000000;
+        result.append(res.try_into().unwrap());
+        res = (*val & 0xff0000) / 0x10000;
+        result.append(res.try_into().unwrap());
+        res = (*val & 0xff00) / 0x100;
+        result.append(res.try_into().unwrap());
+        res = *val & 0xff;
+        result.append(res.try_into().unwrap());
+    };
     result
 }
 
@@ -104,14 +104,22 @@ fn sha256_inner(mut data: Span<u32>, i: usize, k: Span<u32>, mut h: Span<u32>) -
     let h2 = compression(w, 0, k, h);
 
     let mut t = array![];
-    t.append(u32_wrapping_add(*h[0], *h2[0]));
-    t.append(u32_wrapping_add(*h[1], *h2[1]));
-    t.append(u32_wrapping_add(*h[2], *h2[2]));
-    t.append(u32_wrapping_add(*h[3], *h2[3]));
-    t.append(u32_wrapping_add(*h[4], *h2[4]));
-    t.append(u32_wrapping_add(*h[5], *h2[5]));
-    t.append(u32_wrapping_add(*h[6], *h2[6]));
-    t.append(u32_wrapping_add(*h[7], *h2[7]));
+    let (tmp, _) = (*h[0]).overflowing_add(*h2[0]);
+    t.append(tmp);
+    let (tmp, _) = (*h[1]).overflowing_add(*h2[1]);
+    t.append(tmp);
+    let (tmp, _) = (*h[2]).overflowing_add(*h2[2]);
+    t.append(tmp);
+    let (tmp, _) = (*h[3]).overflowing_add(*h2[3]);
+    t.append(tmp);
+    let (tmp, _) = (*h[4]).overflowing_add(*h2[4]);
+    t.append(tmp);
+    let (tmp, _) = (*h[5]).overflowing_add(*h2[5]);
+    t.append(tmp);
+    let (tmp, _) = (*h[6]).overflowing_add(*h2[6]);
+    t.append(tmp);
+    let (tmp, _) = (*h[7]).overflowing_add(*h2[7]);
+    t.append(tmp);
     h = t.span();
     sha256_inner(data, i + 1, k, h)
 }
@@ -122,18 +130,21 @@ fn compression(w: Span<u32>, i: usize, k: Span<u32>, mut h: Span<u32>) -> Span<u
     }
     let s1 = bsig1(*h[4]);
     let ch = ch(*h[4], *h[5], *h[6]);
-    let temp1 = u32_wrapping_add(
-        u32_wrapping_add(u32_wrapping_add(u32_wrapping_add(*h[7], s1), ch), *k[i]), *w[i]
-    );
+    let (tmp, _) = (*h[7]).overflowing_add(s1);
+    let (tmp, _) = tmp.overflowing_add(ch);
+    let (tmp, _) = tmp.overflowing_add(*k[i]);
+    let (temp1, _) = tmp.overflowing_add(*w[i]);
     let s0 = bsig0(*h[0]);
     let maj = maj(*h[0], *h[1], *h[2]);
-    let temp2 = u32_wrapping_add(s0, maj);
+    let (temp2, _) = s0.overflowing_add(maj);
     let mut t = array![];
-    t.append(u32_wrapping_add(temp1, temp2));
+    let (temp3, _) = temp1.overflowing_add(temp2);
+    t.append(temp3);
     t.append(*h[0]);
     t.append(*h[1]);
     t.append(*h[2]);
-    t.append(u32_wrapping_add(*h[3], temp1));
+    let (temp3, _) = (*h[3]).overflowing_add(temp1);
+    t.append(temp3);
     t.append(*h[4]);
     t.append(*h[5]);
     t.append(*h[6]);
@@ -152,9 +163,10 @@ fn create_message_schedule(data: Span<u32>, i: usize) -> Span<u32> {
     while (i < 64) {
         let s0 = ssig0(*result[i - 15]);
         let s1 = ssig1(*result[i - 2]);
-        let res = u32_wrapping_add(
-            u32_wrapping_add(u32_wrapping_add(*result[i - 16], s0), *result[i - 7]), s1
-        );
+
+        let (tmp, _) = (*result[i - 16]).overflowing_add(s0);
+        let (tmp, _) = tmp.overflowing_add(*result[i - 7]);
+        let (res, _) = tmp.overflowing_add(s1);
         result.append(res);
         i += 1;
     };
@@ -163,17 +175,16 @@ fn create_message_schedule(data: Span<u32>, i: usize) -> Span<u32> {
 
 fn from_u8Array_to_u32Array(mut data: Span<u8>) -> Array<u32> {
     let mut result = array![];
-    while let Option::Some(val1) = data
-        .pop_front() {
-            let val2 = data.pop_front().unwrap();
-            let val3 = data.pop_front().unwrap();
-            let val4 = data.pop_front().unwrap();
-            let mut value = (*val1).into() * 0x1000000;
-            value = value + (*val2).into() * 0x10000;
-            value = value + (*val3).into() * 0x100;
-            value = value + (*val4).into();
-            result.append(value);
-        };
+    while let Option::Some(val1) = data.pop_front() {
+        let val2 = data.pop_front().unwrap();
+        let val3 = data.pop_front().unwrap();
+        let val4 = data.pop_front().unwrap();
+        let mut value = (*val1).into() * 0x1000000;
+        value = value + (*val2).into() * 0x10000;
+        value = value + (*val3).into() * 0x100;
+        value = value + (*val4).into();
+        result.append(value);
+    };
     result
 }
 
@@ -189,7 +200,7 @@ fn get_h() -> Array<u32> {
         0x5be0cd19
     ]
 }
-
+// TODO DW
 fn get_k() -> Array<u32> {
     array![
         0x428a2f98,

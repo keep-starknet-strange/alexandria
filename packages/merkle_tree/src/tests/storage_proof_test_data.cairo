@@ -5,7 +5,8 @@ use alexandria_merkle_tree::storage_proof::{
 
 pub(crate) fn balance_proof() -> ContractStateProof {
     // func _balances(user : felt) -> (res : Uint256):
-    // get_storage_var_address('_balances', 0x063c94d6B73eA2284338f464f86F33E12642149F763Cd8E76E035E8E6A5Bb0e6)
+    // get_storage_var_address('_balances',
+    // 0x063c94d6B73eA2284338f464f86F33E12642149F763Cd8E76E035E8E6A5Bb0e6)
     // storage_address = 0x4ae51d08cd202d1472587dfe63dbf2d5ec767cbf4218b59b7ab71956780c6ee
     // ./get_storage_proof.sh 0x02f63993df97fb44439d8e2e999c8b9b51efba1eff78e5c994c709c82b442e65 \
     //     0x00da114221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3 \

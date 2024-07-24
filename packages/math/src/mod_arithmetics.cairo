@@ -17,9 +17,10 @@ pub fn add_mod(a: u256, b: u256, modulo: u256) -> u256 {
     (a + b) % modulo
 }
 
-/// Function that return the modular multiplicative inverse. Disclaimer: this function should only be used with a prime modulo.
+/// Function that return the modular multiplicative inverse. Disclaimer: this function should only
+/// be used with a prime modulo.
 /// # Arguments
-/// * `b` - Number of which to find the multiplicative inverse of. 
+/// * `b` - Number of which to find the multiplicative inverse of.
 /// * `modulo` - modulo.
 /// # Returns
 /// * `u256` - modular multiplicative inverse
