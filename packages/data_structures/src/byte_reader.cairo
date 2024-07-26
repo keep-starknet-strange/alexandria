@@ -1,6 +1,5 @@
 use core::integer::u512;
-// TODO FIX LATER
-// use core::ops::index::IndexView;
+use core::ops::index::IndexView;
 use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 
 #[derive(Copy, Clone, Drop)]
@@ -173,7 +172,7 @@ pub trait ByteReader<T> {
 }
 
 // impl ByteReaderImpl<T, u8, +Drop<T>, +Len<T>, +IndexView<T, usize>> of ByteReader<T> {
-impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteReader<T> {
+impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize>> of ByteReader<T> {
     #[inline]
     fn reader(self: @T) -> ByteReaderState<T> {
         ByteReaderState { data: self, index: 0 }
@@ -575,7 +574,8 @@ impl ByteReaderLenImpl<T, +Len<T>> of Len<ByteReaderState<T>> {
     }
 }
 
-impl ByteArrayIndexViewAsSnapshotImpl of IndexView<ByteArray, usize, @u8> {
+impl ByteArrayIndexViewAsSnapshotImpl of IndexView<ByteArray, usize> {
+    type Target = @u8;
     #[inline(always)]
     fn index(self: @ByteArray, index: usize) -> @u8 {
         @self.at(index).expect('Index out of bounds')
@@ -583,11 +583,13 @@ impl ByteArrayIndexViewAsSnapshotImpl of IndexView<ByteArray, usize, @u8> {
 }
 
 impl ByteReaderIndexViewImpl<
-    T, impl TIndexView: IndexView<T, usize, @u8>
-> of IndexView<ByteReaderState<T>, usize, @u8> {
+    T, impl IndexViewImpl: IndexView<T, usize>
+> of IndexView<ByteReaderState<T>, usize> {
+    type Target = IndexViewImpl::Target;
+
     #[inline(always)]
-    fn index(self: @ByteReaderState<T>, index: usize) -> @u8 {
-        TIndexView::index(*self.data, index)
+    fn index(self: @ByteReaderState<T>, index: usize) -> IndexViewImpl::Target {
+        IndexViewImpl::index(*self.data, index)
     }
 }
 
