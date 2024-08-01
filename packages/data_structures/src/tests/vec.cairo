@@ -1,5 +1,6 @@
 // Internal imports
 use alexandria_data_structures::vec::{Felt252Vec, NullableVec, VecTrait};
+use core::ops::index::Index;
 
 fn vec_new_test<V, T, +VecTrait<V, T>>(vec: @V) {
     assert!(vec.len() == 0, "vec length should be 0");
@@ -62,18 +63,35 @@ fn vec_set_test_expect_error<
 }
 
 fn vec_index_trait_test<
-    V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>, +Index<V, usize, T>
+    V,
+    T,
+    +VecTrait<V, T>,
+    impl IndexImpl: Index<V, usize>,
+    +Drop<T>,
+    +Copy<T>,
+    +PartialEq<T>,
+    +Destruct<V>,
+    +Into<IndexImpl::Target, T>
 >(
     ref vec: V, val_1: T, val_2: T
 ) {
     vec.push(val_1);
     vec.push(val_2);
-    assert!(vec[0] == val_1, "vec[0] != val_1");
-    assert!(vec[1] == val_2, "vec[1] != val_2");
+    assert!(vec[0].into() == val_1, "vec[0] != val_1");
+    assert!(vec[1].into() == val_2, "vec[1] != val_2");
 }
 
 fn vec_index_trait_out_of_bounds_test<
-    V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>, +Index<V, usize, T>
+    V,
+    T,
+    +VecTrait<V, T>,
+    impl IndexImpl: Index<V, usize>,
+    +Drop<T>,
+    +Copy<T>,
+    +Drop<IndexImpl::Target>,
+    +Copy<IndexImpl::Target>,
+    +PartialEq<T>,
+    +Destruct<V>,
 >(
     ref vec: V, val_1: T
 ) {
