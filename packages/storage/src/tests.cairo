@@ -1,4 +1,3 @@
-// TODO FIX THIS
-// mod list_test;
-
+#[cfg(test)]
+mod list_test;
 
