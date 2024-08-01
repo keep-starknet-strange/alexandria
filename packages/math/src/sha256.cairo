@@ -1,8 +1,8 @@
-use core::integer::BoundedInt;
+use core::num::traits::Bounded;
 use core::num::traits::OverflowingAdd;
 
 fn ch(x: u32, y: u32, z: u32) -> u32 {
-    (x & y) ^ ((x ^ BoundedInt::<u32>::max().into()) & z)
+    (x & y) ^ ((x ^ Bounded::<u32>::MAX.into()) & z)
 }
 
 fn maj(x: u32, y: u32, z: u32) -> u32 {
@@ -14,7 +14,7 @@ fn bsig0(x: u32) -> u32 {
     let x1 = (x / 0x4) | (x * 0x40000000);
     let x2 = (x / 0x2000) | (x * 0x80000);
     let x3 = (x / 0x400000) | (x * 0x400);
-    let result = (x1 ^ x2 ^ x3) & BoundedInt::<u32>::max().into();
+    let result = (x1 ^ x2 ^ x3) & Bounded::<u32>::MAX.into();
     result.try_into().unwrap()
 }
 
@@ -23,7 +23,7 @@ fn bsig1(x: u32) -> u32 {
     let x1 = (x / 0x40) | (x * 0x4000000);
     let x2 = (x / 0x800) | (x * 0x200000);
     let x3 = (x / 0x2000000) | (x * 0x80);
-    let result = (x1 ^ x2 ^ x3) & BoundedInt::<u32>::max().into();
+    let result = (x1 ^ x2 ^ x3) & Bounded::<u32>::MAX.into();
     result.try_into().unwrap()
 }
 
@@ -32,7 +32,7 @@ fn ssig0(x: u32) -> u32 {
     let x1 = (x / 0x80) | (x * 0x2000000);
     let x2 = (x / 0x40000) | (x * 0x4000);
     let x3 = (x / 0x8);
-    let result = (x1 ^ x2 ^ x3) & BoundedInt::<u32>::max().into();
+    let result = (x1 ^ x2 ^ x3) & Bounded::<u32>::MAX.into();
     result.try_into().unwrap()
 }
 
@@ -41,7 +41,7 @@ fn ssig1(x: u32) -> u32 {
     let x1 = (x / 0x20000) | (x * 0x8000);
     let x2 = (x / 0x80000) | (x * 0x2000);
     let x3 = (x / 0x400);
-    let result = (x1 ^ x2 ^ x3) & BoundedInt::<u32>::max().into();
+    let result = (x1 ^ x2 ^ x3) & Bounded::<u32>::MAX.into();
     result.try_into().unwrap()
 }
 

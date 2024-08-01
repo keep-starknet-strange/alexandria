@@ -1,4 +1,4 @@
-use core::integer::BoundedInt;
+use core::num::traits::Bounded;
 use core::num::traits::WrappingAdd;
 use core::traits::{BitAnd, BitXor, BitOr};
 use super::BitShift;
@@ -76,7 +76,7 @@ impl WordBitOr of BitOr<Word64> {
 
 impl WordBitNot of BitNot<Word64> {
     fn bitnot(a: Word64) -> Word64 {
-        Word64 { data: BoundedInt::max() - a.data }
+        Word64 { data: Bounded::MAX - a.data }
     }
 }
 
@@ -255,12 +255,12 @@ fn math_shr_precomputed<T, +Div<T>, +Rem<T>, +Drop<T>, +Copy<T>, +Into<T, u128>>
 
 // Shift left wrapper for u64
 fn math_shl_u64(x: u64, n: u64) -> u64 {
-    (math_shl(x.into(), n) % BoundedInt::<u64>::max().into()).try_into().unwrap()
+    (math_shl(x.into(), n) % Bounded::<u64>::MAX.into()).try_into().unwrap()
 }
 
 // Shift right wrapper for u64
 fn math_shr_u64(x: u64, n: u64) -> u64 {
-    (math_shr(x.into(), n) % BoundedInt::<u64>::max().into()).try_into().unwrap()
+    (math_shr(x.into(), n) % Bounded::<u64>::MAX.into()).try_into().unwrap()
 }
 
 fn add_trailing_zeroes(ref data: Array<u8>, msg_len: usize) {
@@ -401,7 +401,7 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
 pub fn sha512(mut data: Array<u8>) -> Array<u8> {
     let bit_numbers: u128 = data.len().into() * 8;
     // any u32 * 8 fits in u64
-    // let bit_numbers = bit_numbers & BoundedInt::<u64>::max().into();
+    // let bit_numbers = bit_numbers & Bounded::<u64>::MAX.into();
 
     let max_u8: u128 = MAX_U8.into();
     let mut msg_len = data.len();

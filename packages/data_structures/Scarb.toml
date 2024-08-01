@@ -4,6 +4,7 @@ version = "0.2.0"
 description = "A set of Cairo data structure libraries and algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/data_structures"
 edition = "2023_11"
+# TODO 2024_07
 
 [tool]
 fmt.workspace = true
@@ -12,4 +13,4 @@ fmt.workspace = true
 alexandria_encoding = { path = "../encoding" }
 
 [dev-dependencies]
-cairo_test = "2.7.0-rc.3"
+cairo_test = "2.7.0"

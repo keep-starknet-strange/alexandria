@@ -1,5 +1,6 @@
 use core::integer::u512;
-use core::ops::index::IndexView;
+// TODO FIX LATER
+// use core::ops::index::IndexView;
 use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 
 #[derive(Copy, Clone, Drop)]
@@ -172,9 +173,7 @@ pub trait ByteReader<T> {
 }
 
 // impl ByteReaderImpl<T, u8, +Drop<T>, +Len<T>, +IndexView<T, usize>> of ByteReader<T> {
-impl ByteReaderImpl<
-    T, +Drop<T>, +Len<T>, +IndexView<T, usize>, +Into<IndexView::<T, usize>::Target, @u8>
-> of ByteReader<T> {
+impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteReader<T> {
     #[inline]
     fn reader(self: @T) -> ByteReaderState<T> {
         ByteReaderState { data: self, index: 0 }
@@ -188,8 +187,8 @@ impl ByteReaderImpl<
     #[inline]
     fn word_u16(self: @T, offset: usize) -> Option<u16> {
         if self.remaining(offset, 2) {
-            let b1: u8 = *self[offset].into();
-            let b2 = *self[offset + 1].into();
+            let b1 = *self[offset];
+            let b2 = *self[offset + 1];
             Option::Some(b1.into() * one_shift_left_bytes_u128(1).try_into().unwrap() + b2.into())
         } else {
             Option::None
@@ -199,8 +198,8 @@ impl ByteReaderImpl<
     #[inline]
     fn word_u16_le(self: @T, offset: usize) -> Option<u16> {
         if self.remaining(offset, 2) {
-            let b1 = *self[offset].into();
-            let b2 = *self[offset + 1].into();
+            let b1 = *self[offset];
+            let b2 = *self[offset + 1];
             Option::Some(b1.into() + b2.into() * one_shift_left_bytes_u128(1).try_into().unwrap())
         } else {
             Option::None
@@ -210,10 +209,10 @@ impl ByteReaderImpl<
     #[inline]
     fn word_u32(self: @T, offset: usize) -> Option<u32> {
         if self.remaining(offset, 4) {
-            let b1: u8 = *self[offset].into();
-            let b2 = *self[offset + 1].into();
-            let b3 = *self[offset + 2].into();
-            let b4 = *self[offset + 3].into();
+            let b1 = *self[offset];
+            let b2 = *self[offset + 1];
+            let b3 = *self[offset + 2];
+            let b4 = *self[offset + 3];
             Option::Some(
                 b1.into() * one_shift_left_bytes_u128(3).try_into().unwrap()
                     + b2.into() * one_shift_left_bytes_u128(2).try_into().unwrap()
@@ -228,10 +227,10 @@ impl ByteReaderImpl<
     #[inline]
     fn word_u32_le(self: @T, offset: usize) -> Option<u32> {
         if self.remaining(offset, 4) {
-            let b1: u8 = *self[offset].into();
-            let b2 = *self[offset + 1].into();
-            let b3 = *self[offset + 2].into();
-            let b4 = *self[offset + 3].into();
+            let b1 = *self[offset];
+            let b2 = *self[offset + 1];
+            let b3 = *self[offset + 2];
+            let b4 = *self[offset + 3];
             Option::Some(
                 b1.into()
                     + b2.into() * one_shift_left_bytes_u128(1).try_into().unwrap()
@@ -246,14 +245,14 @@ impl ByteReaderImpl<
     #[inline]
     fn word_u64(self: @T, offset: usize) -> Option<u64> {
         if self.remaining(offset, 8) {
-            let b1: u8 = *self[offset].into();
-            let b2 = *self[offset + 1].into();
-            let b3 = *self[offset + 2].into();
-            let b4 = *self[offset + 3].into();
-            let b5 = *self[offset + 4].into();
-            let b6 = *self[offset + 5].into();
-            let b7 = *self[offset + 6].into();
-            let b8 = *self[offset + 7].into();
+            let b1 = *self[offset];
+            let b2 = *self[offset + 1];
+            let b3 = *self[offset + 2];
+            let b4 = *self[offset + 3];
+            let b5 = *self[offset + 4];
+            let b6 = *self[offset + 5];
+            let b7 = *self[offset + 6];
+            let b8 = *self[offset + 7];
             Option::Some(
                 b1.into() * one_shift_left_bytes_u128(7).try_into().unwrap()
                     + b2.into() * one_shift_left_bytes_u128(6).try_into().unwrap()
@@ -272,14 +271,14 @@ impl ByteReaderImpl<
     #[inline]
     fn word_u64_le(self: @T, offset: usize) -> Option<u64> {
         if self.remaining(offset, 8) {
-            let b1: u8 = *self[offset].into();
-            let b2 = *self[offset + 1].into();
-            let b3 = *self[offset + 2].into();
-            let b4 = *self[offset + 3].into();
-            let b5 = *self[offset + 4].into();
-            let b6 = *self[offset + 5].into();
-            let b7 = *self[offset + 6].into();
-            let b8 = *self[offset + 7].into();
+            let b1 = *self[offset];
+            let b2 = *self[offset + 1];
+            let b3 = *self[offset + 2];
+            let b4 = *self[offset + 3];
+            let b5 = *self[offset + 4];
+            let b6 = *self[offset + 5];
+            let b7 = *self[offset + 6];
+            let b8 = *self[offset + 7];
             Option::Some(
                 b1.into()
                     + b2.into() * one_shift_left_bytes_u128(1).try_into().unwrap()
@@ -298,22 +297,22 @@ impl ByteReaderImpl<
     #[inline]
     fn word_u128(self: @T, offset: usize) -> Option<u128> {
         if self.remaining(offset, 16) {
-            let b01: u8 = *self[offset].into();
-            let b02 = *self[offset + 1].into();
-            let b03 = *self[offset + 2].into();
-            let b04 = *self[offset + 3].into();
-            let b05 = *self[offset + 4].into();
-            let b06 = *self[offset + 5].into();
-            let b07 = *self[offset + 6].into();
-            let b08 = *self[offset + 7].into();
-            let b09 = *self[offset + 8].into();
-            let b10 = *self[offset + 9].into();
-            let b11 = *self[offset + 10].into();
-            let b12 = *self[offset + 11].into();
-            let b13 = *self[offset + 12].into();
-            let b14 = *self[offset + 13].into();
-            let b15 = *self[offset + 14].into();
-            let b16 = *self[offset + 15].into();
+            let b01 = *self[offset];
+            let b02 = *self[offset + 1];
+            let b03 = *self[offset + 2];
+            let b04 = *self[offset + 3];
+            let b05 = *self[offset + 4];
+            let b06 = *self[offset + 5];
+            let b07 = *self[offset + 6];
+            let b08 = *self[offset + 7];
+            let b09 = *self[offset + 8];
+            let b10 = *self[offset + 9];
+            let b11 = *self[offset + 10];
+            let b12 = *self[offset + 11];
+            let b13 = *self[offset + 12];
+            let b14 = *self[offset + 13];
+            let b15 = *self[offset + 14];
+            let b16 = *self[offset + 15];
             Option::Some(
                 b01.into() * one_shift_left_bytes_u128(15).try_into().unwrap()
                     + b02.into() * one_shift_left_bytes_u128(14).try_into().unwrap()
@@ -340,22 +339,22 @@ impl ByteReaderImpl<
     #[inline]
     fn word_u128_le(self: @T, offset: usize) -> Option<u128> {
         if self.remaining(offset, 16) {
-            let b01: u8 = *self[offset].into();
-            let b02 = *self[offset + 1].into();
-            let b03 = *self[offset + 2].into();
-            let b04 = *self[offset + 3].into();
-            let b05 = *self[offset + 4].into();
-            let b06 = *self[offset + 5].into();
-            let b07 = *self[offset + 6].into();
-            let b08 = *self[offset + 7].into();
-            let b09 = *self[offset + 8].into();
-            let b10 = *self[offset + 9].into();
-            let b11 = *self[offset + 10].into();
-            let b12 = *self[offset + 11].into();
-            let b13 = *self[offset + 12].into();
-            let b14 = *self[offset + 13].into();
-            let b15 = *self[offset + 14].into();
-            let b16 = *self[offset + 15].into();
+            let b01 = *self[offset];
+            let b02 = *self[offset + 1];
+            let b03 = *self[offset + 2];
+            let b04 = *self[offset + 3];
+            let b05 = *self[offset + 4];
+            let b06 = *self[offset + 5];
+            let b07 = *self[offset + 6];
+            let b08 = *self[offset + 7];
+            let b09 = *self[offset + 8];
+            let b10 = *self[offset + 9];
+            let b11 = *self[offset + 10];
+            let b12 = *self[offset + 11];
+            let b13 = *self[offset + 12];
+            let b14 = *self[offset + 13];
+            let b15 = *self[offset + 14];
+            let b16 = *self[offset + 15];
             Option::Some(
                 b01.into()
                     + b02.into() * one_shift_left_bytes_u128(01).try_into().unwrap()
@@ -381,7 +380,7 @@ impl ByteReaderImpl<
 
     fn read_u8(ref self: ByteReaderState<T>) -> Option<u8> {
         if self.data.remaining(self.index, 1) {
-            let result: u8 = *self.data[self.index].into();
+            let result = *self.data[self.index];
             self.index += 1;
             Option::Some(result)
         } else {
@@ -576,8 +575,7 @@ impl ByteReaderLenImpl<T, +Len<T>> of Len<ByteReaderState<T>> {
     }
 }
 
-impl ByteArrayIndexViewAsSnapshotImpl of IndexView<ByteArray, usize> {
-    type Target = @u8;
+impl ByteArrayIndexViewAsSnapshotImpl of IndexView<ByteArray, usize, @u8> {
     #[inline(always)]
     fn index(self: @ByteArray, index: usize) -> @u8 {
         @self.at(index).expect('Index out of bounds')
@@ -585,13 +583,11 @@ impl ByteArrayIndexViewAsSnapshotImpl of IndexView<ByteArray, usize> {
 }
 
 impl ByteReaderIndexViewImpl<
-    T, impl IndexViewImpl: IndexView<T, usize>
-> of IndexView<ByteReaderState<T>, usize> {
-    type Target = IndexViewImpl::Target;
-
+    T, impl TIndexView: IndexView<T, usize, @u8>
+> of IndexView<ByteReaderState<T>, usize, @u8> {
     #[inline(always)]
-    fn index(self: @ByteReaderState<T>, index: usize) -> IndexViewImpl::Target {
-        IndexViewImpl::index(*self.data, index)
+    fn index(self: @ByteReaderState<T>, index: usize) -> @u8 {
+        TIndexView::index(*self.data, index)
     }
 }
 

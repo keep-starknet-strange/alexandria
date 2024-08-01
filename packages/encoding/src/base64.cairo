@@ -1,6 +1,6 @@
 use alexandria_data_structures::array_ext::ArrayTraitExt;
 use alexandria_math::BitShift;
-use core::integer::BoundedInt;
+use core::num::traits::Bounded;
 
 pub trait Encoder<T> {
     fn encode(data: T) -> Array<u8>;
@@ -174,15 +174,15 @@ fn decode_loop(p: u8, data: Array<u8>, d: usize, ref result: Array<u8>) {
         | BitShift::shl((get_base64_value(*data[d + 2])).into(), 6)
         | (get_base64_value(*data[d + 3])).into();
 
-    let mut i: u8 = (BitShift::shr(x, 16) & BoundedInt::<u8>::max().into()).try_into().unwrap();
+    let mut i: u8 = (BitShift::shr(x, 16) & Bounded::<u8>::MAX.into()).try_into().unwrap();
     result.append(i);
-    i = (BitShift::shr(x, 8) & BoundedInt::<u8>::max().into()).try_into().unwrap();
+    i = (BitShift::shr(x, 8) & Bounded::<u8>::MAX.into()).try_into().unwrap();
     if d + 4 >= data.len() && p == 2 {
         return;
     }
     result.append(i);
 
-    i = (x & BoundedInt::<u8>::max().into()).try_into().unwrap();
+    i = (x & Bounded::<u8>::MAX.into()).try_into().unwrap();
     if d + 4 >= data.len() && p == 1 {
         return;
     }

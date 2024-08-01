@@ -1,5 +1,5 @@
 use alexandria_math::{count_digits_of_base, pow, BitShift, BitRotate, WrappingMath};
-use core::integer::BoundedInt;
+use core::num::traits::Bounded;
 
 // Test power function
 #[test]
@@ -302,105 +302,79 @@ fn test_wrapping_math_non_wrapping() {
 
 #[test]
 fn test_wrapping_math_wrapping() {
-    assert_eq!(BoundedInt::<u8>::max().wrapping_add(1_u8), 0_u8);
-    assert_eq!(1_u8.wrapping_add(BoundedInt::<u8>::max()), 0_u8);
-    assert_eq!(BoundedInt::<u8>::max().wrapping_add(2_u8), 1_u8);
-    assert_eq!(2_u8.wrapping_add(BoundedInt::<u8>::max()), 1_u8);
-    assert_eq!(
-        BoundedInt::<u8>::max().wrapping_add(BoundedInt::<u8>::max()),
-        BoundedInt::<u8>::max() - 1_u8
-    );
-    assert_eq!(BoundedInt::<u8>::min().wrapping_sub(1_u8), BoundedInt::<u8>::max());
-    assert_eq!(BoundedInt::<u8>::min().wrapping_sub(2_u8), BoundedInt::<u8>::max() - 1_u8);
-    assert_eq!(1_u8.wrapping_sub(BoundedInt::<u8>::max()), 2_u8);
-    assert_eq!(0_u8.wrapping_sub(BoundedInt::<u8>::max()), 1_u8);
-    assert_eq!(BoundedInt::<u8>::max().wrapping_mul(BoundedInt::<u8>::max()), 1_u8);
-    assert_eq!((BoundedInt::<u8>::max() - 1_u8).wrapping_mul(2_u8), BoundedInt::<u8>::max() - 3_u8);
+    assert_eq!(Bounded::<u8>::MAX.wrapping_add(1_u8), 0_u8);
+    assert_eq!(1_u8.wrapping_add(Bounded::<u8>::MAX), 0_u8);
+    assert_eq!(Bounded::<u8>::MAX.wrapping_add(2_u8), 1_u8);
+    assert_eq!(2_u8.wrapping_add(Bounded::<u8>::MAX), 1_u8);
+    assert_eq!(Bounded::<u8>::MAX.wrapping_add(Bounded::<u8>::MAX), Bounded::<u8>::MAX - 1_u8);
+    assert_eq!(Bounded::<u8>::MIN.wrapping_sub(1_u8), Bounded::<u8>::MAX);
+    assert_eq!(Bounded::<u8>::MIN.wrapping_sub(2_u8), Bounded::<u8>::MAX - 1_u8);
+    assert_eq!(1_u8.wrapping_sub(Bounded::<u8>::MAX), 2_u8);
+    assert_eq!(0_u8.wrapping_sub(Bounded::<u8>::MAX), 1_u8);
+    assert_eq!(Bounded::<u8>::MAX.wrapping_mul(Bounded::<u8>::MAX), 1_u8);
+    assert_eq!((Bounded::<u8>::MAX - 1_u8).wrapping_mul(2_u8), Bounded::<u8>::MAX - 3_u8);
 
-    assert_eq!(BoundedInt::<u16>::max().wrapping_add(1_u16), 0_u16);
-    assert_eq!(1_u16.wrapping_add(BoundedInt::<u16>::max()), 0_u16);
-    assert_eq!(BoundedInt::<u16>::max().wrapping_add(2_u16), 1_u16);
-    assert_eq!(2_u16.wrapping_add(BoundedInt::<u16>::max()), 1_u16);
-    assert_eq!(
-        BoundedInt::<u16>::max().wrapping_add(BoundedInt::<u16>::max()),
-        BoundedInt::<u16>::max() - 1_u16
-    );
-    assert_eq!(BoundedInt::<u16>::min().wrapping_sub(1_u16), BoundedInt::<u16>::max());
-    assert_eq!(BoundedInt::<u16>::min().wrapping_sub(2_u16), BoundedInt::<u16>::max() - 1_u16);
-    assert_eq!(1_u16.wrapping_sub(BoundedInt::<u16>::max()), 2_u16);
-    assert_eq!(0_u16.wrapping_sub(BoundedInt::<u16>::max()), 1_u16);
-    assert_eq!(BoundedInt::<u16>::max().wrapping_mul(BoundedInt::<u16>::max()), 1_u16);
-    assert_eq!(
-        (BoundedInt::<u16>::max() - 1_u16).wrapping_mul(2_u16), BoundedInt::<u16>::max() - 3_u16
-    );
+    assert_eq!(Bounded::<u16>::MAX.wrapping_add(1_u16), 0_u16);
+    assert_eq!(1_u16.wrapping_add(Bounded::<u16>::MAX), 0_u16);
+    assert_eq!(Bounded::<u16>::MAX.wrapping_add(2_u16), 1_u16);
+    assert_eq!(2_u16.wrapping_add(Bounded::<u16>::MAX), 1_u16);
+    assert_eq!(Bounded::<u16>::MAX.wrapping_add(Bounded::<u16>::MAX), Bounded::<u16>::MAX - 1_u16);
+    assert_eq!(Bounded::<u16>::MIN.wrapping_sub(1_u16), Bounded::<u16>::MAX);
+    assert_eq!(Bounded::<u16>::MIN.wrapping_sub(2_u16), Bounded::<u16>::MAX - 1_u16);
+    assert_eq!(1_u16.wrapping_sub(Bounded::<u16>::MAX), 2_u16);
+    assert_eq!(0_u16.wrapping_sub(Bounded::<u16>::MAX), 1_u16);
+    assert_eq!(Bounded::<u16>::MAX.wrapping_mul(Bounded::<u16>::MAX), 1_u16);
+    assert_eq!((Bounded::<u16>::MAX - 1_u16).wrapping_mul(2_u16), Bounded::<u16>::MAX - 3_u16);
 
-    assert_eq!(BoundedInt::<u32>::max().wrapping_add(1_u32), 0_u32);
-    assert_eq!(1_u32.wrapping_add(BoundedInt::<u32>::max()), 0_u32);
-    assert_eq!(BoundedInt::<u32>::max().wrapping_add(2_u32), 1_u32);
-    assert_eq!(2_u32.wrapping_add(BoundedInt::<u32>::max()), 1_u32);
-    assert_eq!(
-        BoundedInt::<u32>::max().wrapping_add(BoundedInt::<u32>::max()),
-        BoundedInt::<u32>::max() - 1_u32
-    );
-    assert_eq!(BoundedInt::<u32>::min().wrapping_sub(1_u32), BoundedInt::<u32>::max());
-    assert_eq!(BoundedInt::<u32>::min().wrapping_sub(2_u32), BoundedInt::<u32>::max() - 1_u32);
-    assert_eq!(1_u32.wrapping_sub(BoundedInt::<u32>::max()), 2_u32);
-    assert_eq!(0_u32.wrapping_sub(BoundedInt::<u32>::max()), 1_u32);
-    assert_eq!(BoundedInt::<u32>::max().wrapping_mul(BoundedInt::<u32>::max()), 1_u32);
-    assert_eq!(
-        (BoundedInt::<u32>::max() - 1_u32).wrapping_mul(2_u32), BoundedInt::<u32>::max() - 3_u32
-    );
+    assert_eq!(Bounded::<u32>::MAX.wrapping_add(1_u32), 0_u32);
+    assert_eq!(1_u32.wrapping_add(Bounded::<u32>::MAX), 0_u32);
+    assert_eq!(Bounded::<u32>::MAX.wrapping_add(2_u32), 1_u32);
+    assert_eq!(2_u32.wrapping_add(Bounded::<u32>::MAX), 1_u32);
+    assert_eq!(Bounded::<u32>::MAX.wrapping_add(Bounded::<u32>::MAX), Bounded::<u32>::MAX - 1_u32);
+    assert_eq!(Bounded::<u32>::MIN.wrapping_sub(1_u32), Bounded::<u32>::MAX);
+    assert_eq!(Bounded::<u32>::MIN.wrapping_sub(2_u32), Bounded::<u32>::MAX - 1_u32);
+    assert_eq!(1_u32.wrapping_sub(Bounded::<u32>::MAX), 2_u32);
+    assert_eq!(0_u32.wrapping_sub(Bounded::<u32>::MAX), 1_u32);
+    assert_eq!(Bounded::<u32>::MAX.wrapping_mul(Bounded::<u32>::MAX), 1_u32);
+    assert_eq!((Bounded::<u32>::MAX - 1_u32).wrapping_mul(2_u32), Bounded::<u32>::MAX - 3_u32);
 
-    assert_eq!(BoundedInt::<u64>::max().wrapping_add(1_u64), 0_u64);
-    assert_eq!(1_u64.wrapping_add(BoundedInt::<u64>::max()), 0_u64);
-    assert_eq!(BoundedInt::<u64>::max().wrapping_add(2_u64), 1_u64);
-    assert_eq!(2_u64.wrapping_add(BoundedInt::<u64>::max()), 1_u64);
-    assert_eq!(
-        BoundedInt::<u64>::max().wrapping_add(BoundedInt::<u64>::max()),
-        BoundedInt::<u64>::max() - 1_u64
-    );
-    assert_eq!(BoundedInt::<u64>::min().wrapping_sub(1_u64), BoundedInt::<u64>::max());
-    assert_eq!(BoundedInt::<u64>::min().wrapping_sub(2_u64), BoundedInt::<u64>::max() - 1_u64);
-    assert_eq!(1_u64.wrapping_sub(BoundedInt::<u64>::max()), 2_u64);
-    assert_eq!(0_u64.wrapping_sub(BoundedInt::<u64>::max()), 1_u64);
-    assert_eq!(BoundedInt::<u64>::max().wrapping_mul(BoundedInt::<u64>::max()), 1_u64);
-    assert_eq!(
-        (BoundedInt::<u64>::max() - 1_u64).wrapping_mul(2_u64), BoundedInt::<u64>::max() - 3_u64
-    );
+    assert_eq!(Bounded::<u64>::MAX.wrapping_add(1_u64), 0_u64);
+    assert_eq!(1_u64.wrapping_add(Bounded::<u64>::MAX), 0_u64);
+    assert_eq!(Bounded::<u64>::MAX.wrapping_add(2_u64), 1_u64);
+    assert_eq!(2_u64.wrapping_add(Bounded::<u64>::MAX), 1_u64);
+    assert_eq!(Bounded::<u64>::MAX.wrapping_add(Bounded::<u64>::MAX), Bounded::<u64>::MAX - 1_u64);
+    assert_eq!(Bounded::<u64>::MIN.wrapping_sub(1_u64), Bounded::<u64>::MAX);
+    assert_eq!(Bounded::<u64>::MIN.wrapping_sub(2_u64), Bounded::<u64>::MAX - 1_u64);
+    assert_eq!(1_u64.wrapping_sub(Bounded::<u64>::MAX), 2_u64);
+    assert_eq!(0_u64.wrapping_sub(Bounded::<u64>::MAX), 1_u64);
+    assert_eq!(Bounded::<u64>::MAX.wrapping_mul(Bounded::<u64>::MAX), 1_u64);
+    assert_eq!((Bounded::<u64>::MAX - 1_u64).wrapping_mul(2_u64), Bounded::<u64>::MAX - 3_u64);
 
-    assert_eq!(BoundedInt::<u128>::max().wrapping_add(1_u128), 0_u128);
-    assert_eq!(1_u128.wrapping_add(BoundedInt::<u128>::max()), 0_u128);
-    assert_eq!(BoundedInt::<u128>::max().wrapping_add(2_u128), 1_u128);
-    assert_eq!(2_u128.wrapping_add(BoundedInt::<u128>::max()), 1_u128);
+    assert_eq!(Bounded::<u128>::MAX.wrapping_add(1_u128), 0_u128);
+    assert_eq!(1_u128.wrapping_add(Bounded::<u128>::MAX), 0_u128);
+    assert_eq!(Bounded::<u128>::MAX.wrapping_add(2_u128), 1_u128);
+    assert_eq!(2_u128.wrapping_add(Bounded::<u128>::MAX), 1_u128);
     assert_eq!(
-        BoundedInt::<u128>::max().wrapping_add(BoundedInt::<u128>::max()),
-        BoundedInt::<u128>::max() - 1_u128
+        Bounded::<u128>::MAX.wrapping_add(Bounded::<u128>::MAX), Bounded::<u128>::MAX - 1_u128
     );
-    assert_eq!(BoundedInt::<u128>::min().wrapping_sub(1_u128), BoundedInt::<u128>::max());
-    assert_eq!(BoundedInt::<u128>::min().wrapping_sub(2_u128), BoundedInt::<u128>::max() - 1_u128);
-    assert_eq!(1_u128.wrapping_sub(BoundedInt::<u128>::max()), 2_u128);
-    assert_eq!(0_u128.wrapping_sub(BoundedInt::<u128>::max()), 1_u128);
-    assert_eq!(BoundedInt::<u128>::max().wrapping_mul(BoundedInt::<u128>::max()), 1_u128);
-    assert_eq!(
-        (BoundedInt::<u128>::max() - 1_u128).wrapping_mul(2_u128),
-        BoundedInt::<u128>::max() - 3_u128
-    );
+    assert_eq!(Bounded::<u128>::MIN.wrapping_sub(1_u128), Bounded::<u128>::MAX);
+    assert_eq!(Bounded::<u128>::MIN.wrapping_sub(2_u128), Bounded::<u128>::MAX - 1_u128);
+    assert_eq!(1_u128.wrapping_sub(Bounded::<u128>::MAX), 2_u128);
+    assert_eq!(0_u128.wrapping_sub(Bounded::<u128>::MAX), 1_u128);
+    assert_eq!(Bounded::<u128>::MAX.wrapping_mul(Bounded::<u128>::MAX), 1_u128);
+    assert_eq!((Bounded::<u128>::MAX - 1_u128).wrapping_mul(2_u128), Bounded::<u128>::MAX - 3_u128);
 
-    assert_eq!(BoundedInt::<u256>::max().wrapping_add(1_u256), 0_u256);
-    assert_eq!(1_u256.wrapping_add(BoundedInt::<u256>::max()), 0_u256);
-    assert_eq!(BoundedInt::<u256>::max().wrapping_add(2_u256), 1_u256);
-    assert_eq!(2_u256.wrapping_add(BoundedInt::<u256>::max()), 1_u256);
+    assert_eq!(Bounded::<u256>::MAX.wrapping_add(1_u256), 0_u256);
+    assert_eq!(1_u256.wrapping_add(Bounded::<u256>::MAX), 0_u256);
+    assert_eq!(Bounded::<u256>::MAX.wrapping_add(2_u256), 1_u256);
+    assert_eq!(2_u256.wrapping_add(Bounded::<u256>::MAX), 1_u256);
     assert_eq!(
-        BoundedInt::<u256>::max().wrapping_add(BoundedInt::<u256>::max()),
-        BoundedInt::<u256>::max() - 1_u256
+        Bounded::<u256>::MAX.wrapping_add(Bounded::<u256>::MAX), Bounded::<u256>::MAX - 1_u256
     );
-    assert_eq!(BoundedInt::<u256>::min().wrapping_sub(1_u256), BoundedInt::<u256>::max());
-    assert_eq!(BoundedInt::<u256>::min().wrapping_sub(2_u256), BoundedInt::<u256>::max() - 1_u256);
-    assert_eq!(1_u256.wrapping_sub(BoundedInt::<u256>::max()), 2_u256);
-    assert_eq!(0_u256.wrapping_sub(BoundedInt::<u256>::max()), 1_u256);
-    assert_eq!(BoundedInt::<u256>::max().wrapping_mul(BoundedInt::<u256>::max()), 1_u256);
-    assert_eq!(
-        (BoundedInt::<u256>::max() - 1_u256).wrapping_mul(2_u256),
-        BoundedInt::<u256>::max() - 3_u256
-    );
+    assert_eq!(Bounded::<u256>::MIN.wrapping_sub(1_u256), Bounded::<u256>::MAX);
+    assert_eq!(Bounded::<u256>::MIN.wrapping_sub(2_u256), Bounded::<u256>::MAX - 1_u256);
+    assert_eq!(1_u256.wrapping_sub(Bounded::<u256>::MAX), 2_u256);
+    assert_eq!(0_u256.wrapping_sub(Bounded::<u256>::MAX), 1_u256);
+    assert_eq!(Bounded::<u256>::MAX.wrapping_mul(Bounded::<u256>::MAX), 1_u256);
+    assert_eq!((Bounded::<u256>::MAX - 1_u256).wrapping_mul(2_u256), Bounded::<u256>::MAX - 3_u256);
 }

@@ -113,7 +113,6 @@ mod tests {
     use alexandria_storage::{List, ListTrait};
     use core::option::OptionTrait;
     use core::starknet::storage::StorageAsPointer;
-    use core::starknet::storage::StorageBaseTrait;
     use core::traits::TryInto;
     use starknet::{
         ClassHash, ContractAddress, syscalls::deploy_syscall, SyscallResultTrait,
@@ -158,9 +157,9 @@ mod tests {
     fn test_new_initializes_empty_list() {
         let contract = deploy_mock();
         set_contract_address(contract.contract_address);
-        let contract_state = AListHolder::unsafe_new_contract_state();
+        let contract_state = AListHolder::contract_state_for_testing();
 
-        let addresses_address = contract_state.storage_base().addresses.as_ptr().address;
+        let addresses_address = contract_state.addresses.read();
         let addresses_list = ListTrait::<ContractAddress>::new(0, addresses_address);
         assert_eq!(addresses_list.address_domain, 0, "Address domain should be 0");
         assert_eq!(addresses_list.len(), 0, "Initial length should be 0");
@@ -184,7 +183,7 @@ mod tests {
     fn test_new_then_fill_list() {
         let contract = deploy_mock();
         set_contract_address(contract.contract_address);
-        let contract_state = AListHolder::unsafe_new_contract_state();
+        let contract_state = AListHolder::contract_state_for_testing();
 
         let addresses_address = contract_state.storage_base().addresses.as_ptr().address;
         let mut addresses_list = ListTrait::<ContractAddress>::new(0, addresses_address);
@@ -224,7 +223,7 @@ mod tests {
     fn test_fetch_existing_list() {
         let contract = deploy_mock();
         set_contract_address(contract.contract_address);
-        let contract_state = AListHolder::unsafe_new_contract_state();
+        let contract_state = AListHolder::contract_state_for_testing();
         let mock_addr = mock_addr();
 
         assert_eq!(contract.do_append(mock_addr, 10), (0, 0), "1st append idx");
