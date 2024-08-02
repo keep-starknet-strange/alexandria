@@ -1,6 +1,4 @@
 use core::integer::u512;
-// TODO FIX LATER
-// use core::ops::index::IndexView;
 use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 
 #[derive(Copy, Clone, Drop)]
@@ -172,6 +170,7 @@ pub trait ByteReader<T> {
     fn len(self: @ByteReaderState<T>) -> usize;
 }
 
+// use core::ops::index::IndexView;
 // impl ByteReaderImpl<T, u8, +Drop<T>, +Len<T>, +IndexView<T, usize>> of ByteReader<T> {
 impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteReader<T> {
     #[inline]
@@ -582,9 +581,12 @@ impl ByteArrayIndexViewAsSnapshotImpl of IndexView<ByteArray, usize, @u8> {
     }
 }
 
+// use core::ops::index::IndexView;
 impl ByteReaderIndexViewImpl<
     T, impl TIndexView: IndexView<T, usize, @u8>
-> of IndexView<ByteReaderState<T>, usize, @u8> {
+> of core::ops::index::IndexView<ByteReaderState<T>, usize> {
+    type Target = @u8;
+
     #[inline(always)]
     fn index(self: @ByteReaderState<T>, index: usize) -> @u8 {
         TIndexView::index(*self.data, index)
