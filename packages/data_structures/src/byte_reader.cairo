@@ -583,13 +583,13 @@ impl ByteArrayIndexViewAsSnapshotImpl of IndexView<ByteArray, usize, @u8> {
 
 // use core::ops::index::IndexView;
 impl ByteReaderIndexViewImpl<
-    T, impl TIndexView: IndexView<T, usize, @u8>
+    T, impl TIndexView: core::ops::index::IndexView<T, usize>, +Into<TIndexView::Target, u8>
 > of core::ops::index::IndexView<ByteReaderState<T>, usize> {
     type Target = @u8;
 
     #[inline(always)]
     fn index(self: @ByteReaderState<T>, index: usize) -> @u8 {
-        TIndexView::index(*self.data, index)
+        @TIndexView::index(*self.data, index).into()
     }
 }
 
