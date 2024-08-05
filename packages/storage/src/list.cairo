@@ -1,3 +1,4 @@
+use core::ops::index::IndexView;
 use core::poseidon::poseidon_hash_span;
 use core::traits::DivRem;
 use starknet::storage_access::{
@@ -14,6 +15,9 @@ pub struct List<T> {
     len: u32, // number of elements in array
 }
 
+#[deprecated(
+    feature: "deprecated-list-trait", note: "Use `starknet::storage::Vec`.", since: "2.7.0"
+)]
 pub trait ListTrait<T> {
     /// Instantiates a new List with the given base address.
     ///
@@ -272,7 +276,9 @@ impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
     }
 }
 
-impl AListIndexViewImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of IndexView<List<T>, u32, T> {
+impl AListIndexViewImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of IndexView<List<T>, u32> {
+    type Target = T;
+
     fn index(self: @List<T>, index: u32) -> T {
         self.get(index).expect('read syscall failed').expect('List index out of bounds')
     }
