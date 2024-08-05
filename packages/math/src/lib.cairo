@@ -63,18 +63,18 @@ fn count_digits_of_base(mut num: u128, base: u128) -> u128 {
     res
 }
 
-pub trait BitShift<T> {
+pub trait BitShift<
+    T, +Sub<T>, +Mul<T>, +Div<T>, +Rem<T>, +PartialEq<T>, +Into<u8, T>, +Drop<T>, +Copy<T>,
+> {
     fn shl(x: T, n: T) -> T;
-    fn shr(x: T, n: T) -> T;
+    fn shr(x: T, n: T) -> T {
+        x / pow(2_u8.into(), n)
+    }
 }
 
 pub impl U8BitShift of BitShift<u8> {
     fn shl(x: u8, n: u8) -> u8 {
         (WideMul::wide_mul(x, pow(2, n)) & Bounded::<u8>::MAX.into()).try_into().unwrap()
-    }
-
-    fn shr(x: u8, n: u8) -> u8 {
-        x / pow(2, n)
     }
 }
 
@@ -82,19 +82,11 @@ pub impl U16BitShift of BitShift<u16> {
     fn shl(x: u16, n: u16) -> u16 {
         (WideMul::wide_mul(x, pow(2, n)) & Bounded::<u16>::MAX.into()).try_into().unwrap()
     }
-
-    fn shr(x: u16, n: u16) -> u16 {
-        x / pow(2, n)
-    }
 }
 
 pub impl U32BitShift of BitShift<u32> {
     fn shl(x: u32, n: u32) -> u32 {
         (WideMul::wide_mul(x, pow(2, n)) & Bounded::<u32>::MAX.into()).try_into().unwrap()
-    }
-
-    fn shr(x: u32, n: u32) -> u32 {
-        x / pow(2, n)
     }
 }
 
@@ -102,19 +94,11 @@ pub impl U64BitShift of BitShift<u64> {
     fn shl(x: u64, n: u64) -> u64 {
         (WideMul::wide_mul(x, pow(2, n)) & Bounded::<u64>::MAX.into()).try_into().unwrap()
     }
-
-    fn shr(x: u64, n: u64) -> u64 {
-        x / pow(2, n)
-    }
 }
 
 pub impl U128BitShift of BitShift<u128> {
     fn shl(x: u128, n: u128) -> u128 {
         WideMul::wide_mul(x, pow(2, n)).low
-    }
-
-    fn shr(x: u128, n: u128) -> u128 {
-        x / pow(2, n)
     }
 }
 
@@ -123,13 +107,8 @@ pub impl U256BitShift of BitShift<u256> {
         let (r, _) = x.overflowing_mul(pow(2, n));
         r
     }
-
-    fn shr(x: u256, n: u256) -> u256 {
-        x / pow(2, n)
-    }
 }
 
-// TODO Can prob make a generic version of this, Need to know how this Target type works.
 /// Rotate the bits of an unsigned integer of type T
 trait BitRotate<T> {
     /// Take the bits of an unsigned integer and rotate in the left direction
