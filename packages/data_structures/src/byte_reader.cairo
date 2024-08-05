@@ -1,4 +1,5 @@
 use core::integer::u512;
+use core::ops::index::IndexView;
 use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 
 #[derive(Copy, Clone, Drop)]
@@ -172,11 +173,7 @@ pub trait ByteReader<T> {
 
 // use core::ops::index::IndexView;
 impl ByteReaderImpl<
-    T,
-    +Drop<T>,
-    +Len<T>,
-    impl IndexViewImpl: core::ops::index::IndexView<T, usize>,
-    +Into<IndexViewImpl::Target, @u8>
+    T, +Drop<T>, +Len<T>, impl IndexViewImpl: IndexView<T, usize>, +Into<IndexViewImpl::Target, @u8>
 > of ByteReader<T> {
     #[inline]
     fn reader(self: @T) -> ByteReaderState<T> {
