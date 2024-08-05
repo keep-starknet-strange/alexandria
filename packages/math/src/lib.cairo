@@ -66,6 +66,7 @@ fn count_digits_of_base(mut num: u128, base: u128) -> u128 {
 pub trait BitShift<
     T, +Sub<T>, +Mul<T>, +Div<T>, +Rem<T>, +PartialEq<T>, +Into<u8, T>, +Drop<T>, +Copy<T>,
 > {
+    // Cannot make SHL generic as u256 doesn't support everything required
     fn shl(x: T, n: T) -> T;
     fn shr(x: T, n: T) -> T {
         x / pow(2_u8.into(), n)
