@@ -6,7 +6,6 @@ use alexandria_math::{U128BitShift, U256BitShift};
 use core::byte_array::ByteArrayTrait;
 use core::ops::index::IndexView;
 use starknet::ContractAddress;
-
 /// Bytes is a dynamic array of u128, where each element contains 16 bytes.
 pub const BYTES_PER_ELEMENT: usize = 16;
 
@@ -118,8 +117,18 @@ pub trait BytesTrait {
     /// concat with other Bytes
     fn concat(ref self: Bytes, other: @Bytes);
     /// keccak hash
+    #[deprecated(
+        feature: "deprecated-keccak",
+        note: "Use `core::keccak::compute_keccak_byte_array`.",
+        since: "2.7.0"
+    )]
     fn keccak(self: @Bytes) -> u256;
     /// sha256 hash
+    #[deprecated(
+        feature: "deprecated-sha256",
+        note: "Use `core::sha256::compute_sha256_byte_array`.",
+        since: "2.7.0"
+    )]
     fn sha256(self: @Bytes) -> u256;
 }
 
@@ -524,7 +533,6 @@ impl BytesImpl of BytesTrait {
             self.append_u128_packed(value, sub_bytes_last_element_size);
         }
     }
-
     /// keccak hash
     fn keccak(self: @Bytes) -> u256 {
         let (last_data_index, last_element_size) = Self::locate(self.size());

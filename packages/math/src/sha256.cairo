@@ -45,6 +45,11 @@ fn ssig1(x: u32) -> u32 {
     result.try_into().unwrap()
 }
 
+#[deprecated(
+    feature: "deprecated-sha256",
+    note: "Use `core::sha256::compute_sha256_byte_array`.",
+    since: "2.7.0"
+)]
 pub fn sha256(mut data: Array<u8>) -> Array<u8> {
     let data_len: u64 = (data.len() * 8).into();
 
