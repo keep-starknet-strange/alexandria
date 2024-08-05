@@ -533,6 +533,7 @@ impl BytesImpl of BytesTrait {
             self.append_u128_packed(value, sub_bytes_last_element_size);
         }
     }
+
     /// keccak hash
     fn keccak(self: @Bytes) -> u256 {
         let (last_data_index, last_element_size) = Self::locate(self.size());

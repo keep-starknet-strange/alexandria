@@ -44,6 +44,11 @@ fn reverse_endianness(value: u256) -> u256 {
 /// # Returns
 ///
 /// A `u256` value representing the Keccak hash of the input bytes array.
+#[deprecated(
+    feature: "deprecated-keccak",
+    note: "Use `core::keccak::compute_keccak_byte_array`.",
+    since: "2.7.0"
+)]
 pub fn keccak256(mut self: Span<u8>) -> u256 {
     // Converts byte array to little endian 8 byte words array.
     let mut words64: Array<u64> = Default::default();

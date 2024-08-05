@@ -4,7 +4,6 @@ version = "0.2.0"
 description = "A set of Cairo data structure libraries and algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/data_structures"
 edition = "2023_11"
-# TODO 2024_07
 
 [tool]
 fmt.workspace = true
