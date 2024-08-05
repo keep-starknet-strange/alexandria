@@ -15,7 +15,7 @@ pub fn diff<T, +PartialOrd<T>, +Sub<T>, +Copy<T>, +Drop<T>, +Zero<T>,>(
     // [Compute] Interpolation
     let mut prev_value = *sequence.pop_front().unwrap();
     let mut array = array![Zero::zero()];
-    while let Option::Some(current_value) = sequence.pop_front() {
+    for current_value in sequence {
         assert(*current_value >= prev_value, 'Sequence must be sorted');
         array.append(*current_value - prev_value);
         prev_value = *current_value;

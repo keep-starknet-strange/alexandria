@@ -32,7 +32,7 @@ pub fn trapezoidal_rule<
     let mut prev_x = *xs.pop_front().unwrap();
     let mut prev_y = *ys.pop_front().unwrap();
     let mut value = Zero::zero();
-    while let Option::Some(next_x) = xs.pop_front() {
+    for next_x in xs {
         assert(*next_x > prev_x, 'Abscissa must be sorted');
         let next_y = *ys.pop_front().unwrap();
         value += (*next_x - prev_x) * (prev_y + next_y);

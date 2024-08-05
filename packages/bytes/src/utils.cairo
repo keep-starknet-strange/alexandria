@@ -54,10 +54,10 @@ pub impl BytesDisplay of Display<Bytes> {
 /// Computes the keccak256 of multiple uint128 values.
 /// The values are interpreted as big-endian.
 /// https://github.com/starkware-libs/cairo/blob/main/corelib/src/keccak.cairo
-pub fn keccak_u128s_be(mut input: Span<u128>, n_bytes: usize) -> u256 {
+pub fn keccak_u128s_be(input: Span<u128>, n_bytes: usize) -> u256 {
     let mut keccak_input = array![];
     let mut size = n_bytes;
-    while let Option::Some(v) = input.pop_front() {
+    for v in input {
         let value_size = uint_min(size, 16);
         keccak_add_uint128_be(ref keccak_input, *v, value_size);
         size -= value_size;

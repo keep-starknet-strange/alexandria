@@ -136,7 +136,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
 
     fn occurrences<+PartialEq<T>>(mut self: Span<T>, item: @T) -> usize {
         let mut count = 0_usize;
-        while let Option::Some(v) = self.pop_front() {
+        for v in self {
             if v == item {
                 count += 1;
             }
@@ -150,7 +150,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
             Option::None => { return Option::None; },
         };
 
-        while let Option::Some(item) = self.pop_front() {
+        for item in self {
             if item < min {
                 min = item
             }
@@ -166,7 +166,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
             Option::Some(item) => item,
             Option::None => { return Option::None; },
         };
-        while let Option::Some(item) = self.pop_front() {
+        for item in self {
             if item < min {
                 min_position = index + 1;
                 min = item;
@@ -183,7 +183,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
             Option::None => { return Option::None; },
         };
 
-        while let Option::Some(item) = self.pop_front() {
+        for item in self {
             if item > max {
                 max = item
             }
@@ -200,7 +200,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
             Option::None => { return Option::None; },
         };
 
-        while let Option::Some(item) = self.pop_front() {
+        for item in self {
             if item > max {
                 max_position = index + 1;
                 max = item
@@ -220,7 +220,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
         let mut last_value = self.pop_front().unwrap();
         let mut ret = array![last_value.clone()];
 
-        while let Option::Some(v) = self.pop_front() {
+        for v in self {
             if (last_value != v) {
                 last_value = v;
                 ret.append(v.clone());
@@ -233,7 +233,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
     fn unique<+PartialEq<T>>(mut self: Span<T>) -> Array<T> {
         let mut ret = array![];
 
-        while let Option::Some(v) = self.pop_front() {
+        for v in self {
             if !ret.span().contains(v) {
                 ret.append(v.clone());
             }

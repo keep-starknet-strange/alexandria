@@ -68,7 +68,7 @@ impl GraphImpl of GraphTrait {
 
         // iterate over existing array to add new node
         if !is_null {
-            while let Option::Some(current_value) = span.pop_front() {
+            for current_value in span {
                 nodes.append(*current_value);
             };
             nodes.append(node);

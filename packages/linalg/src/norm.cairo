@@ -14,7 +14,7 @@ pub fn norm<T, +Into<T, u128>, +Zero<T>, +Copy<T>, +Drop<T>>(
     mut xs: Span<T>, ord: u128, iter: usize
 ) -> u128 {
     let mut norm: u128 = 0;
-    while let Option::Some(x_value) = xs.pop_front() {
+    for x_value in xs {
         if ord == 0 {
             if (*x_value).is_non_zero() {
                 norm += 1;
