@@ -14,7 +14,7 @@ fn verify_signature_test_0() {
     let s_sign: u256 = 0x6a9473f6492676e988709498b228df873fe3cfdf59255b1a9e1add4f87ec610b;
     let signature = array![r_sign, s_sign];
 
-    assert!(verify_signature(msg, signature.span(), pub_key), "Invalid signature");
+    assert!(verify_signature(msg, signature.span(), pub_key));
 }
 
 #[test]
@@ -28,7 +28,7 @@ fn verify_signature_test_1() {
     let s_sign: u256 = 0x7d1308162466f8e6097f8afa310c074796d13459d4b53cdecf80ca7413410000;
     let signature = array![r_sign, s_sign];
 
-    assert!(verify_signature(msg, signature.span(), pub_key), "Invalid signature");
+    assert!(verify_signature(msg, signature.span(), pub_key));
 }
 
 #[test]
@@ -42,7 +42,7 @@ fn verify_signature_test_2() {
     let s_sign: u256 = 0xcc2e419abf32f91bc20419ba0905ad52923c7c110d14623b62300711b8f9370c;
     let signature = array![r_sign, s_sign];
 
-    assert!(verify_signature(msg, signature.span(), pub_key), "Invalid signature");
+    assert!(verify_signature(msg, signature.span(), pub_key));
 }
 
 #[test]
@@ -56,7 +56,7 @@ fn verify_signature_test_3() {
     let s_sign: u256 = 0x68e015fa8775659d1f40a01e1f69b8af4409046f4dc8ff02cdb04fdc3585eb0d;
     let signature = array![r_sign, s_sign];
 
-    assert!(verify_signature(msg, signature.span(), pub_key), "Invalid signature");
+    assert!(verify_signature(msg, signature.span(), pub_key));
 }
 
 #[test]
@@ -70,7 +70,7 @@ fn verify_signature_invalid() {
     let s_sign: u256 = 0x68e015fa8775659d1f40a01e1f69b8af4409046f4dc8ff02cdb04fdc3585eb01;
     let signature = array![r_sign, s_sign];
 
-    assert!(!verify_signature(msg, signature.span(), pub_key), "Signature should be invalid");
+    assert!(!verify_signature(msg, signature.span(), pub_key));
 }
 
 #[test]
@@ -84,8 +84,8 @@ fn verify_signature_invalid_length() {
     let s_sign: u256 = 0x68e015fa8775659d1f40a01e1f69b8af4409046f4dc8ff02cdb04fdc3585eb0d;
     let signature = array![r_sign, s_sign, s_sign];
 
-    assert!(!verify_signature(msg, signature.span(), pub_key), "Invalid signature");
-    assert!(!verify_signature(msg, array![r_sign].span(), pub_key), "Invalid signature");
+    assert!(!verify_signature(msg, signature.span(), pub_key));
+    assert!(!verify_signature(msg, array![r_sign].span(), pub_key));
 }
 
 #[test]

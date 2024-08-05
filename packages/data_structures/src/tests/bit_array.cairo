@@ -108,7 +108,7 @@ fn test_read_word_be_u256() {
     let low = 0x101112131415161718191a1b1c1d1e1f_u128;
     ba.write_word_be(low.into(), 128);
     let high = 0xfffffffffffffffffffffffffffffffe_u128;
-    assert!(ba.read_word_be_u256(length: 256).unwrap() == u256 { low, high }, "unexpected value");
+    assert!(ba.read_word_be_u256(length: 256).unwrap() == u256 { low, high });
 }
 
 #[test]
@@ -118,7 +118,7 @@ fn test_read_word_le_u256() {
     let low = 0x7fffffffffffffffffffffffffffffff_u128;
     let high = 0x101112131415161718191a1b1c1d1e1f_u128;
     ba.write_word_le(high.into(), 128);
-    assert!(ba.read_word_le_u256(length: 256).unwrap() == u256 { low, high }, "unexpected value");
+    assert!(ba.read_word_le_u256(length: 256).unwrap() == u256 { low, high });
 }
 
 #[test]
