@@ -197,21 +197,11 @@ fn test_rotl_max() {
 #[available_gas(4000000)]
 fn test_rotr_min() {
     assert_eq!(BitRotate::rotate_right(pow::<u8>(2, 7) + 1, 1), 0b11 * pow(2, 6), "invalid result");
-    assert(
-        BitRotate::rotate_right(pow::<u16>(2, 15) + 1, 1) == 0b11 * pow(2, 14), 'invalid result'
-    );
-    assert(
-        BitRotate::rotate_right(pow::<u32>(2, 31) + 1, 1) == 0b11 * pow(2, 30), 'invalid result'
-    );
-    assert(
-        BitRotate::rotate_right(pow::<u64>(2, 63) + 1, 1) == 0b11 * pow(2, 62), 'invalid result'
-    );
-    assert(
-        BitRotate::rotate_right(pow::<u128>(2, 127) + 1, 1) == 0b11 * pow(2, 126), 'invalid result'
-    );
-    assert(
-        BitRotate::rotate_right(pow::<u256>(2, 255) + 1, 1) == 0b11 * pow(2, 254), 'invalid result'
-    );
+    assert_eq!(BitRotate::rotate_right(pow::<u16>(2, 15) + 1, 1), 0b11 * pow(2, 14));
+    assert_eq!(BitRotate::rotate_right(pow::<u32>(2, 31) + 1, 1), 0b11 * pow(2, 30));
+    assert_eq!(BitRotate::rotate_right(pow::<u64>(2, 63) + 1, 1), 0b11 * pow(2, 62));
+    assert_eq!(BitRotate::rotate_right(pow::<u128>(2, 127) + 1, 1), 0b11 * pow(2, 126));
+    assert_eq!(BitRotate::rotate_right(pow::<u256>(2, 255) + 1, 1), 0b11 * pow(2, 254));
 }
 
 #[test]

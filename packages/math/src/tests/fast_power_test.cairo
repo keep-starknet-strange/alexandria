@@ -27,24 +27,16 @@ fn fast_power_mod_test() {
     assert_eq!(fast_power_mod(2_u128, 3_u128, 17_u128), 8, "invalid result");
     assert_eq!(fast_power_mod(3_u128, 4_u128, 17_u128), 13, "invalid result");
     assert_eq!(fast_power_mod(2_u128, 100_u128, 1000000007_u128), 976371285, "invalid result");
-    assert(
-        fast_power_mod(
-            2_u128, 127_u128, 340282366920938463463374607431768211454_u128
-        ) == 170141183460469231731687303715884105728,
-        'invalid result'
-    );
     assert_eq!(
-        fast_power_mod(2_u128, 127_u128, 34028236692093846346337460743176821144_u128),
-        8,
-        "invalid result"
+        fast_power_mod(2_u128, 127_u128, 340282366920938463463374607431768211454_u128),
+        170141183460469231731687303715884105728
     );
+    assert_eq!(fast_power_mod(2_u128, 127_u128, 34028236692093846346337460743176821144_u128), 8);
 
     assert_eq!(fast_power_mod(2_u128, 128_u128, 9299_u128), 1412, "invalid result");
 
-    assert(
-        fast_power_mod(
-            2_u128, 88329_u128, 34028236692093846346337460743176821144_u128
-        ) == 2199023255552,
-        'invalid result'
+    assert_eq!(
+        fast_power_mod(2_u128, 88329_u128, 34028236692093846346337460743176821144_u128),
+        2199023255552
     );
 }

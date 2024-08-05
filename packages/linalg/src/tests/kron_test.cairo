@@ -22,8 +22,5 @@ fn kron_product_test() {
 fn kron_product_test_check_len() {
     let xs = array![1_u64];
     let ys = array![];
-    assert(
-        kron(xs.span(), ys.span()) == Result::Err(KronError::UnequalLength),
-        'Arrays must have the same len'
-    );
+    assert!(kron(xs.span(), ys.span()) == Result::Err(KronError::UnequalLength));
 }

@@ -18,10 +18,7 @@ fn test_append_bit() {
         .try_into()
         .unwrap();
     let expected: Array<bytes31> = array![val, val,];
-    assert(
-        ba.current() == 0xa * one_shift_left_bytes_felt252(30) * shift_bit(4).into(),
-        'expected current 0xa'
-    );
+    assert_eq!(ba.current(), 0xa * one_shift_left_bytes_felt252(30) * shift_bit(4).into());
     assert!(ba.data() == expected, "illegal array");
 }
 
@@ -94,19 +91,14 @@ fn test_pop_front_empty() {
 #[available_gas(20000000)]
 fn test_read_word_be() {
     let mut ba = sample_bit_array();
-    assert(
-        ba.read_word_be(length: 128).unwrap() == Bounded::<u128>::MAX.into() - 1, 'expected max - 1'
-    );
+    assert_eq!(ba.read_word_be(length: 128).unwrap(), Bounded::<u128>::MAX.into() - 1);
 }
 
 #[test]
 #[available_gas(20000000)]
 fn test_read_word_le() {
     let mut ba = sample_bit_array();
-    assert(
-        ba.read_word_le(length: 128).unwrap() == 0x7fffffffffffffffffffffffffffffff,
-        'unexpected value'
-    );
+    assert_eq!(ba.read_word_le(length: 128).unwrap(), 0x7fffffffffffffffffffffffffffffff);
 }
 
 #[test]
@@ -140,10 +132,7 @@ fn test_read_word_be_u512() {
     ba.write_word_be(limb1.into(), 128);
     ba.write_word_be(limb0.into(), 128);
     let limb3 = 0xfffffffffffffffffffffffffffffffe_u128;
-    assert(
-        ba.read_word_be_u512(length: 512).unwrap() == u512 { limb0, limb1, limb2, limb3 },
-        'unexpected value'
-    );
+    assert!(ba.read_word_be_u512(length: 512).unwrap() == u512 { limb0, limb1, limb2, limb3 });
 }
 
 #[test]
@@ -157,10 +146,7 @@ fn test_read_word_le_u512() {
     ba.write_word_le(limb2.into(), 128);
     ba.write_word_le(limb3.into(), 128);
     let limb0 = 0x7fffffffffffffffffffffffffffffff_u128;
-    assert(
-        ba.read_word_le_u512(length: 512).unwrap() == u512 { limb0, limb1, limb2, limb3 },
-        'unexpected value'
-    );
+    assert!(ba.read_word_le_u512(length: 512).unwrap() == u512 { limb0, limb1, limb2, limb3 });
 }
 
 #[test]
@@ -184,7 +170,7 @@ fn test_read_word_le_half() {
 fn test_write_word_be() {
     let mut ba: BitArray = Default::default();
     ba.write_word_be(Bounded::<u128>::MAX.into() - 2, 128);
-    assert(ba.read_word_be(128).unwrap() == Bounded::<u128>::MAX.into() - 2, 'unexpected value');
+    assert_eq!(ba.read_word_be(128).unwrap(), Bounded::<u128>::MAX.into() - 2);
 }
 
 #[test]
@@ -200,7 +186,7 @@ fn test_write_word_be_half() {
 fn test_write_word_le() {
     let mut ba: BitArray = Default::default();
     ba.write_word_le(Bounded::<u128>::MAX.into() - 4, 128);
-    assert(ba.read_word_le(128).unwrap() == Bounded::<u128>::MAX.into() - 4, 'unexpected value');
+    assert_eq!(ba.read_word_le(128).unwrap(), Bounded::<u128>::MAX.into() - 4);
 }
 
 #[test]

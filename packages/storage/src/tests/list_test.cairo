@@ -262,7 +262,7 @@ fn test_append_get_many() {
     // test appending many
     while (index != max) {
         let append_indexes = contract.do_append(mock_addr, index.into());
-        assert(append_indexes == (index, index), index.into());
+        assert_eq!(append_indexes, (index, index));
         index += 1;
     };
 

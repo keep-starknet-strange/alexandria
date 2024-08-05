@@ -149,11 +149,9 @@ fn pow_mod_test() {
     assert_eq!(pow_mod(2, 4, prime_non_zero), 16, "Incorrect result");
     assert_eq!(pow_mod(2, 256, prime_non_zero), 38, "Incorrect result");
     assert_eq!(pow_mod(2, 260, prime_non_zero), 608, "Incorrect result");
-    assert(
-        pow_mod(
-            10, 260, prime_non_zero
-        ) == 17820046977743035104984469918379927979184337110507416960697246160624073120874,
-        'Incorrect result'
+    assert_eq!(
+        pow_mod(10, 260, prime_non_zero),
+        17820046977743035104984469918379927979184337110507416960697246160624073120874
     );
     assert_eq!(pow_mod(4, 174, prime_non_zero), 188166885971377801784666882048, "Incorrect result");
     assert_eq!(pow_mod(100, p, prime_non_zero), 100, "Incorrect result");
