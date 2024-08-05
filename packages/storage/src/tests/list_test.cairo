@@ -144,7 +144,7 @@ fn mock_addr() -> ContractAddress {
 #[available_gas(100000000)]
 fn test_deploy() {
     let contract = deploy_mock();
-    assert_eq!(contract.do_get_len(), (0, 0), "do_get_len");
+    assert_eq!(contract.do_get_len(), (0, 0));
 }
 
 #[test]
@@ -154,21 +154,21 @@ fn test_new_initializes_empty_list() {
 
     let addresses_address = contract_state.addresses.as_ptr().__storage_pointer_address__;
     let addresses_list = ListTrait::<ContractAddress>::new(0, addresses_address);
-    assert_eq!(addresses_list.address_domain, 0, "Address domain should be 0");
-    assert_eq!(addresses_list.len(), 0, "Initial length should be 0");
-    assert_eq!(addresses_list.base.into(), addresses_address, "Base address mismatch");
-    assert_eq!(addresses_list.storage_size(), 1, "Storage size should be 1");
+    assert_eq!(addresses_list.address_domain, 0);
+    assert_eq!(addresses_list.len(), 0);
+    assert_eq!(addresses_list.base.into(), addresses_address);
+    assert_eq!(addresses_list.storage_size(), 1);
 
     let numbers_address = contract_state.numbers.as_ptr().__storage_pointer_address__;
     let numbers_list = ListTrait::<u256>::new(0, numbers_address);
-    assert_eq!(numbers_list.address_domain, 0, "Address domain should be 0");
-    assert_eq!(numbers_list.len(), 0, "Initial length should be 0");
-    assert_eq!(numbers_list.base.into(), numbers_address, "Base address mismatch");
-    assert_eq!(numbers_list.storage_size(), 2, "Storage size should be 2");
+    assert_eq!(numbers_list.address_domain, 0);
+    assert_eq!(numbers_list.len(), 0);
+    assert_eq!(numbers_list.base.into(), numbers_address);
+    assert_eq!(numbers_list.storage_size(), 2);
 
     // Check if both addresses and numbers lists are initialized to be empty
-    assert_eq!(contract_state.do_get_len(), (0, 0), "Initial lengths should be 0");
-    assert_eq!(contract_state.do_is_empty(), (true, true), "Lists should be empty");
+    assert_eq!(contract_state.do_get_len(), (0, 0));
+    assert_eq!(contract_state.do_is_empty(), (true, true));
 }
 
 #[test]
@@ -186,11 +186,11 @@ fn test_new_then_fill_list() {
     let _ = numbers_list.append(1);
     let _ = numbers_list.append(2);
 
-    assert_eq!(addresses_list.len(), 1, "Addresses length should be 1");
-    assert_eq!(numbers_list.len(), 2, "Numbers length should be 2");
+    assert_eq!(addresses_list.len(), 1);
+    assert_eq!(numbers_list.len(), 2);
 
-    assert_eq!(contract_state.do_get_len(), (1, 2), "Lengths should be (1,2)");
-    assert_eq!(contract_state.do_is_empty(), (false, false), "Lists should not be empty");
+    assert_eq!(contract_state.do_get_len(), (1, 2));
+    assert_eq!(contract_state.do_is_empty(), (false, false));
 }
 
 #[test]
@@ -200,10 +200,10 @@ fn test_fetch_empty_list() {
 
     let empty_list = ListTrait::<u128>::fetch(0, storage_address).expect('List fetch failed');
 
-    assert_eq!(empty_list.address_domain, 0, "Address domain should be 0");
-    assert_eq!(empty_list.len(), 0, "Length should be 0");
-    assert_eq!(empty_list.base.into(), storage_address, "Base address mismatch");
-    assert_eq!(empty_list.storage_size(), 1, "Storage size should be 1");
+    assert_eq!(empty_list.address_domain, 0);
+    assert_eq!(empty_list.len(), 0);
+    assert_eq!(empty_list.base.into(), storage_address);
+    assert_eq!(empty_list.storage_size(), 1);
 }
 
 #[test]
@@ -212,22 +212,22 @@ fn test_fetch_existing_list() {
     let mut contract_state = AListHolder::contract_state_for_testing();
     let mock_addr = mock_addr();
 
-    assert_eq!(contract_state.do_append(mock_addr, 10), (0, 0), "1st append idx");
-    assert_eq!(contract_state.do_append(mock_addr, 20), (1, 1), "2nd append idx");
+    assert_eq!(contract_state.do_append(mock_addr, 10), (0, 0));
+    assert_eq!(contract_state.do_append(mock_addr, 20), (1, 1));
 
     let addresses_address = contract_state.addresses.as_ptr().__storage_pointer_address__;
     let addresses_list = ListTrait::<ContractAddress>::fetch(0, addresses_address)
         .expect('List fetch failed');
-    assert_eq!(addresses_list.address_domain, 0, "Address domain should be 0");
-    assert_eq!(addresses_list.len(), 2, "Length should be 2");
-    assert_eq!(addresses_list.base.into(), addresses_address, "Base address mismatch");
-    assert_eq!(addresses_list.storage_size(), 1, "Storage size should be 1");
+    assert_eq!(addresses_list.address_domain, 0);
+    assert_eq!(addresses_list.len(), 2);
+    assert_eq!(addresses_list.base.into(), addresses_address);
+    assert_eq!(addresses_list.storage_size(), 1);
 
     let numbers_address = contract_state.numbers.as_ptr().__storage_pointer_address__;
     let numbers_list = ListTrait::<u256>::fetch(0, numbers_address).expect('List fetch failed');
-    assert_eq!(numbers_list.address_domain, 0, "Address domain should be 0");
-    assert_eq!(numbers_list.len(), 2, "Length should be 2");
-    assert_eq!(numbers_list.base.into(), numbers_address, "Base address mismatch");
+    assert_eq!(numbers_list.address_domain, 0);
+    assert_eq!(numbers_list.len(), 2);
+    assert_eq!(numbers_list.base.into(), numbers_address);
 }
 
 #[test]
@@ -235,9 +235,9 @@ fn test_fetch_existing_list() {
 fn test_is_empty() {
     let contract = deploy_mock();
 
-    assert_eq!(contract.do_is_empty(), (true, true), "is empty");
+    assert_eq!(contract.do_is_empty(), (true, true));
     contract.do_append(mock_addr(), 1337);
-    assert_eq!(contract.do_is_empty(), (false, false), "is not empty");
+    assert_eq!(contract.do_is_empty(), (false, false));
 }
 
 #[test]
@@ -245,9 +245,9 @@ fn test_is_empty() {
 fn test_append_few() {
     let contract = deploy_mock();
 
-    assert_eq!(contract.do_append(mock_addr(), 10), (0, 0), "1st append idx");
-    assert_eq!(contract.do_append(mock_addr(), 20), (1, 1), "2nd append idx");
-    assert_eq!(contract.do_get_len(), (2, 2), "len");
+    assert_eq!(contract.do_append(mock_addr(), 10), (0, 0));
+    assert_eq!(contract.do_append(mock_addr(), 20), (1, 1));
+    assert_eq!(contract.do_get_len(), (2, 2));
 }
 
 #[test]
@@ -266,16 +266,16 @@ fn test_append_get_many() {
         index += 1;
     };
 
-    assert_eq!(contract.do_get_len(), (max, max), "len");
+    assert_eq!(contract.do_get_len(), (max, max));
 
     // test getting many
     index = 0;
     while (index != max) {
         let (some_addr, some_number) = contract.do_get(index);
         assert!(some_addr.is_some(), "addr is some");
-        assert_eq!(some_addr.unwrap(), mock_addr, "addr");
+        assert_eq!(some_addr.unwrap(), mock_addr);
         assert!(some_number.is_some(), "number is some");
-        assert_eq!(some_number.unwrap(), index.into(), "number");
+        assert_eq!(some_number.unwrap(), index.into());
 
         index += 1;
     }
@@ -293,21 +293,21 @@ fn test_get_pass() {
 
     let (some_addr0, some_number0) = contract.do_get(0);
     assert!(some_addr0.is_some(), "addr0 is some");
-    assert_eq!(some_addr0.unwrap(), mock_addr, "addr0");
+    assert_eq!(some_addr0.unwrap(), mock_addr);
     assert!(some_number0.is_some(), "number0 is some");
-    assert_eq!(some_number0.unwrap(), 100, "number0");
+    assert_eq!(some_number0.unwrap(), 100);
 
     let (some_addr1, some_number1) = contract.do_get(1);
     assert!(some_addr1.is_some(), "addr1 is some");
-    assert_eq!(some_addr1.unwrap(), mock_addr, "addr1");
+    assert_eq!(some_addr1.unwrap(), mock_addr);
     assert!(some_number1.is_some(), "number1 is some");
-    assert_eq!(some_number1.unwrap(), 200, "number1");
+    assert_eq!(some_number1.unwrap(), 200);
 
     let (some_addr2, some_number2) = contract.do_get(2);
     assert!(some_addr2.is_some(), "addr2 is some");
-    assert_eq!(some_addr2.unwrap(), mock_addr, "addr2");
+    assert_eq!(some_addr2.unwrap(), mock_addr);
     assert!(some_number2.is_some(), "number2 is some");
-    assert_eq!(some_number2.unwrap(), 300, "number2");
+    assert_eq!(some_number2.unwrap(), 300);
 }
 
 #[test]
@@ -339,9 +339,9 @@ fn test_get_index_pass() {
     contract.do_append(mock_addr, 200); // idx 1
     contract.do_append(mock_addr, 300); // idx 2
 
-    assert_eq!(contract.do_get_index(0), (mock_addr, 100), "idx 0");
-    assert_eq!(contract.do_get_index(1), (mock_addr, 200), "idx 1");
-    assert_eq!(contract.do_get_index(2), (mock_addr, 300), "idx 2");
+    assert_eq!(contract.do_get_index(0), (mock_addr, 100));
+    assert_eq!(contract.do_get_index(1), (mock_addr, 200));
+    assert_eq!(contract.do_get_index(2), (mock_addr, 300));
 }
 
 #[test]
@@ -367,10 +367,10 @@ fn test_set_pass() {
     contract.do_set(0, diff_addr, 100);
     contract.do_set(2, diff_addr, 300);
 
-    assert_eq!(contract.do_get_index(0), (diff_addr, 100), "new at 0");
-    assert_eq!(contract.do_get_index(1), (mock_addr, 20), "old at 1");
-    assert_eq!(contract.do_get_index(2), (diff_addr, 300), "new at 2");
-    assert_eq!(contract.do_get_len(), (3, 3), "len");
+    assert_eq!(contract.do_get_index(0), (diff_addr, 100));
+    assert_eq!(contract.do_get_index(1), (mock_addr, 20));
+    assert_eq!(contract.do_get_index(2), (diff_addr, 300));
+    assert_eq!(contract.do_get_len(), (3, 3));
 }
 
 #[test]
@@ -391,28 +391,28 @@ fn test_pop_front_pass() {
     contract.do_append(mock_addr, 200); // idx 1
     contract.do_append(mock_addr, 300); // idx 2
 
-    assert_eq!(contract.do_get_len(), (3, 3), "len");
+    assert_eq!(contract.do_get_len(), (3, 3));
 
     let (pop_addr, pop_number) = contract.do_pop_front();
     assert!(pop_addr.is_some(), "pop addr 2 is some");
-    assert_eq!(pop_addr.unwrap(), mock_addr, "addr 2");
+    assert_eq!(pop_addr.unwrap(), mock_addr);
     assert!(pop_number.is_some(), "pop number 2 is some");
-    assert_eq!(pop_number.unwrap(), 300, "number 2");
-    assert_eq!(contract.do_get_len(), (2, 2), "len");
+    assert_eq!(pop_number.unwrap(), 300);
+    assert_eq!(contract.do_get_len(), (2, 2));
 
     let (pop_addr, pop_number) = contract.do_pop_front();
     assert!(pop_addr.is_some(), "pop addr 1 is some");
-    assert_eq!(pop_addr.unwrap(), mock_addr, "addr 1");
+    assert_eq!(pop_addr.unwrap(), mock_addr);
     assert!(pop_number.is_some(), "pop number 1 is some");
-    assert_eq!(pop_number.unwrap(), 200, "number 1");
-    assert_eq!(contract.do_get_len(), (1, 1), "len");
+    assert_eq!(pop_number.unwrap(), 200);
+    assert_eq!(contract.do_get_len(), (1, 1));
 
     let (pop_addr, pop_number) = contract.do_pop_front();
     assert!(pop_addr.is_some(), "pop addr 0 is some");
-    assert_eq!(pop_addr.unwrap(), mock_addr, "addr 0");
+    assert_eq!(pop_addr.unwrap(), mock_addr);
     assert!(pop_number.is_some(), "pop number 0 is some");
-    assert_eq!(pop_number.unwrap(), 100, "number 0");
-    assert_eq!(contract.do_get_len(), (0, 0), "len");
+    assert_eq!(pop_number.unwrap(), 100);
+    assert_eq!(contract.do_get_len(), (0, 0));
 }
 
 #[test]
@@ -431,19 +431,19 @@ fn test_pop_append() {
     let contract = deploy_mock();
     // write something
     contract.do_append(mock_addr(), 10);
-    assert_eq!(contract.do_get_len(), (1, 1), "len 1");
+    assert_eq!(contract.do_get_len(), (1, 1));
 
     // pop it
     contract.do_pop_front();
-    assert_eq!(contract.do_get_len(), (0, 0), "len 2");
+    assert_eq!(contract.do_get_len(), (0, 0));
 
     let diff_addr = starknet::contract_address_const::<'bye'>();
     // append again and check if it overwrites
     contract.do_append(diff_addr, 9000);
-    assert_eq!(contract.do_get_len(), (1, 1), "len 3");
+    assert_eq!(contract.do_get_len(), (1, 1));
     let (addr, number) = contract.do_get_index(0);
-    assert_eq!(addr, diff_addr, "addr");
-    assert_eq!(number, 9000, "number");
+    assert_eq!(addr, diff_addr);
+    assert_eq!(number, 9000);
 }
 
 #[test]
@@ -458,10 +458,10 @@ fn test_array_pass() {
 
     let (array_addr, array_number) = contract.do_array();
 
-    assert_eq!((array_addr.len(), array_number.len()), contract.do_get_len(), "lens mismatch");
-    assert_eq!((*array_addr[0], *array_number[0]), contract.do_get_index(0), "idx 0");
-    assert_eq!((*array_addr[1], *array_number[1]), contract.do_get_index(1), "idx 1");
-    assert_eq!((*array_addr[2], *array_number[2]), contract.do_get_index(2), "idx 2");
+    assert_eq!((array_addr.len(), array_number.len()), contract.do_get_len());
+    assert_eq!((*array_addr[0], *array_number[0]), contract.do_get_index(0));
+    assert_eq!((*array_addr[1], *array_number[1]), contract.do_get_index(1));
+    assert_eq!((*array_addr[2], *array_number[2]), contract.do_get_index(2));
 }
 
 #[test]
@@ -470,7 +470,7 @@ fn test_array_empty() {
     let contract = deploy_mock();
 
     let (array_addr, array_number) = contract.do_array();
-    assert_eq!((array_addr.len(), array_number.len()), (0, 0), "lens must be null");
+    assert_eq!((array_addr.len(), array_number.len()), (0, 0));
 }
 
 #[test]
@@ -483,7 +483,7 @@ fn test_array_clean() {
     contract.do_append(mock_addr, 200); // idx 1
     contract.do_append(mock_addr, 300); // idx 2
     contract.do_clean();
-    assert_eq!(contract.do_get_len(), (0, 0), "is empty");
+    assert_eq!(contract.do_get_len(), (0, 0));
 }
 
 #[test]
@@ -491,11 +491,11 @@ fn test_array_clean() {
 fn test_array_clean_with_empty_array() {
     let contract = deploy_mock();
 
-    assert_eq!(contract.do_get_len(), (0, 0), "is empty");
+    assert_eq!(contract.do_get_len(), (0, 0));
 
     contract.do_clean();
 
-    assert_eq!(contract.do_get_len(), (0, 0), "is still empty");
+    assert_eq!(contract.do_get_len(), (0, 0));
 }
 
 #[test]
@@ -507,13 +507,13 @@ fn test_array_get_value_after_clean() {
     contract.do_append(mock_addr, 100); // idx 0
     let (addr, number) = contract.do_get(0);
     assert!(addr.is_some(), "addr is some");
-    assert_eq!(addr.unwrap(), mock_addr, "should be mock_addr");
+    assert_eq!(addr.unwrap(), mock_addr);
     assert!(number.is_some(), "number is some");
-    assert_eq!(number.unwrap(), 100, "should be 100");
+    assert_eq!(number.unwrap(), 100);
 
     contract.do_clean();
 
-    assert_eq!(contract.do_get_len(), (0, 0), "len");
+    assert_eq!(contract.do_get_len(), (0, 0));
 
     let (addr, number) = contract.do_get(0);
     assert!(addr.is_none(), "addr is none");
@@ -526,7 +526,7 @@ fn test_append_array_empty() {
     let contract = deploy_mock();
 
     contract.do_append_span(array![], array![]);
-    assert_eq!(contract.do_is_empty(), (true, true), "should be empty");
+    assert_eq!(contract.do_is_empty(), (true, true));
 }
 
 #[test]
@@ -535,17 +535,17 @@ fn test_append_span_existing_list() {
     let contract = deploy_mock();
     let mock_addr = mock_addr();
 
-    assert_eq!(contract.do_append(mock_addr, 10), (0, 0), "1st append idx");
-    assert_eq!(contract.do_append(mock_addr, 20), (1, 1), "2nd append idx");
-    assert_eq!(contract.do_get_len(), (2, 2), "len");
-    assert_eq!(contract.do_get_index(0), (mock_addr, 10), "idx 0");
-    assert_eq!(contract.do_get_index(1), (mock_addr, 20), "idx 1");
+    assert_eq!(contract.do_append(mock_addr, 10), (0, 0));
+    assert_eq!(contract.do_append(mock_addr, 20), (1, 1));
+    assert_eq!(contract.do_get_len(), (2, 2));
+    assert_eq!(contract.do_get_index(0), (mock_addr, 10));
+    assert_eq!(contract.do_get_index(1), (mock_addr, 20));
 
     contract.do_append_span(array![mock_addr], array![30]);
     let (a, b) = contract.do_get_len();
-    assert_eq!((a, b), (3, 3), "len");
+    assert_eq!((a, b), (3, 3));
 
-    assert_eq!(contract.do_get_index(0), (mock_addr, 10), "idx 0");
-    assert_eq!(contract.do_get_index(1), (mock_addr, 20), "idx 1");
-    assert_eq!(contract.do_get_index(2), (mock_addr, 30), "idx 2");
+    assert_eq!(contract.do_get_index(0), (mock_addr, 10));
+    assert_eq!(contract.do_get_index(1), (mock_addr, 20));
+    assert_eq!(contract.do_get_index(2), (mock_addr, 30));
 }

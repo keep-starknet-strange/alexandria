@@ -8,23 +8,23 @@ fn value_found() {
     let mut span = arr.span();
 
     // Test with an even length
-    assert_eq!(binary_search(span, 100).unwrap(), 0, "Should be index 0");
-    assert_eq!(binary_search(span, 200).unwrap(), 1, "Should be index 1");
-    assert_eq!(binary_search(span, 300).unwrap(), 2, "Should be index 2");
-    assert_eq!(binary_search(span, 400).unwrap(), 3, "Should be index 3");
-    assert_eq!(binary_search(span, 500).unwrap(), 4, "Should be index 4");
-    assert_eq!(binary_search(span, 600).unwrap(), 5, "Should be index 5");
+    assert_eq!(binary_search(span, 100).unwrap(), 0);
+    assert_eq!(binary_search(span, 200).unwrap(), 1);
+    assert_eq!(binary_search(span, 300).unwrap(), 2);
+    assert_eq!(binary_search(span, 400).unwrap(), 3);
+    assert_eq!(binary_search(span, 500).unwrap(), 4);
+    assert_eq!(binary_search(span, 600).unwrap(), 5);
 
     // Odd length
     arr.append(700);
     span = arr.span();
-    assert_eq!(binary_search(span, 100).unwrap(), 0, "Should be index 0");
-    assert_eq!(binary_search(span, 200).unwrap(), 1, "Should be index 1");
-    assert_eq!(binary_search(span, 300).unwrap(), 2, "Should be index 2");
-    assert_eq!(binary_search(span, 400).unwrap(), 3, "Should be index 3");
-    assert_eq!(binary_search(span, 500).unwrap(), 4, "Should be index 4");
-    assert_eq!(binary_search(span, 600).unwrap(), 5, "Should be index 5");
-    assert_eq!(binary_search(span, 700).unwrap(), 6, "Should be index 6");
+    assert_eq!(binary_search(span, 100).unwrap(), 0);
+    assert_eq!(binary_search(span, 200).unwrap(), 1);
+    assert_eq!(binary_search(span, 300).unwrap(), 2);
+    assert_eq!(binary_search(span, 400).unwrap(), 3);
+    assert_eq!(binary_search(span, 500).unwrap(), 4);
+    assert_eq!(binary_search(span, 600).unwrap(), 5);
+    assert_eq!(binary_search(span, 700).unwrap(), 6);
 }
 
 #[test]

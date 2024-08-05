@@ -8,7 +8,7 @@ fn merge_sort_test() {
 
     let sorted = MergeSort::sort(data);
 
-    assert_eq!(sorted, correct, "invalid result");
+    assert_eq!(sorted, correct);
 }
 
 #[test]
@@ -19,7 +19,7 @@ fn merge_sort_test_2_pre_sorted_decreasing() {
 
     let sorted = MergeSort::sort(data);
 
-    assert_eq!(sorted, correct, "invalid result");
+    assert_eq!(sorted, correct);
 }
 
 #[test]
@@ -31,7 +31,7 @@ fn merge_sort_test_empty() {
 
     let sorted = MergeSort::sort(data);
 
-    assert_eq!(sorted, correct, "invalid result");
+    assert_eq!(sorted, correct);
 }
 
 #[test]
@@ -42,7 +42,7 @@ fn merge_sort_test_one_element() {
 
     let sorted = MergeSort::sort(data);
 
-    assert_eq!(sorted, correct, "invalid result");
+    assert_eq!(sorted, correct);
 }
 
 #[test]
@@ -53,7 +53,7 @@ fn merge_sort_test_pre_sorted() {
 
     let sorted = MergeSort::sort(data);
 
-    assert_eq!(sorted, correct, "invalid result");
+    assert_eq!(sorted, correct);
 }
 
 #[test]
@@ -64,7 +64,7 @@ fn merge_sort_test_2_same_values() {
 
     let sorted = MergeSort::sort(data);
 
-    assert_eq!(sorted, correct, "invalid result");
+    assert_eq!(sorted, correct);
 }
 
 #[test]
@@ -75,5 +75,5 @@ fn merge_sort_test_2_same_values_pre_sorted() {
 
     let sorted = MergeSort::sort(data);
 
-    assert_eq!(sorted, correct, "invalid result");
+    assert_eq!(sorted, correct);
 }
