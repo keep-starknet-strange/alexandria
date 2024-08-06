@@ -23,7 +23,7 @@ pub fn kron<T, +Mul<T>, +Copy<T>, +Drop<T>,>(
     let mut array = array![];
 
     for x_value in xs {
-        let mut ys_clone = ys;
+        let ys_clone = ys;
         for y_value in ys_clone {
             array.append(*x_value * *y_value);
         }
