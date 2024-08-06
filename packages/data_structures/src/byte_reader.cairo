@@ -171,9 +171,8 @@ pub trait ByteReader<T> {
     fn len(self: @ByteReaderState<T>) -> usize;
 }
 
-// use core::ops::index::IndexView;
 impl ByteReaderImpl<
-    T, +Drop<T>, +Len<T>, impl IndexViewImpl: IndexView<T, usize>, +Into<IndexViewImpl::Target, @u8>
+    T, +Drop<T>, +Len<T>, +IndexView<T, usize>, +Into<IndexView::<T, usize>::Target, @u8>
 > of ByteReader<T> {
     #[inline]
     fn reader(self: @T) -> ByteReaderState<T> {
