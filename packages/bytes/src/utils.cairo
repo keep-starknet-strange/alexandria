@@ -58,7 +58,7 @@ pub fn keccak_u128s_be(input: Span<u128>, n_bytes: usize) -> u256 {
     let mut keccak_input = array![];
     let mut size = n_bytes;
     for v in input {
-        let value_size = uint_min(size, 16);
+        let value_size = core::cmp::min(size, 16);
         keccak_add_uint128_be(ref keccak_input, *v, value_size);
         size -= value_size;
     };
@@ -71,16 +71,6 @@ pub fn keccak_u128s_be(input: Span<u128>, n_bytes: usize) -> u256 {
         let last_input_word = *keccak_input[keccak_input.len() - 1];
         let mut inputs = u64_array_slice(@keccak_input, 0, keccak_input.len() - 1);
         u256_reverse_endian(cairo_keccak(ref inputs, last_input_word, last_input_num_bytes))
-    }
-}
-
-/// return the minimal value
-/// support u8, u16, u32, u64, u128, u256
-fn uint_min<T, +Drop<T>, +PartialOrd<T>, +Copy<T>>(l: T, r: T) -> T {
-    if l <= r {
-        l
-    } else {
-        r
     }
 }
 
