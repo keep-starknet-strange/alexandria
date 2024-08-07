@@ -1,7 +1,6 @@
 use core::clone::Clone;
 use core::cmp::min;
-use core::num::traits::OverflowingSub;
-use core::option::OptionTrait;
+use core::num::traits::CheckedSub;
 use super::array_ext::ArrayTraitExt;
 
 pub trait SpanTraitExt<T> {
@@ -52,14 +51,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
     fn pop_back_n(ref self: Span<T>, n: usize) -> Span<T> {
         let span_len = self.len();
         // Saturating substraction
-        let separator = {
-            let (value, overflow) = span_len.overflowing_sub(n);
-            if overflow {
-                0
-            } else {
-                value
-            }
-        };
+        let separator = span_len.checked_sub(n).unwrap_or(0);
 
         let res = self.slice(separator, span_len - separator);
         self = self.slice(0, separator);
@@ -77,14 +69,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
     fn remove_back_n(ref self: Span<T>, mut n: usize) {
         let span_len = self.len();
         // Saturating substraction
-        let separator = {
-            let (value, overflow) = span_len.overflowing_sub(n);
-            if overflow {
-                0
-            } else {
-                value
-            }
-        };
+        let separator = span_len.checked_sub(n).unwrap_or(0);
 
         self = self.slice(0, separator);
     }

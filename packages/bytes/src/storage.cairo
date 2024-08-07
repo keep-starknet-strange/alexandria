@@ -1,5 +1,5 @@
 use alexandria_bytes::bytes::{Bytes, BytesTrait, BYTES_PER_ELEMENT};
-use core::num::traits::OverflowingAdd;
+use core::num::traits::CheckedAdd;
 use starknet::SyscallResult;
 use starknet::storage_access::{
     Store, StorageAddress, StorageBaseAddress, storage_address_from_base,
@@ -88,15 +88,13 @@ fn inner_read_bytes(address_domain: u32, address: StorageAddress) -> SyscallResu
         data.append(value);
         remaining_full_words -= 1;
 
-        let (tmp, did_overflow) = index_in_chunk.overflowing_add(1);
-        if did_overflow {
-            // After reading 256 `uint128`s `index_in_chunk` will overflow and we move to the
-            // next chunk.
-            chunk += 1;
-            chunk_base = inner_bytes_pointer(address, chunk);
-            index_in_chunk = 0;
-        } else {
-            index_in_chunk = tmp;
+        match index_in_chunk.checked_add(1) {
+            Option::Some(x) => { index_in_chunk = x; },
+            Option::None => {
+                chunk += 1;
+                chunk_base = inner_bytes_pointer(address, chunk);
+                index_in_chunk = 0;
+            },
         }
     }?;
     if last_word_len != 0 {
@@ -133,15 +131,14 @@ fn inner_write_bytes(
             Result::Ok(_) => {},
             Result::Err(err) => { break Result::Err(err); },
         };
-        let (tmp, did_overflow) = index_in_chunk.overflowing_add(1);
-        if did_overflow {
-            // After writing 256 `uint128`s `index_in_chunk` will overflow and we move to the
-            // next chunk.
-            chunk += 1;
-            chunk_base = inner_bytes_pointer(address, chunk);
-            index_in_chunk = 0;
-        } else {
-            index_in_chunk = tmp;
+
+        match index_in_chunk.checked_add(1) {
+            Option::Some(x) => { index_in_chunk = x; },
+            Option::None => {
+                chunk += 1;
+                chunk_base = inner_bytes_pointer(address, chunk);
+                index_in_chunk = 0;
+            },
         }
     }?;
     Result::Ok(())
