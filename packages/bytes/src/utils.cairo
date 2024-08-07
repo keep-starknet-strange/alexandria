@@ -139,6 +139,21 @@ pub fn u8_array_to_u256(arr: Span<u8>) -> u256 {
     u256 { low, high }
 }
 
+pub fn u32s_to_u256(arr: Span<u32>) -> u256 {
+    assert!(arr.len() == 8, "u32s_to_u2562: input must be 8 elements long");
+    let low: u128 = (*arr[7]).into()
+        + (*arr[6]).into() * 0x1_0000_0000
+        + (*arr[5]).into() * 0x1_0000_0000_0000_0000
+        + (*arr[4]).into() * 0x1_0000_0000_0000_0000_0000_0000;
+    let low = low.try_into().expect('u32s_to_u2562:overflow-low');
+    let high = (*arr[3]).into()
+        + (*arr[2]).into() * 0x1_0000_0000
+        + (*arr[1]).into() * 0x1_0000_0000_0000_0000
+        + (*arr[0]).into() * 0x1_0000_0000_0000_0000_0000_0000;
+    let high = high.try_into().expect('u32s_to_u2562:overflow-high');
+    u256 { high, low }
+}
+
 fn u64_array_slice(src: @Array<u64>, mut begin: usize, len: usize) -> Array<u64> {
     let mut slice = array![];
     let end = begin + len;

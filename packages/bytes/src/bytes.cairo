@@ -1,10 +1,11 @@
 use alexandria_bytes::utils::{
-    u128_join, read_sub_u128, u128_split, u128_array_slice, keccak_u128s_be, u8_array_to_u256
+    u128_join, read_sub_u128, u128_split, u128_array_slice, keccak_u128s_be, u8_array_to_u256,
+    u32s_to_u256
 };
-use alexandria_math::sha256::sha256;
 use alexandria_math::{U128BitShift, U256BitShift};
 use core::byte_array::ByteArrayTrait;
 use core::ops::index::IndexView;
+use core::sha256;
 use starknet::ContractAddress;
 /// Bytes is a dynamic array of u128, where each element contains 16 bytes.
 pub const BYTES_PER_ELEMENT: usize = 16;
@@ -552,18 +553,18 @@ impl BytesImpl of BytesTrait {
 
     /// sha256 hash
     fn sha256(self: @Bytes) -> u256 {
-        let mut hash_data: Array<u8> = array![];
         let mut i: usize = 0;
         let mut offset: usize = 0;
+        let mut hash_data_byte_array = "";
         while i != self.size() {
             let (new_offset, hash_data_item) = self.read_u8(offset);
-            hash_data.append(hash_data_item);
+            hash_data_byte_array.append_byte(hash_data_item);
             offset = new_offset;
             i += 1;
         };
 
-        let output: Array<u8> = sha256(hash_data);
-        u8_array_to_u256(output.span())
+        let output = sha256::compute_sha256_byte_array(@hash_data_byte_array);
+        u32s_to_u256(output.span())
     }
 }
 
