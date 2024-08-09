@@ -2,12 +2,7 @@ use core::integer::u512;
 use core::num::traits::{OverflowingAdd, OverflowingSub};
 use core::result::ResultTrait;
 
-#[deprecated(
-    feature: "deprecated-u256_overflow_add",
-    note: "Use `use core::num::traits::OverflowingAdd`.",
-    since: "2.7.0"
-)]
-pub fn u256_overflow_add(lhs: u256, rhs: u256) -> Result<u256, u256> implicits(RangeCheck) {
+fn u256_overflow_add(lhs: u256, rhs: u256) -> Result<u256, u256> implicits(RangeCheck) {
     let (sum, overflow) = lhs.overflowing_add(rhs);
     if overflow {
         Result::Err(sum)
@@ -16,7 +11,7 @@ pub fn u256_overflow_add(lhs: u256, rhs: u256) -> Result<u256, u256> implicits(R
     }
 }
 
-pub fn u256_overflow_sub(lhs: u256, rhs: u256) -> Result<u256, u256> implicits(RangeCheck) {
+fn u256_overflow_sub(lhs: u256, rhs: u256) -> Result<u256, u256> implicits(RangeCheck) {
     let (sum, overflow) = lhs.overflowing_sub(rhs);
     if overflow {
         Result::Err(sum)
