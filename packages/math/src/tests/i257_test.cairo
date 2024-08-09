@@ -7,35 +7,35 @@ fn i257_test_add() {
     let a = I257Impl::new(42, false);
     let b = I257Impl::new(13, false);
     let result = a + b;
-    assert_eq!(result.abs(), 55, "42 + 13 = 55");
+    assert_eq!(result.abs(), 55);
     assert!(!result.is_negative(), "42 + 13 -> positive");
 
     // Test addition of two negative integers
     let a = I257Impl::new(42, true);
     let b = I257Impl::new(13, true);
     let result = a + b;
-    assert_eq!(result.abs(), 55, "-42 - 13 = -55");
+    assert_eq!(result.abs(), 55);
     assert!(result.is_negative(), "-42 - 13 -> negative");
 
     // Test addition of a positive integer and a negative integer with the same magnitude
     let a = I257Impl::new(42, false);
     let b = I257Impl::new(42, true);
     let result = a + b;
-    assert_eq!(result.abs(), 0, "42 - 42 = 0");
+    assert_eq!(result.abs(), 0);
     assert!(!result.is_negative(), "42 - 42 -> positive");
 
     // Test addition of a positive integer and a negative integer with different magnitudes
     let a = I257Impl::new(42, false);
     let b = I257Impl::new(13, true);
     let result = a + b;
-    assert_eq!(result.abs(), 29, "42 - 13 = 29");
+    assert_eq!(result.abs(), 29);
     assert!(!result.is_negative(), "42 - 13 -> positive");
 
     // Test addition of a negative integer and a positive integer with different magnitudes
     let a = I257Impl::new(42, true);
     let b = I257Impl::new(13, false);
     let result = a + b;
-    assert_eq!(result.abs(), 29, "-42 + 13 = -29");
+    assert_eq!(result.abs(), 29);
     assert!(result.is_negative(), "-42 + 13 -> negative");
 }
 
@@ -45,63 +45,63 @@ fn i257_test_sub() {
     let a = I257Impl::new(42, false);
     let b = I257Impl::new(13, false);
     let result = a - b;
-    assert_eq!(result.abs(), 29, "42 - 13 = 29");
+    assert_eq!(result.abs(), 29);
     assert!(!result.is_negative(), "42 - 13 -> positive");
 
     // Test subtraction of two positive integers with larger second
     let a = I257Impl::new(13, false);
     let b = I257Impl::new(42, false);
     let result = a - b;
-    assert_eq!(result.abs(), 29, "13 - 42 = -29");
+    assert_eq!(result.abs(), 29);
     assert!(result.is_negative(), "13 - 42 -> negative");
 
     // Test subtraction of two negative integers with larger first
     let a = I257Impl::new(42, true);
     let b = I257Impl::new(13, true);
     let result = a - b;
-    assert_eq!(result.abs(), 29, "-42 - -13 = 29");
+    assert_eq!(result.abs(), 29);
     assert!(result.is_negative(), "-42 - -13 -> negative");
 
     // Test subtraction of two negative integers with larger second
     let a = I257Impl::new(13, true);
     let b = I257Impl::new(42, true);
     let result = a - b;
-    assert_eq!(result.abs(), 29, "-13 - -42 = 29");
+    assert_eq!(result.abs(), 29);
     assert!(!result.is_negative(), "-13 - -42 -> positive");
 
     // Test subtraction of a positive integer and a negative integer with the same magnitude
     let a = I257Impl::new(42, false);
     let b = I257Impl::new(42, true);
     let result = a - b;
-    assert_eq!(result.abs(), 84, "42 - -42 = 84");
+    assert_eq!(result.abs(), 84);
     assert!(!result.is_negative(), "42 - -42 -> postive");
 
     // Test subtraction of a negative integer and a positive integer with the same magnitude
     let a = I257Impl::new(42, true);
     let b = I257Impl::new(42, false);
     let result = a - b;
-    assert_eq!(result.abs(), 84, "-42 - 42 = -84");
+    assert_eq!(result.abs(), 84);
     assert!(result.is_negative(), "-42 - 42 -> negative");
 
     // Test subtraction of a positive integer and a negative integer with different magnitudes
     let a = I257Impl::new(100, false);
     let b = I257Impl::new(42, true);
     let result = a - b;
-    assert_eq!(result.abs(), 142, "100 - - 42 = 142");
+    assert_eq!(result.abs(), 142);
     assert!(!result.is_negative(), "100 - - 42 -> postive");
 
     // Test subtraction of a negative integer and a positive integer with different magnitudes
     let a = I257Impl::new(42, true);
     let b = I257Impl::new(100, false);
     let result = a - b;
-    assert_eq!(result.abs(), 142, "-42 - 100 = -142");
+    assert_eq!(result.abs(), 142);
     assert!(result.is_negative(), "-42 - 100 -> negative");
 
     // Test subtraction resulting in zero
     let a = I257Impl::new(42, false);
     let b = I257Impl::new(42, false);
     let result = a - b;
-    assert_eq!(result.abs(), 0, "42 - 42 = 0");
+    assert_eq!(result.abs(), 0);
     assert!(!result.is_negative(), "42 - 42 -> positive");
 }
 
@@ -112,28 +112,28 @@ fn i257_test_mul() {
     let a = I257Impl::new(10, false);
     let b = I257Impl::new(5, false);
     let result = a * b;
-    assert_eq!(result.abs(), 50, "10 * 5 = 50");
+    assert_eq!(result.abs(), 50);
     assert!(!result.is_negative(), "10 * 5 -> positive");
 
     // Test multiplication of negative integers
     let a = I257Impl::new(10, true);
     let b = I257Impl::new(5, true);
     let result = a * b;
-    assert_eq!(result.abs(), 50, "-10 * -5 = 50");
+    assert_eq!(result.abs(), 50);
     assert!(!result.is_negative(), "-10 * -5 -> positive");
 
     // Test multiplication of positive and negative integers
     let a = I257Impl::new(10, false);
     let b = I257Impl::new(5, true);
     let result = a * b;
-    assert_eq!(result.abs(), 50, "10 * -5 = -50");
+    assert_eq!(result.abs(), 50);
     assert!(result.is_negative(), "10 * -5 -> negative");
 
     // Test multiplication by zero
     let a = I257Impl::new(10, false);
     let b = I257Impl::new(0, false);
     let result = a * b;
-    assert_eq!(result.abs(), 0, "10 * 0 = 0");
+    assert_eq!(result.abs(), 0);
     assert!(!result.is_negative(), "10 * 0 -> positive");
 }
 
@@ -149,35 +149,35 @@ fn i257_test_div_no_rem() {
     let a = I257Impl::new(10, false);
     let b = I257Impl::new(5, false);
     let result = a / b;
-    assert_eq!(result.abs(), 2, "10 // 5 = 2");
+    assert_eq!(result.abs(), 2);
     assert!(!result.is_negative(), "10 // 5 -> positive");
 
     // Test division of negative integers
     let a = I257Impl::new(10, true);
     let b = I257Impl::new(5, true);
     let result = a / b;
-    assert_eq!(result.abs(), 2, "-10 // -5 = 2");
+    assert_eq!(result.abs(), 2);
     assert!(!result.is_negative(), "-10 // -5 -> positive");
 
     // Test division of positive and negative integers
     let a = I257Impl::new(10, false);
     let b = I257Impl::new(5, true);
     let result = a / b;
-    assert_eq!(result.abs(), 2, "10 // -5 = -2");
+    assert_eq!(result.abs(), 2);
     assert!(result.is_negative(), "10 // -5 -> negative");
 
     // Test division with a = zero
     let a = I257Impl::new(0, false);
     let b = I257Impl::new(10, false);
     let result = a / b;
-    assert_eq!(result.abs(), 0, "0 // 10 = 0");
+    assert_eq!(result.abs(), 0);
     assert!(!result.is_negative(), "0 // 10 -> positive");
 
     // Test division with a = zero
     let a = I257Impl::new(0, false);
     let b = I257Impl::new(10, false);
     let result = a / b;
-    assert_eq!(result.abs(), 0, "0 // 10 = 0");
+    assert_eq!(result.abs(), 0);
     assert!(!result.is_negative(), "0 // 10 -> positive");
 }
 
@@ -313,17 +313,17 @@ fn i257_test_equality() {
 #[test]
 fn i257_test_div_sign_zero() {
     let x = I257Impl::new(0, false) / I257Impl::new(3, true);
-    assert_eq!(x.abs(), 0, "incorrect abs");
+    assert_eq!(x.abs(), 0);
     assert!(!x.is_negative(), "incorrect sign");
 }
 
 #[test]
 fn i257_test_into() {
     let x: i257 = 35.into();
-    assert_eq!(x.abs(), 35, "incorrect into value");
+    assert_eq!(x.abs(), 35);
     assert!(!x.is_negative(), "incorrect into sign");
 
     let y: i257 = 258973.into();
-    assert_eq!(y.abs(), 258973, "incorrect into value");
+    assert_eq!(y.abs(), 258973);
     assert!(!y.is_negative(), "incorrect into sign");
 }

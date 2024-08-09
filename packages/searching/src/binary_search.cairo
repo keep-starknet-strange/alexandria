@@ -27,7 +27,7 @@ pub fn binary_search<T, +Copy<T>, +Drop<T>, +PartialEq<T>, +PartialOrd<T>>(
     }
 }
 
-pub fn binary_search_closest<T, impl TCopy: Copy<T>, impl TDrop: Drop<T>, impl TOr: PartialOrd<T>>(
+pub fn binary_search_closest<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(
     span: Span<T>, val: T
 ) -> Option<u32> {
     // Initial check

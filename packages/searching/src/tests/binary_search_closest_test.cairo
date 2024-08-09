@@ -34,16 +34,16 @@ fn value_not_found() {
 
     // Test with an even length
     let mut span = arr.span();
-    assert!(search(span, 20).is_none(), "value was found");
-    assert!(search(span, 42000).is_none(), "value was found");
-    assert!(search(span, 760).is_none(), "value was found");
+    assert!(search(span, 20).is_none());
+    assert!(search(span, 42000).is_none());
+    assert!(search(span, 760).is_none());
 
     // Odd length
     arr.append(700);
     span = arr.span();
-    assert!(search(span, 20).is_none(), "value was found");
-    assert!(search(span, 42000).is_none(), "value was found");
-    assert!(search(span, 760).is_none(), "value was found");
+    assert!(search(span, 20).is_none());
+    assert!(search(span, 42000).is_none());
+    assert!(search(span, 760).is_none());
 }
 
 #[test]
@@ -74,24 +74,24 @@ fn zero_length_span() {
 #[available_gas(1_000_000)]
 fn length_two_span() {
     let span: Span<u128> = array![100, 200].span();
-    assert!(search(span, 50).is_none(), "value was found");
+    assert!(search(span, 50).is_none());
     assert_eq!(search(span, 100).unwrap(), 0);
     assert_eq!(search(span, 150).unwrap(), 0);
     assert_eq!(search(span, 200).unwrap(), 1);
-    assert!(search(span, 250).is_none(), "value was found");
+    assert!(search(span, 250).is_none());
 }
 
 #[test]
 #[available_gas(1_000_000)]
 fn length_three_span() {
     let span: Span<u128> = array![100, 200, 300].span();
-    assert!(search(span, 50).is_none(), "value was found");
+    assert!(search(span, 50).is_none());
     assert_eq!(search(span, 100).unwrap(), 0);
     assert_eq!(search(span, 150).unwrap(), 0);
     assert_eq!(search(span, 200).unwrap(), 1);
     assert_eq!(search(span, 250).unwrap(), 1);
     assert_eq!(search(span, 300).unwrap(), 2);
-    assert!(search(span, 350).is_none(), "value was found");
+    assert!(search(span, 350).is_none());
 }
 
 #[test]
@@ -127,7 +127,7 @@ fn all_values() {
     let mut span = arr.span();
 
     // Test with an even length
-    assert!(search(span, 50).is_none(), "value was found");
+    assert!(search(span, 50).is_none());
     assert_eq!(search(span, 100).unwrap(), 0);
     assert_eq!(search(span, 150).unwrap(), 0);
     assert_eq!(search(span, 200).unwrap(), 1);
@@ -139,12 +139,12 @@ fn all_values() {
     assert_eq!(search(span, 500).unwrap(), 4);
     assert_eq!(search(span, 550).unwrap(), 4);
     assert_eq!(search(span, 600).unwrap(), 5);
-    assert!(search(span, 650).is_none(), "value was found");
+    assert!(search(span, 650).is_none());
 
     // Odd length
     arr.append(700);
     span = arr.span();
-    assert!(search(span, 50).is_none(), "value was found");
+    assert!(search(span, 50).is_none());
     assert_eq!(search(span, 100).unwrap(), 0);
     assert_eq!(search(span, 150).unwrap(), 0);
     assert_eq!(search(span, 200).unwrap(), 1);
@@ -158,5 +158,5 @@ fn all_values() {
     assert_eq!(search(span, 600).unwrap(), 5);
     assert_eq!(search(span, 650).unwrap(), 5);
     assert_eq!(search(span, 700).unwrap(), 6);
-    assert!(search(span, 750).is_none(), "value was found");
+    assert!(search(span, 750).is_none());
 }

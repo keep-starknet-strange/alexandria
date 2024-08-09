@@ -3,7 +3,8 @@ use alexandria_math::fast_root::fast_sqrt;
 /// Check if the given number is prime
 /// # Arguments
 /// * `n` - The given number
-/// * `iter` - The number of iterations to run when sqrting the number, the higher the more accurate (usually 10 is enough)
+/// * `iter` - The number of iterations to run when sqrting the number, the higher the more accurate
+/// (usually 10 is enough)
 /// # Returns
 /// * `bool` - if the given number is prime
 pub fn is_prime(n: u128, iter: usize) -> bool {

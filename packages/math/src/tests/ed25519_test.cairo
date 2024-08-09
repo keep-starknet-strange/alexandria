@@ -1,6 +1,7 @@
 use alexandria_math::ed25519::{verify_signature, Point, PointOperations, p_non_zero};
 
-// Public keys and signatures were generated with JS library Noble (https://github.com/paulmillr/noble-ed25519)
+// Public keys and signatures were generated with JS library Noble
+// (https://github.com/paulmillr/noble-ed25519)
 
 #[test]
 #[available_gas(3200000000)]
@@ -13,7 +14,7 @@ fn verify_signature_test_0() {
     let s_sign: u256 = 0x6a9473f6492676e988709498b228df873fe3cfdf59255b1a9e1add4f87ec610b;
     let signature = array![r_sign, s_sign];
 
-    assert!(verify_signature(msg, signature.span(), pub_key), "Invalid signature");
+    assert!(verify_signature(msg, signature.span(), pub_key));
 }
 
 #[test]
@@ -27,7 +28,7 @@ fn verify_signature_test_1() {
     let s_sign: u256 = 0x7d1308162466f8e6097f8afa310c074796d13459d4b53cdecf80ca7413410000;
     let signature = array![r_sign, s_sign];
 
-    assert!(verify_signature(msg, signature.span(), pub_key), "Invalid signature");
+    assert!(verify_signature(msg, signature.span(), pub_key));
 }
 
 #[test]
@@ -41,7 +42,7 @@ fn verify_signature_test_2() {
     let s_sign: u256 = 0xcc2e419abf32f91bc20419ba0905ad52923c7c110d14623b62300711b8f9370c;
     let signature = array![r_sign, s_sign];
 
-    assert!(verify_signature(msg, signature.span(), pub_key), "Invalid signature");
+    assert!(verify_signature(msg, signature.span(), pub_key));
 }
 
 #[test]
@@ -55,7 +56,7 @@ fn verify_signature_test_3() {
     let s_sign: u256 = 0x68e015fa8775659d1f40a01e1f69b8af4409046f4dc8ff02cdb04fdc3585eb0d;
     let signature = array![r_sign, s_sign];
 
-    assert!(verify_signature(msg, signature.span(), pub_key), "Invalid signature");
+    assert!(verify_signature(msg, signature.span(), pub_key));
 }
 
 #[test]
@@ -69,7 +70,7 @@ fn verify_signature_invalid() {
     let s_sign: u256 = 0x68e015fa8775659d1f40a01e1f69b8af4409046f4dc8ff02cdb04fdc3585eb01;
     let signature = array![r_sign, s_sign];
 
-    assert!(!verify_signature(msg, signature.span(), pub_key), "Signature should be invalid");
+    assert!(!verify_signature(msg, signature.span(), pub_key));
 }
 
 #[test]
@@ -83,8 +84,8 @@ fn verify_signature_invalid_length() {
     let s_sign: u256 = 0x68e015fa8775659d1f40a01e1f69b8af4409046f4dc8ff02cdb04fdc3585eb0d;
     let signature = array![r_sign, s_sign, s_sign];
 
-    assert!(!verify_signature(msg, signature.span(), pub_key), "Invalid signature");
-    assert!(!verify_signature(msg, array![r_sign].span(), pub_key), "Invalid signature");
+    assert!(!verify_signature(msg, signature.span(), pub_key));
+    assert!(!verify_signature(msg, array![r_sign].span(), pub_key));
 }
 
 #[test]
@@ -101,5 +102,5 @@ fn affine_point_op() {
         x: 34426924428514608760437100447421064591311588584549077394333265447466212246087,
         y: 29872771498517479181395568267318965384440757492476580330810382845026939417492
     };
-    assert(res == p1.add(p2, p_non_zero), 'incorrect point addition');
+    assert!(res == p1.add(p2, p_non_zero));
 }

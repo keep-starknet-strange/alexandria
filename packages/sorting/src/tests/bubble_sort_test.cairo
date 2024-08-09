@@ -8,7 +8,7 @@ fn bubble_sort_test() {
 
     let sorted = BubbleSort::sort(data);
 
-    assert_eq!(sorted.span(), correct.span(), "invalid result");
+    assert_eq!(sorted.span(), correct.span());
 }
 
 
@@ -20,7 +20,7 @@ fn bubble_sort_test_empty() {
 
     let sorted = BubbleSort::sort(data);
 
-    assert_eq!(sorted.span(), correct.span(), "invalid result");
+    assert_eq!(sorted.span(), correct.span());
 }
 
 #[test]
@@ -31,7 +31,7 @@ fn bubble_sort_test_one_element() {
 
     let sorted = BubbleSort::sort(data);
 
-    assert_eq!(sorted.span(), correct.span(), "invalid result");
+    assert_eq!(sorted.span(), correct.span());
 }
 
 #[test]
@@ -42,7 +42,7 @@ fn bubble_sort_test_pre_sorted() {
 
     let sorted = BubbleSort::sort(data);
 
-    assert_eq!(sorted.span(), correct.span(), "invalid result");
+    assert_eq!(sorted.span(), correct.span());
 }
 
 #[test]
@@ -53,7 +53,7 @@ fn bubble_sort_test_pre_sorted_decreasing() {
 
     let sorted = BubbleSort::sort(data);
 
-    assert_eq!(sorted.span(), correct.span(), "invalid result");
+    assert_eq!(sorted.span(), correct.span());
 }
 
 #[test]
@@ -64,7 +64,7 @@ fn bubble_sort_test_pre_sorted_2_same_values() {
 
     let sorted = BubbleSort::sort(data);
 
-    assert_eq!(sorted.span(), correct.span(), "invalid result");
+    assert_eq!(sorted.span(), correct.span());
 }
 
 #[test]
@@ -75,5 +75,5 @@ fn bubble_sort_test_2_same_values() {
 
     let sorted = BubbleSort::sort(data);
 
-    assert_eq!(sorted.span(), correct.span(), "invalid result");
+    assert_eq!(sorted.span(), correct.span());
 }

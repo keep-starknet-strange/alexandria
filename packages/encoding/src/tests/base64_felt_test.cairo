@@ -26,7 +26,7 @@ fn base64encode_empty_test() {
     let input = 0;
     let result = Base64FeltEncoder::encode(input);
     let check = Base64Encoder::encode(bytes_be(input));
-    assert_eq!(result, check, "Expected equal");
+    assert_eq!(result, check);
 }
 
 #[test]
@@ -35,7 +35,7 @@ fn base64encode_simple_test() {
     let input = 'a';
     let result = Base64FeltEncoder::encode(input);
     let check = Base64Encoder::encode(bytes_be(input));
-    assert_eq!(result, check, "Expected equal");
+    assert_eq!(result, check);
 }
 
 #[test]
@@ -44,7 +44,7 @@ fn base64encode_hello_world_test() {
     let input = 'hello world';
     let result = Base64FeltEncoder::encode(input);
     let check = Base64Encoder::encode(bytes_be(input));
-    assert_eq!(result, check, "Expected equal");
+    assert_eq!(result, check);
 }
 
 
@@ -55,7 +55,7 @@ fn base64encode_with_plus_and_slash() {
 
     let result = Base64FeltEncoder::encode(input);
     let check = Base64Encoder::encode(bytes_be(input));
-    assert_eq!(result, check, "Expected equal");
+    assert_eq!(result, check);
 }
 
 #[test]
@@ -65,5 +65,5 @@ fn base64urlencode_with_plus_and_slash() {
 
     let result = Base64UrlFeltEncoder::encode(input);
     let check = Base64UrlEncoder::encode(bytes_be(input));
-    assert_eq!(result, check, "Expected equal");
+    assert_eq!(result, check);
 }

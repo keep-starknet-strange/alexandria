@@ -14,15 +14,14 @@ fn compare_bytes(actual: @Bytes, expected: @Bytes) -> bool {
         return false;
     }
     let mut i: usize = 0;
-    while i < actual
-        .size() {
-            let (_, actual_val) = actual.read_u8(i);
-            let (_, expected_val) = expected.read_u8(i);
-            if actual_val != expected_val {
-                break;
-            }
-            i += 1;
-        };
+    while i < actual.size() {
+        let (_, actual_val) = actual.read_u8(i);
+        let (_, expected_val) = expected.read_u8(i);
+        if actual_val != expected_val {
+            break;
+        }
+        i += 1;
+    };
     if i < actual.size() {
         return false;
     }
@@ -89,7 +88,7 @@ fn encode_test() {
         .encode(sba)
         .encode(address)
         .encode(eth_address);
-    assert_eq!(encoded, expected, "Encode uints failed");
+    assert_eq!(encoded, expected);
 }
 
 #[test]
@@ -135,7 +134,7 @@ fn encode_packed_test() {
         .encode_packed(address)
         .encode_packed(eth_address)
         .encode_packed(bytesArray);
-    assert_eq!(encoded, expected, "Encode packed uints failed");
+    assert_eq!(encoded, expected);
 }
 
 #[test]
@@ -148,7 +147,7 @@ fn encoded_as_test() {
         .encode_as(3, 0x101112_u128)
         .encode_as(21, 0xaabbcc_felt252)
         .encode_as(5, 0xa0b1c2_u256);
-    assert_eq!(encoded, expected, "Encode as failed");
+    assert_eq!(encoded, expected);
 
     let sba: ByteArray = SolBytesTrait::bytes10(0x0000a0b1c2c3c4c5c6c8).into();
     let bytes_31: bytes31 = 0xaabbcc.try_into().unwrap();
@@ -157,16 +156,16 @@ fn encoded_as_test() {
         .encode_as(3, SolBytesTrait::bytes10(0x10111213141516171910))
         .encode_as(21, bytes_31)
         .encode_as(5, sba);
-    assert_eq!(encoded, expected, "Encode as from bytes failed");
+    assert_eq!(encoded, expected);
 }
 
 #[test]
 fn selector_test() {
-    // selector for : transfer(address,uint256) 
+    // selector for : transfer(address,uint256)
     let expected: Bytes = BytesTrait::new(4, array![0xa9059cbb000000000000000000000000]);
     let mut encoded: Bytes = BytesTrait::new_empty();
     encoded = encoded.encode_selector(0xa9059cbb_u32);
-    assert_eq!(encoded, expected, "Encode selector failed");
+    assert_eq!(encoded, expected);
 
     // encode call : transfer(0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF, 10000)
     let expected: Bytes = BytesTrait::new(
@@ -182,7 +181,7 @@ fn selector_test() {
     let mut encoded: Bytes = BytesTrait::new_empty();
     let eth_address: EthAddress = 0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF_u256.into();
     encoded = encoded.encode_selector(0xa9059cbb_u32).encode(eth_address).encode(10000_u256);
-    assert_eq!(encoded, expected, "Encode selector full failed");
+    assert_eq!(encoded, expected);
 }
 
 #[test]
@@ -219,20 +218,20 @@ fn decode_test() {
 
     let mut offset = 0;
     let decoded: u16 = encoded.decode(ref offset);
-    assert_eq!(decoded, 0xa0a1, "Decode uint16 failed");
-    assert_eq!(offset, 32, "Offset after decode uint16 failed");
+    assert_eq!(decoded, 0xa0a1);
+    assert_eq!(offset, 32);
 
     let decoded: u32 = encoded.decode(ref offset);
-    assert_eq!(decoded, 0xa2a3a4a5, "Decode uint32 failed");
-    assert_eq!(offset, 64, "Offset after decode uint32 failed");
+    assert_eq!(decoded, 0xa2a3a4a5);
+    assert_eq!(offset, 64);
 
     let decoded: u8 = encoded.decode(ref offset);
-    assert_eq!(decoded, 0xa6, "Decode uint8 failed");
-    assert_eq!(offset, 96, "Offset after decode uint8 failed");
+    assert_eq!(decoded, 0xa6);
+    assert_eq!(offset, 96);
 
     let decoded: u128 = encoded.decode(ref offset);
-    assert_eq!(decoded, 0xa7a8a9aaabacadaeafb0b1b2b3b4b5b6, "Decode uint128 failed");
-    assert_eq!(offset, 128, "Offset after decode uint128 failed");
+    assert_eq!(decoded, 0xa7a8a9aaabacadaeafb0b1b2b3b4b5b6);
+    assert_eq!(offset, 128);
 
     let decoded: u256 = encoded.decode(ref offset);
     assert_eq!(
@@ -240,45 +239,45 @@ fn decode_test() {
         0xabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd_u256,
         "Decode uint256 failed"
     );
-    assert_eq!(offset, 160, "Offset after decode uint256 failed");
+    assert_eq!(offset, 160);
 
     let decoded: u64 = encoded.decode(ref offset);
-    assert_eq!(decoded, 0xb7b8b9babbbcbdbe, "Decode uint64 failed");
-    assert_eq!(offset, 192, "Offset after decode uint64 failed");
+    assert_eq!(decoded, 0xb7b8b9babbbcbdbe);
+    assert_eq!(offset, 192);
 
     let decoded: Bytes = SolBytesTrait::<Bytes>::bytes5(encoded.decode(ref offset));
-    assert_eq!(decoded, SolBytesTrait::bytes5(0xa0a1a2a3), "Decode Bytes failed");
-    assert_eq!(offset, 224, "Offset after decode Bytes failed");
+    assert_eq!(decoded, SolBytesTrait::bytes5(0xa0a1a2a3));
+    assert_eq!(offset, 224);
 
     let decoded: ByteArray = encoded.decode(ref offset);
     let expected: ByteArray = SolBytesTrait::bytes32(
         0xa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3000000000000000000000000_u256
     )
         .into();
-    assert_eq!(decoded, expected, "Decode ByteArray failed");
-    assert_eq!(offset, 256, "Offset after decode ByteArray failed");
+    assert_eq!(decoded, expected);
+    assert_eq!(offset, 256);
 
     let decoded: bytes31 = encoded.decode(ref offset);
     let bytes_31: bytes31 = 0xa0aaab00000000000000000000000000ac.try_into().unwrap();
     assert!(decoded == bytes_31, "Decode byte31 failed");
-    assert_eq!(offset, 288, "Offset after decode byte31 failed");
+    assert_eq!(offset, 288);
 
     let decoded: felt252 = encoded.decode(ref offset);
-    assert_eq!(decoded, 0x1234_felt252, "Decode felt252 failed");
-    assert_eq!(offset, 320, "Offset after decode felt252 failed");
+    assert_eq!(decoded, 0x1234_felt252);
+    assert_eq!(offset, 320);
 
     let expected: ContractAddress =
         0xa0a1a2a3000000000000000000000000000000000000000000000000001234_felt252
         .try_into()
         .expect('Couldn\'t convert to address');
     let decoded: ContractAddress = encoded.decode(ref offset);
-    assert_eq!(decoded, expected, "Decode ContractAddress failed");
-    assert_eq!(offset, 352, "Offset after decode ContractAddress failed");
+    assert_eq!(decoded, expected);
+    assert_eq!(offset, 352);
 
     let expected: EthAddress = 0xDeadbeefDeaDbeefdEAdbeefdEadbEEFdeadbeEF_u256.into();
     let decoded: EthAddress = encoded.decode(ref offset);
-    assert_eq!(decoded, expected, "Decode EthAddress failed");
-    assert_eq!(offset, 384, "Offset after decode EthAddress failed");
+    assert_eq!(decoded, expected);
+    assert_eq!(offset, 384);
 }
 
 #[test]
@@ -290,7 +289,7 @@ fn sol_bytes_test() {
     let mut bytesValAcc: Bytes = BytesTrait::new_empty();
     bytesValAcc.concat(@bytesVal5);
     bytesValAcc.concat(@bytesVal9);
-    assert_eq!(expectedVal14, bytesValAcc, "Concat bytes ints failed");
+    assert_eq!(expectedVal14, bytesValAcc);
 
     // Test bytesX with integer types needing `into` calls
     let expectedVal21: Bytes = SolBytesTrait::bytes21(
@@ -301,7 +300,7 @@ fn sol_bytes_test() {
     let mut bytesValAcc: Bytes = BytesTrait::new_empty();
     bytesValAcc.concat(@bytesVal18);
     bytesValAcc.concat(@bytesVal3);
-    assert_eq!(expectedVal21, bytesValAcc, "Concat bytes ints into failed");
+    assert_eq!(expectedVal21, bytesValAcc);
 
     // Test bytesX with Bytes types
     let expectedVal25: Bytes = SolBytesTrait::bytes25(
@@ -318,5 +317,5 @@ fn sol_bytes_test() {
     let mut bytesValAcc: Bytes = BytesTrait::new_empty();
     bytesValAcc.concat(@bytesVal6);
     bytesValAcc.concat(@bytesVal19);
-    assert_eq!(expectedVal25, bytesValAcc, "Concat bytes failed");
+    assert_eq!(expectedVal25, bytesValAcc);
 }

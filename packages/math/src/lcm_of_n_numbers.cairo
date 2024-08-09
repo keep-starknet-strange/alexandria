@@ -19,10 +19,9 @@ pub fn lcm<T, +Into<T, u128>, +Into<u128, T>, +Mul<T>, +Div<T>, +Copy<T>, +Drop<
         return Result::Err(LCMError::EmptyInput);
     }
     let mut a = *n.pop_front().unwrap();
-    while let Option::Some(b) = n
-        .pop_front() {
-            let gcd: T = gcd_two_numbers(a.into(), (*b).into()).into();
-            a = (a * *b) / gcd;
-        };
+    for b in n {
+        let gcd: T = gcd_two_numbers(a.into(), (*b).into()).into();
+        a = (a * *b) / gcd;
+    };
     Result::Ok(a)
 }

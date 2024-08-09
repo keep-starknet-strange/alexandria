@@ -1,4 +1,6 @@
 use core::num::traits::Zero;
+use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign, RemAssign};
+
 // ====================== INT 257 ======================
 
 // i257 represents a 129-bit integer.
@@ -41,13 +43,13 @@ impl i257Add of Add<i257> {
     fn add(lhs: i257, rhs: i257) -> i257 {
         i257_assert_no_negative_zero(lhs);
         i257_assert_no_negative_zero(rhs);
-        // If both integers have the same sign, 
+        // If both integers have the same sign,
         // the sum of their absolute values can be returned.
         if lhs.is_negative == rhs.is_negative {
             let sum = lhs.abs + rhs.abs;
             I257Impl::new(sum, lhs.is_negative)
         } else {
-            // If the integers have different signs, 
+            // If the integers have different signs,
             // the larger absolute value is subtracted from the smaller one.
             let (larger, smaller) = if lhs.abs >= rhs.abs {
                 (lhs, rhs)
@@ -61,10 +63,10 @@ impl i257Add of Add<i257> {
 }
 
 // Implements the AddEq trait for i257.
-impl i257AddEq of AddEq<i257> {
+impl i257AddEq of AddAssign<i257, i257> {
     #[inline(always)]
-    fn add_eq(ref self: i257, other: i257) {
-        self = Add::add(self, other);
+    fn add_assign(ref self: i257, rhs: i257) {
+        self = Add::add(self, rhs);
     }
 }
 
@@ -78,17 +80,18 @@ impl i257Sub of Sub<i257> {
             return lhs;
         }
 
-        // The subtraction of `lhs` to `rhs` is achieved by negating `rhs` sign and adding it to `lhs`.
+        // The subtraction of `lhs` to `rhs` is achieved by negating `rhs` sign and adding it to
+        // `lhs`.
         let neg_b = I257Impl::new(rhs.abs, !rhs.is_negative);
         lhs + neg_b
     }
 }
 
 // Implements the SubEq trait for i257.
-impl i257SubEq of SubEq<i257> {
+impl i257SubEq of SubAssign<i257, i257> {
     #[inline(always)]
-    fn sub_eq(ref self: i257, other: i257) {
-        self = Sub::sub(self, other);
+    fn sub_assign(ref self: i257, rhs: i257) {
+        self = Sub::sub(self, rhs);
     }
 }
 
@@ -107,10 +110,10 @@ impl i257Mul of Mul<i257> {
 }
 
 // Implements the MulEq trait for i257.
-impl i257MulEq of MulEq<i257> {
+impl i257MulEq of MulAssign<i257, i257> {
     #[inline(always)]
-    fn mul_eq(ref self: i257, other: i257) {
-        self = Mul::mul(self, other);
+    fn mul_assign(ref self: i257, rhs: i257) {
+        self = Mul::mul(self, rhs);
     }
 }
 
@@ -139,7 +142,8 @@ fn i257_div(lhs: i257, rhs: i257) -> i257 {
         return I257Impl::new(lhs.abs / rhs.abs, is_negative);
     }
 
-    // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point over.
+    // If the quotient is not an integer, multiply the dividend by 10 to move the decimal point
+    // over.
     let quotient = (lhs.abs * 10) / rhs.abs;
     let last_digit = quotient % 10;
 
@@ -159,10 +163,10 @@ impl i257Div of Div<i257> {
 }
 
 // Implements the DivEq trait for i257.
-impl i257DivEq of DivEq<i257> {
+impl i257DivEq of DivAssign<i257, i257> {
     #[inline(always)]
-    fn div_eq(ref self: i257, other: i257) {
-        self = Div::div(self, other);
+    fn div_assign(ref self: i257, rhs: i257) {
+        self = Div::div(self, rhs);
     }
 }
 
@@ -187,10 +191,10 @@ impl i257Rem of Rem<i257> {
 }
 
 // Implements the RemEq trait for i257.
-impl i257RemEq of RemEq<i257> {
+impl i257RemEq of RemAssign<i257, i257> {
     #[inline(always)]
-    fn rem_eq(ref self: i257, other: i257) {
-        self = Rem::rem(self, other);
+    fn rem_assign(ref self: i257, rhs: i257) {
+        self = Rem::rem(self, rhs);
     }
 }
 
@@ -217,7 +221,7 @@ impl i257PartialEq of PartialEq<i257> {
     }
 
     fn ne(lhs: @i257, rhs: @i257) -> bool {
-        !i257PartialEq::eq(lhs, rhs)
+        !Self::eq(lhs, rhs)
     }
 }
 
@@ -226,14 +230,14 @@ impl i257PartialEq of PartialEq<i257> {
 // Ensure that neither `lhs` nor `rhs` is negative zero before calling.
 impl i257PartialOrd of PartialOrd<i257> {
     fn le(lhs: i257, rhs: i257) -> bool {
-        !i257PartialOrd::gt(lhs, rhs)
+        !Self::gt(lhs, rhs)
     }
     fn ge(lhs: i257, rhs: i257) -> bool {
-        i257PartialOrd::gt(lhs, rhs) || lhs == rhs
+        Self::gt(lhs, rhs) || lhs == rhs
     }
 
     fn lt(lhs: i257, rhs: i257) -> bool {
-        !i257PartialOrd::gt(lhs, rhs) && lhs != rhs
+        !Self::gt(lhs, rhs) && lhs != rhs
     }
 
     fn gt(lhs: i257, rhs: i257) -> bool {

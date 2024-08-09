@@ -1,7 +1,5 @@
-use core::integer::{
-    u512, u512_safe_div_rem_by_u256, u256_wide_mul, u128_wide_mul, u128_overflowing_add,
-    u128_wrapping_add
-};
+use core::integer::{u512, u512_safe_div_rem_by_u256};
+use core::num::traits::{WrappingAdd, OverflowingAdd, OverflowingSub, WideMul};
 use core::option::OptionTrait;
 use core::traits::TryInto;
 
@@ -17,9 +15,10 @@ pub fn add_mod(a: u256, b: u256, modulo: u256) -> u256 {
     (a + b) % modulo
 }
 
-/// Function that return the modular multiplicative inverse. Disclaimer: this function should only be used with a prime modulo.
+/// Function that return the modular multiplicative inverse. Disclaimer: this function should only
+/// be used with a prime modulo.
 /// # Arguments
-/// * `b` - Number of which to find the multiplicative inverse of. 
+/// * `b` - Number of which to find the multiplicative inverse of.
 /// * `modulo` - modulo.
 /// # Returns
 /// * `u256` - modular multiplicative inverse
@@ -51,10 +50,10 @@ pub fn sub_mod(mut a: u256, mut b: u256, modulo: u256) -> u256 {
     // reduce values
     a = a % modulo;
     b = b % modulo;
-    let (diff, overflow) = core::integer::u256_overflow_sub(a, b);
+    let (diff, overflow) = a.overflowing_sub(b);
     if overflow {
         // Overflow back with add modulo
-        let (diff, _) = core::integer::u256_overflowing_add(diff, modulo);
+        let (diff, _) = diff.overflowing_add(modulo);
         diff
     } else {
         diff
@@ -70,37 +69,39 @@ pub fn sub_mod(mut a: u256, mut b: u256, modulo: u256) -> u256 {
 /// * `u256` - result of modular multiplication
 #[inline(always)]
 pub fn mult_mod(a: u256, b: u256, mod_non_zero: NonZero<u256>) -> u256 {
-    let mult: u512 = u256_wide_mul(a, b);
+    let mult: u512 = WideMul::wide_mul(a, b);
     let (_, rem_u256) = u512_safe_div_rem_by_u256(mult, mod_non_zero);
     rem_u256
 }
 
 #[inline(always)]
 // core::integer::u128_add_with_carry
-fn u128_add_with_carry(a: u128, b: u128) -> (u128, u128) nopanic {
-    match u128_overflowing_add(a, b) {
-        Result::Ok(v) => (v, 0),
-        Result::Err(v) => (v, 1),
+fn u128_add_with_carry(a: u128, b: u128) -> (u128, u128) {
+    let (v, did_overflow) = a.overflowing_add(b);
+    if did_overflow {
+        (v, 1)
+    } else {
+        (v, 0)
     }
 }
 
-pub fn u256_wide_sqr(a: u256) -> u512 nopanic {
-    let (limb1, limb0) = u128_wide_mul(a.low, a.low);
-    let (limb2, limb1_part) = u128_wide_mul(a.low, a.high);
+pub fn u256_wide_sqr(a: u256) -> u512 {
+    let u256 { high: limb1, low: limb0, } = WideMul::wide_mul(a.low, a.low);
+    let u256 { high: limb2, low: limb1_part } = WideMul::wide_mul(a.low, a.high);
     let (limb1, limb1_overflow0) = u128_add_with_carry(limb1, limb1_part);
     let (limb1, limb1_overflow1) = u128_add_with_carry(limb1, limb1_part);
     let (limb2, limb2_overflow) = u128_add_with_carry(limb2, limb2);
-    let (limb3, limb2_part) = u128_wide_mul(a.high, a.high);
+    let u256 { high: limb3, low: limb2_part } = WideMul::wide_mul(a.high, a.high);
     // No overflow since no limb4.
-    let limb3 = u128_wrapping_add(limb3, limb2_overflow);
+    let limb3 = limb3.wrapping_add(limb2_overflow);
     let (limb2, limb2_overflow) = u128_add_with_carry(limb2, limb2_part);
     // No overflow since no limb4.
-    let limb3 = u128_wrapping_add(limb3, limb2_overflow);
+    let limb3 = limb3.wrapping_add(limb2_overflow);
     // No overflow possible in this addition since both operands are 0/1.
-    let limb1_overflow = u128_wrapping_add(limb1_overflow0, limb1_overflow1);
+    let limb1_overflow = limb1_overflow0.wrapping_add(limb1_overflow1);
     let (limb2, limb2_overflow) = u128_add_with_carry(limb2, limb1_overflow);
     // No overflow since no limb4.
-    let limb3 = u128_wrapping_add(limb3, limb2_overflow);
+    let limb3 = limb3.wrapping_add(limb2_overflow);
     u512 { limb0, limb1, limb2, limb3 }
 }
 

@@ -1,6 +1,6 @@
 /// Provides functions to perform calculations with Wad and Ray units
-/// @dev Provides mul and div function for wads (decimal numbers with 18 digits of precision) and rays (decimal numbers
-/// with 27 digits of precision)
+/// @dev Provides mul and div function for wads (decimal numbers with 18 digits of precision) and
+/// rays (decimal numbers with 27 digits of precision)
 /// Operations are rounded. If a value is >=.5, will be rounded up, otherwise rounded down.
 /// https://github.com/aave/aave-v3-core/blob/master/contracts/protocol/libraries/math/WadRayMath.sol
 

@@ -6,11 +6,8 @@ fn test_span_u8_into_byte_array() {
     let array: Array<u8> = array![1, 2, 3, 4, 5, 6, 7, 8,];
     let ba: ByteArray = array.span().into();
     let mut index = 0_usize;
-    loop {
-        match ba.at(index) {
-            Option::Some(byte) => assert(*(array[index]) == byte, 'should equal'),
-            Option::None => { break; }
-        };
+    while let Option::Some(byte) = ba.at(index) {
+        assert!(*(array[index]) == byte);
         index += 1;
     };
 }

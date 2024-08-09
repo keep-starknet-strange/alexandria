@@ -53,7 +53,7 @@ fn test_reverse_bytes_u256() {
     let t2: u128 = 0x202122232425262728292a2b2c2d2e2f;
     let t = u256 { low: t1, high: t2 };
     let rev = t.reverse_bytes();
-    assert!(rev == u256 { low: t2.reverse_bytes(), high: t1.reverse_bytes() }, "not equal");
+    assert!(rev == u256 { low: t2.reverse_bytes(), high: t1.reverse_bytes() });
     assert!(rev.reverse_bytes() == t, "not equal");
 }
 

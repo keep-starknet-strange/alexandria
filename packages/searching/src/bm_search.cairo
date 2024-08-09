@@ -67,7 +67,8 @@ pub fn bm_search(text: @ByteArray, pattern: @ByteArray) -> Array<usize> {
             let current_char = text.at(shift + pattern_index - 1).unwrap();
             let index = char_dict.get(current_char.into());
 
-            // Calculate the next shift value based on the last occurrence of the current character in the pattern
+            // Calculate the next shift value based on the last occurrence of the current character
+            // in the pattern
             if pattern_index <= (index + 1) {
                 shift += 1;
             } else {

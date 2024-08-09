@@ -1,5 +1,7 @@
-use core::integer::u32_wrapping_add;
 use core::nullable::NullableImpl;
+use core::num::traits::WrappingAdd;
+use core::ops::index::Index;
+
 //! Vec implementation.
 //!
 //! # Example
@@ -40,7 +42,7 @@ pub trait VecTrait<V, T> {
     /// Parameters
     /// * self The vec instance.
     /// * value The value to push onto the vec.
-    fn push(ref self: V, value: T) -> ();
+    fn push(ref self: V, value: T);
 
     /// Sets the item at the given index to the given value.
     /// Panics if the index is out of bounds.
@@ -58,7 +60,9 @@ pub trait VecTrait<V, T> {
     fn len(self: @V) -> usize;
 }
 
-impl VecIndex<V, T, impl VecTraitImpl: VecTrait<V, T>> of Index<V, usize, T> {
+impl VecIndex<V, T, +VecTrait<V, T>> of Index<V, usize> {
+    type Target = T;
+
     #[inline(always)]
     fn index(ref self: V, index: usize) -> T {
         self.at(index)
@@ -97,9 +101,9 @@ impl Felt252VecImpl<T, +Drop<T>, +Copy<T>, +Felt252DictValue<T>> of VecTrait<Fel
         item
     }
 
-    fn push(ref self: Felt252Vec<T>, value: T) -> () {
+    fn push(ref self: Felt252Vec<T>, value: T) {
         self.items.insert(self.len.into(), value);
-        self.len = u32_wrapping_add(self.len, 1_usize);
+        self.len = self.len.wrapping_add(1);
     }
 
     fn set(ref self: Felt252Vec<T>, index: usize, value: T) {
@@ -141,9 +145,9 @@ impl NullableVecImpl<T, +Drop<T>, +Copy<T>> of VecTrait<NullableVec<T>, T> {
         self.items.get(index.into()).deref()
     }
 
-    fn push(ref self: NullableVec<T>, value: T) -> () {
+    fn push(ref self: NullableVec<T>, value: T) {
         self.items.insert(self.len.into(), NullableImpl::new(value));
-        self.len = u32_wrapping_add(self.len, 1_usize);
+        self.len = self.len.wrapping_add(1);
     }
 
     fn set(ref self: NullableVec<T>, index: usize, value: T) {

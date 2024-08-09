@@ -1,4 +1,5 @@
-use core::integer::{u64_wrapping_add, BoundedInt};
+use core::num::traits::Bounded;
+use core::num::traits::WrappingAdd;
 use core::traits::{BitAnd, BitXor, BitOr};
 use super::BitShift;
 
@@ -75,13 +76,13 @@ impl WordBitOr of BitOr<Word64> {
 
 impl WordBitNot of BitNot<Word64> {
     fn bitnot(a: Word64) -> Word64 {
-        Word64 { data: BoundedInt::max() - a.data }
+        Word64 { data: Bounded::MAX - a.data }
     }
 }
 
 impl WordAdd of Add<Word64> {
     fn add(lhs: Word64, rhs: Word64) -> Word64 {
-        Word64 { data: u64_wrapping_add(lhs.data, rhs.data) }
+        Word64 { data: lhs.data.wrapping_add(rhs.data) }
     }
 }
 
@@ -204,13 +205,18 @@ pub fn fpow(mut base: u128, mut power: u128) -> u128 {
     result
 }
 
+const two_squarings: [
+    u64
+    ; 6] = [
+    TWO_POW_1, TWO_POW_2, TWO_POW_4, TWO_POW_8, TWO_POW_16, TWO_POW_32
+];
 // Uses cache for faster powers of 2 in a u128
 // Uses TWO_POW_* constants
 // Generic T to use with both u128 and u64
 pub fn two_pow<T, +DivRem<T>, +Mul<T>, +Into<u64, T>, +Drop<T>>(mut power: u64) -> T {
-    let two_squarings = array![TWO_POW_1, TWO_POW_2, TWO_POW_4, TWO_POW_8, TWO_POW_16, TWO_POW_32,];
     let mut i = 0;
     let mut result: T = 1_u64.into();
+    let two_squarings = two_squarings.span();
     while (power != 0) {
         let (q, r) = DivRem::div_rem(power, 2);
         if r == 1 {
@@ -249,12 +255,12 @@ fn math_shr_precomputed<T, +Div<T>, +Rem<T>, +Drop<T>, +Copy<T>, +Into<T, u128>>
 
 // Shift left wrapper for u64
 fn math_shl_u64(x: u64, n: u64) -> u64 {
-    (math_shl(x.into(), n) % BoundedInt::<u64>::max().into()).try_into().unwrap()
+    (math_shl(x.into(), n) % Bounded::<u64>::MAX.into()).try_into().unwrap()
 }
 
 // Shift right wrapper for u64
 fn math_shr_u64(x: u64, n: u64) -> u64 {
-    (math_shr(x.into(), n) % BoundedInt::<u64>::max().into()).try_into().unwrap()
+    (math_shr(x.into(), n) % Bounded::<u64>::MAX.into()).try_into().unwrap()
 }
 
 fn add_trailing_zeroes(ref data: Array<u8>, msg_len: usize) {
@@ -395,7 +401,7 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
 pub fn sha512(mut data: Array<u8>) -> Array<u8> {
     let bit_numbers: u128 = data.len().into() * 8;
     // any u32 * 8 fits in u64
-    // let bit_numbers = bit_numbers & BoundedInt::<u64>::max().into();
+    // let bit_numbers = bit_numbers & Bounded::<u64>::MAX.into();
 
     let max_u8: u128 = MAX_U8.into();
     let mut msg_len = data.len();

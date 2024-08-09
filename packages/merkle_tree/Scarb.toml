@@ -7,3 +7,6 @@ edition = "2023_11"
 
 [tool]
 fmt.workspace = true
+
+[dev-dependencies]
+cairo_test.workspace = true

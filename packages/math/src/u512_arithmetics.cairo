@@ -1,9 +1,9 @@
 use core::integer::u512;
-use core::integer::{u128_overflowing_add, u128_overflowing_sub};
+use core::num::traits::{OverflowingAdd, OverflowingSub};
 use core::result::ResultTrait;
 
-pub fn u256_overflow_add(lhs: u256, rhs: u256) -> Result<u256, u256> implicits(RangeCheck) nopanic {
-    let (sum, overflow) = core::integer::u256_overflowing_add(lhs, rhs);
+fn u256_overflow_add(lhs: u256, rhs: u256) -> Result<u256, u256> implicits(RangeCheck) {
+    let (sum, overflow) = lhs.overflowing_add(rhs);
     if overflow {
         Result::Err(sum)
     } else {
@@ -11,8 +11,8 @@ pub fn u256_overflow_add(lhs: u256, rhs: u256) -> Result<u256, u256> implicits(R
     }
 }
 
-pub fn u256_overflow_sub(lhs: u256, rhs: u256) -> Result<u256, u256> implicits(RangeCheck) nopanic {
-    let (sum, overflow) = core::integer::u256_overflow_sub(lhs, rhs);
+fn u256_overflow_sub(lhs: u256, rhs: u256) -> Result<u256, u256> implicits(RangeCheck) {
+    let (sum, overflow) = lhs.overflowing_sub(rhs);
     if overflow {
         Result::Err(sum)
     } else {
@@ -48,14 +48,17 @@ pub fn u512_add(lhs: u512, rhs: u512) -> u512 {
         Result::Err(u256 { low: limb0,
         high: limb1 }) => {
             // Try to move overflow to limb2
-            return match u128_overflowing_add(limb2, 1_u128) {
-                Result::Ok(limb2) => u512 { limb0, limb1, limb2, limb3 },
-                Result::Err(limb2) => {
-                    // Try to move overflow to limb3
-                    let limb3 = u128_overflowing_add(limb3, 1_u128).expect('u512 add overflow');
-                    u512 { limb0, limb1, limb2, limb3 }
-                },
-            };
+            let (limb2, did_overflow) = limb2.overflowing_add(1_u128);
+            if did_overflow {
+                // Try to move overflow to limb3
+                let (limb3, did_overflow) = limb3.overflowing_add(1_u128);
+                if did_overflow {
+                    panic!("u512 add overflow");
+                }
+                u512 { limb0, limb1, limb2, limb3 }
+            } else {
+                u512 { limb0, limb1, limb2, limb3 }
+            }
         },
     }
 }
@@ -74,14 +77,17 @@ pub fn u512_sub(lhs: u512, rhs: u512) -> u512 {
         Result::Err(u256 { low: limb0,
         high: limb1 }) => {
             // Try to move overflow to limb2
-            return match u128_overflowing_sub(limb2, 1_u128) {
-                Result::Ok(limb2) => u512 { limb0, limb1, limb2, limb3 },
-                Result::Err(limb2) => {
-                    // Try to move overflow to limb3
-                    let limb3 = u128_overflowing_sub(limb3, 1_u128).expect('u512 sub overflow');
-                    u512 { limb0, limb1, limb2, limb3 }
-                },
-            };
+            let (limb2, did_overflow) = limb2.overflowing_sub(1_u128);
+            if did_overflow {
+                // Try to move overflow to limb3
+                let (limb3, did_overflow) = limb3.overflowing_sub(1_u128);
+                if did_overflow {
+                    panic!("u512 sub overflow");
+                }
+                u512 { limb0, limb1, limb2, limb3 }
+            } else {
+                u512 { limb0, limb1, limb2, limb3 }
+            }
         },
     }
 }

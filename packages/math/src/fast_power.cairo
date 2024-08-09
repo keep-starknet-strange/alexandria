@@ -1,10 +1,11 @@
 //! # Fast power algorithm
+use core::ops::DivAssign;
 
-/// Calculate the base ^ power 
+/// Calculate the base ^ power
 /// using the fast powering algorithm
 /// # Arguments
-/// * ` base ` - The base of the exponentiation 
-/// * ` power ` - The power of the exponentiation 
+/// * ` base ` - The base of the exponentiation
+/// * ` power ` - The power of the exponentiation
 /// # Returns
 /// * ` T ` - The result of base ^ power
 /// # Panics
@@ -12,7 +13,7 @@
 pub fn fast_power<
     T,
     +Div<T>,
-    +DivEq<T>,
+    +DivAssign<T, T>,
     +Rem<T>,
     +Into<u8, T>,
     +Into<T, u256>,
@@ -45,8 +46,8 @@ pub fn fast_power<
 /// Calculate the ( base ^ power ) mod modulus
 /// using the fast powering algorithm
 /// # Arguments
-/// * ` base ` - The base of the exponentiation 
-/// * ` power ` - The power of the exponentiation 
+/// * ` base ` - The base of the exponentiation
+/// * ` power ` - The power of the exponentiation
 /// * ` modulus ` - The modulus used in the calculation
 /// # Returns
 /// * ` T ` - The result of ( base ^ power ) mod modulus
@@ -55,7 +56,7 @@ pub fn fast_power<
 pub fn fast_power_mod<
     T,
     +Div<T>,
-    +DivEq<T>,
+    +DivAssign<T, T>,
     +Rem<T>,
     +Into<u8, T>,
     +Into<T, u256>,

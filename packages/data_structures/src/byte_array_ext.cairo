@@ -25,11 +25,8 @@ pub impl ByteArrayIntoArrayU8 of Into<ByteArray, Array<u8>> {
     fn into(self: ByteArray) -> Array<u8> {
         let mut reader = self.reader();
         let mut result = array![];
-        loop {
-            match reader.read_u8() {
-                Option::Some(byte) => result.append(byte),
-                Option::None => { break; },
-            }
+        while let Option::Some(byte) = reader.read_u8() {
+            result.append(byte);
         };
         result
     }

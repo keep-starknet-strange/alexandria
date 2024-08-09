@@ -2,15 +2,15 @@
 use alexandria_data_structures::stack::{StackTrait, Felt252Stack, NullableStack};
 
 
-fn stack_new_test<S, T, impl Stack: StackTrait<S, T>>(stack: @S) {
+fn stack_new_test<S, T, +StackTrait<S, T>>(stack: @S) {
     assert!(stack.len() == 0, "stack length should be 0");
 }
 
-fn stack_is_empty_test<S, T, impl Stack: StackTrait<S, T>>(stack: @S) {
+fn stack_is_empty_test<S, T, +StackTrait<S, T>>(stack: @S) {
     assert!(stack.is_empty(), "stack should be empty");
 }
 
-fn stack_push_test<S, T, impl Stack: StackTrait<S, T>, +Drop<T>, impl SDestruct: Destruct<S>>(
+fn stack_push_test<S, T, +StackTrait<S, T>, +Drop<T>, +Destruct<S>>(
     ref stack: S, val_1: T, val_2: T
 ) {
     stack.push(val_1);
@@ -20,15 +20,7 @@ fn stack_push_test<S, T, impl Stack: StackTrait<S, T>, +Drop<T>, impl SDestruct:
     assert!(stack.len() == 2, "len should be 2");
 }
 
-fn stack_peek_test<
-    S,
-    T,
-    impl Stack: StackTrait<S, T>,
-    +Drop<T>,
-    +Copy<T>,
-    +PartialEq<T>,
-    impl SDestruct: Destruct<S>
->(
+fn stack_peek_test<S, T, +StackTrait<S, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<S>>(
     ref stack: S, val_1: T, val_2: T
 ) {
     stack.push(val_1);
@@ -41,15 +33,7 @@ fn stack_peek_test<
     assert!(stack.len() == 2, "should not remove items");
 }
 
-fn stack_pop_test<
-    S,
-    T,
-    impl Stack: StackTrait<S, T>,
-    +Drop<T>,
-    +Copy<T>,
-    +PartialEq<T>,
-    impl SDestruct: Destruct<S>
->(
+fn stack_pop_test<S, T, +StackTrait<S, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<S>>(
     ref stack: S, val_1: T, val_2: T
 ) {
     stack.push(val_1);
@@ -65,13 +49,7 @@ fn stack_pop_test<
 }
 
 fn stack_push_pop_push_test<
-    S,
-    T,
-    impl Stack: StackTrait<S, T>,
-    +Drop<T>,
-    +Copy<T>,
-    +PartialEq<T>,
-    impl SDestruct: Destruct<S>
+    S, T, +StackTrait<S, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<S>
 >(
     ref stack: S, val_1: T, val_2: T, val_3: T
 ) {

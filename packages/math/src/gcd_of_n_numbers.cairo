@@ -10,7 +10,7 @@ pub fn gcd(mut n: Span<u128>) -> u128 {
     assert!(!n.is_empty(), "gcd-empty");
 
     let mut a = *n.pop_front().unwrap();
-    while let Option::Some(b) = n.pop_front() {
+    for b in n {
         a = gcd_two_numbers(a, *b);
     };
     a

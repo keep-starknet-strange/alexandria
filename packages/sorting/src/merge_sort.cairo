@@ -24,8 +24,8 @@ pub impl MergeSort of Sortable {
         let right_arr = array.slice(middle, len - middle);
 
         // Recursively sort the left and right arrays
-        let sorted_left = MergeSort::sort(left_arr);
-        let sorted_right = MergeSort::sort(right_arr);
+        let sorted_left = Self::sort(left_arr);
+        let sorted_right = Self::sort(right_arr);
 
         let mut result_arr = array![];
         merge_recursive(sorted_left, sorted_right, ref result_arr, 0, 0);

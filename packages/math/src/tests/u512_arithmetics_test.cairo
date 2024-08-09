@@ -12,39 +12,32 @@ fn mu512(limb0: u128, limb1: u128, limb2: u128, limb3: u128) -> u512 {
 
 #[test]
 fn test_u512_add() {
-    assert(
-        u512_add(mu512(1, 2, 3, 4), mu512(5, 6, 7, 8)) == mu512(6, 8, 10, 12), 'incorrect u512 add'
-    );
-    assert(
-        u512_add(mu512(MAX_128, 1, 2, 3), mu512(4, 5, 6, 7)) == mu512(3, 7, 8, 10),
-        'incorrect u512 add'
-    );
+    assert!(u512_add(mu512(1, 2, 3, 4), mu512(5, 6, 7, 8)) == mu512(6, 8, 10, 12));
+    assert!(u512_add(mu512(MAX_128, 1, 2, 3), mu512(4, 5, 6, 7)) == mu512(3, 7, 8, 10));
 }
 
 #[test]
 fn test_u512_sub() {
     let sub0 = u512_sub(mu512(5, 6, 7, 8), mu512(1, 2, 3, 4));
-    assert(sub0 == mu512(4, 4, 4, 4), 'incorrect u512 sub');
+    assert!(sub0 == mu512(4, 4, 4, 4));
 
     let sub1 = u512_sub(mu512(3, 2, 1, MAX_128,), mu512(7, 6, 5, 4));
-    assert(
+    assert!(
         sub1 == mu512(
             0xfffffffffffffffffffffffffffffffc,
             0xfffffffffffffffffffffffffffffffb,
             0xfffffffffffffffffffffffffffffffb,
             0xfffffffffffffffffffffffffffffffa
-        ),
-        'incorrect u512 sub1'
+        )
     );
 
     let sub2 = u512_sub(mu512(3, 2, 1, 1), mu512(7, 6, 5, 0));
-    assert(
+    assert!(
         sub2 == mu512(
             0xfffffffffffffffffffffffffffffffc,
             0xfffffffffffffffffffffffffffffffb,
             0xfffffffffffffffffffffffffffffffb,
             0
-        ),
-        'incorrect u512 sub2'
+        )
     );
 }

@@ -379,16 +379,10 @@ fn test_read_sequence() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
     assert!(rd.read_i8() == Option::Some(1), "expected 1");
-    assert(
-        rd.read_i128() == Option::Some(0x02030405060708090a0b0c0d0e0f1011), 'not 0x0203040506...'
-    );
-    assert(
-        rd.read_u128() == Option::Some(0x12131415161718191a1b1c1d1e1f2021), 'not 0x1213141516...'
-    );
-    assert!(rd.read_i64() == Option::Some(0x2223242526272829), "not 0x22232425...");
-    assert(
-        rd.read_u128() == Option::Some(0x2a2b2c2d2e2f30313233343536373839), 'not 0x2a2b2c2d2e...'
-    );
+    assert!(rd.read_i128() == Option::Some(0x02030405060708090a0b0c0d0e0f1011));
+    assert!(rd.read_u128() == Option::Some(0x12131415161718191a1b1c1d1e1f2021));
+    assert!(rd.read_i64() == Option::Some(0x2223242526272829));
+    assert!(rd.read_u128() == Option::Some(0x2a2b2c2d2e2f30313233343536373839));
     assert!(rd.read_u32() == Option::Some(0x3a3b3c3d), "not 0x3a3b3c3d");
     assert!(rd.read_i16() == Option::Some(0x3e3f), "not 0x3e3f");
     assert!(rd.read_u8() == Option::Some(0x40), "not 0x40");
@@ -401,16 +395,10 @@ fn test_read_sequence_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
     assert!(rd.read_i8() == Option::Some(1), "expected 1");
-    assert(
-        rd.read_i128() == Option::Some(0x02030405060708090a0b0c0d0e0f1011), 'not 0x0203040506...'
-    );
-    assert(
-        rd.read_u128() == Option::Some(0x12131415161718191a1b1c1d1e1f2021), 'not 0x1213141516...'
-    );
+    assert!(rd.read_i128() == Option::Some(0x02030405060708090a0b0c0d0e0f1011));
+    assert!(rd.read_u128() == Option::Some(0x12131415161718191a1b1c1d1e1f2021));
     assert!(rd.read_i64() == Option::Some(0x2223242526272829), "not 0x22232425...");
-    assert(
-        rd.read_u128() == Option::Some(0x2a2b2c2d2e2f30313233343536373839), 'not 0x2a2b2c2d2e...'
-    );
+    assert!(rd.read_u128() == Option::Some(0x2a2b2c2d2e2f30313233343536373839));
     assert!(rd.read_u32() == Option::Some(0x3a3b3c3d), "not 0x3a3b3c3d");
     assert!(rd.read_i16() == Option::Some(0x3e3f), "not 0x3e3f");
     assert!(rd.read_u8() == Option::Some(0x40), "not 0x40");
@@ -423,16 +411,10 @@ fn test_read_sequence_le() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
     assert!(rd.read_i8() == Option::Some(1), "expected 1");
-    assert(
-        rd.read_i128_le() == Option::Some(0x11100f0e0d0c0b0a0908070605040302), 'not 0x11100f0e0...'
-    );
-    assert(
-        rd.read_u128_le() == Option::Some(0x21201f1e1d1c1b1a1918171615141312), 'not 0x21201f1e1d...'
-    );
+    assert!(rd.read_i128_le() == Option::Some(0x11100f0e0d0c0b0a0908070605040302));
+    assert!(rd.read_u128_le() == Option::Some(0x21201f1e1d1c1b1a1918171615141312));
     assert!(rd.read_i64_le() == Option::Some(0x2928272625242322), "not 0x29282726...");
-    assert(
-        rd.read_u128_le() == Option::Some(0x393837363534333231302f2e2d2c2b2a), 'not 0x3938373635...'
-    );
+    assert!(rd.read_u128_le() == Option::Some(0x393837363534333231302f2e2d2c2b2a));
     assert!(rd.read_u32_le() == Option::Some(0x3d3c3b3a), "not 0x3d3c3b3a");
     assert!(rd.read_i16_le() == Option::Some(0x3f3e), "not 0x3f3e");
     assert!(rd.read_u8() == Option::Some(0x40), "not 0x40");
@@ -445,16 +427,10 @@ fn test_read_sequence_le_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
     assert!(rd.read_i8() == Option::Some(1), "expected 1");
-    assert(
-        rd.read_i128_le() == Option::Some(0x11100f0e0d0c0b0a0908070605040302), 'not 0x11100f0e0...'
-    );
-    assert(
-        rd.read_u128_le() == Option::Some(0x21201f1e1d1c1b1a1918171615141312), 'not 0x21201f1e1d...'
-    );
+    assert!(rd.read_i128_le() == Option::Some(0x11100f0e0d0c0b0a0908070605040302));
+    assert!(rd.read_u128_le() == Option::Some(0x21201f1e1d1c1b1a1918171615141312));
     assert!(rd.read_i64_le() == Option::Some(0x2928272625242322), "not 0x29282726...");
-    assert(
-        rd.read_u128_le() == Option::Some(0x393837363534333231302f2e2d2c2b2a), 'not 0x3938373635...'
-    );
+    assert!(rd.read_u128_le() == Option::Some(0x393837363534333231302f2e2d2c2b2a));
     assert!(rd.read_u32_le() == Option::Some(0x3d3c3b3a), "not 0x3d3c3b3a");
     assert!(rd.read_i16_le() == Option::Some(0x3f3e), "not 0x3f3e");
     assert!(rd.read_u8() == Option::Some(0x40), "not 0x40");

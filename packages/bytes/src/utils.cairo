@@ -21,15 +21,14 @@ pub impl BytesDebug of Debug<Bytes> {
         let prefix: ByteArray = "0x";
         Display::fmt(@prefix, ref f)?;
         let mut res: Result<(), Error> = Result::Ok(());
-        while i < self
-            .size() {
-                let (new_i, value) = self.read_u8(i);
-                res = format_byte_hex(value, ref f);
-                if res.is_err() {
-                    break;
-                }
-                i = new_i;
-            };
+        while i < self.size() {
+            let (new_i, value) = self.read_u8(i);
+            res = format_byte_hex(value, ref f);
+            if res.is_err() {
+                break;
+            }
+            i = new_i;
+        };
         res
     }
 }
@@ -40,15 +39,14 @@ pub impl BytesDisplay of Display<Bytes> {
         let prefix: ByteArray = "0x";
         Display::fmt(@prefix, ref f)?;
         let mut res: Result<(), Error> = Result::Ok(());
-        while i < self
-            .size() {
-                let (new_i, value) = self.read_u8(i);
-                res = format_byte_hex(value, ref f);
-                if res.is_err() {
-                    break;
-                }
-                i = new_i;
-            };
+        while i < self.size() {
+            let (new_i, value) = self.read_u8(i);
+            res = format_byte_hex(value, ref f);
+            if res.is_err() {
+                break;
+            }
+            i = new_i;
+        };
         res
     }
 }
@@ -56,15 +54,14 @@ pub impl BytesDisplay of Display<Bytes> {
 /// Computes the keccak256 of multiple uint128 values.
 /// The values are interpreted as big-endian.
 /// https://github.com/starkware-libs/cairo/blob/main/corelib/src/keccak.cairo
-pub fn keccak_u128s_be(mut input: Span<u128>, n_bytes: usize) -> u256 {
+pub fn keccak_u128s_be(input: Span<u128>, n_bytes: usize) -> u256 {
     let mut keccak_input = array![];
     let mut size = n_bytes;
-    while let Option::Some(v) = input
-        .pop_front() {
-            let value_size = uint_min(size, 16);
-            keccak_add_uint128_be(ref keccak_input, *v, value_size);
-            size -= value_size;
-        };
+    for v in input {
+        let value_size = core::cmp::min(size, 16);
+        keccak_add_uint128_be(ref keccak_input, *v, value_size);
+        size -= value_size;
+    };
 
     let aligned = n_bytes % 8 == 0;
     if aligned {
@@ -74,16 +71,6 @@ pub fn keccak_u128s_be(mut input: Span<u128>, n_bytes: usize) -> u256 {
         let last_input_word = *keccak_input[keccak_input.len() - 1];
         let mut inputs = u64_array_slice(@keccak_input, 0, keccak_input.len() - 1);
         u256_reverse_endian(cairo_keccak(ref inputs, last_input_word, last_input_num_bytes))
-    }
-}
-
-/// return the minimal value
-/// support u8, u16, u32, u64, u128, u256
-fn uint_min<T, +Drop<T>, +PartialOrd<T>, +Copy<T>>(l: T, r: T) -> T {
-    if l <= r {
-        l
-    } else {
-        r
     }
 }
 
@@ -120,15 +107,14 @@ fn update_u256_array_at(arr: @Array<u256>, index: usize, value: u256) -> Array<u
     let mut new_arr = array![];
     let mut i = 0;
 
-    while i != arr
-        .len() {
-            if i == index {
-                new_arr.append(value);
-            } else {
-                new_arr.append(*arr[i]);
-            }
-            i += 1;
-        };
+    while i != arr.len() {
+        if i == index {
+            new_arr.append(value);
+        } else {
+            new_arr.append(*arr[i]);
+        }
+        i += 1;
+    };
     new_arr
 }
 
@@ -151,6 +137,21 @@ pub fn u8_array_to_u256(arr: Span<u8>) -> u256 {
     };
 
     u256 { low, high }
+}
+
+pub fn u32s_to_u256(arr: Span<u32>) -> u256 {
+    assert!(arr.len() == 8, "u32s_to_u2562: input must be 8 elements long");
+    let low: u128 = (*arr[7]).into()
+        + (*arr[6]).into() * 0x1_0000_0000
+        + (*arr[5]).into() * 0x1_0000_0000_0000_0000
+        + (*arr[4]).into() * 0x1_0000_0000_0000_0000_0000_0000;
+    let low = low.try_into().expect('u32s_to_u2562:overflow-low');
+    let high = (*arr[3]).into()
+        + (*arr[2]).into() * 0x1_0000_0000
+        + (*arr[1]).into() * 0x1_0000_0000_0000_0000
+        + (*arr[0]).into() * 0x1_0000_0000_0000_0000_0000_0000;
+    let high = high.try_into().expect('u32s_to_u2562:overflow-high');
+    u256 { high, low }
 }
 
 fn u64_array_slice(src: @Array<u64>, mut begin: usize, len: usize) -> Array<u64> {
@@ -179,9 +180,7 @@ pub fn u128_array_slice(src: @Array<u128>, mut begin: usize, len: usize) -> Arra
     slice
 }
 
-fn array_slice<T, impl TDrop: Drop<T>, impl TCopy: Copy<T>>(
-    src: @Array<T>, mut begin: usize, len: usize
-) -> Array<T> {
+fn array_slice<T, +Drop<T>, +Copy<T>>(src: @Array<T>, mut begin: usize, len: usize) -> Array<T> {
     let mut slice = array![];
     let end = begin + len;
     while begin < end && begin < src.len() {

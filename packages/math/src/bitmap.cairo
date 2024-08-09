@@ -1,6 +1,7 @@
 // Internam imports
 
 use alexandria_math::fast_power::fast_power as pow;
+use core::ops::DivAssign;
 
 #[generate_trait]
 pub impl Bitmap<
@@ -9,7 +10,7 @@ pub impl Bitmap<
     +Sub<T>,
     +Mul<T>,
     +Div<T>,
-    +DivEq<T>,
+    +DivAssign<T, T>,
     +Rem<T>,
     +BitAnd<T>,
     +BitOr<T>,
@@ -159,11 +160,12 @@ pub impl Bitmap<
     /// * `x` - The value for which to compute the most significant bit.
     /// * `i` - The index for which to start the search.
     /// # Returns
-    /// * The index of the nearest left significant bit, None is returned if no significant bit is found.
+    /// * The index of the nearest left significant bit, None is returned if no significant bit is
+    /// found.
     #[inline(always)]
     fn nearest_left_significant_bit(x: T, i: u8) -> Option::<u8> {
         let mask = ~(pow(2_u8.into(), i.into()) - 1_u8.into());
-        Bitmap::least_significant_bit(x & mask)
+        Self::least_significant_bit(x & mask)
     }
 
     /// The index of the nearest right significant bit to the index of a number.
@@ -171,11 +173,12 @@ pub impl Bitmap<
     /// * `x` - The value for which to compute the most significant bit.
     /// * `i` - The index for which to start the search.
     /// # Returns
-    /// * The index of the nearest right significant bit, None is returned if no significant bit is found.
+    /// * The index of the nearest right significant bit, None is returned if no significant bit is
+    /// found.
     #[inline(always)]
     fn nearest_right_significant_bit(x: T, i: u8) -> Option::<u8> {
         let mask = pow(2_u8.into(), (i + 1).into()) - 1_u8.into();
-        Bitmap::most_significant_bit(x & mask)
+        Self::most_significant_bit(x & mask)
     }
 
     /// The index of the nearest significant bit to the index of a number,
@@ -183,13 +186,14 @@ pub impl Bitmap<
     /// # Arguments
     /// * `x` - The value for which to compute the most significant bit, must be greater than 0.
     /// * `i` - The index for which to start the search.
-    /// * `priority` - if priority is set to true then right is prioritized over left, left over right otherwise.
+    /// * `priority` - if priority is set to true then right is prioritized over left, left over
+    /// right otherwise.
     /// # Returns
     /// * The index of the nearest significant bit, None is returned if no significant bit is found.
     #[inline(always)]
     fn nearest_significant_bit(x: T, i: u8, priority: bool) -> Option::<u8> {
-        let nlsb = Bitmap::nearest_left_significant_bit(x, i);
-        let nrsb = Bitmap::nearest_right_significant_bit(x, i);
+        let nlsb = Self::nearest_left_significant_bit(x, i);
+        let nrsb = Self::nearest_right_significant_bit(x, i);
         match (nlsb, nrsb) {
             (
                 Option::Some(lhs), Option::Some(rhs)

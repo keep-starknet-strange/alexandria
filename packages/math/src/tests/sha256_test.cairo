@@ -7,39 +7,39 @@ fn sha256_empty_test() {
     let result = sha256::sha256(input);
 
     // result should be 0xE3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
-    assert_eq!(result.len(), 32, "invalid result length");
-    assert_eq!(*result[0], 0xE3, "invalid result");
-    assert_eq!(*result[1], 0xB0, "invalid result");
-    assert_eq!(*result[2], 0xC4, "invalid result");
-    assert_eq!(*result[3], 0x42, "invalid result");
-    assert_eq!(*result[4], 0x98, "invalid result");
-    assert_eq!(*result[5], 0xFC, "invalid result");
-    assert_eq!(*result[6], 0x1C, "invalid result");
-    assert_eq!(*result[7], 0x14, "invalid result");
-    assert_eq!(*result[8], 0x9A, "invalid result");
-    assert_eq!(*result[9], 0xFB, "invalid result");
-    assert_eq!(*result[10], 0xF4, "invalid result");
-    assert_eq!(*result[11], 0xC8, "invalid result");
-    assert_eq!(*result[12], 0x99, "invalid result");
-    assert_eq!(*result[13], 0x6F, "invalid result");
-    assert_eq!(*result[14], 0xB9, "invalid result");
-    assert_eq!(*result[15], 0x24, "invalid result");
-    assert_eq!(*result[16], 0x27, "invalid result");
-    assert_eq!(*result[17], 0xAE, "invalid result");
-    assert_eq!(*result[18], 0x41, "invalid result");
-    assert_eq!(*result[19], 0xE4, "invalid result");
-    assert_eq!(*result[20], 0x64, "invalid result");
-    assert_eq!(*result[21], 0x9B, "invalid result");
-    assert_eq!(*result[22], 0x93, "invalid result");
-    assert_eq!(*result[23], 0x4C, "invalid result");
-    assert_eq!(*result[24], 0xA4, "invalid result");
-    assert_eq!(*result[25], 0x95, "invalid result");
-    assert_eq!(*result[26], 0x99, "invalid result");
-    assert_eq!(*result[27], 0x1B, "invalid result");
-    assert_eq!(*result[28], 0x78, "invalid result");
-    assert_eq!(*result[29], 0x52, "invalid result");
-    assert_eq!(*result[30], 0xB8, "invalid result");
-    assert_eq!(*result[31], 0x55, "invalid result");
+    assert_eq!(result.len(), 32);
+    assert_eq!(*result[0], 0xE3);
+    assert_eq!(*result[1], 0xB0);
+    assert_eq!(*result[2], 0xC4);
+    assert_eq!(*result[3], 0x42);
+    assert_eq!(*result[4], 0x98);
+    assert_eq!(*result[5], 0xFC);
+    assert_eq!(*result[6], 0x1C);
+    assert_eq!(*result[7], 0x14);
+    assert_eq!(*result[8], 0x9A);
+    assert_eq!(*result[9], 0xFB);
+    assert_eq!(*result[10], 0xF4);
+    assert_eq!(*result[11], 0xC8);
+    assert_eq!(*result[12], 0x99);
+    assert_eq!(*result[13], 0x6F);
+    assert_eq!(*result[14], 0xB9);
+    assert_eq!(*result[15], 0x24);
+    assert_eq!(*result[16], 0x27);
+    assert_eq!(*result[17], 0xAE);
+    assert_eq!(*result[18], 0x41);
+    assert_eq!(*result[19], 0xE4);
+    assert_eq!(*result[20], 0x64);
+    assert_eq!(*result[21], 0x9B);
+    assert_eq!(*result[22], 0x93);
+    assert_eq!(*result[23], 0x4C);
+    assert_eq!(*result[24], 0xA4);
+    assert_eq!(*result[25], 0x95);
+    assert_eq!(*result[26], 0x99);
+    assert_eq!(*result[27], 0x1B);
+    assert_eq!(*result[28], 0x78);
+    assert_eq!(*result[29], 0x52);
+    assert_eq!(*result[30], 0xB8);
+    assert_eq!(*result[31], 0x55);
 }
 
 #[test]
@@ -49,46 +49,48 @@ fn sha256_random_data_test() {
         0x57, 0x77, 0x71, 0x71, 0x66, 0x50, 0x45, 0x51, 0x51, 0x43, 0x39, 0x48, 0x38
     ];
     let result = sha256::sha256(input);
-    assert_eq!(*result[0], 61, "invalid result");
-    assert_eq!(*result[1], 226, "invalid result");
-    assert_eq!(*result[2], 188, "invalid result");
-    assert_eq!(*result[3], 242, "invalid result");
-    assert_eq!(*result[4], 118, "invalid result");
-    assert_eq!(*result[5], 121, "invalid result");
-    assert_eq!(*result[6], 7, "invalid result");
-    assert_eq!(*result[7], 225, "invalid result");
-    assert_eq!(*result[8], 150, "invalid result");
-    assert_eq!(*result[9], 220, "invalid result");
-    assert_eq!(*result[10], 105, "invalid result");
-    assert_eq!(*result[11], 158, "invalid result");
-    assert_eq!(*result[12], 185, "invalid result");
-    assert_eq!(*result[13], 180, "invalid result");
-    assert_eq!(*result[14], 139, "invalid result");
-    assert_eq!(*result[15], 103, "invalid result");
-    assert_eq!(*result[16], 221, "invalid result");
-    assert_eq!(*result[17], 95, "invalid result");
-    assert_eq!(*result[18], 56, "invalid result");
-    assert_eq!(*result[19], 88, "invalid result");
-    assert_eq!(*result[20], 209, "invalid result");
-    assert_eq!(*result[21], 159, "invalid result");
-    assert_eq!(*result[22], 255, "invalid result");
-    assert_eq!(*result[23], 247, "invalid result");
-    assert_eq!(*result[24], 145, "invalid result");
-    assert_eq!(*result[25], 146, "invalid result");
-    assert_eq!(*result[26], 83, "invalid result");
-    assert_eq!(*result[27], 110, "invalid result");
-    assert_eq!(*result[28], 185, "invalid result");
-    assert_eq!(*result[29], 5, "invalid result");
-    assert_eq!(*result[30], 248, "invalid result");
-    assert_eq!(*result[31], 15, "invalid result");
+    assert_eq!(*result[0], 61);
+    assert_eq!(*result[1], 226);
+    assert_eq!(*result[2], 188);
+    assert_eq!(*result[3], 242);
+    assert_eq!(*result[4], 118);
+    assert_eq!(*result[5], 121);
+    assert_eq!(*result[6], 7);
+    assert_eq!(*result[7], 225);
+    assert_eq!(*result[8], 150);
+    assert_eq!(*result[9], 220);
+    assert_eq!(*result[10], 105);
+    assert_eq!(*result[11], 158);
+    assert_eq!(*result[12], 185);
+    assert_eq!(*result[13], 180);
+    assert_eq!(*result[14], 139);
+    assert_eq!(*result[15], 103);
+    assert_eq!(*result[16], 221);
+    assert_eq!(*result[17], 95);
+    assert_eq!(*result[18], 56);
+    assert_eq!(*result[19], 88);
+    assert_eq!(*result[20], 209);
+    assert_eq!(*result[21], 159);
+    assert_eq!(*result[22], 255);
+    assert_eq!(*result[23], 247);
+    assert_eq!(*result[24], 145);
+    assert_eq!(*result[25], 146);
+    assert_eq!(*result[26], 83);
+    assert_eq!(*result[27], 110);
+    assert_eq!(*result[28], 185);
+    assert_eq!(*result[29], 5);
+    assert_eq!(*result[30], 248);
+    assert_eq!(*result[31], 15);
 }
 
 #[test]
 #[available_gas(2000000000)]
 fn sha256_lorem_ipsum_test() {
-    // Lorem ipsum, or lsipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs.
-    // The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of
-    // Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with
+    // Lorem ipsum, or lsipsum as it is sometimes known, is dummy text used in laying out print,
+    // graphic or web designs.
+    // The passage is attributed to an unknown typesetter in the 15th century who is thought to have
+    // scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book. It
+    // usually begins with
     let mut input = array![];
     input.append('L');
     input.append('o');
@@ -415,39 +417,39 @@ fn sha256_lorem_ipsum_test() {
     let result = sha256::sha256(input);
 
     // result should be 0xD35BF81DDF990122F8B96C7BF88C0737D5080E0C9BC3F7ABF68E6FF0D5F9EA44
-    assert_eq!(result.len(), 32, "invalid result length");
-    assert_eq!(*result[0], 0xD3, "invalid result");
-    assert_eq!(*result[1], 0x5B, "invalid result");
-    assert_eq!(*result[2], 0xF8, "invalid result");
-    assert_eq!(*result[3], 0x1D, "invalid result");
-    assert_eq!(*result[4], 0xDF, "invalid result");
-    assert_eq!(*result[5], 0x99, "invalid result");
-    assert_eq!(*result[6], 0x01, "invalid result");
-    assert_eq!(*result[7], 0x22, "invalid result");
-    assert_eq!(*result[8], 0xF8, "invalid result");
-    assert_eq!(*result[9], 0xB9, "invalid result");
-    assert_eq!(*result[10], 0x6C, "invalid result");
-    assert_eq!(*result[11], 0x7B, "invalid result");
-    assert_eq!(*result[12], 0xF8, "invalid result");
-    assert_eq!(*result[13], 0x8C, "invalid result");
-    assert_eq!(*result[14], 0x07, "invalid result");
-    assert_eq!(*result[15], 0x37, "invalid result");
-    assert_eq!(*result[16], 0xD5, "invalid result");
-    assert_eq!(*result[17], 0x08, "invalid result");
-    assert_eq!(*result[18], 0x0E, "invalid result");
-    assert_eq!(*result[19], 0x0C, "invalid result");
-    assert_eq!(*result[20], 0x9B, "invalid result");
-    assert_eq!(*result[21], 0xC3, "invalid result");
-    assert_eq!(*result[22], 0xF7, "invalid result");
-    assert_eq!(*result[23], 0xAB, "invalid result");
-    assert_eq!(*result[24], 0xF6, "invalid result");
-    assert_eq!(*result[25], 0x8E, "invalid result");
-    assert_eq!(*result[26], 0x6F, "invalid result");
-    assert_eq!(*result[27], 0xF0, "invalid result");
-    assert_eq!(*result[28], 0xD5, "invalid result");
-    assert_eq!(*result[29], 0xF9, "invalid result");
-    assert_eq!(*result[30], 0xEA, "invalid result");
-    assert_eq!(*result[31], 0x44, "invalid result");
+    assert_eq!(result.len(), 32);
+    assert_eq!(*result[0], 0xD3);
+    assert_eq!(*result[1], 0x5B);
+    assert_eq!(*result[2], 0xF8);
+    assert_eq!(*result[3], 0x1D);
+    assert_eq!(*result[4], 0xDF);
+    assert_eq!(*result[5], 0x99);
+    assert_eq!(*result[6], 0x01);
+    assert_eq!(*result[7], 0x22);
+    assert_eq!(*result[8], 0xF8);
+    assert_eq!(*result[9], 0xB9);
+    assert_eq!(*result[10], 0x6C);
+    assert_eq!(*result[11], 0x7B);
+    assert_eq!(*result[12], 0xF8);
+    assert_eq!(*result[13], 0x8C);
+    assert_eq!(*result[14], 0x07);
+    assert_eq!(*result[15], 0x37);
+    assert_eq!(*result[16], 0xD5);
+    assert_eq!(*result[17], 0x08);
+    assert_eq!(*result[18], 0x0E);
+    assert_eq!(*result[19], 0x0C);
+    assert_eq!(*result[20], 0x9B);
+    assert_eq!(*result[21], 0xC3);
+    assert_eq!(*result[22], 0xF7);
+    assert_eq!(*result[23], 0xAB);
+    assert_eq!(*result[24], 0xF6);
+    assert_eq!(*result[25], 0x8E);
+    assert_eq!(*result[26], 0x6F);
+    assert_eq!(*result[27], 0xF0);
+    assert_eq!(*result[28], 0xD5);
+    assert_eq!(*result[29], 0xF9);
+    assert_eq!(*result[30], 0xEA);
+    assert_eq!(*result[31], 0x44);
 }
 #[test]
 #[available_gas(10_000_000_000)]
@@ -665,37 +667,37 @@ fn sha256_url() {
     let result = sha256::sha256(data);
 
     // result should be 0xe5ddd0d703d54d024a1e49cdb614d1f4e9dfa81fff119ca01554ec22d1a45f59
-    assert_eq!(result.len(), 32, "invalid result length");
-    assert_eq!(*result[0], 0xE5, "invalid result");
-    assert_eq!(*result[1], 0xDD, "invalid result");
-    assert_eq!(*result[2], 0xD0, "invalid result");
-    assert_eq!(*result[3], 0xD7, "invalid result");
-    assert_eq!(*result[4], 0x03, "invalid result");
-    assert_eq!(*result[5], 0xD5, "invalid result");
-    assert_eq!(*result[6], 0x4D, "invalid result");
-    assert_eq!(*result[7], 0x02, "invalid result");
-    assert_eq!(*result[8], 0x4A, "invalid result");
-    assert_eq!(*result[9], 0x1E, "invalid result");
-    assert_eq!(*result[10], 0x49, "invalid result");
-    assert_eq!(*result[11], 0xCD, "invalid result");
-    assert_eq!(*result[12], 0xB6, "invalid result");
-    assert_eq!(*result[13], 0x14, "invalid result");
-    assert_eq!(*result[14], 0xD1, "invalid result");
-    assert_eq!(*result[15], 0xF4, "invalid result");
-    assert_eq!(*result[16], 0xE9, "invalid result");
-    assert_eq!(*result[17], 0xDF, "invalid result");
-    assert_eq!(*result[18], 0xA8, "invalid result");
-    assert_eq!(*result[19], 0x1F, "invalid result");
-    assert_eq!(*result[20], 0xFF, "invalid result");
-    assert_eq!(*result[21], 0x11, "invalid result");
-    assert_eq!(*result[22], 0x9C, "invalid result");
-    assert_eq!(*result[23], 0xA0, "invalid result");
-    assert_eq!(*result[24], 0x15, "invalid result");
-    assert_eq!(*result[25], 0x54, "invalid result");
-    assert_eq!(*result[26], 0xEC, "invalid result");
-    assert_eq!(*result[27], 0x22, "invalid result");
-    assert_eq!(*result[28], 0xD1, "invalid result");
-    assert_eq!(*result[29], 0xA4, "invalid result");
-    assert_eq!(*result[30], 0x5F, "invalid result");
-    assert_eq!(*result[31], 0x59, "invalid result");
+    assert_eq!(result.len(), 32);
+    assert_eq!(*result[0], 0xE5);
+    assert_eq!(*result[1], 0xDD);
+    assert_eq!(*result[2], 0xD0);
+    assert_eq!(*result[3], 0xD7);
+    assert_eq!(*result[4], 0x03);
+    assert_eq!(*result[5], 0xD5);
+    assert_eq!(*result[6], 0x4D);
+    assert_eq!(*result[7], 0x02);
+    assert_eq!(*result[8], 0x4A);
+    assert_eq!(*result[9], 0x1E);
+    assert_eq!(*result[10], 0x49);
+    assert_eq!(*result[11], 0xCD);
+    assert_eq!(*result[12], 0xB6);
+    assert_eq!(*result[13], 0x14);
+    assert_eq!(*result[14], 0xD1);
+    assert_eq!(*result[15], 0xF4);
+    assert_eq!(*result[16], 0xE9);
+    assert_eq!(*result[17], 0xDF);
+    assert_eq!(*result[18], 0xA8);
+    assert_eq!(*result[19], 0x1F);
+    assert_eq!(*result[20], 0xFF);
+    assert_eq!(*result[21], 0x11);
+    assert_eq!(*result[22], 0x9C);
+    assert_eq!(*result[23], 0xA0);
+    assert_eq!(*result[24], 0x15);
+    assert_eq!(*result[25], 0x54);
+    assert_eq!(*result[26], 0xEC);
+    assert_eq!(*result[27], 0x22);
+    assert_eq!(*result[28], 0xD1);
+    assert_eq!(*result[29], 0xA4);
+    assert_eq!(*result[30], 0x5F);
+    assert_eq!(*result[31], 0x59);
 }
