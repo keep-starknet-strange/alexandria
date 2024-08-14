@@ -45,7 +45,7 @@ mod tests {
     #[test]
     fn test_deploy() {
         let contract = deploy();
-        assert_eq!(contract.get_bytes(), BytesTrait::new_empty(), "Initial bytes should be empty");
+        assert_eq!(contract.get_bytes(), BytesTrait::new_empty());
     }
 
     #[test]
@@ -53,7 +53,7 @@ mod tests {
         let contract = deploy();
         let bytes = BytesTrait::new(32, array![0x01020304050607080910, 0x11121314151617181920]);
         contract.set_bytes(bytes.clone());
-        assert_eq!(contract.get_bytes(), bytes, "Bytes should be set correctly");
+        assert_eq!(contract.get_bytes(), bytes);
     }
 
     #[test]
@@ -66,6 +66,6 @@ mod tests {
             ]
         );
         contract.set_bytes(bytes.clone());
-        assert_eq!(contract.get_bytes(), bytes, "Bytes should be set correctly");
+        assert_eq!(contract.get_bytes(), bytes);
     }
 }

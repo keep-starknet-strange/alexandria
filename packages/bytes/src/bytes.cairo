@@ -1,11 +1,12 @@
 use alexandria_bytes::utils::{
-    u128_join, read_sub_u128, u128_split, u128_array_slice, keccak_u128s_be, u8_array_to_u256
+    u128_join, read_sub_u128, u128_split, u128_array_slice, keccak_u128s_be, u8_array_to_u256,
+    u32s_to_u256
 };
-use alexandria_math::sha256::sha256;
 use alexandria_math::{U128BitShift, U256BitShift};
 use core::byte_array::ByteArrayTrait;
+use core::ops::index::IndexView;
+use core::sha256;
 use starknet::ContractAddress;
-
 /// Bytes is a dynamic array of u128, where each element contains 16 bytes.
 pub const BYTES_PER_ELEMENT: usize = 16;
 
@@ -37,7 +38,8 @@ pub struct Bytes {
     data: Array<u128>
 }
 
-pub impl BytesIndex of IndexView<Bytes, usize, @u128> {
+pub impl BytesIndex of IndexView<Bytes, usize> {
+    type Target = @u128;
     fn index(self: @Bytes, index: usize) -> @u128 {
         self.data[index]
     }
@@ -55,7 +57,7 @@ pub trait BytesTrait {
     fn locate(offset: usize) -> (usize, usize);
     /// Get Bytes size
     fn size(self: @Bytes) -> usize;
-    /// Get data 
+    /// Get data
     fn data(self: Bytes) -> Array<u128>;
     /// update specific value (1 bytes) at specific offset
     fn update_at(ref self: Bytes, offset: usize, value: u8);
@@ -116,8 +118,18 @@ pub trait BytesTrait {
     /// concat with other Bytes
     fn concat(ref self: Bytes, other: @Bytes);
     /// keccak hash
+    #[deprecated(
+        feature: "deprecated-keccak",
+        note: "Use `core::keccak::compute_keccak_byte_array`.",
+        since: "2.7.0"
+    )]
     fn keccak(self: @Bytes) -> u256;
     /// sha256 hash
+    #[deprecated(
+        feature: "deprecated-sha256",
+        note: "Use `core::sha256::compute_sha256_byte_array`.",
+        since: "2.7.0"
+    )]
     fn sha256(self: @Bytes) -> u256;
 }
 
@@ -175,7 +187,7 @@ impl BytesImpl of BytesTrait {
     /// update specific value (1 bytes) at specific offset
     fn update_at(ref self: Bytes, offset: usize, value: u8) {
         assert(offset < self.size(), 'update out of bound');
-        let mut new_bytes = BytesTrait::new_empty();
+        let mut new_bytes = Self::new_empty();
 
         // if update first bytes, ignore
         if offset > 0 {
@@ -207,12 +219,12 @@ impl BytesImpl of BytesTrait {
         // check value in one element or two
         // if value in one element, just read it
         // if value in two elements, read them and join them
-        let (element_index, element_offset) = BytesTrait::locate(offset);
+        let (element_index, element_offset) = Self::locate(offset);
         let value_in_one_element = element_offset + size <= BYTES_PER_ELEMENT;
         let value = if value_in_one_element {
             read_sub_u128(*self.data[element_index], BYTES_PER_ELEMENT, element_offset, size)
         } else {
-            let (_, end_element_offset) = BytesTrait::locate(offset + size);
+            let (_, end_element_offset) = Self::locate(offset + size);
             let left = read_sub_u128(
                 *self.data[element_index],
                 BYTES_PER_ELEMENT,
@@ -340,7 +352,7 @@ impl BytesImpl of BytesTrait {
         assert(offset + size <= self.size(), 'out of bound');
 
         if size == 0 {
-            return (offset, BytesTrait::new_empty());
+            return (offset, Self::new_empty());
         }
 
         let mut array = array![];
@@ -367,7 +379,7 @@ impl BytesImpl of BytesTrait {
             offset = new_offset;
         }
 
-        return (offset, BytesTrait::new(size, array));
+        return (offset, Self::new(size, array));
     }
 
     /// read felt252 from Bytes
@@ -409,7 +421,7 @@ impl BytesImpl of BytesTrait {
         assert(size <= 16, 'size must be less than 16');
 
         let Bytes { size: old_bytes_size, mut data } = self;
-        let (last_data_index, last_element_size) = BytesTrait::locate(old_bytes_size);
+        let (last_data_index, last_element_size) = Self::locate(old_bytes_size);
 
         if last_element_size == 0 {
             let padded_value = u128_join(value, 0, BYTES_PER_ELEMENT - size);
@@ -493,7 +505,7 @@ impl BytesImpl of BytesTrait {
     fn append_bytes31(ref self: Bytes, value: bytes31) {
         let mut value: u256 = value.into();
         value = U256BitShift::shl(value, 8);
-        self.concat(@BytesTrait::new(31, array![value.high, value.low]));
+        self.concat(@Self::new(31, array![value.high, value.low]));
     }
 
     /// Write address into Bytes
@@ -525,7 +537,7 @@ impl BytesImpl of BytesTrait {
 
     /// keccak hash
     fn keccak(self: @Bytes) -> u256 {
-        let (last_data_index, last_element_size) = BytesTrait::locate(self.size());
+        let (last_data_index, last_element_size) = Self::locate(self.size());
         if last_element_size == 0 {
             return keccak_u128s_be(self.data.span(), self.size());
         } else {
@@ -541,19 +553,18 @@ impl BytesImpl of BytesTrait {
 
     /// sha256 hash
     fn sha256(self: @Bytes) -> u256 {
-        let mut hash_data: Array<u8> = array![];
         let mut i: usize = 0;
         let mut offset: usize = 0;
-        while i != self
-            .size() {
-                let (new_offset, hash_data_item) = self.read_u8(offset);
-                hash_data.append(hash_data_item);
-                offset = new_offset;
-                i += 1;
-            };
+        let mut hash_data_byte_array = "";
+        while i != self.size() {
+            let (new_offset, hash_data_item) = self.read_u8(offset);
+            hash_data_byte_array.append_byte(hash_data_item);
+            offset = new_offset;
+            i += 1;
+        };
 
-        let output: Array<u8> = sha256(hash_data);
-        u8_array_to_u256(output.span())
+        let output = sha256::compute_sha256_byte_array(@hash_data_byte_array);
+        u32s_to_u256(output.span())
     }
 }
 
@@ -573,18 +584,17 @@ pub impl BytesIntoByteArray of Into<Bytes, ByteArray> {
     fn into(self: Bytes) -> ByteArray {
         let mut res: ByteArray = Default::default();
         let mut offset = 0;
-        while offset < self
-            .size() {
-                if offset + 31 <= self.size() {
-                    let (new_offset, value) = self.read_bytes31(offset);
-                    res.append_word(value.into(), 31);
-                    offset = new_offset;
-                } else {
-                    let (new_offset, value) = self.read_u8(offset);
-                    res.append_byte(value);
-                    offset = new_offset;
-                }
-            };
+        while offset < self.size() {
+            if offset + 31 <= self.size() {
+                let (new_offset, value) = self.read_bytes31(offset);
+                res.append_word(value.into(), 31);
+                offset = new_offset;
+            } else {
+                let (new_offset, value) = self.read_u8(offset);
+                res.append_byte(value);
+                offset = new_offset;
+            }
+        };
         res
     }
 }

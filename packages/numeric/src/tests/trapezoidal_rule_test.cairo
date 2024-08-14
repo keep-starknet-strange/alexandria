@@ -5,7 +5,7 @@ use alexandria_numeric::trapezoidal_rule::trapezoidal_rule;
 fn trapezoidal_rule_test() {
     let xs: Array::<u64> = array![3, 5, 7];
     let ys = array![11, 13, 17];
-    assert_eq!(trapezoidal_rule(xs.span(), ys.span()), 54, "invalid integral");
+    assert_eq!(trapezoidal_rule(xs.span(), ys.span()), 54);
 }
 
 #[test]

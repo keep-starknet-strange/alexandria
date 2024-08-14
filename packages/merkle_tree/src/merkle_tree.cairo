@@ -4,7 +4,8 @@
 //!
 //! ```
 //! // This version uses the pedersen hash method because the PedersenHasherImpl is in the scope.
-//! use alexandria_data_structures::merkle_tree::{Hasher, MerkleTree, pedersen::PedersenHasherImpl, MerkleTreeTrait};
+//! use alexandria_data_structures::merkle_tree::{Hasher, MerkleTree, pedersen::PedersenHasherImpl,
+//! MerkleTreeTrait};
 //!
 //! // Create a new merkle tree instance.
 //! let mut merkle_tree: MerkleTree<Hasher> = MerkleTreeTrait::new();
@@ -15,7 +16,8 @@
 //!
 //! ```
 //! // This version uses the poseidon hash method because the PoseidonHasherImpl is in the scope.
-//! use alexandria_data_structures::merkle_tree::{ Hasher, MerkleTree, poseidon::PoseidonHasherImpl, MerkleTreeTrait };
+//! use alexandria_data_structures::merkle_tree::{ Hasher, MerkleTree, poseidon::PoseidonHasherImpl,
+//! MerkleTreeTrait };
 //!
 //! // Create a new merkle tree instance.
 //! let mut merkle_tree: MerkleTree<PoseidonHasher> = MerkleTreeTrait::new();
@@ -104,18 +106,18 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
     fn compute_root(
         ref self: MerkleTree<T>, mut current_node: felt252, mut proof: Span<felt252>
     ) -> felt252 {
-        while let Option::Some(proof_element) = proof
-            .pop_front() {
-                // Compute the hash of the current node and the current element of the proof.
-                // We need to check if the current node is smaller than the current element of the proof.
-                // If it is, we need to swap the order of the hash.
-                current_node =
-                    if Into::<felt252, u256>::into(current_node) < (*proof_element).into() {
-                        self.hasher.hash(current_node, *proof_element)
-                    } else {
-                        self.hasher.hash(*proof_element, current_node)
-                    }
-            };
+        for proof_element in proof {
+            // Compute the hash of the current node and the current element of the proof.
+            // We need to check if the current node is smaller than the current element of the
+            // proof.
+            // If it is, we need to swap the order of the hash.
+            current_node =
+                if Into::<felt252, u256>::into(current_node) < (*proof_element).into() {
+                    self.hasher.hash(current_node, *proof_element)
+                } else {
+                    self.hasher.hash(*proof_element, current_node)
+                }
+        };
         current_node
     }
 
@@ -129,18 +131,18 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
     fn verify(
         ref self: MerkleTree<T>, root: felt252, mut leaf: felt252, mut proof: Span<felt252>
     ) -> bool {
-        while let Option::Some(proof_element) = proof
-            .pop_front() {
-                // Compute the hash of the current node and the current element of the proof.
-                // We need to check if the current node is smaller than the current element of the proof.
-                // If it is, we need to swap the order of the hash.
-                leaf =
-                    if Into::<felt252, u256>::into(leaf) < (*proof_element).into() {
-                        self.hasher.hash(leaf, *proof_element)
-                    } else {
-                        self.hasher.hash(*proof_element, leaf)
-                    };
-            };
+        for proof_element in proof {
+            // Compute the hash of the current node and the current element of the proof.
+            // We need to check if the current node is smaller than the current element of the
+            // proof.
+            // If it is, we need to swap the order of the hash.
+            leaf =
+                if Into::<felt252, u256>::into(leaf) < (*proof_element).into() {
+                    self.hasher.hash(leaf, *proof_element)
+                } else {
+                    self.hasher.hash(*proof_element, leaf)
+                };
+        };
         leaf == root
     }
 
@@ -202,15 +204,14 @@ fn get_next_level<T, +HasherTrait<T>, +Drop<T>>(
     mut nodes: Span<felt252>, ref hasher: T
 ) -> Array<felt252> {
     let mut next_level: Array<felt252> = array![];
-    while let Option::Some(left) = nodes
-        .pop_front() {
-            let right = *nodes.pop_front().expect('Index out of bounds');
-            let node = if Into::<felt252, u256>::into(*left) < right.into() {
-                hasher.hash(*left, right)
-            } else {
-                hasher.hash(right, *left)
-            };
-            next_level.append(node);
+    while let Option::Some(left) = nodes.pop_front() {
+        let right = *nodes.pop_front().expect('Index out of bounds');
+        let node = if Into::<felt252, u256>::into(*left) < right.into() {
+            hasher.hash(*left, right)
+        } else {
+            hasher.hash(right, *left)
         };
+        next_level.append(node);
+    };
     next_level
 }

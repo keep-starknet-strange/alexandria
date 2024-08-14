@@ -3,7 +3,8 @@
 //! It can be considered to be based on the conversion between Julian day and the calendar date.
 
 /// Compute the day of the week for the given Gregorian date.
-/// The returned value is an integer in the range 0 to 6, where 0 is Saturday, 1 is Sunday, 2 is Monday, and so on.
+/// The returned value is an integer in the range 0 to 6, where 0 is Saturday, 1 is Sunday, 2 is
+/// Monday, and so on.
 /// # Arguments
 /// * `date` - The date of the month
 /// * `month` - The month of the year

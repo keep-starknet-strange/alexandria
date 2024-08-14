@@ -1,8 +1,8 @@
 use alexandria_data_structures::bit_array::{
     BitArray, BitArrayTrait, one_shift_left_bytes_felt252, shift_bit
 };
-use core::integer::BoundedInt;
 use core::integer::u512;
+use core::num::traits::Bounded;
 
 #[test]
 #[available_gas(30000000)]
@@ -18,10 +18,7 @@ fn test_append_bit() {
         .try_into()
         .unwrap();
     let expected: Array<bytes31> = array![val, val,];
-    assert(
-        ba.current() == 0xa * one_shift_left_bytes_felt252(30) * shift_bit(4).into(),
-        'expected current 0xa'
-    );
+    assert_eq!(ba.current(), 0xa * one_shift_left_bytes_felt252(30) * shift_bit(4).into());
     assert!(ba.data() == expected, "illegal array");
 }
 
@@ -32,7 +29,7 @@ fn test_at() {
     let mut index: usize = 0;
     loop {
         if index == 8 * 16 - 1 {
-            // last value 
+            // last value
             assert!(ba[index] == false, "expected false");
             break;
         }
@@ -94,20 +91,14 @@ fn test_pop_front_empty() {
 #[available_gas(20000000)]
 fn test_read_word_be() {
     let mut ba = sample_bit_array();
-    assert(
-        ba.read_word_be(length: 128).unwrap() == BoundedInt::<u128>::max().into() - 1,
-        'expected max - 1'
-    );
+    assert_eq!(ba.read_word_be(length: 128).unwrap(), Bounded::<u128>::MAX.into() - 1);
 }
 
 #[test]
 #[available_gas(20000000)]
 fn test_read_word_le() {
     let mut ba = sample_bit_array();
-    assert(
-        ba.read_word_le(length: 128).unwrap() == 0x7fffffffffffffffffffffffffffffff,
-        'unexpected value'
-    );
+    assert_eq!(ba.read_word_le(length: 128).unwrap(), 0x7fffffffffffffffffffffffffffffff);
 }
 
 #[test]
@@ -117,7 +108,7 @@ fn test_read_word_be_u256() {
     let low = 0x101112131415161718191a1b1c1d1e1f_u128;
     ba.write_word_be(low.into(), 128);
     let high = 0xfffffffffffffffffffffffffffffffe_u128;
-    assert!(ba.read_word_be_u256(length: 256).unwrap() == u256 { low, high }, "unexpected value");
+    assert!(ba.read_word_be_u256(length: 256).unwrap() == u256 { low, high });
 }
 
 #[test]
@@ -127,7 +118,7 @@ fn test_read_word_le_u256() {
     let low = 0x7fffffffffffffffffffffffffffffff_u128;
     let high = 0x101112131415161718191a1b1c1d1e1f_u128;
     ba.write_word_le(high.into(), 128);
-    assert!(ba.read_word_le_u256(length: 256).unwrap() == u256 { low, high }, "unexpected value");
+    assert!(ba.read_word_le_u256(length: 256).unwrap() == u256 { low, high });
 }
 
 #[test]
@@ -141,10 +132,7 @@ fn test_read_word_be_u512() {
     ba.write_word_be(limb1.into(), 128);
     ba.write_word_be(limb0.into(), 128);
     let limb3 = 0xfffffffffffffffffffffffffffffffe_u128;
-    assert(
-        ba.read_word_be_u512(length: 512).unwrap() == u512 { limb0, limb1, limb2, limb3 },
-        'unexpected value'
-    );
+    assert!(ba.read_word_be_u512(length: 512).unwrap() == u512 { limb0, limb1, limb2, limb3 });
 }
 
 #[test]
@@ -158,10 +146,7 @@ fn test_read_word_le_u512() {
     ba.write_word_le(limb2.into(), 128);
     ba.write_word_le(limb3.into(), 128);
     let limb0 = 0x7fffffffffffffffffffffffffffffff_u128;
-    assert(
-        ba.read_word_le_u512(length: 512).unwrap() == u512 { limb0, limb1, limb2, limb3 },
-        'unexpected value'
-    );
+    assert!(ba.read_word_le_u512(length: 512).unwrap() == u512 { limb0, limb1, limb2, limb3 });
 }
 
 #[test]
@@ -184,47 +169,39 @@ fn test_read_word_le_half() {
 #[available_gas(20000000)]
 fn test_write_word_be() {
     let mut ba: BitArray = Default::default();
-    ba.write_word_be(BoundedInt::<u128>::max().into() - 2, 128);
-    assert(
-        ba.read_word_be(128).unwrap() == BoundedInt::<u128>::max().into() - 2, 'unexpected value'
-    );
+    ba.write_word_be(Bounded::<u128>::MAX.into() - 2, 128);
+    assert_eq!(ba.read_word_be(128).unwrap(), Bounded::<u128>::MAX.into() - 2);
 }
 
 #[test]
 #[available_gas(20000000)]
 fn test_write_word_be_half() {
     let mut ba: BitArray = Default::default();
-    ba.write_word_be(BoundedInt::<u128>::max().into() - 3, 64);
-    assert!(
-        ba.read_word_be(64).unwrap() == BoundedInt::<u64>::max().into() - 3, "unexpected value"
-    );
+    ba.write_word_be(Bounded::<u128>::MAX.into() - 3, 64);
+    assert!(ba.read_word_be(64).unwrap() == Bounded::<u64>::MAX.into() - 3, "unexpected value");
 }
 
 #[test]
 #[available_gas(20000000)]
 fn test_write_word_le() {
     let mut ba: BitArray = Default::default();
-    ba.write_word_le(BoundedInt::<u128>::max().into() - 4, 128);
-    assert(
-        ba.read_word_le(128).unwrap() == BoundedInt::<u128>::max().into() - 4, 'unexpected value'
-    );
+    ba.write_word_le(Bounded::<u128>::MAX.into() - 4, 128);
+    assert_eq!(ba.read_word_le(128).unwrap(), Bounded::<u128>::MAX.into() - 4);
 }
 
 #[test]
 #[available_gas(20000000)]
 fn test_write_word_le_half() {
     let mut ba: BitArray = Default::default();
-    ba.write_word_le(BoundedInt::<u128>::max().into() - 5, 64);
-    assert!(
-        ba.read_word_le(64).unwrap() == BoundedInt::<u64>::max().into() - 5, "unexpected value"
-    );
+    ba.write_word_le(Bounded::<u128>::MAX.into() - 5, 64);
+    assert!(ba.read_word_le(64).unwrap() == Bounded::<u64>::MAX.into() - 5, "unexpected value");
 }
 
 #[test]
 #[available_gas(40000000)]
 fn test_write_word_be_u256() {
     let mut ba: BitArray = Default::default();
-    let expected = u256 { low: BoundedInt::max() - 1, high: BoundedInt::max() - 2 };
+    let expected = u256 { low: Bounded::MAX - 1, high: Bounded::MAX - 2 };
     ba.write_word_be_u256(expected, 256);
     assert!(ba.read_word_be_u256(256).unwrap() == expected, "unexpected value");
 }
@@ -233,7 +210,7 @@ fn test_write_word_be_u256() {
 #[available_gas(40000000)]
 fn test_write_word_le_u256() {
     let mut ba: BitArray = Default::default();
-    let expected = u256 { low: BoundedInt::max() - 1, high: BoundedInt::max() - 2 };
+    let expected = u256 { low: Bounded::MAX - 1, high: Bounded::MAX - 2 };
     ba.write_word_le_u256(expected, 256);
     assert!(ba.read_word_le_u256(256).unwrap() == expected, "unexpected value");
 }
@@ -242,10 +219,10 @@ fn test_write_word_le_u256() {
 #[available_gas(80000000)]
 fn test_write_word_be_u512() {
     let mut ba: BitArray = Default::default();
-    let limb0 = BoundedInt::<u128>::max();
-    let limb1 = BoundedInt::<u128>::max() - 1;
-    let limb2 = BoundedInt::<u128>::max() - 2;
-    let limb3 = BoundedInt::<u128>::max() - 3;
+    let limb0 = Bounded::<u128>::MAX;
+    let limb1 = Bounded::<u128>::MAX - 1;
+    let limb2 = Bounded::<u128>::MAX - 2;
+    let limb3 = Bounded::<u128>::MAX - 3;
     let expected = u512 { limb0, limb1, limb2, limb3 };
     ba.write_word_be_u512(expected, 512);
     assert!(ba.read_word_be_u512(512).unwrap() == expected, "unexpected value");
@@ -255,10 +232,10 @@ fn test_write_word_be_u512() {
 #[available_gas(80000000)]
 fn test_write_word_le_u512() {
     let mut ba: BitArray = Default::default();
-    let limb0 = BoundedInt::<u128>::max();
-    let limb1 = BoundedInt::<u128>::max() - 1;
-    let limb2 = BoundedInt::<u128>::max() - 2;
-    let limb3 = BoundedInt::<u128>::max() - 3;
+    let limb0 = Bounded::<u128>::MAX;
+    let limb1 = Bounded::<u128>::MAX - 1;
+    let limb2 = Bounded::<u128>::MAX - 2;
+    let limb3 = Bounded::<u128>::MAX - 3;
     let expected = u512 { limb0, limb1, limb2, limb3 };
     ba.write_word_le_u512(expected, 512);
     assert!(ba.read_word_le_u512(512).unwrap() == expected, "unexpected value");
@@ -298,7 +275,7 @@ fn test_serde_serialize() {
     // We gotta skip one now
     out.pop_front().unwrap();
     let data: felt252 = out.pop_front().unwrap();
-    let expected: felt252 = BoundedInt::<u128>::max().into() - 1;
+    let expected: felt252 = Bounded::<u128>::MAX.into() - 1;
     let expected = expected * one_shift_left_bytes_felt252(15);
     assert!(data == expected, "unexpected data");
 }
@@ -329,6 +306,6 @@ fn test_serde_ser_deser() {
 
 // helpers
 fn sample_bit_array() -> BitArray {
-    let sample: felt252 = BoundedInt::<u128>::max().into() - 1;
+    let sample: felt252 = Bounded::<u128>::MAX.into() - 1;
     BitArrayTrait::new(array![], sample * one_shift_left_bytes_felt252(15), 0, 8 * 16)
 }

@@ -10,7 +10,7 @@ mod span_ext;
 mod stack;
 mod vec;
 
-// Utilities 
+// Utilities
 
 #[inline(always)]
 fn get_felt252_array() -> Array<felt252> {

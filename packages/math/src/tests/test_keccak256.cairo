@@ -8,7 +8,7 @@ fn test_keccak256_empty_bytes() {
     let hash = keccak256(input.span());
     let expected = 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470;
 
-    assert(hash == expected, 'wrong hash value')
+    assert_eq!(hash, expected)
 }
 
 #[test]
@@ -19,7 +19,7 @@ fn test_keccak256_partial_bytes() {
     let hash = keccak256(input.span());
     let expected = 0x51e8babe8b42352100dffa7f7b3843c95245d3d545c6cbf5052e80258ae80627;
 
-    assert(hash == expected, 'wrong hash value');
+    assert_eq!(hash, expected);
 }
 
 #[test]
@@ -64,5 +64,5 @@ fn test_keccak256_full_u256() {
     let hash = keccak256(input.span());
     let expected = 0x98cfb1eca8a71b4a4b1c115f3d5a462296a66487d1d97fb4c47b979c64bde069;
 
-    assert(hash == expected, 'wrong hash value');
+    assert_eq!(hash, expected);
 }

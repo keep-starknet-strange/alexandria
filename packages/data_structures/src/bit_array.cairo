@@ -1,5 +1,6 @@
 use core::bytes_31::bytes31;
 use core::integer::u512;
+use core::ops::index::IndexView;
 use core::serde::Serde;
 use core::serde::into_felt252_based::SerdeImpl;
 
@@ -83,8 +84,8 @@ pub trait BitArrayTrait {
     /// `word` - The value to store onto the bit array of type `u512`
     /// `length` - The length of the word in bits, maximum 512
     fn write_word_be_u512(ref self: BitArray, word: u512, length: usize);
-    /// Reads a single word of the specified length up to 248 bits in little endian bit representation
-    /// # Arguments
+    /// Reads a single word of the specified length up to 248 bits in little endian bit
+    /// representation # Arguments
     /// `length` - The bit length of the word to read, max 248
     /// # Returns
     /// `Option<felt252>` - If there are `length` bits remaining, the word is returned as felt252
@@ -96,7 +97,7 @@ pub trait BitArrayTrait {
     /// # Returns
     /// `Option<u256>` - If there are `length` bits remaining, the word is returned as u256
     fn read_word_le_u256(ref self: BitArray, length: usize) -> Option<u256>;
-    /// Reads a single word of the specified length upto 512 bits in little endian representation.
+    /// Reads a single word of the specified length up to 512 bits in little endian representation.
     /// For words shorter than (or equal to) 256 bits consider the other read calls instead.
     /// # Arguments
     /// `length` - The bit length of the word to read, max 512
@@ -115,7 +116,7 @@ pub trait BitArrayTrait {
     /// `word` - The value to store onto the bit array of type `u256`
     /// `length` - The length of the word in bits, maximum 256
     fn write_word_le_u256(ref self: BitArray, word: u256, length: usize);
-    /// Writes the bits of the specified length from `word` onto the BitArray 
+    /// Writes the bits of the specified length from `word` onto the BitArray
     /// in little endian representation
     /// # Arguments
     /// `word` - The value to store onto the bit array of type `u512`
@@ -458,7 +459,8 @@ impl BitArrayInternalImpl of BitArrayInternalTrait {
     }
 }
 
-impl BitArrayIndexView of IndexView<BitArray, usize, bool> {
+impl BitArrayIndexView of IndexView<BitArray, usize> {
+    type Target = bool;
     fn index(self: @BitArray, index: usize) -> bool {
         self.at(index).expect('Index out of bounds')
     }

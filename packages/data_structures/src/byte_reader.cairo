@@ -1,4 +1,5 @@
 use core::integer::u512;
+use core::ops::index::IndexView;
 use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 
 #[derive(Copy, Clone, Drop)]
@@ -6,6 +7,7 @@ pub struct ByteReaderState<T> {
     pub(crate) data: @T,
     index: usize,
 }
+
 
 pub trait ByteReader<T> {
     /// Wraps the array of bytes in a ByteReader for sequential consumption of integers and/or bytes
@@ -23,49 +25,57 @@ pub trait ByteReader<T> {
     /// # Arguments
     /// * `offset` - the start location of the consecutive bytes to read
     /// # Returns
-    /// * `Option<u16>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    /// * `Option<u16>` - Returns an integer if there are enough consecutive bytes available in the
+    /// ByteArray
     fn word_u16(self: @T, offset: usize) -> Option<u16>;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
     /// # Arguments
     /// * `offset` - the start location of the consecutive bytes to read
     /// # Returns
-    /// * `Option<u16>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    /// * `Option<u16>` - Returns an integer if there are enough consecutive bytes available in the
+    /// ByteArray
     fn word_u16_le(self: @T, offset: usize) -> Option<u16>;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
     /// # Arguments
     /// * `offset` - the start location of the consecutive bytes to read
     /// # Returns
-    /// * `Option<u32>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    /// * `Option<u32>` - Returns an integer if there are enough consecutive bytes available in the
+    /// ByteArray
     fn word_u32(self: @T, offset: usize) -> Option<u32>;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
     /// # Arguments
     /// * `offset` - the start location of the consecutive bytes to read
     /// # Returns
-    /// * `Option<u32>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    /// * `Option<u32>` - Returns an integer if there are enough consecutive bytes available in the
+    /// ByteArray
     fn word_u32_le(self: @T, offset: usize) -> Option<u32>;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
     /// # Arguments
     /// * `offset` - the start location of the consecutive bytes to read
     /// # Returns
-    /// * `Option<u64>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    /// * `Option<u64>` - Returns an integer if there are enough consecutive bytes available in the
+    /// ByteArray
     fn word_u64(self: @T, offset: usize) -> Option<u64>;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
     /// # Arguments
     /// * `offset` - the start location of the consecutive bytes to read
     /// # Returns
-    /// * `Option<u64>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    /// * `Option<u64>` - Returns an integer if there are enough consecutive bytes available in the
+    /// ByteArray
     fn word_u64_le(self: @T, offset: usize) -> Option<u64>;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
     /// # Arguments
     /// * `offset` - the start location of the consecutive bytes to read
     /// # Returns
-    /// * `Option<u128>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    /// * `Option<u128>` - Returns an integer if there are enough consecutive bytes available in the
+    /// ByteArray
     fn word_u128(self: @T, offset: usize) -> Option<u128>;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
     /// # Arguments
     /// * `offset` - the start location of the consecutive bytes to read
     /// # Returns
-    /// * `Option<u128>` - Returns an integer if there are enough consecutive bytes available in the ByteArray
+    /// * `Option<u128>` - Returns an integer if there are enough consecutive bytes available in the
+    /// ByteArray
     fn word_u128_le(self: @T, offset: usize) -> Option<u128>;
     /// Reads a u8 unsigned integer
     /// # Returns
@@ -123,36 +133,36 @@ pub trait ByteReader<T> {
     /// # Returns
     /// `Option<i8>` - If there are enough bytes remaining an optional integer is returned
     fn read_i8(ref self: ByteReaderState<T>) -> Option<i8>;
-    /// Reads an i16 signed integer in two's complement encoding from the ByteArray in big endian byte order
-    /// # Returns
+    /// Reads an i16 signed integer in two's complement encoding from the ByteArray in big endian
+    /// byte order # Returns
     /// `Option<i16>` - If there are enough bytes remaining an optional integer is returned
     fn read_i16(ref self: ByteReaderState<T>) -> Option<i16>;
-    /// Reads an i16 signed integer in two's complement encoding from the ByteArray in little endian byte order
-    /// # Returns
+    /// Reads an i16 signed integer in two's complement encoding from the ByteArray in little endian
+    /// byte order # Returns
     /// `Option<i16>` - If there are enough bytes remaining an optional integer is returned
     fn read_i16_le(ref self: ByteReaderState<T>) -> Option<i16>;
-    /// Reads an i32 signed integer in two's complement encoding from the ByteArray in big endian byte order
-    /// # Returns
+    /// Reads an i32 signed integer in two's complement encoding from the ByteArray in big endian
+    /// byte order # Returns
     /// `Option<i32>` - If there are enough bytes remaining an optional integer is returned
     fn read_i32(ref self: ByteReaderState<T>) -> Option<i32>;
-    /// Reads an i32 signed integer in two's complement encoding from the ByteArray in little endian byte order
-    /// # Returns
+    /// Reads an i32 signed integer in two's complement encoding from the ByteArray in little endian
+    /// byte order # Returns
     /// `Option<i32>` - If there are enough bytes remaining an optional integer is returned
     fn read_i32_le(ref self: ByteReaderState<T>) -> Option<i32>;
-    /// Reads an i64 signed integer in two's complement encoding from the ByteArray in big endian byte order
-    /// # Returns
+    /// Reads an i64 signed integer in two's complement encoding from the ByteArray in big endian
+    /// byte order # Returns
     /// `Option<i64>` - If there are enough bytes remaining an optional integer is returned
     fn read_i64(ref self: ByteReaderState<T>) -> Option<i64>;
-    /// Reads an i64 signed integer in two's complement encoding from the ByteArray in little endian byte order
-    /// # Returns
+    /// Reads an i64 signed integer in two's complement encoding from the ByteArray in little endian
+    /// byte order # Returns
     /// `Option<i64>` - If there are enough bytes remaining an optional integer is returned
     fn read_i64_le(ref self: ByteReaderState<T>) -> Option<i64>;
-    /// Reads an i128 signed integer in two's complement encoding from the ByteArray in big endian byte order
-    /// # Returns
+    /// Reads an i128 signed integer in two's complement encoding from the ByteArray in big endian
+    /// byte order # Returns
     /// `Option<i128>` - If there are enough bytes remaining an optional integer is returned
     fn read_i128(ref self: ByteReaderState<T>) -> Option<i128>;
-    /// Reads an i128 signed integer in two's complement encoding from the ByteArray in little endian byte order
-    /// # Returns
+    /// Reads an i128 signed integer in two's complement encoding from the ByteArray in little
+    /// endian byte order # Returns
     /// `Option<i128>` - If there are enough bytes remaining an optional integer is returned
     fn read_i128_le(ref self: ByteReaderState<T>) -> Option<i128>;
     /// Remaining length count relative to what has already been consume/read
@@ -161,7 +171,9 @@ pub trait ByteReader<T> {
     fn len(self: @ByteReaderState<T>) -> usize;
 }
 
-impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteReader<T> {
+impl ByteReaderImpl<
+    T, +Drop<T>, +Len<T>, +IndexView<T, usize>, +Into<IndexView::<T, usize>::Target, @u8>
+> of ByteReader<T> {
     #[inline]
     fn reader(self: @T) -> ByteReaderState<T> {
         ByteReaderState { data: self, index: 0 }
@@ -175,8 +187,8 @@ impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteRead
     #[inline]
     fn word_u16(self: @T, offset: usize) -> Option<u16> {
         if self.remaining(offset, 2) {
-            let b1 = *self[offset];
-            let b2 = *self[offset + 1];
+            let b1 = *self[offset].into();
+            let b2 = *self[offset + 1].into();
             Option::Some(b1.into() * one_shift_left_bytes_u128(1).try_into().unwrap() + b2.into())
         } else {
             Option::None
@@ -186,8 +198,8 @@ impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteRead
     #[inline]
     fn word_u16_le(self: @T, offset: usize) -> Option<u16> {
         if self.remaining(offset, 2) {
-            let b1 = *self[offset];
-            let b2 = *self[offset + 1];
+            let b1 = *self[offset].into();
+            let b2 = *self[offset + 1].into();
             Option::Some(b1.into() + b2.into() * one_shift_left_bytes_u128(1).try_into().unwrap())
         } else {
             Option::None
@@ -197,10 +209,10 @@ impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteRead
     #[inline]
     fn word_u32(self: @T, offset: usize) -> Option<u32> {
         if self.remaining(offset, 4) {
-            let b1 = *self[offset];
-            let b2 = *self[offset + 1];
-            let b3 = *self[offset + 2];
-            let b4 = *self[offset + 3];
+            let b1 = *self[offset].into();
+            let b2 = *self[offset + 1].into();
+            let b3 = *self[offset + 2].into();
+            let b4 = *self[offset + 3].into();
             Option::Some(
                 b1.into() * one_shift_left_bytes_u128(3).try_into().unwrap()
                     + b2.into() * one_shift_left_bytes_u128(2).try_into().unwrap()
@@ -215,10 +227,10 @@ impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteRead
     #[inline]
     fn word_u32_le(self: @T, offset: usize) -> Option<u32> {
         if self.remaining(offset, 4) {
-            let b1 = *self[offset];
-            let b2 = *self[offset + 1];
-            let b3 = *self[offset + 2];
-            let b4 = *self[offset + 3];
+            let b1 = *self[offset].into();
+            let b2 = *self[offset + 1].into();
+            let b3 = *self[offset + 2].into();
+            let b4 = *self[offset + 3].into();
             Option::Some(
                 b1.into()
                     + b2.into() * one_shift_left_bytes_u128(1).try_into().unwrap()
@@ -233,14 +245,14 @@ impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteRead
     #[inline]
     fn word_u64(self: @T, offset: usize) -> Option<u64> {
         if self.remaining(offset, 8) {
-            let b1 = *self[offset];
-            let b2 = *self[offset + 1];
-            let b3 = *self[offset + 2];
-            let b4 = *self[offset + 3];
-            let b5 = *self[offset + 4];
-            let b6 = *self[offset + 5];
-            let b7 = *self[offset + 6];
-            let b8 = *self[offset + 7];
+            let b1 = *self[offset].into();
+            let b2 = *self[offset + 1].into();
+            let b3 = *self[offset + 2].into();
+            let b4 = *self[offset + 3].into();
+            let b5 = *self[offset + 4].into();
+            let b6 = *self[offset + 5].into();
+            let b7 = *self[offset + 6].into();
+            let b8 = *self[offset + 7].into();
             Option::Some(
                 b1.into() * one_shift_left_bytes_u128(7).try_into().unwrap()
                     + b2.into() * one_shift_left_bytes_u128(6).try_into().unwrap()
@@ -259,14 +271,14 @@ impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteRead
     #[inline]
     fn word_u64_le(self: @T, offset: usize) -> Option<u64> {
         if self.remaining(offset, 8) {
-            let b1 = *self[offset];
-            let b2 = *self[offset + 1];
-            let b3 = *self[offset + 2];
-            let b4 = *self[offset + 3];
-            let b5 = *self[offset + 4];
-            let b6 = *self[offset + 5];
-            let b7 = *self[offset + 6];
-            let b8 = *self[offset + 7];
+            let b1 = *self[offset].into();
+            let b2 = *self[offset + 1].into();
+            let b3 = *self[offset + 2].into();
+            let b4 = *self[offset + 3].into();
+            let b5 = *self[offset + 4].into();
+            let b6 = *self[offset + 5].into();
+            let b7 = *self[offset + 6].into();
+            let b8 = *self[offset + 7].into();
             Option::Some(
                 b1.into()
                     + b2.into() * one_shift_left_bytes_u128(1).try_into().unwrap()
@@ -285,22 +297,22 @@ impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteRead
     #[inline]
     fn word_u128(self: @T, offset: usize) -> Option<u128> {
         if self.remaining(offset, 16) {
-            let b01 = *self[offset];
-            let b02 = *self[offset + 1];
-            let b03 = *self[offset + 2];
-            let b04 = *self[offset + 3];
-            let b05 = *self[offset + 4];
-            let b06 = *self[offset + 5];
-            let b07 = *self[offset + 6];
-            let b08 = *self[offset + 7];
-            let b09 = *self[offset + 8];
-            let b10 = *self[offset + 9];
-            let b11 = *self[offset + 10];
-            let b12 = *self[offset + 11];
-            let b13 = *self[offset + 12];
-            let b14 = *self[offset + 13];
-            let b15 = *self[offset + 14];
-            let b16 = *self[offset + 15];
+            let b01 = *self[offset].into();
+            let b02 = *self[offset + 1].into();
+            let b03 = *self[offset + 2].into();
+            let b04 = *self[offset + 3].into();
+            let b05 = *self[offset + 4].into();
+            let b06 = *self[offset + 5].into();
+            let b07 = *self[offset + 6].into();
+            let b08 = *self[offset + 7].into();
+            let b09 = *self[offset + 8].into();
+            let b10 = *self[offset + 9].into();
+            let b11 = *self[offset + 10].into();
+            let b12 = *self[offset + 11].into();
+            let b13 = *self[offset + 12].into();
+            let b14 = *self[offset + 13].into();
+            let b15 = *self[offset + 14].into();
+            let b16 = *self[offset + 15].into();
             Option::Some(
                 b01.into() * one_shift_left_bytes_u128(15).try_into().unwrap()
                     + b02.into() * one_shift_left_bytes_u128(14).try_into().unwrap()
@@ -327,22 +339,22 @@ impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteRead
     #[inline]
     fn word_u128_le(self: @T, offset: usize) -> Option<u128> {
         if self.remaining(offset, 16) {
-            let b01 = *self[offset];
-            let b02 = *self[offset + 1];
-            let b03 = *self[offset + 2];
-            let b04 = *self[offset + 3];
-            let b05 = *self[offset + 4];
-            let b06 = *self[offset + 5];
-            let b07 = *self[offset + 6];
-            let b08 = *self[offset + 7];
-            let b09 = *self[offset + 8];
-            let b10 = *self[offset + 9];
-            let b11 = *self[offset + 10];
-            let b12 = *self[offset + 11];
-            let b13 = *self[offset + 12];
-            let b14 = *self[offset + 13];
-            let b15 = *self[offset + 14];
-            let b16 = *self[offset + 15];
+            let b01 = *self[offset].into();
+            let b02 = *self[offset + 1].into();
+            let b03 = *self[offset + 2].into();
+            let b04 = *self[offset + 3].into();
+            let b05 = *self[offset + 4].into();
+            let b06 = *self[offset + 5].into();
+            let b07 = *self[offset + 6].into();
+            let b08 = *self[offset + 7].into();
+            let b09 = *self[offset + 8].into();
+            let b10 = *self[offset + 9].into();
+            let b11 = *self[offset + 10].into();
+            let b12 = *self[offset + 11].into();
+            let b13 = *self[offset + 12].into();
+            let b14 = *self[offset + 13].into();
+            let b15 = *self[offset + 14].into();
+            let b16 = *self[offset + 15].into();
             Option::Some(
                 b01.into()
                     + b02.into() * one_shift_left_bytes_u128(01).try_into().unwrap()
@@ -368,7 +380,7 @@ impl ByteReaderImpl<T, +Drop<T>, +Len<T>, +IndexView<T, usize, @u8>> of ByteRead
 
     fn read_u8(ref self: ByteReaderState<T>) -> Option<u8> {
         if self.data.remaining(self.index, 1) {
-            let result = *self.data[self.index];
+            let result = *self.data[self.index].into();
             self.index += 1;
             Option::Some(result)
         } else {
@@ -553,7 +565,8 @@ impl ByteArrayLenImpl of Len<ByteArray> {
 impl ByteReaderLenImpl<T, +Len<T>> of Len<ByteReaderState<T>> {
     /// Returns the remaining length of the ByteReader
     /// # Returns
-    /// `usize` - The number of bytes remaining, considering the number of bytes that have already been consumed
+    /// `usize` - The number of bytes remaining, considering the number of bytes that have already
+    /// been consumed
     #[inline]
     fn len(self: @ByteReaderState<T>) -> usize {
         let byte_array = *self.data;
@@ -562,19 +575,10 @@ impl ByteReaderLenImpl<T, +Len<T>> of Len<ByteReaderState<T>> {
     }
 }
 
-impl ByteArrayIndexViewAsSnapshotImpl of IndexView<ByteArray, usize, @u8> {
+impl IntoU8Impl of Into<u8, @u8> {
     #[inline(always)]
-    fn index(self: @ByteArray, index: usize) -> @u8 {
-        @self.at(index).expect('Index out of bounds')
-    }
-}
-
-impl ByteReaderIndexViewImpl<
-    T, impl TIndexView: IndexView<T, usize, @u8>
-> of IndexView<ByteReaderState<T>, usize, @u8> {
-    #[inline(always)]
-    fn index(self: @ByteReaderState<T>, index: usize) -> @u8 {
-        TIndexView::index(*self.data, index)
+    fn into(self: u8) -> @u8 {
+        @self
     }
 }
 

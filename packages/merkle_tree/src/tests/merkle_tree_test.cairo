@@ -25,13 +25,13 @@ mod regular_call_merkle_tree_pedersen {
 
         // [Assert] Compute merkle root.
         let computed_root = merkle_tree.compute_root(leaf, valid_proof);
-        assert_eq!(computed_root, root, "compute valid root failed");
+        assert_eq!(computed_root, root);
 
         // [Assert] Compute merkle proof.
         let mut input_leaves = leaves;
         let index = 0;
         let computed_proof = merkle_tree.compute_proof(input_leaves, index);
-        assert_eq!(computed_proof, valid_proof, "compute valid proof failed");
+        assert_eq!(computed_proof, valid_proof);
 
         // [Assert] Verify a valid proof.
         let result = merkle_tree.verify(root, leaf, valid_proof);
@@ -67,7 +67,7 @@ fn merkle_tree_pedersen_test() {
     let computed_root = MerkleTreeImpl::<
         _, PedersenHasherImpl
     >::compute_root(ref merkle_tree, leaf, valid_proof);
-    assert_eq!(computed_root, root, "compute valid root failed");
+    assert_eq!(computed_root, root);
 
     // [Assert] Compute merkle proof.
     let mut input_leaves = leaves;
@@ -75,7 +75,7 @@ fn merkle_tree_pedersen_test() {
     let computed_proof = MerkleTreeImpl::<
         _, PedersenHasherImpl
     >::compute_proof(ref merkle_tree, input_leaves, index);
-    assert_eq!(computed_proof, valid_proof, "compute valid proof failed");
+    assert_eq!(computed_proof, valid_proof);
 
     // [Assert] Verify a valid proof.
     let result = MerkleTreeImpl::<
@@ -116,7 +116,7 @@ fn merkle_tree_poseidon_test() {
     let computed_root = MerkleTreeImpl::<
         _, PoseidonHasherImpl
     >::compute_root(ref merkle_tree, leaf, valid_proof);
-    assert_eq!(computed_root, root, "compute valid root failed");
+    assert_eq!(computed_root, root);
 
     // [Assert] Compute merkle proof.
     let mut input_leaves = leaves;
@@ -124,7 +124,7 @@ fn merkle_tree_poseidon_test() {
     let computed_proof = MerkleTreeImpl::<
         _, PoseidonHasherImpl
     >::compute_proof(ref merkle_tree, input_leaves, index);
-    assert_eq!(computed_proof, valid_proof, "compute valid proof failed");
+    assert_eq!(computed_proof, valid_proof);
 
     // [Assert] Verify a valid proof.
     let result = MerkleTreeImpl::<

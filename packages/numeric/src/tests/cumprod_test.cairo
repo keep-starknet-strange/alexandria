@@ -5,9 +5,9 @@ use alexandria_numeric::cumprod::cumprod;
 fn cumprod_test() {
     let xs: Array<u64> = array![3, 5, 7];
     let ys = cumprod(xs.span());
-    assert_eq!(*ys[0], *xs[0], "wrong value at index 0");
-    assert_eq!(*ys[1], *xs[0] * *xs[1], "wrong value at index 1");
-    assert_eq!(*ys[2], *xs[0] * *xs[1] * *xs[2], "wrong value at index 2");
+    assert_eq!(*ys[0], *xs[0]);
+    assert_eq!(*ys[1], *xs[0] * *xs[1]);
+    assert_eq!(*ys[2], *xs[0] * *xs[1] * *xs[2]);
 }
 
 #[test]

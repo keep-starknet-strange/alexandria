@@ -11,3 +11,6 @@ fmt.workspace = true
 [dependencies]
 # dependency due to VecTrait usage in dijkstra.cairo
 alexandria_data_structures = { path = "../data_structures" }
+
+[dev-dependencies]
+cairo_test.workspace = true

@@ -5,9 +5,9 @@ use alexandria_numeric::diff::diff;
 fn diff_test() {
     let xs = array![3, 5, 7];
     let ys = diff(xs.span());
-    assert_eq!(*ys[0], 0_u256, "wrong value at index 0");
-    assert_eq!(*ys[1], *xs[1] - *xs[0], "wrong value at index 1");
-    assert_eq!(*ys[2], *xs[2] - *xs[1], "wrong value at index 2");
+    assert_eq!(*ys[0], 0_u256);
+    assert_eq!(*ys[1], *xs[1] - *xs[0]);
+    assert_eq!(*ys[2], *xs[2] - *xs[1]);
 }
 
 #[test]

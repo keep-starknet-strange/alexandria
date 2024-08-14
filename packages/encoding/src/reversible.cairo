@@ -1,5 +1,6 @@
 use core::integer::u512;
 use core::num::traits::Zero;
+use core::ops::{MulAssign, AddAssign};
 
 const SELECT_BYTE: u16 = 0x100;
 const SELECT_BIT: u8 = 0b10;
@@ -30,9 +31,9 @@ pub fn reversing<
     +TryInto<T, NonZero<T>>,
     +DivRem<T>,
     +Drop<T>,
-    +MulEq<T>,
+    +MulAssign<T, T>,
     +Rem<T>,
-    +AddEq<T>
+    +AddAssign<T, T>
 >(
     word: T, size: usize, step: T
 ) -> (T, T) {
@@ -42,7 +43,14 @@ pub fn reversing<
 
 #[inline]
 pub fn reversing_partial_result<
-    T, +Copy<T>, +DivRem<T>, +TryInto<T, NonZero<T>>, +Drop<T>, +MulEq<T>, +Rem<T>, +AddEq<T>
+    T,
+    +Copy<T>,
+    +DivRem<T>,
+    +TryInto<T, NonZero<T>>,
+    +Drop<T>,
+    +MulAssign<T, T>,
+    +Rem<T>,
+    +AddAssign<T, T>
 >(
     mut word: T, mut onto: T, size: usize, step: T
 ) -> (T, T) {
