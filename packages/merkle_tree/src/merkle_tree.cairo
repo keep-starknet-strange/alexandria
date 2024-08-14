@@ -106,7 +106,7 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
     fn compute_root(
         ref self: MerkleTree<T>, mut current_node: felt252, mut proof: Span<felt252>
     ) -> felt252 {
-        while let Option::Some(proof_element) = proof.pop_front() {
+        for proof_element in proof {
             // Compute the hash of the current node and the current element of the proof.
             // We need to check if the current node is smaller than the current element of the
             // proof.
@@ -131,7 +131,7 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
     fn verify(
         ref self: MerkleTree<T>, root: felt252, mut leaf: felt252, mut proof: Span<felt252>
     ) -> bool {
-        while let Option::Some(proof_element) = proof.pop_front() {
+        for proof_element in proof {
             // Compute the hash of the current node and the current element of the proof.
             // We need to check if the current node is smaller than the current element of the
             // proof.

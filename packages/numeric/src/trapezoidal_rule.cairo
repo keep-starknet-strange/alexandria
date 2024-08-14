@@ -1,6 +1,6 @@
 use core::array::SpanTrait;
 use core::num::traits::Zero;
-use core::ops::{MulAssign, AddAssign};
+use core::ops::AddAssign;
 //! Integrate using the composite trapezoidal rule
 
 /// Integrate y(x).

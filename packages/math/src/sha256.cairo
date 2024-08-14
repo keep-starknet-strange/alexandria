@@ -86,7 +86,7 @@ pub fn sha256(mut data: Array<u8>) -> Array<u8> {
 
 fn from_u32Array_to_u8Array(mut data: Span<u32>) -> Array<u8> {
     let mut result = array![];
-    while let Option::Some(val) = data.pop_front() {
+    for val in data {
         let mut res = (*val & 0xff000000) / 0x1000000;
         result.append(res.try_into().unwrap());
         res = (*val & 0xff0000) / 0x10000;
