@@ -41,10 +41,7 @@ dependencies = [
 
 [[package]]
 name = "alexandria_math"
-version = "0.2.0"
-dependencies = [
- "alexandria_data_structures",
-]
+version = "0.2.1"
 
 [[package]]
 name = "alexandria_merkle_tree"
