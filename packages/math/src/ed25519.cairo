@@ -1,14 +1,11 @@
-use alexandria_data_structures::span_ext::SpanTraitExt;
 use alexandria_math::mod_arithmetics::{mult_mod, sqr_mod, div_mod, pow_mod, equality_mod};
 use alexandria_math::sha512::{sha512, SHA512_LEN};
 use alexandria_math::u512_arithmetics::{u512_add, u512_sub};
-use core::array::ArrayTrait;
 use core::integer::{u512, u512_safe_div_rem_by_u256};
 use core::math::u256_inv_mod;
 use core::num::traits::{OverflowingMul, WideMul};
 use core::option::OptionTrait;
-use core::traits::Div;
-use core::traits::TryInto;
+use core::traits::{Div, TryInto};
 
 // Subtraction without modulo operation
 // assumes a, b < modulo
@@ -239,12 +236,12 @@ impl U256TryIntoPoint of TryInto<u256, Point> {
     fn try_into(self: u256) -> Option<Point> {
         let mut x = 0;
         let mut y_span: Span<u8> = self.into();
-        let mut y_le_span: Span<u8> = y_span.reversed().span();
+        let mut y_le_span: Span<u8> = reverse(y_span);
 
         let last_byte = *y_le_span[31];
 
         let _ = y_le_span.pop_back();
-        let mut normed_array: Array<u8> = y_le_span.dedup();
+        let mut normed_array: Array<u8> = dedup(y_le_span);
         normed_array.append(last_byte & ~0x80);
 
         let x_0: u256 = (last_byte.into() / 128) & 1; // bitshift of 255
@@ -361,8 +358,8 @@ pub fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> 
 
     let s: u256 = *signature[1];
     let s_span: Span<u8> = s.into();
-    let reversed_s_span = s_span.reversed();
-    let s: u256 = reversed_s_span.span().into();
+    let reversed_s_span = reverse(s_span);
+    let s: u256 = reversed_s_span.into();
     if (s >= l) {
         return false;
     }
@@ -376,11 +373,15 @@ pub fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> 
     let A_prime: Point = A_prime_opt.unwrap();
 
     let r_bytes: Span<u8> = r.into();
-    let r_bytes = r_bytes.reversed().span();
+    let r_bytes = reverse(r_bytes);
     let pub_key_bytes: Span<u8> = pub_key.into();
-    let pub_key_bytes = pub_key_bytes.reversed().span();
+    let pub_key_bytes = reverse(pub_key_bytes);
 
-    let hashable = r_bytes.concat(pub_key_bytes).span().concat(msg);
+    let mut hashable = array![];
+    hashable.append_span(r_bytes);
+    hashable.append_span(pub_key_bytes);
+    hashable.append_span(msg);
+
     // k = SHA512(dom2(F, C) -> empty string || R -> half of sig || A -> pub_key || PH(M) ->
     // identity function for msg)
     let k: Array<u8> = sha512(hashable);
@@ -390,4 +391,31 @@ pub fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> 
     let (_, k_reduced) = core::integer::u512_safe_div_rem_by_u256(k_u512, l_non_zero);
 
     check_group_equation(s, R, k_reduced, A_prime)
+}
+
+// reverse and dedup are helper functions copy-pasted here from
+// the data_structures SpanTraitExt implementation to prevent
+// dependency of the math package on the data_structures package
+// and all its heavy dependencies
+
+fn reverse(mut span: Span<u8>) -> Span<u8> {
+    let mut res = array![];
+    while let Option::Some(v) = span.pop_back() {
+        res.append(v.clone());
+    };
+    res.span()
+}
+
+fn dedup(mut span: Span<u8>) -> Array<u8> {
+    let mut last_value = span.pop_front().unwrap();
+    let mut ret = array![last_value.clone()];
+
+    for v in span {
+        if (last_value != v) {
+            last_value = v;
+            ret.append(v.clone());
+        }
+    };
+
+    ret
 }
