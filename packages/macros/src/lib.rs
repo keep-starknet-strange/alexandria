@@ -3,6 +3,14 @@ use cairo_lang_macro::{inline_macro, Diagnostic, ProcMacroResult, TokenStream};
 use cairo_lang_parser::utils::SimpleParserDatabase;
 use cairo_lang_syntax::node::kind::SyntaxKind::Arg;
 
+/// Compile-time power function.
+///
+/// Takes two arguments, `x, y`, calculates the value of `x` raised to the power of `y`.
+///
+/// ```
+/// const MEGABYTE: u64 = pow!(2, 20);
+/// assert_eq!(MEGABYTE, 1048576);
+/// ```
 #[inline_macro]
 pub fn pow(token_stream: TokenStream) -> ProcMacroResult {
     let db = SimpleParserDatabase::default();
