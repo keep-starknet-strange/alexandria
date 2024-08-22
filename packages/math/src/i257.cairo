@@ -1,3 +1,4 @@
+use core::fmt::{Display, Formatter, Error};
 use core::num::traits::Zero;
 use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign, RemAssign};
 
@@ -353,3 +354,14 @@ impl FeltIntoI257 of Into<felt252, i257> {
         i257 { abs: self.into(), is_negative: false }
     }
 }
+
+// Implements the Display trait for i257.
+pub impl DisplayI257Impl of Display<i257> {
+    fn fmt(self: @i257, ref f: Formatter) -> Result<(), Error> {
+        if *self.is_negative {
+            write!(f, "-")?;
+        }
+        self.abs.fmt(ref f)
+    }
+}
+
