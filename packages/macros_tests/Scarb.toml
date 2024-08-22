@@ -1,0 +1,11 @@
+[package]
+name = "macros_tests"
+description = "Dummy package only used to test macros. Not part of the workspace."
+version = "0.1.0"
+edition = "2024_07"
+
+[dependencies]
+alexandria_macros = { path = "../macros" }
+
+[dev-dependencies]
+cairo_test = "2.7.0"

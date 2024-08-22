@@ -1,0 +1,53 @@
+name: Macros CI
+
+on:
+  push:
+    paths:
+      - 'packages/macros/**'
+      - 'packages/macros_tests/**'
+  pull_request:
+    paths:
+      - 'packages/macros/**'
+      - 'packages/macros_tests/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/macros
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Build
+        run: cargo build --release
+
+  rustlint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/macros
+    env:
+      RUSTFLAGS: "-Dwarnings" # fail on warnings
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: Format check
+        run: cargo fmt --check
+      - name: Clippy
+        run: cargo clippy --all
+
+  scarbfmt:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/macros_tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: software-mansion/setup-scarb@v1
+      - name: Cairo format check
+        run: scarb fmt --check

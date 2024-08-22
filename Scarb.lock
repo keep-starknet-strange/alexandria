@@ -40,6 +40,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "alexandria_macros"
+version = "0.1.0"
+
+[[package]]
 name = "alexandria_math"
 version = "0.2.1"
 

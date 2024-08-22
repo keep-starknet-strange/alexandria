@@ -3,6 +3,7 @@ members = [
   "packages/data_structures",
   "packages/encoding",
   "packages/linalg",
+  "packages/macros",
   "packages/math",
   "packages/merkle_tree",
   "packages/numeric",
