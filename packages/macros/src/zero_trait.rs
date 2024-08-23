@@ -7,9 +7,10 @@ fn generate_zero_trait_impl(s: &StructInfo) -> String {
         .as_ref()
         .map_or(String::new(), |params| format!("<{}>", params.join(", ")));
 
-    let trait_bounds = s.generic_params.as_ref().map_or_else(
-        || String::new(),
-        |params| {
+    let trait_bounds = s
+        .generic_params
+        .as_ref()
+        .map_or_else(String::new, |params| {
             let bounds = params
                 .iter()
                 .flat_map(|param| {
@@ -21,8 +22,7 @@ fn generate_zero_trait_impl(s: &StructInfo) -> String {
                 .collect::<Vec<_>>()
                 .join(",\n");
             format!("<{},\n{}>", params.join(", "), bounds)
-        },
-    );
+        });
 
     let zero_fn = s
         .members

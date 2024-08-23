@@ -18,7 +18,7 @@ pub(crate) fn parse_struct_info(token_stream: TokenStream) -> StructInfo {
 
     // find struct name - the next TokenIdentifier after TeminalStruct
     let mut struct_name = String::new();
-    while let Some(node) = nodes.next() {
+    for node in nodes.by_ref() {
         if node.kind(&db) == TerminalStruct {
             struct_name = nodes
                 .find(|node| node.kind(&db) == TokenIdentifier)
@@ -30,7 +30,7 @@ pub(crate) fn parse_struct_info(token_stream: TokenStream) -> StructInfo {
 
     // collect generic params or skip if there aren't any
     let mut generic_params: Option<Vec<String>> = None;
-    while let Some(node) = nodes.next() {
+    for node in nodes.by_ref() {
         match node.kind(&db) {
             WrappedGenericParamList => {
                 let params = node
@@ -50,7 +50,7 @@ pub(crate) fn parse_struct_info(token_stream: TokenStream) -> StructInfo {
 
     // collect struct members - all TokenIdentifier nodes after each Member
     let mut members = Vec::new();
-    while let Some(node) = nodes.next() {
+    for node in nodes {
         if node.kind(&db) == Member {
             let member = node
                 .descendants(&db)

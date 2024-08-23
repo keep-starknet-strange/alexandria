@@ -14,9 +14,10 @@ fn generate_op_trait_impl(op_info: &OpInfo, s: &StructInfo) -> String {
         .as_ref()
         .map_or(String::new(), |params| format!("<{}>", params.join(", ")));
 
-    let trait_bounds = s.generic_params.as_ref().map_or_else(
-        || String::new(),
-        |params| {
+    let trait_bounds = s
+        .generic_params
+        .as_ref()
+        .map_or_else(String::new, |params| {
             let bounds = params
                 .iter()
                 .flat_map(|param| {
@@ -28,8 +29,7 @@ fn generate_op_trait_impl(op_info: &OpInfo, s: &StructInfo) -> String {
                 .collect::<Vec<_>>()
                 .join(",\n");
             format!("<{},\n{}>", params.join(", "), bounds)
-        },
-    );
+        });
 
     let members_op = s
         .members
@@ -56,9 +56,10 @@ fn generate_op_assign_trait_impl(op_info: &OpInfo, s: &StructInfo) -> String {
         .as_ref()
         .map_or(String::new(), |params| format!("<{}>", params.join(", ")));
 
-    let trait_bounds = s.generic_params.as_ref().map_or_else(
-        || String::new(),
-        |params| {
+    let trait_bounds = s
+        .generic_params
+        .as_ref()
+        .map_or_else(String::new, |params| {
             let bounds = params
                 .iter()
                 .flat_map(|param| {
@@ -70,8 +71,7 @@ fn generate_op_assign_trait_impl(op_info: &OpInfo, s: &StructInfo) -> String {
                 .collect::<Vec<_>>()
                 .join(",\n");
             format!("<{},\n{}>", params.join(", "), bounds)
-        },
-    );
+        });
 
     let members_op = s
         .members
