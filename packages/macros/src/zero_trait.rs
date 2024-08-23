@@ -58,7 +58,7 @@ of core::num::traits::Zero<{0}{2}> {{
     )
 }
 
-/// Adds implementation of the `Zero` trait.
+/// Adds implementation of the `core::num::traits::Zero` trait.
 ///
 /// All members of the struct must already implement the `Zero` trait.
 ///
