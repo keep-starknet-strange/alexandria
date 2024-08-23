@@ -158,8 +158,10 @@ of core::ops::{1}Assign<{0}{3}, {0}{3}> {{
     )
 }
 
-// TODO: add macro docs so that they show in VSCode
-
+/// Adds implementation for the `Add` trait.
+///
+/// Allows you to use the `+` oprator on a type. All members of
+/// the struct must already implement the `Add` trait.
 #[derive_macro]
 pub fn add(token_stream: TokenStream) -> ProcMacroResult {
     let op = OpInfo {
@@ -173,6 +175,10 @@ pub fn add(token_stream: TokenStream) -> ProcMacroResult {
     ProcMacroResult::new(TokenStream::new(generate_op_trait_impl(&op, &s)))
 }
 
+/// Adds implementation for the `Sub` trait.
+///
+/// Allows you to use the `-` operator on a type. All members of
+/// the struct must already implement the `Sub` trait.
 #[derive_macro]
 pub fn sub(token_stream: TokenStream) -> ProcMacroResult {
     let op = OpInfo {
@@ -185,6 +191,10 @@ pub fn sub(token_stream: TokenStream) -> ProcMacroResult {
     ProcMacroResult::new(TokenStream::new(generate_op_trait_impl(&op, &s)))
 }
 
+/// Adds implementation for the `Mul` trait.
+///
+/// Allows you to use the `*` operator on a type. All members of
+/// the struct must already implement the `Mul` trait.
 #[derive_macro]
 pub fn mul(token_stream: TokenStream) -> ProcMacroResult {
     let op = OpInfo {
@@ -197,6 +207,10 @@ pub fn mul(token_stream: TokenStream) -> ProcMacroResult {
     ProcMacroResult::new(TokenStream::new(generate_op_trait_impl(&op, &s)))
 }
 
+/// Adds implementation for the `Div` trait.
+///
+/// Allows you to use the `/` operator on a type. All members of
+/// the struct must already implement the `Div` trait.
 #[derive_macro]
 pub fn div(token_stream: TokenStream) -> ProcMacroResult {
     let op = OpInfo {
@@ -209,6 +223,10 @@ pub fn div(token_stream: TokenStream) -> ProcMacroResult {
     ProcMacroResult::new(TokenStream::new(generate_op_trait_impl(&op, &s)))
 }
 
+/// Adds implementation for the `AddAssign` trait.
+///
+/// Allows you to use the `+=` operator on a type. All members of
+/// the struct must already implement the `AddAssign` trait.
 #[derive_macro]
 fn add_assign(token_stream: TokenStream) -> ProcMacroResult {
     let op = OpInfo {
@@ -221,6 +239,10 @@ fn add_assign(token_stream: TokenStream) -> ProcMacroResult {
     ProcMacroResult::new(TokenStream::new(generate_op_assign_trait_impl(&op, &s)))
 }
 
+/// Adds implementation for the `SubAssign` trait.
+///
+/// Allows you to use the `-=` operator on a type. All members of
+/// the struct must already implement the `SubAssign` trait.
 #[derive_macro]
 fn sub_assign(token_stream: TokenStream) -> ProcMacroResult {
     let op = OpInfo {
@@ -233,6 +255,10 @@ fn sub_assign(token_stream: TokenStream) -> ProcMacroResult {
     ProcMacroResult::new(TokenStream::new(generate_op_assign_trait_impl(&op, &s)))
 }
 
+/// Adds implementation for the `MulAssign` trait.
+///
+/// Allows you to use the `*=` operator on a type. All members of
+/// the struct must already implement the `MulAssign` trait.
 #[derive_macro]
 fn mul_assign(token_stream: TokenStream) -> ProcMacroResult {
     let op = OpInfo {
@@ -245,6 +271,10 @@ fn mul_assign(token_stream: TokenStream) -> ProcMacroResult {
     ProcMacroResult::new(TokenStream::new(generate_op_assign_trait_impl(&op, &s)))
 }
 
+/// Adds implementation for the `DivAssign` trait.
+///
+/// Allows you to use the `/=` operator on a type. All members of
+/// the struct must already implement the `DivAssign` trait.
 #[derive_macro]
 fn div_assign(token_stream: TokenStream) -> ProcMacroResult {
     let op = OpInfo {
