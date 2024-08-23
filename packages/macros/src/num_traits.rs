@@ -1,6 +1,6 @@
 use cairo_lang_macro::{derive_macro, ProcMacroResult, TokenStream};
 
-use crate::parse::{StructInfo, parse_struct_info};
+use crate::parse::{parse_struct_info, StructInfo};
 
 struct OpInfo {
     trait_name: String,

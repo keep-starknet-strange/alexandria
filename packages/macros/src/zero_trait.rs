@@ -1,5 +1,5 @@
-use cairo_lang_macro::{derive_macro, ProcMacroResult, TokenStream};
 use crate::parse::{parse_struct_info, StructInfo};
+use cairo_lang_macro::{derive_macro, ProcMacroResult, TokenStream};
 
 fn generate_zero_trait_impl(s: &StructInfo) -> String {
     let generic_params = s

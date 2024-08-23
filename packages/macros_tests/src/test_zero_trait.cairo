@@ -24,7 +24,6 @@ struct C {
 }
 
 
-
 #[test]
 fn test_zero_derive() {
     let b0: B = B { a: 0, b: 0 };
