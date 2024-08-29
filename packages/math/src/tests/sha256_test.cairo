@@ -1,7 +1,6 @@
 use alexandria_math::sha256;
 
 #[test]
-#[available_gas(2000000000)]
 fn sha256_empty_test() {
     let mut input: Array<u8> = array![];
     let result = sha256::sha256(input);
@@ -43,7 +42,6 @@ fn sha256_empty_test() {
 }
 
 #[test]
-#[available_gas(200000000000)]
 fn sha256_random_data_test() {
     let mut input: Array<u8> = array![
         0x57, 0x77, 0x71, 0x71, 0x66, 0x50, 0x45, 0x51, 0x51, 0x43, 0x39, 0x48, 0x38
@@ -84,7 +82,6 @@ fn sha256_random_data_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn sha256_lorem_ipsum_test() {
     // Lorem ipsum, or lsipsum as it is sometimes known, is dummy text used in laying out print,
     // graphic or web designs.
@@ -452,7 +449,6 @@ fn sha256_lorem_ipsum_test() {
     assert_eq!(*result[31], 0x44);
 }
 #[test]
-#[available_gas(10_000_000_000)]
 fn sha256_url() {
     let data = array![
         '{',

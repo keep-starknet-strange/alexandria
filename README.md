@@ -104,12 +104,14 @@ scarb build
 
 ### Test
 
+Install [Starknet-Foundry](https://foundry-rs.github.io/starknet-foundry/getting-started/installation.html) and then run the following command to run all the tests:
+
 ```bash
 scarb test
 ```
 Running a specific subset of tests
 ```bash
-scarb test -f math
+scarb test math
 ```
 
 ### Format

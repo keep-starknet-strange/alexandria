@@ -21,7 +21,6 @@ fn bytes_be(val: felt252) -> Array<u8> {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64encode_empty_test() {
     let input = 0;
     let result = Base64FeltEncoder::encode(input);
@@ -30,7 +29,6 @@ fn base64encode_empty_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64encode_simple_test() {
     let input = 'a';
     let result = Base64FeltEncoder::encode(input);
@@ -39,7 +37,6 @@ fn base64encode_simple_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64encode_hello_world_test() {
     let input = 'hello world';
     let result = Base64FeltEncoder::encode(input);
@@ -49,7 +46,6 @@ fn base64encode_hello_world_test() {
 
 
 #[test]
-#[available_gas(2000000000)]
 fn base64encode_with_plus_and_slash() {
     let mut input = 65519; // Equivalent to array![255, 239] as bytes_be
 
@@ -59,7 +55,6 @@ fn base64encode_with_plus_and_slash() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64urlencode_with_plus_and_slash() {
     let mut input = 65519; // Equivalent to array![255, 239] as bytes_be
 

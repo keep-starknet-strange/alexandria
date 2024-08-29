@@ -10,3 +10,11 @@ fmt.workspace = true
 
 [dependencies]
 starknet.workspace = true
+
+[dev-dependencies]
+assert_macros = "0.1.0"
+snforge_std = { git = "https://github.com/foundry-rs/starknet-foundry.git", tag = "v0.28.0" }
+
+[scripts]
+test = "snforge test"
+test-profiling = "snforge test --build-profile"

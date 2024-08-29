@@ -3,7 +3,6 @@ use alexandria_bytes::{Bytes, BytesTrait, BytesIndex};
 use starknet::ContractAddress;
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_zero() {
     let bytes = BytesTrait::zero(1);
     assert_eq!(bytes.size(), 1);
@@ -22,15 +21,13 @@ fn test_bytes_zero() {
 }
 
 #[test]
-#[available_gas(200000000)]
-#[should_panic(expected: ('update out of bound',))]
+#[should_panic(expected: 'update out of bound')]
 fn test_bytes_update_panic() {
     let mut bytes = BytesTrait::new_empty();
     bytes.update_at(0, 0x01);
 }
 
 #[test]
-#[available_gas(200000000)]
 fn test_bytes_update() {
     let mut bytes = BytesTrait::new(5, array![0x01020304050000000000000000000000]);
 
@@ -77,7 +74,6 @@ fn test_bytes_update() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u128_packed() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -109,8 +105,7 @@ fn test_bytes_read_u128_packed() {
 }
 
 #[test]
-#[available_gas(20000000)]
-#[should_panic(expected: ('out of bound',))]
+#[should_panic(expected: 'out of bound')]
 fn test_bytes_read_u128_packed_out_of_bound() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -124,8 +119,7 @@ fn test_bytes_read_u128_packed_out_of_bound() {
 }
 
 #[test]
-#[available_gas(20000000)]
-#[should_panic(expected: ('too large',))]
+#[should_panic(expected: 'too large')]
 fn test_bytes_read_u128_packed_too_large() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -139,7 +133,6 @@ fn test_bytes_read_u128_packed_too_large() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u128_array_packed() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -164,8 +157,7 @@ fn test_bytes_read_u128_array_packed() {
 }
 
 #[test]
-#[available_gas(20000000)]
-#[should_panic(expected: ('out of bound',))]
+#[should_panic(expected: 'out of bound')]
 fn test_bytes_read_u128_array_packed_out_of_bound() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -179,8 +171,7 @@ fn test_bytes_read_u128_array_packed_out_of_bound() {
 }
 
 #[test]
-#[available_gas(20000000)]
-#[should_panic(expected: ('too large',))]
+#[should_panic(expected: 'too large')]
 fn test_bytes_read_u128_array_packed_too_large() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -194,7 +185,6 @@ fn test_bytes_read_u128_array_packed_too_large() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_felt252_packed() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -210,8 +200,7 @@ fn test_bytes_read_felt252_packed() {
 }
 
 #[test]
-#[available_gas(20000000)]
-#[should_panic(expected: ('out of bound',))]
+#[should_panic(expected: 'out of bound')]
 fn test_bytes_read_felt252_packed_out_of_bound() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -225,8 +214,7 @@ fn test_bytes_read_felt252_packed_out_of_bound() {
 }
 
 #[test]
-#[available_gas(20000000)]
-#[should_panic(expected: ('too large',))]
+#[should_panic(expected: 'too large')]
 fn test_bytes_read_felt252_packed_too_large() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -240,7 +228,6 @@ fn test_bytes_read_felt252_packed_too_large() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u8() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -256,7 +243,6 @@ fn test_bytes_read_u8() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u16() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -272,7 +258,6 @@ fn test_bytes_read_u16() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u32() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -288,7 +273,6 @@ fn test_bytes_read_u32() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_usize() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -304,7 +288,6 @@ fn test_bytes_read_usize() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u64() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -320,7 +303,6 @@ fn test_bytes_read_u64() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u128() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -336,7 +318,6 @@ fn test_bytes_read_u128() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u256() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -353,7 +334,6 @@ fn test_bytes_read_u256() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_bytes31() {
     let bytes: Bytes = BytesTrait::new(
         31, array![0x0102030405060708090a0b0c0d0e0f10, 0x1112131415161718191a1b1c1d1e1f00]
@@ -367,7 +347,6 @@ fn test_bytes_read_bytes31() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u256_array() {
     let array = array![
         0x01020304050607080910111213141516,
@@ -391,7 +370,6 @@ fn test_bytes_read_u256_array() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_address() {
     let array = array![
         0x01020304050607080910111213140154,
@@ -408,7 +386,6 @@ fn test_bytes_read_address() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_bytes() {
     let array = array![
         0x01020304050607080910111213140154,
@@ -448,7 +425,6 @@ fn test_bytes_read_bytes() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_append() {
     let mut bytes = BytesTrait::new_empty();
 
@@ -537,7 +513,6 @@ fn test_bytes_append() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_concat() {
     let array: Array<u128> = array![
         0x10111213141516171810111213141516,
@@ -609,7 +584,6 @@ fn test_bytes_concat() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_keccak() {
     // Calculating keccak by Python
     // from Crypto.Hash import keccak
@@ -651,7 +625,6 @@ fn test_bytes_keccak() {
 }
 
 #[test]
-#[available_gas(20000000000)]
 fn test_bytes_sha256() {
     // empty
     let bytes = BytesTrait::new_empty();

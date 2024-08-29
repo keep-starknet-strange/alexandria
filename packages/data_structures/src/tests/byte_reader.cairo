@@ -2,203 +2,174 @@ use alexandria_data_structures::byte_reader::ByteReader;
 use core::integer::u512;
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u16() {
     let word = test_byte_array_64().word_u16(62).unwrap();
     assert!(word == 0x3f40_u16, "word u16 differs");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u16_arr() {
     let word = test_array_64().word_u16(62).unwrap();
     assert!(word == 0x3f40_u16, "word u16 differs");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u16_le() {
     let word = test_byte_array_64().word_u16_le(62).unwrap();
     assert!(word == 0x403f_u16, "word u16 differs");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u16_le_arr() {
     let word = test_array_64().word_u16_le(62).unwrap();
     assert!(word == 0x403f_u16, "word u16 differs");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u16_none() {
     let is_none = test_byte_array_64().word_u16(63).is_none();
     assert!(is_none, "word u16 should be empty");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u16_none_arr() {
     let is_none = test_array_64().word_u16(63).is_none();
     assert!(is_none, "word u16 should be empty");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u16_le_none() {
     let is_none = test_byte_array_64().word_u16_le(63).is_none();
     assert!(is_none, "word u16 should be empty");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u16_le_none_arr() {
     let is_none = test_array_64().word_u16_le(63).is_none();
     assert!(is_none, "word u16 should be empty");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u32() {
     let word = test_byte_array_64().word_u32(60).unwrap();
     assert!(word == 0x3d3e3f40_u32, "word u32 differs");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u32_arr() {
     let word = test_array_64().word_u32(60).unwrap();
     assert!(word == 0x3d3e3f40_u32, "word u32 differs");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u32_le() {
     let word = test_byte_array_64().word_u32_le(60).unwrap();
     assert!(word == 0x403f3e3d_u32, "word u32 differs");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u32_le_arr() {
     let word = test_array_64().word_u32_le(60).unwrap();
     assert!(word == 0x403f3e3d_u32, "word u32 differs");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u32_none() {
     let is_none = test_byte_array_64().word_u32(61).is_none();
     assert!(is_none, "word u32 should be empty");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u32_none_arr() {
     let is_none = test_array_64().word_u32(61).is_none();
     assert!(is_none, "word u32 should be empty");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u32_le_none() {
     let is_none = test_byte_array_64().word_u32_le(61).is_none();
     assert!(is_none, "word u32 should be empty");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u32_le_none_arr() {
     let is_none = test_array_64().word_u32_le(61).is_none();
     assert!(is_none, "word u32 should be empty");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u64() {
     let word = test_byte_array_64().word_u64(56).unwrap();
     assert!(word == 0x393a3b3c3d3e3f40_u64, "word u64 differs");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u64_arr() {
     let word = test_array_64().word_u64(56).unwrap();
     assert!(word == 0x393a3b3c3d3e3f40_u64, "word u64 differs");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u64_le() {
     let word = test_byte_array_64().word_u64_le(56).unwrap();
     assert!(word == 0x403f3e3d3c3b3a39_u64, "word u64 differs");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u64_le_arr() {
     let word = test_array_64().word_u64_le(56).unwrap();
     assert!(word == 0x403f3e3d3c3b3a39_u64, "word u64 differs");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u64_none() {
     let is_none = test_byte_array_64().word_u64(57).is_none();
     assert!(is_none, "word u64 should be empty");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u64_none_arr() {
     let is_none = test_array_64().word_u64(57).is_none();
     assert!(is_none, "word u64 should be empty");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u64_le_none() {
     let is_none = test_byte_array_64().word_u64_le(57).is_none();
     assert!(is_none, "word u64 should be empty");
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_word_u64_le_none_arr() {
     let is_none = test_array_64().word_u64_le(57).is_none();
     assert!(is_none, "word u64 should be empty");
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_word_u128() {
     let word = test_byte_array_64().word_u128(48).unwrap();
     assert!(word == 0x3132333435363738393a3b3c3d3e3f40_u128, "word u128 differs");
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_word_u128_arr() {
     let word = test_array_64().word_u128(48).unwrap();
     assert!(word == 0x3132333435363738393a3b3c3d3e3f40_u128, "word u128 differs");
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_word_u128_le() {
     let word = test_byte_array_64().word_u128_le(48).unwrap();
     assert!(word == 0x403f3e3d3c3b3a393837363534333231_u128, "word u128 differs");
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_word_u128_le_arr() {
     let word = test_array_64().word_u128_le(48).unwrap();
     assert!(word == 0x403f3e3d3c3b3a393837363534333231_u128, "word u128 differs");
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_word_u128_none() {
     let is_none = test_byte_array_64().word_u128(49).is_none();
     assert!(is_none, "word u128 should be empty");
@@ -210,21 +181,18 @@ fn test_word_u128_none_arr() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_word_u128_le_none() {
     let is_none = test_byte_array_64().word_u128_le(49).is_none();
     assert!(is_none, "word u128 should be empty");
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_word_u128_le_none_arr() {
     let is_none = test_array_64().word_u128_le(49).is_none();
     assert!(is_none, "word u128 should be empty");
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_reader_helper() {
     let ba = test_byte_array_64();
     let reader = ba.reader();
@@ -232,7 +200,6 @@ fn test_reader_helper() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_reader_helper_arr() {
     let ba = test_array_64();
     let reader = ba.reader();
@@ -240,7 +207,6 @@ fn test_reader_helper_arr() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_len() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
@@ -262,7 +228,6 @@ fn test_len() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_len_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
@@ -284,7 +249,6 @@ fn test_len_arr() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_u256() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
@@ -294,7 +258,6 @@ fn test_read_u256() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_u256_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
@@ -304,7 +267,6 @@ fn test_read_u256_arr() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_u256_le() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
@@ -314,7 +276,6 @@ fn test_read_u256_le() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_u256_le_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
@@ -324,7 +285,6 @@ fn test_read_u256_le_arr() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_u512() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
@@ -337,7 +297,6 @@ fn test_read_u512() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_u512_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
@@ -350,7 +309,6 @@ fn test_read_u512_arr() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_u512_le() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
@@ -362,7 +320,6 @@ fn test_read_u512_le() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_u512_le_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
@@ -374,7 +331,6 @@ fn test_read_u512_le_arr() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_sequence() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
@@ -390,7 +346,6 @@ fn test_read_sequence() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_sequence_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
@@ -406,7 +361,6 @@ fn test_read_sequence_arr() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_sequence_le() {
     let ba = test_byte_array_64();
     let mut rd = ba.reader();
@@ -422,7 +376,6 @@ fn test_read_sequence_le() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_sequence_le_arr() {
     let ba = test_array_64();
     let mut rd = ba.reader();
@@ -438,7 +391,6 @@ fn test_read_sequence_le_arr() {
 }
 
 #[test]
-#[available_gas(10000000)]
 fn test_clone_byte_array_reader() {
     let ba = test_byte_array_64();
     let mut rd1 = ba.reader();
@@ -451,7 +403,6 @@ fn test_clone_byte_array_reader() {
 }
 
 #[test]
-#[available_gas(10000000)]
 fn test_clone_array_of_bytes_reader() {
     let ba = test_array_64();
     let mut rd1 = ba.reader();
@@ -464,7 +415,6 @@ fn test_clone_array_of_bytes_reader() {
 }
 
 #[test]
-#[available_gas(10000000)]
 fn test_byte_array_reader_equals_array_of_bytes_reader() {
     let mut ba = test_array_64().reader();
     let mut bb = test_byte_array_64().reader();

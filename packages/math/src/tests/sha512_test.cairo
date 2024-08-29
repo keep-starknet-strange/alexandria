@@ -328,7 +328,6 @@ fn get_lorem_ipsum() -> Array<u8> {
 }
 
 #[test]
-#[available_gas(20000000000)]
 fn test_sha512_lorem_ipsum() {
     let msg = get_lorem_ipsum();
     let res = sha512(msg);
@@ -402,7 +401,6 @@ fn test_sha512_lorem_ipsum() {
 }
 
 #[test]
-#[available_gas(20000000000)]
 fn test_sha512_size_one() {
     let mut arr: Array<u8> = array![49];
     let mut res = sha512(arr);
@@ -476,7 +474,6 @@ fn test_sha512_size_one() {
 }
 
 #[test]
-#[available_gas(20000000000)]
 fn test_size_zero() {
     let msg = array![];
 

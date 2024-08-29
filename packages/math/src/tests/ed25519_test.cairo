@@ -4,7 +4,6 @@ use alexandria_math::ed25519::{verify_signature, Point, PointOperations, p_non_z
 // (https://github.com/paulmillr/noble-ed25519)
 
 #[test]
-#[available_gas(3200000000)]
 fn verify_signature_test_0() {
     let pub_key: u256 = 0x1e6c5b385880849f46716d691b8a447d7cbe4a7ef154f3e2174ffb3c5256fcfe;
 
@@ -18,7 +17,6 @@ fn verify_signature_test_0() {
 }
 
 #[test]
-#[available_gas(3200000000)]
 fn verify_signature_test_1() {
     let pub_key: u256 = 0xcc05c1a7ba2937b1c0e71ca1ac636e7240c39fdc8e4672bb0c125eff082324d4;
 
@@ -32,7 +30,6 @@ fn verify_signature_test_1() {
 }
 
 #[test]
-#[available_gas(3200000000)]
 fn verify_signature_test_2() {
     let pub_key: u256 = 0x136fa0f7464a55d9a19e9dd0e2edf4f605d3b3f3228dbbe3d7337136ae216d49;
 
@@ -46,7 +43,6 @@ fn verify_signature_test_2() {
 }
 
 #[test]
-#[available_gas(3200000000)]
 fn verify_signature_test_3() {
     let pub_key: u256 = 0x040369a47bcee3ae0cb373037ec0d2e36cae4a3762e388ff0682962aef49f444;
 
@@ -60,7 +56,6 @@ fn verify_signature_test_3() {
 }
 
 #[test]
-#[available_gas(3200000000)]
 fn verify_signature_invalid() {
     let pub_key: u256 = 0x040369a47bcee3ae0cb373037ec0d2e36cae4a3762e388ff0682962aef49f444;
 
@@ -74,7 +69,6 @@ fn verify_signature_invalid() {
 }
 
 #[test]
-#[available_gas(3200000000)]
 fn verify_signature_invalid_length() {
     let pub_key: u256 = 0x040369a47bcee3ae0cb373037ec0d2e36cae4a3762e388ff0682962aef49f444;
 

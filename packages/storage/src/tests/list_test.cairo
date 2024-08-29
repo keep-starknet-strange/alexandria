@@ -129,11 +129,8 @@ impl StorageBaseAddressPartialEq of PartialEq<StorageBaseAddress> {
     }
 }
 
-fn deploy_mock() -> IAListHolderDispatcher {
-    let class_hash: ClassHash = AListHolder::TEST_CLASS_HASH.try_into().unwrap();
-    let ctor_data: Array<felt252> = Default::default();
-    let (addr, _) = deploy_syscall(class_hash, 0, ctor_data.span(), false).unwrap_syscall();
-    IAListHolderDispatcher { contract_address: addr }
+fn deploy_mock() -> AListHolder::ContractState {
+    AListHolder::contract_state_for_testing()
 }
 
 fn mock_addr() -> ContractAddress {
@@ -141,14 +138,12 @@ fn mock_addr() -> ContractAddress {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_deploy() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
     assert_eq!(contract.do_get_len(), (0, 0));
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_new_initializes_empty_list() {
     let mut contract_state = AListHolder::contract_state_for_testing();
 
@@ -172,7 +167,6 @@ fn test_new_initializes_empty_list() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_new_then_fill_list() {
     let mut contract_state = AListHolder::contract_state_for_testing();
 
@@ -194,7 +188,6 @@ fn test_new_then_fill_list() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_fetch_empty_list() {
     let storage_address = storage_base_address_from_felt252('empty_address');
 
@@ -207,7 +200,6 @@ fn test_fetch_empty_list() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_fetch_existing_list() {
     let mut contract_state = AListHolder::contract_state_for_testing();
     let mock_addr = mock_addr();
@@ -231,9 +223,8 @@ fn test_fetch_existing_list() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_is_empty() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
 
     assert_eq!(contract.do_is_empty(), (true, true));
     contract.do_append(mock_addr(), 1337);
@@ -241,9 +232,8 @@ fn test_is_empty() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_append_few() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
 
     assert_eq!(contract.do_append(mock_addr(), 10), (0, 0));
     assert_eq!(contract.do_append(mock_addr(), 20), (1, 1));
@@ -251,9 +241,8 @@ fn test_append_few() {
 }
 
 #[test]
-#[available_gas(100000000000)]
 fn test_append_get_many() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
     let mock_addr = mock_addr();
 
     let mut index: u32 = 0;
@@ -282,9 +271,8 @@ fn test_append_get_many() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_get_pass() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
     let mock_addr = mock_addr();
 
     contract.do_append(mock_addr, 100); // idx 0
@@ -311,18 +299,16 @@ fn test_get_pass() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_get_empty() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
     let (addr, number) = contract.do_get(0);
     assert!(addr.is_none(), "addr is none");
     assert!(number.is_none(), "number is none");
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_get_out_of_bounds() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
     contract.do_append(mock_addr(), 10);
     let (addr, number) = contract.do_get(42);
     assert!(addr.is_none(), "addr is none");
@@ -330,9 +316,8 @@ fn test_get_out_of_bounds() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_get_index_pass() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
     let mock_addr = mock_addr();
 
     contract.do_append(mock_addr, 100); // idx 0
@@ -345,18 +330,16 @@ fn test_get_index_pass() {
 }
 
 #[test]
-#[available_gas(100000000)]
-#[should_panic(expected: ('List index out of bounds', 'ENTRYPOINT_FAILED'))]
+#[should_panic(expected: 'List index out of bounds')]
 fn test_get_index_out_of_bounds() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
     contract.do_append(mock_addr(), 10);
     contract.do_get_index(10);
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_set_pass() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
     let mock_addr = mock_addr();
     let diff_addr = starknet::contract_address_const::<'bye'>();
 
@@ -374,17 +357,15 @@ fn test_set_pass() {
 }
 
 #[test]
-#[available_gas(100000000)]
-#[should_panic(expected: ('List index out of bounds', 'ENTRYPOINT_FAILED'))]
+#[should_panic(expected: 'List index out of bounds')]
 fn test_set_out_of_bounds() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
     contract.do_set(2, mock_addr(), 20);
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_pop_front_pass() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
     let mock_addr = mock_addr();
 
     contract.do_append(mock_addr, 100); // idx 0
@@ -416,9 +397,8 @@ fn test_pop_front_pass() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_pop_front_empty() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
 
     let (pop_addr, pop_number) = contract.do_pop_front();
     assert!(pop_addr.is_none(), "pop addr none");
@@ -426,9 +406,8 @@ fn test_pop_front_empty() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_pop_append() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
     // write something
     contract.do_append(mock_addr(), 10);
     assert_eq!(contract.do_get_len(), (1, 1));
@@ -447,9 +426,8 @@ fn test_pop_append() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_array_pass() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
     let mock_addr = mock_addr();
 
     contract.do_append(mock_addr, 100); // idx 0
@@ -465,18 +443,16 @@ fn test_array_pass() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_array_empty() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
 
     let (array_addr, array_number) = contract.do_array();
     assert_eq!((array_addr.len(), array_number.len()), (0, 0));
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_array_clean() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
     let mock_addr = mock_addr();
 
     contract.do_append(mock_addr, 100); // idx 0
@@ -487,9 +463,8 @@ fn test_array_clean() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_array_clean_with_empty_array() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
 
     assert_eq!(contract.do_get_len(), (0, 0));
 
@@ -499,9 +474,8 @@ fn test_array_clean_with_empty_array() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_array_get_value_after_clean() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
     let mock_addr = mock_addr();
 
     contract.do_append(mock_addr, 100); // idx 0
@@ -521,18 +495,16 @@ fn test_array_get_value_after_clean() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_append_array_empty() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
 
     contract.do_append_span(array![], array![]);
     assert_eq!(contract.do_is_empty(), (true, true));
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_append_span_existing_list() {
-    let contract = deploy_mock();
+    let mut contract = deploy_mock();
     let mock_addr = mock_addr();
 
     assert_eq!(contract.do_append(mock_addr, 10), (0, 0));

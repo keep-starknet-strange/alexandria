@@ -1,7 +1,6 @@
 use alexandria_numeric::diff::diff;
 
 #[test]
-#[available_gas(2000000)]
 fn diff_test() {
     let xs = array![3, 5, 7];
     let ys = diff(xs.span());
@@ -11,7 +10,7 @@ fn diff_test() {
 }
 
 #[test]
-#[should_panic(expected: ('Sequence must be sorted',))]
+#[should_panic(expected: 'Sequence must be sorted')]
 #[available_gas(2000000)]
 fn diff_test_revert_not_sorted() {
     let xs: Array<u128> = array![3, 2];
@@ -19,7 +18,7 @@ fn diff_test_revert_not_sorted() {
 }
 
 #[test]
-#[should_panic(expected: ('Array must have at least 1 elt',))]
+#[should_panic(expected: 'Array must have at least 1 elt')]
 #[available_gas(2000000)]
 fn diff_test_revert_empty() {
     let xs: Array<u128> = array![];
