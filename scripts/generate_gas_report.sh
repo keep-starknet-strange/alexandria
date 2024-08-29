@@ -1,12 +1,12 @@
 #!/bin/bash
 
 run_tests_and_collect_gas() {
-    scarb test | grep -E 'test .* \.\.\. ok \(gas usage est\.: [0-9]+\)' | sed -E 's/test (.*) \.\.\. ok \(gas usage est\.: ([0-9]+)\)/\1 \2/' | sort -k2 -nr
+    scarb test | grep -E '\[PASS\] .* \(gas: ~[0-9]+\)' | sed -E 's/\[PASS\] (.*) \(gas: ~([0-9]+)\)/\1 \2/' | sort -k2 -nr
 }
 
 generate_gas_report() {
     local gas_data=$(run_tests_and_collect_gas)
-    
+
     if [ -z "$gas_data" ]; then
         echo "Error: No gas data found. Make sure 'scarb test' is running correctly."
         exit 1
