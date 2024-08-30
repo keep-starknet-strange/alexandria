@@ -1,7 +1,6 @@
 use alexandria_encoding::base64::{Base64Encoder, Base64Decoder, Base64UrlEncoder, Base64UrlDecoder};
 
 #[test]
-#[available_gas(2000000000)]
 fn base64encode_empty_test() {
     let input = array![];
     let result = Base64Encoder::encode(input);
@@ -9,7 +8,6 @@ fn base64encode_empty_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64encode_simple_test() {
     let input = array!['a'];
 
@@ -22,7 +20,6 @@ fn base64encode_simple_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64encode_hello_world_test() {
     let input = array!['h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'];
 
@@ -47,7 +44,6 @@ fn base64encode_hello_world_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64decode_empty_test() {
     let input = array![];
 
@@ -56,7 +52,6 @@ fn base64decode_empty_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64decode_simple_test() {
     let input = array!['Y', 'Q', '=', '='];
 
@@ -66,7 +61,6 @@ fn base64decode_simple_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64decode_hello_world_test() {
     let input = array![
         'a', 'G', 'V', 's', 'b', 'G', '8', 'g', 'd', '2', '9', 'y', 'b', 'G', 'Q', '='
@@ -88,7 +82,6 @@ fn base64decode_hello_world_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64encode_with_plus_and_slash() {
     let input = array![255, 239];
 
@@ -101,7 +94,6 @@ fn base64encode_with_plus_and_slash() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64urlencode_with_plus_and_slash() {
     let input = array![255, 239];
 
@@ -114,7 +106,6 @@ fn base64urlencode_with_plus_and_slash() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64decode_with_plus_and_slash() {
     let input = array!['/', '+', '8', '='];
 
@@ -125,7 +116,6 @@ fn base64decode_with_plus_and_slash() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64urldecode_with_plus_and_slash() {
     let input = array!['_', '-', '8', '='];
 

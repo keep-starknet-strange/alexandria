@@ -1,7 +1,6 @@
 use alexandria_math::fast_power::{fast_power, fast_power_mod};
 
 #[test]
-#[available_gas(1000000000)]
 fn fast_power_test() {
     assert_eq!(fast_power(2_u128, 1_u128), 2);
     assert_eq!(fast_power(2_u128, 2_u128), 4);
@@ -20,7 +19,6 @@ fn fast_power_test() {
 }
 
 #[test]
-#[available_gas(1000000000)]
 fn fast_power_mod_test() {
     assert_eq!(fast_power_mod(2_u128, 1_u128, 17_u128), 2);
     assert_eq!(fast_power_mod(2_u128, 2_u128, 17_u128), 4);

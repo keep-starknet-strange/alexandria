@@ -14,4 +14,9 @@ alexandria_data_structures = { path = "../data_structures" }
 starknet.workspace = true
 
 [dev-dependencies]
-cairo_test.workspace = true
+assert_macros = "0.1.0"
+snforge_std = { git = "https://github.com/foundry-rs/starknet-foundry.git", tag = "v0.28.0" }
+
+[scripts]
+test = "snforge test"
+test-profiling = "snforge test --build-profile"

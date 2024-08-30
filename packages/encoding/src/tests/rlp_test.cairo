@@ -1,7 +1,6 @@
 use alexandria_encoding::rlp::{RLPError, RLPType, RLPTrait, RLPItem};
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_type_byte() {
     let arr = array![0x78];
 
@@ -13,7 +12,6 @@ fn test_rlp_decode_type_byte() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_type_short_string() {
     let arr = array![0x82];
 
@@ -25,7 +23,6 @@ fn test_rlp_decode_type_short_string() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_type_long_string() {
     let arr = array![0xb9, 0x01, 0x02];
 
@@ -37,7 +34,6 @@ fn test_rlp_decode_type_long_string() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_type_short_list() {
     let arr = array![0xc3];
 
@@ -49,7 +45,6 @@ fn test_rlp_decode_type_short_list() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_type_long_list() {
     let arr = array![0xf9, 0x01, 0x02];
 
@@ -61,7 +56,6 @@ fn test_rlp_decode_type_long_list() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_type_long_list_len_too_short() {
     let arr = array![0xf9, 0x01];
 
@@ -72,7 +66,6 @@ fn test_rlp_decode_type_long_list_len_too_short() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_type_long_string_payload_too_long() {
     let arr = array![0xbf, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02];
 
@@ -83,7 +76,6 @@ fn test_rlp_decode_type_long_string_payload_too_long() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_type_long_list_payload_too_long() {
     let arr = array![0xfc, 0x01, 0x02, 0x02, 0x02, 0x02];
 
@@ -94,7 +86,6 @@ fn test_rlp_decode_type_long_list_payload_too_long() {
 }
 
 #[test]
-#[available_gas(9999999)]
 fn test_rlp_empty() {
     let res = RLPTrait::decode(ArrayTrait::new().span());
 
@@ -103,7 +94,6 @@ fn test_rlp_empty() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_string_default_value() {
     let arr = array![0x80];
 
@@ -116,7 +106,6 @@ fn test_rlp_decode_string_default_value() {
 
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_string() {
     let mut i = 0;
     while (i != 128) {
@@ -131,7 +120,6 @@ fn test_rlp_decode_string() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_short_string() {
     let mut arr = array![
         0x9b,
@@ -175,7 +163,6 @@ fn test_rlp_decode_short_string() {
 
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_short_string_input_too_short() {
     let arr = array![
         0x9b,
@@ -214,7 +201,6 @@ fn test_rlp_decode_short_string_input_too_short() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_long_string_with_payload_len_on_1_byte() {
     let mut arr = array![
         0xb8,
@@ -292,7 +278,6 @@ fn test_rlp_decode_long_string_with_payload_len_on_1_byte() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_long_string_with_input_too_short() {
     let arr = array![
         0xb8,
@@ -365,7 +350,6 @@ fn test_rlp_decode_long_string_with_input_too_short() {
 
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_long_string_with_payload_len_on_2_bytes() {
     let mut arr = array![
         0xb9,
@@ -643,7 +627,6 @@ fn test_rlp_decode_long_string_with_payload_len_on_2_bytes() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_rlp_decode_long_string_with_payload_len_too_short() {
     let arr = array![0xb9, 0x01,];
 
@@ -654,7 +637,6 @@ fn test_rlp_decode_long_string_with_payload_len_too_short() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_rlp_decode_short_list() {
     let arr = array![0xc9, 0x83, 0x35, 0x35, 0x35, 0x42, 0x83, 0x45, 0x38, 0x92];
     let res = RLPTrait::decode(arr.span()).unwrap();
@@ -669,7 +651,6 @@ fn test_rlp_decode_short_list() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_rlp_decode_short_nested_list() {
     let arr = array![0xc7, 0xc0, 0xc1, 0xc0, 0xc3, 0xc0, 0xc1, 0xc0];
     let res = RLPTrait::decode(arr.span()).unwrap();
@@ -684,7 +665,6 @@ fn test_rlp_decode_short_nested_list() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_rlp_decode_multi_list() {
     let mut arr = array![0xc6, 0x82, 0x7a, 0x77, 0xc1, 0x04, 0x01,];
 
@@ -700,7 +680,6 @@ fn test_rlp_decode_multi_list() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_rlp_decode_short_list_with_input_too_short() {
     let arr = array![0xc9, 0x83, 0x35, 0x35, 0x89, 0x42, 0x83, 0x45, 0x38];
 
@@ -711,7 +690,6 @@ fn test_rlp_decode_short_list_with_input_too_short() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_rlp_decode_long_list() {
     let mut arr = array![
         0xf9,
@@ -1871,7 +1849,6 @@ fn test_rlp_decode_long_list() {
 
 
 #[test]
-#[available_gas(99999999999)]
 fn test_rlp_decode_long_list_with_input_too_short() {
     let mut arr = array![
         0xf9,
@@ -1911,7 +1888,6 @@ fn test_rlp_decode_long_list_with_input_too_short() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_rlp_decode_long_list_with_len_too_short() {
     let arr = array![0xf9, 0x02,];
 
@@ -1922,7 +1898,6 @@ fn test_rlp_decode_long_list_with_len_too_short() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_rlp_encode_empty_input_should_fail() {
     let input = array![];
 
@@ -1934,7 +1909,6 @@ fn test_rlp_encode_empty_input_should_fail() {
 
 
 #[test]
-#[available_gas(20000000)]
 fn test_rlp_encode_default_value() {
     let input = RLPItem::String(array![].span());
 
@@ -1945,7 +1919,6 @@ fn test_rlp_encode_default_value() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_rlp_encode_string_single_byte_lt_0x80() {
     let mut input: Array<u8> = Default::default();
     input.append(0x40);
@@ -1957,7 +1930,6 @@ fn test_rlp_encode_string_single_byte_lt_0x80() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_rlp_encode_string_single_byte_ge_0x80() {
     let mut input: Array<u8> = Default::default();
     input.append(0x80);
@@ -1970,7 +1942,6 @@ fn test_rlp_encode_string_single_byte_ge_0x80() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_rlp_encode_string_length_between_2_and_55() {
     let mut input: Array<u8> = Default::default();
     input.append(0x40);
@@ -1985,7 +1956,6 @@ fn test_rlp_encode_string_length_between_2_and_55() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_rlp_encode_string_length_exactly_56() {
     let mut input: Array<u8> = Default::default();
     let mut i = 0;
@@ -2011,7 +1981,6 @@ fn test_rlp_encode_string_length_exactly_56() {
 
 
 #[test]
-#[available_gas(20000000)]
 fn test_rlp_encode_string_length_greater_than_56() {
     let mut input: Array<u8> = Default::default();
     let mut i = 0;
@@ -2033,7 +2002,6 @@ fn test_rlp_encode_string_length_greater_than_56() {
 }
 
 #[test]
-#[available_gas(200000000)]
 fn test_rlp_encode_string_large_bytearray_inputs() {
     let mut input: Array<u8> = Default::default();
     let mut i = 0;
@@ -2056,7 +2024,6 @@ fn test_rlp_encode_string_large_bytearray_inputs() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_rlp_encode_mutilple_string() {
     let mut input = array![];
     input.append(RLPItem::String(array![0x40, 0x53, 0x15, 0x94, 0x50, 0x40, 0x40, 0x40].span()));
@@ -2071,7 +2038,6 @@ fn test_rlp_encode_mutilple_string() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_rlp_encode_short_list() {
     let string_0 = RLPItem::String(array![0x35, 0x35, 0x35].span());
     let string_1 = RLPItem::String(array![0x42].span());
@@ -2087,7 +2053,6 @@ fn test_rlp_encode_short_list() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_rlp_encode_short_nested_list() {
     let string_0 = RLPItem::List(array![].span());
     let string_1 = RLPItem::List(array![string_0].span());
@@ -2103,7 +2068,6 @@ fn test_rlp_encode_short_nested_list() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_rlp_encode_long_list() {
     let string_0 = RLPItem::String(
         array![

@@ -2,7 +2,6 @@ use alexandria_encoding::reversible::{ReversibleBits, ReversibleBytes};
 use core::integer::u512;
 
 #[test]
-#[available_gas(1000000)]
 fn test_reverse_bytes_u8() {
     let t: u8 = 0b10111010;
     let rev = t.reverse_bytes();
@@ -11,7 +10,6 @@ fn test_reverse_bytes_u8() {
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_reverse_bytes_u16() {
     let t: u16 = 0x1122;
     let rev = t.reverse_bytes();
@@ -20,7 +18,6 @@ fn test_reverse_bytes_u16() {
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_reverse_bytes_u32() {
     let t: u32 = 0x11223344;
     let rev = t.reverse_bytes();
@@ -29,7 +26,6 @@ fn test_reverse_bytes_u32() {
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_reverse_bytes_u64() {
     let t: u64 = 0x1122334455667788;
     let rev = t.reverse_bytes();
@@ -38,7 +34,6 @@ fn test_reverse_bytes_u64() {
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_reverse_bytes_u128() {
     let t: u128 = 0x112233445566778899aabbccddeeff00;
     let rev = t.reverse_bytes();
@@ -47,7 +42,6 @@ fn test_reverse_bytes_u128() {
 }
 
 #[test]
-#[available_gas(10000000)]
 fn test_reverse_bytes_u256() {
     let t1: u128 = 0x101112131415161718191a1b1c1d1e1f;
     let t2: u128 = 0x202122232425262728292a2b2c2d2e2f;
@@ -58,7 +52,6 @@ fn test_reverse_bytes_u256() {
 }
 
 #[test]
-#[available_gas(10000000)]
 fn test_reverse_bytes_u512() {
     let t0: u128 = 0x101112131415161718191a1b1c1d1e1f;
     let t1: u128 = 0x202122232425262728292a2b2c2d2e2f;
@@ -77,7 +70,6 @@ fn test_reverse_bytes_u512() {
 }
 
 #[test]
-#[available_gas(10000000)]
 fn test_reverse_bytes_bytes31() {
     let t1: u128 = 0x101112131415161718191a1b1c1d1e1f;
     let t2: u128 = 0x202122232425262728292a2b2c2d2e;
@@ -94,7 +86,6 @@ fn test_reverse_bytes_bytes31() {
 }
 
 #[test]
-#[available_gas(10000000)]
 fn test_reverse_bytes_array() {
     let t: Array<u16> = array![0x1122, 0x3344, 0x5566, 0x7788, 0x99aa, 0xbbcc, 0xddee];
     let t_rev: Array<u16> = array![0xeedd, 0xccbb, 0xaa99, 0x8877, 0x6655, 0x4433, 0x2211];
@@ -104,7 +95,6 @@ fn test_reverse_bytes_array() {
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_reverse_bits_u8() {
     let t: u8 = 0b10111010;
     let t_rev: u8 = 0b01011101;
@@ -114,7 +104,6 @@ fn test_reverse_bits_u8() {
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_reverse_bits_u16() {
     let t: u16 = 0x11aa;
     let t_rev: u16 = 0x5588;
@@ -124,7 +113,6 @@ fn test_reverse_bits_u16() {
 }
 
 #[test]
-#[available_gas(10000000)]
 fn test_reverse_bits_u32() {
     let t: u32 = 0x1111aaaa;
     let t_rev: u32 = 0x55558888;
@@ -134,7 +122,6 @@ fn test_reverse_bits_u32() {
 }
 
 #[test]
-#[available_gas(10000000)]
 fn test_reverse_bits_u64() {
     let t: u64 = 0x11111111aaaaaaaa;
     let t_rev: u64 = 0x5555555588888888;
@@ -144,7 +131,6 @@ fn test_reverse_bits_u64() {
 }
 
 #[test]
-#[available_gas(10000000)]
 fn test_reverse_bits_u128() {
     let t: u128 = 0x1111111111111111aaaaaaaaaaaaaaaa;
     let t_rev: u128 = 0x55555555555555558888888888888888;
@@ -154,7 +140,6 @@ fn test_reverse_bits_u128() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_reverse_bits_u256() {
     let t1: u128 = 0x1111111111111111aaaaaaaaaaaaaaaa;
     let t2: u128 = 0xcccccccccccccccc7777777777777777;
@@ -168,7 +153,6 @@ fn test_reverse_bits_u256() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_reverse_bits_u512() {
     let t0: u128 = 0x1111111111111111aaaaaaaaaaaaaaaa;
     let t1: u128 = 0xcccccccccccccccc7777777777777777;
@@ -187,7 +171,6 @@ fn test_reverse_bits_u512() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_reverse_bits_bytes31() {
     let t1: u128 = 0x123457bcde123457bcde123457bcde12;
     let t2: u128 = 0x84c2aed3b784c2aed3b784c2aed3b7;
@@ -205,7 +188,6 @@ fn test_reverse_bits_bytes31() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_reverse_bits_array() {
     let t: Array<u16> = array![0x1234, 0x57bc, 0xde84, 0xc2ae, 0xd3b7];
     let t_rev: Array<u16> = array![0xedcb, 0x7543, 0x217b, 0x3dea, 0x2c48];

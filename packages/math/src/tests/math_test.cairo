@@ -3,7 +3,6 @@ use core::num::traits::Bounded;
 
 // Test power function
 #[test]
-#[available_gas(1000000000)]
 fn test_pow_power_2_all() {
     assert_eq!(pow::<u128>(2, 0), 1);
     assert_eq!(pow::<u128>(2, 1), 2);
@@ -137,7 +136,6 @@ fn test_pow_power_2_all() {
 
 
 #[test]
-#[available_gas(2000000)]
 fn pow_test() {
     assert_eq!(pow::<u128>(200, 0), 1);
     assert_eq!(pow::<u128>(5, 9), 1953125);
@@ -149,7 +147,6 @@ fn pow_test() {
 
 // Test counting of number of digits function
 #[test]
-#[available_gas(2000000)]
 fn count_digits_of_base_test() {
     assert_eq!(count_digits_of_base(0, 10), 0);
     assert_eq!(count_digits_of_base(2, 10), 1);
@@ -161,7 +158,6 @@ fn count_digits_of_base_test() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn shl_should_not_overflow() {
     assert_eq!(BitShift::shl(pow::<u8>(2, 7), 1), 0);
     assert_eq!(BitShift::shl(pow::<u16>(2, 15), 1), 0);
@@ -172,7 +168,6 @@ fn shl_should_not_overflow() {
 }
 
 #[test]
-#[available_gas(3000000)]
 fn test_rotl_min() {
     assert_eq!(BitRotate::rotate_left(pow::<u8>(2, 7) + 1, 1), 3);
     assert_eq!(BitRotate::rotate_left(pow::<u16>(2, 15) + 1, 1), 3);
@@ -183,7 +178,6 @@ fn test_rotl_min() {
 }
 
 #[test]
-#[available_gas(3000000)]
 fn test_rotl_max() {
     assert_eq!(BitRotate::rotate_left(0b101, 7), pow::<u8>(2, 7) + 0b10);
     assert_eq!(BitRotate::rotate_left(0b101, 15), pow::<u16>(2, 15) + 0b10);
@@ -194,7 +188,6 @@ fn test_rotl_max() {
 }
 
 #[test]
-#[available_gas(4000000)]
 fn test_rotr_min() {
     assert_eq!(BitRotate::rotate_right(pow::<u8>(2, 7) + 1, 1), 0b11 * pow(2, 6));
     assert_eq!(BitRotate::rotate_right(pow::<u16>(2, 15) + 1, 1), 0b11 * pow(2, 14));
@@ -205,7 +198,6 @@ fn test_rotr_min() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_rotr_max() {
     assert_eq!(BitRotate::rotate_right(0b101_u8, 7), 0b1010);
     assert_eq!(BitRotate::rotate_right(0b101_u16, 15), 0b1010);

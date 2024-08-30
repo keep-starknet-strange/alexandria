@@ -2,7 +2,6 @@ use alexandria_ascii::ToAsciiTrait;
 use core::num::traits::Bounded;
 
 #[test]
-#[available_gas(2000000000)]
 fn u256_to_ascii() {
     // ------------------------------ max u256 test ----------------------------- //
     // max u256 int in cairo is GitHub Copilot: The maximum u256 number in Cairo is `
@@ -32,7 +31,6 @@ fn u256_to_ascii() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn u128_to_ascii() {
     // ------------------------------ max u128 test ----------------------------- //
     // max u128 int in cairo is 340282366920938463463374607431768211455
@@ -55,7 +53,6 @@ fn u128_to_ascii() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn u64_to_ascii() {
     // ------------------------------ max u64 test ------------------------------ //
     let num: u64 = Bounded::MAX;
@@ -66,7 +63,6 @@ fn u64_to_ascii() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn u32_to_ascii() {
     // ------------------------------ max u32 test ------------------------------ //
     let num: u32 = Bounded::MAX;
@@ -77,7 +73,6 @@ fn u32_to_ascii() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn u16_to_ascii() {
     // ------------------------------ max u16 test ------------------------------ //
     let num: u16 = Bounded::MAX;
@@ -88,7 +83,6 @@ fn u16_to_ascii() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn u8_to_ascii() {
     // ------------------------------- max u8 test ------------------------------ //
     let num: u8 = Bounded::MAX;

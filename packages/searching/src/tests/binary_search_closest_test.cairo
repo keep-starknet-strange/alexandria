@@ -1,7 +1,6 @@
 use alexandria_searching::binary_search::binary_search_closest as search;
 
 #[test]
-#[available_gas(2000000)]
 fn value_found() {
     let mut arr: Array<u128> = array![100, 200, 300, 400, 500, 600];
 
@@ -28,7 +27,6 @@ fn value_found() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn value_not_found() {
     let mut arr: Array<u128> = array![100, 200, 300, 400, 500, 600];
 
@@ -47,7 +45,6 @@ fn value_not_found() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn value_found_length_one() {
     let span: Span<u128> = array![100].span();
 
@@ -55,14 +52,12 @@ fn value_found_length_one() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn value_not_found_length_one() {
     let span: Span<u128> = array![100].span();
     assert!(search(span, 50).is_none(), "value was found")
 }
 
 #[test]
-#[available_gas(2000000)]
 fn zero_length_span() {
     let span: Span<u128> = array![].span();
     assert!(search(span, 100).is_none(), "value was found")
@@ -71,7 +66,6 @@ fn zero_length_span() {
 // Closest specific tests
 
 #[test]
-#[available_gas(1_000_000)]
 fn length_two_span() {
     let span: Span<u128> = array![100, 200].span();
     assert!(search(span, 50).is_none());
@@ -82,7 +76,6 @@ fn length_two_span() {
 }
 
 #[test]
-#[available_gas(1_000_000)]
 fn length_three_span() {
     let span: Span<u128> = array![100, 200, 300].span();
     assert!(search(span, 50).is_none());
@@ -95,7 +88,6 @@ fn length_three_span() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn closest_value_found() {
     let mut arr: Array<u128> = array![100, 200, 300, 400, 500, 600];
 
@@ -120,7 +112,6 @@ fn closest_value_found() {
 }
 
 #[test]
-#[available_gas(5_000_000)]
 fn all_values() {
     let mut arr: Array<u128> = array![100, 200, 300, 400, 500, 600];
 

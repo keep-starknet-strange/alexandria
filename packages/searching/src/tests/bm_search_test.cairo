@@ -1,7 +1,6 @@
 use alexandria_searching::bm_search::bm_search;
 
 #[test]
-#[available_gas(5000000)]
 fn bm_search_test_1() {
     // AABCAB12AFAABCABFFEGABCAB ->
     // 41,41,42,43,41,42,31,32,41,46,41,41,42,43,41,42,46,46,45,47,41,42,43,41,42
@@ -45,7 +44,6 @@ fn bm_search_test_1() {
 }
 
 #[test]
-#[available_gas(5000000)]
 fn bm_search_test_2() {
     // AABCAB12AFAABCABFFEGABCAB ->
     // 41,41,42,43,41,42,31,32,41,46,41,41,42,43,41,42,46,46,45,47,41,42,43,41,42
@@ -87,7 +85,6 @@ fn bm_search_test_2() {
 }
 
 #[test]
-#[available_gas(5000000)]
 fn bm_search_test_3() {
     // AABCAB12AFAABCABFFEGABCAB ->
     // 41,41,42,43,41,42,31,32,41,46,41,41,42,43,41,42,46,46,45,47,41,42,43,41,42

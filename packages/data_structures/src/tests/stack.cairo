@@ -63,19 +63,16 @@ fn stack_push_pop_push_test<
 }
 
 #[test]
-#[available_gas(2000000)]
 fn felt252_stack_new_test() {
     stack_new_test(@StackTrait::<Felt252Stack, u128>::new());
 }
 
 #[test]
-#[available_gas(2000000)]
 fn felt252_stack_is_empty_test() {
     stack_is_empty_test(@StackTrait::<Felt252Stack, u128>::new());
 }
 
 #[test]
-#[available_gas(2000000)]
 fn felt252_stack_push_test() {
     let mut stack = StackTrait::<Felt252Stack, u128>::new();
     stack_push_test(ref stack, 1, 2);
@@ -83,21 +80,18 @@ fn felt252_stack_push_test() {
 
 
 #[test]
-#[available_gas(2000000)]
 fn felt252_stack_peek_test() {
     let mut stack = StackTrait::<Felt252Stack, u128>::new();
     stack_peek_test(ref stack, 1, 2);
 }
 
 #[test]
-#[available_gas(2000000)]
 fn felt252_stack_pop_test() {
     let mut stack = StackTrait::<Felt252Stack, u128>::new();
     stack_pop_test(ref stack, 1, 2);
 }
 
 #[test]
-#[available_gas(2000000)]
 fn felt252_stack_push_pop_push_test() {
     let mut stack = StackTrait::<Felt252Stack, u128>::new();
 
@@ -106,19 +100,16 @@ fn felt252_stack_push_pop_push_test() {
 
 
 #[test]
-#[available_gas(2000000)]
 fn nullable_stack_new_test() {
     stack_new_test(@StackTrait::<NullableStack, u256>::new());
 }
 
 #[test]
-#[available_gas(2000000)]
 fn nullable_stack_is_empty_test() {
     stack_is_empty_test(@StackTrait::<NullableStack, u256>::new());
 }
 
 #[test]
-#[available_gas(2000000)]
 fn nullable_stack_push_test() {
     let mut stack = StackTrait::<NullableStack, u256>::new();
     stack_push_test(ref stack, 1, 2);
@@ -126,21 +117,18 @@ fn nullable_stack_push_test() {
 
 
 #[test]
-#[available_gas(2000000)]
 fn nullable_stack_peek_test() {
     let mut stack = StackTrait::<NullableStack, u256>::new();
     stack_peek_test(ref stack, 1, 2);
 }
 
 #[test]
-#[available_gas(2000000)]
 fn nullable_stack_pop_test() {
     let mut stack = StackTrait::<NullableStack, u256>::new();
     stack_pop_test(ref stack, 1, 2);
 }
 
 #[test]
-#[available_gas(2000000)]
 fn nullable_stack_push_pop_push_test() {
     let mut stack = StackTrait::<NullableStack<u256>, u256>::new();
 

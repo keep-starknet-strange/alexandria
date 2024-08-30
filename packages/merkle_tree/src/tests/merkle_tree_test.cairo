@@ -53,7 +53,6 @@ mod regular_call_merkle_tree_pedersen {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn merkle_tree_pedersen_test() {
     // [Setup] Merkle tree.
     let mut merkle_tree: MerkleTree<Hasher> = MerkleTreeImpl::<_, PedersenHasherImpl>::new();
@@ -102,7 +101,6 @@ fn merkle_tree_pedersen_test() {
 }
 
 #[test]
-#[available_gas(50000000000)]
 fn merkle_tree_poseidon_test() {
     // [Setup] Merkle tree.
     let mut merkle_tree: MerkleTree<Hasher> = MerkleTreeImpl::<_, PoseidonHasherImpl>::new();

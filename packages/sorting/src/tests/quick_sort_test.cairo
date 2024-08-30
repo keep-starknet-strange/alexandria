@@ -26,7 +26,6 @@ fn is_equal_vec(mut a: Felt252Vec<u32>, mut b: Span<u32>) -> bool {
 }
 
 #[test]
-#[available_gas(20000000000000)]
 fn quicksort_test() {
     let mut data = VecTrait::<Felt252Vec, u32>::new();
     data.push(4);
@@ -44,7 +43,6 @@ fn quicksort_test() {
 
 
 #[test]
-#[available_gas(2000000)]
 fn quicksort_test_empty() {
     let data = VecTrait::<Felt252Vec, u32>::new();
     let correct = array![];
@@ -55,7 +53,6 @@ fn quicksort_test_empty() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn quicksort_test_one_element() {
     let mut data = VecTrait::<Felt252Vec, u32>::new();
     data.push(2);
@@ -67,7 +64,6 @@ fn quicksort_test_one_element() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn quicksort_test_pre_sorted() {
     let mut data = VecTrait::<Felt252Vec, u32>::new();
     data.push(1);
@@ -82,7 +78,6 @@ fn quicksort_test_pre_sorted() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn quicksort_test_pre_sorted_decreasing() {
     let mut data = VecTrait::<Felt252Vec, u32>::new();
     data.push(4);
@@ -97,7 +92,6 @@ fn quicksort_test_pre_sorted_decreasing() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn quicksort_test_pre_sorted_2_same_values() {
     let mut data = VecTrait::<Felt252Vec, u32>::new();
     data.push(1);
@@ -112,7 +106,6 @@ fn quicksort_test_pre_sorted_2_same_values() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn quicksort_test_2_same_values() {
     let mut data = VecTrait::<Felt252Vec, u32>::new();
     data.push(1);

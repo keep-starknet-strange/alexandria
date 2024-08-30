@@ -1,7 +1,6 @@
 use alexandria_math::keccak256::keccak256;
 
 #[test]
-#[available_gas(2000000)]
 fn test_keccak256_empty_bytes() {
     let input = array![];
 
@@ -12,7 +11,6 @@ fn test_keccak256_empty_bytes() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_keccak256_partial_bytes() {
     let input = array![0x00, 0x01, 0x02, 0x03, 0x04, 0x05];
 
@@ -23,7 +21,6 @@ fn test_keccak256_partial_bytes() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_keccak256_full_u256() {
     let input = array![
         0x00,

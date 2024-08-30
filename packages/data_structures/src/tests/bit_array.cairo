@@ -5,7 +5,6 @@ use core::integer::u512;
 use core::num::traits::Bounded;
 
 #[test]
-#[available_gas(30000000)]
 fn test_append_bit() {
     let mut ba: BitArray = Default::default();
     let mut c = 250;
@@ -23,7 +22,6 @@ fn test_append_bit() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_at() {
     let ba = sample_bit_array();
     let mut index: usize = 0;
@@ -39,14 +37,12 @@ fn test_at() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_at_none() {
     let ba = sample_bit_array();
     assert!(ba.at(8 * 16).is_none(), "expected none");
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_index() {
     let ba = sample_bit_array();
     assert!(ba[0] == true, "expected true");
@@ -54,15 +50,13 @@ fn test_index() {
 }
 
 #[test]
-#[available_gas(20000000)]
-#[should_panic(expected: ('Index out of bounds',))]
+#[should_panic(expected: 'Index out of bounds')]
 fn test_index_fail() {
     let ba = sample_bit_array();
     ba[8 * 16];
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_len() {
     let mut ba = sample_bit_array();
     let expected = 8 * 16;
@@ -74,35 +68,30 @@ fn test_len() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_pop_front() {
     let mut ba = sample_bit_array();
     assert!(ba.pop_front() == Option::Some(true), "expected (some) true");
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_pop_front_empty() {
     let mut ba: BitArray = Default::default();
     assert!(ba.pop_front() == Option::None, "expected none");
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_word_be() {
     let mut ba = sample_bit_array();
     assert_eq!(ba.read_word_be(length: 128).unwrap(), Bounded::<u128>::MAX.into() - 1);
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_word_le() {
     let mut ba = sample_bit_array();
     assert_eq!(ba.read_word_le(length: 128).unwrap(), 0x7fffffffffffffffffffffffffffffff);
 }
 
 #[test]
-#[available_gas(40000000)]
 fn test_read_word_be_u256() {
     let mut ba = sample_bit_array();
     let low = 0x101112131415161718191a1b1c1d1e1f_u128;
@@ -112,7 +101,6 @@ fn test_read_word_be_u256() {
 }
 
 #[test]
-#[available_gas(40000000)]
 fn test_read_word_le_u256() {
     let mut ba = sample_bit_array();
     let low = 0x7fffffffffffffffffffffffffffffff_u128;
@@ -122,7 +110,6 @@ fn test_read_word_le_u256() {
 }
 
 #[test]
-#[available_gas(70000000)]
 fn test_read_word_be_u512() {
     let mut ba = sample_bit_array();
     let limb0 = 0x101112131415161718191a1b1c1d1e1f_u128;
@@ -136,7 +123,6 @@ fn test_read_word_be_u512() {
 }
 
 #[test]
-#[available_gas(70000000)]
 fn test_read_word_le_u512() {
     let mut ba = sample_bit_array();
     let limb1 = 0x101112131415161718191a1b1c1d1e1f_u128;
@@ -150,7 +136,6 @@ fn test_read_word_le_u512() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_word_be_half() {
     let mut ba = sample_bit_array();
     assert!(ba.read_word_be(64).unwrap() == 0xffffffffffffffff, "unexpected result");
@@ -158,7 +143,6 @@ fn test_read_word_be_half() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_word_le_half() {
     let mut ba = sample_bit_array();
     assert!(ba.read_word_le(64).unwrap() == 0xffffffffffffffff, "unexpected result");
@@ -166,7 +150,6 @@ fn test_read_word_le_half() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_write_word_be() {
     let mut ba: BitArray = Default::default();
     ba.write_word_be(Bounded::<u128>::MAX.into() - 2, 128);
@@ -174,7 +157,6 @@ fn test_write_word_be() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_write_word_be_half() {
     let mut ba: BitArray = Default::default();
     ba.write_word_be(Bounded::<u128>::MAX.into() - 3, 64);
@@ -182,7 +164,6 @@ fn test_write_word_be_half() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_write_word_le() {
     let mut ba: BitArray = Default::default();
     ba.write_word_le(Bounded::<u128>::MAX.into() - 4, 128);
@@ -190,7 +171,6 @@ fn test_write_word_le() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_write_word_le_half() {
     let mut ba: BitArray = Default::default();
     ba.write_word_le(Bounded::<u128>::MAX.into() - 5, 64);
@@ -198,7 +178,6 @@ fn test_write_word_le_half() {
 }
 
 #[test]
-#[available_gas(40000000)]
 fn test_write_word_be_u256() {
     let mut ba: BitArray = Default::default();
     let expected = u256 { low: Bounded::MAX - 1, high: Bounded::MAX - 2 };
@@ -207,7 +186,6 @@ fn test_write_word_be_u256() {
 }
 
 #[test]
-#[available_gas(40000000)]
 fn test_write_word_le_u256() {
     let mut ba: BitArray = Default::default();
     let expected = u256 { low: Bounded::MAX - 1, high: Bounded::MAX - 2 };
@@ -216,7 +194,6 @@ fn test_write_word_le_u256() {
 }
 
 #[test]
-#[available_gas(80000000)]
 fn test_write_word_be_u512() {
     let mut ba: BitArray = Default::default();
     let limb0 = Bounded::<u128>::MAX;
@@ -229,7 +206,6 @@ fn test_write_word_be_u512() {
 }
 
 #[test]
-#[available_gas(80000000)]
 fn test_write_word_le_u512() {
     let mut ba: BitArray = Default::default();
     let limb0 = Bounded::<u128>::MAX;
@@ -242,7 +218,6 @@ fn test_write_word_le_u512() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn test_stress_test() {
     let mut ba: BitArray = Default::default();
     let mut index = 0;
@@ -264,7 +239,6 @@ fn test_stress_test() {
 }
 
 #[test]
-#[available_gas(100000)]
 fn test_serde_serialize() {
     let mut out = array![];
     let ba = sample_bit_array();
@@ -281,7 +255,6 @@ fn test_serde_serialize() {
 }
 
 #[test]
-#[available_gas(300000000)]
 fn test_serde_ser_deser() {
     let mut ba: BitArray = Default::default();
     let test: felt252 = 0x101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e;
