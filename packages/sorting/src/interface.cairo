@@ -1,4 +1,4 @@
-use alexandria_data_structures::vec::{Felt252Vec, VecTrait};
+use alexandria_data_structures::vec::Felt252Vec;
 
 pub trait Sortable {
     fn sort<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(array: Span<T>) -> Array<T>;

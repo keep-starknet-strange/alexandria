@@ -5,7 +5,6 @@ use starknet::{ContractAddress, EthAddress, ClassHash, StorageAddress};
 /// Display
 mod display_felt252_based {
     use core::fmt::{Display, Formatter, Error};
-    use core::to_byte_array::AppendFormattedToByteArray;
     pub impl TDisplay<T, +Into<T, felt252>, +Copy<T>> of Display<T> {
         fn fmt(self: @T, ref f: Formatter) -> Result<(), Error> {
             let value: felt252 = (*self).into();
@@ -22,7 +21,6 @@ pub impl StorageAddressDisplay = display_felt252_based::TDisplay<StorageAddress>
 /// Debug
 mod debug_display_based {
     use core::fmt::{Display, Debug, Formatter, Error};
-    use core::to_byte_array::AppendFormattedToByteArray;
     pub impl TDebug<T, +Display<T>> of Debug<T> {
         fn fmt(self: @T, ref f: Formatter) -> Result<(), Error> {
             Display::fmt(self, ref f)
