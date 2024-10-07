@@ -1,8 +1,8 @@
+use alexandria_math::schnorr::{sign, verify};
 use core::byte_array::ByteArrayTrait;
 use core::clone::Clone;
 use core::option::OptionTrait;
 use core::traits::Into;
-use alexandria_math::schnorr::{sign, verify};
 
 impl U256IntoByteArray of Into<u256, ByteArray> {
     fn into(self: u256) -> ByteArray {

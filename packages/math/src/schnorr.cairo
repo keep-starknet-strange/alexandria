@@ -1,12 +1,12 @@
 //! bip340 implementation
 use core::byte_array::ByteArrayTrait;
+use core::math::u256_mul_mod_n;
 use core::option::OptionTrait;
 use core::result::ResultTrait;
 use core::sha256::compute_sha256_byte_array; //Available in Cairo ^2.7.0.
 use core::starknet::SyscallResultTrait;
 use core::to_byte_array::{AppendFormattedToByteArray, FormatAsByteArray};
 use core::traits::Into;
-use core::math::u256_mul_mod_n;
 
 use starknet::{secp256k1::{Secp256k1Point}, secp256_trait::{Secp256Trait, Secp256PointTrait}};
 
