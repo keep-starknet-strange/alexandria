@@ -1,4 +1,4 @@
-use alexandria_math::schnorr::{sign, verify};
+use alexandria_math::bip340::{verify};
 use core::byte_array::ByteArrayTrait;
 use core::clone::Clone;
 use core::option::OptionTrait;

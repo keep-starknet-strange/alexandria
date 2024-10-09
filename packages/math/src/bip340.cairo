@@ -40,7 +40,8 @@ const p: u256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC
 /// "BIP0340/challenge".
 fn hash_challenge(rx: u256, px: u256, m: ByteArray) -> u256 {
     // sha256(tag)
-    let [x0, x1, x2, x3, x4, x5, x6, x7] = compute_sha256_byte_array(@"BIP0340/challenge");
+    //Precomputed values - calculated from 'compute_sha256_byte_array(@"BIP0340/challenge")' ;
+    let (x0, x1, x2, x3, x4, x5, x6, x7) = (2075471226, 2683263026, 1051836282, 1081979778, 3539202776, 464593487, 1241403791, 1833489276);
 
     let mut ba = Default::default();
     // sha256(tag)
