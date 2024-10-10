@@ -1,9 +1,8 @@
 use alexandria_bytes::{Bytes, BytesTrait};
-use alexandria_data_structures::array_ext::ArrayTraitExt;
 use core::fmt::{Debug, Display, Formatter, Error};
 use core::integer::u128_byte_reverse;
 use core::keccak::cairo_keccak;
-use core::to_byte_array::{AppendFormattedToByteArray, FormatAsByteArray};
+use core::to_byte_array::FormatAsByteArray;
 
 fn format_byte_hex(byte: u8, ref f: Formatter) -> Result<(), Error> {
     let base: NonZero<u8> = 16_u8.try_into().unwrap();

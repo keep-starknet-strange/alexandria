@@ -154,6 +154,7 @@ pub trait ListTrait<T> {
     fn storage_size(self: @List<T>) -> u8;
 }
 
+#[feature("deprecated-list-trait")]
 impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
     #[inline(always)]
     fn new(address_domain: u32, base: StorageBaseAddress) -> List<T> {

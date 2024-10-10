@@ -1,8 +1,7 @@
-use alexandria_data_structures::array_ext::ArrayTraitExt;
 use super::{get_felt252_array, get_u128_array};
 
 mod append_all {
-    use super::{ArrayTraitExt, get_felt252_array};
+    use super::get_felt252_array;
 
     #[test]
     #[available_gas(2000000)]

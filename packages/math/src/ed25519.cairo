@@ -1,11 +1,11 @@
-use alexandria_math::mod_arithmetics::{mult_mod, sqr_mod, div_mod, pow_mod, equality_mod};
+use alexandria_math::mod_arithmetics::{mult_mod, sqr_mod, div_mod, pow_mod};
 use alexandria_math::sha512::{sha512, SHA512_LEN};
-use alexandria_math::u512_arithmetics::{u512_add, u512_sub};
+use alexandria_math::u512_arithmetics::u512_sub;
 use core::integer::{u512, u512_safe_div_rem_by_u256};
 use core::math::u256_inv_mod;
-use core::num::traits::{OverflowingMul, WideMul};
+use core::num::traits::WideMul;
 use core::option::OptionTrait;
-use core::traits::{Div, TryInto};
+use core::traits::TryInto;
 
 // Subtraction without modulo operation
 // assumes a, b < modulo
