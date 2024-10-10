@@ -1,5 +1,6 @@
 pub mod aliquot_sum;
 pub mod armstrong_number;
+pub mod bip340;
 pub mod bitmap;
 pub mod collatz_sequence;
 pub mod ed25519;
