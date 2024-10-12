@@ -30,13 +30,13 @@ const p: u256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC
 ///   https://github.com/bitcoin/bips/blob/master/bip-0340/reference.py
 ///
 ///
-/// # Parameters:
-/// - `rx`: `u256` - The x-coordinate of the R point from the signature.
-/// - `px`: `u256` - The x-coordinate of the public key.
-/// - `m`: `ByteArray` - The message for which the signature is being verified.
+/// # Arguments:
+/// * `rx`: `u256` - The x-coordinate of the R point from the signature.
+/// * `px`: `u256` - The x-coordinate of the public key.
+/// * `m`: `ByteArray` - The message for which the signature is being verified.
 ///
 /// # Returns:
-/// `sha256(tag) || sha256(tag) || bytes(rx) || bytes(px) || m` as u256 where tag =
+/// * `u256` - `sha256(tag) || sha256(tag) || bytes(rx) || bytes(px) || m` as u256 where tag =
 /// "BIP0340/challenge".
 fn hash_challenge(rx: u256, px: u256, m: ByteArray) -> u256 {
     // sha256(tag)
@@ -69,15 +69,14 @@ fn hash_challenge(rx: u256, px: u256, m: ByteArray) -> u256 {
 /// This function checks if the signature `(rx, s)` is valid for a message `m` with
 /// respect to the public key `px`.
 ///
-/// # Parameters
-/// - `px`: `u256` - The x-coordinate of the public key.
-/// - `rx`: `u256` - The x-coordinate of the R point from the signature.
-/// - `s`: `u256` - The scalar component of the signature.
-/// - `m`: `ByteArray` - The message for which the signature is being verified.
+/// # Arguments
+/// * `px`: `u256` - The x-coordinate of the public key.
+/// * `rx`: `u256` - The x-coordinate of the R point from the signature.
+/// * `s`: `u256` - The scalar component of the signature.
+/// * `m`: `ByteArray` - The message for which the signature is being verified.
 ///
 /// # Returns
-/// Returns `true` if the signature is valid for the given message and public key; otherwise,
-/// returns `false`.
+/// * `bool` - `true` if the signature is verified for the message and public key, `false` otherwise.
 pub fn verify(px: u256, rx: u256, s: u256, m: ByteArray) -> bool {
     let n = Secp256Trait::<Secp256k1Point>::get_curve_size();
 
