@@ -18,10 +18,10 @@ name = "alexandria"
 version = "0.1.0"
 description = "Community maintained Cairo and Starknet libraries"
 homepage = "https://github.com/keep-starknet-strange/alexandria/"
-cairo-version = "2.7.0"
+cairo-version = "2.8.4"
 
 [workspace.dependencies]
-starknet = "2.7.0"
+starknet = "2.8.4"
 cairo_test = "2.7.0"
 
 [workspace.tool.fmt]
