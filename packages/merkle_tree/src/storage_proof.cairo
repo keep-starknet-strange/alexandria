@@ -1,6 +1,7 @@
 use core::hash::HashStateTrait;
 use core::pedersen::PedersenTrait;
 use core::poseidon::PoseidonTrait;
+use alexandria_math::const_pow::pow2;
 
 #[derive(Drop, Serde)]
 pub struct BinaryNode {
@@ -131,8 +132,7 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
     let mut expected_hash = node_hash(@TrieNode::Edge(leaf));
     let value = leaf.child;
     let mut path = leaf.path;
-    let mut path_length_pow2 = pow(2, leaf.length);
-
+    let mut path_length_pow2 = pow2(leaf.length.into()).into();
     loop {
         match nodes.pop_back() {
             Option::Some(node) => {
@@ -149,7 +149,8 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
                     TrieNode::Edge(edge_node) => {
                         assert(expected_hash == *edge_node.child, 'invalid node hash');
                         path += *edge_node.path * path_length_pow2;
-                        path_length_pow2 *= pow(2, *edge_node.length);
+                        // types conversion from u8 to u32 and u128 to felt252 are fre
+                        path_length_pow2 *= pow2((*edge_node.length).into()).into();
                     }
                 }
                 expected_hash = node_hash(node);
@@ -169,18 +170,6 @@ fn node_hash(node: @TrieNode) -> felt252 {
     }
 }
 
-// TODO: replace with lookup table once array constants are available in Cairo
-fn pow(x: felt252, n: u8) -> felt252 {
-    if n == 0 {
-        1
-    } else if n == 1 {
-        x
-    } else if (n & 1) == 1 {
-        x * pow(x * x, n / 2)
-    } else {
-        pow(x * x, n / 2)
-    }
-}
 
 #[inline(always)]
 fn pedersen_hash(a: felt252, b: felt252) -> felt252 {
