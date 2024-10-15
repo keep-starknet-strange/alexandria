@@ -1,9 +1,7 @@
 // Internal imports
 use alexandria_merkle_tree::merkle_tree::{
-    Hasher, MerkleTree, pedersen::PedersenHasherImpl, poseidon::PoseidonHasherImpl, MerkleTreeTrait,
-    MerkleTreeImpl
+    Hasher, MerkleTree, pedersen::PedersenHasherImpl, poseidon::PoseidonHasherImpl, MerkleTreeImpl
 };
-
 
 mod regular_call_merkle_tree_pedersen {
     // Internal imports

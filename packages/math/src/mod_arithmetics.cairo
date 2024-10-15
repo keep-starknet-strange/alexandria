@@ -1,7 +1,5 @@
 use core::integer::{u512, u512_safe_div_rem_by_u256};
 use core::num::traits::{WrappingAdd, OverflowingAdd, OverflowingSub, WideMul};
-use core::option::OptionTrait;
-use core::traits::TryInto;
 
 /// Function that performs modular addition. Will panick if result is > u256 max
 /// # Arguments

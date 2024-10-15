@@ -1,7 +1,6 @@
 use core::num::traits::Bounded;
 use core::num::traits::WrappingAdd;
 use core::traits::{BitAnd, BitXor, BitOr};
-use super::BitShift;
 
 // Variable naming is compliant to RFC-6234 (https://datatracker.ietf.org/doc/html/rfc6234)
 

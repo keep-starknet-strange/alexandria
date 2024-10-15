@@ -1,5 +1,3 @@
-use alexandria_math::BitShift;
-
 pub trait UIntBytes<T> {
     fn from_bytes(input: Span<u8>) -> Option<T>;
     fn to_bytes(self: T) -> Span<u8>;

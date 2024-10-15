@@ -1,7 +1,7 @@
+use alexandria_math::const_pow::pow2_felt252;
 use core::hash::HashStateTrait;
 use core::pedersen::PedersenTrait;
 use core::poseidon::PoseidonTrait;
-use alexandria_math::const_pow::pow2_felt252;
 
 #[derive(Drop, Serde)]
 pub struct BinaryNode {
