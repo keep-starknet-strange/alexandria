@@ -50,6 +50,9 @@ version = "0.2.1"
 [[package]]
 name = "alexandria_merkle_tree"
 version = "0.1.0"
+dependencies = [
+ "alexandria_math",
+]
 
 [[package]]
 name = "alexandria_numeric"
