@@ -1,6 +1,5 @@
 use alexandria_bytes::utils::{BytesDebug, BytesDisplay};
 use alexandria_bytes::{Bytes, BytesTrait, BytesIndex};
-use starknet::ContractAddress;
 
 #[test]
 #[available_gas(20000000)]

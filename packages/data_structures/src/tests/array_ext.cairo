@@ -466,7 +466,7 @@ mod position {
 }
 
 mod occurrences {
-    use super::{ArrayTraitExt, get_u128_array, get_felt252_array};
+    use super::ArrayTraitExt;
 
     #[test]
     #[available_gas(2000000)]
@@ -633,7 +633,7 @@ mod max_position {
 }
 
 mod dedup {
-    use super::{ArrayTraitExt, get_u128_array, get_felt252_array};
+    use super::ArrayTraitExt;
 
     #[test]
     #[available_gas(2000000)]
@@ -716,7 +716,7 @@ mod dedup {
 }
 
 mod unique {
-    use super::{ArrayTraitExt, get_u128_array, get_felt252_array};
+    use super::ArrayTraitExt;
 
     #[test]
     #[available_gas(2000000)]

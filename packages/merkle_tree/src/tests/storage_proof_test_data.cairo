@@ -1,6 +1,6 @@
 use alexandria_merkle_tree::storage_proof::{
-    ContractStateProof, ContractData, TrieNode, BinaryNode, EdgeNode, BinaryNodeImpl, EdgeNodeImpl,
-    ContractStateProofImpl, ContractDataImpl
+    ContractStateProof, TrieNode, BinaryNodeImpl, EdgeNodeImpl, ContractStateProofImpl,
+    ContractDataImpl
 };
 
 pub(crate) fn balance_proof() -> ContractStateProof {

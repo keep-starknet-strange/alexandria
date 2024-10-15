@@ -1,12 +1,6 @@
 //! bip340 implementation
-use core::byte_array::ByteArrayTrait;
-use core::math::u256_mul_mod_n;
-use core::option::OptionTrait;
-use core::result::ResultTrait;
 use core::sha256::compute_sha256_byte_array; //Available in Cairo ^2.7.0.
 use core::starknet::SyscallResultTrait;
-use core::to_byte_array::{AppendFormattedToByteArray, FormatAsByteArray};
-use core::traits::Into;
 
 use starknet::{secp256k1::{Secp256k1Point}, secp256_trait::{Secp256Trait, Secp256PointTrait}};
 
@@ -76,7 +70,8 @@ fn hash_challenge(rx: u256, px: u256, m: ByteArray) -> u256 {
 /// * `m`: `ByteArray` - The message for which the signature is being verified.
 ///
 /// # Returns
-/// * `bool` - `true` if the signature is verified for the message and public key, `false` otherwise.
+/// * `bool` - `true` if the signature is verified for the message and public key, `false`
+/// otherwise.
 pub fn verify(px: u256, rx: u256, s: u256, m: ByteArray) -> bool {
     let n = Secp256Trait::<Secp256k1Point>::get_curve_size();
 

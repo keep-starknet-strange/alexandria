@@ -1,10 +1,7 @@
-use alexandria_storage::{List, ListTrait};
-use core::option::OptionTrait;
+use alexandria_storage::ListTrait;
 use core::starknet::storage::StorageAsPointer;
-use core::traits::TryInto;
 use starknet::{
     ClassHash, ContractAddress, syscalls::deploy_syscall, SyscallResultTrait,
-    testing::set_contract_address,
     storage_access::{
         storage_base_address_from_felt252, storage_address_from_base, StorageBaseAddress
     }

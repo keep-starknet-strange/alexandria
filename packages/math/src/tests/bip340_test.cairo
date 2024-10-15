@@ -1,8 +1,5 @@
 use alexandria_math::bip340::{verify};
 use core::byte_array::ByteArrayTrait;
-use core::clone::Clone;
-use core::option::OptionTrait;
-use core::traits::Into;
 
 impl U256IntoByteArray of Into<u256, ByteArray> {
     fn into(self: u256) -> ByteArray {
