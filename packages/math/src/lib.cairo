@@ -55,8 +55,8 @@ pub fn pow<T, +Sub<T>, +Mul<T>, +Div<T>, +Rem<T>, +PartialEq<T>, +Into<u8, T>, +
 /// * `num` - The number to count the digits of.
 /// * `base` - Base in which to count the digits.
 /// # Returns
-/// * `felt252` - The number of digits in num of base
-fn count_digits_of_base(mut num: u128, base: u128) -> u128 {
+/// * `u32` - The number of digits in num of base
+fn count_digits_of_base(mut num: u128, base: u128) -> u32 {
     let mut res = 0;
     while (num != 0) {
         num = num / base;
