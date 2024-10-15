@@ -1,7 +1,7 @@
 use core::hash::HashStateTrait;
 use core::pedersen::PedersenTrait;
 use core::poseidon::PoseidonTrait;
-use alexandria_math::const_pow::pow2;
+use alexandria_math::const_pow::pow2_felt252;
 
 #[derive(Drop, Serde)]
 pub struct BinaryNode {
@@ -132,7 +132,8 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
     let mut expected_hash = node_hash(@TrieNode::Edge(leaf));
     let value = leaf.child;
     let mut path = leaf.path;
-    let mut path_length_pow2 = pow2(leaf.length.into()).into();
+    let mut path_length_pow2 = pow2_felt252(leaf.length.into());
+
     loop {
         match nodes.pop_back() {
             Option::Some(node) => {
@@ -149,8 +150,7 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
                     TrieNode::Edge(edge_node) => {
                         assert(expected_hash == *edge_node.child, 'invalid node hash');
                         path += *edge_node.path * path_length_pow2;
-                        // types conversion from u8 to u32 and u128 to felt252 are fre
-                        path_length_pow2 *= pow2((*edge_node.length).into()).into();
+                        path_length_pow2 *= pow2_felt252((*edge_node.length).into());
                     }
                 }
                 expected_hash = node_hash(node);
@@ -169,7 +169,6 @@ fn node_hash(node: @TrieNode) -> felt252 {
         TrieNode::Edge(edge) => pedersen_hash(*edge.child, *edge.path) + (*edge.length).into()
     }
 }
-
 
 #[inline(always)]
 fn pedersen_hash(a: felt252, b: felt252) -> felt252 {
