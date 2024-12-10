@@ -393,7 +393,7 @@ impl BytesImpl of BytesTrait {
     #[inline(always)]
     fn read_bytes31(self: @Bytes, offset: usize) -> (usize, bytes31) {
         // Read 31 bytes of data ( 16 bytes high + 15 bytes low )
-        let (new_offset, high) = self.read_u128(0);
+        let (new_offset, high) = self.read_u128(offset);
         let (new_offset, low) = self.read_u128_packed(new_offset, 15);
         // low bits shifting to remove the left padded 0 byte on u128 type
         let low = U128BitShift::shl(low, 8);
