@@ -688,7 +688,7 @@ fn test_bytes_sha256() {
 #[test]
 fn test_byte_array_conversions() {
     let bytes = BytesTrait::new(
-        52,
+        64,
         array![
             0x01020304050607080910111213141516,
             0x16151413121110090807060504030201,
