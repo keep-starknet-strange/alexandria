@@ -355,11 +355,11 @@ fn test_bytes_read_u256() {
 #[available_gas(20000000)]
 fn test_bytes_read_bytes31() {
     let bytes: Bytes = BytesTrait::new(
-        31, array![0x0102030405060708090a0b0c0d0e0f10, 0x1112131415161718191a1b1c1d1e1f00]
+        42, array![0x0102030405060708090a0b0c0d0e0f10, 0x1112131415161718191a1b1c1d1e1f17, 0x0]
     );
-    let (offset, val) = bytes.read_bytes31(0);
-    assert_eq!(offset, 31);
-    let byte31: bytes31 = 0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
+    let (offset, val) = bytes.read_bytes31(2);
+    assert_eq!(offset, 33);
+    let byte31: bytes31 = 0x030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f1700
         .try_into()
         .unwrap();
     assert!(val == byte31, "read_bytes31 test failed")
@@ -688,7 +688,7 @@ fn test_bytes_sha256() {
 #[test]
 fn test_byte_array_conversions() {
     let bytes = BytesTrait::new(
-        52,
+        64,
         array![
             0x01020304050607080910111213141516,
             0x16151413121110090807060504030201,
