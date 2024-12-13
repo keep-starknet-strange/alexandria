@@ -28,6 +28,7 @@ name = "alexandria_encoding"
 version = "0.1.0"
 dependencies = [
  "alexandria_bytes",
+ "alexandria_data_structures",
  "alexandria_math",
  "alexandria_numeric",
 ]
