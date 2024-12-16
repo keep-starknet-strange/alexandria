@@ -1,4 +1,4 @@
-use alexandria_math::sha512::{sha512, Word64WordOperations};
+use alexandria_math::sha512::{Word64WordOperations, sha512};
 
 fn get_lorem_ipsum() -> Array<u8> {
     let mut input: Array<u8> = array![
@@ -322,7 +322,7 @@ fn get_lorem_ipsum() -> Array<u8> {
         0x77,
         0x69,
         0x74,
-        0x68
+        0x68,
     ];
     input
 }

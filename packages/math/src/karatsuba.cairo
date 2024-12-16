@@ -1,6 +1,6 @@
 //! # Karatsuba Multiplication.
 use core::cmp::max;
-use super::{count_digits_of_base, const_pow::pow10};
+use super::{const_pow::pow10, count_digits_of_base};
 
 /// Algorithm to multiply two numbers in O(n^1.6) running time
 /// # Arguments

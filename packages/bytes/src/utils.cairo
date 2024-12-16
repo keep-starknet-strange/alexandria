@@ -1,6 +1,6 @@
 use alexandria_bytes::{Bytes, BytesTrait};
 use alexandria_math::const_pow::pow2;
-use core::fmt::{Debug, Display, Formatter, Error};
+use core::fmt::{Debug, Display, Error, Formatter};
 use core::integer::u128_byte_reverse;
 use core::keccak::cairo_keccak;
 use core::to_byte_array::FormatAsByteArray;
@@ -83,7 +83,7 @@ fn u256_reverse_endian(input: u256) -> u256 {
 fn keccak_add_uint128_be(ref keccak_input: Array::<u64>, value: u128, value_size: usize) {
     if value_size == 16 {
         let (high, low) = core::integer::u128_safe_divmod(
-            u128_byte_reverse(value), 0x10000000000000000_u128.try_into().unwrap()
+            u128_byte_reverse(value), 0x10000000000000000_u128.try_into().unwrap(),
         );
         keccak_input.append(low.try_into().unwrap());
         keccak_input.append(high.try_into().unwrap());
@@ -94,7 +94,7 @@ fn keccak_add_uint128_be(ref keccak_input: Array::<u64>, value: u128, value_size
             keccak_input.append(reversed_value.try_into().unwrap());
         } else {
             let (high, low) = DivRem::div_rem(
-                reversed_value, pow2(64).try_into().expect('Division by 0')
+                reversed_value, pow2(64).try_into().expect('Division by 0'),
             );
             keccak_input.append(low.try_into().unwrap());
             keccak_input.append(high.try_into().unwrap());
