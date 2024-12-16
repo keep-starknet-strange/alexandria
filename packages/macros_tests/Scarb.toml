@@ -8,4 +8,4 @@ edition = "2024_07"
 alexandria_macros = { path = "../macros" }
 
 [dev-dependencies]
-cairo_test.workspace = true
+cairo_test = "2.9.2"
