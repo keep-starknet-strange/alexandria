@@ -41,14 +41,14 @@ impl U32BytesImpl of UIntBytes<u32> {
                 (val3 / 0x1000000).try_into().unwrap(),
                 (val2 / 0x10000).try_into().unwrap(),
                 (val1 / 0x100).try_into().unwrap(),
-                val0
+                val0,
             ]
                 .span();
         }
 
         if val2 != 0 {
             return array![
-                (val2 / 0x10000).try_into().unwrap(), (val1 / 0x100).try_into().unwrap(), val0
+                (val2 / 0x10000).try_into().unwrap(), (val1 / 0x100).try_into().unwrap(), val0,
             ]
                 .span();
         }

@@ -1,4 +1,4 @@
-use alexandria_math::lcm_of_n_numbers::{lcm, LCMError};
+use alexandria_math::lcm_of_n_numbers::{LCMError, lcm};
 
 // the following trait is not safe, it is only used for testing.
 impl u128_into_u32 of Into<u128, u32> {

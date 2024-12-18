@@ -201,7 +201,7 @@ mod concat {
 }
 
 mod pop_front_n {
-    use super::{ArrayTraitExt, get_u128_array, get_felt252_array};
+    use super::{ArrayTraitExt, get_felt252_array, get_u128_array};
 
     #[test]
     #[available_gas(2000000)]
@@ -277,7 +277,7 @@ mod pop_front_n {
 }
 
 mod remove_front_n {
-    use super::{ArrayTraitExt, get_u128_array, get_felt252_array};
+    use super::{ArrayTraitExt, get_felt252_array, get_u128_array};
 
     #[test]
     #[available_gas(2000000)]
@@ -435,7 +435,7 @@ mod contains {
 }
 
 mod position {
-    use super::{ArrayTraitExt, get_u128_array, get_felt252_array};
+    use super::{ArrayTraitExt, get_felt252_array, get_u128_array};
 
     #[test]
     #[available_gas(2000000)]

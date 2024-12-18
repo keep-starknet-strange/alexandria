@@ -273,7 +273,7 @@ fn get_base64_char_set() -> Array<u8> {
         '6',
         '7',
         '8',
-        '9'
+        '9',
     ];
     result
 }
