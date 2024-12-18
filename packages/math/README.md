@@ -2,7 +2,7 @@
 
 ## [Fast Root](./src/fast_root.cairo)
 
-The fast root algorithm uses Newton-Raphson method to calculate a arbitrary root of a given number (e.g., square root, cubic root, etc.). The algorithm is used to find the roots of a polynomial equation, which has applications in various areas of mathematics, including algebra, calculus, and number theory. The fast root algorithm is also used in computer science, as it can be used to solve problems involving the roots of a polynomial equation.
+The fast root algorithm uses Newton-Raphson method to calculate an arbitrary root of a given number (e.g., square root, cubic root, etc.). The algorithm is used to find the roots of a polynomial equation, which has applications in various areas of mathematics, including algebra, calculus, and number theory. The fast root algorithm is also used in computer science, as it can be used to solve problems involving the roots of a polynomial equation.
 
 ## [Is Power Of Two](./src/is_power_of_two.cairo)
 

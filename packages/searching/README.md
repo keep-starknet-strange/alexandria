@@ -16,4 +16,4 @@ Dijkstra's algorithm is a graph search algorithm that finds the shortest path fr
 
 ## [Levenshtein distance](./src/levenshtein_distance.cairo)
 
-The Levenshtein distance is a string metric for measuring the difference between two sequences. It is the minimum number of single-character edits (insertions, deletions, or substitutions) required to change one string into the other. This version of the algorithm optmizes the space complexity. Time complexity: O(nm). Space complexity: O(n),
+The Levenshtein distance is a string metric for measuring the difference between two sequences. It is the minimum number of single-character edits (insertions, deletions, or substitutions) required to change one string into the other. This version of the algorithm optimizes the space complexity. Time complexity: O(nm). Space complexity: O(n),
