@@ -38,6 +38,6 @@ pub fn trapezoidal_rule<
         value += (*next_x - prev_x) * (prev_y + next_y);
         prev_x = *next_x;
         prev_y = next_y;
-    };
+    }
     value / Into::into(2_u8)
 }

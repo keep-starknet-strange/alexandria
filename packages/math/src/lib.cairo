@@ -27,8 +27,7 @@ pub mod trigonometry;
 pub mod u512_arithmetics;
 pub mod wad_ray_math;
 pub mod zellers_congruence;
-use core::num::traits::Bounded;
-use core::num::traits::{OverflowingMul, WideMul, WrappingAdd, WrappingMul, WrappingSub};
+use core::num::traits::{Bounded, OverflowingMul, WideMul, WrappingAdd, WrappingMul, WrappingSub};
 
 /// Raise a number to a power.
 /// O(log n) time complexity.
@@ -61,7 +60,7 @@ fn count_digits_of_base(mut num: u128, base: u128) -> u32 {
     while (num != 0) {
         num = num / base;
         res += 1;
-    };
+    }
     res
 }
 

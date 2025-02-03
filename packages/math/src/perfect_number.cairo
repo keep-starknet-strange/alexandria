@@ -20,7 +20,7 @@ pub fn is_perfect_number(num: u128) -> bool {
             sum += index;
         }
         index += 1;
-    };
+    }
     num == sum
 }
 
@@ -38,6 +38,6 @@ pub fn perfect_numbers(max: u128) -> Array<u128> {
             res.append(index);
         }
         index += 1;
-    };
+    }
     res
 }

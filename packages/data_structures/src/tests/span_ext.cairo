@@ -1,4 +1,4 @@
-use alexandria_data_structures::span_ext::{SpanTraitExt};
+use alexandria_data_structures::span_ext::SpanTraitExt;
 use super::{get_felt252_array, get_u128_array};
 
 mod pop_front_n {

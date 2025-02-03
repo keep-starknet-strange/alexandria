@@ -28,7 +28,7 @@ fn stack_peek_test<S, T, +StackTrait<S, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +
     match stack.peek() {
         Option::Some(result) => { assert!(result == val_2, "wrong result"); },
         Option::None => { assert!(false, "should return value"); },
-    };
+    }
 
     assert!(stack.len() == 2, "should not remove items");
 }
@@ -43,7 +43,7 @@ fn stack_pop_test<S, T, +StackTrait<S, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +D
     match value {
         Option::Some(result) => { assert!(result == val_2, "wrong result"); },
         Option::None => { assert!(false, "should return a value"); },
-    };
+    }
 
     assert!(stack.len() == 1, "should remove item");
 }

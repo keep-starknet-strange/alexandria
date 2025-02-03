@@ -16,6 +16,6 @@ pub fn cumsum<T, +Add<T>, +Copy<T>, +Drop<T>>(mut sequence: Span<T>) -> Array<T>
         let sum = *current_value + prev_value;
         array.append(sum);
         prev_value = sum;
-    };
+    }
     array
 }

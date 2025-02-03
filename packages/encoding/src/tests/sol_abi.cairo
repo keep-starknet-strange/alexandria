@@ -1,9 +1,9 @@
 use alexandria_bytes::utils::{BytesDebug, BytesDisplay};
 use alexandria_bytes::{Bytes, BytesTrait};
-use alexandria_encoding::sol_abi::{
-    decode::SolAbiDecodeTrait, encode::SolAbiEncodeSelectorTrait, encode::SolAbiEncodeTrait,
-    encode_as::SolAbiEncodeAsTrait, sol_bytes::SolBytesTrait,
-};
+use alexandria_encoding::sol_abi::decode::SolAbiDecodeTrait;
+use alexandria_encoding::sol_abi::encode::{SolAbiEncodeSelectorTrait, SolAbiEncodeTrait};
+use alexandria_encoding::sol_abi::encode_as::SolAbiEncodeAsTrait;
+use alexandria_encoding::sol_abi::sol_bytes::SolBytesTrait;
 use core::bytes_31;
 use core::to_byte_array::FormatAsByteArray;
 use starknet::{ContractAddress, EthAddress};
@@ -21,7 +21,7 @@ fn compare_bytes(actual: @Bytes, expected: @Bytes) -> bool {
             break;
         }
         i += 1;
-    };
+    }
     if i < actual.size() {
         return false;
     }
@@ -162,7 +162,7 @@ fn encoded_as_test() {
         .encode_as(3, 0x101112_u128)
         .encode_as(21, 0xaabbcc_felt252)
         .encode_as(5, 0xa0b1c2_u256);
-    assert_eq!(encoded, expected);
+    assert_eq!(@encoded, @expected);
 
     let sba: ByteArray = SolBytesTrait::bytes10(0x0000a0b1c2c3c4c5c6c8).into();
     let bytes_31: bytes31 = 0xaabbcc.try_into().unwrap();
@@ -171,7 +171,7 @@ fn encoded_as_test() {
         .encode_as(3, SolBytesTrait::bytes10(0x10111213141516171910))
         .encode_as(21, bytes_31)
         .encode_as(5, sba);
-    assert_eq!(encoded, expected);
+    assert_eq!(@encoded, @expected);
 }
 
 #[test]

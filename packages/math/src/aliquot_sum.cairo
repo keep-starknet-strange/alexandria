@@ -18,6 +18,6 @@ pub fn aliquot_sum(number: u128) -> u128 {
             res = res + index;
         }
         index += 1;
-    };
+    }
     res
 }

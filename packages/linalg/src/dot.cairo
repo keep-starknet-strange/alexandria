@@ -20,6 +20,6 @@ pub fn dot<T, +Mul<T>, +AddAssign<T, T>, +Zero<T>, +Copy<T>, +Drop<T>>(
         let x = *xs.pop_front().unwrap();
         let y = *ys.pop_front().unwrap();
         sum += x * y;
-    };
+    }
     sum
 }

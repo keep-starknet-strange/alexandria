@@ -61,7 +61,7 @@ pub fn reversing_partial_result<
         onto *= step.into();
         onto += remainder;
         i += 1;
-    };
+    }
     (onto, word)
 }
 
@@ -223,7 +223,7 @@ impl ArrayReversibleBytes<T, +Copy<T>, +Drop<T>, +ReversibleBytes<T>> of Reversi
                 Option::Some(value) => { result.append(value.reverse_bytes()); },
                 Option::None => { break; },
             }
-        };
+        }
         result
     }
 }
@@ -237,7 +237,7 @@ impl ArrayReversibleBits<T, +ReversibleBits<T>, +Copy<T>, +Drop<T>> of Reversibl
                 Option::Some(value) => { result.append(value.reverse_bits()); },
                 Option::None => { break; },
             }
-        };
+        }
         result
     }
 }

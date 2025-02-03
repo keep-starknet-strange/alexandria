@@ -22,7 +22,7 @@ impl U32BytesImpl of UIntBytes<u32> {
         for byte in input {
             let byte: u32 = (*byte).into();
             result = result * 0x100 + byte;
-        };
+        }
         Option::Some(result)
     }
 
