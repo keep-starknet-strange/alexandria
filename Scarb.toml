@@ -18,11 +18,11 @@ name = "alexandria"
 version = "0.1.0"
 description = "Community maintained Cairo and Starknet libraries"
 homepage = "https://github.com/keep-starknet-strange/alexandria/"
-cairo-version = "2.9.2"
+cairo-version = "2.10.0"
 
 [workspace.dependencies]
-starknet = "2.9.2"
-cairo_test = "2.9.2"
+starknet = "2.10.0"
+cairo_test = "2.10.0"
 
 [workspace.tool.fmt]
 sort-module-level-items = true
