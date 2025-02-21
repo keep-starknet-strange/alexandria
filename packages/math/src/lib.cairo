@@ -1,7 +1,9 @@
 pub mod aliquot_sum;
 pub mod armstrong_number;
+pub mod bip340;
 pub mod bitmap;
 pub mod collatz_sequence;
+pub mod const_pow;
 pub mod ed25519;
 pub mod extended_euclidean_algorithm;
 pub mod fast_power;
@@ -26,7 +28,7 @@ pub mod u512_arithmetics;
 pub mod wad_ray_math;
 pub mod zellers_congruence;
 use core::num::traits::Bounded;
-use core::num::traits::{WrappingAdd, WrappingSub, WrappingMul, WideMul, OverflowingMul};
+use core::num::traits::{OverflowingMul, WideMul, WrappingAdd, WrappingMul, WrappingSub};
 
 /// Raise a number to a power.
 /// O(log n) time complexity.
@@ -35,7 +37,7 @@ use core::num::traits::{WrappingAdd, WrappingSub, WrappingMul, WideMul, Overflow
 /// # Returns
 /// * `T` - The result of base raised to the power of exp.
 pub fn pow<T, +Sub<T>, +Mul<T>, +Div<T>, +Rem<T>, +PartialEq<T>, +Into<u8, T>, +Drop<T>, +Copy<T>>(
-    base: T, exp: T
+    base: T, exp: T,
 ) -> T {
     if exp == 0_u8.into() {
         1_u8.into()
@@ -53,8 +55,8 @@ pub fn pow<T, +Sub<T>, +Mul<T>, +Div<T>, +Rem<T>, +PartialEq<T>, +Into<u8, T>, +
 /// * `num` - The number to count the digits of.
 /// * `base` - Base in which to count the digits.
 /// # Returns
-/// * `felt252` - The number of digits in num of base
-fn count_digits_of_base(mut num: u128, base: u128) -> u128 {
+/// * `u32` - The number of digits in num of base
+fn count_digits_of_base(mut num: u128, base: u128) -> u32 {
     let mut res = 0;
     while (num != 0) {
         num = num / base;
@@ -174,7 +176,7 @@ pub impl U64BitRotate of BitRotate<u64> {
     fn rotate_left(x: u64, n: u64) -> u64 {
         let word = WideMul::wide_mul(x, pow(2, n));
         let (quotient, remainder) = DivRem::div_rem(
-            word, 0x10000000000000000_u128.try_into().unwrap()
+            word, 0x10000000000000000_u128.try_into().unwrap(),
         );
         (quotient + remainder).try_into().unwrap()
     }
@@ -190,7 +192,7 @@ pub impl U128BitRotate of BitRotate<u128> {
     fn rotate_left(x: u128, n: u128) -> u128 {
         let word = WideMul::wide_mul(x, pow(2, n));
         let (quotient, remainder) = DivRem::div_rem(
-            word, u256 { low: 0, high: 1 }.try_into().unwrap()
+            word, u256 { low: 0, high: 1 }.try_into().unwrap(),
         );
         (quotient + remainder).try_into().unwrap()
     }

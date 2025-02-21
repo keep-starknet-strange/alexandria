@@ -1,12 +1,15 @@
 [package]
 name = "alexandria_merkle_tree"
-version.workspace = true
+version = "0.1.0"
 description = "Merkle tree related stuff"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/merkle_tree"
 edition = "2023_11"
 
 [tool]
 fmt.workspace = true
+
+[dependencies]
+alexandria_math = { path = "../math" }
 
 [dev-dependencies]
 cairo_test.workspace = true

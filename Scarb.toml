@@ -15,17 +15,14 @@ members = [
   "packages/utils",
 ]
 name = "alexandria"
-version = "0.2.0"
+version = "0.1.0"
 description = "Community maintained Cairo and Starknet libraries"
 homepage = "https://github.com/keep-starknet-strange/alexandria/"
-cairo-version = "2.8.2"
+cairo-version = "2.9.2"
 
 [workspace.dependencies]
-starknet = "2.8.2"
-cairo_test = "2.8.2"
-
-[workspace.package]
-version = "0.2.0"
+starknet = "2.9.2"
+cairo_test = "2.9.2"
 
 [workspace.tool.fmt]
 sort-module-level-items = true

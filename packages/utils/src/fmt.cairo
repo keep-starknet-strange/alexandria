@@ -1,11 +1,10 @@
-use core::fmt::{Display, Debug, Formatter, Error};
-use starknet::{ContractAddress, EthAddress, ClassHash, StorageAddress};
+use core::fmt::{Debug, Display, Error, Formatter};
+use starknet::{ClassHash, ContractAddress, EthAddress, StorageAddress};
 
 
 /// Display
 mod display_felt252_based {
-    use core::fmt::{Display, Formatter, Error};
-    use core::to_byte_array::AppendFormattedToByteArray;
+    use core::fmt::{Display, Error, Formatter};
     pub impl TDisplay<T, +Into<T, felt252>, +Copy<T>> of Display<T> {
         fn fmt(self: @T, ref f: Formatter) -> Result<(), Error> {
             let value: felt252 = (*self).into();
@@ -21,8 +20,7 @@ pub impl StorageAddressDisplay = display_felt252_based::TDisplay<StorageAddress>
 
 /// Debug
 mod debug_display_based {
-    use core::fmt::{Display, Debug, Formatter, Error};
-    use core::to_byte_array::AppendFormattedToByteArray;
+    use core::fmt::{Debug, Display, Error, Formatter};
     pub impl TDebug<T, +Display<T>> of Debug<T> {
         fn fmt(self: @T, ref f: Formatter) -> Result<(), Error> {
             Display::fmt(self, ref f)
@@ -59,7 +57,7 @@ pub impl SpanTDebug<T, +Display<T>, +Copy<T>> of Debug<Span<T>> {
                         break Result::Err(Error {});
                     };
                 },
-                Option::None => { break Result::Ok(()); }
+                Option::None => { break Result::Ok(()); },
             };
         }?;
         write!(f, "]")

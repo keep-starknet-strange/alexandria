@@ -1,4 +1,4 @@
-use alexandria_data_structures::queue::{Queue, QueueTrait};
+use alexandria_data_structures::queue::QueueTrait;
 
 #[test]
 #[available_gas(2000000)]

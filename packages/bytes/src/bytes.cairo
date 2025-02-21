@@ -1,6 +1,5 @@
 use alexandria_bytes::utils::{
-    u128_join, read_sub_u128, u128_split, u128_array_slice, keccak_u128s_be, u8_array_to_u256,
-    u32s_to_u256
+    keccak_u128s_be, read_sub_u128, u128_array_slice, u128_join, u128_split, u32s_to_u256,
 };
 use alexandria_math::{U128BitShift, U256BitShift};
 use core::byte_array::ByteArrayTrait;
@@ -35,7 +34,7 @@ pub const BYTES_PER_ELEMENT: usize = 16;
 #[derive(Drop, Clone, PartialEq, Serde)]
 pub struct Bytes {
     size: usize,
-    data: Array<u128>
+    data: Array<u128>,
 }
 
 pub impl BytesIndex of IndexView<Bytes, usize> {
@@ -65,7 +64,7 @@ pub trait BytesTrait {
     fn read_u128_packed(self: @Bytes, offset: usize, size: usize) -> (usize, u128);
     /// Read value with element_size bytes from Bytes, and packed into u128 array
     fn read_u128_array_packed(
-        self: @Bytes, offset: usize, array_length: usize, element_size: usize
+        self: @Bytes, offset: usize, array_length: usize, element_size: usize,
     ) -> (usize, Array<u128>);
     /// Read value with size bytes from Bytes, and packed into felt252
     fn read_felt252_packed(self: @Bytes, offset: usize, size: usize) -> (usize, felt252);
@@ -121,14 +120,14 @@ pub trait BytesTrait {
     #[deprecated(
         feature: "deprecated-keccak",
         note: "Use `core::keccak::compute_keccak_byte_array`.",
-        since: "2.7.0"
+        since: "2.7.0",
     )]
     fn keccak(self: @Bytes) -> u256;
     /// sha256 hash
     #[deprecated(
         feature: "deprecated-sha256",
         note: "Use `core::sha256::compute_sha256_byte_array`.",
-        since: "2.7.0"
+        since: "2.7.0",
     )]
     fn sha256(self: @Bytes) -> u256;
 }
@@ -147,7 +146,7 @@ impl BytesImpl of BytesTrait {
     fn zero(size: usize) -> Bytes {
         let mut data = array![];
         let (data_index, mut data_len) = DivRem::div_rem(
-            size, BYTES_PER_ELEMENT.try_into().expect('Division by 0')
+            size, BYTES_PER_ELEMENT.try_into().expect('Division by 0'),
         );
 
         if data_index != 0 {
@@ -229,10 +228,10 @@ impl BytesImpl of BytesTrait {
                 *self.data[element_index],
                 BYTES_PER_ELEMENT,
                 element_offset,
-                BYTES_PER_ELEMENT - element_offset
+                BYTES_PER_ELEMENT - element_offset,
             );
             let right = read_sub_u128(
-                *self.data[element_index + 1], BYTES_PER_ELEMENT, 0, end_element_offset
+                *self.data[element_index + 1], BYTES_PER_ELEMENT, 0, end_element_offset,
             );
             u128_join(left, right, end_element_offset)
         };
@@ -240,7 +239,7 @@ impl BytesImpl of BytesTrait {
     }
 
     fn read_u128_array_packed(
-        self: @Bytes, offset: usize, array_length: usize, element_size: usize
+        self: @Bytes, offset: usize, array_length: usize, element_size: usize,
     ) -> (usize, Array<u128>) {
         assert(offset + array_length * element_size <= self.size(), 'out of bound');
         let mut array = array![];
@@ -394,7 +393,7 @@ impl BytesImpl of BytesTrait {
     #[inline(always)]
     fn read_bytes31(self: @Bytes, offset: usize) -> (usize, bytes31) {
         // Read 31 bytes of data ( 16 bytes high + 15 bytes low )
-        let (new_offset, high) = self.read_u128(0);
+        let (new_offset, high) = self.read_u128(offset);
         let (new_offset, low) = self.read_u128_packed(new_offset, 15);
         // low bits shifting to remove the left padded 0 byte on u128 type
         let low = U128BitShift::shl(low, 8);
@@ -432,17 +431,17 @@ impl BytesImpl of BytesTrait {
             if size + last_element_size > BYTES_PER_ELEMENT {
                 let (left, right) = u128_split(value, size, BYTES_PER_ELEMENT - last_element_size);
                 let value_full = u128_join(
-                    last_element_value, left, BYTES_PER_ELEMENT - last_element_size
+                    last_element_value, left, BYTES_PER_ELEMENT - last_element_size,
                 );
                 let value_padded = u128_join(
-                    right, 0, 2 * BYTES_PER_ELEMENT - size - last_element_size
+                    right, 0, 2 * BYTES_PER_ELEMENT - size - last_element_size,
                 );
                 data.append(value_full);
                 data.append(value_padded);
             } else {
                 let value = u128_join(last_element_value, value, size);
                 let value_padded = u128_join(
-                    value, 0, BYTES_PER_ELEMENT - size - last_element_size
+                    value, 0, BYTES_PER_ELEMENT - size - last_element_size,
                 );
                 data.append(value_padded);
             }
@@ -544,7 +543,7 @@ impl BytesImpl of BytesTrait {
             let mut hash_data = u128_array_slice(self.data, 0, last_data_index);
             // To compute hash, we should remove 0 padded
             let (last_element_value, _) = u128_split(
-                *self.data[last_data_index], BYTES_PER_ELEMENT, last_element_size
+                *self.data[last_data_index], BYTES_PER_ELEMENT, last_element_size,
             );
             hash_data.append(last_element_value);
             return keccak_u128s_be(hash_data.span(), self.size());

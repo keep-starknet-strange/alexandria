@@ -1,6 +1,6 @@
 [package]
 name = "alexandria_sorting"
-version.workspace = true
+version = "0.1.0"
 description = "A set of sorting algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/sorting"
 edition = "2023_11"
@@ -9,7 +9,7 @@ edition = "2023_11"
 fmt.workspace = true
 
 [dependencies]
-alexandria_data_structures = { path = "../data_structures", version = "0.2.0" }
+alexandria_data_structures = { path = "../data_structures" }
 
 [dev-dependencies]
 cairo_test.workspace = true

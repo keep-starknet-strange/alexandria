@@ -1,6 +1,5 @@
 use alexandria_bytes::utils::{BytesDebug, BytesDisplay};
-use alexandria_bytes::{Bytes, BytesTrait, BytesIndex};
-use starknet::ContractAddress;
+use alexandria_bytes::{Bytes, BytesIndex, BytesTrait};
 
 #[test]
 #[available_gas(20000000)]
@@ -59,8 +58,8 @@ fn test_bytes_update() {
         array![
             0x01020304050607080910111213141516,
             0x01020304050607080910111213141516,
-            0x01020304050607080910000000000000
-        ]
+            0x01020304050607080910000000000000,
+        ],
     );
 
     bytes.update_at(16, 0x16);
@@ -82,7 +81,7 @@ fn test_bytes_read_u128_packed() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -115,7 +114,7 @@ fn test_bytes_read_u128_packed_out_of_bound() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -130,7 +129,7 @@ fn test_bytes_read_u128_packed_too_large() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -144,7 +143,7 @@ fn test_bytes_read_u128_array_packed() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -170,7 +169,7 @@ fn test_bytes_read_u128_array_packed_out_of_bound() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -185,7 +184,7 @@ fn test_bytes_read_u128_array_packed_too_large() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -199,7 +198,7 @@ fn test_bytes_read_felt252_packed() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -216,7 +215,7 @@ fn test_bytes_read_felt252_packed_out_of_bound() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -231,7 +230,7 @@ fn test_bytes_read_felt252_packed_too_large() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -245,7 +244,7 @@ fn test_bytes_read_u8() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -261,7 +260,7 @@ fn test_bytes_read_u16() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -277,7 +276,7 @@ fn test_bytes_read_u32() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -293,7 +292,7 @@ fn test_bytes_read_usize() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -309,7 +308,7 @@ fn test_bytes_read_u64() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -325,7 +324,7 @@ fn test_bytes_read_u128() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -341,7 +340,7 @@ fn test_bytes_read_u256() {
     let array = array![
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x01020304050607080910000000000000
+        0x01020304050607080910000000000000,
     ];
 
     let bytes = BytesTrait::new(42, array);
@@ -356,11 +355,11 @@ fn test_bytes_read_u256() {
 #[available_gas(20000000)]
 fn test_bytes_read_bytes31() {
     let bytes: Bytes = BytesTrait::new(
-        31, array![0x0102030405060708090a0b0c0d0e0f10, 0x1112131415161718191a1b1c1d1e1f00]
+        42, array![0x0102030405060708090a0b0c0d0e0f10, 0x1112131415161718191a1b1c1d1e1f17, 0x0],
     );
-    let (offset, val) = bytes.read_bytes31(0);
-    assert_eq!(offset, 31);
-    let byte31: bytes31 = 0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
+    let (offset, val) = bytes.read_bytes31(2);
+    assert_eq!(offset, 33);
+    let byte31: bytes31 = 0x030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f1700
         .try_into()
         .unwrap();
     assert!(val == byte31, "read_bytes31 test failed")
@@ -375,7 +374,7 @@ fn test_bytes_read_u256_array() {
         0x16151413121110090807060504030201,
         0x01020304050607080910111213141516,
         0x01020304050607080910111213141516,
-        0x16151413121110090000000000000000
+        0x16151413121110090000000000000000,
     ];
 
     let bytes = BytesTrait::new(88, array);
@@ -547,14 +546,14 @@ fn test_bytes_concat() {
         0x05060708090000000000000000000102,
         0x0304050607015401855d7796176b05d1,
         0x60196ff92381eb7910f5446c2e0e04e1,
-        0x3db2194a4f0000000000000000000000
+        0x3db2194a4f0000000000000000000000,
     ];
     let mut bytes = BytesTrait::new(117, array);
 
     let array: Array<u128> = array![
         0x01020304050607080910111213140154,
         0x01855d7796176b05d160196ff92381eb,
-        0x7910f5446c2e0e04e13db2194a4f0000
+        0x7910f5446c2e0e04e13db2194a4f0000,
     ];
     let other = BytesTrait::new(46, array);
 
@@ -689,13 +688,13 @@ fn test_bytes_sha256() {
 #[test]
 fn test_byte_array_conversions() {
     let bytes = BytesTrait::new(
-        52,
+        64,
         array![
             0x01020304050607080910111213141516,
             0x16151413121110090807060504030201,
             0x60196ff92381eb7910f5446c2e0e04e1,
-            0x3db2194a000000000000000000000000
-        ]
+            0x3db2194a000000000000000000000000,
+        ],
     );
     let byte_array: ByteArray = bytes.clone().into();
     let new_bytes: Bytes = byte_array.into();

@@ -48,7 +48,7 @@ fn ssig1(x: u32) -> u32 {
 #[deprecated(
     feature: "deprecated-sha256",
     note: "Use `core::sha256::compute_sha256_byte_array`.",
-    since: "2.7.0"
+    since: "2.7.0",
 )]
 pub fn sha256(mut data: Array<u8>) -> Array<u8> {
     let data_len: u64 = (data.len() * 8).into();
@@ -194,7 +194,7 @@ fn from_u8Array_to_u32Array(mut data: Span<u8>) -> Array<u32> {
 const h: [
     u32
     ; 8] = [
-    0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+    0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
 ];
 
 const k: [
@@ -263,5 +263,5 @@ const k: [
     0x90befffa,
     0xa4506ceb,
     0xbef9a3f7,
-    0xc67178f2
+    0xc67178f2,
 ];

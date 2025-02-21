@@ -1,12 +1,15 @@
 [package]
 name = "alexandria_data_structures"
-version.workspace = true
+version = "0.2.0"
 description = "A set of Cairo data structure libraries and algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/data_structures"
 edition = "2023_11"
 
 [tool]
 fmt.workspace = true
+
+[dependencies]
+alexandria_encoding = { path = "../encoding" }
 
 [dev-dependencies]
 cairo_test.workspace = true
