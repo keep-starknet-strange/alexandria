@@ -4,6 +4,9 @@ description = "Dummy package only used to test macros. Not part of the workspace
 version.workspace = true
 edition = "2024_07"
 
+[tool]
+fmt.workspace = true
+
 [dependencies]
 alexandria_macros = { path = "../macros" }
 
