@@ -23,7 +23,8 @@ pub trait ReversibleBits<T> {
     fn reverse_bits(self: @T) -> T;
 }
 
-// [Erim]: Duplicated function in data_structures::byte_appender. Use that one for package management
+// [Erim]: Duplicated function in data_structures::byte_appender. Use that one for package
+// management
 #[inline]
 pub fn reversing<
     T,
