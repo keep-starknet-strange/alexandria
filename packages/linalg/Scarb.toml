@@ -1,6 +1,6 @@
 [package]
 name = "alexandria_linalg"
-version = "0.1.0"
+version.workspace = true
 description = "A set of linear algebra libraries and algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/linalg"
 edition = "2023_11"
@@ -9,7 +9,7 @@ edition = "2023_11"
 fmt.workspace = true
 
 [dependencies]
-alexandria_math = { path = "../math" }
+alexandria_math = { path = "../math", version = "0.3.0" }
 
 [dev-dependencies]
 cairo_test.workspace = true

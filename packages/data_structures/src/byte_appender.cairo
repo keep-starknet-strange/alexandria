@@ -1,4 +1,3 @@
-use alexandria_encoding::reversible::reversing;
 use core::byte_array::ByteArrayTrait;
 use core::integer::u512;
 use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
@@ -284,3 +283,46 @@ impl ByteAppenderImpl<T, +Drop<T>, +ByteAppenderSupportTrait<T>> of ByteAppender
 
 impl ArrayU8ByteAppenderImpl = ByteAppenderImpl<Array<u8>>;
 impl ByteArrayByteAppenderImpl = ByteAppenderImpl<ByteArray>;
+
+// [Erim]: Duplicated to fix dependency problem
+#[inline]
+pub fn reversing<
+    T,
+    +Copy<T>,
+    +Zero<T>,
+    +TryInto<T, NonZero<T>>,
+    +DivRem<T>,
+    +Drop<T>,
+    +MulAssign<T, T>,
+    +Rem<T>,
+    +AddAssign<T, T>,
+>(
+    word: T, size: usize, step: T,
+) -> (T, T) {
+    let result = Zero::zero();
+    reversing_partial_result(word, result, size, step)
+}
+
+#[inline]
+pub fn reversing_partial_result<
+    T,
+    +Copy<T>,
+    +DivRem<T>,
+    +TryInto<T, NonZero<T>>,
+    +Drop<T>,
+    +MulAssign<T, T>,
+    +Rem<T>,
+    +AddAssign<T, T>,
+>(
+    mut word: T, mut onto: T, size: usize, step: T,
+) -> (T, T) {
+    let mut i: usize = 0;
+    while i != size {
+        let (new_word, remainder) = DivRem::div_rem(word, step.try_into().unwrap());
+        word = new_word;
+        onto *= step.into();
+        onto += remainder;
+        i += 1;
+    };
+    (onto, word)
+}

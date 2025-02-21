@@ -7,9 +7,7 @@ const FAST_180: u64 = 180 * BASE;
 const FAST_90: u64 = 90 * BASE;
 const FAST_10: u64 = 10 * BASE;
 
-const sin_table: [
-    u64
-    ; 10] = [
+const sin_table: [u64; 10] = [
     0_u64, // sin(0)
     17364818_u64, // sin(10)
     34202014_u64, // sin(20)
@@ -22,9 +20,7 @@ const sin_table: [
     100000000_u64 // sin(90)
 ];
 
-const cos_table: [
-    u64
-    ; 10] = [
+const cos_table: [u64; 10] = [
     100000000_u64, // cos(0)
     99984769_u64, // cos(1)
     99939082_u64, // cos(2)

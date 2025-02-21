@@ -204,9 +204,7 @@ pub fn fpow(mut base: u128, mut power: u128) -> u128 {
     result
 }
 
-const two_squarings: [
-    u64
-    ; 6] = [
+const two_squarings: [u64; 6] = [
     TWO_POW_1, TWO_POW_2, TWO_POW_4, TWO_POW_8, TWO_POW_16, TWO_POW_32,
 ];
 // Uses cache for faster powers of 2 in a u128
