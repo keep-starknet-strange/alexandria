@@ -1,5 +1,7 @@
 use core::byte_array::ByteArrayTrait;
 use core::integer::u512;
+use core::num::traits::Zero;
+use core::ops::{MulAssign, AddAssign};
 use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 
 /// Generic support trait for appending signed and unsigned integers onto byte storage.
