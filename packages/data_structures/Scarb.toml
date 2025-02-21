@@ -9,7 +9,7 @@ edition = "2023_11"
 fmt.workspace = true
 
 [dependencies]
-alexandria_encoding = { path = "../encoding" }
+alexandria_encoding = { path = "../encoding", version = "0.2.0" }
 
 [dev-dependencies]
 cairo_test.workspace = true

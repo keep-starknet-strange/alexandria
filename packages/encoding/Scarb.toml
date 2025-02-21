@@ -9,9 +9,9 @@ edition = "2023_11"
 fmt.workspace = true
 
 [dependencies]
-alexandria_math = { path = "../math" }
-alexandria_numeric = { path = "../numeric" }
-alexandria_bytes = { path = "../bytes" }
+alexandria_math = { path = "../math", version = "0.2.0" }
+alexandria_numeric = { path = "../numeric", version = "0.2.0" }
+alexandria_bytes = { path = "../bytes", version = "0.2.0" }
 
 [dev-dependencies]
 cairo_test.workspace = true

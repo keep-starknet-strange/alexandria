@@ -9,7 +9,7 @@ edition = "2023_11"
 fmt.workspace = true
 
 [dependencies]
-alexandria_data_structures = { path = "../data_structures" }
+alexandria_data_structures = { path = "../data_structures", version = "0.2.0" }
 
 [dev-dependencies]
 cairo_test.workspace = true
