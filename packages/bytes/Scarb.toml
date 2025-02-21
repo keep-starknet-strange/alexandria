@@ -1,6 +1,6 @@
 [package]
 name = "alexandria_bytes"
-version = "0.1.0"
+version.workspace = true
 description = "An implementation similar to Solidity bytes written in Cairo 1"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/bytes"
 edition = "2023_11"

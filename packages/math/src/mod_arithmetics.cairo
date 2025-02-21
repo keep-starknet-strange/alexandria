@@ -1,5 +1,7 @@
 use core::integer::{u512, u512_safe_div_rem_by_u256};
-use core::num::traits::{OverflowingAdd, OverflowingSub, WideMul, WrappingAdd};
+use core::num::traits::{WrappingAdd, OverflowingAdd, OverflowingSub, WideMul};
+use core::option::OptionTrait;
+use core::traits::TryInto;
 
 /// Function that performs modular addition. Will panick if result is > u256 max
 /// # Arguments
@@ -84,7 +86,7 @@ fn u128_add_with_carry(a: u128, b: u128) -> (u128, u128) {
 }
 
 pub fn u256_wide_sqr(a: u256) -> u512 {
-    let u256 { high: limb1, low: limb0 } = WideMul::wide_mul(a.low, a.low);
+    let u256 { high: limb1, low: limb0, } = WideMul::wide_mul(a.low, a.low);
     let u256 { high: limb2, low: limb1_part } = WideMul::wide_mul(a.low, a.high);
     let (limb1, limb1_overflow0) = u128_add_with_carry(limb1, limb1_part);
     let (limb1, limb1_overflow1) = u128_add_with_carry(limb1, limb1_part);

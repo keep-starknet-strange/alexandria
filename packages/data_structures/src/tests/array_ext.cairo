@@ -201,7 +201,7 @@ mod concat {
 }
 
 mod pop_front_n {
-    use super::{ArrayTraitExt, get_felt252_array, get_u128_array};
+    use super::{ArrayTraitExt, get_u128_array, get_felt252_array};
 
     #[test]
     #[available_gas(2000000)]
@@ -277,7 +277,7 @@ mod pop_front_n {
 }
 
 mod remove_front_n {
-    use super::{ArrayTraitExt, get_felt252_array, get_u128_array};
+    use super::{ArrayTraitExt, get_u128_array, get_felt252_array};
 
     #[test]
     #[available_gas(2000000)]
@@ -435,7 +435,7 @@ mod contains {
 }
 
 mod position {
-    use super::{ArrayTraitExt, get_felt252_array, get_u128_array};
+    use super::{ArrayTraitExt, get_u128_array, get_felt252_array};
 
     #[test]
     #[available_gas(2000000)]
@@ -466,7 +466,7 @@ mod position {
 }
 
 mod occurrences {
-    use super::ArrayTraitExt;
+    use super::{ArrayTraitExt, get_u128_array, get_felt252_array};
 
     #[test]
     #[available_gas(2000000)]
@@ -633,7 +633,7 @@ mod max_position {
 }
 
 mod dedup {
-    use super::ArrayTraitExt;
+    use super::{ArrayTraitExt, get_u128_array, get_felt252_array};
 
     #[test]
     #[available_gas(2000000)]
@@ -716,7 +716,7 @@ mod dedup {
 }
 
 mod unique {
-    use super::ArrayTraitExt;
+    use super::{ArrayTraitExt, get_u128_array, get_felt252_array};
 
     #[test]
     #[available_gas(2000000)]

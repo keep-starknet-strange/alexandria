@@ -6,6 +6,6 @@ pub trait Sortable {
 
 pub trait SortableVec {
     fn sort<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +Felt252DictValue<T>>(
-        array: Felt252Vec<T>,
+        array: Felt252Vec<T>
     ) -> Felt252Vec<T>;
 }

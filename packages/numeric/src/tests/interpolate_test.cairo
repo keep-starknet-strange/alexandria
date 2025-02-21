@@ -1,4 +1,4 @@
-use alexandria_numeric::interpolate::{Extrapolation, Interpolation, interpolate};
+use alexandria_numeric::interpolate::{interpolate, Interpolation, Extrapolation};
 
 #[test]
 #[available_gas(2000000)]
@@ -6,10 +6,10 @@ fn interp_extrapolation_test() {
     let xs: Array::<u64> = array![3, 5, 7];
     let ys = array![11, 13, 17];
     assert_eq!(
-        interpolate(0, xs.span(), ys.span(), Interpolation::Linear, Extrapolation::Constant), 11,
+        interpolate(0, xs.span(), ys.span(), Interpolation::Linear, Extrapolation::Constant), 11
     );
     assert_eq!(
-        interpolate(9, xs.span(), ys.span(), Interpolation::Linear, Extrapolation::Constant), 17,
+        interpolate(9, xs.span(), ys.span(), Interpolation::Linear, Extrapolation::Constant), 17
     );
     assert_eq!(interpolate(0, xs.span(), ys.span(), Interpolation::Linear, Extrapolation::Null), 0);
     assert_eq!(interpolate(9, xs.span(), ys.span(), Interpolation::Linear, Extrapolation::Null), 0);
@@ -21,10 +21,10 @@ fn interp_linear_test() {
     let xs: Array::<u64> = array![3, 5, 7];
     let ys = array![11, 13, 17];
     assert_eq!(
-        interpolate(4, xs.span(), ys.span(), Interpolation::Linear, Extrapolation::Constant), 12,
+        interpolate(4, xs.span(), ys.span(), Interpolation::Linear, Extrapolation::Constant), 12
     );
     assert_eq!(
-        interpolate(4, xs.span(), ys.span(), Interpolation::Linear, Extrapolation::Constant), 12,
+        interpolate(4, xs.span(), ys.span(), Interpolation::Linear, Extrapolation::Constant), 12
     );
 }
 
@@ -34,13 +34,13 @@ fn interp_nearest_test() {
     let xs: Array::<u64> = array![3, 5, 7];
     let ys = array![11, 13, 17];
     assert_eq!(
-        interpolate(4, xs.span(), ys.span(), Interpolation::Nearest, Extrapolation::Constant), 11,
+        interpolate(4, xs.span(), ys.span(), Interpolation::Nearest, Extrapolation::Constant), 11
     );
     assert_eq!(
-        interpolate(6, xs.span(), ys.span(), Interpolation::Nearest, Extrapolation::Constant), 13,
+        interpolate(6, xs.span(), ys.span(), Interpolation::Nearest, Extrapolation::Constant), 13
     );
     assert_eq!(
-        interpolate(7, xs.span(), ys.span(), Interpolation::Nearest, Extrapolation::Constant), 17,
+        interpolate(7, xs.span(), ys.span(), Interpolation::Nearest, Extrapolation::Constant), 17
     );
 }
 
@@ -51,15 +51,15 @@ fn interp_constant_left_test() {
     let ys = array![11, 13, 17];
     assert_eq!(
         interpolate(4, xs.span(), ys.span(), Interpolation::ConstantLeft, Extrapolation::Constant),
-        13,
+        13
     );
     assert_eq!(
         interpolate(6, xs.span(), ys.span(), Interpolation::ConstantLeft, Extrapolation::Constant),
-        17,
+        17
     );
     assert_eq!(
         interpolate(7, xs.span(), ys.span(), Interpolation::ConstantLeft, Extrapolation::Constant),
-        17,
+        17
     );
 }
 
@@ -70,15 +70,15 @@ fn interp_constant_right_test() {
     let ys = array![11, 13, 17];
     assert_eq!(
         interpolate(4, xs.span(), ys.span(), Interpolation::ConstantRight, Extrapolation::Constant),
-        11,
+        11
     );
     assert_eq!(
         interpolate(6, xs.span(), ys.span(), Interpolation::ConstantRight, Extrapolation::Constant),
-        13,
+        13
     );
     assert_eq!(
         interpolate(7, xs.span(), ys.span(), Interpolation::ConstantRight, Extrapolation::Constant),
-        13,
+        13
     );
 }
 

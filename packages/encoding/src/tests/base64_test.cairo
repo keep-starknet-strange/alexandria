@@ -1,4 +1,4 @@
-use alexandria_encoding::base64::{Base64Decoder, Base64Encoder, Base64UrlDecoder, Base64UrlEncoder};
+use alexandria_encoding::base64::{Base64Encoder, Base64Decoder, Base64UrlEncoder, Base64UrlDecoder};
 
 #[test]
 #[available_gas(2000000000)]
@@ -69,7 +69,7 @@ fn base64decode_simple_test() {
 #[available_gas(2000000000)]
 fn base64decode_hello_world_test() {
     let input = array![
-        'a', 'G', 'V', 's', 'b', 'G', '8', 'g', 'd', '2', '9', 'y', 'b', 'G', 'Q', '=',
+        'a', 'G', 'V', 's', 'b', 'G', '8', 'g', 'd', '2', '9', 'y', 'b', 'G', 'Q', '='
     ];
 
     let result = Base64Decoder::decode(input);

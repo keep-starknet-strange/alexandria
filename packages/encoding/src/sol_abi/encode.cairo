@@ -1,4 +1,5 @@
 use alexandria_bytes::{Bytes, BytesTrait};
+use core::traits::TryInto;
 use starknet::{ContractAddress, EthAddress};
 
 /// Encode selector trait meant to provide an interface similar to Solidity's

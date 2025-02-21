@@ -5,7 +5,7 @@
 /// * `sequence` - The sequence to operate.
 /// # Returns
 /// * `Array<T>` - The cumulative sum of sequence.
-pub fn cumsum<T, +Add<T>, +Copy<T>, +Drop<T>>(mut sequence: Span<T>) -> Array<T> {
+pub fn cumsum<T, +Add<T>, +Copy<T>, +Drop<T>,>(mut sequence: Span<T>) -> Array<T> {
     // [Check] Inputs
     assert(sequence.len() >= 1, 'Array must have at least 1 elt');
 

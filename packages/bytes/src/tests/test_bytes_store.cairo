@@ -30,9 +30,9 @@ mod ABytesStore {
 #[cfg(test)]
 mod tests {
     use alexandria_bytes::utils::{BytesDebug, BytesDisplay};
-    use alexandria_bytes::{BytesStore, BytesTrait};
+    use alexandria_bytes::{Bytes, BytesTrait, BytesStore};
     use starknet::syscalls::deploy_syscall;
-    use starknet::{ClassHash, SyscallResultTrait};
+    use starknet::{ClassHash, ContractAddress, SyscallResultTrait,};
     use super::{ABytesStore, IABytesStoreDispatcher, IABytesStoreDispatcherTrait};
 
     fn deploy() -> IABytesStoreDispatcher {
@@ -62,8 +62,8 @@ mod tests {
         let bytes = BytesTrait::new(
             40,
             array![
-                0x01020304050607080910, 0x11121314151617181920, 0x21222324252627280000000000000000,
-            ],
+                0x01020304050607080910, 0x11121314151617181920, 0x21222324252627280000000000000000
+            ]
         );
         contract.set_bytes(bytes.clone());
         assert_eq!(contract.get_bytes(), bytes);

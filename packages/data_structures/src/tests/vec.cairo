@@ -7,14 +7,14 @@ fn vec_new_test<V, T, +VecTrait<V, T>>(vec: @V) {
 }
 
 fn vec_len_test<V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>>(
-    ref vec: V, val_1: T,
+    ref vec: V, val_1: T
 ) {
     vec.push(val_1);
     assert!(vec.len() == 1, "vec length should be 1");
 }
 
 fn vec_get_test<V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>>(
-    ref vec: V, val_1: T,
+    ref vec: V, val_1: T
 ) {
     vec.push(val_1);
     assert!(vec.get(0).unwrap() == val_1, "vec get should return val_1");
@@ -22,22 +22,22 @@ fn vec_get_test<V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destr
 }
 
 fn vec_at_test<V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>>(
-    ref vec: V, val_1: T,
+    ref vec: V, val_1: T
 ) {
     vec.push(val_1);
     assert!(vec.at(0) == val_1, "vec at should return val_1");
 }
 
 fn vec_at_out_of_bounds_test<
-    V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>,
+    V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>
 >(
-    ref vec: V,
+    ref vec: V
 ) {
     vec.at(0);
 }
 
 fn vec_push_test<V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>>(
-    ref vec: V, val_1: T,
+    ref vec: V, val_1: T
 ) {
     vec.push(val_1);
     assert!(vec.len() == 1, "vec length should be 1");
@@ -45,7 +45,7 @@ fn vec_push_test<V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Dest
 }
 
 fn vec_set_test<V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>>(
-    ref vec: V, val_1: T, val_2: T,
+    ref vec: V, val_1: T, val_2: T
 ) {
     vec.push(val_1);
     vec.set(0, val_2);
@@ -54,9 +54,9 @@ fn vec_set_test<V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destr
 }
 
 fn vec_set_test_expect_error<
-    V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>,
+    V, T, +VecTrait<V, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<V>
 >(
-    ref vec: V, val_1: T, val_2: T,
+    ref vec: V, val_1: T, val_2: T
 ) {
     vec.push(val_1);
     vec.set(1, val_2);
@@ -71,9 +71,9 @@ fn vec_index_trait_test<
     +Copy<T>,
     +PartialEq<T>,
     +Destruct<V>,
-    +Into<IndexImpl::Target, T>,
+    +Into<IndexImpl::Target, T>
 >(
-    ref vec: V, val_1: T, val_2: T,
+    ref vec: V, val_1: T, val_2: T
 ) {
     vec.push(val_1);
     vec.push(val_2);
@@ -93,7 +93,7 @@ fn vec_index_trait_out_of_bounds_test<
     +PartialEq<T>,
     +Destruct<V>,
 >(
-    ref vec: V, val_1: T,
+    ref vec: V, val_1: T
 ) {
     vec[0];
 }

@@ -58,7 +58,7 @@ fn test_keccak256_full_u256() {
         0x29,
         0x30,
         0x31,
-        0x32,
+        0x32
     ];
 
     let hash = keccak256(input.span());

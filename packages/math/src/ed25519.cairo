@@ -1,9 +1,11 @@
-use alexandria_math::mod_arithmetics::{div_mod, mult_mod, pow_mod, sqr_mod};
-use alexandria_math::sha512::{SHA512_LEN, sha512};
-use alexandria_math::u512_arithmetics::{u512_sub};
+use alexandria_math::mod_arithmetics::{mult_mod, sqr_mod, div_mod, pow_mod, equality_mod};
+use alexandria_math::sha512::{sha512, SHA512_LEN};
+use alexandria_math::u512_arithmetics::{u512_add, u512_sub};
 use core::integer::{u512, u512_safe_div_rem_by_u256};
 use core::math::u256_inv_mod;
-use core::num::traits::WideMul;
+use core::num::traits::{OverflowingMul, WideMul};
+use core::option::OptionTrait;
+use core::traits::{Div, TryInto};
 
 // Subtraction without modulo operation
 // assumes a, b < modulo
@@ -26,7 +28,7 @@ fn sub_wo_mod_u512(a: u512, b: u512, modulo: u256) -> u512 {
             let u256 { low: limb2, high: limb3 } = u256 { low, high } + modulo;
             u512 { limb0, limb1, limb2, limb3 }
         },
-        b,
+        b
     )
 }
 
@@ -107,7 +109,7 @@ impl PointDoublingPoint of PointOperations<Point> {
 
         // y1y2 + ax1x2 = y1y2 - x1x2, a  = -1
         let (_, y1y2_ax1x2) = u512_safe_div_rem_by_u256(
-            sub_wo_mod_u512(y1y2_512, x1x2_512, p), prime_nz,
+            sub_wo_mod_u512(y1y2_512, x1x2_512, p), prime_nz
         );
 
         // 1 / (y1y2 + ax1x2)
@@ -116,7 +118,7 @@ impl PointDoublingPoint of PointOperations<Point> {
 
         // x1y2 − y1x2
         let (_, x1y2_sub_y1x2) = u512_safe_div_rem_by_u256(
-            sub_wo_mod_u512(x1y2_512, y1x2_512, p), prime_nz,
+            sub_wo_mod_u512(x1y2_512, y1x2_512, p), prime_nz
         );
 
         // 1 / (x1y2 − y1x2)
@@ -268,7 +270,7 @@ impl U256TryIntoPoint of TryInto<u256, Point> {
         let x_candidate_root: u256 = mult_mod(
             u_times_v_power_3,
             pow_mod(mult_mod(u, v_pow_7, prime_nz), p_minus_5_div_8, prime_nz),
-            prime_nz,
+            prime_nz
         );
 
         let v_times_x_squared: u256 = mult_mod(v, sqr_mod(x_candidate_root, prime_nz), prime_nz);
@@ -291,7 +293,7 @@ impl U256TryIntoPoint of TryInto<u256, Point> {
             x = p - x;
         }
 
-        Option::Some(Point { x: x, y: y })
+        Option::Some(Point { x: x, y: y, })
     }
 }
 

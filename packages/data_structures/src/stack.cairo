@@ -115,7 +115,7 @@ impl DestructNullableStack<T, +Drop<T>> of Destruct<NullableStack<T>> {
     }
 }
 
-impl NullableStackImpl<T, +Copy<T>, +Drop<T>> of StackTrait<NullableStack<T>, T> {
+impl NullableStackImpl<T, +Copy<T>, +Drop<T>,> of StackTrait<NullableStack<T>, T> {
     #[inline(always)]
     fn new() -> NullableStack<T> {
         let elements: Felt252Dict<Nullable<T>> = Default::default();

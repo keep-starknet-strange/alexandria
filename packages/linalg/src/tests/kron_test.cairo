@@ -1,4 +1,4 @@
-use alexandria_linalg::kron::{KronError, kron};
+use alexandria_linalg::kron::{kron, KronError};
 
 #[test]
 #[available_gas(2000000)]

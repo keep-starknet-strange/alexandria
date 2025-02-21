@@ -11,8 +11,8 @@ pub enum KronError {
 /// * `ys` - The second sequence of len L.
 /// # Returns
 /// * `Result<Array<T>, KronError>` - The Kronecker product.
-pub fn kron<T, +Mul<T>, +Copy<T>, +Drop<T>>(
-    mut xs: Span<T>, mut ys: Span<T>,
+pub fn kron<T, +Mul<T>, +Copy<T>, +Drop<T>,>(
+    mut xs: Span<T>, mut ys: Span<T>
 ) -> Result<Array<T>, KronError> {
     // [Check] Inputs
     if xs.len() != ys.len() {

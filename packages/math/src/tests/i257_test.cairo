@@ -1,4 +1,4 @@
-use alexandria_math::i257::{I257Impl, i257, i257_div_rem};
+use alexandria_math::i257::{i257, I257Impl, i257_div_rem, i257_assert_no_negative_zero};
 use core::num::traits::Zero;
 
 #[test]

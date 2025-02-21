@@ -21,7 +21,7 @@ pub impl Bitmap<
     +Into<T, u256>,
     +TryInto<u256, T>,
     +Drop<T>,
-    +Copy<T>,
+    +Copy<T>
 > of BitmapTrait<T> {
     /// The bit value at the provided index of a number.
     /// # Arguments
@@ -196,7 +196,7 @@ pub impl Bitmap<
         let nrsb = Self::nearest_right_significant_bit(x, i);
         match (nlsb, nrsb) {
             (
-                Option::Some(lhs), Option::Some(rhs),
+                Option::Some(lhs), Option::Some(rhs)
             ) => {
                 if i - rhs < lhs - i || (priority && (i - rhs == lhs - i)) {
                     Option::Some(rhs)

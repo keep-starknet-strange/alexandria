@@ -5,5 +5,5 @@ pub mod storage;
 mod tests;
 pub mod utils;
 
-pub use bytes::{Bytes, BytesIndex, BytesTrait};
+pub use bytes::{Bytes, BytesTrait, BytesIndex};
 pub use storage::BytesStore;

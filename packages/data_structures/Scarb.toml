@@ -1,6 +1,6 @@
 [package]
 name = "alexandria_data_structures"
-version = "0.2.0"
+version.workspace = true
 description = "A set of Cairo data structure libraries and algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/data_structures"
 edition = "2023_11"

@@ -1,7 +1,7 @@
 //! # Fast root algorithm using the Newton-Raphson method
 use super::pow;
 
-/// Newton-Raphson optimization to solve the equation a^r = x.
+/// Newton-Raphson optimization to solve the equation x^r = a.
 /// The optimization has a quadratic convergence rate.
 /// # Arguments
 /// * ` x ` - The number to calculate the root of

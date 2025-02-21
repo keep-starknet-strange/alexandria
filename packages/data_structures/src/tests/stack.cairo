@@ -1,5 +1,5 @@
 // Internal imports
-use alexandria_data_structures::stack::{Felt252Stack, NullableStack, StackTrait};
+use alexandria_data_structures::stack::{StackTrait, Felt252Stack, NullableStack};
 
 
 fn stack_new_test<S, T, +StackTrait<S, T>>(stack: @S) {
@@ -11,7 +11,7 @@ fn stack_is_empty_test<S, T, +StackTrait<S, T>>(stack: @S) {
 }
 
 fn stack_push_test<S, T, +StackTrait<S, T>, +Drop<T>, +Destruct<S>>(
-    ref stack: S, val_1: T, val_2: T,
+    ref stack: S, val_1: T, val_2: T
 ) {
     stack.push(val_1);
     stack.push(val_2);
@@ -21,7 +21,7 @@ fn stack_push_test<S, T, +StackTrait<S, T>, +Drop<T>, +Destruct<S>>(
 }
 
 fn stack_peek_test<S, T, +StackTrait<S, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<S>>(
-    ref stack: S, val_1: T, val_2: T,
+    ref stack: S, val_1: T, val_2: T
 ) {
     stack.push(val_1);
     stack.push(val_2);
@@ -34,7 +34,7 @@ fn stack_peek_test<S, T, +StackTrait<S, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +
 }
 
 fn stack_pop_test<S, T, +StackTrait<S, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<S>>(
-    ref stack: S, val_1: T, val_2: T,
+    ref stack: S, val_1: T, val_2: T
 ) {
     stack.push(val_1);
     stack.push(val_2);
@@ -49,9 +49,9 @@ fn stack_pop_test<S, T, +StackTrait<S, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +D
 }
 
 fn stack_push_pop_push_test<
-    S, T, +StackTrait<S, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<S>,
+    S, T, +StackTrait<S, T>, +Drop<T>, +Copy<T>, +PartialEq<T>, +Destruct<S>
 >(
-    ref stack: S, val_1: T, val_2: T, val_3: T,
+    ref stack: S, val_1: T, val_2: T, val_3: T
 ) {
     stack.push(val_1);
     stack.push(val_2);

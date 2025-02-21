@@ -1,4 +1,6 @@
-use alexandria_merkle_tree::storage_proof::verify;
+use alexandria_merkle_tree::storage_proof::{
+    ContractStateProof, ContractData, TrieNode, BinaryNode, EdgeNode, verify
+};
 
 use alexandria_merkle_tree::tests::storage_proof_test_data::{balance_proof, total_balance_proof};
 

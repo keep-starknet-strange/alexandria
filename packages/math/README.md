@@ -71,9 +71,6 @@ The perfect number algorithm is used to determine whether a given positive integ
 A perfect number is a positive integer that is equal to the sum of its proper divisors (excluding itself).
 The purpose of the algorithm is to identify these special numbers and to study their properties. Perfect numbers have applications in various areas of mathematics, including number theory and algebraic geometry. They are also used in cryptography and coding theory. The perfect number algorithm is important for understanding the structure of numbers and their relationships to each other, and it has been studied for centuries by mathematicians.
 
-## [Schnorr Signature Verification - BIP340](./src/schnorr.cairo)
-Schnorr Signature Verification has been implemented according to [BIP-340](https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki). Secp256k1 elliptic curve has been utilized, and Schnorr signature offers provable security, non-malleability (unlike ECDSA), and linearity which makes it efficient to aggregate signatures from multiple public keys.
-
 ## [Zeller's congruence](./src/zellers_congruence.cairo)
 
 Zeller's congruence algorithm is used to determine the day of the week for a given date.

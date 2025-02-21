@@ -1,9 +1,9 @@
-use alexandria_bytes::bytes::{BYTES_PER_ELEMENT, Bytes, BytesTrait};
+use alexandria_bytes::bytes::{Bytes, BytesTrait, BYTES_PER_ELEMENT};
 use core::num::traits::CheckedAdd;
 use starknet::SyscallResult;
 use starknet::storage_access::{
-    StorageAddress, StorageBaseAddress, Store, storage_address_from_base,
-    storage_address_from_base_and_offset, storage_base_address_from_felt252,
+    Store, StorageAddress, StorageBaseAddress, storage_address_from_base,
+    storage_base_address_from_felt252, storage_address_from_base_and_offset,
 };
 
 /// Store for a `Bytes` object.
@@ -27,13 +27,13 @@ pub impl BytesStore of Store<Bytes> {
     }
     #[inline(always)]
     fn read_at_offset(
-        address_domain: u32, base: StorageBaseAddress, offset: u8,
+        address_domain: u32, base: StorageBaseAddress, offset: u8
     ) -> SyscallResult<Bytes> {
         inner_read_bytes(address_domain, storage_address_from_base_and_offset(base, offset))
     }
     #[inline(always)]
     fn write_at_offset(
-        address_domain: u32, base: StorageBaseAddress, offset: u8, value: Bytes,
+        address_domain: u32, base: StorageBaseAddress, offset: u8, value: Bytes
     ) -> SyscallResult<()> {
         inner_write_bytes(address_domain, storage_address_from_base_and_offset(base, offset), value)
     }
@@ -64,7 +64,7 @@ fn inner_read_bytes(address_domain: u32, address: StorageAddress) -> SyscallResu
         Option::None => { return SyscallResult::Err(array!['Invalid Bytes size']); },
     };
     let (mut remaining_full_words, last_word_len) = DivRem::div_rem(
-        size, BYTES_PER_ELEMENT.try_into().unwrap(),
+        size, BYTES_PER_ELEMENT.try_into().unwrap()
     );
     let mut chunk = 0;
     let mut chunk_base = inner_bytes_pointer(address, chunk);
@@ -76,7 +76,7 @@ fn inner_read_bytes(address_domain: u32, address: StorageAddress) -> SyscallResu
         }
         let value =
             match starknet::syscalls::storage_read_syscall(
-                address_domain, storage_address_from_base_and_offset(chunk_base, index_in_chunk),
+                address_domain, storage_address_from_base_and_offset(chunk_base, index_in_chunk)
             ) {
             Result::Ok(value) => value,
             Result::Err(err) => { break Result::Err(err); },
@@ -99,7 +99,7 @@ fn inner_read_bytes(address_domain: u32, address: StorageAddress) -> SyscallResu
     }?;
     if last_word_len != 0 {
         let last_word = starknet::syscalls::storage_read_syscall(
-            address_domain, storage_address_from_base_and_offset(chunk_base, index_in_chunk),
+            address_domain, storage_address_from_base_and_offset(chunk_base, index_in_chunk)
         )?;
         data.append(last_word.try_into().expect('Invalid last word'));
     }
@@ -110,7 +110,7 @@ fn inner_read_bytes(address_domain: u32, address: StorageAddress) -> SyscallResu
 /// The length of the bytes is written to `address` at domain `address_domain`.
 /// For more info read the documentation of `BytesStore`.
 fn inner_write_bytes(
-    address_domain: u32, address: StorageAddress, value: Bytes,
+    address_domain: u32, address: StorageAddress, value: Bytes
 ) -> SyscallResult<()> {
     let size = value.size();
     starknet::syscalls::storage_write_syscall(address_domain, address, size.into())?;
@@ -126,7 +126,7 @@ fn inner_write_bytes(
         match starknet::syscalls::storage_write_syscall(
             address_domain,
             storage_address_from_base_and_offset(chunk_base, index_in_chunk),
-            (*curr_value).into(),
+            (*curr_value).into()
         ) {
             Result::Ok(_) => {},
             Result::Err(err) => { break Result::Err(err); },

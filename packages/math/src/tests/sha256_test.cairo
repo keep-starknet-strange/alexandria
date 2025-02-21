@@ -46,7 +46,7 @@ fn sha256_empty_test() {
 #[available_gas(200000000000)]
 fn sha256_random_data_test() {
     let mut input: Array<u8> = array![
-        0x57, 0x77, 0x71, 0x71, 0x66, 0x50, 0x45, 0x51, 0x51, 0x43, 0x39, 0x48, 0x38,
+        0x57, 0x77, 0x71, 0x71, 0x66, 0x50, 0x45, 0x51, 0x51, 0x43, 0x39, 0x48, 0x38
     ];
     let result = sha256::sha256(input);
     assert_eq!(*result[0], 61);
@@ -662,7 +662,7 @@ fn sha256_url() {
         'e',
         'x',
         '"',
-        '}',
+        '}'
     ];
     let result = sha256::sha256(data);
 

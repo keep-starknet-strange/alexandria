@@ -1,6 +1,7 @@
 use core::num::traits::Bounded;
 use core::num::traits::WrappingAdd;
-use core::traits::{BitAnd, BitOr, BitXor};
+use core::traits::{BitAnd, BitXor, BitOr};
+use super::BitShift;
 
 // Variable naming is compliant to RFC-6234 (https://datatracker.ietf.org/doc/html/rfc6234)
 
@@ -114,7 +115,7 @@ pub impl Word64WordOperations of WordOperations<Word64> {
     }
     fn rotr(self: Word64, n: u64) -> Word64 {
         let data = BitOr::bitor(
-            math_shr_u64(self.data, n), math_shl_u64(self.data, (U64_BIT_NUM - n)),
+            math_shr_u64(self.data, n), math_shl_u64(self.data, (U64_BIT_NUM - n))
         );
         Word64 { data }
     }
@@ -123,19 +124,19 @@ pub impl Word64WordOperations of WordOperations<Word64> {
         let data = self.data.into();
         let data: u128 = BitOr::bitor(
             math_shr_precomputed::<u128>(data, two_pow_n.into()),
-            math_shl_precomputed::<u128>(data, two_pow_64_n.into()),
+            math_shl_precomputed::<u128>(data, two_pow_64_n.into())
         );
 
         let data: u64 = match data.try_into() {
             Option::Some(data) => data,
-            Option::None => (data & MAX_U64).try_into().unwrap(),
+            Option::None => (data & MAX_U64).try_into().unwrap()
         };
 
         Word64 { data }
     }
     fn rotl(self: Word64, n: u64) -> Word64 {
         let data = BitOr::bitor(
-            math_shl_u64(self.data, n), math_shr_u64(self.data, (U64_BIT_NUM - n)),
+            math_shl_u64(self.data, n), math_shr_u64(self.data, (U64_BIT_NUM - n))
         );
         Word64 { data }
     }
@@ -204,8 +205,10 @@ pub fn fpow(mut base: u128, mut power: u128) -> u128 {
     result
 }
 
-const two_squarings: [u64; 6] = [
-    TWO_POW_1, TWO_POW_2, TWO_POW_4, TWO_POW_8, TWO_POW_16, TWO_POW_32,
+const two_squarings: [
+    u64
+    ; 6] = [
+    TWO_POW_1, TWO_POW_2, TWO_POW_4, TWO_POW_8, TWO_POW_16, TWO_POW_32
 ];
 // Uses cache for faster powers of 2 in a u128
 // Uses TWO_POW_* constants
@@ -238,14 +241,14 @@ fn math_shr(x: u128, n: u64) -> u128 {
 
 // Shift left with precomputed powers of 2
 fn math_shl_precomputed<T, +Mul<T>, +Rem<T>, +Drop<T>, +Copy<T>, +Into<T, u128>>(
-    x: T, two_power_n: T,
+    x: T, two_power_n: T
 ) -> T {
     x * two_power_n
 }
 
 // Shift right with precomputed powers of 2
 fn math_shr_precomputed<T, +Div<T>, +Rem<T>, +Drop<T>, +Copy<T>, +Into<T, u128>>(
-    x: T, two_power_n: T,
+    x: T, two_power_n: T
 ) -> T {
     x / two_power_n
 }

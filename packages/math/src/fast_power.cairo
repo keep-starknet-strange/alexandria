@@ -20,9 +20,9 @@ pub fn fast_power<
     +TryInto<u256, T>,
     +PartialEq<T>,
     +Copy<T>,
-    +Drop<T>,
+    +Drop<T>
 >(
-    base: T, mut power: T,
+    base: T, mut power: T
 ) -> T {
     assert!(base != 0_u8.into(), "fast_power: invalid input");
 
@@ -63,9 +63,9 @@ pub fn fast_power_mod<
     +TryInto<u256, T>,
     +PartialEq<T>,
     +Copy<T>,
-    +Drop<T>,
+    +Drop<T>
 >(
-    base: T, mut power: T, modulus: T,
+    base: T, mut power: T, modulus: T
 ) -> T {
     assert!(base != 0_u8.into(), "fast_power: invalid input");
 

@@ -1,8 +1,7 @@
 use alexandria_data_structures::byte_appender::ByteAppender;
 use alexandria_data_structures::tests::byte_reader::{
-    test_array_16, test_array_16_neg, test_array_32, test_array_64, test_array_8,
-    test_byte_array_16, test_byte_array_16_neg, test_byte_array_32, test_byte_array_64,
-    test_byte_array_8,
+    test_array_8, test_array_16, test_array_16_neg, test_array_32, test_array_64, test_byte_array_8,
+    test_byte_array_16, test_byte_array_16_neg, test_byte_array_32, test_byte_array_64
 };
 use core::integer::u512;
 

@@ -1,6 +1,6 @@
 [package]
 name = "alexandria_sorting"
-version = "0.1.0"
+version.workspace = true
 description = "A set of sorting algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/sorting"
 edition = "2023_11"

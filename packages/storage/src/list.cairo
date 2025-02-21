@@ -2,7 +2,7 @@ use core::ops::index::IndexView;
 use core::poseidon::poseidon_hash_span;
 use core::traits::DivRem;
 use starknet::storage_access::{
-    StorageBaseAddress, Store, storage_address_from_base, storage_base_address_from_felt252,
+    Store, StorageBaseAddress, storage_address_from_base, storage_base_address_from_felt252
 };
 use starknet::{SyscallResult, SyscallResultTrait};
 
@@ -12,11 +12,11 @@ const POW2_8: u32 = 256; // 2^8
 pub struct List<T> {
     pub(crate) address_domain: u32,
     pub(crate) base: StorageBaseAddress,
-    len: u32 // number of elements in array
+    len: u32, // number of elements in array
 }
 
 #[deprecated(
-    feature: "deprecated-list-trait", note: "Use `starknet::storage::Vec`.", since: "2.7.0",
+    feature: "deprecated-list-trait", note: "Use `starknet::storage::Vec`.", since: "2.7.0"
 )]
 pub trait ListTrait<T> {
     /// Instantiates a new List with the given base address.
@@ -173,15 +173,15 @@ impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
             match span.pop_front() {
                 Option::Some(v) => {
                     let (base, offset) = calculate_base_and_offset_for_index(
-                        self.base, index, storage_size,
+                        self.base, index, storage_size
                     );
                     match Store::write_at_offset(self.address_domain, base, offset, *v) {
                         Result::Ok(_) => {},
-                        Result::Err(e) => { break Result::Err(e); },
+                        Result::Err(e) => { break Result::Err(e); }
                     }
                     index += 1;
                 },
-                Option::None => { break Store::write(self.address_domain, self.base, self.len); },
+                Option::None => { break Store::write(self.address_domain, self.base, self.len); }
             };
         }
     }
@@ -198,7 +198,7 @@ impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
 
     fn append(ref self: List<T>, value: T) -> SyscallResult<u32> {
         let (base, offset) = calculate_base_and_offset_for_index(
-            self.base, self.len, self.storage_size(),
+            self.base, self.len, self.storage_size()
         );
         Store::write_at_offset(self.address_domain, base, offset, value)?;
 
@@ -215,7 +215,7 @@ impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
         }
 
         let (base, offset) = calculate_base_and_offset_for_index(
-            *self.base, index, self.storage_size(),
+            *self.base, index, self.storage_size()
         );
         let t = Store::read_at_offset(*self.address_domain, base, offset)?;
         Result::Ok(Option::Some(t))
@@ -224,7 +224,7 @@ impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
     fn set(ref self: List<T>, index: u32, value: T) -> SyscallResult<()> {
         assert(index < self.len, 'List index out of bounds');
         let (base, offset) = calculate_base_and_offset_for_index(
-            self.base, index, self.storage_size(),
+            self.base, index, self.storage_size()
         );
         Store::write_at_offset(self.address_domain, base, offset, value)
     }
@@ -259,7 +259,7 @@ impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
             }
             let value = match self.get(index) {
                 Result::Ok(v) => v,
-                Result::Err(e) => { break Result::Err(e); },
+                Result::Err(e) => { break Result::Err(e); }
             }.expect('List index out of bounds');
             array.append(value);
             index += 1;
@@ -267,7 +267,7 @@ impl ListImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of ListTrait<T> {
 
         match result {
             Result::Ok(_) => Result::Ok(array),
-            Result::Err(e) => Result::Err(e),
+            Result::Err(e) => Result::Err(e)
         }
     }
 
@@ -321,7 +321,7 @@ impl AListIndexViewImpl<T, +Copy<T>, +Drop<T>, +Store<T>> of IndexView<List<T>, 
 // so for getting a Foo at index 90 this function would return address of segment2 and offset of 26
 
 fn calculate_base_and_offset_for_index(
-    list_base: StorageBaseAddress, index: u32, storage_size: u8,
+    list_base: StorageBaseAddress, index: u32, storage_size: u8
 ) -> (StorageBaseAddress, u8) {
     let max_elements = POW2_8 / storage_size.into();
     let (key, offset) = DivRem::div_rem(index, max_elements.try_into().unwrap());
@@ -345,7 +345,7 @@ impl ListStore<T, +Store<T>> of Store<List<T>> {
     }
 
     fn read_at_offset(
-        address_domain: u32, base: StorageBaseAddress, offset: u8,
+        address_domain: u32, base: StorageBaseAddress, offset: u8
     ) -> SyscallResult<List<T>> {
         let len: u32 = Store::read_at_offset(address_domain, base, offset).unwrap_syscall();
         Result::Ok(List { address_domain, base, len })
@@ -353,7 +353,7 @@ impl ListStore<T, +Store<T>> of Store<List<T>> {
 
     #[inline(always)]
     fn write_at_offset(
-        address_domain: u32, base: StorageBaseAddress, offset: u8, value: List<T>,
+        address_domain: u32, base: StorageBaseAddress, offset: u8, value: List<T>
     ) -> SyscallResult<()> {
         Store::write_at_offset(address_domain, base, offset, value.len)
     }

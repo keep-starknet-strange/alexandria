@@ -15,7 +15,7 @@ pub fn is_armstrong_number(mut num: u128) -> bool {
         }
 
         let lastDigit = num % 10;
-        let sum = pow(lastDigit, digits.into());
+        let sum = pow(lastDigit, digits);
         num = num / 10;
         if sum > original_num {
             break false;

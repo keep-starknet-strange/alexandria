@@ -1,4 +1,4 @@
-use alexandria_encoding::rlp::{RLPError, RLPItem, RLPTrait, RLPType};
+use alexandria_encoding::rlp::{RLPError, RLPType, RLPTrait, RLPItem};
 
 #[test]
 #[available_gas(99999999)]
@@ -161,7 +161,7 @@ fn test_rlp_decode_short_string() {
         0xa8,
         0xda,
         0x3b,
-        0xf7,
+        0xf7
     ];
 
     let res = RLPTrait::decode(arr.span()).unwrap();
@@ -204,7 +204,7 @@ fn test_rlp_decode_short_string_input_too_short() {
         0xbb,
         0xa8,
         0xda,
-        0x3b,
+        0x3b
     ];
 
     let res = RLPTrait::decode(arr.span());
@@ -278,7 +278,7 @@ fn test_rlp_decode_long_string_with_payload_len_on_1_byte() {
         0x86,
         0x19,
         0x7d,
-        0xd9,
+        0xd9
     ];
 
     let res = RLPTrait::decode(arr.span()).unwrap();
@@ -628,7 +628,7 @@ fn test_rlp_decode_long_string_with_payload_len_on_2_bytes() {
         0x76,
         0x99,
         0x87,
-        0x60,
+        0x60
     ];
 
     let res = RLPTrait::decode(arr.span()).unwrap();
@@ -645,7 +645,7 @@ fn test_rlp_decode_long_string_with_payload_len_on_2_bytes() {
 #[test]
 #[available_gas(99999999)]
 fn test_rlp_decode_long_string_with_payload_len_too_short() {
-    let arr = array![0xb9, 0x01];
+    let arr = array![0xb9, 0x01,];
 
     let res = RLPTrait::decode(arr.span());
 
@@ -686,7 +686,7 @@ fn test_rlp_decode_short_nested_list() {
 #[test]
 #[available_gas(99999999999)]
 fn test_rlp_decode_multi_list() {
-    let mut arr = array![0xc6, 0x82, 0x7a, 0x77, 0xc1, 0x04, 0x01];
+    let mut arr = array![0xc6, 0x82, 0x7a, 0x77, 0xc1, 0x04, 0x01,];
 
     let res = RLPTrait::decode(arr.span()).unwrap();
 
@@ -1245,7 +1245,7 @@ fn test_rlp_decode_long_list() {
         0xe2,
         0xb3,
         0x5f,
-        0x80,
+        0x80
     ];
     let res = RLPTrait::decode(arr.span()).unwrap();
 
@@ -1282,9 +1282,9 @@ fn test_rlp_decode_long_list() {
             0x73,
             0xc1,
             0x4a,
-            0xf4,
+            0xf4
         ]
-            .span(),
+            .span()
     );
     let expected_1 = RLPItem::String(
         array![
@@ -1319,9 +1319,9 @@ fn test_rlp_decode_long_list() {
             0x02,
             0x50,
             0x71,
-            0xb4,
+            0xb4
         ]
-            .span(),
+            .span()
     );
     let expected_2 = RLPItem::String(
         array![
@@ -1356,9 +1356,9 @@ fn test_rlp_decode_long_list() {
             0xfa,
             0x3f,
             0xcd,
-            0xee,
+            0xee
         ]
-            .span(),
+            .span()
     );
     let expected_3 = RLPItem::String(
         array![
@@ -1393,9 +1393,9 @@ fn test_rlp_decode_long_list() {
             0x37,
             0xa6,
             0x38,
-            0x51,
+            0x51
         ]
-            .span(),
+            .span()
     );
     let expected_4 = RLPItem::String(
         array![
@@ -1430,9 +1430,9 @@ fn test_rlp_decode_long_list() {
             0xdb,
             0x97,
             0x18,
-            0xd7,
+            0xd7
         ]
-            .span(),
+            .span()
     );
     let expected_5 = RLPItem::String(
         array![
@@ -1467,9 +1467,9 @@ fn test_rlp_decode_long_list() {
             0xb3,
             0xe2,
             0x03,
-            0x4c,
+            0x4c
         ]
-            .span(),
+            .span()
     );
     let expected_6 = RLPItem::String(
         array![
@@ -1504,9 +1504,9 @@ fn test_rlp_decode_long_list() {
             0xbb,
             0x13,
             0x01,
-            0x30,
+            0x30
         ]
-            .span(),
+            .span()
     );
     let expected_7 = RLPItem::String(
         array![
@@ -1541,9 +1541,9 @@ fn test_rlp_decode_long_list() {
             0x5f,
             0xf8,
             0x52,
-            0xae,
+            0xae
         ]
-            .span(),
+            .span()
     );
     let expected_8 = RLPItem::String(
         array![
@@ -1578,9 +1578,9 @@ fn test_rlp_decode_long_list() {
             0x53,
             0x4a,
             0x96,
-            0x58,
+            0x58
         ]
-            .span(),
+            .span()
     );
     let expected_9 = RLPItem::String(
         array![
@@ -1615,9 +1615,9 @@ fn test_rlp_decode_long_list() {
             0xad,
             0xc4,
             0xc1,
-            0xa3,
+            0xa3
         ]
-            .span(),
+            .span()
     );
     let expected_10 = RLPItem::String(
         array![
@@ -1652,9 +1652,9 @@ fn test_rlp_decode_long_list() {
             0x66,
             0x03,
             0x42,
-            0xe7,
+            0xe7
         ]
-            .span(),
+            .span()
     );
     let expected_11 = RLPItem::String(
         array![
@@ -1689,9 +1689,9 @@ fn test_rlp_decode_long_list() {
             0xd9,
             0x9b,
             0x26,
-            0x14,
+            0x14
         ]
-            .span(),
+            .span()
     );
     let expected_12 = RLPItem::String(
         array![
@@ -1726,9 +1726,9 @@ fn test_rlp_decode_long_list() {
             0x2f,
             0xe6,
             0x09,
-            0xf3,
+            0xf3
         ]
-            .span(),
+            .span()
     );
     let expected_13 = RLPItem::String(
         array![
@@ -1763,9 +1763,9 @@ fn test_rlp_decode_long_list() {
             0xc9,
             0x2a,
             0xb1,
-            0xfd,
+            0xfd
         ]
-            .span(),
+            .span()
     );
     let expected_14 = RLPItem::String(
         array![
@@ -1800,9 +1800,9 @@ fn test_rlp_decode_long_list() {
             0x29,
             0xe2,
             0x50,
-            0x2f,
+            0x2f
         ]
-            .span(),
+            .span()
     );
     let expected_15 = RLPItem::String(
         array![
@@ -1837,9 +1837,9 @@ fn test_rlp_decode_long_list() {
             0x8f,
             0xe2,
             0xb3,
-            0x5f,
+            0x5f
         ]
-            .span(),
+            .span()
     );
 
     let expected_16 = RLPItem::String(array![].span());
@@ -1861,7 +1861,7 @@ fn test_rlp_decode_long_list() {
         expected_13,
         expected_14,
         expected_15,
-        expected_16,
+        expected_16
     ];
 
     let expected_item = RLPItem::List(expected.span());
@@ -1901,7 +1901,7 @@ fn test_rlp_decode_long_list_with_input_too_short() {
         0x1f,
         0x68,
         0xcd,
-        0xb4,
+        0xb4
     ];
 
     let res = RLPTrait::decode(arr.span());
@@ -1913,7 +1913,7 @@ fn test_rlp_decode_long_list_with_input_too_short() {
 #[test]
 #[available_gas(99999999999)]
 fn test_rlp_decode_long_list_with_len_too_short() {
-    let arr = array![0xf9, 0x02];
+    let arr = array![0xf9, 0x02,];
 
     let res = RLPTrait::decode(arr.span());
 
@@ -2138,9 +2138,9 @@ fn test_rlp_encode_long_list() {
             0x73,
             0xc1,
             0x4a,
-            0xf4,
+            0xf4
         ]
-            .span(),
+            .span()
     );
     let string_1 = RLPItem::String(
         array![
@@ -2175,9 +2175,9 @@ fn test_rlp_encode_long_list() {
             0x02,
             0x50,
             0x71,
-            0xb4,
+            0xb4
         ]
-            .span(),
+            .span()
     );
     let string_2 = RLPItem::String(
         array![
@@ -2212,9 +2212,9 @@ fn test_rlp_encode_long_list() {
             0xfa,
             0x3f,
             0xcd,
-            0xee,
+            0xee
         ]
-            .span(),
+            .span()
     );
     let string_3 = RLPItem::String(
         array![
@@ -2249,9 +2249,9 @@ fn test_rlp_encode_long_list() {
             0x37,
             0xa6,
             0x38,
-            0x51,
+            0x51
         ]
-            .span(),
+            .span()
     );
     let string_4 = RLPItem::String(
         array![
@@ -2286,9 +2286,9 @@ fn test_rlp_encode_long_list() {
             0xdb,
             0x97,
             0x18,
-            0xd7,
+            0xd7
         ]
-            .span(),
+            .span()
     );
     let string_5 = RLPItem::String(
         array![
@@ -2323,9 +2323,9 @@ fn test_rlp_encode_long_list() {
             0xb3,
             0xe2,
             0x03,
-            0x4c,
+            0x4c
         ]
-            .span(),
+            .span()
     );
     let string_6 = RLPItem::String(
         array![
@@ -2360,9 +2360,9 @@ fn test_rlp_encode_long_list() {
             0xbb,
             0x13,
             0x01,
-            0x30,
+            0x30
         ]
-            .span(),
+            .span()
     );
     let string_7 = RLPItem::String(
         array![
@@ -2397,9 +2397,9 @@ fn test_rlp_encode_long_list() {
             0x5f,
             0xf8,
             0x52,
-            0xae,
+            0xae
         ]
-            .span(),
+            .span()
     );
     let string_8 = RLPItem::String(
         array![
@@ -2434,9 +2434,9 @@ fn test_rlp_encode_long_list() {
             0x53,
             0x4a,
             0x96,
-            0x58,
+            0x58
         ]
-            .span(),
+            .span()
     );
     let string_9 = RLPItem::String(
         array![
@@ -2471,9 +2471,9 @@ fn test_rlp_encode_long_list() {
             0xad,
             0xc4,
             0xc1,
-            0xa3,
+            0xa3
         ]
-            .span(),
+            .span()
     );
     let string_10 = RLPItem::String(
         array![
@@ -2508,9 +2508,9 @@ fn test_rlp_encode_long_list() {
             0x66,
             0x03,
             0x42,
-            0xe7,
+            0xe7
         ]
-            .span(),
+            .span()
     );
     let string_11 = RLPItem::String(
         array![
@@ -2545,9 +2545,9 @@ fn test_rlp_encode_long_list() {
             0xd9,
             0x9b,
             0x26,
-            0x14,
+            0x14
         ]
-            .span(),
+            .span()
     );
     let string_12 = RLPItem::String(
         array![
@@ -2582,9 +2582,9 @@ fn test_rlp_encode_long_list() {
             0x2f,
             0xe6,
             0x09,
-            0xf3,
+            0xf3
         ]
-            .span(),
+            .span()
     );
     let string_13 = RLPItem::String(
         array![
@@ -2619,9 +2619,9 @@ fn test_rlp_encode_long_list() {
             0xc9,
             0x2a,
             0xb1,
-            0xfd,
+            0xfd
         ]
-            .span(),
+            .span()
     );
     let string_14 = RLPItem::String(
         array![
@@ -2656,9 +2656,9 @@ fn test_rlp_encode_long_list() {
             0x29,
             0xe2,
             0x50,
-            0x2f,
+            0x2f
         ]
-            .span(),
+            .span()
     );
     let string_15 = RLPItem::String(
         array![
@@ -2693,9 +2693,9 @@ fn test_rlp_encode_long_list() {
             0x8f,
             0xe2,
             0xb3,
-            0x5f,
+            0x5f
         ]
-            .span(),
+            .span()
     );
 
     let string_16 = RLPItem::String(array![].span());
@@ -2717,7 +2717,7 @@ fn test_rlp_encode_long_list() {
         string_13,
         string_14,
         string_15,
-        string_16,
+        string_16
     ];
 
     let list = RLPItem::List(strings_list.span());
@@ -3256,7 +3256,7 @@ fn test_rlp_encode_long_list() {
         0xe2,
         0xb3,
         0x5f,
-        0x80,
+        0x80
     ];
 
     assert!(res == expected.span(), "Wrong value");

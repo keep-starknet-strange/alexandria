@@ -1,11 +1,13 @@
-use alexandria_storage::ListTrait;
+use alexandria_storage::{List, ListTrait};
+use core::option::OptionTrait;
 use core::starknet::storage::StorageAsPointer;
+use core::traits::TryInto;
 use starknet::{
-    ClassHash, ContractAddress, SyscallResultTrait,
+    ClassHash, ContractAddress, syscalls::deploy_syscall, SyscallResultTrait,
+    testing::set_contract_address,
     storage_access::{
-        StorageBaseAddress, storage_address_from_base, storage_base_address_from_felt252,
-    },
-    syscalls::deploy_syscall,
+        storage_base_address_from_felt252, storage_address_from_base, StorageBaseAddress
+    }
 };
 
 #[starknet::interface]
@@ -13,18 +15,18 @@ trait IAListHolder<TContractState> {
     fn do_get_len(self: @TContractState) -> (u32, u32);
     fn do_is_empty(self: @TContractState) -> (bool, bool);
     fn do_append(
-        ref self: TContractState, addrs_value: ContractAddress, numbers_value: u256,
+        ref self: TContractState, addrs_value: ContractAddress, numbers_value: u256
     ) -> (u32, u32);
     fn do_get(self: @TContractState, index: u32) -> (Option<ContractAddress>, Option<u256>);
     fn do_get_index(self: @TContractState, index: u32) -> (ContractAddress, u256);
     fn do_set(
-        ref self: TContractState, index: u32, addrs_value: ContractAddress, numbers_value: u256,
+        ref self: TContractState, index: u32, addrs_value: ContractAddress, numbers_value: u256
     );
     fn do_clean(ref self: TContractState);
     fn do_pop_front(ref self: TContractState) -> (Option<ContractAddress>, Option<u256>);
     fn do_array(self: @TContractState) -> (Array<ContractAddress>, Array<u256>);
     fn do_append_span(
-        ref self: TContractState, addrs_array: Array<ContractAddress>, numbers_array: Array<u256>,
+        ref self: TContractState, addrs_array: Array<ContractAddress>, numbers_array: Array<u256>
     );
 }
 
@@ -39,7 +41,7 @@ mod AListHolder {
         // Into<ContractAddress, felt252>
         addresses: List<ContractAddress>,
         // to test a corelib compound struct
-        numbers: List<u256>,
+        numbers: List<u256>
     }
 
     #[abi(embed_v0)]
@@ -53,20 +55,20 @@ mod AListHolder {
         }
 
         fn do_append(
-            ref self: ContractState, addrs_value: ContractAddress, numbers_value: u256,
+            ref self: ContractState, addrs_value: ContractAddress, numbers_value: u256
         ) -> (u32, u32) {
             let mut a = self.addresses.read();
             let mut n = self.numbers.read();
             (
                 a.append(addrs_value).expect('syscallresult error'),
-                n.append(numbers_value).expect('syscallresult error'),
+                n.append(numbers_value).expect('syscallresult error')
             )
         }
 
         fn do_get(self: @ContractState, index: u32) -> (Option<ContractAddress>, Option<u256>) {
             (
                 self.addresses.read().get(index).expect('syscallresult error'),
-                self.numbers.read().get(index).expect('syscallresult error'),
+                self.numbers.read().get(index).expect('syscallresult error')
             )
         }
 
@@ -75,7 +77,7 @@ mod AListHolder {
         }
 
         fn do_set(
-            ref self: ContractState, index: u32, addrs_value: ContractAddress, numbers_value: u256,
+            ref self: ContractState, index: u32, addrs_value: ContractAddress, numbers_value: u256
         ) {
             let mut a = self.addresses.read();
             let mut n = self.numbers.read();
@@ -95,7 +97,7 @@ mod AListHolder {
             let mut n = self.numbers.read();
             (
                 a.pop_front().expect('syscallresult error'),
-                n.pop_front().expect('syscallresult error'),
+                n.pop_front().expect('syscallresult error')
             )
         }
 
@@ -106,9 +108,7 @@ mod AListHolder {
         }
 
         fn do_append_span(
-            ref self: ContractState,
-            addrs_array: Array<ContractAddress>,
-            numbers_array: Array<u256>,
+            ref self: ContractState, addrs_array: Array<ContractAddress>, numbers_array: Array<u256>
         ) {
             let mut a = self.addresses.read();
             let mut n = self.numbers.read();

@@ -73,7 +73,7 @@ pub mod poseidon {
 
 #[derive(Drop)]
 pub struct MerkleTree<T> {
-    hasher: T,
+    hasher: T
 }
 
 /// MerkleTree trait.
@@ -82,7 +82,7 @@ pub trait MerkleTreeTrait<T> {
     fn new() -> MerkleTree<T>;
     /// Compute the merkle root of a given proof.
     fn compute_root(
-        ref self: MerkleTree<T>, current_node: felt252, proof: Span<felt252>,
+        ref self: MerkleTree<T>, current_node: felt252, proof: Span<felt252>
     ) -> felt252;
     /// Verify a merkle proof.
     fn verify(ref self: MerkleTree<T>, root: felt252, leaf: felt252, proof: Span<felt252>) -> bool;
@@ -104,7 +104,7 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
     /// # Returns
     /// The merkle root.
     fn compute_root(
-        ref self: MerkleTree<T>, mut current_node: felt252, mut proof: Span<felt252>,
+        ref self: MerkleTree<T>, mut current_node: felt252, mut proof: Span<felt252>
     ) -> felt252 {
         for proof_element in proof {
             // Compute the hash of the current node and the current element of the proof.
@@ -129,7 +129,7 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
     /// # Returns
     /// True if the proof is valid, false otherwise.
     fn verify(
-        ref self: MerkleTree<T>, root: felt252, mut leaf: felt252, mut proof: Span<felt252>,
+        ref self: MerkleTree<T>, root: felt252, mut leaf: felt252, mut proof: Span<felt252>
     ) -> bool {
         for proof_element in proof {
             // Compute the hash of the current node and the current element of the proof.
@@ -153,7 +153,7 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
     /// # Returns
     /// The merkle proof.
     fn compute_proof(
-        ref self: MerkleTree<T>, mut leaves: Array<felt252>, index: u32,
+        ref self: MerkleTree<T>, mut leaves: Array<felt252>, index: u32
     ) -> Span<felt252> {
         let mut proof: Array<felt252> = array![];
 
@@ -176,7 +176,7 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
 /// * `hasher` - The hasher to use.
 /// * `proof` - The proof array to fill.
 fn compute_proof<T, +HasherTrait<T>, +Drop<T>>(
-    mut nodes: Array<felt252>, mut hasher: T, index: u32, ref proof: Array<felt252>,
+    mut nodes: Array<felt252>, mut hasher: T, index: u32, ref proof: Array<felt252>
 ) {
     if index % 2 == 0 {
         proof.append(*nodes.at(index + 1));
@@ -201,7 +201,7 @@ fn compute_proof<T, +HasherTrait<T>, +Drop<T>>(
 /// # Returns
 /// The next layer of nodes.
 fn get_next_level<T, +HasherTrait<T>, +Drop<T>>(
-    mut nodes: Span<felt252>, ref hasher: T,
+    mut nodes: Span<felt252>, ref hasher: T
 ) -> Array<felt252> {
     let mut next_level: Array<felt252> = array![];
     while let Option::Some(left) = nodes.pop_front() {

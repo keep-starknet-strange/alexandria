@@ -21,14 +21,14 @@ fn test_u512_sub() {
     let sub0 = u512_sub(mu512(5, 6, 7, 8), mu512(1, 2, 3, 4));
     assert!(sub0 == mu512(4, 4, 4, 4));
 
-    let sub1 = u512_sub(mu512(3, 2, 1, MAX_128), mu512(7, 6, 5, 4));
+    let sub1 = u512_sub(mu512(3, 2, 1, MAX_128,), mu512(7, 6, 5, 4));
     assert!(
         sub1 == mu512(
             0xfffffffffffffffffffffffffffffffc,
             0xfffffffffffffffffffffffffffffffb,
             0xfffffffffffffffffffffffffffffffb,
-            0xfffffffffffffffffffffffffffffffa,
-        ),
+            0xfffffffffffffffffffffffffffffffa
+        )
     );
 
     let sub2 = u512_sub(mu512(3, 2, 1, 1), mu512(7, 6, 5, 0));
@@ -37,7 +37,7 @@ fn test_u512_sub() {
             0xfffffffffffffffffffffffffffffffc,
             0xfffffffffffffffffffffffffffffffb,
             0xfffffffffffffffffffffffffffffffb,
-            0,
-        ),
+            0
+        )
     );
 }

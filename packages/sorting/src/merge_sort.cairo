@@ -47,7 +47,7 @@ fn merge_recursive<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(
     mut right_arr: Array<T>,
     ref result_arr: Array<T>,
     left_arr_ix: usize,
-    right_arr_ix: usize,
+    right_arr_ix: usize
 ) {
     if result_arr.len() == left_arr.len() + right_arr.len() {
         return;

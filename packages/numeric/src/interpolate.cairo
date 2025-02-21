@@ -28,7 +28,7 @@ pub enum Extrapolation {
 pub fn interpolate<
     T, +PartialOrd<T>, +Add<T>, +Sub<T>, +Mul<T>, +Div<T>, +Zero<T>, +Copy<T>, +Drop<T>,
 >(
-    x: T, xs: Span<T>, ys: Span<T>, interpolation: Interpolation, extrapolation: Extrapolation,
+    x: T, xs: Span<T>, ys: Span<T>, interpolation: Interpolation, extrapolation: Extrapolation
 ) -> T {
     // [Check] Inputs
     assert!(xs.len() == ys.len(), "Arrays must have the same len");
@@ -92,7 +92,7 @@ pub fn interpolate<
 pub fn interpolate_fast<
     T, +PartialOrd<T>, +Add<T>, +Sub<T>, +Mul<T>, +Div<T>, +Zero<T>, +Copy<T>, +Drop<T>,
 >(
-    x: T, xs: Span<T>, ys: Span<T>, interpolation: Interpolation, extrapolation: Extrapolation,
+    x: T, xs: Span<T>, ys: Span<T>, interpolation: Interpolation, extrapolation: Extrapolation
 ) -> T {
     // [Check] Inputs
     assert!(xs.len() == ys.len(), "Arrays must have the same len");

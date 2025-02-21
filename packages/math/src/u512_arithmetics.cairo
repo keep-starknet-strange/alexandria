@@ -40,15 +40,13 @@ pub fn u512_add(lhs: u512, rhs: u512) -> u512 {
     let rhs: u256X2 = rhs.into();
 
     // No overflow allowed
-    let u256 {
-        low: limb2, high: limb3,
-    } = u256_overflow_add(lhs.high, rhs.high).expect('u512 add overflow');
+    let u256 { low: limb2, high: limb3 } = u256_overflow_add(lhs.high, rhs.high)
+        .expect('u512 add overflow');
 
     match u256_overflow_add(lhs.low, rhs.low) {
         Result::Ok(u256 { low: limb0, high: limb1 }) => { u512 { limb0, limb1, limb2, limb3 } },
-        Result::Err(u256 {
-            low: limb0, high: limb1,
-        }) => {
+        Result::Err(u256 { low: limb0,
+        high: limb1 }) => {
             // Try to move overflow to limb2
             let (limb2, did_overflow) = limb2.overflowing_add(1_u128);
             if did_overflow {
@@ -71,15 +69,13 @@ pub fn u512_sub(lhs: u512, rhs: u512) -> u512 {
     let rhs: u256X2 = rhs.into();
 
     // No overflow allowed
-    let u256 {
-        low: limb2, high: limb3,
-    } = u256_overflow_sub(lhs.high, rhs.high).expect('u512 sub overflow');
+    let u256 { low: limb2, high: limb3 } = u256_overflow_sub(lhs.high, rhs.high)
+        .expect('u512 sub overflow');
 
     match u256_overflow_sub(lhs.low, rhs.low) {
         Result::Ok(u256 { low: limb0, high: limb1 }) => { u512 { limb0, limb1, limb2, limb3 } },
-        Result::Err(u256 {
-            low: limb0, high: limb1,
-        }) => {
+        Result::Err(u256 { low: limb0,
+        high: limb1 }) => {
             // Try to move overflow to limb2
             let (limb2, did_overflow) = limb2.overflowing_sub(1_u128);
             if did_overflow {

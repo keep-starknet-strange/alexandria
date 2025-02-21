@@ -1,4 +1,5 @@
-use alexandria_math::mod_arithmetics::{add_mod, div_mod, mult_mod, pow_mod, sqr_mod, sub_mod};
+use alexandria_math::mod_arithmetics::{add_mod, sub_mod, mult_mod, sqr_mod, div_mod, pow_mod};
+use core::traits::TryInto;
 
 const p: u256 =
     57896044618658097711785492504343953926634992332820282019728792003956564819949; // 2^255 - 19
@@ -121,12 +122,12 @@ fn sqr_mod_test() {
     assert_eq!(
         sqr_mod(p, pow_256_minus_1.try_into().unwrap()),
         mult_mod(p, p, pow_256_minus_1.try_into().unwrap()),
-        "Incorrect result",
+        "Incorrect result"
     );
     assert_eq!(
         sqr_mod(pow_256_minus_1, p.try_into().unwrap()),
         mult_mod(pow_256_minus_1, pow_256_minus_1, p.try_into().unwrap()),
-        "Incorrect result",
+        "Incorrect result"
     );
 }
 
@@ -150,7 +151,7 @@ fn pow_mod_test() {
     assert_eq!(pow_mod(2, 260, prime_non_zero), 608);
     assert_eq!(
         pow_mod(10, 260, prime_non_zero),
-        17820046977743035104984469918379927979184337110507416960697246160624073120874,
+        17820046977743035104984469918379927979184337110507416960697246160624073120874
     );
     assert_eq!(pow_mod(4, 174, prime_non_zero), 188166885971377801784666882048);
     assert_eq!(pow_mod(100, p, prime_non_zero), 100);

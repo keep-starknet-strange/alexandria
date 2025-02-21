@@ -1,6 +1,6 @@
-use core::fmt::{Display, Error, Formatter};
+use core::fmt::{Display, Formatter, Error};
 use core::num::traits::Zero;
-use core::ops::{AddAssign, DivAssign, MulAssign, RemAssign, SubAssign};
+use core::ops::{AddAssign, SubAssign, MulAssign, DivAssign, RemAssign};
 
 // ====================== INT 257 ======================
 

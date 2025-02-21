@@ -8,8 +8,8 @@ use core::ops::AddAssign;
 /// * `ys` - The second sequence of len L.
 /// # Returns
 /// * `sum` - The dot product.
-pub fn dot<T, +Mul<T>, +AddAssign<T, T>, +Zero<T>, +Copy<T>, +Drop<T>>(
-    mut xs: Span<T>, mut ys: Span<T>,
+pub fn dot<T, +Mul<T>, +AddAssign<T, T>, +Zero<T>, +Copy<T>, +Drop<T>,>(
+    mut xs: Span<T>, mut ys: Span<T>
 ) -> T {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');

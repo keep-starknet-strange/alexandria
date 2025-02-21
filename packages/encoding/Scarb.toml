@@ -1,6 +1,6 @@
 [package]
 name = "alexandria_encoding"
-version = "0.1.0"
+version.workspace = true
 description = "Encoding utilities"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/encoding"
 edition = "2023_11"
@@ -12,7 +12,6 @@ fmt.workspace = true
 alexandria_math = { path = "../math" }
 alexandria_numeric = { path = "../numeric" }
 alexandria_bytes = { path = "../bytes" }
-alexandria_data_structures = { path = "../data_structures" }
 
 [dev-dependencies]
 cairo_test.workspace = true

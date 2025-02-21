@@ -11,7 +11,7 @@ use super::SortableVec;
 
 pub impl QuickSort of SortableVec {
     fn sort<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +Felt252DictValue<T>>(
-        mut array: Felt252Vec<T>,
+        mut array: Felt252Vec<T>
     ) -> Felt252Vec<T> {
         let array_size = array.len();
         if array_size <= 1 {
@@ -24,7 +24,7 @@ pub impl QuickSort of SortableVec {
 }
 
 fn quick_sort_range<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +Felt252DictValue<T>>(
-    ref array: Felt252Vec<T>, left: usize, right: usize,
+    ref array: Felt252Vec<T>, left: usize, right: usize
 ) {
     if left >= right {
         return;

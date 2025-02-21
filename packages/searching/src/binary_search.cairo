@@ -1,5 +1,5 @@
 pub fn binary_search<T, +Copy<T>, +Drop<T>, +PartialEq<T>, +PartialOrd<T>>(
-    span: Span<T>, val: T,
+    span: Span<T>, val: T
 ) -> Option<u32> {
     // Initial check
     if span.len() == 0 {
@@ -23,12 +23,12 @@ pub fn binary_search<T, +Copy<T>, +Drop<T>, +PartialEq<T>, +PartialOrd<T>>(
     let val = binary_search(span.slice(middle, len), val);
     match val {
         Option::Some(v) => Option::Some(v + middle),
-        Option::None => Option::None,
+        Option::None => Option::None
     }
 }
 
 pub fn binary_search_closest<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(
-    span: Span<T>, val: T,
+    span: Span<T>, val: T
 ) -> Option<u32> {
     // Initial check
     if (span.len() == 0) {
@@ -57,13 +57,13 @@ pub fn binary_search_closest<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(
         let index = binary_search_closest(span.slice(0, middle + 1), val);
         match index {
             Option::Some(v) => Option::Some(v),
-            Option::None => Option::None,
+            Option::None => Option::None
         }
     } else {
         let index = binary_search_closest(span.slice(middle, len), val);
         match index {
             Option::Some(v) => Option::Some(v + middle),
-            Option::None => Option::None,
+            Option::None => Option::None
         }
     }
 }

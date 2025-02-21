@@ -2,7 +2,7 @@
 #[derive(Add, AddAssign, Sub, SubAssign, Mul, MulAssign, Div, DivAssign, Debug, Drop, PartialEq)]
 struct B {
     pub a: u8,
-    b: u16,
+    b: u16
 }
 
 // a generic struct
@@ -10,7 +10,7 @@ struct B {
 struct G<T1, T2> {
     x: T1,
     pub y: T2,
-    z: T2,
+    z: T2
 }
 
 
@@ -19,7 +19,7 @@ struct G<T1, T2> {
 struct C {
     pub g: G<u128, u256>,
     i: u64,
-    j: u32,
+    j: u32
 }
 
 #[test]

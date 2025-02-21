@@ -1,4 +1,4 @@
-use alexandria_math::{BitRotate, BitShift, WrappingMath, count_digits_of_base, pow};
+use alexandria_math::{count_digits_of_base, pow, BitShift, BitRotate, WrappingMath};
 use core::num::traits::Bounded;
 
 // Test power function
@@ -345,7 +345,7 @@ fn test_wrapping_math_wrapping() {
     assert_eq!(Bounded::<u128>::MAX.wrapping_add(2_u128), 1_u128);
     assert_eq!(2_u128.wrapping_add(Bounded::<u128>::MAX), 1_u128);
     assert_eq!(
-        Bounded::<u128>::MAX.wrapping_add(Bounded::<u128>::MAX), Bounded::<u128>::MAX - 1_u128,
+        Bounded::<u128>::MAX.wrapping_add(Bounded::<u128>::MAX), Bounded::<u128>::MAX - 1_u128
     );
     assert_eq!(Bounded::<u128>::MIN.wrapping_sub(1_u128), Bounded::<u128>::MAX);
     assert_eq!(Bounded::<u128>::MIN.wrapping_sub(2_u128), Bounded::<u128>::MAX - 1_u128);
@@ -359,7 +359,7 @@ fn test_wrapping_math_wrapping() {
     assert_eq!(Bounded::<u256>::MAX.wrapping_add(2_u256), 1_u256);
     assert_eq!(2_u256.wrapping_add(Bounded::<u256>::MAX), 1_u256);
     assert_eq!(
-        Bounded::<u256>::MAX.wrapping_add(Bounded::<u256>::MAX), Bounded::<u256>::MAX - 1_u256,
+        Bounded::<u256>::MAX.wrapping_add(Bounded::<u256>::MAX), Bounded::<u256>::MAX - 1_u256
     );
     assert_eq!(Bounded::<u256>::MIN.wrapping_sub(1_u256), Bounded::<u256>::MAX);
     assert_eq!(Bounded::<u256>::MIN.wrapping_sub(2_u256), Bounded::<u256>::MAX - 1_u256);

@@ -557,7 +557,7 @@ pub fn test_array_32() -> Array<u8> {
         29,
         30,
         31,
-        32,
+        32
     ]
 }
 
@@ -594,7 +594,7 @@ pub fn test_array_32_neg() -> Array<u8> {
         0xe3,
         0xe2,
         0xe1,
-        0xe0,
+        0xe0
     ]
 }
 
@@ -615,7 +615,7 @@ pub fn test_array_16_neg() -> Array<u8> {
         0xff,
         0xff,
         0xff,
-        0xfe,
+        0xfe
     ]
 }
 
@@ -684,7 +684,7 @@ pub fn test_array_64() -> Array<u8> {
         61,
         62,
         63,
-        64,
+        64
     ]
 }
 
@@ -694,6 +694,6 @@ fn serialized_byte_array_64() -> Array<felt252> {
         0x40,
         0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f,
         0x202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e,
-        0x3f40,
+        0x3f40
     ]
 }

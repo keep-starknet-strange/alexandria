@@ -1,5 +1,5 @@
 use alexandria_data_structures::bit_array::{
-    BitArray, BitArrayTrait, one_shift_left_bytes_felt252, shift_bit,
+    BitArray, BitArrayTrait, one_shift_left_bytes_felt252, shift_bit
 };
 use core::integer::u512;
 use core::num::traits::Bounded;
@@ -17,7 +17,7 @@ fn test_append_bit() {
     let val: bytes31 = 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
         .try_into()
         .unwrap();
-    let expected: Array<bytes31> = array![val, val];
+    let expected: Array<bytes31> = array![val, val,];
     assert_eq!(ba.current(), 0xa * one_shift_left_bytes_felt252(30) * shift_bit(4).into());
     assert!(ba.data() == expected, "illegal array");
 }

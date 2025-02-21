@@ -69,7 +69,7 @@ fn test_reverse_bytes_u512() {
         limb0: t3.reverse_bytes(),
         limb1: t2.reverse_bytes(),
         limb2: t1.reverse_bytes(),
-        limb3: t0.reverse_bytes(),
+        limb3: t0.reverse_bytes()
     };
     let rev = t.reverse_bytes();
     assert!(rev == t_rev, "not equal");

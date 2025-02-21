@@ -172,7 +172,7 @@ pub trait ByteReader<T> {
 }
 
 impl ByteReaderImpl<
-    T, +Drop<T>, +Len<T>, +IndexView<T, usize>, +Into<IndexView::<T, usize>::Target, @u8>,
+    T, +Drop<T>, +Len<T>, +IndexView<T, usize>, +Into<IndexView::<T, usize>::Target, @u8>
 > of ByteReader<T> {
     #[inline]
     fn reader(self: @T) -> ByteReaderState<T> {
@@ -217,7 +217,7 @@ impl ByteReaderImpl<
                 b1.into() * one_shift_left_bytes_u128(3).try_into().unwrap()
                     + b2.into() * one_shift_left_bytes_u128(2).try_into().unwrap()
                     + b3.into() * one_shift_left_bytes_u128(1).try_into().unwrap()
-                    + b4.into(),
+                    + b4.into()
             )
         } else {
             Option::None
@@ -235,7 +235,7 @@ impl ByteReaderImpl<
                 b1.into()
                     + b2.into() * one_shift_left_bytes_u128(1).try_into().unwrap()
                     + b3.into() * one_shift_left_bytes_u128(2).try_into().unwrap()
-                    + b4.into() * one_shift_left_bytes_u128(3).try_into().unwrap(),
+                    + b4.into() * one_shift_left_bytes_u128(3).try_into().unwrap()
             )
         } else {
             Option::None
@@ -261,7 +261,7 @@ impl ByteReaderImpl<
                     + b5.into() * one_shift_left_bytes_u128(3).try_into().unwrap()
                     + b6.into() * one_shift_left_bytes_u128(2).try_into().unwrap()
                     + b7.into() * one_shift_left_bytes_u128(1).try_into().unwrap()
-                    + b8.into(),
+                    + b8.into()
             )
         } else {
             Option::None
@@ -287,7 +287,7 @@ impl ByteReaderImpl<
                     + b5.into() * one_shift_left_bytes_u128(4).try_into().unwrap()
                     + b6.into() * one_shift_left_bytes_u128(5).try_into().unwrap()
                     + b7.into() * one_shift_left_bytes_u128(6).try_into().unwrap()
-                    + b8.into() * one_shift_left_bytes_u128(7).try_into().unwrap(),
+                    + b8.into() * one_shift_left_bytes_u128(7).try_into().unwrap()
             )
         } else {
             Option::None
@@ -329,7 +329,7 @@ impl ByteReaderImpl<
                     + b13.into() * one_shift_left_bytes_u128(03).try_into().unwrap()
                     + b14.into() * one_shift_left_bytes_u128(02).try_into().unwrap()
                     + b15.into() * one_shift_left_bytes_u128(01).try_into().unwrap()
-                    + b16.into(),
+                    + b16.into()
             )
         } else {
             Option::None
@@ -371,7 +371,7 @@ impl ByteReaderImpl<
                     + b13.into() * one_shift_left_bytes_u128(12).try_into().unwrap()
                     + b14.into() * one_shift_left_bytes_u128(13).try_into().unwrap()
                     + b15.into() * one_shift_left_bytes_u128(14).try_into().unwrap()
-                    + b16.into() * one_shift_left_bytes_u128(15).try_into().unwrap(),
+                    + b16.into() * one_shift_left_bytes_u128(15).try_into().unwrap()
             )
         } else {
             Option::None
@@ -438,7 +438,7 @@ impl ByteReaderImpl<
 
     fn read_u256(ref self: ByteReaderState<T>) -> Option<u256> {
         let result = u256 {
-            high: self.data.word_u128(self.index)?, low: self.data.word_u128(self.index + 16)?,
+            high: self.data.word_u128(self.index)?, low: self.data.word_u128(self.index + 16)?
         };
         self.index += 32;
         Option::Some(result)
@@ -446,8 +446,7 @@ impl ByteReaderImpl<
 
     fn read_u256_le(ref self: ByteReaderState<T>) -> Option<u256> {
         let result = u256 {
-            low: self.data.word_u128_le(self.index)?,
-            high: self.data.word_u128_le(self.index + 16)?,
+            low: self.data.word_u128_le(self.index)?, high: self.data.word_u128_le(self.index + 16)?
         };
         self.index += 32;
         Option::Some(result)
@@ -458,7 +457,7 @@ impl ByteReaderImpl<
             limb3: self.data.word_u128(self.index)?,
             limb2: self.data.word_u128(self.index + 16)?,
             limb1: self.data.word_u128(self.index + 32)?,
-            limb0: self.data.word_u128(self.index + 48)?,
+            limb0: self.data.word_u128(self.index + 48)?
         };
         self.index += 64;
         Option::Some(result)
@@ -469,7 +468,7 @@ impl ByteReaderImpl<
             limb0: self.data.word_u128_le(self.index)?,
             limb1: self.data.word_u128_le(self.index + 16)?,
             limb2: self.data.word_u128_le(self.index + 32)?,
-            limb3: self.data.word_u128_le(self.index + 48)?,
+            limb3: self.data.word_u128_le(self.index + 48)?
         };
         self.index += 64;
         Option::Some(result)

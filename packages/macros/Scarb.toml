@@ -1,6 +1,6 @@
 [package]
 name = "alexandria_macros"
-version = "0.1.0"
+version.workspace = true
 description = "A set of useful macros"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/macros"
 edition = "2024_07"

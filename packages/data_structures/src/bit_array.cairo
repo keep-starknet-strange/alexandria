@@ -20,12 +20,12 @@ pub struct BitArray {
 
 impl BitArrayDefaultImpl of Default<BitArray> {
     fn default() -> BitArray {
-        BitArray { data: array![], current: 0, read_pos: 0, write_pos: 0 }
+        BitArray { data: array![], current: 0, read_pos: 0, write_pos: 0, }
     }
 }
 
 pub trait BitArrayTrait {
-    fn new(data: Array<bytes31>, current: felt252, read_pos: usize, write_pos: usize) -> BitArray;
+    fn new(data: Array<bytes31>, current: felt252, read_pos: usize, write_pos: usize,) -> BitArray;
     fn current(self: @BitArray) -> felt252;
     fn data(self: BitArray) -> Array<bytes31>;
     /// Appends a single bit to the BitArray
@@ -125,8 +125,8 @@ pub trait BitArrayTrait {
 }
 
 impl BitArrayImpl of BitArrayTrait {
-    fn new(data: Array<bytes31>, current: felt252, read_pos: usize, write_pos: usize) -> BitArray {
-        BitArray { data, current, read_pos, write_pos }
+    fn new(data: Array<bytes31>, current: felt252, read_pos: usize, write_pos: usize,) -> BitArray {
+        BitArray { data, current, read_pos, write_pos, }
     }
 
     fn current(self: @BitArray) -> felt252 {
@@ -139,7 +139,7 @@ impl BitArrayImpl of BitArrayTrait {
 
     fn append_bit(ref self: BitArray, bit: bool) {
         let (byte_number, bit_offset) = DivRem::div_rem(
-            self.write_pos, 8_usize.try_into().unwrap(),
+            self.write_pos, 8_usize.try_into().unwrap()
         );
         let byte_offset = BYTES_IN_BYTES31_MINUS_ONE - (byte_number % BYTES_IN_BYTES31);
         let bit_offset = 7 - bit_offset;
@@ -190,7 +190,7 @@ impl BitArrayImpl of BitArrayTrait {
                 let high = 0;
                 let low = self._read_word_be_recursive(0, length)?.try_into().unwrap();
                 u256 { low, high }
-            },
+            }
         )
     }
 
@@ -221,7 +221,7 @@ impl BitArrayImpl of BitArrayTrait {
                 let limb1 = 0;
                 let limb0 = self._read_word_be_recursive(0, length)?.try_into().unwrap();
                 u512 { limb0, limb1, limb2, limb3 }
-            },
+            }
         )
     }
 
@@ -231,7 +231,7 @@ impl BitArrayImpl of BitArrayTrait {
             return;
         }
         let (mut byte_offset, mut bit_offset) = DivRem::div_rem(
-            length - 1, 8_usize.try_into().unwrap(),
+            length - 1, 8_usize.try_into().unwrap()
         );
         loop {
             self.append_bit(select(word, byte_offset, bit_offset));
@@ -300,7 +300,7 @@ impl BitArrayImpl of BitArrayTrait {
                 Option::None => {
                     result = Option::None;
                     break;
-                },
+                }
             }
             if bit_offset == 7 {
                 byte_offset += 1;
@@ -323,7 +323,7 @@ impl BitArrayImpl of BitArrayTrait {
                 let low = self.read_word_le(length)?.try_into().unwrap();
                 let high = 0;
                 u256 { low, high }
-            },
+            }
         )
     }
 
@@ -339,7 +339,7 @@ impl BitArrayImpl of BitArrayTrait {
                     limb0: limb0.try_into().unwrap(),
                     limb1: limb1.try_into().unwrap(),
                     limb2: limb2.try_into().unwrap(),
-                    limb3: limb3.try_into().unwrap(),
+                    limb3: limb3.try_into().unwrap()
                 }
             } else if length > 256 {
                 let limb0 = self.read_word_le(128)?;
@@ -350,7 +350,7 @@ impl BitArrayImpl of BitArrayTrait {
                     limb0: limb0.try_into().unwrap(),
                     limb1: limb1.try_into().unwrap(),
                     limb2: limb2.try_into().unwrap(),
-                    limb3,
+                    limb3
                 }
             } else if length > 128 {
                 let limb0 = self.read_word_le(128)?;
@@ -358,10 +358,7 @@ impl BitArrayImpl of BitArrayTrait {
                 let limb2 = 0;
                 let limb3 = 0;
                 u512 {
-                    limb0: limb0.try_into().unwrap(),
-                    limb1: limb1.try_into().unwrap(),
-                    limb2,
-                    limb3,
+                    limb0: limb0.try_into().unwrap(), limb1: limb1.try_into().unwrap(), limb2, limb3
                 }
             } else {
                 let limb0 = self.read_word_le(length)?;
@@ -369,7 +366,7 @@ impl BitArrayImpl of BitArrayTrait {
                 let limb2 = 0;
                 let limb3 = 0;
                 u512 { limb0: limb0.try_into().unwrap(), limb1, limb2, limb3 }
-            },
+            }
         )
     }
 
@@ -422,7 +419,7 @@ impl BitArrayInternalImpl of BitArrayInternalTrait {
     fn word_and_offset(self: @BitArray, index: usize) -> (felt252, usize, usize) {
         let (byte_number, bit_offset) = DivRem::div_rem(index, 8_usize.try_into().unwrap());
         let (word_index, byte_offset) = DivRem::div_rem(
-            byte_number, BYTES_IN_BYTES31.try_into().unwrap(),
+            byte_number, BYTES_IN_BYTES31.try_into().unwrap()
         );
         let bit_offset = 7_usize - bit_offset;
         let byte_offset = BYTES_IN_BYTES31_MINUS_ONE - byte_offset;
@@ -446,7 +443,7 @@ impl BitArrayInternalImpl of BitArrayInternalTrait {
     }
 
     fn _read_word_be_recursive(
-        ref self: BitArray, current: felt252, length: usize,
+        ref self: BitArray, current: felt252, length: usize
     ) -> Option<felt252> {
         if length == 0 {
             return Option::Some(current);
@@ -547,7 +544,7 @@ pub fn one_shift_left_bytes_u128(n_bytes: usize) -> u128 {
         14 => 0x10000000000000000000000000000,
         15 => 0x1000000000000000000000000000000,
         _ => core::panic_with_felt252(
-            'n_bytes too big',
-        ) // For some reason we can't use panic!("") macro here... (running out of gas)
+            'n_bytes too big'
+        ), // For some reason we can't use panic!("") macro here... (running out of gas)
     }
 }

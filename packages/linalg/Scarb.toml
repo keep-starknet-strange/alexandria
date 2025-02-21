@@ -1,6 +1,6 @@
 [package]
 name = "alexandria_linalg"
-version = "0.1.0"
+version.workspace = true
 description = "A set of linear algebra libraries and algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/linalg"
 edition = "2023_11"

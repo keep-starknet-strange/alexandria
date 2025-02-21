@@ -11,7 +11,7 @@ use core::num::traits::Zero;
 /// # Returns
 /// * `u128` - The norm for the array.
 pub fn norm<T, +Into<T, u128>, +Zero<T>, +Copy<T>, +Drop<T>>(
-    mut xs: Span<T>, ord: u128, iter: usize,
+    mut xs: Span<T>, ord: u128, iter: usize
 ) -> u128 {
     let mut norm: u128 = 0;
     for x_value in xs {

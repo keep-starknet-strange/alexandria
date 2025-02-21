@@ -6,8 +6,8 @@ use core::num::traits::Zero;
 /// * `sequence` - The sorted sequence to operate.
 /// # Returns
 /// * `Array<T>` - The discrete difference of sorted sequence.
-pub fn diff<T, +PartialOrd<T>, +Sub<T>, +Copy<T>, +Drop<T>, +Zero<T>>(
-    mut sequence: Span<T>,
+pub fn diff<T, +PartialOrd<T>, +Sub<T>, +Copy<T>, +Drop<T>, +Zero<T>,>(
+    mut sequence: Span<T>
 ) -> Array<T> {
     // [Check] Inputs
     assert(sequence.len() >= 1, 'Array must have at least 1 elt');

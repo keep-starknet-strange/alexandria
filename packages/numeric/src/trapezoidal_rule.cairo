@@ -22,7 +22,7 @@ pub fn trapezoidal_rule<
     +Zero<T>,
     +Into<u8, T>,
 >(
-    mut xs: Span<T>, mut ys: Span<T>,
+    mut xs: Span<T>, mut ys: Span<T>
 ) -> T {
     // [Check] Inputs
     assert(xs.len() == ys.len(), 'Arrays must have the same len');

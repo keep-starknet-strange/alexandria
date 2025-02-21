@@ -1,6 +1,6 @@
 use core::integer::u512;
 use core::num::traits::Zero;
-use core::ops::{AddAssign, MulAssign};
+use core::ops::{MulAssign, AddAssign};
 
 const SELECT_BYTE: u16 = 0x100;
 const SELECT_BIT: u8 = 0b10;
@@ -33,9 +33,9 @@ pub fn reversing<
     +Drop<T>,
     +MulAssign<T, T>,
     +Rem<T>,
-    +AddAssign<T, T>,
+    +AddAssign<T, T>
 >(
-    word: T, size: usize, step: T,
+    word: T, size: usize, step: T
 ) -> (T, T) {
     let result = Zero::zero();
     reversing_partial_result(word, result, size, step)
@@ -50,9 +50,9 @@ pub fn reversing_partial_result<
     +Drop<T>,
     +MulAssign<T, T>,
     +Rem<T>,
-    +AddAssign<T, T>,
+    +AddAssign<T, T>
 >(
-    mut word: T, mut onto: T, size: usize, step: T,
+    mut word: T, mut onto: T, size: usize, step: T
 ) -> (T, T) {
     let mut i: usize = 0;
     while i != size {
@@ -163,7 +163,7 @@ impl U512Reversible of ReversibleBytes<u512> {
             limb0: limb3_reversed,
             limb1: limb2_reversed,
             limb2: limb1_reversed,
-            limb3: limb0_reversed,
+            limb3: limb0_reversed
         }
     }
 }
@@ -179,7 +179,7 @@ impl U512ReversibleBits of ReversibleBits<u512> {
             limb0: limb3_reversed,
             limb1: limb2_reversed,
             limb2: limb1_reversed,
-            limb3: limb0_reversed,
+            limb3: limb0_reversed
         }
     }
 }
@@ -193,7 +193,7 @@ impl Bytes31Reversible of ReversibleBytes<bytes31> {
         let u256 { low, high } = (*self).into();
         let (c_rev, _) = reversing(word: high, size: 15, step: SELECT_BYTE.into());
         let (low_rev, a) = reversing_partial_result( // pushes b_rev yielding low_rev
-            word: low, onto: c_rev, size: 1, step: SELECT_BYTE.into(),
+            word: low, onto: c_rev, size: 1, step: SELECT_BYTE.into()
         );
         let (high_rev, _) = reversing(word: a, size: 15, step: SELECT_BYTE.into());
         let felt: felt252 = u256 { low: low_rev, high: high_rev }.try_into().unwrap();
@@ -206,7 +206,7 @@ impl Bytes31ReversibleBits of ReversibleBits<bytes31> {
         let u256 { low, high } = (*self).into();
         let (c_rev, _) = reversing(word: high, size: 120, step: SELECT_BIT.into());
         let (low_rev, a) = reversing_partial_result( // pushes b_rev yielding low_rev
-            word: low, onto: c_rev, size: 8, step: SELECT_BIT.into(),
+            word: low, onto: c_rev, size: 8, step: SELECT_BIT.into()
         );
         let (high_rev, _) = reversing(word: a, size: 120, step: SELECT_BIT.into());
         let felt: felt252 = u256 { low: low_rev, high: high_rev }.try_into().unwrap();
@@ -221,7 +221,7 @@ impl ArrayReversibleBytes<T, +Copy<T>, +Drop<T>, +ReversibleBytes<T>> of Reversi
         loop {
             match span.pop_back() {
                 Option::Some(value) => { result.append(value.reverse_bytes()); },
-                Option::None => { break; },
+                Option::None => { break; }
             }
         };
         result
@@ -235,7 +235,7 @@ impl ArrayReversibleBits<T, +ReversibleBits<T>, +Copy<T>, +Drop<T>> of Reversibl
         loop {
             match span.pop_back() {
                 Option::Some(value) => { result.append(value.reverse_bits()); },
-                Option::None => { break; },
+                Option::None => { break; }
             }
         };
         result

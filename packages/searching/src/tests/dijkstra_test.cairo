@@ -1,4 +1,4 @@
-use alexandria_searching::dijkstra::{GraphTrait, NodeGetters};
+use alexandria_searching::dijkstra::{Graph, Node, GraphTrait, NodeGetters};
 use core::nullable::{FromNullableResult, match_nullable};
 
 

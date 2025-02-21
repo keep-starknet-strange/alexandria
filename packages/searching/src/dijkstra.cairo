@@ -5,7 +5,7 @@ use core::nullable::{FromNullableResult, match_nullable};
 pub struct Node {
     source: u32,
     dest: u32,
-    weight: u128,
+    weight: u128
 }
 
 #[generate_trait]

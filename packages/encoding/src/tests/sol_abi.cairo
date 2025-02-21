@@ -1,8 +1,8 @@
 use alexandria_bytes::utils::{BytesDebug, BytesDisplay};
 use alexandria_bytes::{Bytes, BytesTrait};
 use alexandria_encoding::sol_abi::{
-    decode::SolAbiDecodeTrait, encode::SolAbiEncodeSelectorTrait, encode::SolAbiEncodeTrait,
-    encode_as::SolAbiEncodeAsTrait, sol_bytes::SolBytesTrait,
+    encode::SolAbiEncodeTrait, encode_as::SolAbiEncodeAsTrait, encode::SolAbiEncodeSelectorTrait,
+    decode::SolAbiDecodeTrait, sol_bytes::SolBytesTrait
 };
 use core::bytes_31;
 use core::to_byte_array::FormatAsByteArray;
@@ -62,8 +62,8 @@ fn encode_test() {
             0x049d36570d4e46f48e99674bd3fcc846,
             0x44ddd6b96f7c741b1562b82f9e004dc7,
             0x000000000000000000000000DeaDbeef,
-            0xdEAdbeefdEadbEEFdeadbeEFdEaDbeeF,
-        ],
+            0xdEAdbeefdEadbEEFdeadbeEFdEaDbeeF
+        ]
     );
     let mut encoded: Bytes = BytesTrait::new_empty();
     let address: ContractAddress =
@@ -108,8 +108,8 @@ fn encode_packed_test() {
             0x46f48e99674bd3fcc84644ddd6b96f7c,
             0x741b1562b82f9e004dc7DeaDbeefdEAd,
             0xbeefdEadbEEFdeadbeEFdEaDbeeFa0aa,
-            0xabacad00000000000000000000000000,
-        ],
+            0xabacad00000000000000000000000000
+        ]
     );
     let mut encoded: Bytes = BytesTrait::new_empty();
     let address: ContractAddress =
@@ -140,7 +140,7 @@ fn encode_packed_test() {
 #[test]
 fn encoded_as_test() {
     let expected: Bytes = BytesTrait::new(
-        29, array![0x10111200000000000000000000000000, 0x0000000000aabbcc0000a0b1c2000000],
+        29, array![0x10111200000000000000000000000000, 0x0000000000aabbcc0000a0b1c2000000]
     );
     let mut encoded: Bytes = BytesTrait::new_empty();
     encoded = encoded
@@ -175,8 +175,8 @@ fn selector_test() {
             0xDeaDbeefdEAdbeefdEadbEEFdeadbeEF,
             0xdEaDbeeF000000000000000000000000,
             0x00000000000000000000000000000000,
-            0x00002710000000000000000000000000,
-        ],
+            0x00002710000000000000000000000000
+        ]
     );
     let mut encoded: Bytes = BytesTrait::new_empty();
     let eth_address: EthAddress = 0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF_u256.into();
@@ -212,8 +212,8 @@ fn decode_test() {
             0x00a0a1a2a30000000000000000000000,
             0x00000000000000000000000000001234,
             0x000000000000000000000000Deadbeef,
-            0xDeaDbeefdEAdbeefdEadbEEFdeadbeEF,
-        ],
+            0xDeaDbeefdEAdbeefdEadbEEFdeadbeEF
+        ]
     );
 
     let mut offset = 0;
@@ -237,7 +237,7 @@ fn decode_test() {
     assert_eq!(
         decoded,
         0xabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd_u256,
-        "Decode uint256 failed",
+        "Decode uint256 failed"
     );
     assert_eq!(offset, 160);
 
@@ -251,7 +251,7 @@ fn decode_test() {
 
     let decoded: ByteArray = encoded.decode(ref offset);
     let expected: ByteArray = SolBytesTrait::bytes32(
-        0xa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3000000000000000000000000_u256,
+        0xa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3000000000000000000000000_u256
     )
         .into();
     assert_eq!(decoded, expected);
@@ -293,7 +293,7 @@ fn sol_bytes_test() {
 
     // Test bytesX with integer types needing `into` calls
     let expectedVal21: Bytes = SolBytesTrait::bytes21(
-        0x0000a0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2_u256,
+        0x0000a0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2_u256
     );
     let bytesVal18: Bytes = SolBytesTrait::bytes18(0xa0a1a2a3a4a5a6a7a8a9aaabacadaeaf_u128);
     let bytesVal3: Bytes = SolBytesTrait::bytes3(0xb0b1b2);
@@ -304,13 +304,13 @@ fn sol_bytes_test() {
 
     // Test bytesX with Bytes types
     let expectedVal25: Bytes = SolBytesTrait::bytes25(
-        0xa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8_u256,
+        0xa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8_u256
     );
     let bytesVal6: Bytes = SolBytesTrait::bytes6(
-        BytesTrait::new(16, array![0xa0a1a2a3a4a500000000000000000000]),
+        BytesTrait::new(16, array![0xa0a1a2a3a4a500000000000000000000])
     );
     let bytesArray: ByteArray = SolBytesTrait::bytes32(
-        0xa6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b800000000000000000000000000_u256,
+        0xa6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b800000000000000000000000000_u256
     )
         .into();
     let bytesVal19: Bytes = SolBytesTrait::bytes19(bytesArray);

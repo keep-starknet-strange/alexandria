@@ -2,7 +2,7 @@ use alexandria_data_structures::span_ext::{SpanTraitExt};
 use super::{get_felt252_array, get_u128_array};
 
 mod pop_front_n {
-    use super::{SpanTraitExt, get_felt252_array, get_u128_array};
+    use super::{SpanTraitExt, get_u128_array, get_felt252_array};
 
     #[test]
     #[available_gas(2000000)]
@@ -77,7 +77,7 @@ mod pop_front_n {
 }
 
 mod pop_back_n {
-    use super::{SpanTraitExt, get_felt252_array, get_u128_array};
+    use super::{SpanTraitExt, get_u128_array, get_felt252_array};
 
     #[test]
     #[available_gas(2000000)]
@@ -152,7 +152,7 @@ mod pop_back_n {
 }
 
 mod remove_front_n {
-    use super::{SpanTraitExt, get_felt252_array, get_u128_array};
+    use super::{SpanTraitExt, get_u128_array, get_felt252_array};
 
     #[test]
     #[available_gas(2000000)]
@@ -221,7 +221,7 @@ mod remove_front_n {
 }
 
 mod remove_back_n {
-    use super::{SpanTraitExt, get_felt252_array, get_u128_array};
+    use super::{SpanTraitExt, get_u128_array, get_felt252_array};
 
     #[test]
     #[available_gas(2000000)]

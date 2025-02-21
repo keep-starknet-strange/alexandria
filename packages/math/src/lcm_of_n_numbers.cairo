@@ -12,7 +12,7 @@ pub enum LCMError {
 /// # Returns
 /// * `Result<T, LCMError>` - The lcm of input numbers
 pub fn lcm<T, +Into<T, u128>, +Into<u128, T>, +Mul<T>, +Div<T>, +Copy<T>, +Drop<T>>(
-    mut n: Span<T>,
+    mut n: Span<T>
 ) -> Result<T, LCMError> {
     // Return empty input error
     if n.is_empty() {
