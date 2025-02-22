@@ -1,6 +1,6 @@
 [package]
 name = "alexandria_numeric"
-version = "0.1.0"
+version.workspace = true
 description = "A set of numerical analysis libraries and algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/numeric"
 edition = "2023_11"
@@ -9,8 +9,8 @@ edition = "2023_11"
 fmt.workspace = true
 
 [dependencies]
-alexandria_math = { path = "../math" }
-alexandria_searching = { path = "../searching" }
+alexandria_math = { path = "../math", version = "0.4.0" }
+alexandria_searching = { path = "../searching", version = "0.4.0" }
 
 [dev-dependencies]
 cairo_test.workspace = true
