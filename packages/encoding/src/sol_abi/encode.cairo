@@ -161,7 +161,10 @@ pub impl SolAbiEncodeBytes31 of SolAbiEncodeTrait<bytes31> {
 pub impl SolAbiEncodeBytes of SolAbiEncodeTrait<Bytes> {
     fn encode(mut self: Bytes, mut x: Bytes) -> Bytes {
         self.concat(@x);
-        self.concat(@BytesTrait::zero(32 - (x.size() % 32)));
+        let padding = 32 - (x.size() % 32);
+        if padding < 32 {
+            self.concat(@BytesTrait::zero(padding));
+        }
         self
     }
 
@@ -175,7 +178,10 @@ pub impl SolAbiEncodeByteArray of SolAbiEncodeTrait<ByteArray> {
     fn encode(mut self: Bytes, x: ByteArray) -> Bytes {
         let x_len: usize = x.len();
         self.concat(@x.into());
-        self.concat(@BytesTrait::zero(32 - (x_len % 32)));
+        let padding = 32 - (x_len % 32);
+        if padding < 32 {
+            self.concat(@BytesTrait::zero(padding));
+        }
         self
     }
 

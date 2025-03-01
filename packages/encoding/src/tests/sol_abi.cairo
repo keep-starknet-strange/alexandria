@@ -31,7 +31,7 @@ fn compare_bytes(actual: @Bytes, expected: @Bytes) -> bool {
 #[test]
 fn encode_test() {
     let expected: Bytes = BytesTrait::new(
-        480,
+        544,
         array![
             0x00000000000000000000000000000000,
             0x0000000000000000000000000000001a,
@@ -63,6 +63,10 @@ fn encode_test() {
             0x44ddd6b96f7c741b1562b82f9e004dc7,
             0x000000000000000000000000DeaDbeef,
             0xdEAdbeefdEadbEEFdeadbeEFdEaDbeeF,
+            0xc0ffeec0ffeec0ffeec0ffeec0ffeec0,
+            0xffeec0ffeec0ffeec0ffeec0ffeec0ff,
+            0xc0ffeec0ffeec0ffeec0ffeec0ffeec0,
+            0xffeec0ffeec0ffeec0ffeec0ffeec0ff,
         ],
     );
     let mut encoded: Bytes = BytesTrait::new_empty();
@@ -72,6 +76,16 @@ fn encode_test() {
         .expect('Couldn\'t convert to address');
     let eth_address: EthAddress = 0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF_u256.into();
     let sba: ByteArray = (SolBytesTrait::bytes5(0x0000abcdef).into());
+    let arbitrary_data: ByteArray = BytesTrait::new(
+        64,
+        array![
+            0xc0ffeec0ffeec0ffeec0ffeec0ffeec0,
+            0xffeec0ffeec0ffeec0ffeec0ffeec0ff,
+            0xc0ffeec0ffeec0ffeec0ffeec0ffeec0,
+            0xffeec0ffeec0ffeec0ffeec0ffeec0ff,
+        ],
+    )
+        .into();
     encoded = encoded
         .encode(0x1a_u8)
         .encode(0x101112131415161718191a1b1c1d1e1f_u128)
@@ -87,7 +101,8 @@ fn encode_test() {
         .encode(SolBytesTrait::bytes7(0xa0b0c0d0e0f))
         .encode(sba)
         .encode(address)
-        .encode(eth_address);
+        .encode(eth_address)
+        .encode(arbitrary_data);
     assert_eq!(encoded, expected);
 }
 
