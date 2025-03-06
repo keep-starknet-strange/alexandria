@@ -1,7 +1,7 @@
+use alexandria_math::pow;
 use alexandria_math::wad_ray_math::{
     half_ray, half_wad, ray, ray_div, ray_mul, ray_to_wad, wad, wad_div, wad_mul, wad_to_ray,
 };
-use alexandria_math::{pow};
 
 // conversion
 #[test]

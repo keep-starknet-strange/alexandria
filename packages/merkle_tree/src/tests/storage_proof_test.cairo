@@ -1,5 +1,4 @@
 use alexandria_merkle_tree::storage_proof::verify;
-
 use alexandria_merkle_tree::tests::storage_proof_test_data::{balance_proof, total_balance_proof};
 
 const DAI: felt252 = 0x00da114221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd20e6eb3;

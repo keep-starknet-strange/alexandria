@@ -91,7 +91,7 @@ pub fn encode_u8_array(mut bytes: Array<u8>, base64_chars: Span<u8>) -> Array<u8
             result.append(*base64_chars[e4]);
         }
         i += 3;
-    };
+    }
     result
 }
 
@@ -126,10 +126,10 @@ pub fn encode_felt(self: felt252, base64_chars: Span<u8>) -> Array<u8> {
         result.append(*base64_chars[r3]);
         result.append(*base64_chars[r4]);
         num = quotient;
-    };
+    }
     while (result.len() < 43) {
         result.append('A');
-    };
+    }
     result = result.reversed();
     result.append('=');
     result

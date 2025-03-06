@@ -183,7 +183,7 @@ pub impl RLPImpl of RLPTrait {
                     output.append(RLPItem::List(array![].span()));
                 }
             },
-        };
+        }
 
         let total_item_len = len + offset;
         if total_item_len < input_len {

@@ -1992,7 +1992,7 @@ fn test_rlp_encode_string_length_exactly_56() {
     while (i != 56) {
         input.append(0x60);
         i += 1;
-    };
+    }
 
     let res = RLPTrait::encode(array![RLPItem::String(input.span())].span()).unwrap();
 
@@ -2018,7 +2018,7 @@ fn test_rlp_encode_string_length_greater_than_56() {
     while (i != 60) {
         input.append(0x70);
         i += 1;
-    };
+    }
 
     let res = RLPTrait::encode(array![RLPItem::String(input.span())].span()).unwrap();
 
@@ -2040,7 +2040,7 @@ fn test_rlp_encode_string_large_bytearray_inputs() {
     while (i != 500) {
         input.append(0x70);
         i += 1;
-    };
+    }
 
     let res = RLPTrait::encode(array![RLPItem::String(input.span())].span()).unwrap();
 

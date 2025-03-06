@@ -42,7 +42,7 @@ pub impl BubbleSort of Sortable {
                     sorted_iteration = false;
                 }
             };
-        };
+        }
         sorted_array
     }
 }

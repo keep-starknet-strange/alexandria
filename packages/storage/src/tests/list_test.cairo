@@ -1,12 +1,10 @@
 use alexandria_storage::ListTrait;
 use core::starknet::storage::StorageAsPointer;
-use starknet::{
-    ClassHash, ContractAddress, SyscallResultTrait,
-    storage_access::{
-        StorageBaseAddress, storage_address_from_base, storage_base_address_from_felt252,
-    },
-    syscalls::deploy_syscall,
+use starknet::storage_access::{
+    StorageBaseAddress, storage_address_from_base, storage_base_address_from_felt252,
 };
+use starknet::syscalls::deploy_syscall;
+use starknet::{ClassHash, ContractAddress, SyscallResultTrait};
 
 #[starknet::interface]
 trait IAListHolder<TContractState> {
@@ -264,7 +262,7 @@ fn test_append_get_many() {
         let append_indexes = contract.do_append(mock_addr, index.into());
         assert_eq!(append_indexes, (index, index));
         index += 1;
-    };
+    }
 
     assert_eq!(contract.do_get_len(), (max, max));
 

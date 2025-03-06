@@ -40,7 +40,7 @@ fn queue_peek_front_test() {
     match queue.peek_front() {
         Option::Some(result) => { assert_eq!(*(result.unbox()), 1); },
         Option::None => { assert!(false, "should return value"); },
-    };
+    }
 
     let result_len = queue.len();
     assert_eq!(result_len, 3);
@@ -57,7 +57,7 @@ fn queue_dequeue_test() {
     match queue.dequeue() {
         Option::Some(result) => { assert_eq!(result, 1); },
         Option::None => { assert!(false, "should return a value"); },
-    };
+    }
 
     let result_len = queue.len();
     assert_eq!(result_len, 2);

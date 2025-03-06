@@ -1,4 +1,4 @@
-use alexandria_math::extended_euclidean_algorithm::{extended_euclidean_algorithm};
+use alexandria_math::extended_euclidean_algorithm::extended_euclidean_algorithm;
 use core::num::traits::WrappingSub;
 
 // Define a test case function to avoid code duplication.

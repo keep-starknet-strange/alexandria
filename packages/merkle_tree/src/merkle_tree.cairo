@@ -117,7 +117,7 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
                 } else {
                     self.hasher.hash(*proof_element, current_node)
                 }
-        };
+        }
         current_node
     }
 
@@ -142,7 +142,7 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
                 } else {
                     self.hasher.hash(*proof_element, leaf)
                 };
-        };
+        }
         leaf == root
     }
 
@@ -212,6 +212,6 @@ fn get_next_level<T, +HasherTrait<T>, +Drop<T>>(
             hasher.hash(right, *left)
         };
         next_level.append(node);
-    };
+    }
     next_level
 }
