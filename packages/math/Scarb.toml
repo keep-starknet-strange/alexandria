@@ -1,6 +1,6 @@
 [package]
 name = "alexandria_math"
-version = "0.2.1"
+version.workspace = true
 description = "A set of math libraries and algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/math"
 edition = "2023_11"
