@@ -4,6 +4,7 @@ version.workspace = true
 description = "Starknet storage utilities"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/storage"
 edition = "2023_11"
+cairo-version = "2.11.1"
 
 [tool]
 fmt.workspace = true

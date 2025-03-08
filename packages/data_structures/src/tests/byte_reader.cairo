@@ -1,4 +1,4 @@
-use alexandria_data_structures::byte_reader::ByteReader;
+use alexandria_data_structures::byte_reader::{ByteReader, ByteReaderState};
 use core::integer::u512;
 
 #[test]
@@ -440,9 +440,9 @@ fn test_read_sequence_le_arr() {
 #[test]
 #[available_gas(10000000)]
 fn test_clone_byte_array_reader() {
-    let ba = test_byte_array_64();
+    let ba: ByteArray = test_byte_array_64();
     let mut rd1 = ba.reader();
-    let mut rd2 = rd1.clone();
+    let mut rd2:ByteReaderState<ByteArray> = rd1.clone();
     let a = rd1.read_u128().unwrap();
     assert!(rd1.len() != rd2.len(), "indices equal");
     let b = rd2.read_u128().unwrap();
@@ -453,7 +453,7 @@ fn test_clone_byte_array_reader() {
 #[test]
 #[available_gas(10000000)]
 fn test_clone_array_of_bytes_reader() {
-    let ba = test_array_64();
+    let ba: Array<u8> = test_array_64();
     let mut rd1 = ba.reader();
     let mut rd2 = rd1.clone();
     let a = rd1.read_u128().unwrap();
