@@ -130,7 +130,7 @@ fn inner_write_bytes(
         ) {
             Result::Ok(_) => {},
             Result::Err(err) => { break Result::Err(err); },
-        };
+        }
 
         match index_in_chunk.checked_add(1) {
             Option::Some(x) => { index_in_chunk = x; },

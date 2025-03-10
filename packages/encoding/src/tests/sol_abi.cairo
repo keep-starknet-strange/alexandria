@@ -1,9 +1,9 @@
 use alexandria_bytes::utils::{BytesDebug, BytesDisplay};
 use alexandria_bytes::{Bytes, BytesTrait};
-use alexandria_encoding::sol_abi::{
-    decode::SolAbiDecodeTrait, encode::SolAbiEncodeSelectorTrait, encode::SolAbiEncodeTrait,
-    encode_as::SolAbiEncodeAsTrait, sol_bytes::SolBytesTrait,
-};
+use alexandria_encoding::sol_abi::decode::SolAbiDecodeTrait;
+use alexandria_encoding::sol_abi::encode::{SolAbiEncodeSelectorTrait, SolAbiEncodeTrait};
+use alexandria_encoding::sol_abi::encode_as::SolAbiEncodeAsTrait;
+use alexandria_encoding::sol_abi::sol_bytes::SolBytesTrait;
 use core::bytes_31;
 use core::to_byte_array::FormatAsByteArray;
 use starknet::{ContractAddress, EthAddress};
@@ -21,7 +21,7 @@ fn compare_bytes(actual: @Bytes, expected: @Bytes) -> bool {
             break;
         }
         i += 1;
-    };
+    }
     if i < actual.size() {
         return false;
     }

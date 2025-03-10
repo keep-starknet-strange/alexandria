@@ -58,7 +58,7 @@ impl ArrayImpl<T, +Clone<T>, +Drop<T>> of ArrayTraitExt<T> {
                 },
                 Option::None => { break; },
             };
-        };
+        }
 
         res
     }

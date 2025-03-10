@@ -22,6 +22,6 @@ pub fn sequence(mut number: u128) -> Array<u128> {
         } else {
             number = 3 * number + 1;
         };
-    };
+    }
     arr
 }

@@ -1,5 +1,4 @@
-use core::num::traits::Bounded;
-use core::num::traits::OverflowingAdd;
+use core::num::traits::{Bounded, OverflowingAdd};
 
 fn ch(x: u32, y: u32, z: u32) -> u32 {
     (x & y) ^ ((x ^ Bounded::<u32>::MAX.into()) & z)
@@ -58,7 +57,7 @@ pub fn sha256(mut data: Array<u8>) -> Array<u8> {
     // add padding
     while ((64 * ((data.len() - 1) / 64 + 1)) - 8 != data.len()) {
         data.append(0);
-    };
+    }
 
     // add length to the end
     let mut res = (data_len & 0xff00000000000000) / 0x100000000000000;
@@ -95,7 +94,7 @@ fn from_u32Array_to_u8Array(mut data: Span<u32>) -> Array<u8> {
         result.append(res.try_into().unwrap());
         res = *val & 0xff;
         result.append(res.try_into().unwrap());
-    };
+    }
     result
 }
 
@@ -161,7 +160,7 @@ fn create_message_schedule(data: Span<u32>, i: usize) -> Span<u32> {
     while (j < 16) {
         result.append(*data[i * 16 + j]);
         j += 1;
-    };
+    }
     let mut i = 16;
     while (i < 64) {
         let s0 = ssig0(*result[i - 15]);
@@ -172,7 +171,7 @@ fn create_message_schedule(data: Span<u32>, i: usize) -> Span<u32> {
         let (res, _) = tmp.overflowing_add(s1);
         result.append(res);
         i += 1;
-    };
+    }
     result.span()
 }
 
@@ -187,7 +186,7 @@ fn from_u8Array_to_u32Array(mut data: Span<u8>) -> Array<u32> {
         value = value + (*val3).into() * 0x100;
         value = value + (*val4).into();
         result.append(value);
-    };
+    }
     result
 }
 

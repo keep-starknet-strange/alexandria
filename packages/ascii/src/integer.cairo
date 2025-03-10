@@ -44,7 +44,7 @@ impl ToAsciiArrayTraitImpl<
             );
             new_arr.append(remainder.into() + 48);
             num = quotient;
-        };
+        }
         new_arr
     }
 }
@@ -75,7 +75,7 @@ impl SmallIntegerToAsciiTraitImpl<
                 Option::Some(val) => { ascii = ascii * 256 + *val; },
                 Option::None(_) => { break; },
             };
-        };
+        }
 
         ascii
     }
@@ -126,9 +126,9 @@ impl BigIntegerToAsciiTraitImpl<
                     }
                     break;
                 },
-            };
+            }
             index += 1;
-        };
+        }
         data
     }
 }
@@ -158,7 +158,7 @@ impl U256ToAsciiArrayTraitImpl of ToAsciiArrayTrait<u256> {
             );
             new_arr.append(remainder.try_into().expect('number overflow felt252') + 48);
             num = quotient;
-        };
+        }
         new_arr
     }
 }
@@ -187,7 +187,7 @@ impl U256ToAsciiTraitImpl of ToAsciiTrait<u256, Array<felt252>> {
                 new_ascii
             };
             index += 1;
-        };
+        }
 
         if ascii.is_non_zero() {
             data.append(ascii);

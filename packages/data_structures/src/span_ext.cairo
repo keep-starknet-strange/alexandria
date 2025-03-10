@@ -88,7 +88,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
 
         while let Option::Some(v) = self.pop_back() {
             res.append(v.clone());
-        };
+        }
 
         res
     }
@@ -125,7 +125,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
             if v == item {
                 count += 1;
             }
-        };
+        }
         count
     }
 
@@ -139,7 +139,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
             if item < min {
                 min = item
             }
-        };
+        }
 
         Option::Some(min.clone())
     }
@@ -157,7 +157,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
                 min = item;
             }
             index += 1;
-        };
+        }
 
         Option::Some(min_position)
     }
@@ -172,7 +172,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
             if item > max {
                 max = item
             }
-        };
+        }
 
         Option::Some(max.clone())
     }
@@ -191,7 +191,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
                 max = item
             }
             index += 1;
-        };
+        }
 
         Option::Some(max_position)
     }
@@ -210,7 +210,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
                 last_value = v;
                 ret.append(v.clone());
             }
-        };
+        }
 
         ret
     }
@@ -222,7 +222,7 @@ impl SpanImpl<T, +Clone<T>, +Drop<T>> of SpanTraitExt<T> {
             if !ret.span().contains(v) {
                 ret.append(v.clone());
             }
-        };
+        }
 
         ret
     }

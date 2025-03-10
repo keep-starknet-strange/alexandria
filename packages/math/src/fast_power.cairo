@@ -38,7 +38,7 @@ pub fn fast_power<
             break;
         }
         base *= base;
-    };
+    }
 
     result.try_into().expect('too large to fit output type')
 }
@@ -86,7 +86,7 @@ pub fn fast_power_mod<
             break;
         }
         base = (base * base) % modulus;
-    };
+    }
 
     result.try_into().expect('too large to fit output type')
 }

@@ -27,7 +27,7 @@ pub fn kron<T, +Mul<T>, +Copy<T>, +Drop<T>>(
         for y_value in ys_clone {
             array.append(*x_value * *y_value);
         }
-    };
+    }
 
     Result::Ok(array)
 }
