@@ -1,10 +1,10 @@
 use super::span_ext::SpanTraitExt;
 
-pub trait ArrayTraitExt<T> {
+pub trait ArrayTraitExt<T, +Clone<T>, +Drop<T>> {
     /// Moves all the elements of `other` into `self`, leaving `other` empty.
     fn append_all(ref self: Array<T>, ref other: Array<T>);
     /// Clones and appends all the elements of `other` into `self`.
-    fn extend_from_span<+Drop<T>>(ref self: Array<T>, other: Span<T>);
+    fn extend_from_span(ref self: Array<T>, other: Span<T>);
     /// Removes up to `n` elements from the front of `self` and returns them in a new array.
     fn pop_front_n(ref self: Array<T>, n: usize) -> Array<T>;
     /// Removes up to `n` elements from the front of `self`.
@@ -20,13 +20,13 @@ pub trait ArrayTraitExt<T> {
     /// Returns the number of elements in the array with the given value.
     fn occurrences<+PartialEq<T>>(self: @Array<T>, item: @T) -> usize;
     /// Returns the minimum element of an array.
-    fn min<+PartialOrd<T>>(self: @Array<T>) -> Option<T>;
+    fn min<+PartialOrd<@T>>(self: @Array<T>) -> Option<T>;
     /// Returns the position of the minimum element of an array.
-    fn min_position<+PartialOrd<T>>(self: @Array<T>) -> Option<usize>;
+    fn min_position<+PartialOrd<@T>>(self: @Array<T>) -> Option<usize>;
     /// Returns the maximum element of an array.
-    fn max<+PartialOrd<T>>(self: @Array<T>) -> Option<T>;
+    fn max<+PartialOrd<@T>>(self: @Array<T>) -> Option<T>;
     /// Returns the position of the maximum element of an array.
-    fn max_position<+PartialOrd<T>>(self: @Array<T>) -> Option<usize>;
+    fn max_position<+PartialOrd<@T>>(self: @Array<T>) -> Option<usize>;
     /// Returns a new array, cloned from `self` but removes consecutive repeated elements.
     /// If the array is sorted, this removes all duplicates.
     fn dedup<+PartialEq<T>>(self: @Array<T>) -> Array<T>;
@@ -41,7 +41,7 @@ impl ArrayImpl<T, +Clone<T>, +Drop<T>> of ArrayTraitExt<T> {
         }
     }
 
-    fn extend_from_span<+Destruct<T>>(ref self: Array<T>, mut other: Span<T>) {
+    fn extend_from_span(ref self: Array<T>, mut other: Span<T>) {
         while let Option::Some(elem) = other.pop_front() {
             self.append(elem.clone());
         }
@@ -58,7 +58,7 @@ impl ArrayImpl<T, +Clone<T>, +Drop<T>> of ArrayTraitExt<T> {
                 },
                 Option::None => { break; },
             };
-        };
+        }
 
         res
     }

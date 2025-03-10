@@ -28,7 +28,7 @@ pub impl BytesDebug of Debug<Bytes> {
                 break;
             }
             i = new_i;
-        };
+        }
         res
     }
 }
@@ -46,7 +46,7 @@ pub impl BytesDisplay of Display<Bytes> {
                 break;
             }
             i = new_i;
-        };
+        }
         res
     }
 }
@@ -61,7 +61,7 @@ pub fn keccak_u128s_be(input: Span<u128>, n_bytes: usize) -> u256 {
         let value_size = core::cmp::min(size, 16);
         keccak_add_uint128_be(ref keccak_input, *v, value_size);
         size -= value_size;
-    };
+    }
 
     let aligned = n_bytes % 8 == 0;
     if aligned {
@@ -80,7 +80,7 @@ fn u256_reverse_endian(input: u256) -> u256 {
     u256 { low, high }
 }
 
-fn keccak_add_uint128_be(ref keccak_input: Array::<u64>, value: u128, value_size: usize) {
+fn keccak_add_uint128_be(ref keccak_input: Array<u64>, value: u128, value_size: usize) {
     if value_size == 16 {
         let (high, low) = core::integer::u128_safe_divmod(
             u128_byte_reverse(value), 0x10000000000000000_u128.try_into().unwrap(),
@@ -114,7 +114,7 @@ fn update_u256_array_at(arr: @Array<u256>, index: usize, value: u256) -> Array<u
             new_arr.append(*arr[i]);
         }
         i += 1;
-    };
+    }
     new_arr
 }
 
@@ -129,12 +129,12 @@ pub fn u8_array_to_u256(arr: Span<u8>) -> u256 {
     while i < arr.len() && i != 16 {
         high = u128_join(high, (*arr[i]).into(), 1);
         i += 1;
-    };
+    }
     // process low
     while i < arr.len() && i != 32 {
         low = u128_join(low, (*arr[i]).into(), 1);
         i += 1;
-    };
+    }
 
     u256 { low, high }
 }
@@ -160,7 +160,7 @@ fn u64_array_slice(src: @Array<u64>, mut begin: usize, len: usize) -> Array<u64>
     while begin < end && begin < src.len() {
         slice.append(*src[begin]);
         begin += 1;
-    };
+    }
     slice
 }
 
@@ -176,7 +176,7 @@ pub fn u128_array_slice(src: @Array<u128>, mut begin: usize, len: usize) -> Arra
     while begin < end && begin < src.len() {
         slice.append(*src[begin]);
         begin += 1;
-    };
+    }
     slice
 }
 
@@ -186,7 +186,7 @@ fn array_slice<T, +Drop<T>, +Copy<T>>(src: @Array<T>, mut begin: usize, len: usi
     while begin < end && begin < src.len() {
         slice.append(*src[begin]);
         begin += 1;
-    };
+    }
     slice
 }
 

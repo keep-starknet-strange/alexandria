@@ -13,7 +13,7 @@ fn test_append_bit() {
         ba.append_bit(true);
         ba.append_bit(false);
         c -= 1;
-    };
+    }
     let val: bytes31 = 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
         .try_into()
         .unwrap();
@@ -252,7 +252,7 @@ fn test_stress_test() {
         ba.write_word_be(value, 248);
         ba.write_word_le(value, 248);
         index += 1;
-    };
+    }
     index = 0;
     while (index != limit) {
         let value = ba.read_word_be(248).unwrap();

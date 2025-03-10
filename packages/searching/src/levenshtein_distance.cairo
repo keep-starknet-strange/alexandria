@@ -23,7 +23,7 @@ pub fn levenshtein_distance(arr1: @ByteArray, arr2: @ByteArray) -> usize {
     while index != arr1_len + 1 {
         prev_distances.insert(index.into(), index);
         index += 1;
-    };
+    }
 
     // Initialize a variable to keep track of the current row
     let mut current_row: usize = 0;
@@ -57,10 +57,10 @@ pub fn levenshtein_distance(arr1: @ByteArray, arr2: @ByteArray) -> usize {
             prev_distances.insert((current_column + 1).into(), min_cost);
 
             current_column += 1
-        };
+        }
 
         current_row += 1;
-    };
+    }
 
     // Return the Levenshtein distance
     prev_distances.get(arr1_len.into())

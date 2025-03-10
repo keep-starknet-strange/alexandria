@@ -26,7 +26,7 @@ pub fn bm_search(text: @ByteArray, pattern: @ByteArray) -> Array<usize> {
         // Avoid 0 since felt252_dict initializes every entry to 0 by default
         char_dict.insert(current_char.into(), pattern_index + 1);
         pattern_index += 1;
-    };
+    }
 
     let mut shift: usize = 0; // Shift value for pattern matching
 
@@ -42,7 +42,7 @@ pub fn bm_search(text: @ByteArray, pattern: @ByteArray) -> Array<usize> {
                 break;
             }
             pattern_index -= 1;
-        };
+        }
 
         // If the pattern is found at the current shift position
         if pattern_index == 0 {
@@ -75,7 +75,7 @@ pub fn bm_search(text: @ByteArray, pattern: @ByteArray) -> Array<usize> {
                 shift += pattern_index - index;
             }
         }
-    };
+    }
 
     positions // Return the array of positions
 }

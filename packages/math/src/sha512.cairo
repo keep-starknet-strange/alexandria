@@ -1,5 +1,4 @@
-use core::num::traits::Bounded;
-use core::num::traits::WrappingAdd;
+use core::num::traits::{Bounded, WrappingAdd};
 use core::traits::{BitAnd, BitOr, BitXor};
 
 // Variable naming is compliant to RFC-6234 (https://datatracker.ietf.org/doc/html/rfc6234)
@@ -199,7 +198,7 @@ pub fn fpow(mut base: u128, mut power: u128) -> u128 {
         }
         base = base * base;
         power = q;
-    };
+    }
 
     result
 }
@@ -221,7 +220,7 @@ pub fn two_pow<T, +DivRem<T>, +Mul<T>, +Into<u64, T>, +Drop<T>>(mut power: u64) 
         }
         i = i + 1;
         power = q;
-    };
+    }
 
     result
 }
@@ -292,7 +291,7 @@ fn from_u8Array_to_WordArray(data: Array<u8>) -> Array<Word64> {
             + math_shl_precomputed((*data[i + 7]).into(), TWO_POW_0);
         new_arr.append(Word64 { data: new_word });
         i += 8;
-    };
+    }
     new_arr
 }
 
@@ -319,7 +318,7 @@ fn from_WordArray_to_u8array(data: Span<Word64>) -> Array<u8> {
         res = math_shr_precomputed((*data.at(i).data).into(), TWO_POW_0) & MAX_U8;
         arr.append(res.try_into().unwrap());
         i += 1;
-    };
+    }
     arr
 }
 
@@ -353,7 +352,7 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
                 W.append(buf);
             }
             t += 1;
-        };
+        }
 
         let mut a = h_0;
         let mut b = h_1;
@@ -378,7 +377,7 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
             a = T1 + T2;
 
             t += 1;
-        };
+        }
 
         h_0 = a + h_0;
         h_1 = b + h_1;
@@ -390,7 +389,7 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
         h_7 = h + h_7;
 
         i += 1;
-    };
+    }
 
     array![h_0, h_1, h_2, h_3, h_4, h_5, h_6, h_7]
 }

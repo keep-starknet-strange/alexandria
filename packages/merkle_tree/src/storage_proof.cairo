@@ -144,7 +144,7 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
                             path += path_length_pow2;
                         } else {
                             assert(expected_hash == *binary_node.left, 'invalid node hash');
-                        };
+                        }
                         path_length_pow2 *= 2;
                     },
                     TrieNode::Edge(edge_node) => {
@@ -157,7 +157,7 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
             },
             Option::None => { break; },
         };
-    };
+    }
     assert(expected_path == path, 'invalid proof path');
     (expected_hash, value)
 }
