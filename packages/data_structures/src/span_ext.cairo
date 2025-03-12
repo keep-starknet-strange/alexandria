@@ -3,7 +3,7 @@ use core::cmp::min;
 use core::num::traits::CheckedSub;
 use super::array_ext::ArrayTraitExt;
 
-pub trait SpanTraitExt<T> {
+pub trait SpanTraitExt<T, +Clone<T>, +Drop<T>> {
     /// Removes up to `n` elements from the front of `self` and returns them in a new span.
     fn pop_front_n(ref self: Span<T>, n: usize) -> Span<T>;
     /// Removes up to `n` elements from the back of `self` and returns them in a new span.
