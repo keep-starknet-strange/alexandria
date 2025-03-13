@@ -19,6 +19,6 @@ pub fn diff<T, +PartialOrd<T>, +Sub<T>, +Copy<T>, +Drop<T>, +Zero<T>>(
         assert(*current_value >= prev_value, 'Sequence must be sorted');
         array.append(*current_value - prev_value);
         prev_value = *current_value;
-    };
+    }
     array
 }

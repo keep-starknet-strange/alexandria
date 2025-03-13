@@ -1,10 +1,10 @@
 use super::span_ext::SpanTraitExt;
 
-pub trait ArrayTraitExt<T> {
+pub trait ArrayTraitExt<T, +Clone<T>, +Drop<T>> {
     /// Moves all the elements of `other` into `self`, leaving `other` empty.
     fn append_all(ref self: Array<T>, ref other: Array<T>);
     /// Clones and appends all the elements of `other` into `self`.
-    fn extend_from_span<+Destruct<T>>(ref self: Array<T>, other: Span<T>);
+    fn extend_from_span(ref self: Array<T>, other: Span<T>);
     /// Removes up to `n` elements from the front of `self` and returns them in a new array.
     fn pop_front_n(ref self: Array<T>, n: usize) -> Array<T>;
     /// Removes up to `n` elements from the front of `self`.
@@ -41,7 +41,7 @@ impl ArrayImpl<T, +Clone<T>, +Drop<T>> of ArrayTraitExt<T> {
         }
     }
 
-    fn extend_from_span<+Destruct<T>>(ref self: Array<T>, mut other: Span<T>) {
+    fn extend_from_span(ref self: Array<T>, mut other: Span<T>) {
         while let Option::Some(elem) = other.pop_front() {
             self.append(elem.clone());
         }
@@ -58,7 +58,7 @@ impl ArrayImpl<T, +Clone<T>, +Drop<T>> of ArrayTraitExt<T> {
                 },
                 Option::None => { break; },
             };
-        };
+        }
 
         res
     }
@@ -116,4 +116,3 @@ impl ArrayImpl<T, +Clone<T>, +Drop<T>> of ArrayTraitExt<T> {
         self.span().unique()
     }
 }
-

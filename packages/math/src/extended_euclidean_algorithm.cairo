@@ -24,7 +24,7 @@ pub fn extended_euclidean_algorithm(a: u128, b: u128) -> (u128, u128, u128) {
         update_step(ref rem, ref old_r, quotient);
         update_step(ref coeff_s, ref old_s, quotient);
         update_step(ref coeff_t, ref old_t, quotient);
-    };
+    }
     (old_r, old_s, old_t)
 }
 

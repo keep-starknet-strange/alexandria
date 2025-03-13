@@ -22,7 +22,7 @@ pub fn norm<T, +Into<T, u128>, +Zero<T>, +Copy<T>, +Drop<T>>(
         } else {
             norm += pow((*x_value).into(), ord);
         };
-    };
+    }
 
     if ord == 0 {
         return norm;

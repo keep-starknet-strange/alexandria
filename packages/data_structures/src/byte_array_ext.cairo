@@ -10,7 +10,7 @@ pub impl SpanU8IntoBytearray of Into<Span<u8>, ByteArray> {
                 Option::Some(byte) => result.append_byte(byte),
                 Option::None => { break; },
             }
-        };
+        }
         result
     }
 }
@@ -27,7 +27,7 @@ pub impl ByteArrayIntoArrayU8 of Into<ByteArray, Array<u8>> {
         let mut result = array![];
         while let Option::Some(byte) = reader.read_u8() {
             result.append(byte);
-        };
+        }
         result
     }
 }

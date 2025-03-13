@@ -16,6 +16,6 @@ pub fn cumprod<T, +Mul<T>, +Copy<T>, +Drop<T>>(mut sequence: Span<T>) -> Array<T
         let prod = *current_value * prev_value;
         array.append(prod);
         prev_value = prod;
-    };
+    }
     array
 }

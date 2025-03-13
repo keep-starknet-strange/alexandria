@@ -134,7 +134,7 @@ pub trait BytesTrait {
 
 impl BytesImpl of BytesTrait {
     #[inline(always)]
-    fn new(size: usize, data: Array::<u128>) -> Bytes {
+    fn new(size: usize, data: Array<u128>) -> Bytes {
         Bytes { size, data }
     }
 
@@ -156,7 +156,7 @@ impl BytesImpl of BytesTrait {
         while data_len != 0 {
             data.append(0_u128);
             data_len -= 1;
-        };
+        }
 
         Bytes { size, data }
     }
@@ -254,7 +254,7 @@ impl BytesImpl of BytesTrait {
             array.append(value);
             offset = new_offset;
             i -= 1;
-        };
+        }
         (offset, array)
     }
 
@@ -341,7 +341,7 @@ impl BytesImpl of BytesTrait {
             array.append(value);
             offset = new_offset;
             i -= 1;
-        };
+        }
         (offset, array)
     }
 
@@ -364,7 +364,7 @@ impl BytesImpl of BytesTrait {
             array.append(value);
             offset = new_offset;
             sub_bytes_full_array_len -= 1;
-        };
+        }
 
         // process last array element for sub_bytes
         // 1. read last element real value;
@@ -524,7 +524,7 @@ impl BytesImpl of BytesTrait {
             self.append_u128(value);
             offset = new_offset;
             sub_bytes_full_array_len -= 1;
-        };
+        }
 
         // process last array element for right
         let sub_bytes_last_element_size = *other.size % BYTES_PER_ELEMENT;
@@ -560,7 +560,7 @@ impl BytesImpl of BytesTrait {
             hash_data_byte_array.append_byte(hash_data_item);
             offset = new_offset;
             i += 1;
-        };
+        }
 
         let output = sha256::compute_sha256_byte_array(@hash_data_byte_array);
         u32s_to_u256(output.span())
@@ -574,7 +574,7 @@ pub impl ByteArrayIntoBytes of Into<ByteArray, Bytes> {
         while len < self.len() {
             res.append_u8(self[len]);
             len += 1;
-        };
+        }
         res
     }
 }
@@ -593,7 +593,7 @@ pub impl BytesIntoByteArray of Into<Bytes, ByteArray> {
                 res.append_byte(value);
                 offset = new_offset;
             }
-        };
+        }
         res
     }
 }

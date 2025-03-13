@@ -70,7 +70,7 @@ impl GraphImpl of GraphTrait {
         if !is_null {
             for current_value in span {
                 nodes.append(*current_value);
-            };
+            }
             nodes.append(node);
         }
         // add node
@@ -105,7 +105,7 @@ pub fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Di
         let current_node = *nodes.at(index);
         dist.insert(current_node.dest.into(), 255_u128);
         index += 1;
-    };
+    }
 
     // distance from itself is 0
     dist.insert(source.into(), 0);
@@ -150,14 +150,14 @@ pub fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Di
                     priority_queue.append(Node { source, dest: adj_node.dest, weight });
                 }
                 index += 1;
-            };
+            }
 
             visited_node.append(current_node.source);
         } else {
             no_more_adj_node = false;
             visited += 1;
         };
-    };
+    }
     dist
 }
 

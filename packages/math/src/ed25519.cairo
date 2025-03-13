@@ -1,6 +1,6 @@
 use alexandria_math::mod_arithmetics::{div_mod, mult_mod, pow_mod, sqr_mod};
 use alexandria_math::sha512::{SHA512_LEN, sha512};
-use alexandria_math::u512_arithmetics::{u512_sub};
+use alexandria_math::u512_arithmetics::u512_sub;
 use core::integer::{u512, u512_safe_div_rem_by_u256};
 use core::math::u256_inv_mod;
 use core::num::traits::WideMul;
@@ -213,7 +213,7 @@ impl U256IntoSpanU8 of Into<u256, Span<u8>> {
             ret.append(byte.try_into().unwrap());
             remaining_value = temp_remaining;
             i += 1;
-        };
+        }
 
         ret.span()
     }
@@ -315,7 +315,7 @@ pub fn point_mult_double_and_add(mut scalar: u256, mut P: Point, prime_nz: NonZe
         }
         P = P.double(prime_nz);
         scalar = q;
-    };
+    }
     Q
 }
 
@@ -400,7 +400,7 @@ fn reverse(mut span: Span<u8>) -> Span<u8> {
     let mut res = array![];
     while let Option::Some(v) = span.pop_back() {
         res.append(v.clone());
-    };
+    }
     res.span()
 }
 
@@ -413,7 +413,7 @@ fn dedup(mut span: Span<u8>) -> Array<u8> {
             last_value = v;
             ret.append(v.clone());
         }
-    };
+    }
 
     ret
 }

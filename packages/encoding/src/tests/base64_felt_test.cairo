@@ -11,10 +11,10 @@ fn bytes_be(val: felt252) -> Array<u8> {
         let (quotient, remainder) = DivRem::div_rem(num, 256_u256.try_into().unwrap());
         result.append(remainder.try_into().unwrap());
         num = quotient;
-    };
+    }
     while (result.len() < 32) {
         result.append(0);
-    };
+    }
     result = result.reversed();
     result
 }

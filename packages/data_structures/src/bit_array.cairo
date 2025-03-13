@@ -308,7 +308,7 @@ impl BitArrayImpl of BitArrayTrait {
             } else {
                 bit_offset += 1;
             }
-        };
+        }
         result
     }
 

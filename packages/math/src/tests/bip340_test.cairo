@@ -1,4 +1,4 @@
-use alexandria_math::bip340::{verify};
+use alexandria_math::bip340::verify;
 use core::byte_array::ByteArrayTrait;
 
 impl U256IntoByteArray of Into<u256, ByteArray> {

@@ -326,6 +326,6 @@ pub fn reversing_partial_result<
         onto *= step.into();
         onto += remainder;
         i += 1;
-    };
+    }
     (onto, word)
 }

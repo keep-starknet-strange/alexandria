@@ -12,7 +12,7 @@ pub fn gcd(mut n: Span<u128>) -> u128 {
     let mut a = *n.pop_front().unwrap();
     for b in n {
         a = gcd_two_numbers(a, *b);
-    };
+    }
     a
 }
 
@@ -27,6 +27,6 @@ pub fn gcd_two_numbers(mut a: u128, mut b: u128) -> u128 {
         let r = a % b;
         a = b;
         b = r;
-    };
+    }
     a
 }
