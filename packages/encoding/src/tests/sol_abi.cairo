@@ -154,7 +154,7 @@ fn encode_packed_test() {
 
 #[test]
 fn encoded_as_test() {
-    let expected: Bytes = BytesTrait::new(
+    let mut expected: Bytes = BytesTrait::new(
         29, array![0x10111200000000000000000000000000, 0x0000000000aabbcc0000a0b1c2000000],
     );
     let mut encoded: Bytes = BytesTrait::new_empty();
@@ -163,7 +163,13 @@ fn encoded_as_test() {
         .encode_as(21, 0xaabbcc_felt252)
         .encode_as(5, 0xa0b1c2_u256);
     assert_eq!(@encoded, @expected);
+}
 
+#[test]
+fn encoded_as_test_second() {
+    let mut expected: Bytes = BytesTrait::new(
+        29, array![0x10111200000000000000000000000000, 0x0000000000aabbcc0000a0b1c2000000],
+    );
     let sba: ByteArray = SolBytesTrait::bytes10(0x0000a0b1c2c3c4c5c6c8).into();
     let bytes_31: bytes31 = 0xaabbcc.try_into().unwrap();
     let mut encoded: Bytes = BytesTrait::new_empty();
