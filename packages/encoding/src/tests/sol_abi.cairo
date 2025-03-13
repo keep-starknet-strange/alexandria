@@ -163,6 +163,7 @@ fn encoded_as_test() {
         .encode_as(21, 0xaabbcc_felt252)
         .encode_as(5, 0xa0b1c2_u256);
     assert_eq!(@encoded, @expected);
+}
 
 #[test]
 fn encoded_as_test_second() {

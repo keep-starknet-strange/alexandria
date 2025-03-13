@@ -442,7 +442,7 @@ fn test_read_sequence_le_arr() {
 fn test_clone_byte_array_reader() {
     let ba: ByteArray = test_byte_array_64();
     let mut rd1 = ba.reader();
-    let mut rd2:ByteReaderState<ByteArray> = rd1.clone();
+    let mut rd2: ByteReaderState<ByteArray> = rd1.clone();
     let a = rd1.read_u128().unwrap();
     assert!(rd1.len() != rd2.len(), "indices equal");
     let b = rd2.read_u128().unwrap();
