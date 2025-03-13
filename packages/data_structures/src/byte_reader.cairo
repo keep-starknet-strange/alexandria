@@ -2,7 +2,7 @@ use core::integer::u512;
 use core::ops::index::IndexView;
 use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 
-#[derive(Copy, Clone, Drop)]
+#[derive(Clone, Drop)]
 pub struct ByteReaderState<T> {
     pub(crate) data: @T,
     index: usize,

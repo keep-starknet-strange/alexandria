@@ -23,7 +23,7 @@ impl U64Impl of U64Trait {
                 Option::None => { break; },
             };
             value = value * 0x100 + (byte.into());
-        };
+        }
         (value, n_bytes)
     }
 }
@@ -57,7 +57,7 @@ pub fn keccak256(mut self: Span<u8>) -> u256 {
         let (value, _) = U64Trait::from_le_bytes(current_word);
         words64.append(value);
         self = self.slice(8, self.len() - 8);
-    };
+    }
     // handle last word specifically
     let (last_word, last_word_bytes) = U64Trait::from_le_bytes(self);
     reverse_endianness(cairo_keccak(ref words64, last_word, last_word_bytes))

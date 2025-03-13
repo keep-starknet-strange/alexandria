@@ -146,7 +146,7 @@ pub fn pow_mod(mut base: u256, mut pow: u256, mod_non_zero: NonZero<u256>) -> u2
         }
         pow = q;
         base = sqr_mod(base, mod_non_zero);
-    };
+    }
 
     result
 }

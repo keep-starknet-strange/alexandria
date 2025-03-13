@@ -1,6 +1,4 @@
-use alexandria_math::fast_root::fast_cbrt;
-use alexandria_math::fast_root::fast_nr_optimize;
-use alexandria_math::fast_root::fast_sqrt;
+use alexandria_math::fast_root::{fast_cbrt, fast_nr_optimize, fast_sqrt};
 
 #[test]
 #[available_gas(5000000)]

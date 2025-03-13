@@ -36,18 +36,18 @@ fn quick_sort_range<T, +Copy<T>, +Drop<T>, +PartialOrd<T>, +Felt252DictValue<T>>
     while l < r {
         while (l < r) && (array[r] >= array[left]) {
             r -= 1;
-        };
+        }
 
         while (l < r) && (array[l] <= array[left]) {
             l += 1;
-        };
+        }
 
         if left != right {
             let tmp = array[l];
             array.set(l, array[r]);
             array.set(r, tmp);
         }
-    };
+    }
 
     let tmp = array[left];
     array.set(left, array[l]);

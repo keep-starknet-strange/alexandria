@@ -1,13 +1,12 @@
 // Internal imports
-use alexandria_merkle_tree::merkle_tree::{
-    Hasher, MerkleTree, MerkleTreeImpl, pedersen::PedersenHasherImpl, poseidon::PoseidonHasherImpl,
-};
+use alexandria_merkle_tree::merkle_tree::pedersen::PedersenHasherImpl;
+use alexandria_merkle_tree::merkle_tree::poseidon::PoseidonHasherImpl;
+use alexandria_merkle_tree::merkle_tree::{Hasher, MerkleTree, MerkleTreeImpl};
 
 mod regular_call_merkle_tree_pedersen {
     // Internal imports
-    use alexandria_merkle_tree::merkle_tree::{
-        Hasher, MerkleTree, MerkleTreeTrait, pedersen::PedersenHasherImpl,
-    };
+    use alexandria_merkle_tree::merkle_tree::pedersen::PedersenHasherImpl;
+    use alexandria_merkle_tree::merkle_tree::{Hasher, MerkleTree, MerkleTreeTrait};
     #[test]
     #[available_gas(2000000)]
     fn regular_call_merkle_tree_pedersen_test() {

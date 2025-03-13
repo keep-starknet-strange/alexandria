@@ -163,7 +163,7 @@ pub impl Bitmap<
     /// * The index of the nearest left significant bit, None is returned if no significant bit is
     /// found.
     #[inline(always)]
-    fn nearest_left_significant_bit(x: T, i: u8) -> Option::<u8> {
+    fn nearest_left_significant_bit(x: T, i: u8) -> Option<u8> {
         let mask = ~(pow(2_u8.into(), i.into()) - 1_u8.into());
         Self::least_significant_bit(x & mask)
     }
@@ -176,7 +176,7 @@ pub impl Bitmap<
     /// * The index of the nearest right significant bit, None is returned if no significant bit is
     /// found.
     #[inline(always)]
-    fn nearest_right_significant_bit(x: T, i: u8) -> Option::<u8> {
+    fn nearest_right_significant_bit(x: T, i: u8) -> Option<u8> {
         let mask = pow(2_u8.into(), (i + 1).into()) - 1_u8.into();
         Self::most_significant_bit(x & mask)
     }
@@ -191,7 +191,7 @@ pub impl Bitmap<
     /// # Returns
     /// * The index of the nearest significant bit, None is returned if no significant bit is found.
     #[inline(always)]
-    fn nearest_significant_bit(x: T, i: u8, priority: bool) -> Option::<u8> {
+    fn nearest_significant_bit(x: T, i: u8, priority: bool) -> Option<u8> {
         let nlsb = Self::nearest_left_significant_bit(x, i);
         let nrsb = Self::nearest_right_significant_bit(x, i);
         match (nlsb, nrsb) {

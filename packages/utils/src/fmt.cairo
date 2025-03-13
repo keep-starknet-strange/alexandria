@@ -49,7 +49,7 @@ pub impl SpanTDebug<T, +Display<T>, +Copy<T>> of Debug<Span<T>> {
                 Option::Some(value) => {
                     if Display::fmt(value, ref f).is_err() {
                         break Result::Err(Error {});
-                    };
+                    }
                     if self.len() == 0 {
                         break Result::Ok(());
                     }

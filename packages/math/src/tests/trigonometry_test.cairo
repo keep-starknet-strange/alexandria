@@ -1,6 +1,4 @@
-use alexandria_math::trigonometry::fast_cos;
-use alexandria_math::trigonometry::fast_sin;
-use alexandria_math::trigonometry::fast_tan;
+use alexandria_math::trigonometry::{fast_cos, fast_sin, fast_tan};
 
 #[test]
 #[available_gas(200000)]

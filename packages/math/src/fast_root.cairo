@@ -25,7 +25,7 @@ pub fn fast_nr_optimize(x: u128, r: u128, iter: usize) -> u128 {
         let x_r_m1 = pow(x_optim, r - 1);
         x_optim = round_div(((r - 1) * x_optim + round_div(x, x_r_m1)), r);
         n_iter += 1;
-    };
+    }
 
     return x_optim;
 }
