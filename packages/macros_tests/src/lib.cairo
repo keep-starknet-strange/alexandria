@@ -1,8 +1,8 @@
 #[cfg(test)]
-mod test_pow;
+mod test_num_traits;
 
 #[cfg(test)]
-mod test_num_traits;
+mod test_pow;
 
 #[cfg(test)]
 mod test_zero_trait;
