@@ -41,13 +41,13 @@ jobs:
       - name: Clippy
         run: cargo clippy --all
 
-  #scarbfmt:
-  #  runs-on: ubuntu-latest
-  #  defaults:
-  #    run:
-  #      working-directory: packages/macros_tests
-  #  steps:
-  #    - uses: actions/checkout@v4
-  #    - uses: software-mansion/setup-scarb@v1
-  #    - name: Cairo format check
-  #      run: scarb fmt --check
+  scarbfmt:
+   runs-on: ubuntu-latest
+   defaults:
+     run:
+       working-directory: packages/macros_tests
+   steps:
+     - uses: actions/checkout@v4
+     - uses: software-mansion/setup-scarb@v1
+     - name: Cairo format check
+       run: scarb fmt --check
