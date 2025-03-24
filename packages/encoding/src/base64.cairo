@@ -1,6 +1,4 @@
 use alexandria_data_structures::array_ext::ArrayTraitExt;
-use alexandria_math::BitShift;
-use core::num::traits::Bounded;
 
 pub trait Encoder<T> {
     fn encode(data: T) -> Array<u8>;
@@ -142,72 +140,93 @@ pub impl Base64Decoder of Decoder<Array<u8>> {
 }
 
 pub impl Base64UrlDecoder of Decoder<Array<u8>> {
-    fn decode(mut data: Array<u8>) -> Array<u8> {
+    fn decode(data: Array<u8>) -> Array<u8> {
         inner_decode(data)
     }
 }
 
-
 fn inner_decode(data: Array<u8>) -> Array<u8> {
     let mut result = array![];
-    let mut p = 0_u8;
-    if data.len() > 0 {
-        if *data[data.len() - 1] == '=' {
-            p += 1;
-        }
-        if *data[data.len() - 2] == '=' {
-            p += 1;
-        }
-        decode_loop(p, data, 0, ref result);
+
+    // Early return for empty input
+    if data.len() == 0 {
+        return result;
     }
+
+    // Calculate padding
+    let mut p = 0_u8;
+    let data_len = data.len();
+
+    // Check for padding characters ('=')
+    if data_len > 0 && *data[data_len - 1] == '=' {
+        p += 1;
+
+        if data_len > 1 && *data[data_len - 2] == '=' {
+            p += 1;
+        }
+    }
+
+    // Process data in groups of 4 characters
+    let mut i = 0;
+    while i + 3 < data_len {
+        // Get values for the 4 characters
+        let v1: u32 = get_base64_value(*data[i]).into();
+        let v2: u32 = get_base64_value(*data[i + 1]).into();
+        let v3: u32 = get_base64_value(*data[i + 2]).into();
+        let v4: u32 = get_base64_value(*data[i + 3]).into();
+
+        // Combine the 4 6-bit values into a 24-bit number
+        let combined: u32 = (v1 * 262144) + (v2 * 4096) + (v3 * 64) + v4;
+
+        // Extract the 3 bytes
+        let b1: u8 = ((combined / 65536) & 0xFF).try_into().unwrap();
+        result.append(b1);
+
+        // Handle padding - don't add bytes if we're at the end with padding
+        if i + 4 >= data_len && p == 2 {
+            break;
+        }
+
+        let b2: u8 = ((combined / 256) & 0xFF).try_into().unwrap();
+        result.append(b2);
+
+        if i + 4 >= data_len && p == 1 {
+            break;
+        }
+
+        let b3: u8 = (combined & 0xFF).try_into().unwrap();
+        result.append(b3);
+
+        i += 4;
+    }
+
     result
 }
 
-fn decode_loop(p: u8, data: Array<u8>, d: usize, ref result: Array<u8>) {
-    if (d >= data.len()) {
-        return;
-    }
-    let x: u128 = BitShift::shl((get_base64_value(*data[d]).into()), 18)
-        | BitShift::shl((get_base64_value(*data[d + 1])).into(), 12)
-        | BitShift::shl((get_base64_value(*data[d + 2])).into(), 6)
-        | (get_base64_value(*data[d + 3])).into();
-
-    let mut i: u8 = (BitShift::shr(x, 16) & Bounded::<u8>::MAX.into()).try_into().unwrap();
-    result.append(i);
-    i = (BitShift::shr(x, 8) & Bounded::<u8>::MAX.into()).try_into().unwrap();
-    if d + 4 >= data.len() && p == 2 {
-        return;
-    }
-    result.append(i);
-
-    i = (x & Bounded::<u8>::MAX.into()).try_into().unwrap();
-    if d + 4 >= data.len() && p == 1 {
-        return;
-    }
-    result.append(i);
-    decode_loop(p, data, d + 4, ref result);
-}
-
 fn get_base64_value(x: u8) -> u8 {
-    if (x == '+') {
-        62
-    } else if (x == '-') {
-        62
-    } else if (x == '/') {
-        63
-    } else if (x <= '9') {
-        (x - '0') + 52
-    } else if (x == '=') {
-        0
-    } else if (x <= 'Z') {
-        (x - 'A') + 0
-    } else if (x == '_') {
-        63
-    } else if (x <= 'z') {
-        (x - 'a') + 26
-    } else {
-        0
+    // Fast lookup based on ASCII values
+    if x == '+' || x == '-' {
+        return 62;
     }
+
+    if x == '/' || x == '_' {
+        return 63;
+    }
+
+    if x >= 'A' && x <= 'Z' {
+        return x - 'A';
+    }
+
+    if x >= 'a' && x <= 'z' {
+        return (x - 'a') + 26;
+    }
+
+    if x >= '0' && x <= '9' {
+        return (x - '0') + 52;
+    }
+
+    // '=' padding character or any other character
+    return 0;
 }
 
 fn get_base64_char_set() -> Array<u8> {
