@@ -54,9 +54,7 @@ pub trait ByteArrayTraitExt {
         T, +Add<T>, +Mul<T>, +Zero<T>, +TryInto<felt252, T>, +Drop<T>, +Into<u8, T>,
     >(
         self: @ByteArray, offset: usize, size: usize,
-    ) -> (usize, T) {
-        read_uint::<T>(self, offset, size)
-    }
+    ) -> (usize, T);
 }
 
 
@@ -168,6 +166,7 @@ impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
     }
 
     /// Read an array of u128 values from ByteArray
+    #[inline(always)]
     fn read_u128_array_packed(
         self: @ByteArray, offset: usize, array_length: usize, element_size: usize,
     ) -> (usize, Array<u128>) {
@@ -189,6 +188,7 @@ impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
     }
 
     /// Read an array of u256 values from ByteArray
+    #[inline(always)]
     fn read_u256_array(
         self: @ByteArray, offset: usize, array_length: usize,
     ) -> (usize, Array<u256>) {
