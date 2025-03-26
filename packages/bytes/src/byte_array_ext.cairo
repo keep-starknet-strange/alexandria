@@ -2,18 +2,35 @@ use alexandria_math::{U128BitShift, U256BitShift};
 use core::num::traits::Zero;
 use starknet::ContractAddress;
 
+
+// - zero --> not needed
+// - locate --> can be implemented to reduce gas cost once ByteArray prop will become public
+// - data --> can be implemented ByteArray prop will become public
+// - append_u128_packed --> not needed because it's not anyore required to add padding 0
+// - concat --> use concat from standard impl
+
 /// Extension trait for reading and writing different data types to `ByteArray`
 pub trait ByteArrayTraitExt {
+    /// Create a ByteArray from an array of u128
+    fn new(size: usize, data: Array<u128>) -> ByteArray;
+    /// instantiate a new ByteArray
+    fn new_empty() -> ByteArray;
+    // get size. Same as len()
+    fn size(self: @ByteArray) -> usize;
+    /// Reads a 8-bit unsigned integer from the given offset.
+    fn read_u8(self: @ByteArray, offset: usize) -> (usize, u8);
     /// Reads a 16-bit unsigned integer from the given offset.
     fn read_u16(self: @ByteArray, offset: usize) -> (usize, u16);
     /// Reads a 32-bit unsigned integer from the given offset.
     fn read_u32(self: @ByteArray, offset: usize) -> (usize, u32);
-    /// Reads a `usize` (platform-dependent size) integer from the given offset.
+    /// Reads a `usize` from the given offset.
     fn read_usize(self: @ByteArray, offset: usize) -> (usize, usize);
     /// Reads a 64-bit unsigned integer from the given offset.
     fn read_u64(self: @ByteArray, offset: usize) -> (usize, u64);
     /// Reads a 128-bit unsigned integer from the given offset.
     fn read_u128(self: @ByteArray, offset: usize) -> (usize, u128);
+    /// Read value with size bytes from ByteArray, and packed into u128
+    fn read_u128_packed(self: @ByteArray, offset: usize, size: usize) -> (usize, u128);
     /// Reads a packed array of `u128` values from the given offset.
     fn read_u128_array_packed(
         self: @ByteArray, offset: usize, array_length: usize, element_size: usize,
@@ -26,16 +43,22 @@ pub trait ByteArrayTraitExt {
     ) -> (usize, Array<u256>);
     /// Reads a `felt252` (Starknet field element) from the given offset.
     fn read_felt252(self: @ByteArray, offset: usize) -> (usize, felt252);
+    /// Read value with size bytes from Bytes, and packed into felt252
+    fn read_felt252_packed(self: @ByteArray, offset: usize, size: usize) -> (usize, felt252);
     /// Reads a `bytes31` value (31-byte sequence) from the given offset.
     fn read_bytes31(self: @ByteArray, offset: usize) -> (usize, bytes31);
     /// Reads a Starknet contract address from the given offset.
     fn read_address(self: @ByteArray, offset: usize) -> (usize, ContractAddress);
     /// Reads a raw sequence of bytes of given `size` from the given offset.
     fn read_bytes(self: @ByteArray, offset: usize, size: usize) -> (usize, ByteArray);
+    /// Appends a 8-bit unsigned integer to the `ByteArray`.
+    fn append_u8(ref self: ByteArray, value: u8);
     /// Appends a 16-bit unsigned integer to the `ByteArray`.
     fn append_u16(ref self: ByteArray, value: u16);
     /// Appends a 32-bit unsigned integer to the `ByteArray`.
     fn append_u32(ref self: ByteArray, value: u32);
+    /// Appends usize to the `ByteArray`.
+    fn append_usize(ref self: ByteArray, value: usize);
     /// Appends a 64-bit unsigned integer to the `ByteArray`.
     fn append_u64(ref self: ByteArray, value: u64);
     /// Appends a 128-bit unsigned integer to the `ByteArray`.
@@ -59,6 +82,40 @@ pub trait ByteArrayTraitExt {
 
 
 impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
+    /// Create a ByteArray from an array of u128
+    #[inline(always)]
+    fn new(size: usize, mut data: Array<u128>) -> ByteArray {
+        if data.len() == 0 {
+            return Default::default();
+        }
+        let mut index = 0;
+        let mut ba: ByteArray = Default::default();
+        while index != data.len() {
+            ba.append_u128(*data[index]);
+            index += 1;
+        }
+        ba
+    }
+
+    /// instantiate a new ByteArray
+    #[inline(always)]
+    fn new_empty() -> ByteArray {
+        Default::default()
+    }
+
+    /// get size. Same as len()
+    #[inline(always)]
+    fn size(self: @ByteArray) -> usize {
+        self.len()
+    }
+
+    /// Read a u_ from ByteArray
+    #[inline(always)]
+    fn read_u8(self: @ByteArray, offset: usize) -> (usize, u8) {
+        assert(offset <= self.len(), 'out of bound');
+        (offset + 1, self.at(offset).unwrap())
+    }
+
     /// Read a u16 from ByteArray
     #[inline(always)]
     fn read_u16(self: @ByteArray, offset: usize) -> (usize, u16) {
@@ -89,13 +146,46 @@ impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
         read_uint::<u128>(self, offset, 16)
     }
 
+    /// Read value with size bytes from ByteArray, and packed into u128
+    /// Arguments:
+    ///  - offset: the offset in Bytes
+    ///  - size: the number of bytes to read
+    /// Returns:
+    ///  - new_offset: next value offset in Bytes
+    ///  - value: the value packed into u128
+    #[inline(always)]
+    fn read_u128_packed(self: @ByteArray, offset: usize, size: usize) -> (usize, u128) {
+        // check
+        assert(offset + size <= self.len(), 'out of bound');
+        assert(size <= 16, 'too large');
+
+        self.read_uint_within_size::<u128>(offset, size)
+    }
+
     /// Read a u256 from ByteArray
     #[inline(always)]
     fn read_u256(self: @ByteArray, offset: usize) -> (usize, u256) {
         read_uint::<u256>(self, offset, 32)
     }
 
-    /// Read a felt252 from ByteArray
+    /// Read value with size bytes from ByteArray, and packed into felt252
+    /// Arguments:
+    ///  - offset: the offset in Bytes
+    ///  - size: the number of bytes to read
+    /// Returns:
+    ///  - new_offset: next value offset in Bytes
+    ///  - value: the value packed into felt252
+    #[inline(always)]
+    fn read_felt252_packed(self: @ByteArray, offset: usize, size: usize) -> (usize, felt252) {
+        // check
+        assert(offset + size <= self.size(), 'out of bound');
+        // Bytes unit is one byte
+        // felt252 can hold 31 bytes max
+        assert(size <= 31, 'too large');
+        self.read_uint_within_size::<felt252>(offset, size)
+    }
+
+
     #[inline(always)]
     fn read_felt252(self: @ByteArray, offset: usize) -> (usize, felt252) {
         let (new_offset, value) = read_uint::<u256>(self, offset, 32);
@@ -230,6 +320,11 @@ impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
         read_uint::<T>(self, offset, size)
     }
 
+    /// Append a u8 to ByteArray
+    fn append_u8(ref self: ByteArray, value: u8) {
+        self.append_byte(value);
+    }
+
     /// Append a u16 to ByteArray
     fn append_u16(ref self: ByteArray, value: u16) {
         self.append_word(value.into(), 2);
@@ -237,6 +332,11 @@ impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
 
     /// Append a u32 to ByteArray
     fn append_u32(ref self: ByteArray, value: u32) {
+        self.append_word(value.into(), 4);
+    }
+
+    /// Append a usize to ByteArray
+    fn append_usize(ref self: ByteArray, value: usize) {
         self.append_word(value.into(), 4);
     }
 

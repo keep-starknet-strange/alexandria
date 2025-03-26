@@ -1,6 +1,29 @@
 use alexandria_bytes::byte_array_ext::ByteArrayTraitExt;
 
-// Tests for boundary conditions and edge cases
+#[test]
+#[available_gas(20000000)]
+fn test_new() {
+    let array = array![
+        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516,
+        0x01020304050607080910000000000000,
+    ];
+
+    let ba: ByteArray = ByteArrayTraitExt::new(48, array);
+    assert!(ba.len() == 48, "Failed to instantiate new ByteArray from array");
+
+    let (new_offset, result) = ba.read_u128(15);
+    assert_eq!(new_offset, 31);
+    assert_eq!(result, 0x16010203040506070809101112131415);
+}
+
+#[test]
+#[available_gas(20000000)]
+fn test_new_empty() {
+    let ba: ByteArray = ByteArrayTraitExt::new_empty();
+    assert!(ba.len() == 0, "Failed to instantiate new empty ByteArray");
+}
+
 #[test]
 #[available_gas(20000000)]
 #[should_panic(expected: ('out of bound',))]
@@ -13,7 +36,8 @@ fn test_read_from_empty_byte_array() {
 #[available_gas(20000000)]
 fn test_read_write_max_u16() {
     let max_u16 = 0xffff_u16;
-    let mut ba = Default::default();
+    let mut ba: ByteArray = Default::default();
+    assert!(ba.len() == 0);
     ba.append_u16(max_u16);
     let (new_offset, result) = ba.read_u16(0);
     assert_eq!(new_offset, 2);
@@ -122,6 +146,11 @@ fn test_bytes_append() {
     assert_eq!(ba.at(6).unwrap(), 0x07);
     assert_eq!(ba.at(13).unwrap(), 0x14);
 
+    ba.append_usize(0x15161718);
+    assert_eq!(ba.len(), 18);
+    assert_eq!(ba.at(14).unwrap(), 0x15);
+    assert_eq!(ba.at(17).unwrap(), 0x18);
+
     let mut ba2 = Default::default();
     let address = 0x015401855d7796176b05d160196ff92381eb7910f5446c2e0e04e13db2194a4f
         .try_into()
@@ -197,6 +226,94 @@ fn test_bytes_read_u128() {
     let (new_offset, result) = ba.read_u128(15);
     assert_eq!(new_offset, 31);
     assert_eq!(result, 0x16010203040506070809101112131415);
+}
+
+#[test]
+#[available_gas(20000000)]
+fn test_bytes_read_u128_packed() {
+    let mut ba = Default::default();
+    ba.append_u128(0x01020304050607080910111213141516);
+    ba.append_u128(0x01020304050607080910111213141516);
+    ba.append_u128(0x01020304050607080910000000000000);
+
+    let (new_offset, value) = ba.read_u128_packed(0, 1);
+    assert_eq!(new_offset, 1);
+    assert_eq!(value, 0x01);
+
+    let (new_offset, value) = ba.read_u128_packed(new_offset, 14);
+    assert_eq!(new_offset, 15);
+    assert_eq!(value, 0x0203040506070809101112131415);
+
+    let (new_offset, value) = ba.read_u128_packed(new_offset, 15);
+    assert_eq!(new_offset, 30);
+    assert_eq!(value, 0x160102030405060708091011121314);
+
+    let (new_offset, value) = ba.read_u128_packed(new_offset, 8);
+    assert_eq!(new_offset, 38);
+    assert_eq!(value, 0x1516010203040506);
+
+    let (new_offset, value) = ba.read_u128_packed(new_offset, 4);
+    assert_eq!(new_offset, 42);
+    assert_eq!(value, 0x07080910);
+}
+
+#[test]
+#[available_gas(20000000)]
+#[should_panic(expected: ('out of bound',))]
+fn test_bytes_read_u128_packed_out_of_bound() {
+    let mut ba = Default::default();
+    ba.append_u128(0x01020304050607080910111213141516);
+    ba.append_u128(0x01020304050607080910111213141516);
+    ba.append_u128(0x01020304050607080910000000000000);
+
+    ba.read_u128_packed(0, 49);
+}
+
+#[test]
+#[available_gas(20000000)]
+#[should_panic(expected: ('too large',))]
+fn test_bytes_read_u128_packed_too_large() {
+    let mut ba = Default::default();
+    ba.append_u128(0x01020304050607080910111213141516);
+    ba.append_u128(0x01020304050607080910111213141516);
+    ba.append_u128(0x01020304050607080910000000000000);
+
+    ba.read_u128_packed(0, 17);
+}
+
+#[test]
+#[available_gas(20000000)]
+fn test_bytes_read_felt252_packed() {
+    let mut ba = Default::default();
+    ba.append_u128(0x01020304050607080910111213141516);
+    ba.append_u128(0x01020304050607080910111213141516);
+    ba.append_u128(0x01020304050607080910000000000000);
+
+    let (new_offset, value) = ba.read_felt252_packed(13, 20);
+    assert_eq!(new_offset, 33);
+    assert_eq!(value, 0x1415160102030405060708091011121314151601);
+}
+
+#[test]
+#[available_gas(20000000)]
+#[should_panic(expected: ('out of bound',))]
+fn test_bytes_read_felt252_packed_out_of_bound() {
+    let mut ba = Default::default();
+    ba.append_u128(0x01020304050607080910111213141516);
+    ba.append_u128(0x01020304050607080910111213141516);
+    ba.append_u128(0x01020304050607080910000000000000);
+    ba.read_felt252_packed(0, 49);
+}
+
+#[test]
+#[available_gas(20000000)]
+#[should_panic(expected: ('too large',))]
+fn test_bytes_read_felt252_packed_too_large() {
+    let mut ba = Default::default();
+    ba.append_u128(0x01020304050607080910111213141516);
+    ba.append_u128(0x01020304050607080910111213141516);
+    ba.append_u128(0x01020304050607080910000000000000);
+    ba.read_felt252_packed(0, 32);
 }
 
 #[test]
