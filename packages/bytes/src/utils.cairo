@@ -260,7 +260,7 @@ pub fn u128_join(left: u128, right: u128, right_size: usize) -> u128 {
 /// Return the bytes len represent in u128
 /// Examples:
 /// u128_bytes_len(0x0102) -> 2
-fn u128_bytes_len(value: u128) -> usize {
+pub fn u128_bytes_len(value: u128) -> usize {
     if value <= 0xff_u128 {
         1_usize
     } else if value <= 0xffff_u128 {
