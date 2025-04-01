@@ -827,7 +827,7 @@ fn test_serde_with_first_padded() {
 #[available_gas(20000000)]
 fn test_serde_with_last_padded() {
     let mut out = array![];
-    let mut array = array![0x01020304050607080910111213141516,0x010203040506];
+    let mut array = array![0x01020304050607080910111213141516, 0x010203040506];
 
     let bytes = BytesTrait::new(22, array);
 
@@ -937,7 +937,7 @@ fn test_serde_deser_last_not_padded() {
         0x0123,
         0x01234,
         0x012345,
-        0x01020304050607080910111213141516
+        0x01020304050607080910111213141516,
     ];
     let bytes = BytesTrait::new(80, array);
     bytes.serialize(ref out);
