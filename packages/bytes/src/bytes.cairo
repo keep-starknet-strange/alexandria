@@ -51,7 +51,7 @@ pub impl BytesIndex of IndexView<Bytes, usize> {
 pub trait BytesTrait {
     /// Create a Bytes from an array of u128
     fn new(size: usize, data: Array<u128>) -> Bytes;
-    /// Create an empty Bytes²
+    /// Create an empty Bytes
     fn new_empty() -> Bytes;
     /// Create a Bytes with size bytes 0
     fn zero(size: usize) -> Bytes;
