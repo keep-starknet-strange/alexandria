@@ -1,5 +1,5 @@
 use alexandria_bytes::utils::{
-    keccak_u128s_be, read_sub_u128, u128_array_slice, u128_bytes_len, u128_join, u128_split,
+    keccak_u128s_be, pad_right_data, read_sub_u128, u128_array_slice, u128_join, u128_split,
     u32s_to_u256,
 };
 use alexandria_math::{U128BitShift, U256BitShift};
@@ -34,7 +34,7 @@ pub const BYTES_PER_ELEMENT: usize = 16;
 /// Bytes is a dynamic array of u128, where each element contains 16 bytes.
 ///  - size: the number of bytes in the Bytes
 ///  - data: the data of the Bytes
-#[derive(Drop, Clone, PartialEq, Serde)]
+#[derive(Drop, Clone, PartialEq)]
 pub struct Bytes {
     size: usize,
     data: Array<u128>,
@@ -51,7 +51,7 @@ pub impl BytesIndex of IndexView<Bytes, usize> {
 pub trait BytesTrait {
     /// Create a Bytes from an array of u128
     fn new(size: usize, data: Array<u128>) -> Bytes;
-    /// Create an empty Bytes
+    /// Create an empty Bytes²
     fn new_empty() -> Bytes;
     /// Create a Bytes with size bytes 0
     fn zero(size: usize) -> Bytes;
@@ -138,19 +138,7 @@ pub trait BytesTrait {
 impl BytesImpl of BytesTrait {
     #[inline(always)]
     fn new(size: usize, data: Array<u128>) -> Bytes {
-        let mut padded_data = array![];
-        for value in data {
-            let value_size = u128_bytes_len(value);
-
-            if value_size < BYTES_PER_ELEMENT {
-                //left pad with zeros using u128_join
-                let padded_value = u128_join(0, value, BYTES_PER_ELEMENT - value_size);
-                padded_data.append(padded_value);
-            } else {
-                padded_data.append(value);
-            }
-        }
-        Bytes { size, data: padded_data }
+        Bytes { size, data: pad_right_data(data, BYTES_PER_ELEMENT) }
     }
 
     #[inline(always)]
@@ -612,18 +600,17 @@ pub impl BytesIntoByteArray of Into<Bytes, ByteArray> {
         res
     }
 }
-// impl BytesSerde of Serde<Bytes> {
-//     fn serialize(self: @Bytes, ref output: Array<felt252>) {
-//         self.size.serialize(ref output);
-//         self.data.serialize(ref output);
-//     }
 
-//     fn deserialize(ref serialized: Span<felt252>) -> Option<Bytes> {
-//         let size = Serde::<usize>::deserialize(ref serialized)?;
-//         let data = Serde::<Array<u128>>::deserialize(ref serialized)?;
+impl BytesSerde of Serde<Bytes> {
+    fn serialize(self: @Bytes, ref output: Array<felt252>) {
+        self.size.serialize(ref output);
+        self.data.serialize(ref output);
+    }
 
-//         Option::Some(Bytes { size, data })
-//     }
-// }
-
+    fn deserialize(ref serialized: Span<felt252>) -> Option<Bytes> {
+        let size = Serde::<usize>::deserialize(ref serialized)?;
+        let data = Serde::<Array<u128>>::deserialize(ref serialized)?;
+        Option::Some(Bytes { size, data: pad_right_data(data, BYTES_PER_ELEMENT) })
+    }
+}
 
