@@ -623,6 +623,7 @@ fn test_bytes_keccak() {
     assert_eq!(res, hash);
 
     // u256{low: 1, high: 0}
+    //0x0000000000000000000000000000000000000000000000000000000000000001
     let mut array = array![];
     array.append(0);
     array.append(1);
@@ -712,7 +713,7 @@ fn test_bytes_new_with_padded_first() {
 
     let (new_offset, value) = bytes.read_u128(0);
     assert_eq!(new_offset, 16);
-    assert_eq!(value, 0x01230000000000000000000000000000);
+    assert_eq!(value, 0x00000000000000000000000000000123);
 }
 
 #[test]
@@ -726,7 +727,7 @@ fn test_bytes_new_with_padded_mid() {
 
     let (new_offset, value) = bytes.read_u128(16);
     assert_eq!(new_offset, 32);
-    assert_eq!(value, 0x01230000000000000000000000000000);
+    assert_eq!(value, 0x00000000000000000000000000000123);
 }
 
 #[test]
@@ -740,7 +741,7 @@ fn test_bytes_new_with_padded_last() {
 
     let (new_offset, value) = bytes.read_u128_packed(32, 16);
     assert_eq!(new_offset, 48);
-    assert_eq!(value, 0x01230000000000000000000000000000);
+    assert_eq!(value, 0x00000000000000000000000000000123);
 }
 
 #[test]
@@ -758,7 +759,7 @@ fn test_bytes_new_with_padded_multi() {
 
     let (new_offset, value) = bytes.read_u128_packed(16, 16);
     assert_eq!(new_offset, 32);
-    assert_eq!(value, 0x01230000000000000000000000000000);
+    assert_eq!(value, 0x00000000000000000000000000000123);
 
     let (new_offset, value) = bytes.read_u128_packed(32, 16);
     assert_eq!(new_offset, 48);
@@ -766,11 +767,11 @@ fn test_bytes_new_with_padded_multi() {
 
     let (new_offset, value) = bytes.read_u128(48);
     assert_eq!(new_offset, 64);
-    assert_eq!(value, 0x12340000000000000000000000000000);
+    assert_eq!(value, 0x00000000000000000000000000001234);
 
     let (new_offset, value) = bytes.read_u128_packed(64, 16);
     assert_eq!(new_offset, 80);
-    assert_eq!(value, 0x12345000000000000000000000000000);
+    assert_eq!(value, 0x00000000000000000000000000123450);
 }
 
 #[test]
@@ -791,15 +792,15 @@ fn test_serde() {
 
     let array_1_pos: felt252 = out.pop_front().unwrap();
     let array_1_pos: u128 = array_1_pos.try_into().unwrap();
-    assert!(array_1_pos == 0x01000000000000000000000000000000, "expected same u128 at pos 1");
+    assert!(array_1_pos == 0x00000000000000000000000000000001, "expected same u128 at pos 1");
 
     let array_2_pos: felt252 = out.pop_front().unwrap();
     let array_2_pos: u128 = array_2_pos.try_into().unwrap();
-    assert!(array_2_pos == 0x02000000000000000000000000000000, "expected same u128 at pos 2");
+    assert!(array_2_pos == 0x00000000000000000000000000000002, "expected same u128 at pos 2");
 
     let array_3_pos: felt252 = out.pop_front().unwrap();
     let array_3_pos: u128 = array_3_pos.try_into().unwrap();
-    assert!(array_3_pos == 0x03000000000000000000000000000000, "expected same u128 at pos 3");
+    assert!(array_3_pos == 0x00000000000000000000000000000003, "expected same u128 at pos 3");
 }
 
 #[test]
@@ -820,7 +821,7 @@ fn test_serde_with_first_padded() {
 
     let array_1_pos: felt252 = out.pop_front().unwrap();
     let array_1_pos: u128 = array_1_pos.try_into().unwrap();
-    assert!(array_1_pos == 0x01020304050607000000000000000000, "expected same u128 at pos 1");
+    assert!(array_1_pos == 0x00000000000000000001020304050607, "expected same u128 at pos 1");
 
     let array_2_pos: felt252 = out.pop_front().unwrap();
     let array_2_pos: u128 = array_2_pos.try_into().unwrap();
@@ -849,7 +850,7 @@ fn test_serde_with_last_padded() {
 
     let array_2_pos: felt252 = out.pop_front().unwrap();
     let array_2_pos: u128 = array_2_pos.try_into().unwrap();
-    assert!(array_2_pos == 0x01020304050600000000000000000000, "expected same u128 at pos 2");
+    assert!(array_2_pos == 0x00000000000000000000010203040506, "expected same u128 at pos 2");
 }
 
 #[test]
@@ -880,7 +881,7 @@ fn test_serde_with_multi_padded() {
 
     let array_2_pos: felt252 = out.pop_front().unwrap();
     let array_2_pos: u128 = array_2_pos.try_into().unwrap();
-    assert!(array_2_pos == 0x01230000000000000000000000000000, "expected same u128 at pos 2");
+    assert!(array_2_pos == 0x00000000000000000000000000000123, "expected same u128 at pos 2");
 
     let array_3_pos: felt252 = out.pop_front().unwrap();
     let array_3_pos: u128 = array_3_pos.try_into().unwrap();
@@ -888,11 +889,11 @@ fn test_serde_with_multi_padded() {
 
     let array_4_pos: felt252 = out.pop_front().unwrap();
     let array_4_pos: u128 = array_4_pos.try_into().unwrap();
-    assert!(array_4_pos == 0x01000000000000000000000000000000, "expected same u128 at pos 4");
+    assert!(array_4_pos == 0x00000000000000000000000000000001, "expected same u128 at pos 4");
 
     let array_5_pos: felt252 = out.pop_front().unwrap();
     let array_5_pos: u128 = array_5_pos.try_into().unwrap();
-    assert!(array_5_pos == 0x01234500000000000000000000000000, "expected same u128 at pos 5");
+    assert!(array_5_pos == 0x00000000000000000000000000012345, "expected same u128 at pos 5");
 }
 
 #[test]
@@ -902,9 +903,9 @@ fn test_serde_deser() {
 
     let array = array![0x01, 0x02, 0x03];
     let expected_array = array![
-        0x01000000000000000000000000000000,
-        0x02000000000000000000000000000000,
-        0x03000000000000000000000000000000,
+        0x00000000000000000000000000000001,
+        0x00000000000000000000000000000002,
+        0x00000000000000000000000000000003,
     ];
     let mut bytes = BytesTrait::new(16, array);
     bytes.serialize(ref out);
@@ -931,10 +932,10 @@ fn test_serde_deser_multi_padded() {
 
     let expected_array = array![
         0x01020304050607080910111213141516,
-        0x01230000000000000000000000000000,
+        0x00000000000000000000000000000123,
         0x01020304050607080910111213141516,
-        0x12340000000000000000000000000000,
-        0x01234500000000000000000000000000,
+        0x00000000000000000000000000001234,
+        0x00000000000000000000000000012345,
     ];
 
     let bytes = BytesTrait::new(80, array);
@@ -961,9 +962,9 @@ fn test_serde_deser_last_not_padded() {
 
     let expected_array = array![
         0x01020304050607080910111213141516,
-        0x01230000000000000000000000000000,
-        0x12340000000000000000000000000000,
-        0x01234500000000000000000000000000,
+        0x00000000000000000000000000000123,
+        0x00000000000000000000000000001234,
+        0x00000000000000000000000000012345,
         0x01020304050607080910111213141516,
     ];
 

@@ -296,7 +296,7 @@ pub fn u128_bytes_len(value: u128) -> usize {
     }
 }
 
-/// Pads each `u128` value in the given array with zeros on the right if its byte size is smaller
+/// Pads each `u128` value in the given array with zeros on the left if its byte size is smaller
 /// than `bytes_per_element`.
 ///
 /// # Arguments
@@ -308,14 +308,14 @@ pub fn u128_bytes_len(value: u128) -> usize {
 /// bytes) or padded with zeros.
 ///
 /// # Padding Strategy
-/// If the byte size of `value` is less than `bytes_per_element`, zeros are added to the right using
+/// If the byte size of `value` is less than `bytes_per_element`, zeros are added to the left using
 /// `u128_join`.
-pub fn pad_right_data(data: Array<u128>, bytes_per_element: usize) -> Array<u128> {
+pub fn pad_left_data(data: Array<u128>, bytes_per_element: usize) -> Array<u128> {
     let mut padded_data = array![];
     for value in data {
         let value_size = u128_bytes_len(value);
         let padded_value = if value_size < bytes_per_element {
-            u128_join(value, 0, bytes_per_element - value_size)
+            u128_join(0, value, bytes_per_element - value_size)
         } else {
             value
         };
