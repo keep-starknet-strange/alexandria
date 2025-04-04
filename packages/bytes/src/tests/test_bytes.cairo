@@ -1013,3 +1013,21 @@ fn test_serde_deser_compare_bytes() {
     assert!(deser.data() == bytes2.data(), "expected equal data");
 }
 
+#[test]
+#[available_gas(20000000)]
+#[should_panic()]
+fn test_deser_exceed_u128() {
+    let expected_array: Array<felt252> = array![
+        80,
+        5,
+        0x0102030405060708091011121314151617,
+        0x0123,
+        0x1234,
+        0x012345,
+        0x01020304050607080910111213141516,
+    ];
+
+    let mut span = expected_array.span();
+    Serde::<Bytes>::deserialize(ref span).unwrap();
+}
+
