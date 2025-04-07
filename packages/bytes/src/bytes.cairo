@@ -1,9 +1,12 @@
 use alexandria_bytes::utils::{
-    keccak_u128s_be, read_sub_u128, u128_array_slice, u128_join, u128_split, u32s_to_u256,
+    keccak_u128s_be, pad_left_data, read_sub_u128, u128_array_slice, u128_join, u128_split,
+    u32s_to_u256,
 };
 use alexandria_math::{U128BitShift, U256BitShift};
 use core::byte_array::ByteArrayTrait;
 use core::ops::index::IndexView;
+use core::serde::Serde;
+use core::serde::into_felt252_based::SerdeImpl;
 use core::sha256;
 use starknet::ContractAddress;
 /// Bytes is a dynamic array of u128, where each element contains 16 bytes.
@@ -31,7 +34,7 @@ pub const BYTES_PER_ELEMENT: usize = 16;
 /// Bytes is a dynamic array of u128, where each element contains 16 bytes.
 ///  - size: the number of bytes in the Bytes
 ///  - data: the data of the Bytes
-#[derive(Drop, Clone, PartialEq, Serde)]
+#[derive(Drop, Clone, PartialEq)]
 pub struct Bytes {
     size: usize,
     data: Array<u128>,
@@ -47,74 +50,222 @@ pub impl BytesIndex of IndexView<Bytes, usize> {
 
 pub trait BytesTrait {
     /// Create a Bytes from an array of u128
+    #[deprecated(
+        feature: "deprecated-new",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::new`.",
+        since: "2.11.1",
+    )]
     fn new(size: usize, data: Array<u128>) -> Bytes;
     /// Create an empty Bytes
+    #[deprecated(
+        feature: "deprecated-new_empty",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::new_empty`.",
+        since: "2.11.1",
+    )]
     fn new_empty() -> Bytes;
     /// Create a Bytes with size bytes 0
     fn zero(size: usize) -> Bytes;
     /// Locate offset in Bytes
     fn locate(offset: usize) -> (usize, usize);
     /// Get Bytes size
+    #[deprecated(
+        feature: "deprecated-size",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::size`.",
+        since: "2.11.1",
+    )]
     fn size(self: @Bytes) -> usize;
     /// Get data
     fn data(self: Bytes) -> Array<u128>;
     /// update specific value (1 bytes) at specific offset
+    #[deprecated(
+        feature: "deprecated-size",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::size`.",
+        since: "2.11.1",
+    )]
     fn update_at(ref self: Bytes, offset: usize, value: u8);
     /// Read value with size bytes from Bytes, and packed into u128
+    #[deprecated(
+        feature: "deprecated-read_u128_packed",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::read_u128_packed`.",
+        since: "2.11.1",
+    )]
     fn read_u128_packed(self: @Bytes, offset: usize, size: usize) -> (usize, u128);
     /// Read value with element_size bytes from Bytes, and packed into u128 array
+    #[deprecated(
+        feature: "deprecated-read_u128_array_packed",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::read_u128_array_packed`.",
+        since: "2.11.1",
+    )]
     fn read_u128_array_packed(
         self: @Bytes, offset: usize, array_length: usize, element_size: usize,
     ) -> (usize, Array<u128>);
     /// Read value with size bytes from Bytes, and packed into felt252
+    #[deprecated(
+        feature: "deprecated-read_felt252_packed",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::read_felt252_packed`.",
+        since: "2.11.1",
+    )]
     fn read_felt252_packed(self: @Bytes, offset: usize, size: usize) -> (usize, felt252);
     /// Read a u8 from Bytes
+    #[deprecated(
+        feature: "deprecated-read_u8",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::read_u8`.",
+        since: "2.11.1",
+    )]
     fn read_u8(self: @Bytes, offset: usize) -> (usize, u8);
     /// Read a u16 from Bytes
+    #[deprecated(
+        feature: "deprecated-read_u16",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::read_u16`.",
+        since: "2.11.1",
+    )]
     fn read_u16(self: @Bytes, offset: usize) -> (usize, u16);
     /// Read a u32 from Bytes
+    #[deprecated(
+        feature: "deprecated-read_u32",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::read_u32`.",
+        since: "2.11.1",
+    )]
     fn read_u32(self: @Bytes, offset: usize) -> (usize, u32);
     /// Read a usize from Bytes
+    #[deprecated(
+        feature: "deprecated-read_usize",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::read_usize`.",
+        since: "2.11.1",
+    )]
     fn read_usize(self: @Bytes, offset: usize) -> (usize, usize);
     /// Read a u64 from Bytes
+    #[deprecated(
+        feature: "deprecated-read_u64",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::read_u64`.",
+        since: "2.11.1",
+    )]
     fn read_u64(self: @Bytes, offset: usize) -> (usize, u64);
     /// Read a u128 from Bytes
+    #[deprecated(
+        feature: "deprecated-read_u128",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::read_u128`.",
+        since: "2.11.1",
+    )]
     fn read_u128(self: @Bytes, offset: usize) -> (usize, u128);
     /// Read a u256 from Bytes
+    #[deprecated(
+        feature: "deprecated-read_u256",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::read_u256`.",
+        since: "2.11.1",
+    )]
     fn read_u256(self: @Bytes, offset: usize) -> (usize, u256);
     /// Read a u256 array from Bytes
+    #[deprecated(
+        feature: "deprecated-read_u256_array",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::read_u256_array`.",
+        since: "2.11.1",
+    )]
     fn read_u256_array(self: @Bytes, offset: usize, array_length: usize) -> (usize, Array<u256>);
     /// Read sub Bytes with size bytes from Bytes
+    #[deprecated(
+        feature: "deprecated-read_bytes",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::read_bytes`.",
+        since: "2.11.1",
+    )]
     fn read_bytes(self: @Bytes, offset: usize, size: usize) -> (usize, Bytes);
     /// Read felt252 from Bytes, which stored as u256
+    #[deprecated(
+        feature: "deprecated-read_felt252",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::read_felt252`.",
+        since: "2.11.1",
+    )]
     fn read_felt252(self: @Bytes, offset: usize) -> (usize, felt252);
     /// Read bytes31 from Bytes
+    #[deprecated(
+        feature: "deprecated-read_bytes31",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::read_bytes31`.",
+        since: "2.11.1",
+    )]
     fn read_bytes31(self: @Bytes, offset: usize) -> (usize, bytes31);
     /// Read a ContractAddress from Bytes
+    #[deprecated(
+        feature: "deprecated-read_address",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::read_address`.",
+        since: "2.11.1",
+    )]
     fn read_address(self: @Bytes, offset: usize) -> (usize, ContractAddress);
     /// Write value with size bytes into Bytes, value is packed into u128
     fn append_u128_packed(ref self: Bytes, value: u128, size: usize);
     /// Write u8 into Bytes
+    #[deprecated(
+        feature: "deprecated-append_u8",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::append_u8`.",
+        since: "2.11.1",
+    )]
     fn append_u8(ref self: Bytes, value: u8);
     /// Write u16 into Bytes
+    #[deprecated(
+        feature: "deprecated-append_u16",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::append_u16`.",
+        since: "2.11.1",
+    )]
     fn append_u16(ref self: Bytes, value: u16);
     /// Write u32 into Bytes
+    #[deprecated(
+        feature: "deprecated-append_u32",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::append_u32`.",
+        since: "2.11.1",
+    )]
     fn append_u32(ref self: Bytes, value: u32);
     /// Write usize into Bytes
+    #[deprecated(
+        feature: "deprecated-append_usize",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::append_usize`.",
+        since: "2.11.1",
+    )]
     fn append_usize(ref self: Bytes, value: usize);
     /// Write u64 into Bytes
+    #[deprecated(
+        feature: "deprecated-append_u64",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::append_u64`.",
+        since: "2.11.1",
+    )]
     fn append_u64(ref self: Bytes, value: u64);
     /// Write u128 into Bytes
+    #[deprecated(
+        feature: "deprecated-append_u128",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::append_u128`.",
+        since: "2.11.1",
+    )]
     fn append_u128(ref self: Bytes, value: u128);
     /// Write u256 into Bytes
+    #[deprecated(
+        feature: "deprecated-append_u256",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::append_u256`.",
+        since: "2.11.1",
+    )]
     fn append_u256(ref self: Bytes, value: u256);
     /// Write felt252 into Bytes, which stored as u256
+    #[deprecated(
+        feature: "deprecated-append_felt252",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::append_felt252`.",
+        since: "2.11.1",
+    )]
     fn append_felt252(ref self: Bytes, value: felt252);
     /// Write bytes31 into Bytes
+    #[deprecated(
+        feature: "deprecated-append_bytes31",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::append_bytes31`.",
+        since: "2.11.1",
+    )]
     fn append_bytes31(ref self: Bytes, value: bytes31);
     /// Write address into Bytes
+    #[deprecated(
+        feature: "deprecated-append_address",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::append_address`.",
+        since: "2.11.1",
+    )]
     fn append_address(ref self: Bytes, value: ContractAddress);
     /// concat with other Bytes
+    #[deprecated(
+        feature: "deprecated-concat", note: "Use `core::byte_array::concat`.", since: "2.11.1",
+    )]
     fn concat(ref self: Bytes, other: @Bytes);
     /// keccak hash
     #[deprecated(
@@ -135,7 +286,7 @@ pub trait BytesTrait {
 impl BytesImpl of BytesTrait {
     #[inline(always)]
     fn new(size: usize, data: Array<u128>) -> Bytes {
-        Bytes { size, data }
+        Bytes { size, data: pad_left_data(data, BYTES_PER_ELEMENT) }
     }
 
     #[inline(always)]
@@ -597,3 +748,17 @@ pub impl BytesIntoByteArray of Into<Bytes, ByteArray> {
         res
     }
 }
+
+impl BytesSerde of Serde<Bytes> {
+    fn serialize(self: @Bytes, ref output: Array<felt252>) {
+        self.size.serialize(ref output);
+        self.data.serialize(ref output);
+    }
+
+    fn deserialize(ref serialized: Span<felt252>) -> Option<Bytes> {
+        let size = Serde::<usize>::deserialize(ref serialized)?;
+        let data = Serde::<Array<u128>>::deserialize(ref serialized)?;
+        Option::Some(Bytes { size, data: pad_left_data(data, BYTES_PER_ELEMENT) })
+    }
+}
+
