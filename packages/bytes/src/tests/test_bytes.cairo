@@ -623,6 +623,7 @@ fn test_bytes_keccak() {
     assert_eq!(res, hash);
 
     // u256{low: 1, high: 0}
+    //0x0000000000000000000000000000000000000000000000000000000000000001
     let mut array = array![];
     array.append(0);
     array.append(1);
@@ -700,3 +701,333 @@ fn test_byte_array_conversions() {
     let new_bytes: Bytes = byte_array.into();
     assert_eq!(bytes, new_bytes);
 }
+
+#[test]
+#[available_gas(20000000)]
+fn test_bytes_new_with_padded_first() {
+    let array = array![
+        0x0123, 0x01020304050607080910111213141516, 0x01020304050607080910000000000000,
+    ];
+
+    let bytes = BytesTrait::new(48, array);
+
+    let (new_offset, value) = bytes.read_u128(0);
+    assert_eq!(new_offset, 16);
+    assert_eq!(value, 0x00000000000000000000000000000123);
+}
+
+#[test]
+#[available_gas(20000000)]
+fn test_bytes_new_with_padded_mid() {
+    let array = array![
+        0x01020304050607080910111213141516, 0x0123, 0x01020304050607080910111213141516,
+    ];
+
+    let bytes = BytesTrait::new(48, array);
+
+    let (new_offset, value) = bytes.read_u128(16);
+    assert_eq!(new_offset, 32);
+    assert_eq!(value, 0x00000000000000000000000000000123);
+}
+
+#[test]
+#[available_gas(20000000)]
+fn test_bytes_new_with_padded_last() {
+    let array = array![
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516, 0x0123,
+    ];
+
+    let bytes = BytesTrait::new(48, array);
+
+    let (new_offset, value) = bytes.read_u128_packed(32, 16);
+    assert_eq!(new_offset, 48);
+    assert_eq!(value, 0x00000000000000000000000000000123);
+}
+
+#[test]
+#[available_gas(20000000)]
+fn test_bytes_new_with_padded_multi() {
+    let array = array![
+        0x01020304050607080910111213141516,
+        0x0123,
+        0x01020304050607080910111213141516,
+        0x1234,
+        0x123450,
+    ];
+
+    let bytes = BytesTrait::new(80, array);
+
+    let (new_offset, value) = bytes.read_u128_packed(16, 16);
+    assert_eq!(new_offset, 32);
+    assert_eq!(value, 0x00000000000000000000000000000123);
+
+    let (new_offset, value) = bytes.read_u128_packed(32, 16);
+    assert_eq!(new_offset, 48);
+    assert_eq!(value, 0x01020304050607080910111213141516);
+
+    let (new_offset, value) = bytes.read_u128(48);
+    assert_eq!(new_offset, 64);
+    assert_eq!(value, 0x00000000000000000000000000001234);
+
+    let (new_offset, value) = bytes.read_u128_packed(64, 16);
+    assert_eq!(new_offset, 80);
+    assert_eq!(value, 0x00000000000000000000000000123450);
+}
+
+#[test]
+#[available_gas(20000000)]
+fn test_serde() {
+    let mut out = array![];
+    let mut array = array![0x01, 0x02, 0x03];
+
+    let bytes = BytesTrait::new(16, array);
+
+    bytes.serialize(ref out);
+
+    assert!(out.pop_front().unwrap().try_into().unwrap() == bytes.size(), "expected equal size");
+
+    let array_size: felt252 = out.pop_front().unwrap();
+    let array_size: u32 = array_size.try_into().unwrap();
+    assert!(array_size == 3, "expected array equal size");
+
+    let array_1_pos: felt252 = out.pop_front().unwrap();
+    let array_1_pos: u128 = array_1_pos.try_into().unwrap();
+    assert!(array_1_pos == 0x00000000000000000000000000000001, "expected same u128 at pos 1");
+
+    let array_2_pos: felt252 = out.pop_front().unwrap();
+    let array_2_pos: u128 = array_2_pos.try_into().unwrap();
+    assert!(array_2_pos == 0x00000000000000000000000000000002, "expected same u128 at pos 2");
+
+    let array_3_pos: felt252 = out.pop_front().unwrap();
+    let array_3_pos: u128 = array_3_pos.try_into().unwrap();
+    assert!(array_3_pos == 0x00000000000000000000000000000003, "expected same u128 at pos 3");
+}
+
+#[test]
+#[available_gas(20000000)]
+fn test_serde_with_first_padded() {
+    let mut out = array![];
+    let mut array = array![0x01020304050607, 0x01020304050607080910111213141516];
+
+    let bytes = BytesTrait::new(23, array);
+
+    bytes.serialize(ref out);
+
+    assert!(out.pop_front().unwrap().try_into().unwrap() == bytes.size(), "expected equal size");
+
+    let array_size: felt252 = out.pop_front().unwrap();
+    let array_size: u32 = array_size.try_into().unwrap();
+    assert!(array_size == 2, "expected array equal size");
+
+    let array_1_pos: felt252 = out.pop_front().unwrap();
+    let array_1_pos: u128 = array_1_pos.try_into().unwrap();
+    assert!(array_1_pos == 0x00000000000000000001020304050607, "expected same u128 at pos 1");
+
+    let array_2_pos: felt252 = out.pop_front().unwrap();
+    let array_2_pos: u128 = array_2_pos.try_into().unwrap();
+    assert!(array_2_pos == 0x01020304050607080910111213141516, "expected same u128 at pos 2");
+}
+
+#[test]
+#[available_gas(20000000)]
+fn test_serde_with_last_padded() {
+    let mut out = array![];
+    let mut array = array![0x01020304050607080910111213141516, 0x010203040506];
+
+    let bytes = BytesTrait::new(22, array);
+
+    bytes.serialize(ref out);
+
+    assert!(out.pop_front().unwrap().try_into().unwrap() == bytes.size(), "expected equal size");
+
+    let array_size: felt252 = out.pop_front().unwrap();
+    let array_size: u32 = array_size.try_into().unwrap();
+    assert!(array_size == 2, "expected array equal size");
+
+    let array_1_pos: felt252 = out.pop_front().unwrap();
+    let array_1_pos: u128 = array_1_pos.try_into().unwrap();
+    assert!(array_1_pos == 0x01020304050607080910111213141516, "expected same u128 at pos 1");
+
+    let array_2_pos: felt252 = out.pop_front().unwrap();
+    let array_2_pos: u128 = array_2_pos.try_into().unwrap();
+    assert!(array_2_pos == 0x00000000000000000000010203040506, "expected same u128 at pos 2");
+}
+
+#[test]
+#[available_gas(20000000)]
+fn test_serde_with_multi_padded() {
+    let mut out = array![];
+    let mut array = array![
+        0x01020304050607080910111213141516,
+        0x0123,
+        0x01020304050607080910111213141516,
+        0x01,
+        0x012345,
+    ];
+
+    let bytes = BytesTrait::new(80, array);
+
+    bytes.serialize(ref out);
+
+    assert!(out.pop_front().unwrap().try_into().unwrap() == bytes.size(), "expected equal size");
+
+    let array_size: felt252 = out.pop_front().unwrap();
+    let array_size: u32 = array_size.try_into().unwrap();
+    assert!(array_size == 5, "expected array equal size");
+
+    let array_1_pos: felt252 = out.pop_front().unwrap();
+    let array_1_pos: u128 = array_1_pos.try_into().unwrap();
+    assert!(array_1_pos == 0x01020304050607080910111213141516, "expected same u128 at pos 1");
+
+    let array_2_pos: felt252 = out.pop_front().unwrap();
+    let array_2_pos: u128 = array_2_pos.try_into().unwrap();
+    assert!(array_2_pos == 0x00000000000000000000000000000123, "expected same u128 at pos 2");
+
+    let array_3_pos: felt252 = out.pop_front().unwrap();
+    let array_3_pos: u128 = array_3_pos.try_into().unwrap();
+    assert!(array_3_pos == 0x01020304050607080910111213141516, "expected same u128 at pos 3");
+
+    let array_4_pos: felt252 = out.pop_front().unwrap();
+    let array_4_pos: u128 = array_4_pos.try_into().unwrap();
+    assert!(array_4_pos == 0x00000000000000000000000000000001, "expected same u128 at pos 4");
+
+    let array_5_pos: felt252 = out.pop_front().unwrap();
+    let array_5_pos: u128 = array_5_pos.try_into().unwrap();
+    assert!(array_5_pos == 0x00000000000000000000000000012345, "expected same u128 at pos 5");
+}
+
+#[test]
+#[available_gas(20000000)]
+fn test_serde_deser() {
+    let mut out = array![];
+
+    let array = array![0x01, 0x02, 0x03];
+    let expected_array = array![
+        0x00000000000000000000000000000001,
+        0x00000000000000000000000000000002,
+        0x00000000000000000000000000000003,
+    ];
+    let mut bytes = BytesTrait::new(16, array);
+    bytes.serialize(ref out);
+
+    let mut span = out.span();
+
+    let mut deser = Serde::<Bytes>::deserialize(ref span).unwrap();
+    assert!(deser.size() == bytes.size(), "expected equal lengths");
+    assert!(deser.data() == expected_array, "expected equal data");
+}
+
+
+#[test]
+#[available_gas(20000000)]
+fn test_serde_deser_multi_padded() {
+    let mut out = array![];
+    let array = array![
+        0x01020304050607080910111213141516,
+        0x0123,
+        0x01020304050607080910111213141516,
+        0x1234,
+        0x012345,
+    ];
+
+    let expected_array = array![
+        0x01020304050607080910111213141516,
+        0x00000000000000000000000000000123,
+        0x01020304050607080910111213141516,
+        0x00000000000000000000000000001234,
+        0x00000000000000000000000000012345,
+    ];
+
+    let bytes = BytesTrait::new(80, array);
+    bytes.serialize(ref out);
+
+    let mut span = out.span();
+
+    let mut deser = Serde::<Bytes>::deserialize(ref span).unwrap();
+    assert!(deser.size() == bytes.size(), "expected equal lengths");
+    assert!(deser.data() == expected_array, "expected equal data");
+}
+
+#[test]
+#[available_gas(20000000)]
+fn test_serde_deser_last_not_padded() {
+    let mut out = array![];
+    let array = array![
+        0x01020304050607080910111213141516,
+        0x0123,
+        0x1234,
+        0x012345,
+        0x01020304050607080910111213141516,
+    ];
+
+    let expected_array = array![
+        0x01020304050607080910111213141516,
+        0x00000000000000000000000000000123,
+        0x00000000000000000000000000001234,
+        0x00000000000000000000000000012345,
+        0x01020304050607080910111213141516,
+    ];
+
+    let bytes = BytesTrait::new(80, array);
+    bytes.serialize(ref out);
+
+    let mut span = out.span();
+
+    let mut deser = Serde::<Bytes>::deserialize(ref span).unwrap();
+    assert!(deser.size() == bytes.size(), "expected equal lengths");
+    assert!(deser.data() == expected_array, "expected equal data");
+}
+
+
+#[test]
+#[available_gas(20000000)]
+fn test_serde_deser_compare_bytes() {
+    let mut out = array![];
+    let array = array![
+        0x01020304050607080910111213141516,
+        0x0123,
+        0x1234,
+        0x012345,
+        0x01020304050607080910111213141516,
+    ];
+
+    let bytes = BytesTrait::new(80, array.clone());
+    bytes.serialize(ref out);
+    let mut span = out.span();
+    let mut deser = Serde::<Bytes>::deserialize(ref span).unwrap();
+
+    let expected_array: Array<felt252> = array![
+        80,
+        5,
+        0x01020304050607080910111213141516,
+        0x0123,
+        0x1234,
+        0x012345,
+        0x01020304050607080910111213141516,
+    ];
+
+    let mut span2 = expected_array.span();
+    let mut bytes2 = Serde::<Bytes>::deserialize(ref span2).unwrap();
+
+    assert!(deser.size() == bytes.size(), "expected equal lengths");
+    assert!(deser.data() == bytes2.data(), "expected equal data");
+}
+
+#[test]
+#[available_gas(20000000)]
+#[should_panic()]
+fn test_deser_exceed_u128() {
+    let expected_array: Array<felt252> = array![
+        80,
+        5,
+        0x0102030405060708091011121314151617,
+        0x0123,
+        0x1234,
+        0x012345,
+        0x01020304050607080910111213141516,
+    ];
+
+    let mut span = expected_array.span();
+    Serde::<Bytes>::deserialize(ref span).unwrap();
+}
+
