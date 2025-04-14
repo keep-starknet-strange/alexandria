@@ -239,7 +239,7 @@ impl U256TryIntoPoint of TryInto<u256, Point> {
         let last_byte = *y_le_span[31];
 
         let _ = y_le_span.pop_back();
-        let mut normed_array: Array<u8> = dedup(y_le_span);
+        let mut normed_array: Array<u8> = to_array(y_le_span);
         normed_array.append(last_byte & ~0x80);
 
         let x_0: u256 = (last_byte.into() / 128) & 1; // bitshift of 255
@@ -384,7 +384,6 @@ pub fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> 
     // identity function for msg)
     let k: Array<u8> = sha512(hashable);
     let k_u512: u512 = k.span().into();
-
     let l_non_zero: NonZero<u256> = l.try_into().unwrap();
     let (_, k_reduced) = core::integer::u512_safe_div_rem_by_u256(k_u512, l_non_zero);
 
@@ -404,16 +403,10 @@ fn reverse(mut span: Span<u8>) -> Span<u8> {
     res.span()
 }
 
-fn dedup(mut span: Span<u8>) -> Array<u8> {
-    let mut last_value = span.pop_front().unwrap();
-    let mut ret = array![last_value.clone()];
-
+fn to_array(span: Span<u8>) -> Array<u8> {
+    let mut ret = ArrayTrait::new();
     for v in span {
-        if (last_value != v) {
-            last_value = v;
-            ret.append(v.clone());
-        }
+        ret.append(v.clone());
     }
-
     ret
 }
