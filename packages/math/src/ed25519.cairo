@@ -1,3 +1,5 @@
+/// DISCLAIMER: this code has not been audited and should not be used in a production environment.
+
 use alexandria_math::mod_arithmetics::{div_mod, mult_mod, pow_mod, sqr_mod};
 use alexandria_math::sha512::{SHA512_LEN, sha512};
 use alexandria_math::u512_arithmetics::u512_sub;
