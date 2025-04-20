@@ -42,7 +42,7 @@ pub trait ByteArrayTraitExt {
         self: @ByteArray, offset: usize, array_length: usize,
     ) -> (usize, Array<u256>);
     /// Reads a `felt252` (Starknet field element) from the given offset.
-    fn read_felt252(self: @ByteArray, offset: usize) -> (usize, felt252);
+    fn read_felt252(self: @ByteArray, offset: usize, size: usize) -> (usize, felt252);
     /// Read value with size bytes from Bytes, and packed into felt252
     fn read_felt252_packed(self: @ByteArray, offset: usize, size: usize) -> (usize, felt252);
     /// Reads a `bytes31` value (31-byte sequence) from the given offset.
@@ -187,8 +187,8 @@ impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
 
 
     #[inline(always)]
-    fn read_felt252(self: @ByteArray, offset: usize) -> (usize, felt252) {
-        let (new_offset, value) = read_uint::<u256>(self, offset, 32);
+    fn read_felt252(self: @ByteArray, offset: usize, size: usize) -> (usize, felt252) {
+        let (new_offset, value) = read_uint::<u256>(self, offset, size);
         (new_offset, value.try_into().expect('Couldn\'t convert to felt252'))
     }
 

@@ -112,7 +112,7 @@ fn test_read_felt252() {
         .try_into()
         .unwrap();
     ba.append_felt252(felt_value);
-    let (new_offset, result) = ba.read_felt252(0);
+    let (new_offset, result) = ba.read_felt252(0, 32);
     assert_eq!(new_offset, 32);
     assert_eq!(result, felt_value);
 }
