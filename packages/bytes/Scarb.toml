@@ -12,6 +12,7 @@ fmt.workspace = true
 [dependencies]
 alexandria_math = { path = "../math", version ="0.5.0" }
 alexandria_data_structures = { path = "../data_structures", version ="0.5.0" }
+alexandria_encoding = { path = "../encoding", version ="0.5.0" }
 starknet.workspace = true
 
 [dev-dependencies]

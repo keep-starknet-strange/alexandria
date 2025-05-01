@@ -24,11 +24,6 @@ impl BitArrayDefaultImpl of Default<BitArray> {
     }
 }
 
-#[deprecated(
-    feature: "deprecated-BitArrayTrait",
-    note: "Use `alexandria_bytes::bit_array`.",
-    since: "2.11.1",
-)]
 pub trait BitArrayTrait {
     fn new(data: Array<bytes31>, current: felt252, read_pos: usize, write_pos: usize) -> BitArray;
     fn current(self: @BitArray) -> felt252;

@@ -8,9 +8,7 @@ pub struct ByteReaderState<T> {
     index: usize,
 }
 
-#[deprecated(
-    feature: "deprecated-ByteReader", note: "Use `alexandria_bytes::byte_reader`.", since: "2.11.1",
-)]
+
 pub trait ByteReader<T> {
     /// Wraps the array of bytes in a ByteReader for sequential consumption of integers and/or bytes
     /// # Returns
