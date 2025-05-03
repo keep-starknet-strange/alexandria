@@ -239,7 +239,7 @@ impl U256TryIntoPoint of TryInto<u256, Point> {
         let last_byte = *y_le_span[31];
 
         let _ = y_le_span.pop_back();
-        let mut normed_array: Array<u8> = to_array(y_le_span);
+        let mut normed_array: Array<u8> = y_le_span.into();
         normed_array.append(last_byte & ~0x80);
 
         let x_0: u256 = (last_byte.into() / 128) & 1; // bitshift of 255
@@ -343,6 +343,7 @@ fn check_group_equation(S: u256, R: Point, k: u256, A_prime: Point) -> bool {
     lhs == rhs
 }
 
+/// Experimental feature: use with caution. Not recommended for production.
 pub fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> bool {
     if (signature.len() != 2) {
         return false;
@@ -401,12 +402,4 @@ fn reverse(mut span: Span<u8>) -> Span<u8> {
         res.append(v.clone());
     }
     res.span()
-}
-
-fn to_array(span: Span<u8>) -> Array<u8> {
-    let mut ret = ArrayTrait::new();
-    for v in span {
-        ret.append(v.clone());
-    }
-    ret
 }

@@ -1,4 +1,6 @@
+use alexandria_bytes::byte_array_ext::ByteArrayTraitExt;
 use alexandria_data_structures::array_ext::ArrayTraitExt;
+
 
 pub trait Encoder<T> {
     fn encode(data: T) -> Array<u8>;
@@ -6,6 +8,14 @@ pub trait Encoder<T> {
 
 pub trait Decoder<T> {
     fn decode(data: T) -> Array<u8>;
+}
+
+pub trait ByteArrayEncoder {
+    fn encode(data: ByteArray) -> ByteArray;
+}
+
+pub trait ByteArrayDecoder {
+    fn decode(data: ByteArray) -> ByteArray;
 }
 
 pub impl Base64Encoder of Encoder<Array<u8>> {
@@ -41,6 +51,24 @@ pub impl Base64UrlFeltEncoder of Encoder<felt252> {
         char_set.append('-');
         char_set.append('_');
         encode_felt(data, char_set.span())
+    }
+}
+
+pub impl Base64ByteArrayEncoder of ByteArrayEncoder {
+    fn encode(data: ByteArray) -> ByteArray {
+        let mut char_set = get_base64_char_set();
+        char_set.append('+');
+        char_set.append('/');
+        encode_byte_array(data, char_set.span())
+    }
+}
+
+pub impl Base64ByteArrayUrlEncoder of ByteArrayEncoder {
+    fn encode(data: ByteArray) -> ByteArray {
+        let mut char_set = get_base64_char_set();
+        char_set.append('-');
+        char_set.append('_');
+        encode_byte_array(data, char_set.span())
     }
 }
 
@@ -133,6 +161,69 @@ pub fn encode_felt(self: felt252, base64_chars: Span<u8>) -> Array<u8> {
     result
 }
 
+/// Encodes a ByteArray into a Base64 encoded ByteArray.
+///
+/// This function processes the input binary data in chunks of 3 bytes,
+/// converts them into their corresponding 6-bit values, and combines
+/// them into 24-bit numbers. It then maps these values to Base64 characters
+/// and handles any necessary padding.
+///
+/// # Arguments
+///
+/// * `self` - A mutable ByteArray containing the binary data to be encoded.
+/// * `base64_chars` - A Span containing the Base64 character set used for encoding.
+///
+/// # Returns
+/// * A ByteArray containing the Base64 encoded data.
+pub fn encode_byte_array(mut self: ByteArray, base64_chars: Span<u8>) -> ByteArray {
+    let mut result = Default::default();
+    if self.len() == 0 {
+        return result;
+    }
+
+    let mut p: u8 = 0;
+    let c = self.len() % 3;
+    if c == 1 {
+        p = 2;
+        self.append_u16(0x0000);
+    } else if c == 2 {
+        p = 1;
+        self.append_byte(0x00);
+    }
+
+    let mut i = 0;
+    let len = self.len();
+    let last_iteration = len - 3;
+
+    while i != len {
+        let (_, n) = self.read_uint_within_size::<u32>(i, 3);
+        let e1 = (n / 262144) & 63;
+        let e2 = (n / 4096) & 63;
+        let e3 = (n / 64) & 63;
+        let e4 = n & 63;
+
+        result.append_byte(*base64_chars[e1]);
+        result.append_byte(*base64_chars[e2]);
+        if i == last_iteration {
+            if p == 2 {
+                result.append_u16('==');
+            } else if p == 1 {
+                result.append_byte(*base64_chars[e3]);
+                result.append_byte('=');
+            } else {
+                result.append_byte(*base64_chars[e3]);
+                result.append_byte(*base64_chars[e4]);
+            }
+        } else {
+            result.append_byte(*base64_chars[e3]);
+            result.append_byte(*base64_chars[e4]);
+        }
+        i += 3;
+    }
+
+    result
+}
+
 pub impl Base64Decoder of Decoder<Array<u8>> {
     fn decode(data: Array<u8>) -> Array<u8> {
         inner_decode(data)
@@ -142,6 +233,12 @@ pub impl Base64Decoder of Decoder<Array<u8>> {
 pub impl Base64UrlDecoder of Decoder<Array<u8>> {
     fn decode(data: Array<u8>) -> Array<u8> {
         inner_decode(data)
+    }
+}
+
+pub impl Base64ByteArrayDecoder of ByteArrayDecoder {
+    fn decode(data: ByteArray) -> ByteArray {
+        decode_byte_array(data)
     }
 }
 
@@ -169,17 +266,8 @@ fn inner_decode(data: Array<u8>) -> Array<u8> {
     // Process data in groups of 4 characters
     let mut i = 0;
     while i + 3 < data_len {
-        // Get values for the 4 characters
-        let v1: u32 = get_base64_value(*data[i]).into();
-        let v2: u32 = get_base64_value(*data[i + 1]).into();
-        let v3: u32 = get_base64_value(*data[i + 2]).into();
-        let v4: u32 = get_base64_value(*data[i + 3]).into();
-
-        // Combine the 4 6-bit values into a 24-bit number
-        let combined: u32 = (v1 * 262144) + (v2 * 4096) + (v3 * 64) + v4;
-
         // Extract the 3 bytes
-        let b1: u8 = ((combined / 65536) & 0xFF).try_into().unwrap();
+        let (combined, b1) = get_decoded_b1(*data[i], *data[i + 1], *data[i + 2], *data[i + 3]);
         result.append(b1);
 
         // Handle padding - don't add bytes if we're at the end with padding
@@ -187,20 +275,136 @@ fn inner_decode(data: Array<u8>) -> Array<u8> {
             break;
         }
 
-        let b2: u8 = ((combined / 256) & 0xFF).try_into().unwrap();
+        let b2: u8 = get_decoded_b2(combined);
         result.append(b2);
 
         if i + 4 >= data_len && p == 1 {
             break;
         }
 
-        let b3: u8 = (combined & 0xFF).try_into().unwrap();
+        let b3: u8 = get_decoded_b3(combined);
         result.append(b3);
 
         i += 4;
     }
 
     result
+}
+
+/// Decodes a Base64 encoded ByteArray into its original binary form.
+///
+/// This function processes the input data in chunks of 4 characters,
+/// converts them into their corresponding 6-bit values, and combines
+/// them into 24-bit numbers. It then extracts the original bytes from
+/// these 24-bit numbers and handles any padding that may be present.
+///
+/// # Arguments
+/// * `data` - A ByteArray containing Base64 encoded data.
+///
+/// # Returns
+/// * A ByteArray containing the decoded binary data.
+fn decode_byte_array(data: ByteArray) -> ByteArray {
+    let mut result: ByteArray = Default::default();
+
+    // Early return for empty input
+    if data.len() == 0 {
+        return result;
+    }
+
+    // Calculate padding
+    let mut p = 0_u8;
+    let data_len = data.len();
+
+    // Check for padding characters ('=')
+    if data_len > 0 && data.at(data_len - 1).unwrap().into() == '=' {
+        p += 1;
+
+        if data_len > 1 && data.at(data_len - 2).unwrap() == '=' {
+            p += 1;
+        }
+    }
+
+    // Process data in groups of 4 characters
+    let mut i = 0;
+    while i + 3 < data_len {
+        // Extract the 3 bytes
+        let (combined, b1) = get_decoded_b1(
+            data.at(i).unwrap(),
+            data.at(i + 1).unwrap(),
+            data.at(i + 2).unwrap(),
+            data.at(i + 3).unwrap(),
+        );
+        result.append_byte(b1);
+        // Handle padding - don't add bytes if we're at the end with padding
+        if i + 4 >= data_len && p == 2 {
+            break;
+        }
+
+        let b2: u8 = get_decoded_b2(combined);
+        result.append_byte(b2);
+
+        if i + 4 >= data_len && p == 1 {
+            break;
+        }
+
+        let b3: u8 = get_decoded_b3(combined);
+        result.append_byte(b3);
+
+        i += 4;
+    }
+
+    result
+}
+
+/// Decodes the first byte from a group of four Base64 characters.
+///
+/// This function takes four Base64 values, combines them into a 24-bit number,
+/// and extracts the first byte from this number.
+///
+/// # Arguments
+/// * `val1` - The first Base64 character value.
+/// * `val2` - The second Base64 character value.
+/// * `val3` - The third Base64 character value.
+/// * `val4` - The fourth Base64 character value.
+///
+/// # Returns
+/// * A tuple containing the combined 24-bit number and the first decoded byte.
+fn get_decoded_b1(val1: u8, val2: u8, val3: u8, val4: u8) -> (u32, u8) {
+    let v1: u32 = get_base64_value(val1).into();
+    let v2: u32 = get_base64_value(val2).into();
+    let v3: u32 = get_base64_value(val3).into();
+    let v4: u32 = get_base64_value(val4).into();
+
+    let combined: u32 = (v1 * 262144) + (v2 * 4096) + (v3 * 64) + v4;
+    (combined, ((combined / 65536) & 0xFF).try_into().unwrap())
+}
+
+/// Decodes the second byte from a 24-bit combined number.
+///
+/// This function extracts the second byte from a 24-bit number
+/// that was previously combined from four Base64 character values.
+///
+/// # Arguments
+/// * `val` - The 24-bit combined number.
+///
+/// # Returns
+/// * decoded byte.
+fn get_decoded_b2(val: u32) -> u8 {
+    ((val / 256) & 0xFF).try_into().unwrap()
+}
+
+/// Decodes the third byte from a 24-bit combined number.
+///
+/// This function extracts the third byte from a 24-bit number
+/// that was previously combined from four Base64 character values.
+///
+/// # Arguments
+/// * `val` - The 24-bit combined number.
+///
+/// # Returns
+/// * decoded byte.
+fn get_decoded_b3(val: u32) -> u8 {
+    (val & 0xFF).try_into().unwrap()
 }
 
 fn get_base64_value(x: u8) -> u8 {

@@ -1,13 +1,43 @@
+use alexandria_encoding::reversible::reversing;
 use alexandria_math::{U128BitShift, U256BitShift};
+use core::integer::u512;
 use core::num::traits::Zero;
 use starknet::ContractAddress;
+use crate::bit_array::one_shift_left_bytes_felt252;
+use crate::byte_appender::{ByteAppender, ByteAppenderSupportTrait};
 
 
-// - zero --> not needed
-// - locate --> can be implemented to reduce gas cost once ByteArray prop will become public
-// - data --> can be implemented ByteArray prop will become public
-// - append_u128_packed --> not needed because it's not anyore required to add padding 0
-// - concat --> use concat from standard impl
+pub impl SpanU8IntoBytearray of Into<Span<u8>, ByteArray> {
+    #[inline]
+    fn into(self: Span<u8>) -> ByteArray {
+        let mut reader: u32 = 0;
+        let mut result: ByteArray = Default::default();
+        while reader != self.len() {
+            result.append_byte(*self.at(reader));
+            reader = reader + 1;
+        }
+        result
+    }
+}
+
+impl ArrayU8IntoByteArray of Into<Array<u8>, ByteArray> {
+    fn into(self: Array<u8>) -> ByteArray {
+        self.span().into()
+    }
+}
+
+pub impl ByteArrayIntoArrayU8 of Into<ByteArray, Array<u8>> {
+    fn into(self: ByteArray) -> Array<u8> {
+        let mut reader: u32 = 0;
+        let mut result = array![];
+        while reader != self.len() {
+            let (_, byte) = self.read_u8(reader);
+            result.append(byte);
+            reader = reader + 1;
+        }
+        result
+    }
+}
 
 /// Extension trait for reading and writing different data types to `ByteArray`
 pub trait ByteArrayTraitExt {
@@ -65,6 +95,8 @@ pub trait ByteArrayTraitExt {
     fn append_u128(ref self: ByteArray, value: u128);
     /// Appends a 256-bit unsigned integer to the `ByteArray`.
     fn append_u256(ref self: ByteArray, value: u256);
+    /// Appends a 512-bit unsigned integer to the `ByteArray`.
+    fn append_u512(ref self: ByteArray, value: u512);
     /// Appends a `felt252` to the `ByteArray`.
     fn append_felt252(ref self: ByteArray, value: felt252);
     /// Appends a Starknet contract address to the `ByteArray`.
@@ -81,7 +113,7 @@ pub trait ByteArrayTraitExt {
 }
 
 
-impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
+pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
     /// Create a ByteArray from an array of u128
     #[inline(always)]
     fn new(size: usize, mut data: Array<u128>) -> ByteArray {
@@ -91,7 +123,7 @@ impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
         let mut index = 0;
         let mut ba: ByteArray = Default::default();
         while index != data.len() {
-            ba.append_u128(*data[index]);
+            Self::append_u128(ref ba, *data[index]);
             index += 1;
         }
         ba
@@ -236,7 +268,7 @@ impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
 
         while sub_bytes_full_array_len != 0 {
             let (new_offset, value) = self.read_u32(offset);
-            ba.append_u32(value);
+            Self::append_u32(ref ba, value);
             offset = new_offset;
             sub_bytes_full_array_len -= 1;
         }
@@ -352,14 +384,23 @@ impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
 
     /// Append a u256 to ByteArray
     fn append_u256(ref self: ByteArray, value: u256) {
-        self.append_u128(value.high);
-        self.append_u128(value.low);
+        Self::append_u128(ref self, value.high);
+        Self::append_u128(ref self, value.low);
+    }
+
+    /// Append a u512 to ByteArray
+    fn append_u512(ref self: ByteArray, value: u512) {
+        let u512 { limb0, limb1, limb2, limb3 } = value;
+        Self::append_u128(ref self, limb3);
+        Self::append_u128(ref self, limb2);
+        Self::append_u128(ref self, limb1);
+        Self::append_u128(ref self, limb0);
     }
 
     /// Append a felt252 to ByteArray
     fn append_felt252(ref self: ByteArray, value: felt252) {
         let value: u256 = value.into();
-        self.append_u256(value);
+        Self::append_u256(ref self, value);
     }
 
     /// Append a ContractAddress to ByteArray
@@ -372,7 +413,7 @@ impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
     fn append_bytes31(ref self: ByteArray, value: bytes31) {
         let mut value: u256 = value.into();
         value = U256BitShift::shl(value, 8);
-        self.append_u256(value);
+        Self::append_u256(ref self, value);
     }
 
     /// Update a byte at a specific offset in ByteArray
@@ -385,6 +426,150 @@ impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
         new_byte_array.append_byte(value);
         new_byte_array.append(@temp_r);
         self = new_byte_array;
+    }
+}
+
+impl ByteAppenderSupportByteArrayImpl of ByteAppenderSupportTrait<ByteArray> {
+    #[inline(always)]
+    fn append_bytes_be(ref self: ByteArray, bytes: felt252, count: usize) {
+        assert(count <= 16, 'count too big');
+        self.append_word(bytes.into(), count);
+    }
+
+    #[inline(always)]
+    fn append_bytes_le(ref self: ByteArray, bytes: felt252, count: usize) {
+        assert(count <= 16, 'count too big');
+        let u256 { low, high: _high } = bytes.into();
+        let (reversed, _) = reversing(low, count, 0x100);
+        self.append_word(reversed.into(), count);
+    }
+}
+
+pub impl ByteArrayAppenderImpl of ByteAppender<T: ByteArray> {
+    fn append_u16(ref self: ByteArray, word: u16) {
+        ByteArrayTraitExtImpl::append_u16(ref self, word);
+    }
+
+    fn append_u16_le(ref self: ByteArray, word: u16) {
+        self.append_bytes_le(word.into(), 2);
+    }
+
+    fn append_u32(ref self: ByteArray, word: u32) {
+        ByteArrayTraitExtImpl::append_u32(ref self, word);
+    }
+
+    fn append_u32_le(ref self: ByteArray, word: u32) {
+        self.append_bytes_le(word.into(), 4);
+    }
+
+    fn append_u64(ref self: ByteArray, word: u64) {
+        ByteArrayTraitExtImpl::append_u64(ref self, word);
+    }
+
+    fn append_u64_le(ref self: ByteArray, word: u64) {
+        self.append_bytes_le(word.into(), 8);
+    }
+
+    fn append_u128(ref self: ByteArray, word: u128) {
+        ByteArrayTraitExtImpl::append_u128(ref self, word);
+    }
+
+    fn append_u128_le(ref self: ByteArray, word: u128) {
+        self.append_bytes_le(word.into(), 16);
+    }
+
+    fn append_u256(ref self: ByteArray, word: u256) {
+        ByteArrayTraitExtImpl::append_u256(ref self, word);
+    }
+
+    fn append_u256_le(ref self: ByteArray, word: u256) {
+        let u256 { low, high } = word;
+        Self::append_u128_le(ref self, low);
+        Self::append_u128_le(ref self, high);
+    }
+
+    fn append_u512(ref self: ByteArray, word: u512) {
+        ByteArrayTraitExtImpl::append_u512(ref self, word);
+    }
+
+    fn append_u512_le(ref self: ByteArray, word: u512) {
+        let u512 { limb0, limb1, limb2, limb3 } = word;
+        Self::append_u128_le(ref self, limb0);
+        Self::append_u128_le(ref self, limb1);
+        Self::append_u128_le(ref self, limb2);
+        Self::append_u128_le(ref self, limb3);
+    }
+
+    fn append_i8(ref self: ByteArray, word: i8) {
+        if word >= 0_i8 {
+            self.append_bytes_be(word.into(), 1);
+        } else {
+            self.append_bytes_be(word.into() + one_shift_left_bytes_felt252(1), 1);
+        }
+    }
+
+    fn append_i16(ref self: ByteArray, word: i16) {
+        if word >= 0_i16 {
+            self.append_bytes_be(word.into(), 2);
+        } else {
+            self.append_bytes_be(word.into() + one_shift_left_bytes_felt252(2), 2);
+        }
+    }
+
+    fn append_i16_le(ref self: ByteArray, word: i16) {
+        if word >= 0_i16 {
+            self.append_bytes_le(word.into(), 2);
+        } else {
+            self.append_bytes_le(word.into() + one_shift_left_bytes_felt252(2), 2);
+        }
+    }
+
+    fn append_i32(ref self: ByteArray, word: i32) {
+        if word >= 0_i32 {
+            self.append_bytes_be(word.into(), 4);
+        } else {
+            self.append_bytes_be(word.into() + one_shift_left_bytes_felt252(4), 4);
+        }
+    }
+
+    fn append_i32_le(ref self: ByteArray, word: i32) {
+        if word >= 0_i32 {
+            self.append_bytes_le(word.into(), 4);
+        } else {
+            self.append_bytes_le(word.into() + one_shift_left_bytes_felt252(4), 4);
+        }
+    }
+
+    fn append_i64(ref self: ByteArray, word: i64) {
+        if word >= 0_i64 {
+            self.append_bytes_be(word.into(), 8);
+        } else {
+            self.append_bytes_be(word.into() + one_shift_left_bytes_felt252(8), 8);
+        }
+    }
+
+    fn append_i64_le(ref self: ByteArray, word: i64) {
+        if word >= 0_i64 {
+            self.append_bytes_le(word.into(), 8);
+        } else {
+            self.append_bytes_le(word.into() + one_shift_left_bytes_felt252(8), 8);
+        }
+    }
+
+    fn append_i128(ref self: ByteArray, word: i128) {
+        if word >= 0_i128 {
+            self.append_bytes_be(word.into(), 16);
+        } else {
+            self.append_bytes_be(word.into() + one_shift_left_bytes_felt252(16), 16);
+        }
+    }
+
+    fn append_i128_le(ref self: ByteArray, word: i128) {
+        if word >= 0_i128 {
+            self.append_bytes_le(word.into(), 16);
+        } else {
+            self.append_bytes_le(word.into() + one_shift_left_bytes_felt252(16), 16);
+        }
     }
 }
 
