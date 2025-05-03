@@ -69,3 +69,35 @@ assert_eq!(Point { x: 0, y: 0 }, Zero::zero());
 assert!(Point { x: 0, y: 0 }.is_zero());
 assert!(Point { x: 1, y: 0 }.is_non_zero());
 ```
+
+## PrintStruct derive
+
+This macro adds an implementation of the Display trait for the type that derives it. The struct will be printed in a human-readable format like StructName(field1: value1, field2: value2, ...).
+
+The implementation is encapsulated in a separate module to prevent name collisions for commonly reused types such as ContractAddress. To use the generated implementation, import it explicitly.
+
+Only the following field types are currently supported:
+
+- Integer types: u8, u16, u32, u64, u128, u256, i8, i16, i32, i64, i128, i256
+- felt252
+- ContractAddress
+- bool
+- Arrays of the above: e.g., Array::<u256>, Array::<felt252>
+
+If a field uses an unsupported type, the macro will fail with a descriptive compile-time error.
+
+```rust
+#[derive(PrintStruct, Drop)]
+struct User {
+    id: u64,
+    name: felt252,
+    contract: ContractAddress,
+    values: Array::<u8>
+}
+
+// Import the generated Display implementation
+use User::{User, UserDisplay};
+
+let user = User { ... };
+println!("User is {}", user)
+```

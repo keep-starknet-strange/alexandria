@@ -1,14 +1,19 @@
 use cairo_lang_macro::TokenStream;
 use cairo_lang_parser::utils::SimpleParserDatabase;
 use cairo_lang_syntax::node::kind::SyntaxKind::{
-    Member, OptionWrappedGenericParamListEmpty, TerminalStruct, TokenIdentifier,
-    WrappedGenericParamList,
+    Member, OptionWrappedGenericParamListEmpty, TerminalStruct, TokenColonColon, TokenIdentifier,
+    TypeClause, WrappedGenericParamList,
 };
+
+pub(crate) struct MemberInfo {
+    pub(crate) name: String,
+    pub(crate) ty: String,
+}
 
 pub(crate) struct StructInfo {
     pub(crate) name: String,
     pub(crate) generic_params: Option<Vec<String>>,
-    pub(crate) members: Vec<String>,
+    pub(crate) members: Vec<MemberInfo>,
 }
 
 pub(crate) fn parse_struct_info(token_stream: TokenStream) -> StructInfo {
@@ -52,12 +57,34 @@ pub(crate) fn parse_struct_info(token_stream: TokenStream) -> StructInfo {
     let mut members = Vec::new();
     for node in nodes {
         if node.kind(&db) == Member {
-            let member = node
-                .descendants(&db)
-                .find(|node| node.kind(&db) == TokenIdentifier)
-                .map(|node| node.get_text(&db))
-                .unwrap();
-            members.push(member);
+            let mut name: Option<String> = None;
+            let mut type_parts: Vec<String> = Vec::new();
+
+            for descendant in node.descendants(&db) {
+                match descendant.kind(&db) {
+                    TypeClause => {
+                        type_parts = descendant
+                            .descendants(&db)
+                            .filter(|n| {
+                                let k = n.kind(&db);
+                                k == TokenIdentifier || k == TokenColonColon
+                            })
+                            .map(|n| n.get_text(&db))
+                            .collect();
+                    }
+                    TokenIdentifier => {
+                        if name.is_none() {
+                            name = Some(descendant.get_text(&db));
+                        }
+                    }
+                    _ => {}
+                }
+            }
+
+            if let (Some(name), false) = (name, type_parts.is_empty()) {
+                let ty = type_parts.join("::");
+                members.push(MemberInfo { name, ty });
+            }
         }
     }
 
