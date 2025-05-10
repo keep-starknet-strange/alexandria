@@ -35,6 +35,11 @@ pub impl RLPImpl of RLPTrait {
     /// # Errors
     /// * empty input - if the input is empty
     /// * input too short - if the input is too short for a given
+    #[deprecated(
+        feature: "deprecated-decode_type",
+        note: "Use `alexandria_encoding::rlp_byte_array::RLPTrait::decode_byte_array_type`.",
+        since: "2.11.1",
+    )]
     fn decode_type(input: Span<u8>) -> Result<(RLPType, u32, u32), RLPError> {
         let input_len = input.len();
         if input_len == 0 {
@@ -78,6 +83,11 @@ pub impl RLPImpl of RLPTrait {
     /// * `Span<u8> - RLP encoded items as a span of bytes
     /// # Errors
     /// * empty input - if the input is empty
+    #[deprecated(
+        feature: "deprecated-encode",
+        note: "Use `alexandria_encoding::rlp_byte_array::RLPTrait::encode_byte_array`.",
+        since: "2.11.1",
+    )]
     fn encode(mut input: Span<RLPItem>) -> Result<Span<u8>, RLPError> {
         if input.len() == 0 {
             return Result::Err(RLPError::EmptyInput);
@@ -122,6 +132,11 @@ pub impl RLPImpl of RLPTrait {
     /// * `input` - Array of bytes representing a RLP String to encode
     /// # Returns
     /// * `Span<u8> - RLP encoded items as a span of bytes
+    #[deprecated(
+        feature: "deprecated-encode_string",
+        note: "Use `alexandria_encoding::rlp_byte_array::RLPTrait::encode_byte_array_string`.",
+        since: "2.11.1",
+    )]
     fn encode_string(input: Span<u8>) -> Result<Span<u8>, RLPError> {
         let len = input.len();
         if len == 0 {
@@ -157,6 +172,11 @@ pub impl RLPImpl of RLPTrait {
     /// * `Span<RLPItem>` - Span of RLPItem
     /// # Errors
     /// * input too short - if the input is too short for a given
+    #[deprecated(
+        feature: "deprecated-decode",
+        note: "Use `alexandria_encoding::rlp_byte_array::RLPTrait::decode_byte_array`.",
+        since: "2.11.1",
+    )]
     fn decode(input: Span<u8>) -> Result<Span<RLPItem>, RLPError> {
         let mut output: Array<RLPItem> = Default::default();
         let input_len = input.len();

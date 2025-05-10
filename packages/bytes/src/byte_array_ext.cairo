@@ -220,7 +220,7 @@ pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
 
     #[inline(always)]
     fn read_felt252(self: @ByteArray, offset: usize) -> (usize, felt252) {
-        let (new_offset, value) = read_uint::<u256>(self, offset, 32);
+        let (new_offset, value) = read_uint::<felt252>(self, offset, 32);
         (new_offset, value.try_into().expect('Couldn\'t convert to felt252'))
     }
 
@@ -399,8 +399,7 @@ pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
 
     /// Append a felt252 to ByteArray
     fn append_felt252(ref self: ByteArray, value: felt252) {
-        let value: u256 = value.into();
-        Self::append_u256(ref self, value);
+        self.append_word(value.into(), 32);
     }
 
     /// Append a ContractAddress to ByteArray

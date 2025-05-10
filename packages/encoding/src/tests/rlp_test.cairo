@@ -1,3 +1,4 @@
+use alexandria_bytes::byte_array_ext::ByteArrayTraitExt;
 use alexandria_encoding::rlp::{RLPError, RLPItem, RLPTrait, RLPType};
 
 #[test]
