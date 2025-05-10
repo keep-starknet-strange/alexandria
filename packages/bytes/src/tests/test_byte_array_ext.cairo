@@ -96,7 +96,6 @@ fn test_append_u256() {
 #[available_gas(20000000)]
 fn test_append_felt252() {
     let mut ba = Default::default();
-    // let felt_value: felt252 = 0x0102030405060708091011121314151617181920212223242526272829303132
     let felt_value: felt252 = 0x91020304050607080910111213141516171819202122232425262728293031
         .try_into()
         .unwrap();
