@@ -399,7 +399,7 @@ pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
 
     /// Append a felt252 to ByteArray
     fn append_felt252(ref self: ByteArray, value: felt252) {
-        self.append_word(value.into(), 32);
+        Self::append_u256(ref self, value.into());
     }
 
     /// Append a ContractAddress to ByteArray
