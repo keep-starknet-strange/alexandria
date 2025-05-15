@@ -30,7 +30,6 @@
 - [Features](#features)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
-  - [Installation from Git repositories](#installation-from-git-repositories)
   - [Installation from Scarb registries](#installation-from-scarb-registries)
 - [Usage](#usage)
   - [Build](#build)
@@ -83,34 +82,19 @@ This repository is composed of multiple crates:
 - [Scarb](https://docs.swmansion.com/scarb)
 - [Rust](https://www.rust-lang.org/tools/install)
 
-### Installation from Git repositories
-
-Alexandria is a collection of utility Cairo packages, which have to be added as dependencies separately.
-For example, the `alexandria_math` package can be installed by adding the following line to your `Scarb.toml`:
-
-```toml
-[dependencies]
-alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
-```
-
-then add the following line in your `.cairo` file
-
-```rust
-use alexandria_math::sha512::sha512;
-```
 
 ### Installation from Scarb registries
 
-- ASCII : `scarb add alexandria_ascii@0.5.0`
-- Data Structures : `scarb add alexandria_data_structures@0.5.0`
-- Encoding : `scarb add alexandria_encoding@0.5.0`
-- Linalg : `scarb add alexandria_linalg@0.5.0`
-- Math : `scarb add alexandria_math@0.5.0`
-- Numeric : `scarb add alexandria_numeric@0.5.0`
-- Searching : `scarb add alexandria_searching@0.5.0`
-- Sorting : `scarb add alexandria_sorting@0.5.0`
-- Storage : `scarb add alexandria_storage@0.5.0`
-- Bytes : `scarb add alexandria_bytes@0.5.0`
+- ASCII : `scarb add alexandria_ascii@0.5.1`
+- Data Structures : `scarb add alexandria_data_structures@0.5.1`
+- Encoding : `scarb add alexandria_encoding@0.5.1`
+- Linalg : `scarb add alexandria_linalg@0.5.1`
+- Math : `scarb add alexandria_math@0.5.1`
+- Numeric : `scarb add alexandria_numeric@0.5.1`
+- Searching : `scarb add alexandria_searching@0.5.1`
+- Sorting : `scarb add alexandria_sorting@0.5.1`
+- Storage : `scarb add alexandria_storage@0.5.1`
+- Bytes : `scarb add alexandria_bytes@0.5.1`
 
 ## Usage
 
