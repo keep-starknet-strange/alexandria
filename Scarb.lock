@@ -3,26 +3,27 @@ version = 1
 
 [[package]]
 name = "alexandria_ascii"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "alexandria_data_structures",
 ]
 
 [[package]]
 name = "alexandria_bytes"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "alexandria_data_structures",
+ "alexandria_encoding",
  "alexandria_math",
 ]
 
 [[package]]
 name = "alexandria_data_structures"
-version = "0.5.0"
+version = "0.5.1"
 
 [[package]]
 name = "alexandria_encoding"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "alexandria_bytes",
  "alexandria_data_structures",
@@ -32,29 +33,29 @@ dependencies = [
 
 [[package]]
 name = "alexandria_linalg"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "alexandria_math",
 ]
 
 [[package]]
 name = "alexandria_macros"
-version = "0.5.0"
+version = "0.5.1"
 
 [[package]]
 name = "alexandria_math"
-version = "0.5.0"
+version = "0.5.1"
 
 [[package]]
 name = "alexandria_merkle_tree"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "alexandria_math",
 ]
 
 [[package]]
 name = "alexandria_numeric"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "alexandria_math",
  "alexandria_searching",
@@ -62,22 +63,22 @@ dependencies = [
 
 [[package]]
 name = "alexandria_searching"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "alexandria_data_structures",
 ]
 
 [[package]]
 name = "alexandria_sorting"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "alexandria_data_structures",
 ]
 
 [[package]]
 name = "alexandria_storage"
-version = "0.5.0"
+version = "0.5.1"
 
 [[package]]
 name = "alexandria_utils"
-version = "0.5.0"
+version = "0.5.1"

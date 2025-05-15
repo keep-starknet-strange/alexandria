@@ -4,13 +4,13 @@ version.workspace = true
 description = "Merkle tree related stuff"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/merkle_tree"
 edition = "2023_11"
-cairo-version = "2.11.1"
+cairo-version = "2.11.2"
 
 [tool]
 fmt.workspace = true
 
 [dependencies]
-alexandria_math = { path = "../math", version = "0.5.0" }
+alexandria_math = { path = "../math", version = "0.5.1" }
 
 [dev-dependencies]
 cairo_test.workspace = true

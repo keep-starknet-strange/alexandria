@@ -4,14 +4,14 @@ version.workspace = true
 description = "A set of searching algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/searching"
 edition = "2023_11"
-cairo-version = "2.11.1"
+cairo-version = "2.11.2"
 
 [tool]
 fmt.workspace = true
 
 [dependencies]
 # dependency due to VecTrait usage in dijkstra.cairo
-alexandria_data_structures = { path = "../data_structures", version = "0.5.0" }
+alexandria_data_structures = { path = "../data_structures", version = "0.5.1" }
 
 [dev-dependencies]
 cairo_test.workspace = true
