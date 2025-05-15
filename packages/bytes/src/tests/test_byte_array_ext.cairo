@@ -96,13 +96,13 @@ fn test_append_u256() {
 #[available_gas(20000000)]
 fn test_append_felt252() {
     let mut ba = Default::default();
-    let felt_value: felt252 = 0x0102030405060708091011121314151617181920212223242526272829303132
+    let felt_value: felt252 = 0x91020304050607080910111213141516171819202122232425262728293031
         .try_into()
         .unwrap();
     ba.append_felt252(felt_value);
     assert_eq!(ba.len(), 32);
-    assert_eq!(ba.at(0).unwrap(), 0x01);
-    assert_eq!(ba.at(31).unwrap(), 0x32);
+    assert_eq!(ba.at(0).unwrap(), 0x00);
+    assert_eq!(ba.at(31).unwrap(), 0x31);
 }
 
 // Tests for reading values
