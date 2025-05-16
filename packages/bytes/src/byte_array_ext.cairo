@@ -1,10 +1,10 @@
-use alexandria_encoding::reversible::reversing;
 use alexandria_math::{U128BitShift, U256BitShift};
 use core::integer::u512;
 use core::num::traits::Zero;
 use starknet::ContractAddress;
 use crate::bit_array::one_shift_left_bytes_felt252;
 use crate::byte_appender::{ByteAppender, ByteAppenderSupportTrait};
+use crate::reversible::reversing;
 
 
 pub impl SpanU8IntoBytearray of Into<Span<u8>, ByteArray> {
