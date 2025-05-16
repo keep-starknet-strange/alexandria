@@ -34,7 +34,7 @@ fn generate_op_trait_impl(op_info: &OpInfo, s: &StructInfo) -> String {
     let members_op = s
         .members
         .iter()
-        .map(|member| format!("{0}: lhs.{0} {1} rhs.{0}", member, op_info.operator))
+        .map(|member| format!("{0}: lhs.{0} {1} rhs.{0}", member.name, op_info.operator))
         .collect::<Vec<_>>()
         .join(", ");
 
@@ -76,7 +76,7 @@ fn generate_op_assign_trait_impl(op_info: &OpInfo, s: &StructInfo) -> String {
     let members_op = s
         .members
         .iter()
-        .map(|member| format!("self.{0} {1}= rhs.{0}", member, op_info.operator))
+        .map(|member| format!("self.{0} {1}= rhs.{0}", member.name, op_info.operator))
         .collect::<Vec<_>>()
         .join(";\n        ");
 
