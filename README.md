@@ -26,13 +26,13 @@
 - [Report a Bug](#report-a-bug)
 - [Request a Feature](#request-a-feature)
 - [About](#about)
+- [Version](#version)
 - [Features](#features)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
+  - [Installation from Scarb registries](#installation-from-scarb-registries)
 - [Usage](#usage)
   - [Build](#build)
-  - [Run](#run)
   - [Test](#test)
   - [Format](#format)
 - [Roadmap](#roadmap)
@@ -54,6 +54,10 @@
 Alexandria is a community maintained standard library for Cairo 1.0.
 It is a collection of useful algorithms and data structures implemented in Cairo.
 Current version can be found in the [toml file](./Scarb.toml)
+
+## Version
+
+Actual version is **0.5.0** compatible with starknet **2.11.1**
 
 ## Features
 
@@ -78,21 +82,19 @@ This repository is composed of multiple crates:
 - [Scarb](https://docs.swmansion.com/scarb)
 - [Rust](https://www.rust-lang.org/tools/install)
 
-### Installation
 
-Alexandria is a collection of utility Cairo packages, which have to be added as dependencies separately.
-For example, the `alexandria_math` package can be installed by adding the following line to your `Scarb.toml`:
+### Installation from Scarb registries
 
-```toml
-[dependencies]
-alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
-```
-
-then add the following line in your `.cairo` file
-
-```rust
-use alexandria_math::sha512::sha512;
-```
+- ASCII : `scarb add alexandria_ascii@0.5.1`
+- Data Structures : `scarb add alexandria_data_structures@0.5.1`
+- Encoding : `scarb add alexandria_encoding@0.5.1`
+- Linalg : `scarb add alexandria_linalg@0.5.1`
+- Math : `scarb add alexandria_math@0.5.1`
+- Numeric : `scarb add alexandria_numeric@0.5.1`
+- Searching : `scarb add alexandria_searching@0.5.1`
+- Sorting : `scarb add alexandria_sorting@0.5.1`
+- Storage : `scarb add alexandria_storage@0.5.1`
+- Bytes : `scarb add alexandria_bytes@0.5.1`
 
 ## Usage
 

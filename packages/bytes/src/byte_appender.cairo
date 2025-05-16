@@ -1,5 +1,3 @@
-use alexandria_encoding::reversible::reversing;
-use core::byte_array::ByteArrayTrait;
 use core::integer::u512;
 use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 
