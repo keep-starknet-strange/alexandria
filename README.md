@@ -57,7 +57,7 @@ Current version can be found in the [toml file](./Scarb.toml)
 
 ## Version
 
-Actual version is **0.5.0** compatible with starknet **2.11.1**
+Actual version is **0.5.1** compatible with starknet **2.11.2**
 
 ## Features
 
