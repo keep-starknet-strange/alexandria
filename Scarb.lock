@@ -31,6 +31,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "alexandria_evm"
+version = "0.5.1"
+dependencies = [
+ "alexandria_bytes",
+ "alexandria_math",
+]
+
+[[package]]
 name = "alexandria_linalg"
 version = "0.5.1"
 dependencies = [

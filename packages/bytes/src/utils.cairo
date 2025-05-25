@@ -81,7 +81,7 @@ pub fn keccak_u128s_be(input: Span<u128>, n_bytes: usize) -> u256 {
 /// Reverses the endianness of a u256 value.
 /// # Arguments
 /// * `input` - The u256 value to reverse endianness
-fn u256_reverse_endian(input: u256) -> u256 {
+pub fn u256_reverse_endian(input: u256) -> u256 {
     let low = u128_byte_reverse(input.high);
     let high = u128_byte_reverse(input.low);
     u256 { low, high }
