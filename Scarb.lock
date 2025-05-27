@@ -13,7 +13,6 @@ name = "alexandria_bytes"
 version = "0.5.1"
 dependencies = [
  "alexandria_data_structures",
- "alexandria_encoding",
  "alexandria_math",
 ]
 
