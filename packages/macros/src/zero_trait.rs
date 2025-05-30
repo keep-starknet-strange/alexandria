@@ -27,14 +27,14 @@ fn generate_zero_trait_impl(s: &StructInfo) -> String {
     let zero_fn = s
         .members
         .iter()
-        .map(|member| format!("{}: core::num::traits::Zero::zero()", member))
+        .map(|member| format!("{}: core::num::traits::Zero::zero()", member.name))
         .collect::<Vec<_>>()
         .join(", ");
 
     let is_zero_fn = s
         .members
         .iter()
-        .map(|member| format!("self.{}.is_zero()", member))
+        .map(|member| format!("self.{}.is_zero()", member.name))
         .collect::<Vec<_>>()
         .join(" && ");
 
