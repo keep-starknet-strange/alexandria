@@ -10,7 +10,7 @@ pub trait ReversibleBytes<T> {
     /// Reverses the byte order or endianness of `self`.
     /// For example, the word `0x1122_u16` is reversed into `0x2211_u16`.
     /// # Returns
-    /// `T` - returns the byte reversal of `self` into the same type T
+    /// * `T` - returns the byte reversal of `self` into the same type T
     fn reverse_bytes(self: @T) -> T;
 }
 
@@ -19,7 +19,7 @@ pub trait ReversibleBits<T> {
     /// Reverses the underlying ordering of the bit representation of `self`.
     /// For example, the word `0b10111010_u8` is reversed into `0b01011101`.
     /// # Returns
-    /// `T` - the bit-representation of `self` reversed into the same type T
+    /// * `T` - the bit-representation of `self` reversed into the same type T
     fn reverse_bits(self: @T) -> T;
 }
 

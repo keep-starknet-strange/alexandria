@@ -7,6 +7,13 @@ use alexandria_math::{U128BitShift, U256BitShift};
 /// Use like :
 /// `let encoded: Bytes = Bytes::new_empty().encode_as(32, x).encode_as(13, y)...`
 pub trait SolAbiEncodeAsTrait<T> {
+    /// Encodes a value of type T into bytes with specified byte size
+    /// # Arguments
+    /// * `self` - The Bytes object to append encoded data to
+    /// * `byteSize` - The number of bytes to use for encoding (must be <= 32)
+    /// * `x` - The value to encode
+    /// # Returns
+    /// * `Bytes` - The original Bytes object with the encoded value appended
     fn encode_as(self: Bytes, byteSize: usize, x: T) -> Bytes;
 }
 

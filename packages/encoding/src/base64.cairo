@@ -2,19 +2,72 @@ use alexandria_bytes::byte_array_ext::ByteArrayTraitExt;
 use alexandria_data_structures::array_ext::ArrayTraitExt;
 
 
+/// Generic trait for encoding data into Base64 format
+///
+/// This trait provides a common interface for encoding various data types
+/// into Base64 representation, which is widely used for encoding binary data
+/// in text-based formats and data transmission.
+///
+/// # Type Parameters
+/// * `T` - The input data type to be encoded
 pub trait Encoder<T> {
+    /// Encodes data into Base64 format
+    ///
+    /// # Arguments
+    /// * `data` - The data to encode
+    ///
+    /// # Returns
+    /// * `Array<u8>` - Base64 encoded representation as bytes
     fn encode(data: T) -> Array<u8>;
 }
 
+/// Generic trait for decoding data from Base64 format
+///
+/// This trait provides a common interface for decoding Base64 encoded data
+/// back to its original binary representation.
+///
+/// # Type Parameters
+/// * `T` - The input data type to be decoded (typically Base64 encoded bytes)
 pub trait Decoder<T> {
+    /// Decodes Base64 encoded data back to raw bytes
+    ///
+    /// # Arguments
+    /// * `data` - The Base64 encoded data to decode
+    ///
+    /// # Returns
+    /// * `Array<u8>` - Raw bytes decoded from Base64 format
     fn decode(data: T) -> Array<u8>;
 }
 
+/// Trait for encoding ByteArray data into Base64 format
+///
+/// This trait is specialized for ByteArray types, providing efficient
+/// encoding operations while maintaining the ByteArray type for both
+/// input and output.
 pub trait ByteArrayEncoder {
+    /// Encodes a ByteArray into Base64 format
+    ///
+    /// # Arguments
+    /// * `data` - The ByteArray to encode
+    ///
+    /// # Returns
+    /// * `ByteArray` - Base64 encoded representation as ByteArray
     fn encode(data: ByteArray) -> ByteArray;
 }
 
+/// Trait for decoding ByteArray data from Base64 format
+///
+/// This trait is specialized for ByteArray types, providing efficient
+/// decoding operations while maintaining the ByteArray type for both
+/// input and output.
 pub trait ByteArrayDecoder {
+    /// Decodes a Base64 encoded ByteArray back to raw bytes
+    ///
+    /// # Arguments
+    /// * `data` - The Base64 encoded ByteArray to decode
+    ///
+    /// # Returns
+    /// * `ByteArray` - Raw bytes decoded from Base64 format as ByteArray
     fn decode(data: ByteArray) -> ByteArray;
 }
 
@@ -72,6 +125,25 @@ pub impl Base64ByteArrayUrlEncoder of ByteArrayEncoder {
     }
 }
 
+/// Encodes an array of u8 bytes into Base64 format
+///
+/// This function takes an array of bytes and converts them to Base64 encoding
+/// using the provided character set. It processes the input in groups of 3 bytes,
+/// converting them to 4 Base64 characters, and handles padding when necessary.
+///
+/// # Arguments
+/// * `bytes` - A mutable array of u8 bytes to be encoded
+/// * `base64_chars` - A span containing the Base64 character set for encoding
+///
+/// # Returns
+/// * `Array<u8>` - The Base64 encoded result as an array of bytes
+///
+/// # Algorithm
+/// 1. Groups input bytes into chunks of 3
+/// 2. Converts each 3-byte chunk into a 24-bit number
+/// 3. Splits the 24-bit number into four 6-bit values
+/// 4. Maps each 6-bit value to a Base64 character
+/// 5. Adds padding ('=') characters when input length is not divisible by 3
 pub fn encode_u8_array(mut bytes: Array<u8>, base64_chars: Span<u8>) -> Array<u8> {
     let mut result = array![];
     if bytes.len() == 0 {
@@ -121,6 +193,26 @@ pub fn encode_u8_array(mut bytes: Array<u8>, base64_chars: Span<u8>) -> Array<u8
     result
 }
 
+/// Encodes a felt252 value into Base64 format
+///
+/// This function converts a felt252 value to its Base64 representation using
+/// a specialized algorithm that handles the large numeric range of felt252.
+/// The encoding process divides the felt252 into manageable chunks and maps
+/// them to Base64 characters, with padding to ensure consistent output length.
+///
+/// # Arguments
+/// * `self` - The felt252 value to be encoded
+/// * `base64_chars` - A span containing the Base64 character set for encoding
+///
+/// # Returns
+/// * `Array<u8>` - The Base64 encoded result as an array of bytes, always 44 characters long
+///
+/// # Algorithm
+/// 1. Converts felt252 to u256 for processing
+/// 2. Processes the number in chunks using division and modulo operations
+/// 3. Maps the resulting values to Base64 characters
+/// 4. Pads with 'A' characters to reach the standard 43-character length
+/// 5. Reverses the result and appends '=' padding character
 pub fn encode_felt(self: felt252, base64_chars: Span<u8>) -> Array<u8> {
     let mut result = array![];
 
@@ -433,6 +525,10 @@ fn get_base64_value(x: u8) -> u8 {
     return 0;
 }
 
+/// Returns the standard Base64 character set (A-Z, a-z, 0-9)
+///
+/// # Returns
+/// * `Array<u8>` - Array of 62 Base64 characters
 fn get_base64_char_set() -> Array<u8> {
     let mut result = array![
         'A',

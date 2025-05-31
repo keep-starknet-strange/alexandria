@@ -29,15 +29,35 @@ pub struct Graph<T> {
     adj_nodes: Felt252Dict<T>,
 }
 
-/// Graph trait.
+/// Graph trait defining operations for working with weighted directed graphs.
 pub trait GraphTrait {
-    /// Create a new graph instance.
+    /// Create a new empty graph instance.
+    /// # Returns
+    /// * `Graph<Nullable<Span<Node>>>` - A new empty graph
     fn new() -> Graph<Nullable<Span<Node>>>;
-    /// add an edge to graph
+
+    /// Add a weighted directed edge to the graph.
+    /// # Arguments
+    /// * `self` - The graph instance to modify
+    /// * `source` - The source node ID
+    /// * `dest` - The destination node ID
+    /// * `weight` - The weight/cost of the edge
     fn add_edge(ref self: Graph<Nullable<Span<Node>>>, source: u32, dest: u32, weight: u128);
-    /// return shortest path from s
+
+    /// Calculate shortest paths from a source node to all other nodes using Dijkstra's algorithm.
+    /// # Arguments
+    /// * `self` - The graph instance
+    /// * `source` - The starting node ID to calculate paths from
+    /// # Returns
+    /// * `Felt252Dict<u128>` - Dictionary mapping node IDs to shortest distances
     fn shortest_path(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u128>;
-    /// return shortest path from s
+
+    /// Get adjacent nodes for a given source node.
+    /// # Arguments
+    /// * `self` - The graph instance
+    /// * `source` - The node ID to get adjacencies for
+    /// # Returns
+    /// * `Nullable<Span<Node>>` - Span of adjacent nodes or null if none exist
     fn adj_nodes(ref self: Graph<Nullable<Span<Node>>>, source: felt252) -> Nullable<Span<Node>>;
 }
 
@@ -89,6 +109,25 @@ impl GraphImpl of GraphTrait {
     }
 }
 
+/// Implements Dijkstra's shortest path algorithm to find shortest distances from a source node
+/// to all other nodes in a weighted graph with non-negative edge weights.
+///
+/// Time complexity: O((V + E) log V) where V is vertices and E is edges
+/// Space complexity: O(V) for distance tracking and priority queue
+///
+/// # Arguments
+/// * `self` - The graph containing nodes and adjacency information
+/// * `source` - The starting node to calculate shortest paths from
+///
+/// # Returns
+/// * `Felt252Dict<u128>` - Dictionary mapping node IDs to their shortest distances from source
+///
+/// # Algorithm Overview
+/// 1. Initialize all distances to infinity except source (distance 0)
+/// 2. Use priority queue to always process the closest unvisited node
+/// 3. For each node, update distances to its neighbors if a shorter path is found
+/// 4. Mark nodes as visited to avoid reprocessing
+/// 5. Continue until all reachable nodes are processed
 pub fn dijkstra(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u128> {
     let mut priority_queue = array![];
     let mut visited_node = array![];
