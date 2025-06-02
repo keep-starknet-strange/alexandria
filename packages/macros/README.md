@@ -2,10 +2,14 @@
 
 A collection of useful macros.
 
-- [Add, Sub, Mul, Div derives](#add-sub-mul-div-derives)
-- [AddAssign, SubAssign, MulAssign, DivAssign derives](#addassign-subassign-mulassign-divassign-derives)
-- [pow!](#pow)
-- [Zero derive](#zero-derive)
+- [Macros](#macros)
+  - [Add, Sub, Mul, Div derives](#add-sub-mul-div-derives)
+  - [AddAssign, SubAssign, MulAssign, DivAssign derives](#addassign-subassign-mulassign-divassign-derives)
+  - [pow!](#pow)
+  - [Zero derive](#zero-derive)
+  - [generate\_events](#generate_events)
+    - [Usage](#usage)
+    - [What it generates](#what-it-generates)
 
 ## Add, Sub, Mul, Div derives
 
@@ -68,4 +72,66 @@ struct Point {
 assert_eq!(Point { x: 0, y: 0 }, Zero::zero());
 assert!(Point { x: 0, y: 0 }.is_zero());
 assert!(Point { x: 1, y: 0 }.is_non_zero());
+```
+
+## generate_events
+
+Automatically generates event structs for Starknet contracts. This macro simplifies event management by creating the necessary struct definitions based on an enum declaration.
+
+### Usage
+
+```rust
+use alexandria_macros::generate_events;
+
+#[starknet::contract]
+mod MyContract {
+    use starknet::event::EventEmitter;
+
+    #[generate_events]
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    pub enum Event {
+        Transfer: Transfer,
+        Approval: Approval,
+        Mint: Mint,
+    }
+
+    #[storage]
+    struct Storage {
+        // ... your storage fields
+    }
+
+    #[abi(embed_v0)]
+    impl MyContract of IMyContract<ContractState> {
+        fn transfer(ref self: ContractState, to: ContractAddress, amount: u256) {
+            // ... transfer logic
+            
+            // Emit the event
+            self.emit(Transfer { data: array![to.into(), amount.into()].span() }
+            ));
+        }
+    }
+}
+```
+
+### What it generates
+
+The `generate_events` macro automatically creates event structs with a standardized `data` field:
+
+```rust
+// Generated automatically by the macro
+#[derive(Drop, starknet::Event)]
+pub struct Transfer {
+    pub data: Span<felt252>,
+}
+
+#[derive(Drop, starknet::Event)]
+pub struct Approval {
+    pub data: Span<felt252>,
+}
+
+#[derive(Drop, starknet::Event)]
+pub struct Mint {
+    pub data: Span<felt252>,
+}
 ```
