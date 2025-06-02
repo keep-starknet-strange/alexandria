@@ -81,27 +81,27 @@ pub trait ByteReader<T> {
     fn word_u128_le(self: @T, offset: usize) -> Option<u128>;
     /// Reads a u8 unsigned integer
     /// # Returns
-    /// `Option<u8>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<u8>` - If there are enough bytes remaining an optional integer is returned
     fn read_u8(ref self: ByteReaderState<T>) -> Option<u8>;
     /// Reads a u16 unsigned integer in big endian byte order
     /// # Returns
-    /// `Option<u16>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<u16>` - If there are enough bytes remaining an optional integer is returned
     fn read_u16(ref self: ByteReaderState<T>) -> Option<u16>;
     /// Reads a u16 unsigned integer in little endian byte order
     /// # Returns
-    /// `Option<u16>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<u16>` - If there are enough bytes remaining an optional integer is returned
     fn read_u16_le(ref self: ByteReaderState<T>) -> Option<u16>;
     /// Reads a u32 unsigned integer in big endian byte order
     /// # Returns
-    /// `Option<u32>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<u32>` - If there are enough bytes remaining an optional integer is returned
     fn read_u32(ref self: ByteReaderState<T>) -> Option<u32>;
     /// Reads a u32 unsigned integer in little endian byte order
     /// # Returns
-    /// `Option<u32>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<u32>` - If there are enough bytes remaining an optional integer is returned
     fn read_u32_le(ref self: ByteReaderState<T>) -> Option<u32>;
     /// Reads a u64 unsigned integer in big endian byte order
     /// # Returns
-    /// `Option<u64>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<u64>` - If there are enough bytes remaining an optional integer is returned
     fn read_u64(ref self: ByteReaderState<T>) -> Option<u64>;
     /// Reads a u64 unsigned integer in little endian byte order
     /// # Returns
@@ -109,67 +109,67 @@ pub trait ByteReader<T> {
     fn read_u64_le(ref self: ByteReaderState<T>) -> Option<u64>;
     /// Reads a u128 unsigned integer in big endian byte order
     /// # Returns
-    /// `Option<u218>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<u218>` - If there are enough bytes remaining an optional integer is returned
     fn read_u128(ref self: ByteReaderState<T>) -> Option<u128>;
     /// Reads a u128 unsigned integer in little endian byte order
     /// # Returns
-    /// `Option<u218>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<u218>` - If there are enough bytes remaining an optional integer is returned
     fn read_u128_le(ref self: ByteReaderState<T>) -> Option<u128>;
     /// Reads a u256 unsigned integer in big endian byte order
     /// # Returns
-    /// `Option<u256>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<u256>` - If there are enough bytes remaining an optional integer is returned
     fn read_u256(ref self: ByteReaderState<T>) -> Option<u256>;
     /// Reads a u256 unsigned integer in little endian byte order
     /// # Returns
-    /// `Option<u256>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<u256>` - If there are enough bytes remaining an optional integer is returned
     fn read_u256_le(ref self: ByteReaderState<T>) -> Option<u256>;
     /// Reads a u512 unsigned integer in big endian byte order
     /// # Returns
-    /// `Option<u512>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<u512>` - If there are enough bytes remaining an optional integer is returned
     fn read_u512(ref self: ByteReaderState<T>) -> Option<u512>;
     /// Reads a u512 unsigned integer in little endian byte order
     /// # Returns
-    /// `Option<u512>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<u512>` - If there are enough bytes remaining an optional integer is returned
     fn read_u512_le(ref self: ByteReaderState<T>) -> Option<u512>;
     /// Reads an i8 signed integer in two's complement encoding from the ByteArray
     /// # Returns
-    /// `Option<i8>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<i8>` - If there are enough bytes remaining an optional integer is returned
     fn read_i8(ref self: ByteReaderState<T>) -> Option<i8>;
     /// Reads an i16 signed integer in two's complement encoding from the ByteArray in big endian
     /// byte order # Returns
-    /// `Option<i16>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<i16>` - If there are enough bytes remaining an optional integer is returned
     fn read_i16(ref self: ByteReaderState<T>) -> Option<i16>;
     /// Reads an i16 signed integer in two's complement encoding from the ByteArray in little endian
     /// byte order # Returns
-    /// `Option<i16>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<i16>` - If there are enough bytes remaining an optional integer is returned
     fn read_i16_le(ref self: ByteReaderState<T>) -> Option<i16>;
     /// Reads an i32 signed integer in two's complement encoding from the ByteArray in big endian
     /// byte order # Returns
-    /// `Option<i32>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<i32>` - If there are enough bytes remaining an optional integer is returned
     fn read_i32(ref self: ByteReaderState<T>) -> Option<i32>;
     /// Reads an i32 signed integer in two's complement encoding from the ByteArray in little endian
     /// byte order # Returns
-    /// `Option<i32>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<i32>` - If there are enough bytes remaining an optional integer is returned
     fn read_i32_le(ref self: ByteReaderState<T>) -> Option<i32>;
     /// Reads an i64 signed integer in two's complement encoding from the ByteArray in big endian
     /// byte order # Returns
-    /// `Option<i64>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<i64>` - If there are enough bytes remaining an optional integer is returned
     fn read_i64(ref self: ByteReaderState<T>) -> Option<i64>;
     /// Reads an i64 signed integer in two's complement encoding from the ByteArray in little endian
     /// byte order # Returns
-    /// `Option<i64>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<i64>` - If there are enough bytes remaining an optional integer is returned
     fn read_i64_le(ref self: ByteReaderState<T>) -> Option<i64>;
     /// Reads an i128 signed integer in two's complement encoding from the ByteArray in big endian
     /// byte order # Returns
-    /// `Option<i128>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<i128>` - If there are enough bytes remaining an optional integer is returned
     fn read_i128(ref self: ByteReaderState<T>) -> Option<i128>;
     /// Reads an i128 signed integer in two's complement encoding from the ByteArray in little
     /// endian byte order # Returns
-    /// `Option<i128>` - If there are enough bytes remaining an optional integer is returned
+    /// *Option<i128>` - If there are enough bytes remaining an optional integer is returned
     fn read_i128_le(ref self: ByteReaderState<T>) -> Option<i128>;
     /// Remaining length count relative to what has already been consume/read
     /// # Returns
-    /// `usize` - count number of bytes remaining
+    /// *usize` - count number of bytes remaining
     fn len(self: @ByteReaderState<T>) -> usize;
 }
 

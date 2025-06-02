@@ -8,6 +8,12 @@ use starknet::{ContractAddress, EthAddress};
 /// Use like this:
 /// BytesTrait::new_empty().encode_selector(selector).encode(arg1).encode(arg2)...
 pub trait SolAbiEncodeSelectorTrait {
+    /// Encodes a function selector as 4 bytes at the beginning of the data
+    /// # Arguments
+    /// * `self` - The Bytes object to append the selector to
+    /// * `selector` - The 4-byte function selector (u32)
+    /// # Returns
+    /// * `Bytes` - The original Bytes object with the selector appended
     fn encode_selector(self: Bytes, selector: u32) -> Bytes;
 }
 

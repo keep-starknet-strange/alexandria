@@ -1,14 +1,12 @@
 //! Merge Sort
-
-// Merge Sort
-/// # Arguments
-/// * `arr` - Array to sort
-/// # Returns
-/// * `Array<T>` - Sorted array
-
 use super::Sortable;
 
 pub impl MergeSort of Sortable {
+    // Merge Sort
+    /// # Arguments
+    /// * `arr` - Array to sort
+    /// # Returns
+    /// * `Array<T>` - Sorted array
     fn sort<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(mut array: Span<T>) -> Array<T> {
         let len = array.len();
         if len == 0 {

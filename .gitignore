@@ -2,6 +2,7 @@
 # will have compiled files and executables
 debug/
 target/
+book/
 
 # Starknet foundry
 .snfoundry_cache

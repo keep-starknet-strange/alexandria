@@ -42,69 +42,168 @@ pub impl ByteArrayIntoArrayU8 of Into<ByteArray, Array<u8>> {
 /// Extension trait for reading and writing different data types to `ByteArray`
 pub trait ByteArrayTraitExt {
     /// Create a ByteArray from an array of u128
+    /// # Arguments
+    /// * `size` - The size of the ByteArray
+    /// * `data` - Array of u128 values to create ByteArray from
     fn new(size: usize, data: Array<u128>) -> ByteArray;
     /// instantiate a new ByteArray
     fn new_empty() -> ByteArray;
     // get size. Same as len()
+    /// # Arguments
+    /// * `self` - The ByteArray to get the size of
     fn size(self: @ByteArray) -> usize;
     /// Reads a 8-bit unsigned integer from the given offset.
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
     fn read_u8(self: @ByteArray, offset: usize) -> (usize, u8);
     /// Reads a 16-bit unsigned integer from the given offset.
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
     fn read_u16(self: @ByteArray, offset: usize) -> (usize, u16);
     /// Reads a 32-bit unsigned integer from the given offset.
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
     fn read_u32(self: @ByteArray, offset: usize) -> (usize, u32);
     /// Reads a `usize` from the given offset.
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
     fn read_usize(self: @ByteArray, offset: usize) -> (usize, usize);
     /// Reads a 64-bit unsigned integer from the given offset.
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
     fn read_u64(self: @ByteArray, offset: usize) -> (usize, u64);
     /// Reads a 128-bit unsigned integer from the given offset.
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
     fn read_u128(self: @ByteArray, offset: usize) -> (usize, u128);
     /// Read value with size bytes from ByteArray, and packed into u128
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
+    /// * `size` - The number of bytes to read
     fn read_u128_packed(self: @ByteArray, offset: usize, size: usize) -> (usize, u128);
     /// Reads a packed array of `u128` values from the given offset.
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
+    /// * `array_length` - The length of the array to read
+    /// * `element_size` - The size of each element in bytes
     fn read_u128_array_packed(
         self: @ByteArray, offset: usize, array_length: usize, element_size: usize,
     ) -> (usize, Array<u128>);
     /// Reads a 256-bit unsigned integer from the given offset.
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
     fn read_u256(self: @ByteArray, offset: usize) -> (usize, u256);
     /// Reads an array of `u256` values from the given offset.
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
+    /// * `array_length` - The length of the array to read
     fn read_u256_array(
         self: @ByteArray, offset: usize, array_length: usize,
     ) -> (usize, Array<u256>);
     /// Reads a `felt252` (Starknet field element) from the given offset.
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
     fn read_felt252(self: @ByteArray, offset: usize) -> (usize, felt252);
     /// Read value with size bytes from Bytes, and packed into felt252
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
+    /// * `size` - The number of bytes to read
     fn read_felt252_packed(self: @ByteArray, offset: usize, size: usize) -> (usize, felt252);
     /// Reads a `bytes31` value (31-byte sequence) from the given offset.
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
     fn read_bytes31(self: @ByteArray, offset: usize) -> (usize, bytes31);
     /// Reads a Starknet contract address from the given offset.
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
     fn read_address(self: @ByteArray, offset: usize) -> (usize, ContractAddress);
     /// Reads a raw sequence of bytes of given `size` from the given offset.
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
+    /// * `size` - The number of bytes to read
     fn read_bytes(self: @ByteArray, offset: usize, size: usize) -> (usize, ByteArray);
     /// Appends a 8-bit unsigned integer to the `ByteArray`.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
     fn append_u8(ref self: ByteArray, value: u8);
     /// Appends a 16-bit unsigned integer to the `ByteArray`.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
     fn append_u16(ref self: ByteArray, value: u16);
     /// Appends a 32-bit unsigned integer to the `ByteArray`.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
     fn append_u32(ref self: ByteArray, value: u32);
     /// Appends usize to the `ByteArray`.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
     fn append_usize(ref self: ByteArray, value: usize);
     /// Appends a 64-bit unsigned integer to the `ByteArray`.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
     fn append_u64(ref self: ByteArray, value: u64);
     /// Appends a 128-bit unsigned integer to the `ByteArray`.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
     fn append_u128(ref self: ByteArray, value: u128);
     /// Appends a 256-bit unsigned integer to the `ByteArray`.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
     fn append_u256(ref self: ByteArray, value: u256);
     /// Appends a 512-bit unsigned integer to the `ByteArray`.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
     fn append_u512(ref self: ByteArray, value: u512);
     /// Appends a `felt252` to the `ByteArray`.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
     fn append_felt252(ref self: ByteArray, value: felt252);
     /// Appends a Starknet contract address to the `ByteArray`.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
     fn append_address(ref self: ByteArray, value: ContractAddress);
     /// Appends a `bytes31` value to the `ByteArray`.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
     fn append_bytes31(ref self: ByteArray, value: bytes31);
     /// Updates a byte at the given `offset` with a new value.
+    /// # Arguments
+    /// * `self` - The ByteArray to update
+    /// * `offset` - The offset to update at
+    /// * `value` - The new value
     fn update_at(ref self: ByteArray, offset: usize, value: u8);
+    /// Reads an unsigned integer of type T from the ByteArray starting at a given offset,
+    /// with a specified size.
+    /// # Arguments
+    /// * `self` - The ByteArray to read from
+    /// * `offset` - The offset to read from
+    /// * `size` - The number of bytes to read
     fn read_uint_within_size<
         T, +Add<T>, +Mul<T>, +Zero<T>, +TryInto<felt252, T>, +Drop<T>, +Into<u8, T>,
     >(
