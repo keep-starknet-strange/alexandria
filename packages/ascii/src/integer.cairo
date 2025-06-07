@@ -7,7 +7,13 @@ pub trait ToAsciiTrait<T, U> {
 
 // converts integers into an array of its individual ascii values
 pub trait ToAsciiArrayTrait<T> {
+    /// Converts an integer to an array of its individual ASCII values in normal order
+    /// # Arguments
+    /// * `self` - The integer value to convert to ASCII array
     fn to_ascii_array(self: T) -> Array<felt252>;
+    /// Converts an integer to an array of its individual ASCII values in reverse order
+    /// # Arguments
+    /// * `self` - The integer value to convert to inverse ASCII array
     fn to_inverse_ascii_array(self: T) -> Array<felt252>;
 }
 

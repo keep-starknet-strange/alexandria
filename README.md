@@ -73,6 +73,7 @@ This repository is composed of multiple crates:
 - [Sorting](./packages/sorting/README.md)
 - [Storage](./packages/storage/README.md)
 - [Bytes](./packages/bytes/README.md)
+- [Evm](./packages/evm/README.md)
 
 ## Getting Started
 
@@ -95,6 +96,7 @@ This repository is composed of multiple crates:
 - Sorting : `scarb add alexandria_sorting@0.5.1`
 - Storage : `scarb add alexandria_storage@0.5.1`
 - Bytes : `scarb add alexandria_bytes@0.5.1`
+- Evm : `scarb add alexandria_evm@0.5.1`
 
 ## Usage
 

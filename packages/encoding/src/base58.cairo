@@ -1,13 +1,26 @@
 use alexandria_data_structures::array_ext::ArrayTraitExt;
 
 pub trait Encoder<T> {
+    /// Encodes data into Base58 format
+    ///
+    /// # Arguments
+    /// * `data` - The data to encode
+    ///
+    /// # Returns
+    /// * `Array<u8>` - Base58 encoded representation as bytes
     fn encode(data: T) -> Array<u8>;
 }
 
 pub trait Decoder<T> {
+    /// Decodes Base58 encoded data back to raw bytes
+    /// # Arguments
+    /// * `data` - The Base58 encoded data to decode
+    /// # Returns
+    /// * `Array<u8>` - Raw bytes decoded from Base58 format
     fn decode(data: T) -> Array<u8>;
 }
 
+/// Base58 encoder implementation for u8 spans
 pub impl Base58Encoder of Encoder<Span<u8>> {
     fn encode(data: Span<u8>) -> Array<u8> {
         encode_u8_array(data, get_base58_char_set().span())

@@ -15,6 +15,7 @@ packages=(
   alexandria_merkle_tree
   alexandria_bytes
   alexandria_encoding
+  alexandria_evm
   # buraya diğer paketleri ekleyebilirsin
 )
 

@@ -5,6 +5,10 @@ use core::integer::u128_byte_reverse;
 use core::keccak::cairo_keccak;
 use core::to_byte_array::FormatAsByteArray;
 
+/// Formats a single byte as a hexadecimal string with leading zero if needed.
+/// # Arguments
+/// * `byte` - The byte value to format as hex
+/// * `f` - Reference to the formatter
 fn format_byte_hex(byte: u8, ref f: Formatter) -> Result<(), Error> {
     let base: NonZero<u8> = 16_u8.try_into().unwrap();
     if byte < 0x10 {
@@ -74,12 +78,20 @@ pub fn keccak_u128s_be(input: Span<u128>, n_bytes: usize) -> u256 {
     }
 }
 
-fn u256_reverse_endian(input: u256) -> u256 {
+/// Reverses the endianness of a u256 value.
+/// # Arguments
+/// * `input` - The u256 value to reverse endianness
+pub fn u256_reverse_endian(input: u256) -> u256 {
     let low = u128_byte_reverse(input.high);
     let high = u128_byte_reverse(input.low);
     u256 { low, high }
 }
 
+/// Adds a u128 value to the keccak input array in big-endian format.
+/// # Arguments
+/// * `keccak_input` - Reference to the array to append u64 values to
+/// * `value` - The u128 value to add
+/// * `value_size` - The size of the value in bytes
 fn keccak_add_uint128_be(ref keccak_input: Array<u64>, value: u128, value_size: usize) {
     if value_size == 16 {
         let (high, low) = core::integer::u128_safe_divmod(
@@ -102,6 +114,11 @@ fn keccak_add_uint128_be(ref keccak_input: Array<u64>, value: u128, value_size: 
     }
 }
 
+/// Updates an element at the specified index in a u256 array.
+/// # Arguments
+/// * `arr` - The array to update
+/// * `index` - The index of the element to update
+/// * `value` - The new value to set at the index
 fn update_u256_array_at(arr: @Array<u256>, index: usize, value: u256) -> Array<u256> {
     assert(index < arr.len(), 'index out of range');
     let mut new_arr = array![];
@@ -119,7 +136,8 @@ fn update_u256_array_at(arr: @Array<u256>, index: usize, value: u256) -> Array<u
 }
 
 /// Convert sha256 result(Array<u8>) to u256
-/// result length MUST be 32
+/// # Arguments
+/// * `arr` - Span of u8 values, length MUST be 32
 pub fn u8_array_to_u256(arr: Span<u8>) -> u256 {
     assert(arr.len() == 32, 'too large');
     let mut i = 0;
@@ -139,6 +157,9 @@ pub fn u8_array_to_u256(arr: Span<u8>) -> u256 {
     u256 { low, high }
 }
 
+/// Converts an array of 8 u32 values to a u256 value.
+/// # Arguments
+/// * `arr` - Span of u32 values (must be exactly 8 elements)
 pub fn u32s_to_u256(arr: Span<u32>) -> u256 {
     assert!(arr.len() == 8, "u32s_to_u2562: input must be 8 elements long");
     let low: u128 = (*arr[7]).into()
@@ -154,6 +175,11 @@ pub fn u32s_to_u256(arr: Span<u32>) -> u256 {
     u256 { high, low }
 }
 
+/// Creates a slice of a u64 array.
+/// # Arguments
+/// * `src` - The source array to slice
+/// * `begin` - The starting index of the slice
+/// * `len` - The length of the slice
 fn u64_array_slice(src: @Array<u64>, mut begin: usize, len: usize) -> Array<u64> {
     let mut slice = array![];
     let end = begin + len;
@@ -180,6 +206,11 @@ pub fn u128_array_slice(src: @Array<u128>, mut begin: usize, len: usize) -> Arra
     slice
 }
 
+/// Creates a slice of a generic array.
+/// # Arguments
+/// * `src` - The source array to slice
+/// * `begin` - The starting index of the slice
+/// * `len` - The length of the slice
 fn array_slice<T, +Drop<T>, +Copy<T>>(src: @Array<T>, mut begin: usize, len: usize) -> Array<T> {
     let mut slice = array![];
     let end = begin + len;
@@ -191,14 +222,14 @@ fn array_slice<T, +Drop<T>, +Copy<T>>(src: @Array<T>, mut begin: usize, len: usi
 }
 
 /// Split a u128 into two parts, [0, left_size-1] and [left_size, end]
-/// Parameters:
-///  - value: data of u128
-///  - value_size: the size of `value` in bytes
-///  - left_size: the size of left part in bytes
-/// Returns:
-///  - letf: [0, left_size-1] of the origin u128
-///  - right: [left_size, end] of the origin u128 which size is (value_size - left_size)
-/// Examples:
+/// # Arguments
+/// * `value` - data of u128
+/// * `value_size` - the size of `value` in bytes
+/// * `left_size` - the size of left part in bytes
+/// # Returns
+/// * `left` - [0, left_size-1] of the origin u128
+/// * `right` - [left_size, end] of the origin u128 which size is (value_size - left_size)
+/// # Examples
 /// u128_split(0x01020304, 4, 0) -> (0, 0x01020304)
 /// u128_split(0x01020304, 4, 1) -> (0x01, 0x020304)
 /// u128_split(0x0001020304, 5, 1) -> (0x00, 0x01020304)
@@ -215,14 +246,14 @@ pub fn u128_split(value: u128, value_size: usize, left_size: usize) -> (u128, u1
 }
 
 /// Read sub value from u128 just like substr in other language
-/// Parameters:
-///  - value: data of u128
-///  - value_size: the size of data in bytes
-///  - offset: the offset of sub value
-///  - size: the size of sub value in bytes
-/// Returns:
-///  - sub_value: the sub value of origin u128
-/// Examples:
+/// # Arguments
+/// * `value` - data of u128
+/// * `value_size` - the size of data in bytes
+/// * `offset` - the offset of sub value
+/// * `size` - the size of sub value in bytes
+/// # Returns
+/// * `sub_value` - the sub value of origin u128
+/// # Examples
 /// u128_sub_value(0x000001020304, 6, 1, 3) -> 0x000102
 pub fn read_sub_u128(value: u128, value_size: usize, offset: usize, size: usize) -> u128 {
     assert(offset + size <= value_size, 'too long');
@@ -241,13 +272,13 @@ pub fn read_sub_u128(value: u128, value_size: usize, offset: usize, size: usize)
 }
 
 /// Join two u128 into one
-/// Parameters:
-///  - left: the left part of u128
-///  - right: the right part of u128
-///  - right_size: the size of right part in bytes
-/// Returns:
-///  - value: the joined u128
-/// Examples:
+/// # Arguments
+/// * `left` - the left part of u128
+/// * `right` - the right part of u128
+/// * `right_size` - the size of right part in bytes
+/// # Returns
+/// * `value` - the joined u128
+/// # Examples
 /// u128_join(0x010203, 0xaabb, 2) -> 0x010203aabb
 /// u128_join(0x010203, 0, 2) -> 0x0102030000
 pub fn u128_join(left: u128, right: u128, right_size: usize) -> u128 {
@@ -258,6 +289,8 @@ pub fn u128_join(left: u128, right: u128, right_size: usize) -> u128 {
 }
 
 /// Return the bytes len represent in u128
+/// # Arguments
+/// * `value` - The u128 value to get byte length for
 /// Examples:
 /// u128_bytes_len(0x0102) -> 2
 fn u128_bytes_len(value: u128) -> usize {

@@ -15,6 +15,13 @@ pub struct i257 {
 
 #[generate_trait]
 pub impl I257Impl of I257Trait {
+    /// Creates a new i257 from an absolute value and sign.
+    /// Ensures zero is always represented as positive.
+    /// # Arguments
+    /// * `abs` - The absolute value as a u256
+    /// * `is_negative` - Whether the number is negative
+    /// # Returns
+    /// * `i257` - The constructed signed integer
     #[inline(always)]
     fn new(abs: u256, is_negative: bool) -> i257 {
         if abs == 0 {
@@ -24,10 +31,20 @@ pub impl I257Impl of I257Trait {
         }
     }
 
+    /// Returns whether the i257 is negative.
+    /// # Arguments
+    /// * `self` - The i257 to check
+    /// # Returns
+    /// * `bool` - true if negative, false if positive or zero
     fn is_negative(self: i257) -> bool {
         self.is_negative
     }
 
+    /// Returns the absolute value of the i257.
+    /// # Arguments
+    /// * `self` - The i257 to get absolute value from
+    /// # Returns
+    /// * `u256` - The absolute value
     fn abs(self: i257) -> u256 {
         self.abs
     }

@@ -18,14 +18,25 @@ pub trait StackTrait<S, T> {
     /// Creates a new Stack instance.
     fn new() -> S;
     /// Pushes a new value onto the stack.
+    /// # Arguments
+    /// * `self` - The stack to push the value onto
+    /// * `value` - The value to push onto the stack
     fn push(ref self: S, value: T);
     /// Removes the last item from the stack and returns it, or None if the stack is empty.
+    /// # Arguments
+    /// * `self` - The stack to pop the item from
     fn pop(ref self: S) -> Option<T>;
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
+    /// # Arguments
+    /// * `self` - The stack to peek at
     fn peek(ref self: S) -> Option<T>;
     /// Returns the number of items in the stack.
+    /// # Arguments
+    /// * `self` - The stack to get the length of
     fn len(self: @S) -> usize;
     /// Returns true if the stack is empty.
+    /// # Arguments
+    /// * `self` - The stack to check if it is empty
     fn is_empty(self: @S) -> bool;
 }
 
