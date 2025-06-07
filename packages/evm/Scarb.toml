@@ -1,0 +1,14 @@
+[package]
+name = "alexandria_evm"
+version.workspace = true
+description = "An implementation similar to Solidity bytes written in Cairo 1"
+homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/evm"
+edition = "2023_11"
+cairo-version = "2.11.2"
+
+[dependencies]
+alexandria_math = { path = "../math", version ="0.5.1" }
+alexandria_bytes = { path = "../bytes", version ="0.5.1" }
+
+[dev-dependencies]
+cairo_test = "2.11.2"
