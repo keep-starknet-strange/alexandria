@@ -60,22 +60,9 @@ fn calculate_values_consumed(types: Span<EVMTypes>) -> usize {
             EVMTypes::Tuple(tuple_types) => {
                 consumed += calculate_values_consumed(*tuple_types);
             },
-            EVMTypes::Array(_) => {
-                // Arrays consume variable number of values, but we need at least 1 for length
-                // The actual consumption depends on the array contents which we can't determine
-                // here
-                consumed += 1;
-            },
-            EVMTypes::Bytes => {
-                // Bytes consume variable number based on ByteArray serialization
-                // We can't determine exact consumption without the actual values
-                consumed += 1;
-            },
-            EVMTypes::String => {
-                // String consume variable number based on ByteArray serialization
-                // We can't determine exact consumption without the actual values
-                consumed += 1;
-            },
+            EVMTypes::Array(_) => { consumed += 1; },
+            EVMTypes::Bytes => { consumed += 1; },
+            EVMTypes::String => { consumed += 1; },
             _ => { consumed += 1; },
         };
     }
@@ -566,7 +553,6 @@ fn encode_tuple(ref ctx: EVMCalldata, types: Span<EVMTypes>, values: Span<felt25
 
         consumed
     } else {
-        // Encode tuple inline
         let mut temp_ctx = EVMCalldata {
             calldata: Default::default(),
             offset: 0,
@@ -598,54 +584,146 @@ fn encode_array(ref ctx: EVMCalldata, types: Span<EVMTypes>, values: Span<felt25
     let array_length = *values.at(0);
     write_u256(ref ctx.dynamic_data, array_length.into());
 
-    // Encode array elements
-    let mut consumed = 1; // For the length
-    let mut temp_ctx = EVMCalldata {
-        calldata: Default::default(),
-        offset: 0,
-        dynamic_data: Default::default(),
-        dynamic_offset: 0,
-    };
-
-    let mut i = 0;
     let length: u32 = array_length.try_into().unwrap();
-    let elem_size = calculate_values_consumed(types);
-    while i < length {
-        // Extract values for this element
-        let elem_values = values.slice(consumed, elem_size);
-        temp_ctx.encode(types, elem_values);
-        consumed += elem_size;
-        i += 1;
+    let mut consumed = 1;
+
+    let is_dynamic = has_dynamic(types);
+
+    if is_dynamic {
+        // For arrays of dynamic types, we need to write offset pointers first,
+        // then the actual data
+        let mut element_data: ByteArray = Default::default();
+        let mut element_offsets: Array<usize> = array![];
+        let mut current_offset = 32 * length;
+
+        let mut i = 0;
+        while i < length {
+            // Calculate and store the offset for this element
+            element_offsets.append(current_offset);
+
+            // Encode this element to calculate its size
+            let elem_consumed = match types.at(0) {
+                EVMTypes::String |
+                EVMTypes::Bytes => {
+                    let elem_values = values.slice(consumed, values.len() - consumed);
+                    let mut elem_values_ref = elem_values;
+                    let _ba: ByteArray = Serde::<ByteArray>::deserialize(ref elem_values_ref)
+                        .unwrap();
+                    let actual_consumed = elem_values.len() - elem_values_ref.len();
+
+                    // Encode this element directly as bytes/string (inline, not as dynamic)
+                    let single_elem_values = values.slice(consumed, actual_consumed);
+                    let mut elem_values_ref = single_elem_values;
+                    let ba: ByteArray = Serde::<ByteArray>::deserialize(ref elem_values_ref)
+                        .unwrap();
+
+                    // Write length
+                    write_u256(ref element_data, ba.len().into());
+
+                    // Write data padded to 32-byte boundaries
+                    let (slot_count, last_slot_bytes) = DivRem::<u32>::div_rem(ba.len(), 32);
+
+                    let mut j = 0;
+                    while j < slot_count {
+                        // Extract 32 bytes and write as u256
+                        let (_, value) = ba.read_u256(j * 32);
+                        write_u256(ref element_data, value);
+                        j += 1;
+                    }
+
+                    if last_slot_bytes > 0 {
+                        // Write last partial slot with padding
+                        let (_, partial_bytes) = ba.read_bytes(slot_count * 32, last_slot_bytes);
+                        let mut padded_value: u256 = 0;
+                        let mut k = 0;
+                        while k < last_slot_bytes {
+                            let (_, byte_val) = partial_bytes.read_u8(k);
+                            let shift_amount = (31 - k) * 8;
+                            padded_value = padded_value
+                                + (byte_val.into()
+                                    * U256BitShift::shl(1_u256, shift_amount.into()));
+                            k += 1;
+                        }
+                        write_u256(ref element_data, padded_value);
+                    }
+
+                    // Update offset for next element (length + padded data)
+                    current_offset += 32 + ((ba.len() + 31) / 32) * 32;
+
+                    actual_consumed
+                },
+                _ => {
+                    // Static types
+                    let elem_size = calculate_values_consumed(types);
+                    let mut temp_ctx = EVMCalldata {
+                        calldata: Default::default(),
+                        offset: 0,
+                        dynamic_data: Default::default(),
+                        dynamic_offset: 0,
+                    };
+                    let elem_values = values.slice(consumed, elem_size);
+                    temp_ctx.encode(types, elem_values);
+                    element_data.append(@temp_ctx.calldata);
+
+                    current_offset += temp_ctx.calldata.len();
+                    elem_size
+                },
+            };
+
+            consumed += elem_consumed;
+            i += 1;
+        }
+
+        // Write all the offset pointers
+        i = 0;
+        while i < length {
+            write_u256(ref ctx.dynamic_data, (*element_offsets.at(i)).into());
+            i += 1;
+        }
+
+        // Write all the element data
+        ctx.dynamic_data.append(@element_data);
+    } else {
+        // For arrays of static types, encode elements inline
+        let mut temp_ctx = EVMCalldata {
+            calldata: Default::default(),
+            offset: 0,
+            dynamic_data: Default::default(),
+            dynamic_offset: 0,
+        };
+
+        let mut i = 0;
+        while i < length {
+            let elem_size = calculate_values_consumed(types);
+            let elem_values = values.slice(consumed, elem_size);
+            temp_ctx.encode(types, elem_values);
+            consumed += elem_size;
+            i += 1;
+        }
+
+        ctx.dynamic_data.append(@temp_ctx.calldata);
     }
 
-    ctx.dynamic_data.append(@temp_ctx.calldata);
     ctx.dynamic_offset = offset
         + 32
-        + temp_ctx.calldata.len(); // Update offset for next dynamic data
-
+        + ctx.dynamic_data.len(); // Update offset for next dynamic data
     consumed
 }
 
 /// Encodes dynamic bytes into calldata.
 fn encode_bytes(ref ctx: EVMCalldata, values: Span<felt252>) -> usize {
-    // Calculate the offset to where dynamic data will start
-    // If this is the first dynamic data, it starts after the static part
     let offset = if ctx.dynamic_offset == 0 {
-        32_usize // First dynamic element starts after one offset slot
+        32_usize
     } else {
         ctx.dynamic_offset
     };
-
     // Write offset to dynamic data
     write_u256(ref ctx.calldata, offset.into());
-
-    // Deserialize ByteArray from values
     let mut values_ref = values;
     let ba: ByteArray = Serde::<ByteArray>::deserialize(ref values_ref).unwrap();
 
     // Write length
     write_u256(ref ctx.dynamic_data, ba.len().into());
-
     // Write data padded to 32-byte boundaries
     let (slot_count, last_slot_bytes) = DivRem::<u32>::div_rem(ba.len(), 32);
 
@@ -674,7 +752,6 @@ fn encode_bytes(ref ctx: EVMCalldata, values: Span<felt252>) -> usize {
 
     ctx.dynamic_offset = offset + 32 + ((ba.len() + 31) / 32) * 32; // Length + padded data
 
-    // Return number of values consumed (ByteArray serialization length)
     values.len() - values_ref.len()
 }
 

@@ -31,7 +31,8 @@ fn test_encode_felt252_max() {
     let encoded = encoder_ctx.encode(array![EVMTypes::Felt252].span(), values);
 
     let mut expected_bytes: ByteArray = Default::default();
-    expected_bytes.append_u256(0x0800000000000011000000000000000000000000000000000000000000000000);
+    expected_bytes
+        .append_felt252(0x0800000000000011000000000000000000000000000000000000000000000000);
 
     assert_eq!(encoded, expected_bytes);
 }
@@ -346,10 +347,10 @@ fn test_encode_bytes_one_full_slot() {
 fn test_encode_string() {
     let mut encoder_ctx = new_encoder();
     // String "ALI" as ByteArray
-    let mut ba: ByteArray = Default::default();
-    ba.append_byte('A');
-    ba.append_byte('L');
-    ba.append_byte('I');
+    let mut ba: ByteArray = "ALI";
+    // ba.append_byte('A');
+    // ba.append_byte('L');
+    // ba.append_byte('I');
     let mut serialized = array![];
     ba.serialize(ref serialized);
 
@@ -430,33 +431,116 @@ fn test_encode_array_of_strings() {
     let mut encoder_ctx = new_encoder();
 
     // Array of 2 strings: "ALI", "VELI"
-    let mut ali_ba: ByteArray = Default::default();
-    ali_ba.append_byte('A');
-    ali_ba.append_byte('L');
-    ali_ba.append_byte('I');
+    let mut ali_ba: ByteArray = "ALI";
     let mut ali_serialized = array![];
     ali_ba.serialize(ref ali_serialized);
 
-    let mut veli_ba: ByteArray = Default::default();
-    veli_ba.append_byte('V');
-    veli_ba.append_byte('E');
-    veli_ba.append_byte('L');
-    veli_ba.append_byte('I');
+    let mut veli_ba: ByteArray = "VELI";
     let mut veli_serialized = array![];
     veli_ba.serialize(ref veli_serialized);
 
-    // For now, simplified test - just test one string
-    let values = ali_serialized.span();
+    // Combine all serialized strings with array length at the beginning
+    let mut all_values = array![2]; // Array length
+    let mut i = 0;
+    while i < ali_serialized.len() {
+        all_values.append(*ali_serialized.at(i));
+        i += 1;
+    }
+    i = 0;
+    while i < veli_serialized.len() {
+        all_values.append(*veli_serialized.at(i));
+        i += 1;
+    }
 
-    let encoded = encoder_ctx.encode(array![EVMTypes::String].span(), values);
+    let array_types = array![EVMTypes::String].span();
+    let encoded = encoder_ctx
+        .encode(array![EVMTypes::Array(array_types)].span(), all_values.span());
 
     let mut expected_bytes: ByteArray = Default::default();
     // Offset to dynamic data
     expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000020);
-    // Length
+    // Array length
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000002);
+    // Offsets to each string (relative to start of array data)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000040);
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000080);
+    // First string "ALI"
     expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000003);
-    // Data "ALI" (left-aligned, padded)
     expected_bytes.append_u256(0x414c490000000000000000000000000000000000000000000000000000000000);
+    // Second string "VELI"
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000004);
+    expected_bytes.append_u256(0x56454c4900000000000000000000000000000000000000000000000000000000);
 
+    assert_eq!(encoded, expected_bytes);
+}
+
+#[test]
+fn test_encode_array_of_strings_long_elements() {
+    let mut encoder_ctx = new_encoder();
+
+    // Create array of 4 strings: "ALI", "VELI", long string, "shortback"
+    let mut ali_ba: ByteArray = "ALI";
+    let mut ali_serialized = array![];
+    ali_ba.serialize(ref ali_serialized);
+
+    let mut veli_ba: ByteArray = "VELI";
+    let mut veli_serialized = array![];
+    veli_ba.serialize(ref veli_serialized);
+
+    let mut long_ba: ByteArray = "LONGSTRINGLONGERTHAN1231231231233123ASASDASDADAD";
+    let mut long_serialized = array![];
+    long_ba.serialize(ref long_serialized);
+
+    let mut short_ba: ByteArray = "shortback";
+    let mut short_serialized = array![];
+    short_ba.serialize(ref short_serialized);
+    // Combine all serialized strings with array length at the beginning
+    let mut all_values = array![4]; // Array length
+    let mut i = 0;
+    while i < ali_serialized.len() {
+        all_values.append(*ali_serialized.at(i));
+        i += 1;
+    }
+    i = 0;
+    while i < veli_serialized.len() {
+        all_values.append(*veli_serialized.at(i));
+        i += 1;
+    }
+    i = 0;
+    while i < long_serialized.len() {
+        all_values.append(*long_serialized.at(i));
+        i += 1;
+    }
+    i = 0;
+    while i < short_serialized.len() {
+        all_values.append(*short_serialized.at(i));
+        i += 1;
+    }
+    let array_types = array![EVMTypes::String].span();
+    let encoded = encoder_ctx
+        .encode(array![EVMTypes::Array(array_types)].span(), all_values.span());
+    let mut expected_bytes: ByteArray = Default::default();
+    // Offset to dynamic data
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000020);
+    // Array length
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000004);
+    // Offsets to each string (relative to start of array data)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000080);
+    expected_bytes.append_u256(0x00000000000000000000000000000000000000000000000000000000000000c0);
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000100);
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000160);
+    // First string "ALI"
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000003);
+    expected_bytes.append_u256(0x414c490000000000000000000000000000000000000000000000000000000000);
+    // Second string "VELI"
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000004);
+    expected_bytes.append_u256(0x56454c4900000000000000000000000000000000000000000000000000000000);
+    // Third string (long string) - 48 bytes
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000030);
+    expected_bytes.append_u256(0x4c4f4e47535452494e474c4f4e4745525448414e313233313233313233313233);
+    expected_bytes.append_u256(0x3331323341534153444153444144414400000000000000000000000000000000);
+    // Fourth string "shortback"
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000009);
+    expected_bytes.append_u256(0x73686f72746261636b0000000000000000000000000000000000000000000000);
     assert_eq!(encoded, expected_bytes);
 }
