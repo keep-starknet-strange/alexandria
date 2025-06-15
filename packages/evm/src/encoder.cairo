@@ -594,7 +594,7 @@ fn encode_array(ref ctx: EVMCalldata, types: Span<EVMTypes>, values: Span<felt25
         // then the actual data
         let mut element_data: ByteArray = Default::default();
         let mut element_offsets: Array<usize> = array![];
-        let mut current_offset = 32 * length;
+        let mut current_offset = 32 * length; // Start after the offset table
 
         let mut i = 0;
         while i < length {
@@ -651,6 +651,35 @@ fn encode_array(ref ctx: EVMCalldata, types: Span<EVMTypes>, values: Span<felt25
                     current_offset += 32 + ((ba.len() + 31) / 32) * 32;
 
                     actual_consumed
+                },
+                EVMTypes::Array(inner_array_types) => {
+                    // Handle nested arrays (array of arrays)
+                    let inner_array_length = *values.at(consumed);
+                    let inner_length: u32 = inner_array_length.try_into().unwrap();
+                    
+                    // Calculate size of inner array data (length + elements)
+                    let inner_elem_size = calculate_values_consumed(*inner_array_types);
+                    let total_inner_size = 1 + (inner_length * inner_elem_size); // 1 for length + elements
+                    
+                    // Encode the inner array
+                    let mut inner_ctx = EVMCalldata {
+                        calldata: Default::default(),
+                        offset: 0,
+                        dynamic_data: Default::default(),
+                        dynamic_offset: 0,
+                    };
+                    
+                    let inner_values = values.slice(consumed, total_inner_size);
+                    inner_ctx.encode(array![EVMTypes::Array(*inner_array_types)].span(), inner_values);
+                    
+                    // Append the inner array's complete encoding (without the initial offset)
+                    // For nested arrays, we need the dynamic data which contains the actual array
+                    element_data.append(@inner_ctx.dynamic_data);
+                    
+                    // Update offset for next element
+                    current_offset += inner_ctx.dynamic_data.len();
+                    
+                    total_inner_size
                 },
                 _ => {
                     // Static types
