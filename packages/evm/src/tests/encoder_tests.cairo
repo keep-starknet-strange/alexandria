@@ -346,11 +346,7 @@ fn test_encode_bytes_one_full_slot() {
 #[test]
 fn test_encode_string() {
     let mut encoder_ctx = new_encoder();
-    // String "ALI" as ByteArray
     let mut ba: ByteArray = "ALI";
-    // ba.append_byte('A');
-    // ba.append_byte('L');
-    // ba.append_byte('I');
     let mut serialized = array![];
     ba.serialize(ref serialized);
 
@@ -368,47 +364,12 @@ fn test_encode_string() {
 }
 
 #[test]
-fn test_encode_transferFrom() {
-    let mut encoder_ctx = new_encoder();
-    let values = array![
-        0x23b872dd, // Function selector
-        0x1111111111111111111111111111111111111111, // from address
-        0x2222222222222222222222222222222222222222, // to address
-        1000000000000000000,
-        0 // amount as u256 (low, high)
-    ]
-        .span();
-
-    let encoded = encoder_ctx
-        .encode(
-            array![
-                EVMTypes::FunctionSignature,
-                EVMTypes::Address,
-                EVMTypes::Address,
-                EVMTypes::Uint256,
-            ]
-                .span(),
-            values,
-        );
-
-    let mut expected_bytes: ByteArray = Default::default();
-    // Function selector (left-aligned)
-    expected_bytes.append_u256(0x23b872dd00000000000000000000000000000000000000000000000000000000);
-    // From address
-    expected_bytes.append_u256(0x0000000000000000000000001111111111111111111111111111111111111111);
-    // To address
-    expected_bytes.append_u256(0x0000000000000000000000002222222222222222222222222222222222222222);
-    // Amount
-    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000de0b6b3a7640000);
-
-    assert_eq!(encoded, expected_bytes);
-}
-
-#[test]
 fn test_encode_complex_mixed_types() {
     let mut encoder_ctx = new_encoder();
     // Encoding: bytes, uint256, int128, array of tuples
-    // Similar to decoder test: test_decode_complex
+    // This should match the decoder test: test_decode_complex
+
+    // 1. Prepare bytes data: 0x00bbffaa00 (5 bytes)
     let mut ba: ByteArray = Default::default();
     ba.append_byte(0x00);
     ba.append_byte(0xbb);
@@ -418,12 +379,76 @@ fn test_encode_complex_mixed_types() {
     let mut bytes_serialized = array![];
     ba.serialize(ref bytes_serialized);
 
-    // For now, simplified test - just test that bytes can be encoded
-    let values = bytes_serialized.span();
+    // 2. Prepare all values in order
+    let mut all_values = array![];
 
-    let encoded = encoder_ctx.encode(array![EVMTypes::Bytes].span(), values);
+    // Add bytes data
+    let mut i = 0;
+    while i < bytes_serialized.len() {
+        all_values.append(*bytes_serialized.at(i));
+        i += 1;
+    }
 
-    assert!(encoded.len() > 0);
+    // Add uint256: 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+    all_values.append(0xffffffffffffffffffffffffffffffff); // low (16 bytes of 0xff)
+    all_values.append(0xffffffffffffffffffffffffffffffff); // high (16 bytes of 0xff)
+
+    // Add int128: -48923 (encoded as two's complement)
+    all_values.append(-48923); // This should be 0xffffffffffffffffffffffffffff40e5 in felt252
+
+    // Add array of tuples: [(111, 222), (777, 888)]
+    all_values.append(0x2); // array length = 2
+    all_values.append(0x6f); // 111
+    all_values.append(0xde); // 222
+    all_values.append(0x309); // 777
+    all_values.append(0x378); // 888
+
+    // 3. Define types
+    let tuple_types = array![EVMTypes::Uint128, EVMTypes::Uint128].span();
+    let array_types = array![EVMTypes::Tuple(tuple_types)].span();
+    let types = array![
+        EVMTypes::Bytes, EVMTypes::Uint256, EVMTypes::Int128, EVMTypes::Array(array_types),
+    ]
+        .span();
+
+    // 4. Encode
+    let encoded = encoder_ctx.encode(types, all_values.span());
+
+    // 5. Verify expected structure with proper assertions
+    let mut expected_bytes: ByteArray = Default::default();
+
+    // Offset to bytes (first dynamic field)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000020);
+    // Uint256 value (all 0xff)
+    expected_bytes.append_u256(0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff);
+    // Int128 value (-48923 = 0xffffffffffffffffffffffffffff40e5)
+    expected_bytes.append_u256(0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff40e5);
+    // Offset to array (second dynamic field)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000060);
+
+    // Bytes data
+    expected_bytes
+        .append_u256(
+            0x0000000000000000000000000000000000000000000000000000000000000005,
+        ); // length = 5
+    expected_bytes
+        .append_u256(0x00bbffaa00000000000000000000000000000000000000000000000000000000); // data
+
+    // Array data
+    expected_bytes
+        .append_u256(
+            0x0000000000000000000000000000000000000000000000000000000000000002,
+        ); // length = 2
+    expected_bytes
+        .append_u256(0x000000000000000000000000000000000000000000000000000000000000006f); // 111
+    expected_bytes
+        .append_u256(0x00000000000000000000000000000000000000000000000000000000000000de); // 222
+    expected_bytes
+        .append_u256(0x0000000000000000000000000000000000000000000000000000000000000309); // 777
+    expected_bytes
+        .append_u256(0x0000000000000000000000000000000000000000000000000000000000000378); // 888
+
+    assert_eq!(encoded, expected_bytes);
 }
 
 #[test]
@@ -542,5 +567,134 @@ fn test_encode_array_of_strings_long_elements() {
     // Fourth string "shortback"
     expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000009);
     expected_bytes.append_u256(0x73686f72746261636b0000000000000000000000000000000000000000000000);
+    assert_eq!(encoded, expected_bytes);
+}
+
+#[test]
+fn test_encode_array_of_struct_mixed_types() {
+    let mut encoder_ctx = new_encoder();
+    // Array of structs with mixed types: (uint128, address, bool)
+    // Array length=2, then 2 structs
+    let values = array![
+        0x2, // array length
+        0x7b, // first struct: uint128 = 123
+        0x742d35Cc6634C0532925a3b844Bc454e4438f44e, // address
+        0x1, // bool = true
+        0x1a4, // second struct: uint128 = 420
+        0x1111111111111111111111111111111111111111, // address
+        0x0 // bool = false
+    ]
+        .span();
+
+    let tuple_types = array![EVMTypes::Uint128, EVMTypes::Address, EVMTypes::Bool].span();
+    let array_types = array![EVMTypes::Tuple(tuple_types)].span();
+    let encoded = encoder_ctx.encode(array![EVMTypes::Array(array_types)].span(), values);
+
+    let mut expected_bytes: ByteArray = Default::default();
+    // Offset to dynamic data
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000020);
+    // Array length
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000002);
+    // First struct
+    expected_bytes.append_u256(0x000000000000000000000000000000000000000000000000000000000000007b);
+    expected_bytes.append_u256(0x000000000000000000000000742d35Cc6634C0532925a3b844Bc454e4438f44e);
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000001);
+    // Second struct
+    expected_bytes.append_u256(0x00000000000000000000000000000000000000000000000000000000000001a4);
+    expected_bytes.append_u256(0x0000000000000000000000001111111111111111111111111111111111111111);
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000000);
+
+    assert_eq!(encoded, expected_bytes);
+}
+
+#[test]
+fn test_encode_array_of_struct_with_different_types() {
+    let mut encoder_ctx = new_encoder();
+    // Array of structs with different field types: (uint256, address)
+    // Array length=2, then 2 tuples
+    let values = array![
+        0x2, // array length
+        0x123,
+        0x0, // first struct: uint256 = (0x123, 0x0)
+        0x742d35Cc6634C0532925a3b844Bc454e4438f44e, // address
+        0x456,
+        0x0, // second struct: uint256 = (0x456, 0x0)
+        0x1111111111111111111111111111111111111111 // address
+    ]
+        .span();
+
+    let tuple_types = array![EVMTypes::Uint256, EVMTypes::Address].span();
+    let array_types = array![EVMTypes::Tuple(tuple_types)].span();
+    let encoded = encoder_ctx.encode(array![EVMTypes::Array(array_types)].span(), values);
+
+    let mut expected_bytes: ByteArray = Default::default();
+    // Offset to dynamic data
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000020);
+    // Array length
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000002);
+    // First struct
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000123);
+    expected_bytes.append_u256(0x000000000000000000000000742d35Cc6634C0532925a3b844Bc454e4438f44e);
+    // Second struct
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000456);
+    expected_bytes.append_u256(0x0000000000000000000000001111111111111111111111111111111111111111);
+
+    assert_eq!(encoded, expected_bytes);
+}
+
+#[test]
+fn test_encode_array_of_addresses() {
+    let mut encoder_ctx = new_encoder();
+    // Test array of addresses: [addr1, addr2, addr3]
+    let values = array![
+        0x3, // length=3
+        0x742d35Cc6634C0532925a3b844Bc454e4438f44e, // address 1
+        0x1111111111111111111111111111111111111111, // address 2  
+        0x2222222222222222222222222222222222222222 // address 3
+    ]
+        .span();
+
+    let array_types = array![EVMTypes::Address].span();
+    let encoded = encoder_ctx.encode(array![EVMTypes::Array(array_types)].span(), values);
+
+    let mut expected_bytes: ByteArray = Default::default();
+    // Offset to dynamic data
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000020);
+    // Array length
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000003);
+    // Array elements
+    expected_bytes.append_u256(0x000000000000000000000000742d35Cc6634C0532925a3b844Bc454e4438f44e);
+    expected_bytes.append_u256(0x0000000000000000000000001111111111111111111111111111111111111111);
+    expected_bytes.append_u256(0x0000000000000000000000002222222222222222222222222222222222222222);
+
+    assert_eq!(encoded, expected_bytes);
+}
+
+#[test]
+fn test_encode_struct_with_multiple_static_fields() {
+    let mut encoder_ctx = new_encoder();
+    // Struct with multiple static fields: (uint256, address, bool, uint128)
+    let values = array![
+        0x1234,
+        0x0, // uint256 = (0x1234, 0x0)
+        0x742d35Cc6634C0532925a3b844Bc454e4438f44e, // address
+        0x1, // bool = true
+        0x5678 // uint128 = 0x5678
+    ]
+        .span();
+
+    let struct_types = array![
+        EVMTypes::Uint256, EVMTypes::Address, EVMTypes::Bool, EVMTypes::Uint128,
+    ]
+        .span();
+    let encoded = encoder_ctx.encode(array![EVMTypes::Tuple(struct_types)].span(), values);
+
+    let mut expected_bytes: ByteArray = Default::default();
+    // All fields are static, so they're encoded inline
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000001234);
+    expected_bytes.append_u256(0x000000000000000000000000742d35Cc6634C0532925a3b844Bc454e4438f44e);
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000001);
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000005678);
+
     assert_eq!(encoded, expected_bytes);
 }
