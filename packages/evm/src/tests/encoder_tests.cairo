@@ -706,57 +706,115 @@ fn test_encode_true_nested_arrays() {
     //
     // The output structure matches :
     // - Level 1: Offset to main array data
-    // - Level 2: Main array length + offsets to each subarray 
+    // - Level 2: Main array length + offsets to each subarray
     // - Level 3: Each subarray with its own length + elements
     let values = array![
         0x3, // outer array length = 3
-        
         // First inner array: [10,20,30]
-        0x3, 0xa, 0x14, 0x1e, // length=3, then 10, 20, 30
-        
-        // Second inner array: [40,50]  
-        0x2, 0x28, 0x32, // length=2, then 40, 50
-        
+        0x3,
+        0xa,
+        0x14,
+        0x1e, // length=3, then 10, 20, 30
+        // Second inner array: [40,50]
+        0x2,
+        0x28,
+        0x32, // length=2, then 40, 50
         // Third inner array: [60,70,80,90]
-        0x4, 0x3c, 0x46, 0x50, 0x5a // length=4, then 60, 70, 80, 90
-    ].span();
-    
+        0x4,
+        0x3c,
+        0x46,
+        0x50,
+        0x5a // length=4, then 60, 70, 80, 90
+    ]
+        .span();
+
     // Define inner array type (array of uint128)
     let inner_array_types = array![EVMTypes::Uint128].span();
-    
+
     // Define outer array type (array of arrays of uint128)
     let outer_array_types = array![EVMTypes::Array(inner_array_types)].span();
-    
+
     let encoded = encoder_ctx.encode(array![EVMTypes::Array(outer_array_types)].span(), values);
 
     let mut expected_bytes: ByteArray = Default::default();
-    
+
     // LEVEL 1: Main array offset
-    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000020); // offset to main array = 32
-    
-    // LEVEL 2: Main array header  
-    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000003); // main array length = 3
-    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000060); // offset to subarray[0] 
-    expected_bytes.append_u256(0x00000000000000000000000000000000000000000000000000000000000000e0); // offset to subarray[1] (actual encoder output)
-    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000140); // offset to subarray[2] (actual encoder output)
-    
+    expected_bytes
+        .append_u256(
+            0x0000000000000000000000000000000000000000000000000000000000000020,
+        ); // offset to main array = 32
+
+    // LEVEL 2: Main array header
+    expected_bytes
+        .append_u256(
+            0x0000000000000000000000000000000000000000000000000000000000000003,
+        ); // main array length = 3
+    expected_bytes
+        .append_u256(
+            0x0000000000000000000000000000000000000000000000000000000000000060,
+        ); // offset to subarray[0] 
+    expected_bytes
+        .append_u256(
+            0x00000000000000000000000000000000000000000000000000000000000000e0,
+        ); // offset to subarray[1] (actual encoder output)
+    expected_bytes
+        .append_u256(
+            0x0000000000000000000000000000000000000000000000000000000000000140,
+        ); // offset to subarray[2] (actual encoder output)
+
     // LEVEL 3: Subarray[0] data - [10,20,30]
-    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000003); // length = 3
-    expected_bytes.append_u256(0x000000000000000000000000000000000000000000000000000000000000000a); // element = 10
-    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000014); // element = 20
-    expected_bytes.append_u256(0x000000000000000000000000000000000000000000000000000000000000001e); // element = 30
-    
-    // LEVEL 3: Subarray[1] data - [40,50]  
-    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000002); // length = 2
-    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000028); // element = 40
-    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000032); // element = 50
-    
+    expected_bytes
+        .append_u256(
+            0x0000000000000000000000000000000000000000000000000000000000000003,
+        ); // length = 3
+    expected_bytes
+        .append_u256(
+            0x000000000000000000000000000000000000000000000000000000000000000a,
+        ); // element = 10
+    expected_bytes
+        .append_u256(
+            0x0000000000000000000000000000000000000000000000000000000000000014,
+        ); // element = 20
+    expected_bytes
+        .append_u256(
+            0x000000000000000000000000000000000000000000000000000000000000001e,
+        ); // element = 30
+
+    // LEVEL 3: Subarray[1] data - [40,50]
+    expected_bytes
+        .append_u256(
+            0x0000000000000000000000000000000000000000000000000000000000000002,
+        ); // length = 2
+    expected_bytes
+        .append_u256(
+            0x0000000000000000000000000000000000000000000000000000000000000028,
+        ); // element = 40
+    expected_bytes
+        .append_u256(
+            0x0000000000000000000000000000000000000000000000000000000000000032,
+        ); // element = 50
+
     // LEVEL 3: Subarray[2] data - [60,70,80,90]
-    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000004); // length = 4  
-    expected_bytes.append_u256(0x000000000000000000000000000000000000000000000000000000000000003c); // element = 60
-    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000046); // element = 70
-    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000050); // element = 80
-    expected_bytes.append_u256(0x000000000000000000000000000000000000000000000000000000000000005a); // element = 90
+    expected_bytes
+        .append_u256(
+            0x0000000000000000000000000000000000000000000000000000000000000004,
+        ); // length = 4  
+    expected_bytes
+        .append_u256(
+            0x000000000000000000000000000000000000000000000000000000000000003c,
+        ); // element = 60
+    expected_bytes
+        .append_u256(
+            0x0000000000000000000000000000000000000000000000000000000000000046,
+        ); // element = 70
+    expected_bytes
+        .append_u256(
+            0x0000000000000000000000000000000000000000000000000000000000000050,
+        ); // element = 80
+    expected_bytes
+        .append_u256(
+            0x000000000000000000000000000000000000000000000000000000000000005a,
+        ); // element = 90
 
     assert_eq!(encoded, expected_bytes);
 }
