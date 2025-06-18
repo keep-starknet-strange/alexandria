@@ -74,7 +74,6 @@ This repository is composed of multiple crates:
 - [Storage](./packages/storage/README.md)
 - [Bytes](./packages/bytes/README.md)
 - [Evm](./packages/evm/README.md)
-- [Hashing](./packages/hashing/README.md)
 
 ## Getting Started
 
@@ -98,7 +97,6 @@ This repository is composed of multiple crates:
 - Storage : `scarb add alexandria_storage@0.5.1`
 - Bytes : `scarb add alexandria_bytes@0.5.1`
 - Evm : `scarb add alexandria_evm@0.5.1`
-- Hashing : `scarb add alexandria_hashing@0.5.1`
 
 ## Usage
 

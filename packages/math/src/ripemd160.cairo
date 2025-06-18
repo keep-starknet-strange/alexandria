@@ -13,8 +13,8 @@
 //! - 5 rounds of 16 operations each on the right side
 //! - Final combination of left and right results
 
-use alexandria_math::U32BitRotate;
 use core::num::traits::WrappingAdd;
+use crate::U32BitRotate;
 
 const POW_2_32: u64 = 0x100000000;
 

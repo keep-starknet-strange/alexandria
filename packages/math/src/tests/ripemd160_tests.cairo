@@ -1,4 +1,4 @@
-use alexandria_hashing::ripemd160::{
+use crate::ripemd160::{
     RIPEMD160Context, ripemd160_context_as_array, ripemd160_context_as_bytes,
     ripemd160_context_as_u256, ripemd160_hash,
 };
