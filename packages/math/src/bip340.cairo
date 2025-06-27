@@ -1,5 +1,5 @@
 //! bip340 implementation
-use core::sha256::compute_sha256_byte_array; //Available in Cairo ^2.7.0.
+use core::sha256::compute_sha256_byte_array;
 use core::starknet::SyscallResultTrait;
 use starknet::secp256_trait::{Secp256PointTrait, Secp256Trait};
 use starknet::secp256k1::Secp256k1Point;
