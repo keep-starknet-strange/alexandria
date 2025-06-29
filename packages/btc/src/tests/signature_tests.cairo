@@ -3,7 +3,7 @@ use alexandria_btc::signature::{
     SIGHASH_ALL, Signature, create_signature_hash, mod_inverse, parse_der_signature,
     verify_signature, verify_transaction_signature,
 };
-use alexandria_btc::types::{Network, PublicKey};
+use alexandria_btc::types::{BitcoinNetwork, BitcoinPublicKey};
 use starknet::secp256_trait::Secp256Trait;
 use starknet::secp256k1::Secp256k1Point;
 
@@ -11,7 +11,9 @@ use starknet::secp256k1::Secp256k1Point;
 fn test_signature_verification_basic() {
     // Test with known good signature
     let private_key = create_private_key(
-        0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef, Network::Mainnet, true,
+        0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef,
+        BitcoinNetwork::Mainnet,
+        true,
     );
 
     let public_key = private_key_to_public_key(private_key);
@@ -34,7 +36,7 @@ fn test_signature_verification_basic() {
 
 #[test]
 fn test_signature_component_validation() {
-    let public_key = PublicKey {
+    let public_key = BitcoinPublicKey {
         x: 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef,
         y: 0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321,
         compressed: true,
@@ -190,7 +192,9 @@ fn test_signature_hash_creation() {
 #[test]
 fn test_transaction_signature_verification() {
     let private_key = create_private_key(
-        0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef, Network::Mainnet, true,
+        0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef,
+        BitcoinNetwork::Mainnet,
+        true,
     );
 
     let public_key = private_key_to_public_key(private_key);
@@ -229,7 +233,7 @@ fn test_transaction_signature_verification() {
 fn test_curve_boundary_conditions() {
     let curve_size = Secp256Trait::<Secp256k1Point>::get_curve_size();
 
-    let public_key = PublicKey {
+    let public_key = BitcoinPublicKey {
         x: 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef,
         y: 0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321,
         compressed: true,

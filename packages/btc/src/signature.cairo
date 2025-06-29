@@ -5,7 +5,7 @@ use starknet::SyscallResultTrait;
 use starknet::secp256_trait::{Secp256PointTrait, Secp256Trait};
 use starknet::secp256k1::Secp256k1Point;
 use crate::hash::hash256;
-use crate::types::PublicKey;
+use crate::types::BitcoinPublicKey;
 
 /// Bitcoin ECDSA signature structure
 #[derive(Drop, Copy)]
@@ -29,7 +29,9 @@ pub const SIGHASH_ANYONECANPAY: u8 = 0x80;
 ///
 /// # Returns
 /// * `bool` - True if signature is valid, false otherwise
-pub fn verify_signature(message_hash: u256, signature: Signature, public_key: PublicKey) -> bool {
+pub fn verify_signature(
+    message_hash: u256, signature: Signature, public_key: BitcoinPublicKey,
+) -> bool {
     // Get curve parameters
     let n = Secp256Trait::<Secp256k1Point>::get_curve_size();
 
@@ -260,7 +262,10 @@ fn hash256_from_byte_array(data: ByteArray) -> Array<u8> {
 /// # Returns
 /// * `bool` - True if signature is valid for the transaction
 pub fn verify_transaction_signature(
-    transaction_data: Span<u8>, signature: Signature, public_key: PublicKey, sighash_type: u8,
+    transaction_data: Span<u8>,
+    signature: Signature,
+    public_key: BitcoinPublicKey,
+    sighash_type: u8,
 ) -> bool {
     let message_hash = create_signature_hash(transaction_data, sighash_type);
     verify_signature(message_hash, signature, public_key)

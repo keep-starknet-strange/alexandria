@@ -3,11 +3,13 @@ use alexandria_encoding::bech32::{Encoder, convert_bits};
 use crate::hash::{hash160, sha256};
 use crate::keys::{private_key_to_public_key, public_key_hash, public_key_to_bytes};
 use crate::taproot::{create_key_path_output, u256_to_32_bytes_be};
-use crate::types::{AddressType, BitcoinAddress, Network, PrivateKey, PublicKey};
+use crate::types::{
+    BitcoinAddress, BitcoinAddressType, BitcoinNetwork, BitcoinPrivateKey, BitcoinPublicKey,
+};
 
 /// Generate Bitcoin address from private key
 pub fn private_key_to_address(
-    private_key: PrivateKey, address_type: AddressType,
+    private_key: BitcoinPrivateKey, address_type: BitcoinAddressType,
 ) -> BitcoinAddress {
     let public_key = private_key_to_public_key(private_key);
     public_key_to_address(public_key, address_type, private_key.network)
@@ -15,14 +17,14 @@ pub fn private_key_to_address(
 
 /// Generate Bitcoin address from public key
 pub fn public_key_to_address(
-    public_key: PublicKey, address_type: AddressType, network: Network,
+    public_key: BitcoinPublicKey, address_type: BitcoinAddressType, network: BitcoinNetwork,
 ) -> BitcoinAddress {
     match address_type {
-        AddressType::P2PKH => generate_p2pkh_address(public_key, network),
-        AddressType::P2SH => generate_p2sh_address(public_key, network),
-        AddressType::P2WPKH => generate_p2wpkh_address(public_key, network),
-        AddressType::P2WSH => generate_p2wsh_address(public_key, network),
-        AddressType::P2TR => generate_p2tr_address(public_key, network),
+        BitcoinAddressType::P2PKH => generate_p2pkh_address(public_key, network),
+        BitcoinAddressType::P2SH => generate_p2sh_address(public_key, network),
+        BitcoinAddressType::P2WPKH => generate_p2wpkh_address(public_key, network),
+        BitcoinAddressType::P2WSH => generate_p2wsh_address(public_key, network),
+        BitcoinAddressType::P2TR => generate_p2tr_address(public_key, network),
     }
 }
 
@@ -63,14 +65,14 @@ fn array_to_bytearray(arr: Array<u8>) -> ByteArray {
 }
 
 /// Generate P2PKH (Pay to Public Key Hash) address
-fn generate_p2pkh_address(public_key: PublicKey, network: Network) -> BitcoinAddress {
+fn generate_p2pkh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) -> BitcoinAddress {
     let pubkey_hash = public_key_hash(public_key);
 
     // Create version + pubkey_hash payload
     let version_byte = match network {
-        Network::Mainnet => 0x00,
-        Network::Testnet => 0x6f,
-        Network::Regtest => 0x6f,
+        BitcoinNetwork::Mainnet => 0x00,
+        BitcoinNetwork::Testnet => 0x6f,
+        BitcoinNetwork::Regtest => 0x6f,
     };
 
     let mut payload = array![version_byte];
@@ -96,11 +98,11 @@ fn generate_p2pkh_address(public_key: PublicKey, network: Network) -> BitcoinAdd
     script_pubkey.append_byte(0x88); // OP_EQUALVERIFY
     script_pubkey.append_byte(0xac); // OP_CHECKSIG
 
-    BitcoinAddress { address, address_type: AddressType::P2PKH, network, script_pubkey }
+    BitcoinAddress { address, address_type: BitcoinAddressType::P2PKH, network, script_pubkey }
 }
 
 /// Generate P2SH (Pay to Script Hash) address
-fn generate_p2sh_address(public_key: PublicKey, network: Network) -> BitcoinAddress {
+fn generate_p2sh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) -> BitcoinAddress {
     // For simplicity, we'll create a P2SH-wrapped P2WPKH
     let pubkey_hash = public_key_hash(public_key);
 
@@ -117,9 +119,9 @@ fn generate_p2sh_address(public_key: PublicKey, network: Network) -> BitcoinAddr
 
     // Create version + script_hash payload
     let version_byte = match network {
-        Network::Mainnet => 0x05,
-        Network::Testnet => 0xc4,
-        Network::Regtest => 0xc4,
+        BitcoinNetwork::Mainnet => 0x05,
+        BitcoinNetwork::Testnet => 0xc4,
+        BitcoinNetwork::Regtest => 0xc4,
     };
 
     let mut payload = array![version_byte];
@@ -143,11 +145,13 @@ fn generate_p2sh_address(public_key: PublicKey, network: Network) -> BitcoinAddr
     }
     script_pubkey.append_byte(0x87); // OP_EQUAL
 
-    BitcoinAddress { address, address_type: AddressType::P2SH, network, script_pubkey }
+    BitcoinAddress { address, address_type: BitcoinAddressType::P2SH, network, script_pubkey }
 }
 
 /// Generate P2WPKH (Pay to Witness Public Key Hash) address
-fn generate_p2wpkh_address(public_key: PublicKey, network: Network) -> BitcoinAddress {
+fn generate_p2wpkh_address(
+    public_key: BitcoinPublicKey, network: BitcoinNetwork,
+) -> BitcoinAddress {
     let pubkey_hash = public_key_hash(public_key);
 
     // Create witness program: version 0 + pubkey_hash
@@ -163,9 +167,9 @@ fn generate_p2wpkh_address(public_key: PublicKey, network: Network) -> BitcoinAd
 
     // Get HRP based on network
     let hrp: ByteArray = match network {
-        Network::Mainnet => "bc",
-        Network::Testnet => "tb",
-        Network::Regtest => "bcrt",
+        BitcoinNetwork::Mainnet => "bc",
+        BitcoinNetwork::Testnet => "tb",
+        BitcoinNetwork::Regtest => "bcrt",
     };
 
     let address = Encoder::encode(hrp, converted.span());
@@ -180,11 +184,11 @@ fn generate_p2wpkh_address(public_key: PublicKey, network: Network) -> BitcoinAd
         i += 1;
     }
 
-    BitcoinAddress { address, address_type: AddressType::P2WPKH, network, script_pubkey }
+    BitcoinAddress { address, address_type: BitcoinAddressType::P2WPKH, network, script_pubkey }
 }
 
 /// Generate P2WSH (Pay to Witness Script Hash) address
-fn generate_p2wsh_address(public_key: PublicKey, network: Network) -> BitcoinAddress {
+fn generate_p2wsh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) -> BitcoinAddress {
     let pubkey_bytes = public_key_to_bytes(public_key);
 
     // Create a simple script: <pubkey> OP_CHECKSIG
@@ -213,9 +217,9 @@ fn generate_p2wsh_address(public_key: PublicKey, network: Network) -> BitcoinAdd
 
     // Get HRP based on network
     let hrp: ByteArray = match network {
-        Network::Mainnet => "bc",
-        Network::Testnet => "tb",
-        Network::Regtest => "bcrt",
+        BitcoinNetwork::Mainnet => "bc",
+        BitcoinNetwork::Testnet => "tb",
+        BitcoinNetwork::Regtest => "bcrt",
     };
 
     let address = Encoder::encode(hrp, converted.span());
@@ -230,11 +234,11 @@ fn generate_p2wsh_address(public_key: PublicKey, network: Network) -> BitcoinAdd
         i += 1;
     }
 
-    BitcoinAddress { address, address_type: AddressType::P2WSH, network, script_pubkey }
+    BitcoinAddress { address, address_type: BitcoinAddressType::P2WSH, network, script_pubkey }
 }
 
 /// Generate P2TR (Pay to Taproot) address using proper BIP-341 key tweaking
-fn generate_p2tr_address(public_key: PublicKey, network: Network) -> BitcoinAddress {
+fn generate_p2tr_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) -> BitcoinAddress {
     // Use the x-coordinate of the public key as the internal key
     let internal_key = public_key.x;
 
@@ -265,9 +269,9 @@ fn generate_p2tr_address(public_key: PublicKey, network: Network) -> BitcoinAddr
 
     // Get HRP based on network
     let hrp: ByteArray = match network {
-        Network::Mainnet => "bc",
-        Network::Testnet => "tb",
-        Network::Regtest => "bcrt",
+        BitcoinNetwork::Mainnet => "bc",
+        BitcoinNetwork::Testnet => "tb",
+        BitcoinNetwork::Regtest => "bcrt",
     };
 
     let address = Encoder::encode(hrp, converted.span());
@@ -282,11 +286,11 @@ fn generate_p2tr_address(public_key: PublicKey, network: Network) -> BitcoinAddr
         i += 1;
     }
 
-    BitcoinAddress { address, address_type: AddressType::P2TR, network, script_pubkey }
+    BitcoinAddress { address, address_type: BitcoinAddressType::P2TR, network, script_pubkey }
 }
 
 /// Validate Bitcoin address format
-pub fn validate_address(address: ByteArray, network: Network) -> bool {
+pub fn validate_address(address: ByteArray, network: BitcoinNetwork) -> bool {
     // Basic validation - in a real implementation this would be more comprehensive
     if address.len() < 26 || address.len() > 62 {
         return false;
@@ -302,11 +306,11 @@ pub fn validate_address(address: ByteArray, network: Network) -> bool {
 }
 
 /// Check if address is Bech32 format
-fn is_bech32_address(address: @ByteArray, network: Network) -> bool {
+fn is_bech32_address(address: @ByteArray, network: BitcoinNetwork) -> bool {
     let expected_hrp: ByteArray = match network {
-        Network::Mainnet => "bc",
-        Network::Testnet => "tb",
-        Network::Regtest => "bcrt",
+        BitcoinNetwork::Mainnet => "bc",
+        BitcoinNetwork::Testnet => "tb",
+        BitcoinNetwork::Regtest => "bcrt",
     };
 
     // Check if address starts with expected HRP
@@ -328,7 +332,7 @@ fn is_bech32_address(address: @ByteArray, network: Network) -> bool {
 }
 
 /// Check if address is Base58Check format
-fn is_base58check_address(address: @ByteArray, network: Network) -> bool {
+fn is_base58check_address(address: @ByteArray, network: BitcoinNetwork) -> bool {
     // Basic length check
     if address.len() < 26 || address.len() > 35 {
         return false;
@@ -337,9 +341,9 @@ fn is_base58check_address(address: @ByteArray, network: Network) -> bool {
     // Check first character matches expected network prefixes
     let first_char = address.at(0).unwrap();
     let valid_prefix = match network {
-        Network::Mainnet => first_char == '1' || first_char == '3',
-        Network::Testnet => first_char == 'm' || first_char == 'n' || first_char == '2',
-        Network::Regtest => first_char == 'm' || first_char == 'n' || first_char == '2',
+        BitcoinNetwork::Mainnet => first_char == '1' || first_char == '3',
+        BitcoinNetwork::Testnet => first_char == 'm' || first_char == 'n' || first_char == '2',
+        BitcoinNetwork::Regtest => first_char == 'm' || first_char == 'n' || first_char == '2',
     };
 
     if !valid_prefix {
