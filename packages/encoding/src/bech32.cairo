@@ -171,13 +171,13 @@ pub fn encode(hrp: ByteArray, data: Span<u8>) -> ByteArray {
     // Validate HRP length (should be 1-83 characters according to BIP-173)
     assert!(hrp.len() >= 1, "HRP too short");
     assert!(hrp.len() <= 83, "HRP too long");
-    
+
     // Calculate total expected length: hrp + separator(1) + data + checksum(6)
     let expected_length = hrp.len() + 1 + data.len() + 6;
-    
+
     // Validate total length doesn't exceed 90 characters (BIP-173 limit)
     assert!(expected_length <= 90, "Encoded string would exceed maximum length of 90 characters");
-    
+
     // Validate data length (should not exceed practical limits)
     assert!(data.len() <= 65, "Data payload too long");
 
