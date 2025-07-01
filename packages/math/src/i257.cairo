@@ -4,9 +4,9 @@ use core::ops::{AddAssign, DivAssign, MulAssign, RemAssign, SubAssign};
 
 // ====================== INT 257 ======================
 
-// i257 represents a 129-bit integer.
-// The abs field holds the absolute value of the integer.
-// The is_negative field is true for negative integers, and false for non-negative integers.
+/// i257 represents a 129-bit integer.
+/// The abs field holds the absolute value of the integer.
+/// The is_negative field is true for negative integers, and false for non-negative integers.
 #[derive(Serde, Copy, Drop, Hash)]
 pub struct i257 {
     abs: u256,
@@ -17,10 +17,10 @@ pub struct i257 {
 pub impl I257Impl of I257Trait {
     /// Creates a new i257 from an absolute value and sign.
     /// Ensures zero is always represented as positive.
-    /// # Arguments
+    /// #### Arguments
     /// * `abs` - The absolute value as a u256
     /// * `is_negative` - Whether the number is negative
-    /// # Returns
+    /// #### Returns
     /// * `i257` - The constructed signed integer
     #[inline(always)]
     fn new(abs: u256, is_negative: bool) -> i257 {
@@ -32,18 +32,18 @@ pub impl I257Impl of I257Trait {
     }
 
     /// Returns whether the i257 is negative.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The i257 to check
-    /// # Returns
+    /// #### Returns
     /// * `bool` - true if negative, false if positive or zero
     fn is_negative(self: i257) -> bool {
         self.is_negative
     }
 
     /// Returns the absolute value of the i257.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The i257 to get absolute value from
-    /// # Returns
+    /// #### Returns
     /// * `u256` - The absolute value
     fn abs(self: i257) -> u256 {
         self.abs
@@ -56,7 +56,7 @@ impl I128Default of Default<i257> {
     }
 }
 
-// Implements the Add trait for i257.
+/// Implements the Add trait for i257.
 impl i257Add of Add<i257> {
     fn add(lhs: i257, rhs: i257) -> i257 {
         i257_assert_no_negative_zero(lhs);
@@ -80,7 +80,7 @@ impl i257Add of Add<i257> {
     }
 }
 
-// Implements the AddEq trait for i257.
+/// Implements the AddEq trait for i257.
 impl i257AddEq of AddAssign<i257, i257> {
     #[inline(always)]
     fn add_assign(ref self: i257, rhs: i257) {
@@ -88,7 +88,7 @@ impl i257AddEq of AddAssign<i257, i257> {
     }
 }
 
-// Implements the Sub trait for i257.
+/// Implements the Sub trait for i257.
 impl i257Sub of Sub<i257> {
     fn sub(lhs: i257, rhs: i257) -> i257 {
         i257_assert_no_negative_zero(lhs);
@@ -105,7 +105,7 @@ impl i257Sub of Sub<i257> {
     }
 }
 
-// Implements the SubEq trait for i257.
+/// Implements the SubEq trait for i257.
 impl i257SubEq of SubAssign<i257, i257> {
     #[inline(always)]
     fn sub_assign(ref self: i257, rhs: i257) {
@@ -113,7 +113,7 @@ impl i257SubEq of SubAssign<i257, i257> {
     }
 }
 
-// Implements the Mul trait for i257.
+/// Implements the Mul trait for i257.
 impl i257Mul of Mul<i257> {
     fn mul(lhs: i257, rhs: i257) -> i257 {
         i257_assert_no_negative_zero(lhs);
@@ -127,7 +127,7 @@ impl i257Mul of Mul<i257> {
     }
 }
 
-// Implements the MulEq trait for i257.
+/// Implements the MulEq trait for i257.
 impl i257MulEq of MulAssign<i257, i257> {
     #[inline(always)]
     fn mul_assign(ref self: i257, rhs: i257) {
@@ -135,12 +135,12 @@ impl i257MulEq of MulAssign<i257, i257> {
     }
 }
 
-// Divides the first i257 by the second i128.
-// # Arguments
-// * `lhs` - The i257 dividend.
-// * `rhs` - The i257 divisor.
-// # Returns
-// * `i257` - The quotient of `lhs` and `rhs`.
+/// Divides the first i257 by the second i128.
+/// #### Arguments
+/// * `lhs` - The i257 dividend.
+/// * `rhs` - The i257 divisor.
+/// #### Returns
+/// * `i257` - The quotient of `lhs` and `rhs`.
 fn i257_div(lhs: i257, rhs: i257) -> i257 {
     i257_assert_no_negative_zero(lhs);
     // Check that the divisor is not zero.
@@ -173,14 +173,14 @@ fn i257_div(lhs: i257, rhs: i257) -> i257 {
     }
 }
 
-// Implements the Div trait for i257.
+/// Implements the Div trait for i257.
 impl i257Div of Div<i257> {
     fn div(lhs: i257, rhs: i257) -> i257 {
         i257_div(lhs, rhs)
     }
 }
 
-// Implements the DivEq trait for i257.
+/// Implements the DivEq trait for i257.
 impl i257DivEq of DivAssign<i257, i257> {
     #[inline(always)]
     fn div_assign(ref self: i257, rhs: i257) {
@@ -188,12 +188,12 @@ impl i257DivEq of DivAssign<i257, i257> {
     }
 }
 
-// Calculates the remainder of the division of a first i257 by a second i257.
-// # Arguments
-// * `lhs` - The i257 dividend.
-// * `rhs` - The i257 divisor.
-// # Returns
-// * `i257` - The remainder of dividing `lhs` by `rhs`.
+/// Calculates the remainder of the division of a first i257 by a second i257.
+/// #### Arguments
+/// * `lhs` - The i257 dividend.
+/// * `rhs` - The i257 divisor.
+/// #### Returns
+/// * `i257` - The remainder of dividing `lhs` by `rhs`.
 fn i257_rem(lhs: i257, rhs: i257) -> i257 {
     i257_assert_no_negative_zero(lhs);
     // Check that the divisor is not zero.
@@ -201,14 +201,14 @@ fn i257_rem(lhs: i257, rhs: i257) -> i257 {
     lhs - (rhs * (lhs / rhs))
 }
 
-// Implements the Rem trait for i257.
+/// Implements the Rem trait for i257.
 impl i257Rem of Rem<i257> {
     fn rem(lhs: i257, rhs: i257) -> i257 {
         i257_rem(lhs, rhs)
     }
 }
 
-// Implements the RemEq trait for i257.
+/// Implements the RemEq trait for i257.
 impl i257RemEq of RemAssign<i257, i257> {
     #[inline(always)]
     fn rem_assign(ref self: i257, rhs: i257) {
@@ -216,21 +216,21 @@ impl i257RemEq of RemAssign<i257, i257> {
     }
 }
 
-// Calculates both the quotient and the remainder of the division of a first i257 by a second i257.
-// # Arguments
-// * `lhs` - The i257 dividend.
-// * `rhs` - The i257 divisor.
-// # Returns
-// * `(i257, i257)` - A tuple containing the quotient and the remainder of dividing `lhs` by `rhs`.
+/// Calculates both the quotient and the remainder of the division of a first i257 by a second i257.
+/// #### Arguments
+/// * `lhs` - The i257 dividend.
+/// * `rhs` - The i257 divisor.
+/// #### Returns
+/// * `(i257, i257)` - A tuple containing the quotient and the remainder of dividing `lhs` by `rhs`.
 pub fn i257_div_rem(lhs: i257, rhs: i257) -> (i257, i257) {
     let quotient = i257_div(lhs, rhs);
     let remainder = i257_rem(lhs, rhs);
     (quotient, remainder)
 }
 
-// Implements the PartialEq trait for i257.
-// WARNING: If either `lhs` or `rhs` is negative zero, functions will revert.
-// Ensure that neither `lhs` nor `rhs` is negative zero before calling.
+/// Implements the PartialEq trait for i257.
+/// WARNING: If either `lhs` or `rhs` is negative zero, functions will revert.
+/// Ensure that neither `lhs` nor `rhs` is negative zero before calling.
 impl i257PartialEq of PartialEq<i257> {
     fn eq(lhs: @i257, rhs: @i257) -> bool {
         i257_assert_no_negative_zero(*lhs);
@@ -243,9 +243,9 @@ impl i257PartialEq of PartialEq<i257> {
     }
 }
 
-// Implements the PartialOrd trait for i257.
-// WARNING: If either `lhs` or `rhs` is negative zero, functions will revert.
-// Ensure that neither `lhs` nor `rhs` is negative zero before calling.
+/// Implements the PartialOrd trait for i257.
+/// WARNING: If either `lhs` or `rhs` is negative zero, functions will revert.
+/// Ensure that neither `lhs` nor `rhs` is negative zero before calling.
 impl i257PartialOrd of PartialOrd<i257> {
     fn le(lhs: i257, rhs: i257) -> bool {
         !Self::gt(lhs, rhs)
@@ -281,7 +281,7 @@ impl i257PartialOrd of PartialOrd<i257> {
 
 // Divides the first i257 by the second i257.
 
-// Implements the Neg trait for i257.
+/// Implements the Neg trait for i257.
 impl i257Neg of Neg<i257> {
     fn neg(a: i257) -> i257 {
         i257_neg(a)
@@ -305,32 +305,32 @@ pub impl i257Zeroable of Zero<i257> {
     }
 }
 
-// Checks if the given i257 integer is zero and has the correct sign.
-// # Arguments
-// * `x` - The i257 integer to check.
-// # Panics
-// Panics if `x` is zero and is negative
+/// Checks if the given i257 integer is zero and has the correct sign.
+/// #### Arguments
+/// * `x` - The i257 integer to check.
+/// #### Panics
+/// Panics if `x` is zero and is negative
 pub fn i257_assert_no_negative_zero(x: i257) {
     if x.abs == 0 {
         assert(!x.is_negative, 'negative zero');
     }
 }
 
-// Computes the absolute value of the given i257 integer.
-// # Arguments
-// * `x` - The i257 integer to compute the absolute value of.
-// # Returns
-// * `i257` - The absolute value of `x`.
+/// Computes the absolute value of the given i257 integer.
+/// #### Arguments
+/// * `x` - The i257 integer to compute the absolute value of.
+/// #### Returns
+/// * `i257` - The absolute value of `x`.
 fn i257_abs(x: i257) -> i257 {
     i257 { abs: x.abs, is_negative: false }
 }
 
-// Computes the maximum between two i257 integers.
-// # Arguments
-// * `lhs` - The first i257 integer to compare.
-// * `rhs` - The second i257 integer to compare.
-// # Returns
-// * `i257` - The maximum between `lhs` and `rhs`.
+/// Computes the maximum between two i257 integers.
+/// #### Arguments
+/// * `lhs` - The first i257 integer to compare.
+/// * `rhs` - The second i257 integer to compare.
+/// #### Returns
+/// * `i257` - The maximum between `lhs` and `rhs`.
 fn i257_max(lhs: i257, rhs: i257) -> i257 {
     if lhs > rhs {
         lhs
@@ -344,12 +344,12 @@ fn i257_neg(x: i257) -> i257 {
     I257Impl::new(x.abs, !x.is_negative)
 }
 
-// Computes the minimum between two i257 integers.
-// # Arguments
-// * `lhs` - The first i257 integer to compare.
-// * `rhs` - The second i257 integer to compare.
-// # Returns
-// * `i257` - The minimum between `lhs` and `rhs`.
+/// Computes the minimum between two i257 integers.
+/// #### Arguments
+/// * `lhs` - The first i257 integer to compare.
+/// * `rhs` - The second i257 integer to compare.
+/// #### Returns
+/// * `i257` - The minimum between `lhs` and `rhs`.
 fn i257_min(lhs: i257, rhs: i257) -> i257 {
     if lhs < rhs {
         lhs
@@ -358,21 +358,21 @@ fn i257_min(lhs: i257, rhs: i257) -> i257 {
     }
 }
 
-// Convert u256 to i257
+/// Convert u256 to i257
 impl U256IntoI257 of Into<u256, i257> {
     fn into(self: u256) -> i257 {
         i257 { abs: self, is_negative: false }
     }
 }
 
-// Convert felt252 to i257
+/// Convert felt252 to i257
 impl FeltIntoI257 of Into<felt252, i257> {
     fn into(self: felt252) -> i257 {
         i257 { abs: self.into(), is_negative: false }
     }
 }
 
-// Implements the Display trait for i257.
+/// Implements the Display trait for i257.
 pub impl DisplayI257Impl of Display<i257> {
     fn fmt(self: @i257, ref f: Formatter) -> Result<(), Error> {
         if *self.is_negative {

@@ -7,13 +7,13 @@ use crate::evm_enum::EVMTypes;
 /// their actual data location elsewhere in calldata. This helper is used to
 /// determine if special encoding/decoding logic is needed.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `types` - A span of `EVMTypes` representing the types to check.
 ///
-/// # Returns
+/// #### Returns
 /// * `true` if any type is dynamic; otherwise, `false`.
 ///
-/// # Examples
+/// #### Examples
 /// ```
 /// let static_types = array![EVMTypes::Uint256, EVMTypes::Address].span();
 /// assert!(!has_dynamic(static_types));
@@ -32,10 +32,10 @@ pub fn has_dynamic(types: Span<EVMTypes>) -> bool {
 
 /// Checks if a single EVM type is dynamic.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `evm_type` - The EVM type to check.
 ///
-/// # Returns
+/// #### Returns
 /// * `true` if the type is dynamic; otherwise, `false`.
 pub fn is_dynamic_type(evm_type: @EVMTypes) -> bool {
     match evm_type {

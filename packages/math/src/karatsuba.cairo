@@ -4,10 +4,10 @@ use super::const_pow::pow10;
 use super::count_digits_of_base;
 
 /// Algorithm to multiply two numbers in O(n^1.6) running time
-/// # Arguments
+/// #### Arguments
 /// * `x` - First number to multiply.
 /// * `y` - Second number to multiply.
-/// # Returns
+/// #### Returns
 /// * `u128` - The product between x and y
 pub fn multiply(x: u128, y: u128) -> u128 {
     if x < 10 {
@@ -29,9 +29,9 @@ pub fn multiply(x: u128, y: u128) -> u128 {
 }
 
 /// Helper function for 'multiply', divides an integer in half and rounds up strictly.
-/// # Arguments
+/// #### Arguments
 /// * `num` - The current value to be divided.
-/// # Returns
+/// #### Returns
 /// * `u32` - Half (rounded up) of num.
 fn div_half_ceil(num: u32) -> u32 {
     if num % 2 != 0 {
@@ -42,10 +42,10 @@ fn div_half_ceil(num: u32) -> u32 {
 }
 
 /// Helper function for 'multiply',splits a number at the indicated index and returns it in a tuple.
-/// # Arguments
+/// #### Arguments
 /// * `num` - The current value to be split.
 /// * `split_idx` - Index at which the number will be split
-/// # Returns
+/// #### Returns
 /// * `(u128, u128)` -tuple representing the split number.
 fn split_number(num: u128, split_idx: u32) -> (u128, u128) {
     let divisor = pow10(split_idx);

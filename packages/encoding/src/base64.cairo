@@ -8,15 +8,15 @@ use alexandria_data_structures::array_ext::ArrayTraitExt;
 /// into Base64 representation, which is widely used for encoding binary data
 /// in text-based formats and data transmission.
 ///
-/// # Type Parameters
+/// #### Type Parameters
 /// * `T` - The input data type to be encoded
 pub trait Encoder<T> {
     /// Encodes data into Base64 format
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `data` - The data to encode
     ///
-    /// # Returns
+    /// #### Returns
     /// * `Array<u8>` - Base64 encoded representation as bytes
     fn encode(data: T) -> Array<u8>;
 }
@@ -26,15 +26,15 @@ pub trait Encoder<T> {
 /// This trait provides a common interface for decoding Base64 encoded data
 /// back to its original binary representation.
 ///
-/// # Type Parameters
+/// #### Type Parameters
 /// * `T` - The input data type to be decoded (typically Base64 encoded bytes)
 pub trait Decoder<T> {
     /// Decodes Base64 encoded data back to raw bytes
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `data` - The Base64 encoded data to decode
     ///
-    /// # Returns
+    /// #### Returns
     /// * `Array<u8>` - Raw bytes decoded from Base64 format
     fn decode(data: T) -> Array<u8>;
 }
@@ -47,10 +47,10 @@ pub trait Decoder<T> {
 pub trait ByteArrayEncoder {
     /// Encodes a ByteArray into Base64 format
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `data` - The ByteArray to encode
     ///
-    /// # Returns
+    /// #### Returns
     /// * `ByteArray` - Base64 encoded representation as ByteArray
     fn encode(data: ByteArray) -> ByteArray;
 }
@@ -63,10 +63,10 @@ pub trait ByteArrayEncoder {
 pub trait ByteArrayDecoder {
     /// Decodes a Base64 encoded ByteArray back to raw bytes
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `data` - The Base64 encoded ByteArray to decode
     ///
-    /// # Returns
+    /// #### Returns
     /// * `ByteArray` - Raw bytes decoded from Base64 format as ByteArray
     fn decode(data: ByteArray) -> ByteArray;
 }
@@ -131,14 +131,14 @@ pub impl Base64ByteArrayUrlEncoder of ByteArrayEncoder {
 /// using the provided character set. It processes the input in groups of 3 bytes,
 /// converting them to 4 Base64 characters, and handles padding when necessary.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `bytes` - A mutable array of u8 bytes to be encoded
 /// * `base64_chars` - A span containing the Base64 character set for encoding
 ///
-/// # Returns
+/// #### Returns
 /// * `Array<u8>` - The Base64 encoded result as an array of bytes
 ///
-/// # Algorithm
+/// #### Algorithm
 /// 1. Groups input bytes into chunks of 3
 /// 2. Converts each 3-byte chunk into a 24-bit number
 /// 3. Splits the 24-bit number into four 6-bit values
@@ -200,14 +200,14 @@ pub fn encode_u8_array(mut bytes: Array<u8>, base64_chars: Span<u8>) -> Array<u8
 /// The encoding process divides the felt252 into manageable chunks and maps
 /// them to Base64 characters, with padding to ensure consistent output length.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `self` - The felt252 value to be encoded
 /// * `base64_chars` - A span containing the Base64 character set for encoding
 ///
-/// # Returns
+/// #### Returns
 /// * `Array<u8>` - The Base64 encoded result as an array of bytes, always 44 characters long
 ///
-/// # Algorithm
+/// #### Algorithm
 /// 1. Converts felt252 to u256 for processing
 /// 2. Processes the number in chunks using division and modulo operations
 /// 3. Maps the resulting values to Base64 characters
@@ -260,12 +260,12 @@ pub fn encode_felt(self: felt252, base64_chars: Span<u8>) -> Array<u8> {
 /// them into 24-bit numbers. It then maps these values to Base64 characters
 /// and handles any necessary padding.
 ///
-/// # Arguments
+/// #### Arguments
 ///
 /// * `self` - A mutable ByteArray containing the binary data to be encoded.
 /// * `base64_chars` - A Span containing the Base64 character set used for encoding.
 ///
-/// # Returns
+/// #### Returns
 /// * A ByteArray containing the Base64 encoded data.
 pub fn encode_byte_array(mut self: ByteArray, base64_chars: Span<u8>) -> ByteArray {
     let mut result = Default::default();
@@ -390,10 +390,10 @@ fn inner_decode(data: Array<u8>) -> Array<u8> {
 /// them into 24-bit numbers. It then extracts the original bytes from
 /// these 24-bit numbers and handles any padding that may be present.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `data` - A ByteArray containing Base64 encoded data.
 ///
-/// # Returns
+/// #### Returns
 /// * A ByteArray containing the decoded binary data.
 fn decode_byte_array(data: ByteArray) -> ByteArray {
     let mut result: ByteArray = Default::default();
@@ -453,13 +453,13 @@ fn decode_byte_array(data: ByteArray) -> ByteArray {
 /// This function takes four Base64 values, combines them into a 24-bit number,
 /// and extracts the first byte from this number.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `val1` - The first Base64 character value.
 /// * `val2` - The second Base64 character value.
 /// * `val3` - The third Base64 character value.
 /// * `val4` - The fourth Base64 character value.
 ///
-/// # Returns
+/// #### Returns
 /// * A tuple containing the combined 24-bit number and the first decoded byte.
 fn get_decoded_b1(val1: u8, val2: u8, val3: u8, val4: u8) -> (u32, u8) {
     let v1: u32 = get_base64_value(val1).into();
@@ -476,10 +476,10 @@ fn get_decoded_b1(val1: u8, val2: u8, val3: u8, val4: u8) -> (u32, u8) {
 /// This function extracts the second byte from a 24-bit number
 /// that was previously combined from four Base64 character values.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `val` - The 24-bit combined number.
 ///
-/// # Returns
+/// #### Returns
 /// * decoded byte.
 fn get_decoded_b2(val: u32) -> u8 {
     ((val / 256) & 0xFF).try_into().unwrap()
@@ -490,10 +490,10 @@ fn get_decoded_b2(val: u32) -> u8 {
 /// This function extracts the third byte from a 24-bit number
 /// that was previously combined from four Base64 character values.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `val` - The 24-bit combined number.
 ///
-/// # Returns
+/// #### Returns
 /// * decoded byte.
 fn get_decoded_b3(val: u32) -> u8 {
     (val & 0xFF).try_into().unwrap()
@@ -527,7 +527,7 @@ fn get_base64_value(x: u8) -> u8 {
 
 /// Returns the standard Base64 character set (A-Z, a-z, 0-9)
 ///
-/// # Returns
+/// #### Returns
 /// * `Array<u8>` - Array of 62 Base64 characters
 fn get_base64_char_set() -> Array<u8> {
     let mut result = array![

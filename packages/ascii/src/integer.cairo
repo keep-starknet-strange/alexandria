@@ -8,11 +8,11 @@ pub trait ToAsciiTrait<T, U> {
 // converts integers into an array of its individual ascii values
 pub trait ToAsciiArrayTrait<T> {
     /// Converts an integer to an array of its individual ASCII values in normal order
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The integer value to convert to ASCII array
     fn to_ascii_array(self: T) -> Array<felt252>;
     /// Converts an integer to an array of its individual ASCII values in reverse order
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The integer value to convert to inverse ASCII array
     fn to_inverse_ascii_array(self: T) -> Array<felt252>;
 }
@@ -55,9 +55,12 @@ impl ToAsciiArrayTraitImpl<
     }
 }
 
-// generic implementation for small integers <u128
-// to transform its integers into a string represented as a single felt252
-// e.g. 1000 -> "1000"
+/// generic implementation for small integers `<u128>`
+/// to transform its integers into a string represented as a single ``felt252``
+/// e.g.
+/// ```
+/// 1000 -> "1000"`
+/// ```
 impl SmallIntegerToAsciiTraitImpl<
     T,
     +PartialOrd<T>,
@@ -87,9 +90,12 @@ impl SmallIntegerToAsciiTraitImpl<
     }
 }
 
-// generic implementation for big integers u128
-// to transform its integers into a string represented as multiple felt252 if there is overflow
-// e.g. max_num + 123 -> ["max_num", "123"]
+/// generic implementation for big integers ``<u128>``
+/// to transform its integers into a string represented as multiple ``felt252`` if there is overflow
+/// e.g.
+/// ```
+/// max_num + 123 -> ["max_num", "123"]
+/// ```
 impl BigIntegerToAsciiTraitImpl<
     T,
     +PartialOrd<T>,

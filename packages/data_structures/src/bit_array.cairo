@@ -34,98 +34,100 @@ pub trait BitArrayTrait {
     fn current(self: @BitArray) -> felt252;
     fn data(self: BitArray) -> Array<bytes31>;
     /// Appends a single bit to the BitArray
-    /// # Arguments
-    /// `bit` - either true or false, representing a single bit to be appended
+    /// #### Arguments
+    /// - `bit` - either true or false, representing a single bit to be appended
     fn append_bit(ref self: BitArray, bit: bool);
     /// Reads a single bit from the array
-    /// # Arguments
-    /// `index` - the index into the array to read
-    /// # Returns
-    /// `Option<bool>` - if the index is found, the stored bool is returned
+    /// #### Arguments
+    /// - `index` - the index into the array to read
+    /// #### Returns
+    /// - `Option<bool>` - if the index is found, the stored bool is returned
     fn at(self: @BitArray, index: usize) -> Option<bool>;
     /// The current length of the BitArray
-    /// # Returns
-    /// `usize` - length in bits of the BitArray
+    /// #### Returns
+    /// - `usize` - length in bits of the BitArray
     fn len(self: @BitArray) -> usize;
     /// Returns and removes the first element of the BitArray
-    /// # Returns
-    /// `Option<bool>` - If the array is non-empty, a `bool` is removed from the front and returned
+    /// #### Returns
+    /// - `Option<bool>` - If the array is non-empty, a `bool` is removed from the front and
+    /// returned
     fn pop_front(ref self: BitArray) -> Option<bool>;
     /// Reads a single word of the specified length up to 248 bits in big endian bit representation
-    /// # Arguments
-    /// `length` - The bit length of the word to read, max 248
-    /// # Returns
-    /// `Option<felt252>` - If there are `length` bits remaining, the word is returned as felt252
+    /// #### Arguments
+    /// - `length` - The bit length of the word to read, max 248
+    /// #### Returns
+    /// - `Option<felt252>` - If there are `length` bits remaining, the word is returned as felt252
     fn read_word_be(ref self: BitArray, length: usize) -> Option<felt252>;
     /// Reads a single word of the specified length up to 256 bits in big endian representation.
     /// For words shorter than (or equal to) 248 bits use `read_word_be(...)` instead.
-    /// # Arguments
-    /// `length` - The bit length of the word to read, max 256
-    /// # Returns
-    /// `Option<u256>` - If there are `length` bits remaining, the word is returned as u256
+    /// #### Arguments
+    /// - `length` - The bit length of the word to read, max 256
+    /// #### Returns
+    /// - `Option<u256>` - If there are `length` bits remaining, the word is returned as u256
     fn read_word_be_u256(ref self: BitArray, length: usize) -> Option<u256>;
     /// Reads a single word of the specified length up to 512 bits in big endian representation.
     /// For words shorter than (or equal to) 256 bits consider the other read calls instead.
-    /// # Arguments
-    /// `length` - The bit length of the word to read, max 512
-    /// # Returns
-    /// `Option<u512>` - If there are `length` bits remaining, the word is returned as u512
+    /// #### Arguments
+    /// - `length` - The bit length of the word to read, max 512
+    /// #### Returns
+    /// - `Option<u512>` - If there are `length` bits remaining, the word is returned as u512
     fn read_word_be_u512(ref self: BitArray, length: usize) -> Option<u512>;
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in big endian representation
-    /// # Arguments
-    /// `word` - The value to store onto the bit array of type `felt252`
-    /// `length` - The length of the word in bits, maximum 248
+    /// #### Arguments
+    /// - `word` - The value to store onto the bit array of type `felt252`
+    /// - `length` - The length of the word in bits, maximum 248
     fn write_word_be(ref self: BitArray, word: felt252, length: usize);
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in big endian representation
-    /// # Arguments
-    /// `word` - The value to store onto the bit array of type `u256`
-    /// `length` - The length of the word in bits, maximum 256
+    /// #### Arguments
+    /// - `word` - The value to store onto the bit array of type `u256`
+    /// - `length` - The length of the word in bits, maximum 256
     fn write_word_be_u256(ref self: BitArray, word: u256, length: usize);
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in big endian representation
-    /// # Arguments
-    /// `word` - The value to store onto the bit array of type `u512`
-    /// `length` - The length of the word in bits, maximum 512
+    /// #### Arguments
+    /// - `word` - The value to store onto the bit array of type `u512`
+    /// - `length` - The length of the word in bits, maximum 512
     fn write_word_be_u512(ref self: BitArray, word: u512, length: usize);
     /// Reads a single word of the specified length up to 248 bits in little endian bit
-    /// representation # Arguments
-    /// `length` - The bit length of the word to read, max 248
-    /// # Returns
-    /// `Option<felt252>` - If there are `length` bits remaining, the word is returned as felt252
+    /// representation
+    /// #### Arguments
+    /// - `length` - The bit length of the word to read, max 248
+    /// #### Returns
+    /// - `Option<felt252>` - If there are `length` bits remaining, the word is returned as felt252
     fn read_word_le(ref self: BitArray, length: usize) -> Option<felt252>;
     /// Reads a single word of the specified length up to 256 bits in little endian representation.
     /// For words shorter than (or equal to) 248 bits use `read_word_be(...)` instead.
-    /// # Arguments
-    /// `length` - The bit length of the word to read, max 256
-    /// # Returns
-    /// `Option<u256>` - If there are `length` bits remaining, the word is returned as u256
+    /// #### Arguments
+    /// - `length` - The bit length of the word to read, max 256
+    /// #### Returns
+    /// - `Option<u256>` - If there are `length` bits remaining, the word is returned as u256
     fn read_word_le_u256(ref self: BitArray, length: usize) -> Option<u256>;
     /// Reads a single word of the specified length up to 512 bits in little endian representation.
     /// For words shorter than (or equal to) 256 bits consider the other read calls instead.
-    /// # Arguments
-    /// `length` - The bit length of the word to read, max 512
-    /// # Returns
-    /// `Option<u512>` - If there are `length` bits remaining, the word is returned as u512
+    /// #### Arguments
+    /// - `length` - The bit length of the word to read, max 512
+    /// #### Returns
+    /// - `Option<u512>` - If there are `length` bits remaining, the word is returned as u512
     fn read_word_le_u512(ref self: BitArray, length: usize) -> Option<u512>;
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in little endian representation
-    /// # Arguments
-    /// `word` - The value to store onto the bit array of type `felt252`
-    /// `length` - The length of the word in bits, maximum 248
+    /// #### Arguments
+    /// - `word` - The value to store onto the bit array of type `felt252`
+    /// - `length` - The length of the word in bits, maximum 248
     fn write_word_le(ref self: BitArray, word: felt252, length: usize);
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in little endian representation
-    /// # Arguments
-    /// `word` - The value to store onto the bit array of type `u256`
-    /// `length` - The length of the word in bits, maximum 256
+    /// #### Arguments
+    /// - `word` - The value to store onto the bit array of type `u256`
+    /// - `length` - The length of the word in bits, maximum 256
     fn write_word_le_u256(ref self: BitArray, word: u256, length: usize);
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in little endian representation
-    /// # Arguments
-    /// `word` - The value to store onto the bit array of type `u512`
-    /// `length` - The length of the word in bits, maximum 512
+    /// #### Arguments
+    /// - `word` - The value to store onto the bit array of type `u512`
+    /// - `length` - The length of the word in bits, maximum 512
     fn write_word_le_u512(ref self: BitArray, word: u512, length: usize);
 }
 

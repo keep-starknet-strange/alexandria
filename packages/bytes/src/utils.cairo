@@ -6,7 +6,7 @@ use core::keccak::cairo_keccak;
 use core::to_byte_array::FormatAsByteArray;
 
 /// Formats a single byte as a hexadecimal string with leading zero if needed.
-/// # Arguments
+/// #### Arguments
 /// * `byte` - The byte value to format as hex
 /// * `f` - Reference to the formatter
 fn format_byte_hex(byte: u8, ref f: Formatter) -> Result<(), Error> {
@@ -79,7 +79,7 @@ pub fn keccak_u128s_be(input: Span<u128>, n_bytes: usize) -> u256 {
 }
 
 /// Reverses the endianness of a u256 value.
-/// # Arguments
+/// #### Arguments
 /// * `input` - The u256 value to reverse endianness
 pub fn u256_reverse_endian(input: u256) -> u256 {
     let low = u128_byte_reverse(input.high);
@@ -88,7 +88,7 @@ pub fn u256_reverse_endian(input: u256) -> u256 {
 }
 
 /// Adds a u128 value to the keccak input array in big-endian format.
-/// # Arguments
+/// #### Arguments
 /// * `keccak_input` - Reference to the array to append u64 values to
 /// * `value` - The u128 value to add
 /// * `value_size` - The size of the value in bytes
@@ -115,7 +115,7 @@ fn keccak_add_uint128_be(ref keccak_input: Array<u64>, value: u128, value_size: 
 }
 
 /// Updates an element at the specified index in a u256 array.
-/// # Arguments
+/// #### Arguments
 /// * `arr` - The array to update
 /// * `index` - The index of the element to update
 /// * `value` - The new value to set at the index
@@ -136,7 +136,7 @@ fn update_u256_array_at(arr: @Array<u256>, index: usize, value: u256) -> Array<u
 }
 
 /// Convert sha256 result(Array<u8>) to u256
-/// # Arguments
+/// #### Arguments
 /// * `arr` - Span of u8 values, length MUST be 32
 pub fn u8_array_to_u256(arr: Span<u8>) -> u256 {
     assert(arr.len() == 32, 'too large');
@@ -158,7 +158,7 @@ pub fn u8_array_to_u256(arr: Span<u8>) -> u256 {
 }
 
 /// Converts an array of 8 u32 values to a u256 value.
-/// # Arguments
+/// #### Arguments
 /// * `arr` - Span of u32 values (must be exactly 8 elements)
 pub fn u32s_to_u256(arr: Span<u32>) -> u256 {
     assert!(arr.len() == 8, "u32s_to_u2562: input must be 8 elements long");
@@ -176,7 +176,7 @@ pub fn u32s_to_u256(arr: Span<u32>) -> u256 {
 }
 
 /// Creates a slice of a u64 array.
-/// # Arguments
+/// #### Arguments
 /// * `src` - The source array to slice
 /// * `begin` - The starting index of the slice
 /// * `len` - The length of the slice
@@ -191,10 +191,11 @@ fn u64_array_slice(src: @Array<u64>, mut begin: usize, len: usize) -> Array<u64>
 }
 
 /// Returns the slice of an array.
+/// #### Arguments
 /// * `arr` - The array to slice.
 /// * `begin` - The index to start the slice at.
 /// * `len` - The length of the slice.
-/// # Returns
+/// #### Returns
 /// * `Array<u128>` - The slice of the array.
 pub fn u128_array_slice(src: @Array<u128>, mut begin: usize, len: usize) -> Array<u128> {
     let mut slice = array![];
@@ -207,7 +208,7 @@ pub fn u128_array_slice(src: @Array<u128>, mut begin: usize, len: usize) -> Arra
 }
 
 /// Creates a slice of a generic array.
-/// # Arguments
+/// #### Arguments
 /// * `src` - The source array to slice
 /// * `begin` - The starting index of the slice
 /// * `len` - The length of the slice
@@ -222,17 +223,19 @@ fn array_slice<T, +Drop<T>, +Copy<T>>(src: @Array<T>, mut begin: usize, len: usi
 }
 
 /// Split a u128 into two parts, [0, left_size-1] and [left_size, end]
-/// # Arguments
+/// #### Arguments
 /// * `value` - data of u128
 /// * `value_size` - the size of `value` in bytes
 /// * `left_size` - the size of left part in bytes
-/// # Returns
+/// #### Returns
 /// * `left` - [0, left_size-1] of the origin u128
 /// * `right` - [left_size, end] of the origin u128 which size is (value_size - left_size)
-/// # Examples
+/// #### Examples
+/// ```rust
 /// u128_split(0x01020304, 4, 0) -> (0, 0x01020304)
 /// u128_split(0x01020304, 4, 1) -> (0x01, 0x020304)
 /// u128_split(0x0001020304, 5, 1) -> (0x00, 0x01020304)
+/// ```
 pub fn u128_split(value: u128, value_size: usize, left_size: usize) -> (u128, u128) {
     assert(value_size <= 16, 'value_size can not be gt 16');
     assert(left_size <= value_size, 'size can not be gt value_size');
@@ -246,15 +249,17 @@ pub fn u128_split(value: u128, value_size: usize, left_size: usize) -> (u128, u1
 }
 
 /// Read sub value from u128 just like substr in other language
-/// # Arguments
+/// #### Arguments
 /// * `value` - data of u128
 /// * `value_size` - the size of data in bytes
 /// * `offset` - the offset of sub value
 /// * `size` - the size of sub value in bytes
-/// # Returns
+/// #### Returns
 /// * `sub_value` - the sub value of origin u128
-/// # Examples
+/// #### Examples
+/// ```rust
 /// u128_sub_value(0x000001020304, 6, 1, 3) -> 0x000102
+/// ```
 pub fn read_sub_u128(value: u128, value_size: usize, offset: usize, size: usize) -> u128 {
     assert(offset + size <= value_size, 'too long');
 
@@ -272,15 +277,17 @@ pub fn read_sub_u128(value: u128, value_size: usize, offset: usize, size: usize)
 }
 
 /// Join two u128 into one
-/// # Arguments
+/// #### Arguments
 /// * `left` - the left part of u128
 /// * `right` - the right part of u128
 /// * `right_size` - the size of right part in bytes
-/// # Returns
+/// #### Returns
 /// * `value` - the joined u128
-/// # Examples
+/// #### Examples
+/// ```rust
 /// u128_join(0x010203, 0xaabb, 2) -> 0x010203aabb
 /// u128_join(0x010203, 0, 2) -> 0x0102030000
+/// ```
 pub fn u128_join(left: u128, right: u128, right_size: usize) -> u128 {
     let left_size = u128_bytes_len(left);
     assert(left_size + right_size <= 16, 'left shift overflow');
@@ -289,10 +296,12 @@ pub fn u128_join(left: u128, right: u128, right_size: usize) -> u128 {
 }
 
 /// Return the bytes len represent in u128
-/// # Arguments
+/// #### Arguments
 /// * `value` - The u128 value to get byte length for
-/// Examples:
+/// #### Examples:
+/// ```rust
 /// u128_bytes_len(0x0102) -> 2
+/// ```
 fn u128_bytes_len(value: u128) -> usize {
     if value <= 0xff_u128 {
         1_usize
@@ -332,15 +341,15 @@ fn u128_bytes_len(value: u128) -> usize {
 /// Pads each `u128` value in the given array with zeros on the left if its byte size is smaller
 /// than `bytes_per_element`.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `data` - An array of `u128` values that may require padding.
 /// * `bytes_per_element` - The target byte size for each element in the array.
 ///
-/// # Returns
+/// #### Returns
 /// * A new `Array<u128>` where each element is either unchanged (if already `bytes_per_element`
 /// bytes) or padded with zeros.
 ///
-/// # Padding Strategy
+/// #### Padding Strategy
 /// If the byte size of `value` is less than `bytes_per_element`, zeros are added to the left using
 /// `u128_join`.
 pub fn pad_left_data(data: Array<u128>, bytes_per_element: usize) -> Array<u128> {

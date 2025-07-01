@@ -3,14 +3,14 @@
 /// Time complexity: O(log n)
 /// Space complexity: O(log n) due to recursion
 ///
-/// # Arguments
+/// #### Arguments
 /// * `span` - A sorted span of elements to search in
 /// * `val` - The target value to search for
 ///
-/// # Returns
+/// #### Returns
 /// * `Option<u32>` - Some(index) if value is found, None if not found
 ///
-/// # Requirements
+/// #### Requirements
 /// * The input span must be sorted in ascending order
 /// * Type T must implement Copy, Drop, PartialEq, and PartialOrd traits
 pub fn binary_search<T, +Copy<T>, +Drop<T>, +PartialEq<T>, +PartialOrd<T>>(
@@ -48,19 +48,19 @@ pub fn binary_search<T, +Copy<T>, +Drop<T>, +PartialEq<T>, +PartialOrd<T>>(
 /// Time complexity: O(log n)
 /// Space complexity: O(log n) due to recursion
 ///
-/// # Arguments
+/// #### Arguments
 /// * `span` - A sorted span of elements to search in
 /// * `val` - The target value to find the closest position for
 ///
-/// # Returns
+/// #### Returns
 /// * `Option<u32>` - Some(index) of the closest position, None if span is empty or no valid
 /// position
 ///
-/// # Requirements
+/// #### Requirements
 /// * The input span must be sorted in ascending order
 /// * Type T must implement Copy, Drop, and PartialOrd traits
 ///
-/// # Behavior
+/// #### Behavior
 /// * Returns the index where val would fit in the sorted order
 /// * Useful for insertion points and range queries
 pub fn binary_search_closest<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(

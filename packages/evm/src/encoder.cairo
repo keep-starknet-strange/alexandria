@@ -26,16 +26,16 @@ pub trait AbiEncodeTrait {
     /// routines (e.g., `encode_uint`, `encode_tuple`, `encode_array`, etc.) based on the types
     /// passed in.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Reference to `EVMCalldata` context which maintains the calldata byte array,
     ///            current offset, dynamic data section and dynamic offset.
     /// * `types` - A list (`Span`) of `EVMTypes` to encode.
     /// * `values` - A list (`Span`) of `felt252` values to encode according to the types.
     ///
-    /// # Returns
+    /// #### Returns
     /// * `ByteArray` - The encoded EVM calldata as a byte array.
     ///
-    /// # Usage
+    /// #### Usage
     /// This function is typically called when preparing calldata for EVM contract calls
     /// from within Cairo smart contracts.
     ///
@@ -45,10 +45,10 @@ pub trait AbiEncodeTrait {
 
 /// Calculates how many values from the values array are consumed by the given types.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `types` - A span of `EVMTypes` representing the types to calculate consumption for.
 ///
-/// # Returns
+/// #### Returns
 /// * `usize` - The number of values that would be consumed from a values array.
 fn calculate_values_consumed(types: Span<EVMTypes>) -> usize {
     let mut consumed = 0;
@@ -525,12 +525,12 @@ pub impl EVMTypesImpl of AbiEncodeTrait {
 
 /// Encodes a Solidity/EVM tuple type into calldata.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `ctx` - The current EVM calldata encoding context.
 /// * `types` - The types of the tuple elements.
 /// * `values` - The values to encode.
 ///
-/// # Returns
+/// #### Returns
 /// The number of values consumed from the values span.
 fn encode_tuple(ref ctx: EVMCalldata, types: Span<EVMTypes>, values: Span<felt252>) -> usize {
     let consumed = calculate_values_consumed(types);

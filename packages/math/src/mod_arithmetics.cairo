@@ -2,11 +2,11 @@ use core::integer::{u512, u512_safe_div_rem_by_u256};
 use core::num::traits::{OverflowingAdd, OverflowingSub, WideMul, WrappingAdd};
 
 /// Function that performs modular addition. Will panick if result is > u256 max
-/// # Arguments
+/// #### Arguments
 /// * `a` - Left hand side of addition.
 /// * `b` - Right hand side of addition.
 /// * `modulo` - modulo.
-/// # Returns
+/// #### Returns
 /// * `u256` - result of modular addition
 #[inline(always)]
 pub fn add_mod(a: u256, b: u256, modulo: u256) -> u256 {
@@ -15,10 +15,10 @@ pub fn add_mod(a: u256, b: u256, modulo: u256) -> u256 {
 
 /// Function that return the modular multiplicative inverse. Disclaimer: this function should only
 /// be used with a prime modulo.
-/// # Arguments
+/// #### Arguments
 /// * `b` - Number of which to find the multiplicative inverse of.
 /// * `modulo` - modulo.
-/// # Returns
+/// #### Returns
 /// * `u256` - modular multiplicative inverse
 #[inline(always)]
 pub fn mult_inverse(b: u256, mod_non_zero: NonZero<u256>) -> u256 {
@@ -26,10 +26,10 @@ pub fn mult_inverse(b: u256, mod_non_zero: NonZero<u256>) -> u256 {
 }
 
 /// Function that return the modular additive inverse.
-/// # Arguments
+/// #### Arguments
 /// * `b` - Number of which to find the additive inverse of.
 /// * `modulo` - modulo.
-/// # Returns
+/// #### Returns
 /// * `u256` - modular additive inverse
 #[inline(always)]
 pub fn add_inverse_mod(b: u256, modulo: u256) -> u256 {
@@ -37,11 +37,11 @@ pub fn add_inverse_mod(b: u256, modulo: u256) -> u256 {
 }
 
 /// Function that performs modular subtraction.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Left hand side of subtraction.
 /// * `b` - Right hand side of subtraction.
 /// * `modulo` - modulo.
-/// # Returns
+/// #### Returns
 /// * `u256` - result of modular subtraction
 #[inline(always)]
 pub fn sub_mod(mut a: u256, mut b: u256, modulo: u256) -> u256 {
@@ -59,11 +59,11 @@ pub fn sub_mod(mut a: u256, mut b: u256, modulo: u256) -> u256 {
 }
 
 /// Function that performs modular multiplication.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Left hand side of multiplication.
 /// * `b` - Right hand side of multiplication.
 /// * `modulo` - modulo.
-/// # Returns
+/// #### Returns
 /// * `u256` - result of modular multiplication
 #[inline(always)]
 pub fn mult_mod(a: u256, b: u256, mod_non_zero: NonZero<u256>) -> u256 {
@@ -104,11 +104,11 @@ pub fn u256_wide_sqr(a: u256) -> u512 {
 }
 
 /// Function that performs modular multiplication.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Left hand side of multiplication.
 /// * `b` - Right hand side of multiplication.
 /// * `modulo` - modulo.
-/// # Returns
+/// #### Returns
 /// * `u256` - result of modular multiplication
 #[inline(always)]
 pub fn sqr_mod(a: u256, mod_non_zero: NonZero<u256>) -> u256 {
@@ -118,11 +118,11 @@ pub fn sqr_mod(a: u256, mod_non_zero: NonZero<u256>) -> u256 {
 }
 
 /// Function that performs modular division.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Left hand side of division.
 /// * `b` - Right hand side of division.
 /// * `modulo` - modulo.
-/// # Returns
+/// #### Returns
 /// * `u256` - result of modular division
 #[inline(always)]
 pub fn div_mod(a: u256, b: u256, mod_non_zero: NonZero<u256>) -> u256 {
@@ -131,11 +131,11 @@ pub fn div_mod(a: u256, b: u256, mod_non_zero: NonZero<u256>) -> u256 {
 }
 
 /// Function that performs modular exponentiation.
-/// # Arguments
+/// #### Arguments
 /// * `base` - Base of exponentiation.
 /// * `pow` - Power of exponentiation.
 /// * `modulo` - modulo.
-/// # Returns
+/// #### Returns
 /// * `u256` - result of modular exponentiation
 pub fn pow_mod(mut base: u256, mut pow: u256, mod_non_zero: NonZero<u256>) -> u256 {
     let mut result: u256 = 1;

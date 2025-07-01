@@ -3,19 +3,19 @@ use alexandria_data_structures::array_ext::ArrayTraitExt;
 pub trait Encoder<T> {
     /// Encodes data into Base58 format
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `data` - The data to encode
     ///
-    /// # Returns
+    /// #### Returns
     /// * `Array<u8>` - Base58 encoded representation as bytes
     fn encode(data: T) -> Array<u8>;
 }
 
 pub trait Decoder<T> {
     /// Decodes Base58 encoded data back to raw bytes
-    /// # Arguments
+    /// #### Arguments
     /// * `data` - The Base58 encoded data to decode
-    /// # Returns
+    /// #### Returns
     /// * `Array<u8>` - Raw bytes decoded from Base58 format
     fn decode(data: T) -> Array<u8>;
 }

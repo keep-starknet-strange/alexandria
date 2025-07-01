@@ -4,11 +4,11 @@ use alexandria_math::pow;
 use core::num::traits::Zero;
 
 /// Compute the norm for an T array.
-/// # Arguments
+/// #### Arguments
 /// * `array` - The inputted array.
 /// * `ord` - The order of the norm.
 /// * `iter` - The number of iterations to run the algorithm
-/// # Returns
+/// #### Returns
 /// * `u128` - The norm for the array.
 pub fn norm<T, +Into<T, u128>, +Zero<T>, +Copy<T>, +Drop<T>>(
     mut xs: Span<T>, ord: u128, iter: usize,

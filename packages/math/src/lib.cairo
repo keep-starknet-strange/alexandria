@@ -32,9 +32,10 @@ use core::num::traits::{Bounded, OverflowingMul, WideMul, WrappingAdd, WrappingM
 
 /// Raise a number to a power.
 /// O(log n) time complexity.
+/// #### Arguments
 /// * `base` - The number to raise.
 /// * `exp` - The exponent.
-/// # Returns
+/// #### Returns
 /// * `T` - The result of base raised to the power of exp.
 pub fn pow<T, +Sub<T>, +Mul<T>, +Div<T>, +Rem<T>, +PartialEq<T>, +Into<u8, T>, +Drop<T>, +Copy<T>>(
     base: T, exp: T,
@@ -51,10 +52,10 @@ pub fn pow<T, +Sub<T>, +Mul<T>, +Div<T>, +Rem<T>, +PartialEq<T>, +Into<u8, T>, +
 }
 
 /// Function to count the number of digits in a number.
-/// # Arguments
+/// #### Arguments
 /// * `num` - The number to count the digits of.
 /// * `base` - Base in which to count the digits.
-/// # Returns
+/// #### Returns
 /// * `u32` - The number of digits in num of base
 fn count_digits_of_base(mut num: u128, base: u128) -> u32 {
     let mut res = 0;
@@ -115,17 +116,17 @@ pub impl U256BitShift of BitShift<u256> {
 /// Rotate the bits of an unsigned integer of type T
 trait BitRotate<T> {
     /// Take the bits of an unsigned integer and rotate in the left direction
-    /// # Arguments
+    /// #### Arguments
     /// * `x` - rotate its bit representation in the leftward direction
     /// * `n` - number of steps to rotate
-    /// # Returns
+    /// #### Returns
     /// * `T` - the result of rotating the bits of number `x` left, `n` number of steps
     fn rotate_left(x: T, n: T) -> T;
     /// Take the bits of an unsigned integer and rotate in the right direction
-    /// # Arguments
+    /// #### Arguments
     /// * `x` - rotate its bit representation in the rightward direction
     /// * `n` - number of steps to rotate
-    /// # Returns
+    /// #### Returns
     /// * `T` - the result of rotating the bits of number `x` right, `n` number of steps
     fn rotate_right(x: T, n: T) -> T;
 }

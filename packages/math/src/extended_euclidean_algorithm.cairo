@@ -2,10 +2,10 @@
 use core::num::traits::{OverflowingMul, OverflowingSub};
 
 /// Extended Euclidean Algorithm.
-/// # Arguments
+/// #### Arguments
 /// * `a` - First number.
 /// * `b` - Second number.
-/// # Returns
+/// #### Returns
 /// * `gcd` - Greatest common divisor.
 /// * `x` - First Bezout coefficient.
 /// * `y` - Second Bezout coefficient.

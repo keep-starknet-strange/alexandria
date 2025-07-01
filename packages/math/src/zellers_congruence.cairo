@@ -5,20 +5,20 @@
 /// Compute the day of the week for the given Gregorian date.
 /// The returned value is an integer in the range 0 to 6, where 0 is Saturday, 1 is Sunday, 2 is
 /// Monday, and so on.
-/// # Arguments
+/// #### Arguments
 /// * `date` - The date of the month
 /// * `month` - The month of the year
 /// * `year` - The year
-/// # Returns
+/// #### Returns
 /// * `Option::None` - If the input parameters are invalid
 /// * `Option::Some(day_of_week)` - The day of the week
-/// # Examples
+/// #### Examples
 /// ```
 /// use alexandria::math::zellers_congruence::day_of_week;
 /// let day_of_week = day_of_week(1, 1, 2020);
 /// ```
-/// # TODO
-/// - Change the return type to `Result`
+// # TODO
+// - Change the return type to `Result`
 pub fn day_of_week(mut date: u128, mut month: u128, mut year: u128) -> Option<u128> {
     // Check input parameters
     if !check_input_parameters(date, month, year) {
@@ -40,11 +40,11 @@ pub fn day_of_week(mut date: u128, mut month: u128, mut year: u128) -> Option<u1
 }
 
 /// Check the input parameters for the `day_of_week` function.
-/// # Arguments
+/// #### Arguments
 /// * `date` - The date of the month
 /// * `month` - The month of the year
 /// * `year` - The year
-/// # Returns
+/// #### Returns
 /// * `true` - If the input parameters are valid
 /// * `false` - If the input parameters are invalid
 pub fn check_input_parameters(date: u128, month: u128, year: u128) -> bool {

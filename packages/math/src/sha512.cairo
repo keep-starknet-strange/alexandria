@@ -99,43 +99,43 @@ impl U64IntoWord of Into<u64, Word64> {
 /// Trait defining bitwise operations for word types used in cryptographic algorithms.
 pub trait WordOperations<T> {
     /// Performs logical right shift operation.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The value to shift
     /// * `n` - Number of positions to shift right
-    /// # Returns
+    /// #### Returns
     /// * `T` - The shifted value
     fn shr(self: T, n: u64) -> T;
 
     /// Performs logical left shift operation.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The value to shift
     /// * `n` - Number of positions to shift left
-    /// # Returns
+    /// #### Returns
     /// * `T` - The shifted value
     fn shl(self: T, n: u64) -> T;
 
     /// Performs rotate right operation.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The value to rotate
     /// * `n` - Number of positions to rotate right
-    /// # Returns
+    /// #### Returns
     /// * `T` - The rotated value
     fn rotr(self: T, n: u64) -> T;
 
     /// Performs rotate right with precomputed power values for efficiency.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The value to rotate
     /// * `two_pow_n` - Precomputed value of 2^n
     /// * `two_pow_64_n` - Precomputed value of 2^(64-n)
-    /// # Returns
+    /// #### Returns
     /// * `T` - The rotated value
     fn rotr_precomputed(self: T, two_pow_n: u64, two_pow_64_n: u64) -> T;
 
     /// Performs rotate left operation.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The value to rotate
     /// * `n` - Number of positions to rotate left
-    /// # Returns
+    /// #### Returns
     /// * `T` - The rotated value
     fn rotl(self: T, n: u64) -> T;
 }

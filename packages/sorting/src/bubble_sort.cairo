@@ -1,9 +1,9 @@
 //! Bubble sort algorithm
 
 // Bubble sort
-/// # Arguments
+/// #### Arguments
 /// * `array` - Array to sort
-/// # Returns
+/// #### Returns
 /// * `Array<usize>` - Sorted array
 use super::Sortable;
 

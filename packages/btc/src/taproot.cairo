@@ -1,8 +1,8 @@
-// # Bitcoin Taproot (BIP-341) Implementation
-//
-// This module provides Taproot functionality including key tweaking, script trees,
-// and proper P2TR address generation using BIP-340 Schnorr signatures.
-//
+//! # Bitcoin Taproot (BIP-341) Implementation
+//!
+//! This module provides Taproot functionality including key tweaking, script trees,
+//! and proper P2TR address generation using BIP-340 Schnorr signatures.
+//!
 
 use alexandria_bytes::byte_array_ext::SpanU8IntoByteArray;
 use alexandria_bytes::reversible::ReversibleBytes;
@@ -34,11 +34,11 @@ pub struct TapTree {
 
 /// Create a tagged hash according to BIP-340 tagged hash specification
 ///
-/// # Arguments
+/// #### Arguments
 /// * `tag` - The tag string (e.g., "TapTweak", "TapLeaf")
 /// * `data` - The data to hash
 ///
-/// # Returns
+/// #### Returns
 /// * `Array<u8>` - The tagged hash (32 bytes)
 pub fn tagged_hash(tag: ByteArray, data: Span<u8>) -> Array<u8> {
     // Calculate tag_hash = SHA256(tag)
@@ -59,11 +59,11 @@ pub fn tagged_hash(tag: ByteArray, data: Span<u8>) -> Array<u8> {
 
 /// Tweak a public key for Taproot according to BIP-341
 ///
-/// # Arguments
+/// #### Arguments
 /// * `internal_key` - The internal public key (x-coordinate only)
 /// * `merkle_root` - Optional Merkle root of the script tree
 ///
-/// # Returns
+/// #### Returns
 /// * `TweakedPublicKey` - The tweaked output key and parity
 pub fn tweak_public_key(internal_key: u256, merkle_root: Option<u256>) -> Option<TweakedPublicKey> {
     // For demonstration, use a simplified approach that generates a valid output
@@ -98,10 +98,10 @@ pub fn tweak_public_key(internal_key: u256, merkle_root: Option<u256>) -> Option
 
 /// Lift an x-coordinate to a valid secp256k1 point
 ///
-/// # Arguments
+/// #### Arguments
 /// * `x` - The x-coordinate
 ///
-/// # Returns
+/// #### Returns
 /// * `Option<Secp256k1Point>` - The point if x is valid, None otherwise
 fn lift_x_coordinate(x: u256) -> Option<Secp256k1Point> {
     // Try to get point with even y-coordinate first
@@ -138,11 +138,11 @@ fn bytes_32_to_u256_be(bytes: Span<u8>) -> u256 {
 
 /// Create a Taproot script tree from a single script
 ///
-/// # Arguments
+/// #### Arguments
 /// * `script` - The script bytes
 /// * `leaf_version` - The script version (usually 0xc0)
 ///
-/// # Returns
+/// #### Returns
 /// * `TapTree` - The script tree
 pub fn create_script_tree(script: Array<u8>, leaf_version: u8) -> TapTree {
     TapTree { leaf: Option::Some(ScriptLeaf { script, leaf_version }) }
@@ -150,10 +150,10 @@ pub fn create_script_tree(script: Array<u8>, leaf_version: u8) -> TapTree {
 
 /// Calculate the Merkle root of a script tree
 ///
-/// # Arguments
+/// #### Arguments
 /// * `tree` - The script tree
 ///
-/// # Returns
+/// #### Returns
 /// * `Option<u256>` - The Merkle root if tree has scripts, None for key-path only
 pub fn calculate_merkle_root(tree: @TapTree) -> Option<u256> {
     match tree.leaf {
@@ -168,10 +168,10 @@ pub fn calculate_merkle_root(tree: @TapTree) -> Option<u256> {
 
 /// Calculate the hash of a script leaf
 ///
-/// # Arguments
+/// #### Arguments
 /// * `leaf` - The script leaf
 ///
-/// # Returns
+/// #### Returns
 /// * `Array<u8>` - The leaf hash (32 bytes)
 fn calculate_leaf_hash(leaf: @ScriptLeaf) -> Array<u8> {
     // Create leaf data: leaf_version || compact_size(script) || script
@@ -193,12 +193,12 @@ fn calculate_leaf_hash(leaf: @ScriptLeaf) -> Array<u8> {
 
 /// Verify a BIP-340 Schnorr signature for Taproot
 ///
-/// # Arguments
+/// #### Arguments
 /// * `signature` - The Schnorr signature (64 bytes: r || s)
 /// * `message` - The message that was signed
 /// * `public_key` - The tweaked public key (x-coordinate only)
 ///
-/// # Returns
+/// #### Returns
 /// * `bool` - True if signature is valid
 pub fn verify_taproot_signature(signature: Span<u8>, message: ByteArray, public_key: u256) -> bool {
     // Ensure signature is 64 bytes
@@ -233,10 +233,10 @@ pub fn verify_taproot_signature(signature: Span<u8>, message: ByteArray, public_
 
 /// Generate a key-path only Taproot output
 ///
-/// # Arguments
+/// #### Arguments
 /// * `internal_key` - The internal public key
 ///
-/// # Returns
+/// #### Returns
 /// * `Option<TweakedPublicKey>` - The tweaked key for key-path spending
 pub fn create_key_path_output(internal_key: u256) -> Option<TweakedPublicKey> {
     // Key-path only: no script tree (merkle_root = None)
@@ -245,11 +245,11 @@ pub fn create_key_path_output(internal_key: u256) -> Option<TweakedPublicKey> {
 
 /// Generate a script-path Taproot output
 ///
-/// # Arguments
+/// #### Arguments
 /// * `internal_key` - The internal public key
 /// * `script_tree` - The script tree
 ///
-/// # Returns
+/// #### Returns
 /// * `Option<TweakedPublicKey>` - The tweaked key for script-path spending
 pub fn create_script_path_output(
     internal_key: u256, script_tree: @TapTree,

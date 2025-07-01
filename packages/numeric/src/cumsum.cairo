@@ -1,9 +1,9 @@
 //! The cumulative sum of the elements.
 
 /// Compute the cumulative sum of a sequence.
-/// # Arguments
+/// #### Arguments
 /// * `sequence` - The sequence to operate.
-/// # Returns
+/// #### Returns
 /// * `Array<T>` - The cumulative sum of sequence.
 pub fn cumsum<T, +Add<T>, +Copy<T>, +Drop<T>>(mut sequence: Span<T>) -> Array<T> {
     // [Check] Inputs

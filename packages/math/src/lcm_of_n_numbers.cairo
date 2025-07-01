@@ -7,9 +7,9 @@ pub enum LCMError {
 }
 
 /// Calculate the lowest common multiple for n numbers
-/// # Arguments
+/// #### Arguments
 /// * `n` - The array of numbers to calculate the lcm for
-/// # Returns
+/// #### Returns
 /// * `Result<T, LCMError>` - The lcm of input numbers
 pub fn lcm<T, +Into<T, u128>, +Into<u128, T>, +Mul<T>, +Div<T>, +Copy<T>, +Drop<T>>(
     mut n: Span<T>,

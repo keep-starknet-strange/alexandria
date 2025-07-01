@@ -15,11 +15,12 @@ pub const BYTES_PER_ELEMENT: usize = 16;
 /// Note that:   In Bytes, there are many variables about size and length.
 ///              We use size to represent the number of bytes in Bytes.
 ///              We use length to represent the number of elements in Bytes.
-
+///
 /// Bytes is a cairo implementation of solidity Bytes in Big-endian.
 /// It is a dynamic array of u128, where each element contains 16 bytes.
 /// To save cost, the last element MUST be filled fully.
 /// That means that every element should and MUST contain 16 bytes.
+///
 /// For example, if we have a Bytes with 33 bytes, we will have 3 elements.
 /// Theoretically, the bytes look like this:
 ///      first element:  [16 bytes]
@@ -30,7 +31,7 @@ pub const BYTES_PER_ELEMENT: usize = 16;
 ///      first element:  [16 bytes]
 ///      second element: [16 bytes]
 ///      third element:  [1 byte] + [15 bytes zero padding]
-
+///
 /// Bytes is a dynamic array of u128, where each element contains 16 bytes.
 ///  - size: the number of bytes in the Bytes
 ///  - data: the data of the Bytes
@@ -313,9 +314,9 @@ impl BytesImpl of BytesTrait {
     }
 
     /// Locate offset in Bytes
-    /// Arguments:
+    /// #### Arguments:
     ///  - offset: the offset in Bytes
-    /// Returns:
+    /// #### Returns:
     ///  - element_index: the index of the element in Bytes
     ///  - element_offset: the offset in the element
     #[inline(always)]
@@ -355,10 +356,10 @@ impl BytesImpl of BytesTrait {
     }
 
     /// Read value with size bytes from Bytes, and packed into u128
-    /// Arguments:
+    /// #### Arguments:
     ///  - offset: the offset in Bytes
     ///  - size: the number of bytes to read
-    /// Returns:
+    /// #### Returns:
     ///  - new_offset: next value offset in Bytes
     ///  - value: the value packed into u128
     fn read_u128_packed(self: @Bytes, offset: usize, size: usize) -> (usize, u128) {

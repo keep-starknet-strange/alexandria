@@ -1,9 +1,9 @@
 //! # Perfect Number.
 
 /// Algorithm to determine if a number is a perfect number
-/// # Arguments
+/// #### Arguments
 /// * `num` - The number to be checked.
-/// # Returns
+/// #### Returns
 /// * `bool` - True if num is a perfect number, false otherwise.
 pub fn is_perfect_number(num: u128) -> bool {
     if num == 0 {
@@ -25,9 +25,9 @@ pub fn is_perfect_number(num: u128) -> bool {
 }
 
 /// Algorithm to determine all the perfect numbers up to a maximum value
-/// # Arguments
+/// #### Arguments
 /// * `max` - The maximum value to check for perfect numbers.
-/// # Returns
+/// #### Returns
 /// * `Array` - An array of perfect numbers up to the max value.
 pub fn perfect_numbers(max: u128) -> Array<u128> {
     let mut res = array![];

@@ -1,9 +1,9 @@
 //! # Aliquot Sum
 
 /// Calculates the aliquot sum of a given number.
-/// # Arguments
+/// #### Arguments
 /// * `number` - The number to calculate the aliquot sum for.
-/// # Returns
+/// #### Returns
 /// * `felt252` - The aliquot sum of the input number.
 pub fn aliquot_sum(number: u128) -> u128 {
     if number == 0 || number == 1 {

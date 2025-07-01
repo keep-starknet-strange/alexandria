@@ -20,16 +20,16 @@ pub trait AbiDecodeTrait {
     /// routines (e.g., `decode_uint`, `decode_tuple`, `decode_array`, etc.) based on the types
     /// passed in.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Reference to `EVMCalldata` context which maintains the calldata byte array,
     ///            current offset, and relative offset for dynamic type resolution.
     /// * `types` - A list (`Span`) of `EVMTypes` to decode from the current calldata position.
     ///
-    /// # Returns
+    /// #### Returns
     /// * `Span<felt252>` - A Cairo Span containing the decoded values in a form compatible
     ///                     with Starknet syscalls (e.g., `call_syscall`).
     ///
-    /// # Usage
+    /// #### Usage
     /// This function is typically called within ABI decoding logic where calldata
     /// is parsed and converted into felt-based arguments for invoking other contracts.
     ///
@@ -159,14 +159,14 @@ pub impl EVMTypesImpl of AbiDecodeTrait {
 
 /// Decodes a Solidity/EVM tuple type from calldata.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `ctx` - The current EVM calldata decoding context.
 /// * `types` - The types of the tuple elements.
 ///
-/// # Returns
+/// #### Returns
 /// A `Span<felt252>` representing the decoded tuple.
 ///
-/// # How it works:
+/// #### How it works:
 /// - If any element in the tuple is dynamic (e.g., string, bytes, array),
 ///   the tuple is encoded using a pointer (offset) to the data region.
 /// - In that case, a cloned context is used to decode the tuple at the dynamic offset.
@@ -190,14 +190,14 @@ fn decode_tuple(ref ctx: EVMCalldata, types: Span<EVMTypes>) -> Span<felt252> {
 
 // Decodes a dynamic array from EVM calldata, based on its ABI type definition.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `ctx` - The current calldata parsing context, holding position and offsets.
 /// * `types` - A span of EVM ABI types, representing the type of each array element.
 ///
-/// # Returns
+/// #### Returns
 /// * A `Span<felt252>` containing the serialized, decoded array contents.
 ///
-/// # How it works:
+/// #### How it works:
 /// - Reads the pointer to the dynamic data from the calldata using the current `ctx.offset`.
 /// - Calculates the true offset in calldata where the array data starts.
 /// - Reads the array length from the data section.
@@ -230,10 +230,10 @@ fn decode_array(ref ctx: EVMCalldata, types: Span<EVMTypes>) -> Span<felt252> {
 
 /// Decodes a dynamic-length `bytes` field from EVM calldata.
 ///
-/// # Returns
+/// #### Returns
 /// A `Span<felt252>` representing the decoded bytes.
 ///
-/// # How it works:
+/// #### How it works:
 /// - Reads pointer to the dynamic `bytes` data.
 /// - Reads its length, then iteratively reads the data slot-by-slot.
 /// - Restores offset back to the caller after decoding is complete.
@@ -287,7 +287,7 @@ fn decode_bytes(ref ctx: EVMCalldata) -> Span<felt252> {
 
 /// Decodes a fixed-length `bytes32` value from EVM calldata.
 ///
-/// # Returns
+/// #### Returns
 /// A `Span<felt252>` containing 32 bytes split into 31 bytes and the MSB.
 #[inline(always)]
 fn decode_bytes_32(ref ctx: EVMCalldata) -> Span<felt252> {
@@ -303,11 +303,11 @@ fn decode_bytes_32(ref ctx: EVMCalldata) -> Span<felt252> {
 
 /// Decodes a fixed-length byte array from EVM calldata.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `size` - Number of bytes to extract (must be <= 32).
 ///
-/// # Returns
-/// A `Span<felt252>` containing the extracted byte segment.
+/// #### Returns
+/// - `Span<felt252>` containing the extracted byte segment.
 #[inline(always)]
 fn decode_fixed_bytes(ref ctx: EVMCalldata, size: usize) -> Span<felt252> {
     let (new_offset, value) = ctx.calldata.read_uint_within_size::<u256>(ctx.offset, size);
@@ -323,8 +323,8 @@ fn decode_fixed_bytes(ref ctx: EVMCalldata, size: usize) -> Span<felt252> {
 
 /// Decodes the first 4 bytes of calldata as an Ethereum function selector.
 ///
-/// # Returns
-/// A `Span<felt252>` containing the 4-byte function selector.
+/// #### Returns
+/// - `Span<felt252>` containing the 4-byte function selector.
 #[inline(always)]
 fn decode_function_signature(ref ctx: EVMCalldata) -> Span<felt252> {
     let (new_offset, value) = ctx.calldata.read_u32(ctx.offset);
@@ -334,8 +334,8 @@ fn decode_function_signature(ref ctx: EVMCalldata) -> Span<felt252> {
 
 /// Decodes a 20-byte Ethereum address from calldata.
 ///
-/// # Returns
-/// A `Span<felt252>` containing the address.
+/// #### Returns
+/// - `Span<felt252>` containing the address.
 #[inline(always)]
 fn decode_address(ref ctx: EVMCalldata) -> Span<felt252> {
     let (new_offset, value) = ctx.calldata.read_u256(ctx.offset);
@@ -346,8 +346,8 @@ fn decode_address(ref ctx: EVMCalldata) -> Span<felt252> {
 
 /// Decodes a boolean value from calldata (truthy if non-zero).
 ///
-/// # Returns
-/// A `Span<felt252>` with 0 or 1.
+/// #### Returns
+/// - `Span<felt252>` with 0 or 1.
 #[inline(always)]
 fn decode_bool(ref ctx: EVMCalldata) -> Span<felt252> {
     let (new_offset, value) = ctx.calldata.read_u256(ctx.offset);
@@ -357,11 +357,11 @@ fn decode_bool(ref ctx: EVMCalldata) -> Span<felt252> {
 
 /// Decodes an unsigned integer of arbitrary size (≤ 256 bits).
 ///
-/// # Arguments
+/// #### Arguments
 /// * `size` - Bit size of the uint (e.g., 8, 16, 64, 256).
 ///
-/// # Returns
-/// A `Span<felt252>` containing the decoded value.
+/// #### Returns
+/// - `Span<felt252>` containing the decoded value.
 #[inline(always)]
 fn decode_uint(ref ctx: EVMCalldata, size: u32) -> Span<felt252> {
     // TODO: maybe range check with size?
@@ -372,8 +372,8 @@ fn decode_uint(ref ctx: EVMCalldata, size: u32) -> Span<felt252> {
 
 /// Decodes a signed integer of arbitrary size (≤ 256 bits).
 ///
-/// # Returns
-/// A `Span<felt252>` with signed integer encoded into a felt252.
+/// #### Returns
+/// - `Span<felt252>` with signed integer encoded into a felt252.
 #[inline(always)]
 fn decode_int(ref ctx: EVMCalldata, size: u32) -> Span<felt252> {
     // Todo: add range checks maybe??
@@ -395,11 +395,11 @@ fn decode_int(ref ctx: EVMCalldata, size: u32) -> Span<felt252> {
 
 /// Decodes a single felt252 value from calldata.
 ///
-/// # Panics
+/// #### Panics
 /// If the value exceeds felt252 limits.
 ///
-/// # Returns
-/// A `Span<felt252>` containing the decoded value.
+/// #### Returns
+/// - `Span<felt252>` containing the decoded value.
 #[inline(always)]
 fn decode_felt252(ref ctx: EVMCalldata) -> Span<felt252> {
     let (new_offset, value) = ctx.calldata.read_u256(ctx.offset);
@@ -410,8 +410,8 @@ fn decode_felt252(ref ctx: EVMCalldata) -> Span<felt252> {
 
 /// Decodes a 256-bit unsigned integer from calldata.
 ///
-/// # Returns
-/// A `Span<felt252>` containing two felts: `[low, high]`.
+/// #### Returns
+/// - `Span<felt252>` containing two felts: `[low, high]`.
 #[inline(always)]
 fn decode_uint256(ref ctx: EVMCalldata) -> Span<felt252> {
     let (new_offset, value) = ctx.calldata.read_u256(ctx.offset);
@@ -421,8 +421,8 @@ fn decode_uint256(ref ctx: EVMCalldata) -> Span<felt252> {
 
 /// Decodes a 256-bit signed integer from calldata.
 ///
-/// # Returns
-/// A `Span<felt252>`: `[low, high, sign_bit]`, where sign_bit is 0 or 1.
+/// #### Returns
+/// - `Span<felt252>`: `[low, high, sign_bit]`, where sign_bit is 0 or 1.
 #[inline(always)]
 fn decode_int256(ref ctx: EVMCalldata) -> Span<felt252> {
     let (new_offset, value) = ctx.calldata.read_u256(ctx.offset);
