@@ -1,0 +1,270 @@
+use alexandria_bytes::byte_array_ext::{ByteArrayIntoArrayU8, SpanU8IntoBytearray};
+use alexandria_math::ripemd160::{ripemd160_context_as_bytes, ripemd160_hash};
+use core::sha256::compute_sha256_byte_array;
+
+
+/// Bitcoin Hash160 (RIPEMD160(SHA256(data)))
+pub fn hash160(data: Span<u8>) -> Array<u8> {
+    // Convert span to ByteArray for SHA256
+    let byte_array = data.into();
+
+    // SHA256 hash
+    let [w0, w1, w2, w3, w4, w5, w6, w7] = compute_sha256_byte_array(@byte_array);
+
+    // Convert SHA256 result to ByteArray for RIPEMD160
+    let mut sha256_bytes = "";
+
+    // Process each word directly
+    sha256_bytes.append_byte(((w0 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w0 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w0 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w0 % 0x100).try_into().unwrap());
+
+    sha256_bytes.append_byte(((w1 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w1 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w1 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w1 % 0x100).try_into().unwrap());
+
+    sha256_bytes.append_byte(((w2 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w2 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w2 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w2 % 0x100).try_into().unwrap());
+
+    sha256_bytes.append_byte(((w3 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w3 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w3 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w3 % 0x100).try_into().unwrap());
+
+    sha256_bytes.append_byte(((w4 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w4 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w4 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w4 % 0x100).try_into().unwrap());
+
+    sha256_bytes.append_byte(((w5 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w5 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w5 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w5 % 0x100).try_into().unwrap());
+
+    sha256_bytes.append_byte(((w6 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w6 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w6 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w6 % 0x100).try_into().unwrap());
+
+    sha256_bytes.append_byte(((w7 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w7 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w7 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w7 % 0x100).try_into().unwrap());
+
+    // RIPEMD160 hash
+    let ripemd160_result = ripemd160_hash(@sha256_bytes);
+    let ripemd160_bytes = ripemd160_context_as_bytes(@ripemd160_result);
+
+    // Convert ByteArray to Array<u8>
+    let mut result = array![];
+    let mut i = 0_u32;
+    while i < 20 {
+        result.append(ripemd160_bytes.at(i).unwrap());
+        i += 1;
+    }
+
+    result
+}
+
+/// Bitcoin Hash256 (SHA256(SHA256(data)))
+pub fn hash256(data: Span<u8>) -> Array<u8> {
+    // First SHA256
+    let first_sha256 = sha256(data);
+
+    // Second SHA256
+    let second_sha256 = sha256(first_sha256.span());
+
+    second_sha256
+}
+
+/// Single SHA256 hash
+pub fn sha256(data: Span<u8>) -> Array<u8> {
+    // Convert span to ByteArray for SHA256
+    let mut byte_array = "";
+    let mut i = 0_u32;
+    while i < data.len() {
+        byte_array.append_byte(*data.at(i));
+        i += 1;
+    }
+
+    // SHA256 hash
+    let [w0, w1, w2, w3, w4, w5, w6, w7] = compute_sha256_byte_array(@byte_array);
+
+    // Convert [u32; 8] to Array<u8>
+    let mut result = array![];
+
+    // Process each word directly
+    result.append(((w0 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w0 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w0 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w0 % 0x100).try_into().unwrap());
+
+    result.append(((w1 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w1 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w1 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w1 % 0x100).try_into().unwrap());
+
+    result.append(((w2 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w2 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w2 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w2 % 0x100).try_into().unwrap());
+
+    result.append(((w3 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w3 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w3 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w3 % 0x100).try_into().unwrap());
+
+    result.append(((w4 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w4 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w4 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w4 % 0x100).try_into().unwrap());
+
+    result.append(((w5 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w5 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w5 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w5 % 0x100).try_into().unwrap());
+
+    result.append(((w6 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w6 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w6 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w6 % 0x100).try_into().unwrap());
+
+    result.append(((w7 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w7 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w7 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w7 % 0x100).try_into().unwrap());
+
+    result
+}
+
+/// Checksum calculation for Base58Check encoding
+pub fn checksum(data: Span<u8>) -> Array<u8> {
+    let hash = hash256(data);
+    // Return first 4 bytes
+    array![*hash.at(0), *hash.at(1), *hash.at(2), *hash.at(3)]
+}
+
+// ByteArray-native versions for easier use
+
+/// Bitcoin Hash160 from ByteArray
+pub fn hash160_from_byte_array(data: @ByteArray) -> Array<u8> {
+    // SHA256 hash
+    let [w0, w1, w2, w3, w4, w5, w6, w7] = compute_sha256_byte_array(data);
+
+    // Convert SHA256 result to ByteArray for RIPEMD160
+    let mut sha256_bytes = "";
+
+    // Process each word directly
+    sha256_bytes.append_byte(((w0 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w0 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w0 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w0 % 0x100).try_into().unwrap());
+
+    sha256_bytes.append_byte(((w1 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w1 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w1 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w1 % 0x100).try_into().unwrap());
+
+    sha256_bytes.append_byte(((w2 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w2 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w2 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w2 % 0x100).try_into().unwrap());
+
+    sha256_bytes.append_byte(((w3 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w3 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w3 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w3 % 0x100).try_into().unwrap());
+
+    sha256_bytes.append_byte(((w4 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w4 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w4 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w4 % 0x100).try_into().unwrap());
+
+    sha256_bytes.append_byte(((w5 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w5 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w5 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w5 % 0x100).try_into().unwrap());
+
+    sha256_bytes.append_byte(((w6 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w6 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w6 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w6 % 0x100).try_into().unwrap());
+
+    sha256_bytes.append_byte(((w7 / 0x1000000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w7 / 0x10000) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte(((w7 / 0x100) % 0x100).try_into().unwrap());
+    sha256_bytes.append_byte((w7 % 0x100).try_into().unwrap());
+
+    // RIPEMD160 hash
+    let ripemd160_result = ripemd160_hash(@sha256_bytes);
+    let ripemd160_bytes = ripemd160_context_as_bytes(@ripemd160_result);
+
+    // Convert ByteArray to Array<u8>
+    ripemd160_bytes.into()
+}
+
+/// SHA256 hash from ByteArray
+pub fn sha256_from_byte_array(data: @ByteArray) -> Array<u8> {
+    // SHA256 hash
+    let [w0, w1, w2, w3, w4, w5, w6, w7] = compute_sha256_byte_array(data);
+
+    // Convert [u32; 8] to Array<u8>
+    let mut result = array![];
+
+    // Process each word directly
+    result.append(((w0 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w0 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w0 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w0 % 0x100).try_into().unwrap());
+
+    result.append(((w1 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w1 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w1 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w1 % 0x100).try_into().unwrap());
+
+    result.append(((w2 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w2 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w2 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w2 % 0x100).try_into().unwrap());
+
+    result.append(((w3 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w3 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w3 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w3 % 0x100).try_into().unwrap());
+
+    result.append(((w4 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w4 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w4 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w4 % 0x100).try_into().unwrap());
+
+    result.append(((w5 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w5 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w5 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w5 % 0x100).try_into().unwrap());
+
+    result.append(((w6 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w6 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w6 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w6 % 0x100).try_into().unwrap());
+
+    result.append(((w7 / 0x1000000) % 0x100).try_into().unwrap());
+    result.append(((w7 / 0x10000) % 0x100).try_into().unwrap());
+    result.append(((w7 / 0x100) % 0x100).try_into().unwrap());
+    result.append((w7 % 0x100).try_into().unwrap());
+
+    result
+}
+
+/// Double SHA256 hash from ByteArray
+pub fn hash256_from_byte_array(data: @ByteArray) -> Array<u8> {
+    // First SHA256
+    let first_hash_bytes = sha256_from_byte_array(data);
+    let first_hash_ba = first_hash_bytes.span().into();
+
+    // Second SHA256
+    sha256_from_byte_array(@first_hash_ba)
+}

@@ -18,6 +18,7 @@ pub mod keccak256;
 pub mod lcm_of_n_numbers;
 pub mod mod_arithmetics;
 pub mod perfect_number;
+pub mod ripemd160;
 pub mod sha256;
 pub mod sha512;
 
