@@ -1,0 +1,12 @@
+[book]
+authors = ["Bora Atik, 0xTitan"]
+language = "en"
+src = "src"
+title = "Alexandria Docs"
+
+[output.html.fold]
+enable = true
+level = 0
+
+[output.html.code.hidelines]
+cairo = "#"
