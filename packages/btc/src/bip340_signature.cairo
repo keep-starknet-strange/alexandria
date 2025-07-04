@@ -78,7 +78,7 @@ pub fn verify_bip340_signature(
 }
 
 #[inline(always)]
-pub fn is_bip340_signature_valid(
+fn is_bip340_signature_valid(
     msg_hash: u256,
     signature: Signature,
     pub_key: u256,

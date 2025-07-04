@@ -23,7 +23,8 @@ use ripemd160::ripemd160_hash;
 use crate::utils::{
     byte_at,
     byte_array_append_sha256,
-    byte_array_append_u256_be
+    byte_array_append_u256_be,
+    shl_byte,
 };
 
 /// A Bitcoin address, 20 bytes in length.
@@ -49,7 +50,7 @@ pub fn verify_legacy_signature(
 }
 
 #[inline(always)]
-pub fn is_legacy_btc_signature_valid(
+fn is_legacy_btc_signature_valid(
     msg_hash: u256, signature: Signature, pub_key: u256,
 ) -> Result<(), felt252> {
     if !is_signature_entry_valid::<Secp256k1Point>(signature.r) {
@@ -101,7 +102,7 @@ pub fn public_key_point_to_legacy_btc_address<
 }
 
 #[inline(always)]
-pub fn compute_checksum(hash_u256: u256) -> u32 {
+fn compute_checksum(hash_u256: u256) -> u32 {
     let mut buff: ByteArray = Default::default();
 
     buff.append_byte(0x0);
@@ -127,4 +128,31 @@ pub fn compute_checksum(hash_u256: u256) -> u32 {
     let sha = compute_sha256_byte_array(@sha_bytes).span();
 
     *sha[0]
+}
+
+#[inline(always)]
+pub fn get_legacy_message_hash(msg: ByteArray) -> u256 {
+    let mut full_msg: ByteArray = "\u0018Bitcoin Signed Message:\n";
+
+    full_msg.append_byte(msg.len().try_into().unwrap());
+
+    full_msg = full_msg + msg;
+
+    let msg_hash_array = compute_sha256_byte_array(@full_msg).span();
+    let mut buff: ByteArray = Default::default();
+
+    byte_array_append_sha256(msg_hash_array, ref buff);
+
+    let msg_hash_array = compute_sha256_byte_array(
+        @buff
+    ).span();
+
+    shl_byte(0x1c, (*msg_hash_array[0]).into()) |
+        shl_byte(0x18, (*msg_hash_array[1]).into()) |
+        shl_byte(0x14, (*msg_hash_array[2]).into()) |
+        shl_byte(0x10, (*msg_hash_array[3]).into()) |
+        shl_byte(0xc, (*msg_hash_array[4]).into()) |
+        shl_byte(0x8, (*msg_hash_array[5]).into()) |
+        shl_byte(0x4, (*msg_hash_array[6]).into()) |
+        (*msg_hash_array[7]).into()
 }
