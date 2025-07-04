@@ -1,6 +1,5 @@
 mod aliquot_sum_test;
 mod armstrong_number_test;
-mod bip340_test;
 mod bitmap_test;
 mod collatz_sequence_test;
 mod const_pow_test;

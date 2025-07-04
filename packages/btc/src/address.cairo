@@ -5,9 +5,23 @@ use crate::keys::{private_key_to_public_key, public_key_hash, public_key_to_byte
 use crate::taproot::{create_key_path_output, u256_to_32_bytes_be};
 use crate::types::{
     BitcoinAddress, BitcoinAddressType, BitcoinNetwork, BitcoinPrivateKey, BitcoinPublicKey,
+    BitcoinPublicKeyTrait,
 };
 
-/// Generate Bitcoin address from private key
+/// Generates a Bitcoin address from a private key for the specified address type.
+///
+/// This function derives the public key from the private key and generates
+/// the corresponding Bitcoin address based on the specified address type.
+///
+/// # Arguments
+/// * `private_key` - The Bitcoin private key containing the key data, network, and compression flag
+/// * `address_type` - The type of Bitcoin address to generate (P2PKH, P2SH, P2WPKH, P2WSH, P2TR)
+///
+/// # Returns
+/// * `BitcoinAddress` - Complete address structure with encoded address, script, and metadata
+///
+/// # Usage
+/// Used when you have a private key and want to generate its corresponding address.
 pub fn private_key_to_address(
     private_key: BitcoinPrivateKey, address_type: BitcoinAddressType,
 ) -> BitcoinAddress {
@@ -15,7 +29,21 @@ pub fn private_key_to_address(
     public_key_to_address(public_key, address_type, private_key.network)
 }
 
-/// Generate Bitcoin address from public key
+/// Generates a Bitcoin address from a public key for the specified address type and network.
+///
+/// This is the primary address generation function that handles all Bitcoin address types
+/// including legacy (P2PKH, P2SH) and SegWit (P2WPKH, P2WSH, P2TR) formats.
+///
+/// # Arguments
+/// * `public_key` - The Bitcoin public key (x, y coordinates and compression flag)
+/// * `address_type` - The type of Bitcoin address to generate
+/// * `network` - The Bitcoin network (Mainnet, Testnet, or Regtest)
+///
+/// # Returns
+/// * `BitcoinAddress` - Complete address structure including encoded address and script_pubkey
+///
+/// # Usage
+/// Primary function for generating Bitcoin addresses when you have a public key.
 pub fn public_key_to_address(
     public_key: BitcoinPublicKey, address_type: BitcoinAddressType, network: BitcoinNetwork,
 ) -> BitcoinAddress {
@@ -28,7 +56,19 @@ pub fn public_key_to_address(
     }
 }
 
-/// Helper function to encode with Base58Check (Base58 + checksum)
+/// Encodes data using Base58Check encoding (Base58 with checksum).
+///
+/// Implements the Bitcoin Base58Check encoding standard by appending a 4-byte
+/// checksum (first 4 bytes of double SHA256) to the payload and encoding with Base58.
+///
+/// # Arguments
+/// * `payload` - The data to encode (version byte + hash)
+///
+/// # Returns
+/// * `Array<u8>` - Base58Check encoded address bytes
+///
+/// # Usage
+/// Used internally for encoding legacy Bitcoin addresses (P2PKH, P2SH).
 fn encode_base58_check(payload: Span<u8>) -> Array<u8> {
     // Calculate double SHA256 checksum
     let first_hash = sha256(payload);
@@ -53,7 +93,16 @@ fn encode_base58_check(payload: Span<u8>) -> Array<u8> {
     Base58Encoder::encode(payload_with_checksum.span())
 }
 
-/// Helper function to convert Array<u8> to ByteArray
+/// Converts an Array<u8> to a ByteArray for address representation.
+///
+/// # Arguments
+/// * `arr` - Array of bytes to convert
+///
+/// # Returns
+/// * `ByteArray` - Converted byte array suitable for address storage
+///
+/// # Usage
+/// Used internally to convert encoded address bytes to the standard ByteArray format.
 fn array_to_bytearray(arr: Array<u8>) -> ByteArray {
     let mut result = "";
     let mut i = 0_u32;
@@ -64,7 +113,20 @@ fn array_to_bytearray(arr: Array<u8>) -> ByteArray {
     result
 }
 
-/// Generate P2PKH (Pay to Public Key Hash) address
+/// Generates a P2PKH (Pay to Public Key Hash) legacy Bitcoin address.
+///
+/// Creates a traditional Bitcoin address by hashing the public key (HASH160)
+/// and encoding it with Base58Check using the appropriate network version byte.
+///
+/// # Arguments
+/// * `public_key` - The Bitcoin public key to generate address from
+/// * `network` - The Bitcoin network (affects version byte)
+///
+/// # Returns
+/// * `BitcoinAddress` - P2PKH address with corresponding script_pubkey
+///
+/// # Script Format
+/// Creates script: OP_DUP OP_HASH160 <pubkey_hash> OP_EQUALVERIFY OP_CHECKSIG
 fn generate_p2pkh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) -> BitcoinAddress {
     let pubkey_hash = public_key_hash(public_key);
 
@@ -101,7 +163,20 @@ fn generate_p2pkh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork)
     BitcoinAddress { address, address_type: BitcoinAddressType::P2PKH, network, script_pubkey }
 }
 
-/// Generate P2SH (Pay to Script Hash) address
+/// Generates a P2SH (Pay to Script Hash) address with P2SH-wrapped P2WPKH.
+///
+/// Creates a P2SH address containing a P2WPKH redeem script, which allows
+/// SegWit functionality while maintaining compatibility with older wallets.
+///
+/// # Arguments
+/// * `public_key` - The Bitcoin public key to generate address from
+/// * `network` - The Bitcoin network (affects version byte)
+///
+/// # Returns
+/// * `BitcoinAddress` - P2SH address with corresponding script_pubkey
+///
+/// # Script Format
+/// Creates script: OP_HASH160 <script_hash> OP_EQUAL
 fn generate_p2sh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) -> BitcoinAddress {
     // For simplicity, we'll create a P2SH-wrapped P2WPKH
     let pubkey_hash = public_key_hash(public_key);
@@ -148,7 +223,20 @@ fn generate_p2sh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) 
     BitcoinAddress { address, address_type: BitcoinAddressType::P2SH, network, script_pubkey }
 }
 
-/// Generate P2WPKH (Pay to Witness Public Key Hash) address
+/// Generates a P2WPKH (Pay to Witness Public Key Hash) SegWit address.
+///
+/// Creates a native SegWit address using Bech32 encoding. This is the most
+/// efficient address type for single-signature transactions.
+///
+/// # Arguments
+/// * `public_key` - The Bitcoin public key to generate address from
+/// * `network` - The Bitcoin network (affects HRP: bc/tb/bcrt)
+///
+/// # Returns
+/// * `BitcoinAddress` - P2WPKH address with corresponding script_pubkey
+///
+/// # Script Format
+/// Creates script: OP_0 <pubkey_hash>
 fn generate_p2wpkh_address(
     public_key: BitcoinPublicKey, network: BitcoinNetwork,
 ) -> BitcoinAddress {
@@ -187,7 +275,20 @@ fn generate_p2wpkh_address(
     BitcoinAddress { address, address_type: BitcoinAddressType::P2WPKH, network, script_pubkey }
 }
 
-/// Generate P2WSH (Pay to Witness Script Hash) address
+/// Generates a P2WSH (Pay to Witness Script Hash) SegWit address.
+///
+/// Creates a native SegWit address for script-based spending using Bech32 encoding.
+/// Uses a simple <pubkey> OP_CHECKSIG script for demonstration.
+///
+/// # Arguments
+/// * `public_key` - The Bitcoin public key to create the script from
+/// * `network` - The Bitcoin network (affects HRP: bc/tb/bcrt)
+///
+/// # Returns
+/// * `BitcoinAddress` - P2WSH address with corresponding script_pubkey
+///
+/// # Script Format
+/// Creates script: OP_0 <script_hash>
 fn generate_p2wsh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) -> BitcoinAddress {
     let pubkey_bytes = public_key_to_bytes(public_key);
 
@@ -237,10 +338,23 @@ fn generate_p2wsh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork)
     BitcoinAddress { address, address_type: BitcoinAddressType::P2WSH, network, script_pubkey }
 }
 
-/// Generate P2TR (Pay to Taproot) address using proper BIP-341 key tweaking
+/// Generates a P2TR (Pay to Taproot) SegWit v1 address using BIP-341 key tweaking.
+///
+/// Creates a Taproot address using the public key as the internal key with
+/// proper BIP-341 tweaking for key-path spending. Uses Bech32m encoding.
+///
+/// # Arguments
+/// * `public_key` - The Bitcoin public key to use as internal key
+/// * `network` - The Bitcoin network (affects HRP: bc/tb/bcrt)
+///
+/// # Returns
+/// * `BitcoinAddress` - P2TR address with corresponding script_pubkey
+///
+/// # Script Format
+/// Creates script: OP_1 <output_key>
 fn generate_p2tr_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) -> BitcoinAddress {
     // Use the x-coordinate of the public key as the internal key
-    let internal_key = public_key.x;
+    let internal_key = public_key.get_x_coordinate();
 
     // Create a key-path only Taproot output (no script tree)
     let tweaked_result = create_key_path_output(internal_key);
@@ -289,7 +403,21 @@ fn generate_p2tr_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) 
     BitcoinAddress { address, address_type: BitcoinAddressType::P2TR, network, script_pubkey }
 }
 
-/// Validate Bitcoin address format
+/// Validates a Bitcoin address format for the specified network.
+///
+/// Performs basic format validation for both legacy (Base58Check) and
+/// SegWit (Bech32/Bech32m) address formats. Checks length, prefixes, and
+/// basic structural requirements.
+///
+/// # Arguments
+/// * `address` - The Bitcoin address string to validate
+/// * `network` - The expected Bitcoin network
+///
+/// # Returns
+/// * `bool` - True if the address format appears valid, false otherwise
+///
+/// # Usage
+/// Used to verify address format before attempting to use it in transactions.
 pub fn validate_address(address: ByteArray, network: BitcoinNetwork) -> bool {
     // Basic validation - in a real implementation this would be more comprehensive
     if address.len() < 26 || address.len() > 62 {
@@ -305,7 +433,17 @@ pub fn validate_address(address: ByteArray, network: BitcoinNetwork) -> bool {
     is_base58check_address(@address, network)
 }
 
-/// Check if address is Bech32 format
+/// Checks if an address uses Bech32 format (SegWit addresses).
+///
+/// Validates that the address starts with the correct Human Readable Part (HRP)
+/// for the specified network: 'bc' for mainnet, 'tb' for testnet, 'bcrt' for regtest.
+///
+/// # Arguments
+/// * `address` - Reference to the address to check
+/// * `network` - The Bitcoin network to validate against
+///
+/// # Returns
+/// * `bool` - True if address appears to be Bech32 format, false otherwise
 fn is_bech32_address(address: @ByteArray, network: BitcoinNetwork) -> bool {
     let expected_hrp: ByteArray = match network {
         BitcoinNetwork::Mainnet => "bc",
@@ -331,7 +469,18 @@ fn is_bech32_address(address: @ByteArray, network: BitcoinNetwork) -> bool {
     true
 }
 
-/// Check if address is Base58Check format
+/// Checks if an address uses Base58Check format (legacy addresses).
+///
+/// Validates basic structure including length and network-specific prefixes:
+/// Mainnet: '1' (P2PKH) or '3' (P2SH)
+/// Testnet/Regtest: 'm', 'n' (P2PKH) or '2' (P2SH)
+///
+/// # Arguments
+/// * `address` - Reference to the address to check
+/// * `network` - The Bitcoin network to validate against
+///
+/// # Returns
+/// * `bool` - True if address appears to be Base58Check format, false otherwise
 fn is_base58check_address(address: @ByteArray, network: BitcoinNetwork) -> bool {
     // Basic length check
     if address.len() < 26 || address.len() > 35 {

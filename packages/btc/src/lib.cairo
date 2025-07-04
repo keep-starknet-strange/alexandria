@@ -1,7 +1,10 @@
 pub mod address;
+pub mod bip340;
+pub mod decoder;
+pub mod encoder;
 pub mod hash;
 pub mod keys;
-pub mod signature;
+pub mod legacy_signature;
 pub mod taproot;
 
 #[cfg(test)]

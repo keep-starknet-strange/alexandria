@@ -1,6 +1,6 @@
 use alexandria_btc::address::{private_key_to_address, public_key_to_address, validate_address};
 use alexandria_btc::keys::{create_private_key, private_key_to_public_key};
-use alexandria_btc::types::{BitcoinAddressType, BitcoinNetwork};
+use alexandria_btc::types::{BitcoinAddressType, BitcoinNetwork, BitcoinPublicKeyTrait};
 
 #[test]
 fn test_create_private_key() {
@@ -12,7 +12,7 @@ fn test_create_private_key() {
 
     assert!(private_key.key == 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef);
     assert!(private_key.network == BitcoinNetwork::Mainnet);
-    assert!(private_key.compressed == true);
+    assert!(private_key.compressed);
 }
 
 #[test]
@@ -26,9 +26,9 @@ fn test_private_to_public_key() {
     let public_key = private_key_to_public_key(private_key);
 
     // Verify the public key was generated (simplified check)
-    assert!(public_key.x != 0);
-    assert!(public_key.y != 0);
-    assert!(public_key.compressed == true);
+    assert!(public_key.get_x_coordinate() != 0);
+    assert!(public_key.bytes.len() == 33); // Compressed key
+    assert!(public_key.is_compressed());
 }
 
 #[test]
@@ -151,11 +151,11 @@ fn test_compressed_vs_uncompressed() {
 fn test_address_validation() {
     // Test valid mainnet address format (simplified)
     let valid_mainnet = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa";
-    assert!(validate_address(valid_mainnet, BitcoinNetwork::Mainnet) == true);
+    assert!(validate_address(valid_mainnet, BitcoinNetwork::Mainnet));
 
     // Test valid testnet address format (simplified)
     let valid_testnet = "mipcBbFg9gMiCh81Kj8tqqdgoZub1ZJRfn";
-    assert!(validate_address(valid_testnet, BitcoinNetwork::Testnet) == true);
+    assert!(validate_address(valid_testnet, BitcoinNetwork::Testnet));
 }
 
 #[test]
