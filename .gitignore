@@ -20,6 +20,9 @@ book/
 # Visual Studio Code
 .vscode/
 
+# Jetbrains
+.idea
+
 # Environment files
 .env
 

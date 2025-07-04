@@ -1,0 +1,13 @@
+[package]
+name = "alexandria_btc"
+version.workspace = true
+description = "An implementation of basic BTC functions written in Cairo 1"
+homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/btc"
+edition = "2023_11"
+cairo-version = "2.11.2"
+
+[dependencies]
+ripemd160 = { git = "https://github.com/j1mbo64/ripemd160_cairo.git" }
+
+[dev-dependencies]
+cairo_test = "2.11.2"
