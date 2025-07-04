@@ -4,7 +4,7 @@ use alexandria_btc::taproot::{
     calculate_merkle_root, create_key_path_output, create_script_path_output, create_script_tree,
     tagged_hash, tweak_public_key, u256_to_32_bytes_be, verify_taproot_signature,
 };
-use alexandria_btc::types::{AddressType, Network};
+use alexandria_btc::types::{BitcoinAddressType, BitcoinNetwork};
 
 #[test]
 fn test_tagged_hash() {
@@ -164,15 +164,19 @@ fn test_create_script_path_output() {
 #[test]
 fn test_p2tr_address_generation() {
     let private_key = create_private_key(
-        0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef, Network::Mainnet, true,
+        0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef,
+        BitcoinNetwork::Mainnet,
+        true,
     );
 
     let public_key = private_key_to_public_key(private_key);
-    let address = public_key_to_address(public_key, AddressType::P2TR, Network::Mainnet);
+    let address = public_key_to_address(
+        public_key, BitcoinAddressType::P2TR, BitcoinNetwork::Mainnet,
+    );
 
     // Check address properties
-    assert!(address.address_type == AddressType::P2TR, "Should be P2TR address type");
-    assert!(address.network == Network::Mainnet, "Should be mainnet address");
+    assert!(address.address_type == BitcoinAddressType::P2TR, "Should be P2TR address type");
+    assert!(address.network == BitcoinNetwork::Mainnet, "Should be mainnet address");
     assert!(address.address.len() > 0, "Address should not be empty");
 
     // Check script pubkey format: OP_1 <32-byte-key>

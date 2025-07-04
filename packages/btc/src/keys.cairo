@@ -2,10 +2,10 @@ use starknet::SyscallResultTrait;
 use starknet::secp256_trait::{Secp256PointTrait, Secp256Trait};
 use starknet::secp256k1::Secp256k1Point;
 use crate::hash::hash160;
-use crate::types::{Network, PrivateKey, PublicKey};
+use crate::types::{BitcoinNetwork, BitcoinPrivateKey, BitcoinPublicKey};
 
 /// Generate a public key from a private key using secp256k1 elliptic curve operations
-pub fn private_key_to_public_key(private_key: PrivateKey) -> PublicKey {
+pub fn private_key_to_public_key(private_key: BitcoinPrivateKey) -> BitcoinPublicKey {
     // Get the generator point G
     let generator = Secp256Trait::<Secp256k1Point>::get_generator_point();
 
@@ -15,7 +15,7 @@ pub fn private_key_to_public_key(private_key: PrivateKey) -> PublicKey {
     // Extract coordinates
     let (x, y) = public_point.get_coordinates().unwrap_syscall();
 
-    PublicKey { x, y, compressed: private_key.compressed }
+    BitcoinPublicKey { x, y, compressed: private_key.compressed }
 }
 
 /// Helper function to convert u256 to bytes in big-endian order
@@ -41,7 +41,7 @@ fn u256_to_be_bytes(mut value: u256) -> Array<u8> {
 }
 
 /// Serialize public key to bytes
-pub fn public_key_to_bytes(public_key: PublicKey) -> Array<u8> {
+pub fn public_key_to_bytes(public_key: BitcoinPublicKey) -> Array<u8> {
     let mut result = array![];
 
     if public_key.compressed {
@@ -85,23 +85,25 @@ pub fn public_key_to_bytes(public_key: PublicKey) -> Array<u8> {
 }
 
 /// Generate public key hash (Hash160 of public key)
-pub fn public_key_hash(public_key: PublicKey) -> Array<u8> {
+pub fn public_key_hash(public_key: BitcoinPublicKey) -> Array<u8> {
     let pubkey_bytes = public_key_to_bytes(public_key);
     hash160(pubkey_bytes.span())
 }
 
 /// Create a private key from a u256 value
-pub fn create_private_key(key: u256, network: Network, compressed: bool) -> PrivateKey {
+pub fn create_private_key(
+    key: u256, network: BitcoinNetwork, compressed: bool,
+) -> BitcoinPrivateKey {
     // Validate that the key is within the secp256k1 curve order
     assert!(key != 0, "Private key cannot be zero");
     let curve_size = Secp256Trait::<Secp256k1Point>::get_curve_size();
     assert!(key < curve_size, "Private key exceeds curve order");
 
-    PrivateKey { key, network, compressed }
+    BitcoinPrivateKey { key, network, compressed }
 }
 
 /// Generate a random private key (placeholder implementation)
-pub fn generate_private_key(network: Network, compressed: bool) -> PrivateKey {
+pub fn generate_private_key(network: BitcoinNetwork, compressed: bool) -> BitcoinPrivateKey {
     // In a real implementation, this would use a cryptographically secure random number generator
     // For now, we'll use a placeholder value that's within the curve order
     let curve_size = Secp256Trait::<Secp256k1Point>::get_curve_size();

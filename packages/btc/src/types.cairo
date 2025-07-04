@@ -1,6 +1,6 @@
 /// Bitcoin network types
 #[derive(Copy, Drop, Serde, PartialEq)]
-pub enum Network {
+pub enum BitcoinNetwork {
     Mainnet,
     Testnet,
     Regtest,
@@ -8,7 +8,7 @@ pub enum Network {
 
 /// Bitcoin address types
 #[derive(Copy, Drop, Serde, PartialEq)]
-pub enum AddressType {
+pub enum BitcoinAddressType {
     P2PKH, // Pay to Public Key Hash (Legacy)
     P2SH, // Pay to Script Hash
     P2WPKH, // Pay to Witness Public Key Hash (SegWit v0)
@@ -18,7 +18,7 @@ pub enum AddressType {
 
 /// Public key representation
 #[derive(Copy, Drop, Serde)]
-pub struct PublicKey {
+pub struct BitcoinPublicKey {
     pub x: u256,
     pub y: u256,
     pub compressed: bool,
@@ -28,37 +28,37 @@ pub struct PublicKey {
 #[derive(Drop, Serde)]
 pub struct BitcoinAddress {
     pub address: ByteArray,
-    pub address_type: AddressType,
-    pub network: Network,
+    pub address_type: BitcoinAddressType,
+    pub network: BitcoinNetwork,
     pub script_pubkey: ByteArray,
 }
 
 /// Private key structure
 #[derive(Copy, Drop, Serde)]
-pub struct PrivateKey {
+pub struct BitcoinPrivateKey {
     pub key: u256,
-    pub network: Network,
+    pub network: BitcoinNetwork,
     pub compressed: bool,
 }
 
-impl NetworkImpl of Into<Network, u8> {
-    fn into(self: Network) -> u8 {
+impl BitcoinNetworkImpl of Into<BitcoinNetwork, u8> {
+    fn into(self: BitcoinNetwork) -> u8 {
         match self {
-            Network::Mainnet => 0x00,
-            Network::Testnet => 0x6f,
-            Network::Regtest => 0x6f,
+            BitcoinNetwork::Mainnet => 0x00,
+            BitcoinNetwork::Testnet => 0x6f,
+            BitcoinNetwork::Regtest => 0x6f,
         }
     }
 }
 
-impl AddressTypeImpl of Into<AddressType, u8> {
-    fn into(self: AddressType) -> u8 {
+impl BitcoinAddressTypeImpl of Into<BitcoinAddressType, u8> {
+    fn into(self: BitcoinAddressType) -> u8 {
         match self {
-            AddressType::P2PKH => 0x00, // Mainnet prefix
-            AddressType::P2SH => 0x05, // Mainnet prefix
-            AddressType::P2WPKH => 0x00, // Handled by bech32
-            AddressType::P2WSH => 0x00, // Handled by bech32
-            AddressType::P2TR => 0x00 // Handled by bech32
+            BitcoinAddressType::P2PKH => 0x00, // Mainnet prefix
+            BitcoinAddressType::P2SH => 0x05, // Mainnet prefix
+            BitcoinAddressType::P2WPKH => 0x00, // Handled by bech32
+            BitcoinAddressType::P2WSH => 0x00, // Handled by bech32
+            BitcoinAddressType::P2TR => 0x00 // Handled by bech32
         }
     }
 }
