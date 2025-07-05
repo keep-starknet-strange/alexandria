@@ -4,7 +4,8 @@
 // and proper P2TR address generation using BIP-340 Schnorr signatures.
 //
 
-// Remove unused imports
+use alexandria_bytes::byte_array_ext::SpanU8IntoByteArray;
+use alexandria_bytes::reversible::ReversibleBytes;
 use starknet::SyscallResultTrait;
 use starknet::secp256_trait::Secp256Trait;
 use starknet::secp256k1::Secp256k1Point;
@@ -44,28 +45,13 @@ pub fn tagged_hash(tag: ByteArray, data: Span<u8>) -> Array<u8> {
     let tag_hash = sha256_from_byte_array(@tag);
 
     // Create message: tag_hash || tag_hash || data
-    let mut message_ba = "";
 
     // Append first tag_hash
-    let mut i = 0;
-    while i < tag_hash.len() {
-        message_ba.append_byte(*tag_hash.at(i));
-        i += 1;
-    }
-
+    let mut message_ba: ByteArray = tag_hash.span().into();
     // Append second tag_hash
-    let mut i = 0;
-    while i < tag_hash.len() {
-        message_ba.append_byte(*tag_hash.at(i));
-        i += 1;
-    }
-
+    message_ba.append(@tag_hash.span().into());
     // Append data
-    let mut i = 0;
-    while i < data.len() {
-        message_ba.append_byte(*data.at(i));
-        i += 1;
-    }
+    message_ba.append(@data.into());
 
     // Return SHA256(tag_hash || tag_hash || data)
     sha256_from_byte_array(@message_ba)
@@ -136,14 +122,7 @@ pub fn u256_to_32_bytes_be(mut value: u256) -> Array<u8> {
         i += 1;
     }
 
-    // Reverse to get big-endian
-    let mut result = array![];
-    let mut i = 32_u32;
-    while i > 0 {
-        i -= 1;
-        result.append(*bytes.at(i));
-    }
-    result
+    bytes.reverse_bytes()
 }
 
 /// Convert 32-byte array to u256 (big-endian)

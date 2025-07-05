@@ -1,3 +1,4 @@
+use alexandria_bytes::byte_array_ext::SpanU8IntoByteArray;
 use alexandria_encoding::base58::Base58Encoder;
 use alexandria_encoding::bech32::{Encoder, convert_bits};
 use crate::hash::{hash160, sha256};
@@ -93,26 +94,6 @@ fn encode_base58_check(payload: Span<u8>) -> Array<u8> {
     Base58Encoder::encode(payload_with_checksum.span())
 }
 
-/// Converts an Array<u8> to a ByteArray for address representation.
-///
-/// # Arguments
-/// * `arr` - Array of bytes to convert
-///
-/// # Returns
-/// * `ByteArray` - Converted byte array suitable for address storage
-///
-/// # Usage
-/// Used internally to convert encoded address bytes to the standard ByteArray format.
-fn array_to_bytearray(arr: Array<u8>) -> ByteArray {
-    let mut result = "";
-    let mut i = 0_u32;
-    while i < arr.len() {
-        result.append_byte(*arr.at(i));
-        i += 1;
-    }
-    result
-}
-
 /// Generates a P2PKH (Pay to Public Key Hash) legacy Bitcoin address.
 ///
 /// Creates a traditional Bitcoin address by hashing the public key (HASH160)
@@ -145,7 +126,7 @@ fn generate_p2pkh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork)
     }
 
     let address_bytes = encode_base58_check(payload.span());
-    let address = array_to_bytearray(address_bytes);
+    let address: ByteArray = address_bytes.span().into();
 
     // Create script_pubkey: OP_DUP OP_HASH160 <pubkey_hash> OP_EQUALVERIFY OP_CHECKSIG
     let mut script_pubkey = "";
@@ -207,7 +188,7 @@ fn generate_p2sh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) 
     }
 
     let address_bytes = encode_base58_check(payload.span());
-    let address = array_to_bytearray(address_bytes);
+    let address: ByteArray = address_bytes.span().into();
 
     // Create script_pubkey: OP_HASH160 <script_hash> OP_EQUAL
     let mut script_pubkey = "";

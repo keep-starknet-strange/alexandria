@@ -1,3 +1,4 @@
+use alexandria_bytes::reversible::ReversibleBytes;
 use starknet::SyscallResultTrait;
 use starknet::secp256_trait::{Secp256PointTrait, Secp256Trait};
 use starknet::secp256k1::Secp256k1Point;
@@ -57,14 +58,7 @@ fn u256_to_be_bytes(mut value: u256) -> Array<u8> {
         i += 1;
     }
 
-    // Reverse to get big-endian order
-    let mut result = array![];
-    let mut j = bytes.len();
-    while j > 0 {
-        j -= 1;
-        result.append(*bytes.at(j));
-    }
-
+    let result: Array<u8> = bytes.reverse_bytes();
     result
 }
 

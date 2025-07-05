@@ -1,4 +1,4 @@
-use alexandria_bytes::byte_array_ext::{ByteArrayIntoArrayU8, SpanU8IntoBytearray};
+use alexandria_bytes::byte_array_ext::{ByteArrayIntoArrayU8, SpanU8IntoByteArray};
 use alexandria_math::ripemd160::{ripemd160_context_as_bytes, ripemd160_hash};
 use core::sha256::compute_sha256_byte_array;
 
@@ -122,12 +122,7 @@ pub fn hash256(data: Span<u8>) -> Array<u8> {
 /// Used as a building block for other hash functions and direct SHA256 operations.
 pub fn sha256(data: Span<u8>) -> Array<u8> {
     // Convert span to ByteArray for SHA256
-    let mut byte_array = "";
-    let mut i = 0_u32;
-    while i < data.len() {
-        byte_array.append_byte(*data.at(i));
-        i += 1;
-    }
+    let mut byte_array: ByteArray = data.into();
 
     // SHA256 hash
     let [w0, w1, w2, w3, w4, w5, w6, w7] = compute_sha256_byte_array(@byte_array);

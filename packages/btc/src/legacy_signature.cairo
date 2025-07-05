@@ -1,5 +1,5 @@
 use alexandria_bytes::byte_array_ext::{
-    ByteArrayIntoArrayU8, ByteArrayTraitExt, SpanU8IntoBytearray,
+    ByteArrayIntoArrayU8, ByteArrayTraitExt, SpanU8IntoByteArray,
 };
 use starknet::SyscallResultTrait;
 use starknet::secp256_trait::{
@@ -70,7 +70,7 @@ pub fn verify_ecdsa_signature_coords(
     recovered_x == public_key.x && recovered_y == public_key.y
 }
 
-/// Verify a Bitcoin ECDSA signature using the new BitcoinPublicKey format
+/// Verify a Bitcoin ECDSA signature
 ///
 /// This function works with the new ByteArray-based BitcoinPublicKey structure
 /// that properly represents Bitcoin's 33-byte compressed or 65-byte uncompressed format.
@@ -158,12 +158,7 @@ pub fn parse_der_signature(der_bytes: Span<u8>) -> Option<Signature> {
     }
 
     // Convert to ByteArray for easier parsing
-    let mut data = "";
-    let mut i = 0;
-    while i < der_bytes.len() {
-        data.append_byte(*der_bytes.at(i));
-        i += 1;
-    }
+    let mut data: ByteArray = der_bytes.into();
 
     // Check DER sequence tag (0x30)
     let (offset, sequence_tag) = data.read_u8(0);
@@ -284,12 +279,7 @@ fn mod_pow(mut base: u256, mut exp: u256, modulus: u256) -> u256 {
 /// * `u256` - The hash to be signed
 pub fn create_signature_hash(transaction_data: Span<u8>, sighash_type: u8) -> u256 {
     // Convert to ByteArray and append sighash type
-    let mut data_with_sighash = "";
-    let mut i = 0;
-    while i < transaction_data.len() {
-        data_with_sighash.append_byte(*transaction_data.at(i));
-        i += 1;
-    }
+    let mut data_with_sighash = transaction_data.into();
 
     // Append sighash type (4 bytes little-endian)
     data_with_sighash.append_byte(sighash_type);
@@ -306,12 +296,7 @@ pub fn create_signature_hash(transaction_data: Span<u8>, sighash_type: u8) -> u2
 
 /// Helper function to hash ByteArray data
 fn hash256_from_byte_array(data: ByteArray) -> Array<u8> {
-    let mut bytes = array![];
-    let mut i = 0;
-    while i < data.len() {
-        bytes.append(data.at(i).unwrap());
-        i += 1;
-    }
+    let mut bytes: Array<u8> = data.into();
     hash256(bytes.span())
 }
 

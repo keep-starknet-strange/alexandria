@@ -6,7 +6,7 @@ use crate::bit_array::one_shift_left_bytes_felt252;
 use crate::byte_appender::{ByteAppender, ByteAppenderSupportTrait};
 
 
-pub impl SpanU8IntoBytearray of Into<Span<u8>, ByteArray> {
+pub impl SpanU8IntoByteArray of Into<Span<u8>, ByteArray> {
     #[inline]
     fn into(self: Span<u8>) -> ByteArray {
         let mut reader: u32 = 0;
