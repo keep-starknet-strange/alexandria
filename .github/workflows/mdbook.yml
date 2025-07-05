@@ -2,7 +2,8 @@
 #
 # To get started with mdBook see: https://rust-lang.github.io/mdBook/index.html
 #
-name: Deploy mdBook site to Pages
+
+name: Deploy Docs
 
 on:
   # Allows you to run this workflow manually from the Actions tab
