@@ -276,8 +276,8 @@ fn test_taproot_signature_verification_interface() {
     // but it tests that the interface works
     let result = verify_taproot_signature(signature_bytes.span(), message1, public_key);
 
-    // Just verify the function doesn't panic
-    assert!(result == true || result == false, "Should return a boolean");
+    // Just verify the function doesn't panic and returns false for dummy data
+    assert!(!result, "Dummy signature should fail verification");
 
     // Test with wrong signature length
     let wrong_sig = array![0x12, 0x34]; // Too short

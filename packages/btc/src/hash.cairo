@@ -1,9 +1,22 @@
-use alexandria_bytes::byte_array_ext::{ByteArrayIntoArrayU8, SpanU8IntoBytearray};
+use alexandria_bytes::byte_array_ext::{ByteArrayIntoArrayU8, SpanU8IntoByteArray};
 use alexandria_math::ripemd160::{ripemd160_context_as_bytes, ripemd160_hash};
 use core::sha256::compute_sha256_byte_array;
 
 
-/// Bitcoin Hash160 (RIPEMD160(SHA256(data)))
+/// Computes Bitcoin Hash160 (RIPEMD160(SHA256(data))) from input data.
+///
+/// Implements the standard Bitcoin Hash160 function used for address generation
+/// and script operations. Applies SHA256 followed by RIPEMD160 to produce a
+/// 20-byte hash output.
+///
+/// # Arguments
+/// * `data` - Input data to hash as a span of bytes
+///
+/// # Returns
+/// * `Array<u8>` - 20-byte Hash160 result
+///
+/// # Usage
+/// Primary hashing function for Bitcoin public key hashes and script hashes.
 pub fn hash160(data: Span<u8>) -> Array<u8> {
     // Convert span to ByteArray for SHA256
     let byte_array = data.into();
@@ -70,7 +83,20 @@ pub fn hash160(data: Span<u8>) -> Array<u8> {
     result
 }
 
-/// Bitcoin Hash256 (SHA256(SHA256(data)))
+/// Computes Bitcoin Hash256 (SHA256(SHA256(data))) from input data.
+///
+/// Implements the Bitcoin double SHA256 function used for transaction IDs,
+/// block hashes, and Base58Check checksums. Applies SHA256 twice for
+/// additional security.
+///
+/// # Arguments
+/// * `data` - Input data to hash as a span of bytes
+///
+/// # Returns
+/// * `Array<u8>` - 32-byte Hash256 result
+///
+/// # Usage
+/// Used for transaction hashes, block hashes, and checksum calculations.
 pub fn hash256(data: Span<u8>) -> Array<u8> {
     // First SHA256
     let first_sha256 = sha256(data);
@@ -81,15 +107,22 @@ pub fn hash256(data: Span<u8>) -> Array<u8> {
     second_sha256
 }
 
-/// Single SHA256 hash
+/// Computes a single SHA256 hash from input data.
+///
+/// Provides a wrapper around the core SHA256 implementation to convert
+/// between different data formats and produce byte array output.
+///
+/// # Arguments
+/// * `data` - Input data to hash as a span of bytes
+///
+/// # Returns
+/// * `Array<u8>` - 32-byte SHA256 hash result
+///
+/// # Usage
+/// Used as a building block for other hash functions and direct SHA256 operations.
 pub fn sha256(data: Span<u8>) -> Array<u8> {
     // Convert span to ByteArray for SHA256
-    let mut byte_array = "";
-    let mut i = 0_u32;
-    while i < data.len() {
-        byte_array.append_byte(*data.at(i));
-        i += 1;
-    }
+    let mut byte_array: ByteArray = data.into();
 
     // SHA256 hash
     let [w0, w1, w2, w3, w4, w5, w6, w7] = compute_sha256_byte_array(@byte_array);
@@ -141,7 +174,19 @@ pub fn sha256(data: Span<u8>) -> Array<u8> {
     result
 }
 
-/// Checksum calculation for Base58Check encoding
+/// Calculates a 4-byte checksum for Base58Check encoding.
+///
+/// Computes Hash256 of the input data and returns the first 4 bytes
+/// as a checksum for Base58Check encoding used in legacy Bitcoin addresses.
+///
+/// # Arguments
+/// * `data` - Input data (version byte + payload) to calculate checksum for
+///
+/// # Returns
+/// * `Array<u8>` - 4-byte checksum
+///
+/// # Usage
+/// Used in Base58Check encoding for legacy Bitcoin address format validation.
 pub fn checksum(data: Span<u8>) -> Array<u8> {
     let hash = hash256(data);
     // Return first 4 bytes
@@ -150,7 +195,19 @@ pub fn checksum(data: Span<u8>) -> Array<u8> {
 
 // ByteArray-native versions for easier use
 
-/// Bitcoin Hash160 from ByteArray
+/// Computes Bitcoin Hash160 directly from ByteArray input.
+///
+/// Optimized version of hash160 that works directly with ByteArray data
+/// without requiring conversion to Span<u8> first.
+///
+/// # Arguments
+/// * `data` - Input data as a ByteArray reference
+///
+/// # Returns
+/// * `Array<u8>` - 20-byte Hash160 result
+///
+/// # Usage
+/// Efficient Hash160 computation when working with ByteArray data structures.
 pub fn hash160_from_byte_array(data: @ByteArray) -> Array<u8> {
     // SHA256 hash
     let [w0, w1, w2, w3, w4, w5, w6, w7] = compute_sha256_byte_array(data);
@@ -207,7 +264,19 @@ pub fn hash160_from_byte_array(data: @ByteArray) -> Array<u8> {
     ripemd160_bytes.into()
 }
 
-/// SHA256 hash from ByteArray
+/// Computes SHA256 hash directly from ByteArray input.
+///
+/// Optimized version of sha256 that works directly with ByteArray data
+/// without requiring conversion to Span<u8> first.
+///
+/// # Arguments
+/// * `data` - Input data as a ByteArray reference
+///
+/// # Returns
+/// * `Array<u8>` - 32-byte SHA256 hash result
+///
+/// # Usage
+/// Efficient SHA256 computation when working with ByteArray data structures.
 pub fn sha256_from_byte_array(data: @ByteArray) -> Array<u8> {
     // SHA256 hash
     let [w0, w1, w2, w3, w4, w5, w6, w7] = compute_sha256_byte_array(data);
@@ -259,7 +328,19 @@ pub fn sha256_from_byte_array(data: @ByteArray) -> Array<u8> {
     result
 }
 
-/// Double SHA256 hash from ByteArray
+/// Computes Bitcoin Hash256 (double SHA256) directly from ByteArray input.
+///
+/// Optimized version of hash256 that works directly with ByteArray data
+/// without requiring conversion to Span<u8> first.
+///
+/// # Arguments
+/// * `data` - Input data as a ByteArray reference
+///
+/// # Returns
+/// * `Array<u8>` - 32-byte Hash256 result
+///
+/// # Usage
+/// Efficient Hash256 computation when working with ByteArray data structures.
 pub fn hash256_from_byte_array(data: @ByteArray) -> Array<u8> {
     // First SHA256
     let first_hash_bytes = sha256_from_byte_array(data);
