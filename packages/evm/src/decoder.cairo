@@ -6,6 +6,7 @@ use core::traits::DivRem;
 use crate::constants::FELT252_MAX;
 use crate::evm_enum::EVMTypes;
 use crate::evm_struct::EVMCalldata;
+use crate::utils::has_dynamic;
 
 
 pub trait AbiDecodeTrait {
@@ -37,34 +38,6 @@ pub trait AbiDecodeTrait {
     ) -> Span<felt252>; // Returns span of felt252 which directly will be passed to call_syscall
 }
 
-/// Checks if any of the provided EVM types are dynamic.
-///
-/// Dynamic types in Solidity/EVM include arrays, strings, and bytes.
-/// These types are not encoded inline and instead use an offset pointing to
-/// their actual data location elsewhere in calldata. This helper is used to
-/// determine if special decoding logic is needed (e.g., `decode_tuple`).
-///
-/// # Arguments
-/// * `types` - A span of `EVMTypes` representing the types in a tuple or array.
-///
-/// # Returns
-/// * `true` if any type is dynamic (e.g., an array); otherwise, `false`.
-fn has_dynamic(types: Span<EVMTypes>) -> bool {
-    let mut result = false;
-    for evm_type in types {
-        match evm_type {
-            EVMTypes::Array => { result = true; },
-            EVMTypes::String => { result = true; },
-            EVMTypes::Bytes => { result = true; },
-            EVMTypes::Tuple(tuple_types) => { if (has_dynamic(*tuple_types)) {
-                result = true;
-            } },
-            _ => { continue; },
-        };
-    }
-
-    result
-}
 
 pub impl EVMTypesImpl of AbiDecodeTrait {
     fn decode(ref self: EVMCalldata, types: Span<EVMTypes>) -> Span<felt252> {

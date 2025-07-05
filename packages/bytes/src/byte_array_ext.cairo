@@ -4,10 +4,9 @@ use core::num::traits::Zero;
 use starknet::ContractAddress;
 use crate::bit_array::one_shift_left_bytes_felt252;
 use crate::byte_appender::{ByteAppender, ByteAppenderSupportTrait};
-use crate::reversible::reversing;
 
 
-pub impl SpanU8IntoBytearray of Into<Span<u8>, ByteArray> {
+pub impl SpanU8IntoByteArray of Into<Span<u8>, ByteArray> {
     #[inline]
     fn into(self: Span<u8>) -> ByteArray {
         let mut reader: u32 = 0;
@@ -147,11 +146,21 @@ pub trait ByteArrayTraitExt {
     /// * `self` - The ByteArray to append to
     /// * `value` - The value to append
     fn append_u16(ref self: ByteArray, value: u16);
+    /// Appends a 16-bit unsigned integer to the `ByteArray` in little-endian format.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
+    fn append_u16_le(ref self: ByteArray, value: u16);
     /// Appends a 32-bit unsigned integer to the `ByteArray`.
     /// # Arguments
     /// * `self` - The ByteArray to append to
     /// * `value` - The value to append
     fn append_u32(ref self: ByteArray, value: u32);
+    /// Appends a 32-bit unsigned integer to the `ByteArray` in little-endian format.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
+    fn append_u32_le(ref self: ByteArray, value: u32);
     /// Appends usize to the `ByteArray`.
     /// # Arguments
     /// * `self` - The ByteArray to append to
@@ -162,16 +171,31 @@ pub trait ByteArrayTraitExt {
     /// * `self` - The ByteArray to append to
     /// * `value` - The value to append
     fn append_u64(ref self: ByteArray, value: u64);
+    /// Appends a 64-bit unsigned integer to the `ByteArray` in little-endian format.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
+    fn append_u64_le(ref self: ByteArray, value: u64);
     /// Appends a 128-bit unsigned integer to the `ByteArray`.
     /// # Arguments
     /// * `self` - The ByteArray to append to
     /// * `value` - The value to append
     fn append_u128(ref self: ByteArray, value: u128);
+    /// Appends a 128-bit unsigned integer to the `ByteArray` in little-endian format.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
+    fn append_u128_le(ref self: ByteArray, value: u128);
     /// Appends a 256-bit unsigned integer to the `ByteArray`.
     /// # Arguments
     /// * `self` - The ByteArray to append to
     /// * `value` - The value to append
     fn append_u256(ref self: ByteArray, value: u256);
+    /// Appends a 256-bit unsigned integer to the `ByteArray` in little-endian format.
+    /// # Arguments
+    /// * `self` - The ByteArray to append to
+    /// * `value` - The value to append
+    fn append_u256_le(ref self: ByteArray, value: u256);
     /// Appends a 512-bit unsigned integer to the `ByteArray`.
     /// # Arguments
     /// * `self` - The ByteArray to append to
@@ -182,6 +206,11 @@ pub trait ByteArrayTraitExt {
     /// * `self` - The ByteArray to append to
     /// * `value` - The value to append
     fn append_felt252(ref self: ByteArray, value: felt252);
+    /// Appends bytes data of size `count` ordered in little endian
+    /// # Arguments
+    /// * `bytes` - little endian ordered bytes to append
+    /// * `count` - number of bytes from input to append
+    fn append_bytes_le(ref self: ByteArray, bytes: felt252, count: usize);
     /// Appends a Starknet contract address to the `ByteArray`.
     /// # Arguments
     /// * `self` - The ByteArray to append to
@@ -457,13 +486,27 @@ pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
     }
 
     /// Append a u16 to ByteArray
+    #[inline]
     fn append_u16(ref self: ByteArray, value: u16) {
         self.append_word(value.into(), 2);
     }
 
+    /// Append a u16 to ByteArray in little-endian format
+    #[inline]
+    fn append_u16_le(ref self: ByteArray, value: u16) {
+        Self::append_bytes_le(ref self, value.into(), 2);
+    }
+
     /// Append a u32 to ByteArray
+    #[inline]
     fn append_u32(ref self: ByteArray, value: u32) {
         self.append_word(value.into(), 4);
+    }
+
+    /// Append a u32 to ByteArray in little-endian format
+    #[inline]
+    fn append_u32_le(ref self: ByteArray, value: u32) {
+        Self::append_bytes_le(ref self, value.into(), 4);
     }
 
     /// Append a usize to ByteArray
@@ -472,19 +515,39 @@ pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
     }
 
     /// Append a u64 to ByteArray
+    #[inline]
     fn append_u64(ref self: ByteArray, value: u64) {
         self.append_word(value.into(), 8);
     }
 
+    /// Append a u64 to ByteArray in little-endian format
+    #[inline]
+    fn append_u64_le(ref self: ByteArray, value: u64) {
+        Self::append_bytes_le(ref self, value.into(), 8);
+    }
+
     /// Append a u128 to ByteArray
+    #[inline]
     fn append_u128(ref self: ByteArray, value: u128) {
         self.append_word(value.into(), 16);
+    }
+
+    /// Append a u128 to ByteArray in little-endian format
+    #[inline]
+    fn append_u128_le(ref self: ByteArray, value: u128) {
+        Self::append_bytes_le(ref self, value.into(), 16);
     }
 
     /// Append a u256 to ByteArray
     fn append_u256(ref self: ByteArray, value: u256) {
         Self::append_u128(ref self, value.high);
         Self::append_u128(ref self, value.low);
+    }
+
+    /// Append a u256 to ByteArray in little-endian format
+    fn append_u256_le(ref self: ByteArray, value: u256) {
+        Self::append_u128_le(ref self, value.low);
+        Self::append_u128_le(ref self, value.high);
     }
 
     /// Append a u512 to ByteArray
@@ -499,6 +562,20 @@ pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
     /// Append a felt252 to ByteArray
     fn append_felt252(ref self: ByteArray, value: felt252) {
         Self::append_u256(ref self, value.into());
+    }
+
+    /// Append bytes data of size `count` ordered in little endian
+    fn append_bytes_le(ref self: ByteArray, bytes: felt252, count: usize) {
+        assert(count <= 16, 'count too big');
+        let u256 { mut low, high: _high } = bytes.into();
+        let mut index = 0;
+        while (index != count) {
+            let (remaining_bytes, next) = DivRem::div_rem(low, 0x100_u128.try_into().unwrap());
+            low = remaining_bytes;
+            // Unwrap safe by definition of remainder from division by 0x100
+            self.append_byte(next.try_into().unwrap());
+            index += 1;
+        };
     }
 
     /// Append a ContractAddress to ByteArray
@@ -536,10 +613,8 @@ impl ByteAppenderSupportByteArrayImpl of ByteAppenderSupportTrait<ByteArray> {
 
     #[inline(always)]
     fn append_bytes_le(ref self: ByteArray, bytes: felt252, count: usize) {
-        assert(count <= 16, 'count too big');
-        let u256 { low, high: _high } = bytes.into();
-        let (reversed, _) = reversing(low, count, 0x100);
-        self.append_word(reversed.into(), count);
+        // Use the same DivRem approach as ByteArrayTraitExtImpl for consistency
+        ByteArrayTraitExtImpl::append_bytes_le(ref self, bytes, count);
     }
 }
 
@@ -549,7 +624,7 @@ pub impl ByteArrayAppenderImpl of ByteAppender<T: ByteArray> {
     }
 
     fn append_u16_le(ref self: ByteArray, word: u16) {
-        self.append_bytes_le(word.into(), 2);
+        ByteArrayTraitExtImpl::append_u16_le(ref self, word);
     }
 
     fn append_u32(ref self: ByteArray, word: u32) {
@@ -557,7 +632,7 @@ pub impl ByteArrayAppenderImpl of ByteAppender<T: ByteArray> {
     }
 
     fn append_u32_le(ref self: ByteArray, word: u32) {
-        self.append_bytes_le(word.into(), 4);
+        ByteArrayTraitExtImpl::append_u32_le(ref self, word);
     }
 
     fn append_u64(ref self: ByteArray, word: u64) {
@@ -565,7 +640,7 @@ pub impl ByteArrayAppenderImpl of ByteAppender<T: ByteArray> {
     }
 
     fn append_u64_le(ref self: ByteArray, word: u64) {
-        self.append_bytes_le(word.into(), 8);
+        ByteArrayTraitExtImpl::append_u64_le(ref self, word);
     }
 
     fn append_u128(ref self: ByteArray, word: u128) {
@@ -573,7 +648,7 @@ pub impl ByteArrayAppenderImpl of ByteAppender<T: ByteArray> {
     }
 
     fn append_u128_le(ref self: ByteArray, word: u128) {
-        self.append_bytes_le(word.into(), 16);
+        ByteArrayTraitExtImpl::append_u128_le(ref self, word);
     }
 
     fn append_u256(ref self: ByteArray, word: u256) {
@@ -616,9 +691,11 @@ pub impl ByteArrayAppenderImpl of ByteAppender<T: ByteArray> {
 
     fn append_i16_le(ref self: ByteArray, word: i16) {
         if word >= 0_i16 {
-            self.append_bytes_le(word.into(), 2);
+            ByteArrayTraitExtImpl::append_bytes_le(ref self, word.into(), 2);
         } else {
-            self.append_bytes_le(word.into() + one_shift_left_bytes_felt252(2), 2);
+            ByteArrayTraitExtImpl::append_bytes_le(
+                ref self, word.into() + one_shift_left_bytes_felt252(2), 2,
+            );
         }
     }
 
@@ -632,9 +709,11 @@ pub impl ByteArrayAppenderImpl of ByteAppender<T: ByteArray> {
 
     fn append_i32_le(ref self: ByteArray, word: i32) {
         if word >= 0_i32 {
-            self.append_bytes_le(word.into(), 4);
+            ByteArrayTraitExtImpl::append_bytes_le(ref self, word.into(), 4);
         } else {
-            self.append_bytes_le(word.into() + one_shift_left_bytes_felt252(4), 4);
+            ByteArrayTraitExtImpl::append_bytes_le(
+                ref self, word.into() + one_shift_left_bytes_felt252(4), 4,
+            );
         }
     }
 
@@ -648,9 +727,11 @@ pub impl ByteArrayAppenderImpl of ByteAppender<T: ByteArray> {
 
     fn append_i64_le(ref self: ByteArray, word: i64) {
         if word >= 0_i64 {
-            self.append_bytes_le(word.into(), 8);
+            ByteArrayTraitExtImpl::append_bytes_le(ref self, word.into(), 8);
         } else {
-            self.append_bytes_le(word.into() + one_shift_left_bytes_felt252(8), 8);
+            ByteArrayTraitExtImpl::append_bytes_le(
+                ref self, word.into() + one_shift_left_bytes_felt252(8), 8,
+            );
         }
     }
 
@@ -664,9 +745,11 @@ pub impl ByteArrayAppenderImpl of ByteAppender<T: ByteArray> {
 
     fn append_i128_le(ref self: ByteArray, word: i128) {
         if word >= 0_i128 {
-            self.append_bytes_le(word.into(), 16);
+            ByteArrayTraitExtImpl::append_bytes_le(ref self, word.into(), 16);
         } else {
-            self.append_bytes_le(word.into() + one_shift_left_bytes_felt252(16), 16);
+            ByteArrayTraitExtImpl::append_bytes_le(
+                ref self, word.into() + one_shift_left_bytes_felt252(16), 16,
+            );
         }
     }
 }

@@ -1,6 +1,5 @@
 mod aliquot_sum_test;
 mod armstrong_number_test;
-mod bip340_test;
 mod bitmap_test;
 mod collatz_sequence_test;
 mod const_pow_test;
@@ -18,6 +17,7 @@ mod lcm_of_n_numbers_test;
 mod math_test;
 mod mod_arithmetics_test;
 mod perfect_number_test;
+mod ripemd160_tests;
 mod sha256_test;
 mod sha512_test;
 mod test_keccak256;
