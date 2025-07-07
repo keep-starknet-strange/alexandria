@@ -2,7 +2,6 @@ use alexandria_bytes::byte_array_ext::SpanU8IntoByteArray;
 use alexandria_encoding::base58::Base58Encoder;
 use alexandria_encoding::bech32::{Encoder, convert_bits};
 use alexandria_math::BitShift;
-use core::traits::{Into, TryInto};
 use crate::hash::{hash160, sha256};
 use crate::keys::{private_key_to_public_key, public_key_hash, public_key_to_bytes};
 use crate::taproot::{create_key_path_output, u256_to_32_bytes_be};
