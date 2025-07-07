@@ -3,6 +3,7 @@ use crate::bip340_utils::tagged_hash;
 use crate::bytes_utils::{
     append_u256_be,
     pack_sha256,
+    sha256_to_byte_array,
     append_u32_le,
     append_u64_le,
     append_u256_le,
@@ -53,7 +54,7 @@ fn hash256(input: @ByteArray) -> Span<u32> {
 
 #[inline(always)]
 fn build_to_spend_tx(message: @ByteArray, script_pubkey: @ByteArray) -> Transaction {
-    let message_hash = pack_sha256(
+    let message_hash = sha256_to_byte_array(
         tagged_hash("BIP0322-signed-message", message)
     );
     let mut script_sig: ByteArray = "";
@@ -61,7 +62,7 @@ fn build_to_spend_tx(message: @ByteArray, script_pubkey: @ByteArray) -> Transact
     script_sig.append_byte(0x0);
     script_sig.append_byte(0x20);
 
-    append_u256_be(ref script_sig, message_hash);
+    script_sig = ByteArrayTrait::concat(@script_sig, @message_hash);
 
     Transaction {
         version: 0,
@@ -157,13 +158,13 @@ fn hash_for_witness_v1(
     append_u256_be(ref prev_outs, *input.hash);
     append_u32_le(ref prev_outs, *input.index);
 
-    let hash_prevouts = pack_sha256(compute_sha256_byte_array(@prev_outs).span());
+    let hash_prevouts = sha256_to_byte_array(compute_sha256_byte_array(@prev_outs).span());
 
     let mut amounts: ByteArray = "";
 
     append_u64_le(ref amounts, 0x0);
 
-    let hash_amounts = pack_sha256(compute_sha256_byte_array(@amounts).span());
+    let hash_amounts = sha256_to_byte_array(compute_sha256_byte_array(@amounts).span());
 
     let mut script_pub_keys: ByteArray = "";
 
@@ -171,13 +172,13 @@ fn hash_for_witness_v1(
 
     script_pub_keys = ByteArrayTrait::concat(@script_pub_keys, prev_out_scripts);
 
-    let hash_script_pub_keys = pack_sha256(compute_sha256_byte_array(@script_pub_keys).span());
+    let hash_script_pub_keys = sha256_to_byte_array(compute_sha256_byte_array(@script_pub_keys).span());
 
     let mut sequences: ByteArray = "";
 
     append_u32_le(ref sequences, *input.sequence);
 
-    let hash_sequences = pack_sha256(compute_sha256_byte_array(@sequences).span());
+    let hash_sequences = sha256_to_byte_array(compute_sha256_byte_array(@sequences).span());
     let output = tx.outputs[0];
 
     let mut outputs: ByteArray = "";
@@ -185,7 +186,7 @@ fn hash_for_witness_v1(
     append_u64_le(ref outputs, *output.value);
     append_varslice(ref outputs, output.script);
 
-    let hash_ouputs = pack_sha256(compute_sha256_byte_array(@outputs).span());
+    let hash_ouputs = sha256_to_byte_array(compute_sha256_byte_array(@outputs).span());
 
     let mut sig_msg: ByteArray = "";
 
@@ -193,11 +194,13 @@ fn hash_for_witness_v1(
     sig_msg.append_byte(SIGHASH_ALL);
     append_u32_le(ref sig_msg, *tx.version);
     append_u32_le(ref sig_msg, *tx.locktime);
-    append_u256_be(ref sig_msg, hash_prevouts);
-    append_u256_be(ref sig_msg, hash_amounts);
-    append_u256_be(ref sig_msg, hash_script_pub_keys);
-    append_u256_be(ref sig_msg, hash_sequences);
-    append_u256_be(ref sig_msg, hash_ouputs);
+
+    sig_msg = ByteArrayTrait::concat(@sig_msg, @hash_prevouts);
+    sig_msg = ByteArrayTrait::concat(@sig_msg, @hash_amounts);
+    sig_msg = ByteArrayTrait::concat(@sig_msg, @hash_script_pub_keys);
+    sig_msg = ByteArrayTrait::concat(@sig_msg, @hash_sequences);
+    sig_msg = ByteArrayTrait::concat(@sig_msg, @hash_ouputs);
+
     sig_msg.append_byte(0x0);
     append_u32_le(ref sig_msg, 0x0);
 

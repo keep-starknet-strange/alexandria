@@ -521,53 +521,114 @@ pub fn address_to_u8_array(
 }
 
 #[inline(always)]
+fn unpack_u32_chunk_byte_array(
+    sha: Span<u32>,
+    chunk_nb: u32,
+    ref output: ByteArray
+) {
+    let chunk: u256 = (*sha[chunk_nb]).into();
+
+    output.append_byte(byte_at(chunk, 3));
+    output.append_byte(byte_at(chunk, 2));
+    output.append_byte(byte_at(chunk, 1));
+    output.append_byte(byte_at(chunk, 0));
+}
+
+#[inline(always)]
 pub fn sha256_to_byte_array(sha: Span<u32>) -> ByteArray {
     let mut sha_bytes: ByteArray = Default::default();
 
-    for i in 0..8_u32  {
-        let chunk: u256 = (*sha[i]).into();
-
-        sha_bytes.append_byte(byte_at(chunk, 3));
-        sha_bytes.append_byte(byte_at(chunk, 2));
-        sha_bytes.append_byte(byte_at(chunk, 1));
-        sha_bytes.append_byte(byte_at(chunk, 0));
-    };
+    unpack_u32_chunk_byte_array(sha, 0, ref sha_bytes);
+    unpack_u32_chunk_byte_array(sha, 1, ref sha_bytes);
+    unpack_u32_chunk_byte_array(sha, 2, ref sha_bytes);
+    unpack_u32_chunk_byte_array(sha, 3, ref sha_bytes);
+    unpack_u32_chunk_byte_array(sha, 4, ref sha_bytes);
+    unpack_u32_chunk_byte_array(sha, 5, ref sha_bytes);
+    unpack_u32_chunk_byte_array(sha, 6, ref sha_bytes);
+    unpack_u32_chunk_byte_array(sha, 7, ref sha_bytes);
 
     sha_bytes
 }
 
 #[inline(always)]
+fn pack_u32_chunk(sha: Span<u32>, chunk_nb: u32) -> u256 {
+    let val: u256 = (*sha[chunk_nb]).into();
+    let base_shift = 31 - chunk_nb * 4;
+
+    shl_byte(base_shift, byte_at(val, 3).into()) |
+        shl_byte(base_shift - 1, byte_at(val, 2).into()) |
+        shl_byte(base_shift - 2, byte_at(val, 1).into()) |
+        shl_byte(base_shift - 3, byte_at(val, 0).into())
+}
+
+#[inline(always)]
 pub fn pack_sha256(hash: Span<u32>) -> u256 {
-    let mut hash_u256 = 0_u256;
+    pack_u32_chunk(hash, 0) |
+    pack_u32_chunk(hash, 1) |
+    pack_u32_chunk(hash, 2) |
+    pack_u32_chunk(hash, 3) |
+    pack_u32_chunk(hash, 4) |
+    pack_u32_chunk(hash, 5) |
+    pack_u32_chunk(hash, 6) |
+    pack_u32_chunk(hash, 7)
+}
 
-    for i in 0..8_u32 {
-        let val: u256 = (*hash[i]).into();
-        let base_shift = 31 - i * 4;
+#[inline(always)]
+pub fn append_sha256_u32(ref data: ByteArray, chunk_nb: u32, input: Span<u32>) {
+    let val = *input[chunk_nb];
 
-        hash_u256 = hash_u256 | shl_byte(base_shift, byte_at(val, 3).into()) |
-            shl_byte(base_shift - 1, byte_at(val, 2).into()) |
-            shl_byte(base_shift - 2, byte_at(val, 1).into()) |
-            shl_byte(base_shift - 3, byte_at(val, 0).into());
-    };
-
-    hash_u256
+    data.append_byte(byte_at(val.into(), 3));
+    data.append_byte(byte_at(val.into(), 2));
+    data.append_byte(byte_at(val.into(), 1));
+    data.append_byte(byte_at(val.into(), 0));
 }
 
 #[inline(always)]
 pub fn append_sha256(ref data: ByteArray, input: Span<u32>) {
-    for i in 0..8_u32 {
-        let val = *input[i];
-
-        data.append_byte(byte_at(val.into(), 3));
-        data.append_byte(byte_at(val.into(), 2));
-        data.append_byte(byte_at(val.into(), 1));
-        data.append_byte(byte_at(val.into(), 0));
-    };
+    append_sha256_u32(ref data, 0, input);
+    append_sha256_u32(ref data, 1, input);
+    append_sha256_u32(ref data, 2, input);
+    append_sha256_u32(ref data, 3, input);
+    append_sha256_u32(ref data, 4, input);
+    append_sha256_u32(ref data, 5, input);
+    append_sha256_u32(ref data, 6, input);
+    append_sha256_u32(ref data, 7, input);
 }
 
 #[inline(always)]
-pub fn append_u256_be(ref data: ByteArray, input: u256) {
-    append_u256_be_from(ref data, input, 0x1f);
+pub fn append_u256_be(ref data: ByteArray, value: u256) {
+    data.append_byte(byte_at(value, 31));
+    data.append_byte(byte_at(value, 30));
+    data.append_byte(byte_at(value, 29));
+    data.append_byte(byte_at(value, 28));
+    data.append_byte(byte_at(value, 27));
+    data.append_byte(byte_at(value, 26));
+    data.append_byte(byte_at(value, 25));
+    data.append_byte(byte_at(value, 24));
+    data.append_byte(byte_at(value, 23));
+    data.append_byte(byte_at(value, 22));
+    data.append_byte(byte_at(value, 21));
+    data.append_byte(byte_at(value, 20));
+    data.append_byte(byte_at(value, 19));
+    data.append_byte(byte_at(value, 18));
+    data.append_byte(byte_at(value, 17));
+    data.append_byte(byte_at(value, 16));
+    data.append_byte(byte_at(value, 15));
+    data.append_byte(byte_at(value, 14));
+    data.append_byte(byte_at(value, 13));
+    data.append_byte(byte_at(value, 12));
+    data.append_byte(byte_at(value, 11));
+    data.append_byte(byte_at(value, 10));
+    data.append_byte(byte_at(value, 9));
+    data.append_byte(byte_at(value, 8));
+    data.append_byte(byte_at(value, 7));
+    data.append_byte(byte_at(value, 6));
+    data.append_byte(byte_at(value, 5));
+    data.append_byte(byte_at(value, 4));
+    data.append_byte(byte_at(value, 3));
+    data.append_byte(byte_at(value, 2));
+    data.append_byte(byte_at(value, 1));
+    data.append_byte(byte_at(value, 0));
 }
 
 #[inline(always)]
@@ -591,9 +652,38 @@ pub fn append_u256_be_from(
 
 #[inline(always)]
 pub fn append_u256_le(ref data: ByteArray, value: u256) {
-    for i in 0..0x20_u32 {
-        data.append_byte(byte_at(value, i));
-    }
+    data.append_byte(byte_at(value, 0));
+    data.append_byte(byte_at(value, 1));
+    data.append_byte(byte_at(value, 2));
+    data.append_byte(byte_at(value, 3));
+    data.append_byte(byte_at(value, 4));
+    data.append_byte(byte_at(value, 5));
+    data.append_byte(byte_at(value, 6));
+    data.append_byte(byte_at(value, 7));
+    data.append_byte(byte_at(value, 8));
+    data.append_byte(byte_at(value, 9));
+    data.append_byte(byte_at(value, 10));
+    data.append_byte(byte_at(value, 11));
+    data.append_byte(byte_at(value, 12));
+    data.append_byte(byte_at(value, 13));
+    data.append_byte(byte_at(value, 14));
+    data.append_byte(byte_at(value, 15));
+    data.append_byte(byte_at(value, 16));
+    data.append_byte(byte_at(value, 17));
+    data.append_byte(byte_at(value, 18));
+    data.append_byte(byte_at(value, 19));
+    data.append_byte(byte_at(value, 20));
+    data.append_byte(byte_at(value, 21));
+    data.append_byte(byte_at(value, 22));
+    data.append_byte(byte_at(value, 23));
+    data.append_byte(byte_at(value, 24));
+    data.append_byte(byte_at(value, 25));
+    data.append_byte(byte_at(value, 26));
+    data.append_byte(byte_at(value, 27));
+    data.append_byte(byte_at(value, 28));
+    data.append_byte(byte_at(value, 29));
+    data.append_byte(byte_at(value, 30));
+    data.append_byte(byte_at(value, 31));
 }
 
 #[inline(always)]
