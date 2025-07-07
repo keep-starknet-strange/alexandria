@@ -1,5 +1,5 @@
 use starknet::secp256_trait::Signature;
-use alexandria_btc::{verify_legacy_signature, get_legacy_message_hash};
+use alexandria_btc::{verify_legacy_signature};
 
 #[test]
 fn test_legacy_verify_success() {
@@ -59,15 +59,4 @@ fn test_legacy_verify_sig_failure() {
     let msg: u256 = 0xadb989cbc22bb0b956f2db501df0f0a265fd38257802c940bb136e8ba10be754;
 
     verify_legacy_signature(msg, sig, pub_key);
-}
-
-#[test]
-fn test_legacy_message_hash() {
-    let msg: ByteArray = "Repeat after me: I shall build on Starknet!";
-    let expected: u256 = 0xa2b489f1037225ce3dc14cb73bace4e7141a59597b53b4d2ce86497fc654757f;
-
-    assert_eq!(
-        get_legacy_message_hash(msg),
-        expected
-    );
 }

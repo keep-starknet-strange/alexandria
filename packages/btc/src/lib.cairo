@@ -1,12 +1,12 @@
-mod bip340_signature;
-mod legacy_signature;
-mod constants;
-mod utils;
+mod bip322_utils;
+mod bip340_utils;
+mod bytes_utils;
+mod legacy_btc_utils;
 
 #[cfg(test)]
 mod tests;
-use bip340_signature::verify_bip340_signature;
-use legacy_signature::{
-    verify_legacy_signature,
-    get_legacy_message_hash
+use bip322_utils::bip322_msg_hash;
+use bip340_utils::verify_bip340_signature;
+use legacy_btc_utils::{
+    verify_legacy_signature
 };
