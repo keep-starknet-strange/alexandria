@@ -184,13 +184,26 @@ fn test_p2tr_address_generation() {
     assert!(address.script_pubkey.at(0).unwrap() == 0x51, "Should start with OP_1");
     assert!(address.script_pubkey.at(1).unwrap() == 0x20, "Should push 32 bytes");
 
-    // Check that address starts with correct Bech32 prefix for mainnet
-    // P2TR addresses should start with "bc1" (the "p" comes from the version 1 encoding)
-    let addr_prefix: ByteArray = "bc1";
+    // Check that address starts with correct Bech32m prefix for mainnet P2TR
+    // P2TR addresses should start with "bc1p" (witness version 1 with Bech32m encoding)
+    assert!(address.address.len() >= 4, "Address should be at least 4 characters long");
+    assert!(address.address.at(0).unwrap() == 'b', "Should start with 'b'");
+    assert!(address.address.at(1).unwrap() == 'c', "Should have 'c' as second character");
+    assert!(
+        address.address.at(2).unwrap() == '1', "Should have '1' as third character (separator)",
+    );
+    assert!(
+        address.address.at(3).unwrap() == 'p',
+        "Should have 'p' as fourth character (witness version 1 in Bech32m)",
+    );
+
+    // Verify full prefix
+    let expected_prefix: ByteArray = "bc1p";
     let mut i = 0_u32;
-    while i < 3 {
+    while i < 4 {
         assert!(
-            address.address.at(i).unwrap() == addr_prefix.at(i).unwrap(), "Should start with bc1",
+            address.address.at(i).unwrap() == expected_prefix.at(i).unwrap(),
+            "P2TR address should start with bc1p prefix",
         );
         i += 1;
     };
