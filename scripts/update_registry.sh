@@ -16,6 +16,7 @@ packages=(
   alexandria_bytes
   alexandria_encoding
   alexandria_evm
+  alexandria_btc
   # buraya diğer paketleri ekleyebilirsin
 )
 
