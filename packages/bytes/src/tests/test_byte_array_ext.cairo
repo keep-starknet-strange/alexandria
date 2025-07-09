@@ -1,5 +1,5 @@
 use alexandria_bytes::byte_array_ext::{
-    ByteArrayIntoArrayU8, ByteArrayTraitExt, SpanU8IntoBytearray,
+    ByteArrayIntoArrayU8, ByteArrayTraitExt, SpanU8IntoByteArray,
 };
 
 #[test]

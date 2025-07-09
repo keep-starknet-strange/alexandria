@@ -1,7 +1,7 @@
 //! bip340 implementation
-use core::sha256::compute_sha256_byte_array; //Available in Cairo ^2.7.0.
+use core::sha256::compute_sha256_byte_array;
 use core::starknet::SyscallResultTrait;
-use starknet::secp256_trait::{Secp256PointTrait, Secp256Trait};
+use starknet::secp256_trait::{Secp256PointTrait, Secp256Trait, Signature};
 use starknet::secp256k1::Secp256k1Point;
 
 const TWO_POW_32: u128 = 0x100000000;
@@ -104,4 +104,21 @@ pub fn verify(px: u256, rx: u256, s: u256, m: ByteArray) -> bool {
 
     // fail if is_infinite(R) || not has_even_y(R) || x(R) ≠ rx.
     !(Rx == 0 && Ry == 0) && Ry % 2 == 0 && Rx == rx
+}
+
+/// Verifies a signature according to the BIP-340 using Signature struct.
+///
+/// This function checks if the signature is valid for a message `m` with
+/// respect to the public key `px`.
+///
+/// # Arguments
+/// * `px`: `u256` - The x-coordinate of the public key.
+/// * `sig`: `Signature` - The signature containing r, s, and y_parity.
+/// * `m`: `ByteArray` - The message for which the signature is being verified.
+///
+/// # Returns
+/// * `bool` - `true` if the signature is verified for the message and public key, `false`
+/// otherwise.
+pub fn verify_signature(px: u256, sig: Signature, m: ByteArray) -> bool {
+    verify(px, sig.r, sig.s, m)
 }

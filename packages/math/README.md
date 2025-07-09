@@ -88,3 +88,9 @@ In public-key cryptography, Edwards-curve Digital Signature Algorithm (EdDSA) is
 ## [sha512](./src/sha512.cairo)
 
 SHA-512 is from the SHA-2 family (Secure Hash Algorithm 2) which is a set of cryptographic hash functions designed by the United States National Security Agency (NSA) and first published in 2001. They are built using the Merkle–Damgård construction, from a one-way compression function itself built using the Davies–Meyer structure from a specialized block cipher.
+
+## [ripemd160](./src/ripemd160.cairo)
+
+RIPEMD-160 (RACE Integrity Primitives Evaluation Message Digest) is a cryptographic hash function that produces a 160-bit (20-byte) hash digest. It was developed in Europe as an alternative to the US-designed SHA-1 algorithm and is part of the RIPEMD family of hash functions. RIPEMD-160 was designed to provide strong collision resistance and is built using a dual-line parallel structure with 5 rounds on each side, processing data in 512-bit blocks. The algorithm employs the Merkle-Damgård construction and uses 5 different round functions (f, g, h, i, j) applied in different orders on the left and right processing lines.
+
+This implementation is based on the original Cairo work by [j1mbo64](https://github.com/j1mbo64/ripemd160_cairo), enhanced with some performance optimizations. The implementation provides multiple output formats (u256, ByteArray, Array<u32>) and is suitable for digital signatures, data integrity verification, and cryptographic applications requiring 160-bit hash digests.
