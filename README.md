@@ -74,6 +74,7 @@ This repository is composed of multiple crates:
 - [Storage](./packages/storage/README.md)
 - [Bytes](./packages/bytes/README.md)
 - [Evm](./packages/evm/README.md)
+- [Bitcoin](./packages/btc//README.md)
 
 ## Getting Started
 
@@ -97,6 +98,7 @@ This repository is composed of multiple crates:
 - Storage : `scarb add alexandria_storage@0.5.1`
 - Bytes : `scarb add alexandria_bytes@0.5.1`
 - Evm : `scarb add alexandria_evm@0.5.1`
+- Bitcoin : `scarb add alexandria_btc@0.5.1`
 
 ## Usage
 

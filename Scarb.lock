@@ -12,7 +12,10 @@ dependencies = [
 name = "alexandria_btc"
 version = "0.5.1"
 dependencies = [
- "ripemd160",
+ "alexandria_bytes",
+ "alexandria_data_structures",
+ "alexandria_encoding",
+ "alexandria_math",
 ]
 
 [[package]]
@@ -96,8 +99,3 @@ version = "0.5.1"
 [[package]]
 name = "alexandria_utils"
 version = "0.5.1"
-
-[[package]]
-name = "ripemd160"
-version = "0.1.0"
-source = "git+https://github.com/j1mbo64/ripemd160_cairo.git#833e07d7d074d4ee51ceb40a5bcb4af2fe6898f3"

@@ -1,12 +1,14 @@
-mod bip322_utils;
-mod bip340_utils;
-mod bytes_utils;
-mod legacy_btc_utils;
+pub mod address;
+pub mod bip322;
+pub mod bip340;
+pub mod bytes_utils;
+pub mod decoder;
+pub mod encoder;
+pub mod hash;
+pub mod keys;
+pub mod legacy_signature;
+pub mod taproot;
 
 #[cfg(test)]
 mod tests;
-use bip322_utils::bip322_msg_hash;
-use bip340_utils::verify_bip340_signature;
-use legacy_btc_utils::{
-    verify_legacy_signature
-};
+pub mod types;

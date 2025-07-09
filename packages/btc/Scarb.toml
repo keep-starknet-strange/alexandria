@@ -1,13 +1,19 @@
 [package]
 name = "alexandria_btc"
 version.workspace = true
-description = "An implementation of basic BTC functions written in Cairo 1"
+description = "Bitcoin utilities for Cairo - address generation, key management, and more"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/btc"
 edition = "2023_11"
 cairo-version = "2.11.2"
 
+[tool]
+fmt.workspace = true
+
 [dependencies]
-ripemd160 = { git = "https://github.com/j1mbo64/ripemd160_cairo.git" }
+alexandria_encoding = { path = "../encoding", version = "0.5.1" }
+alexandria_data_structures = { path = "../data_structures", version = "0.5.1" }
+alexandria_math = { path = "../math", version = "0.5.1" }
+alexandria_bytes = { path = "../bytes", version = "0.5.1" }
 
 [dev-dependencies]
-cairo_test = "2.11.2"
+cairo_test.workspace = true
