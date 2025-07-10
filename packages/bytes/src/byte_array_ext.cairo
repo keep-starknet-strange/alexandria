@@ -241,7 +241,7 @@ pub trait ByteArrayTraitExt {
     /// * `value` - The value to append
     fn append_u64(ref self: ByteArray, value: u64);
     /// Appends a 64-bit unsigned integer to the `ByteArray` in little-endian format.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The ByteArray to append to
     /// * `value` - The value to append
     fn append_u64_le(ref self: ByteArray, value: u64);
@@ -251,7 +251,7 @@ pub trait ByteArrayTraitExt {
     /// * `value` - The value to append
     fn append_u128(ref self: ByteArray, value: u128);
     /// Appends a 128-bit unsigned integer to the `ByteArray` in little-endian format.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The ByteArray to append to
     /// * `value` - The value to append
     fn append_u128_le(ref self: ByteArray, value: u128);
@@ -261,7 +261,7 @@ pub trait ByteArrayTraitExt {
     /// * `value` - The value to append
     fn append_u256(ref self: ByteArray, value: u256);
     /// Appends a 256-bit unsigned integer to the `ByteArray` in little-endian format.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The ByteArray to append to
     /// * `value` - The value to append
     fn append_u256_le(ref self: ByteArray, value: u256);
@@ -276,7 +276,7 @@ pub trait ByteArrayTraitExt {
     /// * `value` - The value to append
     fn append_felt252(ref self: ByteArray, value: felt252);
     /// Appends bytes data of size `count` ordered in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `bytes` - little endian ordered bytes to append
     /// * `count` - number of bytes from input to append
     fn append_bytes_le(ref self: ByteArray, bytes: felt252, count: usize);

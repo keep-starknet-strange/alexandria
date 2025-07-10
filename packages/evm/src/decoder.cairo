@@ -26,13 +26,7 @@ pub trait AbiDecodeTrait {
     /// * `types` - A list (`Span`) of `EVMTypes` to decode from the current calldata position.
     ///
     /// #### Returns
-    /// * `Span<felt252>` - A Cairo Span containing the decoded values in a form compatible
-    ///                     with Starknet syscalls (e.g., `call_syscall`).
-    ///
-    /// #### Usage
-    /// This function is typically called within ABI decoding logic where calldata
-    /// is parsed and converted into felt-based arguments for invoking other contracts.
-    ///
+    /// * `Span<felt252>` - A Cairo Span containing the decoded values as felt252
     fn decode(
         ref self: EVMCalldata, types: Span<EVMTypes>,
     ) -> Span<felt252>; // Returns span of felt252 which directly will be passed to call_syscall

@@ -111,12 +111,12 @@ pub fn verify(px: u256, rx: u256, s: u256, m: ByteArray) -> bool {
 /// This function checks if the signature is valid for a message `m` with
 /// respect to the public key `px`.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `px`: `u256` - The x-coordinate of the public key.
 /// * `sig`: `Signature` - The signature containing r, s, and y_parity.
 /// * `m`: `ByteArray` - The message for which the signature is being verified.
 ///
-/// # Returns
+/// #### Returns
 /// * `bool` - `true` if the signature is verified for the message and public key, `false`
 /// otherwise.
 pub fn verify_signature(px: u256, sig: Signature, m: ByteArray) -> bool {

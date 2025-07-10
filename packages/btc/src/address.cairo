@@ -20,9 +20,6 @@ use crate::types::{
 ///
 /// #### Returns
 /// * `BitcoinAddress` - Complete address structure with encoded address, script, and metadata
-///
-/// ### Usage
-/// Used when you have a private key and want to generate its corresponding address.
 pub fn private_key_to_address(
     private_key: BitcoinPrivateKey, address_type: BitcoinAddressType,
 ) -> BitcoinAddress {
@@ -43,8 +40,6 @@ pub fn private_key_to_address(
 /// #### Returns
 /// * `BitcoinAddress` - Complete address structure including encoded address and script_pubkey
 ///
-/// ### Usage
-/// Primary function for generating Bitcoin addresses when you have a public key.
 pub fn public_key_to_address(
     public_key: BitcoinPublicKey, address_type: BitcoinAddressType, network: BitcoinNetwork,
 ) -> BitcoinAddress {
@@ -67,9 +62,6 @@ pub fn public_key_to_address(
 ///
 /// #### Returns
 /// * `Array<u8>` - Base58Check encoded address bytes
-///
-/// ### Usage
-/// Used internally for encoding legacy Bitcoin addresses (P2PKH, P2SH).
 fn encode_base58_check(payload: Span<u8>) -> Array<u8> {
     // Calculate double SHA256 checksum
     let first_hash = sha256(payload);
@@ -105,9 +97,6 @@ fn encode_base58_check(payload: Span<u8>) -> Array<u8> {
 ///
 /// #### Returns
 /// * `BitcoinAddress` - P2PKH address with corresponding script_pubkey
-///
-/// ### Script Format
-/// Creates script: OP_DUP OP_HASH160 <pubkey_hash> OP_EQUALVERIFY OP_CHECKSIG
 fn generate_p2pkh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) -> BitcoinAddress {
     let pubkey_hash = public_key_hash(public_key);
 
@@ -155,9 +144,6 @@ fn generate_p2pkh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork)
 ///
 /// #### Returns
 /// * `BitcoinAddress` - P2SH address with corresponding script_pubkey
-///
-/// ### Script Format
-/// Creates script: OP_HASH160 <script_hash> OP_EQUAL
 fn generate_p2sh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) -> BitcoinAddress {
     // For simplicity, we'll create a P2SH-wrapped P2WPKH
     let pubkey_hash = public_key_hash(public_key);
@@ -215,9 +201,6 @@ fn generate_p2sh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) 
 ///
 /// #### Returns
 /// * `BitcoinAddress` - P2WPKH address with corresponding script_pubkey
-///
-/// ### Script Format
-/// Creates script: OP_0 <pubkey_hash>
 fn generate_p2wpkh_address(
     public_key: BitcoinPublicKey, network: BitcoinNetwork,
 ) -> BitcoinAddress {
@@ -267,9 +250,6 @@ fn generate_p2wpkh_address(
 ///
 /// #### Returns
 /// * `BitcoinAddress` - P2WSH address with corresponding script_pubkey
-///
-/// ### Script Format
-/// Creates script: OP_0 <script_hash>
 fn generate_p2wsh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) -> BitcoinAddress {
     let pubkey_bytes = public_key_to_bytes(public_key);
 
@@ -330,9 +310,6 @@ fn generate_p2wsh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork)
 ///
 /// #### Returns
 /// * `BitcoinAddress` - P2TR address with corresponding script_pubkey
-///
-/// ### Script Format
-/// Creates script: OP_1 <output_key>
 fn generate_p2tr_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) -> BitcoinAddress {
     // Use the x-coordinate of the public key as the internal key
     let internal_key = public_key.get_x_coordinate();
@@ -396,9 +373,6 @@ fn generate_p2tr_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) 
 ///
 /// #### Returns
 /// * `bool` - True if the address format appears valid, false otherwise
-///
-/// ### Usage
-/// Used to verify address format before attempting to use it in transactions.
 pub fn validate_address(address: ByteArray, network: BitcoinNetwork) -> bool {
     // Basic validation - in a real implementation this would be more comprehensive
     if address.len() < 26 || address.len() > 62 {

@@ -9,7 +9,7 @@ use core::poseidon::PoseidonTrait;
 /// to represent internal nodes that split paths into left and right branches.
 /// This structure is fundamental for Starknet's storage proof verification.
 ///
-/// ### Fields
+/// #### Fields
 /// * `left` - Hash of the left child node
 /// * `right` - Hash of the right child node
 #[derive(Drop, Serde)]

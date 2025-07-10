@@ -9,14 +9,11 @@ use core::sha256::compute_sha256_byte_array;
 /// and script operations. Applies SHA256 followed by RIPEMD160 to produce a
 /// 20-byte hash output.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `data` - Input data to hash as a span of bytes
 ///
-/// # Returns
+/// #### Returns
 /// * `Array<u8>` - 20-byte Hash160 result
-///
-/// # Usage
-/// Primary hashing function for Bitcoin public key hashes and script hashes.
 pub fn hash160(data: Span<u8>) -> Array<u8> {
     // Convert span to ByteArray for SHA256
     let byte_array = data.into();
@@ -89,14 +86,11 @@ pub fn hash160(data: Span<u8>) -> Array<u8> {
 /// block hashes, and Base58Check checksums. Applies SHA256 twice for
 /// additional security.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `data` - Input data to hash as a span of bytes
 ///
-/// # Returns
+/// #### Returns
 /// * `Array<u8>` - 32-byte Hash256 result
-///
-/// # Usage
-/// Used for transaction hashes, block hashes, and checksum calculations.
 pub fn hash256(data: Span<u8>) -> Array<u8> {
     // First SHA256
     let first_sha256 = sha256(data);
@@ -112,14 +106,11 @@ pub fn hash256(data: Span<u8>) -> Array<u8> {
 /// Provides a wrapper around the core SHA256 implementation to convert
 /// between different data formats and produce byte array output.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `data` - Input data to hash as a span of bytes
 ///
-/// # Returns
+/// #### Returns
 /// * `Array<u8>` - 32-byte SHA256 hash result
-///
-/// # Usage
-/// Used as a building block for other hash functions and direct SHA256 operations.
 pub fn sha256(data: Span<u8>) -> Array<u8> {
     // Convert span to ByteArray for SHA256
     let mut byte_array: ByteArray = data.into();
@@ -179,14 +170,11 @@ pub fn sha256(data: Span<u8>) -> Array<u8> {
 /// Computes Hash256 of the input data and returns the first 4 bytes
 /// as a checksum for Base58Check encoding used in legacy Bitcoin addresses.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `data` - Input data (version byte + payload) to calculate checksum for
 ///
-/// # Returns
+/// #### Returns
 /// * `Array<u8>` - 4-byte checksum
-///
-/// # Usage
-/// Used in Base58Check encoding for legacy Bitcoin address format validation.
 pub fn checksum(data: Span<u8>) -> Array<u8> {
     let hash = hash256(data);
     // Return first 4 bytes
@@ -200,14 +188,11 @@ pub fn checksum(data: Span<u8>) -> Array<u8> {
 /// Optimized version of hash160 that works directly with ByteArray data
 /// without requiring conversion to Span<u8> first.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `data` - Input data as a ByteArray reference
 ///
-/// # Returns
+/// #### Returns
 /// * `Array<u8>` - 20-byte Hash160 result
-///
-/// # Usage
-/// Efficient Hash160 computation when working with ByteArray data structures.
 pub fn hash160_from_byte_array(data: @ByteArray) -> Array<u8> {
     // SHA256 hash
     let [w0, w1, w2, w3, w4, w5, w6, w7] = compute_sha256_byte_array(data);
@@ -269,14 +254,11 @@ pub fn hash160_from_byte_array(data: @ByteArray) -> Array<u8> {
 /// Optimized version of sha256 that works directly with ByteArray data
 /// without requiring conversion to Span<u8> first.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `data` - Input data as a ByteArray reference
 ///
-/// # Returns
+/// #### Returns
 /// * `Array<u8>` - 32-byte SHA256 hash result
-///
-/// # Usage
-/// Efficient SHA256 computation when working with ByteArray data structures.
 pub fn sha256_from_byte_array(data: @ByteArray) -> Array<u8> {
     // SHA256 hash
     let [w0, w1, w2, w3, w4, w5, w6, w7] = compute_sha256_byte_array(data);
@@ -333,14 +315,11 @@ pub fn sha256_from_byte_array(data: @ByteArray) -> Array<u8> {
 /// Optimized version of hash256 that works directly with ByteArray data
 /// without requiring conversion to Span<u8> first.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `data` - Input data as a ByteArray reference
 ///
-/// # Returns
+/// #### Returns
 /// * `Array<u8>` - 32-byte Hash256 result
-///
-/// # Usage
-/// Efficient Hash256 computation when working with ByteArray data structures.
 pub fn hash256_from_byte_array(data: @ByteArray) -> Array<u8> {
     // First SHA256
     let first_hash_bytes = sha256_from_byte_array(data);
