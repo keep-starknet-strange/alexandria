@@ -6,6 +6,17 @@ use crate::bit_array::one_shift_left_bytes_felt252;
 use crate::byte_appender::{ByteAppender, ByteAppenderSupportTrait};
 
 
+/// Implementation for converting a Span<u8> to a ByteArray
+///
+/// This conversion creates a new ByteArray by iterating through each byte
+/// in the span and appending it to the ByteArray. This is useful for converting
+/// byte spans to the more efficient ByteArray representation.
+///
+/// #### Arguments
+/// * `self` - The Span<u8> to convert to ByteArray
+///
+/// #### Returns
+/// * `ByteArray` - A new ByteArray containing all bytes from the input span
 pub impl SpanU8IntoByteArray of Into<Span<u8>, ByteArray> {
     #[inline]
     fn into(self: Span<u8>) -> ByteArray {
@@ -19,12 +30,34 @@ pub impl SpanU8IntoByteArray of Into<Span<u8>, ByteArray> {
     }
 }
 
+/// Implementation for converting an Array<u8> to a ByteArray
+///
+/// This conversion creates a new ByteArray from an Array<u8> by first converting
+/// the array to a span and then using the SpanU8IntoByteArray implementation.
+/// This provides a convenient way to convert byte arrays to ByteArray format.
+///
+/// #### Arguments
+/// * `self` - The Array<u8> to convert to ByteArray
+///
+/// #### Returns
+/// * `ByteArray` - A new ByteArray containing all bytes from the input array
 impl ArrayU8IntoByteArray of Into<Array<u8>, ByteArray> {
     fn into(self: Array<u8>) -> ByteArray {
         self.span().into()
     }
 }
 
+/// Implementation for converting a ByteArray to an Array<u8>
+///
+/// This conversion creates a new Array<u8> by iterating through each byte
+/// in the ByteArray and appending it to the array. This is useful when you need
+/// to work with individual bytes or interface with functions that expect Array<u8>.
+///
+/// #### Arguments
+/// * `self` - The ByteArray to convert to Array<u8>
+///
+/// #### Returns
+/// * `Array<u8>` - A new Array<u8> containing all bytes from the input ByteArray
 pub impl ByteArrayIntoArrayU8 of Into<ByteArray, Array<u8>> {
     fn into(self: ByteArray) -> Array<u8> {
         let mut reader: u32 = 0;
@@ -44,48 +77,68 @@ pub trait ByteArrayTraitExt {
     /// #### Arguments
     /// * `size` - The size of the ByteArray
     /// * `data` - Array of u128 values to create ByteArray from
+    /// #### Returns
+    /// * `ByteArray` - A new ByteArray created from the input data
     fn new(size: usize, data: Array<u128>) -> ByteArray;
     /// instantiate a new ByteArray
+    /// #### Returns
+    /// * `ByteArray` - A new empty ByteArray
     fn new_empty() -> ByteArray;
     // get size. Same as len()
     /// #### Arguments
     /// * `self` - The ByteArray to get the size of
+    /// #### Returns
+    /// * `usize` - The size of the ByteArray
     fn size(self: @ByteArray) -> usize;
     /// Reads a 8-bit unsigned integer from the given offset.
     /// #### Arguments
     /// * `self` - The ByteArray to read from
     /// * `offset` - The offset to read from
+    /// #### Returns
+    /// * `(usize, u8)` - The new offset and the u8 value read
     fn read_u8(self: @ByteArray, offset: usize) -> (usize, u8);
     /// Reads a 16-bit unsigned integer from the given offset.
     /// #### Arguments
     /// * `self` - The ByteArray to read from
     /// * `offset` - The offset to read from
+    /// #### Returns
+    /// * `(usize, u16)` - The new offset and the u16 value read
     fn read_u16(self: @ByteArray, offset: usize) -> (usize, u16);
     /// Reads a 32-bit unsigned integer from the given offset.
     /// #### Arguments
     /// * `self` - The ByteArray to read from
     /// * `offset` - The offset to read from
+    /// #### Returns
+    /// * `(usize, u32)` - The new offset and the u32 value read
     fn read_u32(self: @ByteArray, offset: usize) -> (usize, u32);
     /// Reads a `usize` from the given offset.
     /// #### Arguments
     /// * `self` - The ByteArray to read from
     /// * `offset` - The offset to read from
+    /// #### Returns
+    /// * `(usize, usize)` - The new offset and the usize value read
     fn read_usize(self: @ByteArray, offset: usize) -> (usize, usize);
     /// Reads a 64-bit unsigned integer from the given offset.
     /// #### Arguments
     /// * `self` - The ByteArray to read from
     /// * `offset` - The offset to read from
+    /// #### Returns
+    /// * `(usize, u64)` - The new offset and the u64 value read
     fn read_u64(self: @ByteArray, offset: usize) -> (usize, u64);
     /// Reads a 128-bit unsigned integer from the given offset.
     /// #### Arguments
     /// * `self` - The ByteArray to read from
     /// * `offset` - The offset to read from
+    /// #### Returns
+    /// * `(usize, u128)` - The new offset and the u128 value read
     fn read_u128(self: @ByteArray, offset: usize) -> (usize, u128);
     /// Read value with size bytes from ByteArray, and packed into u128
     /// #### Arguments
     /// * `self` - The ByteArray to read from
     /// * `offset` - The offset to read from
     /// * `size` - The number of bytes to read
+    /// #### Returns
+    /// * `(usize, u128)` - The new offset and the packed u128 value
     fn read_u128_packed(self: @ByteArray, offset: usize, size: usize) -> (usize, u128);
     /// Reads a packed array of `u128` values from the given offset.
     /// #### Arguments
@@ -93,6 +146,8 @@ pub trait ByteArrayTraitExt {
     /// * `offset` - The offset to read from
     /// * `array_length` - The length of the array to read
     /// * `element_size` - The size of each element in bytes
+    /// #### Returns
+    /// * `(usize, Array<u128>)` - The new offset and the array of u128 values
     fn read_u128_array_packed(
         self: @ByteArray, offset: usize, array_length: usize, element_size: usize,
     ) -> (usize, Array<u128>);
@@ -100,12 +155,16 @@ pub trait ByteArrayTraitExt {
     /// #### Arguments
     /// * `self` - The ByteArray to read from
     /// * `offset` - The offset to read from
+    /// #### Returns
+    /// * `(usize, u256)` - The new offset and the u256 value read
     fn read_u256(self: @ByteArray, offset: usize) -> (usize, u256);
     /// Reads an array of `u256` values from the given offset.
     /// #### Arguments
     /// * `self` - The ByteArray to read from
     /// * `offset` - The offset to read from
     /// * `array_length` - The length of the array to read
+    /// #### Returns
+    /// * `(usize, Array<u256>)` - The new offset and the array of u256 values
     fn read_u256_array(
         self: @ByteArray, offset: usize, array_length: usize,
     ) -> (usize, Array<u256>);
@@ -113,28 +172,38 @@ pub trait ByteArrayTraitExt {
     /// #### Arguments
     /// * `self` - The ByteArray to read from
     /// * `offset` - The offset to read from
+    /// #### Returns
+    /// * `(usize, felt252)` - The new offset and the felt252 value read
     fn read_felt252(self: @ByteArray, offset: usize) -> (usize, felt252);
     /// Read value with size bytes from Bytes, and packed into felt252
     /// #### Arguments
     /// * `self` - The ByteArray to read from
     /// * `offset` - The offset to read from
     /// * `size` - The number of bytes to read
+    /// #### Returns
+    /// * `(usize, felt252)` - The new offset and the packed felt252 value
     fn read_felt252_packed(self: @ByteArray, offset: usize, size: usize) -> (usize, felt252);
     /// Reads a `bytes31` value (31-byte sequence) from the given offset.
     /// #### Arguments
     /// * `self` - The ByteArray to read from
     /// * `offset` - The offset to read from
+    /// #### Returns
+    /// * `(usize, bytes31)` - The new offset and the bytes31 value read
     fn read_bytes31(self: @ByteArray, offset: usize) -> (usize, bytes31);
     /// Reads a Starknet contract address from the given offset.
     /// #### Arguments
     /// * `self` - The ByteArray to read from
     /// * `offset` - The offset to read from
+    /// #### Returns
+    /// * `(usize, ContractAddress)` - The new offset and the contract address
     fn read_address(self: @ByteArray, offset: usize) -> (usize, ContractAddress);
     /// Reads a raw sequence of bytes of given `size` from the given offset.
     /// #### Arguments
     /// * `self` - The ByteArray to read from
     /// * `offset` - The offset to read from
     /// * `size` - The number of bytes to read
+    /// #### Returns
+    /// * `(usize, ByteArray)` - The new offset and the read bytes as ByteArray
     fn read_bytes(self: @ByteArray, offset: usize, size: usize) -> (usize, ByteArray);
     /// Appends a 8-bit unsigned integer to the `ByteArray`.
     /// #### Arguments
@@ -147,7 +216,7 @@ pub trait ByteArrayTraitExt {
     /// * `value` - The value to append
     fn append_u16(ref self: ByteArray, value: u16);
     /// Appends a 16-bit unsigned integer to the `ByteArray` in little-endian format.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The ByteArray to append to
     /// * `value` - The value to append
     fn append_u16_le(ref self: ByteArray, value: u16);
@@ -157,7 +226,7 @@ pub trait ByteArrayTraitExt {
     /// * `value` - The value to append
     fn append_u32(ref self: ByteArray, value: u32);
     /// Appends a 32-bit unsigned integer to the `ByteArray` in little-endian format.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The ByteArray to append to
     /// * `value` - The value to append
     fn append_u32_le(ref self: ByteArray, value: u32);

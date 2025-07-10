@@ -23,6 +23,19 @@ pub trait ReversibleBits<T> {
     fn reverse_bits(self: @T) -> T;
 }
 
+/// Reverses the order of elements in a value by extracting and reassembling them
+///
+/// This generic function reverses the ordering of elements within a value by repeatedly
+/// dividing by a step size and building the result in reverse order. It's commonly used
+/// for reversing bits or bytes within numeric types.
+///
+/// #### Arguments
+/// * `word` - The value to reverse
+/// * `size` - The number of elements to reverse
+/// * `step` - The step size for each element (e.g., 2 for bits, 256 for bytes)
+///
+/// #### Returns
+/// * `(T, T)` - A tuple containing (reversed_value, remaining_value)
 #[inline]
 pub fn reversing<
     T,
@@ -41,6 +54,20 @@ pub fn reversing<
     reversing_partial_result(word, result, size, step)
 }
 
+/// Reverses elements from a word onto an existing partial result
+///
+/// This function extends the reversing operation by allowing it to build upon
+/// an existing partial result. It extracts elements from the input word and
+/// appends them to the ongoing result, useful for multi-stage reversing operations.
+///
+/// #### Arguments
+/// * `word` - The value to extract elements from for reversal
+/// * `onto` - The existing partial result to build upon
+/// * `size` - The number of elements to reverse and append
+/// * `step` - The step size for each element (e.g., 2 for bits, 256 for bytes)
+///
+/// #### Returns
+/// * `(T, T)` - A tuple containing (final_result_with_appended_elements, remaining_word)
 #[inline]
 pub fn reversing_partial_result<
     T,

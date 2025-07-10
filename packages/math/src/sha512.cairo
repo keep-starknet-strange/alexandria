@@ -177,10 +177,24 @@ pub impl Word64WordOperations of WordOperations<Word64> {
 }
 
 
+/// SHA-512 choice function: x chooses between y and z
+/// #### Arguments
+/// * `x` - Control value for choosing between y and z
+/// * `y` - First choice value
+/// * `z` - Second choice value
+/// #### Returns
+/// * `Word64` - Result of (x & y) ^ (~x & z)
 fn ch(x: Word64, y: Word64, z: Word64) -> Word64 {
     (x & y) ^ (~x & z)
 }
 
+/// SHA-512 majority function: returns majority bit of three inputs
+/// #### Arguments
+/// * `x` - First input value
+/// * `y` - Second input value
+/// * `z` - Third input value
+/// #### Returns
+/// * `Word64` - Result of (x & y) ^ (x & z) ^ (y & z)
 fn maj(x: Word64, y: Word64, z: Word64) -> Word64 {
     (x & y) ^ (x & z) ^ (y & z)
 }
@@ -221,7 +235,12 @@ fn ssig1(x: Word64) -> Word64 {
         ^ math_shr_precomputed::<u64>(x.data, TWO_POW_64_MINUS_6).into() // 2 ** 6
 }
 
-/// Calculates base ** power
+/// Calculates base raised to the power using fast exponentiation
+/// #### Arguments
+/// * `base` - The base value (must be non-zero)
+/// * `power` - The exponent
+/// #### Returns
+/// * `u128` - The result of base^power
 pub fn fpow(mut base: u128, mut power: u128) -> u128 {
     // Return invalid input error
     assert!(base != 0, "fpow: invalid input");
@@ -242,9 +261,17 @@ pub fn fpow(mut base: u128, mut power: u128) -> u128 {
 const two_squarings: [u64; 6] = [
     TWO_POW_1, TWO_POW_2, TWO_POW_4, TWO_POW_8, TWO_POW_16, TWO_POW_32,
 ];
-// Uses cache for faster powers of 2 in a u128
-// Uses TWO_POW_* constants
-// Generic T to use with both u128 and u64
+/// Computes 2^power using cached powers of 2 for optimization
+///
+/// This function efficiently calculates powers of 2 using pre-computed constants
+/// and binary exponentiation. It supports generic types that implement the required
+/// arithmetic traits, commonly used for u64 and u128 types.
+///
+/// #### Arguments
+/// * `power` - The exponent for computing 2^power
+///
+/// #### Returns
+/// * `T` - The result of 2^power in the specified type T
 pub fn two_pow<T, +DivRem<T>, +Mul<T>, +Into<u64, T>, +Drop<T>>(mut power: u64) -> T {
     let mut i = 0;
     let mut result: T = 1_u64.into();
@@ -262,16 +289,34 @@ pub fn two_pow<T, +DivRem<T>, +Mul<T>, +Into<u64, T>, +Drop<T>>(mut power: u64) 
 }
 
 // Shift left with math_shl_precomputed function
+/// Performs left shift operation using precomputed powers of 2
+/// #### Arguments
+/// * `x` - Value to shift
+/// * `n` - Number of positions to shift left
+/// #### Returns
+/// * `u128` - Result of x << n
 fn math_shl(x: u128, n: u64) -> u128 {
     math_shl_precomputed(x, two_pow(n))
 }
 
 // Shift right with math_shr_precomputed function
+/// Performs right shift operation using precomputed powers of 2
+/// #### Arguments
+/// * `x` - Value to shift
+/// * `n` - Number of positions to shift right
+/// #### Returns
+/// * `u128` - Result of x >> n
 fn math_shr(x: u128, n: u64) -> u128 {
     math_shr_precomputed(x, two_pow(n))
 }
 
 // Shift left with precomputed powers of 2
+/// Performs left shift using precomputed power of 2 value
+/// #### Arguments
+/// * `x` - Value to shift
+/// * `two_power_n` - Precomputed value of 2^n
+/// #### Returns
+/// * `T` - Result of x * 2^n (equivalent to x << n)
 fn math_shl_precomputed<T, +Mul<T>, +Rem<T>, +Drop<T>, +Copy<T>, +Into<T, u128>>(
     x: T, two_power_n: T,
 ) -> T {
@@ -279,6 +324,12 @@ fn math_shl_precomputed<T, +Mul<T>, +Rem<T>, +Drop<T>, +Copy<T>, +Into<T, u128>>
 }
 
 // Shift right with precomputed powers of 2
+/// Performs right shift using precomputed power of 2 value
+/// #### Arguments
+/// * `x` - Value to shift
+/// * `two_power_n` - Precomputed value of 2^n
+/// #### Returns
+/// * `T` - Result of x / 2^n (equivalent to x >> n)
 fn math_shr_precomputed<T, +Div<T>, +Rem<T>, +Drop<T>, +Copy<T>, +Into<T, u128>>(
     x: T, two_power_n: T,
 ) -> T {
@@ -286,15 +337,31 @@ fn math_shr_precomputed<T, +Div<T>, +Rem<T>, +Drop<T>, +Copy<T>, +Into<T, u128>>
 }
 
 // Shift left wrapper for u64
+/// Performs left shift on u64 with overflow protection
+/// #### Arguments
+/// * `x` - u64 value to shift
+/// * `n` - Number of positions to shift left
+/// #### Returns
+/// * `u64` - Result of x << n with overflow handling
 fn math_shl_u64(x: u64, n: u64) -> u64 {
     (math_shl(x.into(), n) % Bounded::<u64>::MAX.into()).try_into().unwrap()
 }
 
 // Shift right wrapper for u64
+/// Performs right shift on u64 with overflow protection
+/// #### Arguments
+/// * `x` - u64 value to shift
+/// * `n` - Number of positions to shift right
+/// #### Returns
+/// * `u64` - Result of x >> n with overflow handling
 fn math_shr_u64(x: u64, n: u64) -> u64 {
     (math_shr(x.into(), n) % Bounded::<u64>::MAX.into()).try_into().unwrap()
 }
 
+/// Adds trailing zero bytes for SHA-512 padding
+/// #### Arguments
+/// * `data` - Reference to the data array to pad
+/// * `msg_len` - Original message length for padding calculation
 fn add_trailing_zeroes(ref data: Array<u8>, msg_len: usize) {
     let mdi = msg_len % 128;
     let padding_len = if (mdi < 112) {
@@ -310,6 +377,11 @@ fn add_trailing_zeroes(ref data: Array<u8>, msg_len: usize) {
     };
 }
 
+/// Converts byte array to Word64 array for SHA-512 processing
+/// #### Arguments
+/// * `data` - Array of u8 bytes to convert
+/// #### Returns
+/// * `Array<Word64>` - Array of Word64 values (8 bytes per word)
 fn from_u8Array_to_WordArray(data: Array<u8>) -> Array<Word64> {
     let mut new_arr: Array<Word64> = array![];
     let mut i = 0;
@@ -331,6 +403,11 @@ fn from_u8Array_to_WordArray(data: Array<u8>) -> Array<Word64> {
     new_arr
 }
 
+/// Converts Word64 array back to byte array for final hash output
+/// #### Arguments
+/// * `data` - Span of Word64 values to convert
+/// #### Returns
+/// * `Array<u8>` - Array of u8 bytes (8 bytes per word)
 fn from_WordArray_to_u8array(data: Span<Word64>) -> Array<u8> {
     let mut arr: Array<u8> = array![];
 
@@ -358,6 +435,12 @@ fn from_WordArray_to_u8array(data: Span<Word64>) -> Array<u8> {
     arr
 }
 
+/// Main SHA-512 digest function that processes message blocks
+/// #### Arguments
+/// * `data` - Message data as Word64 array
+/// * `msg_len` - Length of the original message
+/// #### Returns
+/// * `Array<Word64>` - Final hash digest as Word64 array
 fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
     let k = get_k().span();
     let h = get_h().span();
@@ -430,6 +513,17 @@ fn digest_hash(data: Span<Word64>, msg_len: usize) -> Array<Word64> {
     array![h_0, h_1, h_2, h_3, h_4, h_5, h_6, h_7]
 }
 
+/// Computes SHA-512 hash of the input data
+///
+/// This function implements the SHA-512 cryptographic hash algorithm following RFC 6234.
+/// It processes the input by padding it appropriately, then processing in 1024-bit blocks
+/// through 80 rounds of operations using the SHA-512 compression function.
+///
+/// #### Arguments
+/// * `data` - Array of bytes to be hashed
+///
+/// #### Returns
+/// * `Array<u8>` - The 64-byte SHA-512 hash digest as an array of bytes
 pub fn sha512(mut data: Array<u8>) -> Array<u8> {
     let bit_numbers: u128 = data.len().into() * 8;
     // any u32 * 8 fits in u64
@@ -470,6 +564,10 @@ pub fn sha512(mut data: Array<u8>) -> Array<u8> {
     from_WordArray_to_u8array(hash.span())
 }
 
+/// Returns the SHA-512 initial hash values (first 64 bits of fractional parts of square roots of
+/// first 8 primes)
+/// #### Returns
+/// * `Array<Word64>` - Array of 8 initial hash values
 fn get_h() -> Array<Word64> {
     let mut h: Array<Word64> = array![];
     h.append(Word64 { data: 0x6a09e667f3bcc908 });
@@ -483,6 +581,10 @@ fn get_h() -> Array<Word64> {
     h
 }
 
+/// Returns the SHA-512 round constants (first 64 bits of fractional parts of cube roots of first 80
+/// primes)
+/// #### Returns
+/// * `Array<Word64>` - Array of 80 round constants
 fn get_k() -> Array<Word64> {
     let mut k: Array<Word64> = array![];
     k.append(Word64 { data: 0x428a2f98d728ae22 });

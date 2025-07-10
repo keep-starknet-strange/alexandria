@@ -515,7 +515,17 @@ impl BitArraySerde of Serde<BitArray> {
     }
 }
 
-// helper
+/// Computes 2^number for bit positions 0-7 within a byte
+///
+/// This helper function returns the value of 2 raised to the given power,
+/// specifically designed for bit manipulation within a single byte (0-7 bit positions).
+/// It provides fast lookup for common bit shift operations.
+///
+/// #### Arguments
+/// * `number` - The bit position (0-7) to compute 2^number for
+///
+/// #### Returns
+/// * `u8` - The value 2^number as a u8, panics if number > 7
 #[inline(always)]
 pub fn shift_bit(number: usize) -> u8 {
     if number == 0 {
@@ -550,7 +560,17 @@ fn select(word: felt252, byte_index: usize, bit_index: usize) -> bool {
     (shifted_bytes / shift_bit(bit_index).into()) % SELECT_BIT == 1
 }
 
-// TODO Copied from standard library as those aren't visible anymore
+/// Computes 256^n_bytes for felt252 byte shifting operations
+///
+/// This function calculates the value needed to shift bytes within a felt252 value.
+/// Since felt252 can hold up to 31 bytes, this function handles the full range
+/// by splitting calculations between the low and high 128-bit parts when necessary.
+///
+/// #### Arguments
+/// * `n_bytes` - The number of byte positions to shift (0-30)
+///
+/// #### Returns
+/// * `felt252` - The value 256^n_bytes for byte shifting operations
 pub fn one_shift_left_bytes_felt252(n_bytes: usize) -> felt252 {
     if n_bytes < BYTES_IN_U128 {
         one_shift_left_bytes_u128(n_bytes).into()
@@ -559,6 +579,17 @@ pub fn one_shift_left_bytes_felt252(n_bytes: usize) -> felt252 {
     }
 }
 
+/// Computes 256^n_bytes for u128 byte shifting operations
+///
+/// This function provides a lookup table for powers of 256 up to 256^15,
+/// which covers the full range of byte positions within a u128 value.
+/// Each position represents shifting by one byte (8 bits) to the left.
+///
+/// #### Arguments
+/// * `n_bytes` - The number of byte positions to shift (0-15)
+///
+/// #### Returns
+/// * `u128` - The value 256^n_bytes, panics if n_bytes > 15
 pub fn one_shift_left_bytes_u128(n_bytes: usize) -> u128 {
     match n_bytes {
         0 => 0x1,

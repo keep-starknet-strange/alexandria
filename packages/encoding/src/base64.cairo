@@ -71,6 +71,7 @@ pub trait ByteArrayDecoder {
     fn decode(data: ByteArray) -> ByteArray;
 }
 
+/// Standard Base64 encoder implementation for Array<u8>
 pub impl Base64Encoder of Encoder<Array<u8>> {
     fn encode(data: Array<u8>) -> Array<u8> {
         let mut char_set = get_base64_char_set();
@@ -80,6 +81,7 @@ pub impl Base64Encoder of Encoder<Array<u8>> {
     }
 }
 
+/// URL-safe Base64 encoder implementation for Array<u8>
 pub impl Base64UrlEncoder of Encoder<Array<u8>> {
     fn encode(data: Array<u8>) -> Array<u8> {
         let mut char_set = get_base64_char_set();
@@ -89,6 +91,7 @@ pub impl Base64UrlEncoder of Encoder<Array<u8>> {
     }
 }
 
+/// Standard Base64 encoder implementation for felt252
 pub impl Base64FeltEncoder of Encoder<felt252> {
     fn encode(data: felt252) -> Array<u8> {
         let mut char_set = get_base64_char_set();
@@ -98,6 +101,7 @@ pub impl Base64FeltEncoder of Encoder<felt252> {
     }
 }
 
+/// URL-safe Base64 encoder implementation for felt252
 pub impl Base64UrlFeltEncoder of Encoder<felt252> {
     fn encode(data: felt252) -> Array<u8> {
         let mut char_set = get_base64_char_set();
@@ -107,6 +111,7 @@ pub impl Base64UrlFeltEncoder of Encoder<felt252> {
     }
 }
 
+/// Standard Base64 encoder implementation for ByteArray
 pub impl Base64ByteArrayEncoder of ByteArrayEncoder {
     fn encode(data: ByteArray) -> ByteArray {
         let mut char_set = get_base64_char_set();
@@ -116,6 +121,7 @@ pub impl Base64ByteArrayEncoder of ByteArrayEncoder {
     }
 }
 
+/// URL-safe Base64 encoder implementation for ByteArray
 pub impl Base64ByteArrayUrlEncoder of ByteArrayEncoder {
     fn encode(data: ByteArray) -> ByteArray {
         let mut char_set = get_base64_char_set();
@@ -316,24 +322,32 @@ pub fn encode_byte_array(mut self: ByteArray, base64_chars: Span<u8>) -> ByteArr
     result
 }
 
+/// Standard Base64 decoder implementation for Array<u8>
 pub impl Base64Decoder of Decoder<Array<u8>> {
     fn decode(data: Array<u8>) -> Array<u8> {
         inner_decode(data)
     }
 }
 
+/// URL-safe Base64 decoder implementation for Array<u8>
 pub impl Base64UrlDecoder of Decoder<Array<u8>> {
     fn decode(data: Array<u8>) -> Array<u8> {
         inner_decode(data)
     }
 }
 
+/// Base64 decoder implementation for ByteArray
 pub impl Base64ByteArrayDecoder of ByteArrayDecoder {
     fn decode(data: ByteArray) -> ByteArray {
         decode_byte_array(data)
     }
 }
 
+/// Internal decoding function for Array<u8> Base64 data
+/// #### Arguments
+/// * `data` - Base64 encoded data as Array<u8>
+/// #### Returns
+/// * `Array<u8>` - Decoded binary data
 fn inner_decode(data: Array<u8>) -> Array<u8> {
     let mut result = array![];
 
@@ -499,6 +513,11 @@ fn get_decoded_b3(val: u32) -> u8 {
     (val & 0xFF).try_into().unwrap()
 }
 
+/// Converts a Base64 character to its corresponding 6-bit value
+/// #### Arguments
+/// * `x` - The Base64 character to convert
+/// #### Returns
+/// * `u8` - The 6-bit value (0-63) or 0 for padding/invalid characters
 fn get_base64_value(x: u8) -> u8 {
     // Fast lookup based on ASCII values
     if x == '+' || x == '-' {

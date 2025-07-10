@@ -27,6 +27,19 @@ pub impl Base58Encoder of Encoder<Span<u8>> {
     }
 }
 
+/// Encodes a byte array into Base58 format using the specified character set
+///
+/// This function implements Base58 encoding by treating the input bytes as a big integer
+/// and repeatedly dividing by 58 to get the Base58 digits. Leading zero bytes are preserved
+/// as leading '1' characters in the output. The algorithm uses "big integer division"
+/// to avoid overflow during the conversion process.
+///
+/// #### Arguments
+/// * `bytes` - Span of bytes to encode
+/// * `base58_chars` - Span containing the 58-character Base58 alphabet to use
+///
+/// #### Returns
+/// * `Array<u8>` - The Base58 encoded result as an array of character bytes
 pub fn encode_u8_array(bytes: Span<u8>, base58_chars: Span<u8>) -> Array<u8> {
     let mut result = array![];
     if bytes.len() == 0 {
@@ -87,6 +100,7 @@ pub fn encode_u8_array(bytes: Span<u8>, base58_chars: Span<u8>) -> Array<u8> {
     result
 }
 
+/// Base58 decoder implementation for u8 spans
 pub impl Base58Decoder of Decoder<Span<u8>> {
     fn decode(data: Span<u8>) -> Array<u8> {
         if data.len() == 0 {
@@ -180,6 +194,11 @@ pub impl Base58Decoder of Decoder<Span<u8>> {
     }
 }
 
+/// Converts a Base58 character to its corresponding numeric value
+/// #### Arguments
+/// * `x` - The Base58 character to convert
+/// #### Returns
+/// * `u8` - The numeric value (0-57) or 255 for invalid characters
 // Lookup function using direct values
 fn get_base58_value(x: u8) -> u8 {
     if x == '1' {
@@ -361,6 +380,9 @@ fn get_base58_value(x: u8) -> u8 {
     255
 }
 
+/// Returns the Base58 character set used for encoding
+/// #### Returns
+/// * `Array<u8>` - Array containing all 58 Base58 characters in order
 fn get_base58_char_set() -> Array<u8> {
     array![
         '1',

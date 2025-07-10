@@ -83,6 +83,16 @@ fn u128_add_with_carry(a: u128, b: u128) -> (u128, u128) {
     }
 }
 
+/// Computes the square of a u256 value and returns the result as u512 to handle overflow
+///
+/// This function performs wide multiplication to compute a^2 without losing precision,
+/// using the identity (a.high * 2^128 + a.low)^2 to handle the full 512-bit result.
+///
+/// #### Arguments
+/// * `a` - The u256 value to square
+///
+/// #### Returns
+/// * `u512` - The square of the input value as a 512-bit result
 pub fn u256_wide_sqr(a: u256) -> u512 {
     let u256 { high: limb1, low: limb0 } = WideMul::wide_mul(a.low, a.low);
     let u256 { high: limb2, low: limb1_part } = WideMul::wide_mul(a.low, a.high);
@@ -151,6 +161,19 @@ pub fn pow_mod(mut base: u256, mut pow: u256, mod_non_zero: NonZero<u256>) -> u2
     result
 }
 
+/// Checks if two u256 values are congruent modulo a given modulus
+///
+/// This function computes whether a ≡ b (mod modulo) by comparing their remainders
+/// when divided by the modulus. Two numbers are congruent modulo m if they have
+/// the same remainder when divided by m.
+///
+/// #### Arguments
+/// * `a` - The first u256 value to compare
+/// * `b` - The second u256 value to compare
+/// * `modulo` - The modulus for the congruence test
+///
+/// #### Returns
+/// * `bool` - true if a ≡ b (mod modulo), false otherwise
 pub fn equality_mod(a: u256, b: u256, modulo: u256) -> bool {
     let (_, a_rem) = DivRem::div_rem(a, modulo.try_into().unwrap());
     let (_, b_rem) = DivRem::div_rem(b, modulo.try_into().unwrap());

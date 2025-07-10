@@ -2,6 +2,10 @@ use core::integer::u512;
 use core::ops::index::IndexView;
 use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 
+/// Represents the state of a byte reader for sequential reading operations.
+/// #### Fields
+/// * `data` - A snapshot reference to the underlying data structure
+/// * `index` - The current position in the data for reading operations
 #[derive(Clone, Drop)]
 pub struct ByteReaderState<T> {
     pub(crate) data: @T,
@@ -107,11 +111,11 @@ pub trait ByteReader<T> {
     fn read_u64_le(ref self: ByteReaderState<T>) -> Option<u64>;
     /// Reads a u128 unsigned integer in big endian byte order
     /// #### Returns
-    /// * `Option<u218>` - If there are enough bytes remaining an optional integer is returned
+    /// * `Option<u128>` - If there are enough bytes remaining an optional integer is returned
     fn read_u128(ref self: ByteReaderState<T>) -> Option<u128>;
     /// Reads a u128 unsigned integer in little endian byte order
     /// #### Returns
-    /// * `Option<u218>` - If there are enough bytes remaining an optional integer is returned
+    /// * `Option<u128>` - If there are enough bytes remaining an optional integer is returned
     fn read_u128_le(ref self: ByteReaderState<T>) -> Option<u128>;
     /// Reads a u256 unsigned integer in big endian byte order
     /// #### Returns
@@ -179,6 +183,8 @@ pub trait ByteReader<T> {
     fn len(self: @ByteReaderState<T>) -> usize;
 }
 
+/// Implementation of ByteReader trait for types that support indexing and length operations.
+/// Provides sequential byte reading functionality with big-endian and little-endian support.
 impl ByteReaderImpl<
     T, +Drop<T>, +Len<T>, +IndexView<T, usize>, +Into<IndexView::<T, usize>::Target, @u8>,
 > of ByteReader<T> {
@@ -534,6 +540,12 @@ impl ByteReaderImpl<
     }
 }
 
+/// Parses a signed integer from its two's complement representation.
+/// #### Arguments
+/// * `value` - The unsigned value to interpret as signed
+/// * `bytes` - The number of bytes in the representation
+/// #### Returns
+/// * `Option<T>` - The parsed signed integer, or None if conversion fails
 fn parse_signed<T, +TryInto<felt252, T>>(value: felt252, bytes: usize) -> Option<T> {
     match value.try_into() {
         Option::Some(pos) => Option::Some(pos),
@@ -544,11 +556,16 @@ fn parse_signed<T, +TryInto<felt252, T>>(value: felt252, bytes: usize) -> Option
     }
 }
 
-/// Len trait that abstracts the `len()` property of `Array<u8>`, `Span<u8>` and `ByteArray` types
+/// Trait that abstracts the `len()` property of `Array<u8>`, `Span<u8>` and `ByteArray` types.
+/// Provides a unified interface for getting the length of different byte container types.
 trait Len<T> {
+    /// Returns the length of the container.
+    /// #### Returns
+    /// * `usize` - The number of elements in the container
     fn len(self: @T) -> usize;
 }
 
+/// Implementation of Len trait for Array<u8>.
 impl ArrayU8LenImpl of Len<Array<u8>> {
     #[inline]
     fn len(self: @Array<u8>) -> usize {
@@ -556,6 +573,7 @@ impl ArrayU8LenImpl of Len<Array<u8>> {
     }
 }
 
+/// Implementation of Len trait for Span<u8>.
 impl SpanU8LenImpl of Len<Span<u8>> {
     #[inline]
     fn len(self: @Span<u8>) -> usize {
@@ -564,6 +582,7 @@ impl SpanU8LenImpl of Len<Span<u8>> {
 }
 
 
+/// Implementation of Len trait for ByteArray.
 impl ByteArrayLenImpl of Len<ByteArray> {
     #[inline]
     fn len(self: @ByteArray) -> usize {
@@ -584,6 +603,7 @@ impl ByteReaderLenImpl<T, +Len<T>> of Len<ByteReaderState<T>> {
     }
 }
 
+/// Implementation of Into trait for converting u8 to @u8 reference.
 impl IntoU8Impl of Into<u8, @u8> {
     #[inline(always)]
     fn into(self: u8) -> @u8 {
@@ -591,6 +611,9 @@ impl IntoU8Impl of Into<u8, @u8> {
     }
 }
 
+/// Type alias for ByteReader implementation with Array<u8>.
 impl ArrayU8ReaderImpl = ByteReaderImpl<Array<u8>>;
+/// Type alias for ByteReader implementation with Span<u8>.
 impl SpanU8ReaderImpl = ByteReaderImpl<Span<u8>>;
+/// Type alias for ByteReader implementation with ByteArray.
 impl ByteArrayReaderImpl = ByteReaderImpl<ByteArray>;

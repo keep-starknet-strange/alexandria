@@ -492,6 +492,11 @@ impl BitArraySerde of Serde<BitArray> {
 }
 
 // helper
+/// Returns the bit value at the specified position (power of 2)
+/// #### Arguments
+/// * `number` - The bit position (0-7)
+/// #### Returns
+/// * `u8` - The bit value (1 shifted left by position)
 #[inline(always)]
 pub fn shift_bit(number: usize) -> u8 {
     if number == 0 {
@@ -515,6 +520,13 @@ pub fn shift_bit(number: usize) -> u8 {
     }
 }
 
+/// Selects a specific bit from a word at the given byte and bit indices
+/// #### Arguments
+/// * `word` - The felt252 word to select from
+/// * `byte_index` - The index of the byte within the word
+/// * `bit_index` - The index of the bit within the byte
+/// #### Returns
+/// * `bool` - True if the bit is set, false otherwise
 #[inline(always)]
 fn select(word: felt252, byte_index: usize, bit_index: usize) -> bool {
     let u256 { low, high } = word.into();
@@ -526,6 +538,11 @@ fn select(word: felt252, byte_index: usize, bit_index: usize) -> bool {
     (shifted_bytes / shift_bit(bit_index).into()) % SELECT_BIT == 1
 }
 
+/// Shifts 1 left by the specified number of bytes for felt252 values
+/// #### Arguments
+/// * `n_bytes` - The number of bytes to shift left
+/// #### Returns
+/// * `felt252` - The result of 1 shifted left by n_bytes * 8 bits
 // TODO Copied from standard library as those aren't visible anymore
 pub fn one_shift_left_bytes_felt252(n_bytes: usize) -> felt252 {
     if n_bytes < BYTES_IN_U128 {
@@ -535,6 +552,11 @@ pub fn one_shift_left_bytes_felt252(n_bytes: usize) -> felt252 {
     }
 }
 
+/// Shifts 1 left by the specified number of bytes for u128 values
+/// #### Arguments
+/// * `n_bytes` - The number of bytes to shift left
+/// #### Returns
+/// * `u128` - The result of 1 shifted left by n_bytes * 8 bits
 pub fn one_shift_left_bytes_u128(n_bytes: usize) -> u128 {
     match n_bytes {
         0 => 0x1,

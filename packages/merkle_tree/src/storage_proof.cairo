@@ -3,19 +3,47 @@ use core::hash::HashStateTrait;
 use core::pedersen::PedersenTrait;
 use core::poseidon::PoseidonTrait;
 
+/// Represents a binary node in a Merkle Patricia Trie
+///
+/// A binary node contains exactly two children, commonly used in Merkle trees
+/// to represent internal nodes that split paths into left and right branches.
+/// This structure is fundamental for Starknet's storage proof verification.
+///
+/// ### Fields
+/// * `left` - Hash of the left child node
+/// * `right` - Hash of the right child node
 #[derive(Drop, Serde)]
 pub struct BinaryNode {
     left: felt252,
     right: felt252,
 }
 
+/// Trait for creating and manipulating BinaryNode instances
 #[generate_trait]
 pub impl BinaryNodeImpl of BinaryNodeTrait {
+    /// Creates a new BinaryNode with the specified left and right child hashes
+    ///
+    /// #### Arguments
+    /// * `left` - Hash of the left child node
+    /// * `right` - Hash of the right child node
+    ///
+    /// #### Returns
+    /// * `BinaryNode` - A new BinaryNode instance with the specified children
     fn new(left: felt252, right: felt252) -> BinaryNode {
         BinaryNode { left, right }
     }
 }
 
+/// Represents an edge node in a Merkle Patricia Trie
+///
+/// An edge node compresses a path of nodes in the trie, storing both the compressed
+/// path and the hash of the child node. This optimization reduces the depth of the trie
+/// when consecutive nodes have only one child, improving efficiency in Starknet storage proofs.
+///
+/// #### Fields
+/// * `path` - The compressed path as a felt252 value
+/// * `child` - Hash of the child node at the end of this path
+/// * `length` - Length of the compressed path in bits
 #[derive(Drop, Copy, Serde)]
 pub struct EdgeNode {
     path: felt252,
@@ -23,19 +51,47 @@ pub struct EdgeNode {
     length: u8,
 }
 
+/// Trait for creating and manipulating EdgeNode instances
 #[generate_trait]
 pub impl EdgeNodeImpl of EdgeNodeTrait {
+    /// Creates a new EdgeNode with the specified path, child hash, and path length
+    ///
+    /// #### Arguments
+    /// * `path` - The compressed path as a felt252 value
+    /// * `child` - Hash of the child node at the end of this path
+    /// * `length` - Length of the compressed path in bits
+    ///
+    /// #### Returns
+    /// * `EdgeNode` - A new EdgeNode instance with the specified parameters
     fn new(path: felt252, child: felt252, length: u8) -> EdgeNode {
         EdgeNode { path, child, length }
     }
 }
 
+/// Represents a node in a Merkle Patricia Trie
+///
+/// This enum encapsulates the two types of nodes that can exist in a Merkle Patricia Trie:
+/// binary nodes (which have exactly two children) and edge nodes (which compress paths).
+///
+/// #### Variants
+/// * `Binary` - A binary node with left and right children
+/// * `Edge` - An edge node with a compressed path and single child
 #[derive(Drop, Serde)]
 pub enum TrieNode {
     Binary: BinaryNode,
     Edge: EdgeNode,
 }
 
+/// Represents contract-specific data needed for storage proof verification
+///
+/// This structure contains all the necessary information about a contract's state,
+/// including its class hash, nonce, state hash version, and the storage proof itself.
+///
+/// #### Fields
+/// * `class_hash` - The hash of the contract's class
+/// * `nonce` - The contract's current nonce
+/// * `contract_state_hash_version` - Version identifier for the contract state hash format
+/// * `storage_proof` - Array of TrieNode representing the storage proof path
 #[derive(Destruct, Serde)]
 pub struct ContractData {
     class_hash: felt252,
@@ -46,6 +102,14 @@ pub struct ContractData {
 
 #[generate_trait]
 pub impl ContractDataImpl of ContractDataTrait {
+    /// Creates a new ContractData instance with the specified parameters
+    /// #### Arguments
+    /// * `class_hash` - The class hash of the contract
+    /// * `nonce` - The nonce of the contract
+    /// * `contract_state_hash_version` - The version of the contract state hash
+    /// * `storage_proof` - Array of TrieNode representing the storage proof
+    /// #### Returns
+    /// * `ContractData` - A new ContractData instance
     fn new(
         class_hash: felt252,
         nonce: felt252,
@@ -56,6 +120,16 @@ pub impl ContractDataImpl of ContractDataTrait {
     }
 }
 
+/// Represents a complete contract state proof for verification
+///
+/// This structure contains all components needed to verify a contract's state against
+/// the Starknet global state commitment, including the class commitment, contract proof,
+/// and contract-specific data.
+///
+/// #### Fields
+/// * `class_commitment` - The commitment hash for contract classes
+/// * `contract_proof` - Array of TrieNode representing the contract proof path
+/// * `contract_data` - ContractData containing contract-specific information and storage proof
 #[derive(Destruct, Serde)]
 pub struct ContractStateProof {
     class_commitment: felt252,
@@ -65,6 +139,13 @@ pub struct ContractStateProof {
 
 #[generate_trait]
 pub impl ContractStateProofImpl of ContractStateProofTrait {
+    /// Creates a new ContractStateProof instance with the specified parameters
+    /// #### Arguments
+    /// * `class_commitment` - The class commitment hash
+    /// * `contract_proof` - Array of TrieNode representing the contract proof
+    /// * `contract_data` - ContractData containing contract-specific information
+    /// #### Returns
+    /// * `ContractStateProof` - A new ContractStateProof instance
     fn new(
         class_commitment: felt252, contract_proof: Array<TrieNode>, contract_data: ContractData,
     ) -> ContractStateProof {
@@ -120,6 +201,16 @@ pub fn verify(
     storage_value
 }
 
+/// Traverses the Merkle Patricia Trie using the provided proof nodes
+///
+/// This function validates the proof by traversing from leaf to root, ensuring that
+/// each node hash matches the expected hash and that the path construction is correct.
+///
+/// #### Arguments
+/// * `expected_path` - The expected path to traverse in the trie
+/// * `proof` - Array of TrieNode representing the proof path
+/// #### Returns
+/// * `(felt252, felt252)` - Tuple containing (root_hash, leaf_value)
 fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252) {
     let mut nodes = proof.span();
     let expected_path_u256: u256 = expected_path.into();
@@ -162,6 +253,16 @@ fn traverse(expected_path: felt252, proof: Array<TrieNode>) -> (felt252, felt252
     (expected_hash, value)
 }
 
+
+/// Computes the hash of a trie node based on its type
+///
+/// Binary nodes use Pedersen hash of left and right children.
+/// Edge nodes use Pedersen hash of child and path, plus the path length.
+///
+/// #### Arguments
+/// * `node` - Reference to the TrieNode to hash
+/// #### Returns
+/// * `felt252` - The computed hash of the node
 #[inline]
 fn node_hash(node: @TrieNode) -> felt252 {
     match node {
@@ -170,16 +271,39 @@ fn node_hash(node: @TrieNode) -> felt252 {
     }
 }
 
-#[inline(always)]
+
+/// Computes Pedersen hash of two felt252 values
+/// #### Arguments
+/// * `a` - First input value
+/// * `b` - Second input value
+/// #### Returns
+/// * `felt252` - Pedersen hash result
 fn pedersen_hash(a: felt252, b: felt252) -> felt252 {
     PedersenTrait::new(a).update(b).finalize()
 }
 
+
+/// Computes Pedersen hash of four felt252 values
+/// #### Arguments
+/// * `a` - First input value
+/// * `b` - Second input value
+/// * `c` - Third input value
+/// * `d` - Fourth input value
+/// #### Returns
+/// * `felt252` - Pedersen hash result
 #[inline(always)]
 fn pedersen_hash_4(a: felt252, b: felt252, c: felt252, d: felt252) -> felt252 {
     PedersenTrait::new(a).update(b).update(c).update(d).finalize()
 }
 
+
+/// Computes Poseidon hash of three felt252 values
+/// #### Arguments
+/// * `a` - First input value
+/// * `b` - Second input value
+/// * `c` - Third input value
+/// #### Returns
+/// * `felt252` - Poseidon hash result
 #[inline(always)]
 fn poseidon_hash(a: felt252, b: felt252, c: felt252) -> felt252 {
     PoseidonTrait::new().update(a).update(b).update(c).finalize()

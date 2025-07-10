@@ -50,6 +50,8 @@ pub impl I257Impl of I257Trait {
     }
 }
 
+/// Implements the Default trait for i257.
+/// Returns zero as the default value.
 impl I128Default of Default<i257> {
     fn default() -> i257 {
         Zero::zero()
@@ -279,8 +281,6 @@ impl i257PartialOrd of PartialOrd<i257> {
 }
 
 
-// Divides the first i257 by the second i257.
-
 /// Implements the Neg trait for i257.
 impl i257Neg of Neg<i257> {
     fn neg(a: i257) -> i257 {
@@ -321,7 +321,7 @@ pub fn i257_assert_no_negative_zero(x: i257) {
 /// * `x` - The i257 integer to compute the absolute value of.
 /// #### Returns
 /// * `i257` - The absolute value of `x`.
-fn i257_abs(x: i257) -> i257 {
+pub fn i257_abs(x: i257) -> i257 {
     i257 { abs: x.abs, is_negative: false }
 }
 
@@ -339,6 +339,11 @@ fn i257_max(lhs: i257, rhs: i257) -> i257 {
     }
 }
 
+/// Computes the negation of the given i257 integer.
+/// #### Arguments
+/// * `x` - The i257 integer to negate.
+/// #### Returns
+/// * `i257` - The negation of `x`.
 fn i257_neg(x: i257) -> i257 {
     // The negation of an integer is obtained by flipping its is_negative.
     I257Impl::new(x.abs, !x.is_negative)
@@ -358,14 +363,16 @@ fn i257_min(lhs: i257, rhs: i257) -> i257 {
     }
 }
 
-/// Convert u256 to i257
+/// Converts u256 to i257.
+/// Creates a positive i257 with the given absolute value.
 impl U256IntoI257 of Into<u256, i257> {
     fn into(self: u256) -> i257 {
         i257 { abs: self, is_negative: false }
     }
 }
 
-/// Convert felt252 to i257
+/// Converts felt252 to i257.
+/// Creates a positive i257 with the given absolute value.
 impl FeltIntoI257 of Into<felt252, i257> {
     fn into(self: felt252) -> i257 {
         i257 { abs: self.into(), is_negative: false }

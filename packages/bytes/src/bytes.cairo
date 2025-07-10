@@ -41,6 +41,8 @@ pub struct Bytes {
     data: Array<u128>,
 }
 
+/// Implementation of IndexView trait for Bytes.
+/// Allows indexing into the Bytes structure to access individual u128 elements.
 pub impl BytesIndex of IndexView<Bytes, usize> {
     type Target = @u128;
     fn index(self: @Bytes, index: usize) -> @u128 {
@@ -284,6 +286,8 @@ pub trait BytesTrait {
     fn sha256(self: @Bytes) -> u256;
 }
 
+/// Implementation of BytesTrait for the Bytes struct.
+/// Provides functionality for creating, reading, writing, and manipulating byte arrays.
 impl BytesImpl of BytesTrait {
     #[inline(always)]
     fn new(size: usize, data: Array<u128>) -> Bytes {
@@ -331,6 +335,9 @@ impl BytesImpl of BytesTrait {
     }
 
 
+    /// Gets the underlying data array from the Bytes struct.
+    /// #### Returns
+    /// * `Array<u128>` - The array of u128 elements containing the byte data
     fn data(self: Bytes) -> Array<u128> {
         self.data
     }
@@ -390,6 +397,13 @@ impl BytesImpl of BytesTrait {
         (offset + size, value)
     }
 
+    /// Reads an array of u128 values from Bytes, each element packed with specified size.
+    /// #### Arguments
+    /// * `offset` - The starting offset in Bytes
+    /// * `array_length` - The number of elements to read
+    /// * `element_size` - The size in bytes of each element
+    /// #### Returns
+    /// * `(usize, Array<u128>)` - New offset and array of packed u128 values
     fn read_u128_array_packed(
         self: @Bytes, offset: usize, array_length: usize, element_size: usize,
     ) -> (usize, Array<u128>) {
@@ -411,17 +425,23 @@ impl BytesImpl of BytesTrait {
     }
 
     /// Read value with size bytes from Bytes, and packed into felt252
+    /// #### Arguments
+    /// * `offset` - The starting offset in Bytes
+    /// * `size` - The number of bytes to read (max 31)
+    /// #### Returns
+    /// * `(usize, felt252)` - New offset and the packed felt252 value
     fn read_felt252_packed(self: @Bytes, offset: usize, size: usize) -> (usize, felt252) {
-        // check
+        // check bounds
         assert(offset + size <= self.size(), 'out of bound');
-        // Bytes unit is one byte
         // felt252 can hold 31 bytes max
         assert(size <= 31, 'too large');
 
         if size <= 16 {
+            // Read directly as u128 and convert to felt252
             let (new_offset, value) = self.read_u128_packed(offset, size);
             return (new_offset, value.into());
         } else {
+            // Read as two parts: high and low u128 values
             let (new_offset, high) = self.read_u128_packed(offset, size - 16);
             let (new_offset, low) = self.read_u128_packed(new_offset, 16);
             return (new_offset, u256 { low, high }.try_into().unwrap());
@@ -568,6 +588,9 @@ impl BytesImpl of BytesTrait {
     }
 
     /// Write value with size bytes into Bytes, value is packed into u128
+    /// #### Arguments
+    /// * `value` - The u128 value to append
+    /// * `size` - The number of bytes to write (max 16)
     fn append_u128_packed(ref self: Bytes, value: u128, size: usize) {
         assert(size <= 16, 'size must be less than 16');
 
@@ -575,12 +598,15 @@ impl BytesImpl of BytesTrait {
         let (last_data_index, last_element_size) = Self::locate(old_bytes_size);
 
         if last_element_size == 0 {
+            // No partial element, create new padded element
             let padded_value = u128_join(value, 0, BYTES_PER_ELEMENT - size);
             data.append(padded_value);
         } else {
+            // Partial element exists, need to merge
             let (last_element_value, _) = u128_split(*data[last_data_index], 16, last_element_size);
             data = u128_array_slice(@data, 0, last_data_index);
             if size + last_element_size > BYTES_PER_ELEMENT {
+                // Value spans two elements
                 let (left, right) = u128_split(value, size, BYTES_PER_ELEMENT - last_element_size);
                 let value_full = u128_join(
                     last_element_value, left, BYTES_PER_ELEMENT - last_element_size,
@@ -591,6 +617,7 @@ impl BytesImpl of BytesTrait {
                 data.append(value_full);
                 data.append(value_padded);
             } else {
+                // Value fits in current element
                 let value = u128_join(last_element_value, value, size);
                 let value_padded = u128_join(
                     value, 0, BYTES_PER_ELEMENT - size - last_element_size,
@@ -666,9 +693,11 @@ impl BytesImpl of BytesTrait {
         self.append_felt252(address)
     }
 
-    /// concat with other Bytes
+    /// Concatenate with other Bytes
+    /// #### Arguments
+    /// * `other` - The Bytes to concatenate with this one
     fn concat(ref self: Bytes, other: @Bytes) {
-        // read full array element for other
+        // Read full u128 elements from other Bytes
         let mut offset = 0;
         let mut sub_bytes_full_array_len = *other.size / BYTES_PER_ELEMENT;
         while sub_bytes_full_array_len != 0 {
@@ -678,7 +707,7 @@ impl BytesImpl of BytesTrait {
             sub_bytes_full_array_len -= 1;
         }
 
-        // process last array element for right
+        // Process remaining partial element
         let sub_bytes_last_element_size = *other.size % BYTES_PER_ELEMENT;
         if sub_bytes_last_element_size > 0 {
             let (_, value) = other.read_u128_packed(offset, sub_bytes_last_element_size);
@@ -686,14 +715,18 @@ impl BytesImpl of BytesTrait {
         }
     }
 
-    /// keccak hash
+    /// Compute keccak hash of the Bytes
+    /// #### Returns
+    /// * `u256` - The keccak hash of the bytes
     fn keccak(self: @Bytes) -> u256 {
         let (last_data_index, last_element_size) = Self::locate(self.size());
         if last_element_size == 0 {
+            // No partial element, hash all data directly
             return keccak_u128s_be(self.data.span(), self.size());
         } else {
+            // Partial element exists, remove padding before hashing
             let mut hash_data = u128_array_slice(self.data, 0, last_data_index);
-            // To compute hash, we should remove 0 padded
+            // Remove zero padding from last element
             let (last_element_value, _) = u128_split(
                 *self.data[last_data_index], BYTES_PER_ELEMENT, last_element_size,
             );
@@ -702,11 +735,14 @@ impl BytesImpl of BytesTrait {
         }
     }
 
-    /// sha256 hash
+    /// Compute sha256 hash of the Bytes
+    /// #### Returns
+    /// * `u256` - The sha256 hash of the bytes
     fn sha256(self: @Bytes) -> u256 {
         let mut i: usize = 0;
         let mut offset: usize = 0;
         let mut hash_data_byte_array = "";
+        // Convert Bytes to ByteArray for sha256 computation
         while i != self.size() {
             let (new_offset, hash_data_item) = self.read_u8(offset);
             hash_data_byte_array.append_byte(hash_data_item);
@@ -714,11 +750,23 @@ impl BytesImpl of BytesTrait {
             i += 1;
         }
 
+        // Compute sha256 hash and convert to u256
         let output = sha256::compute_sha256_byte_array(@hash_data_byte_array);
         u32s_to_u256(output.span())
     }
 }
 
+/// Implementation for converting a ByteArray to a Bytes struct
+///
+/// This conversion creates a new Bytes structure from a ByteArray by iterating
+/// through each byte in the ByteArray and appending it to the Bytes structure.
+/// The conversion preserves all data and maintains byte order.
+///
+/// #### Arguments
+/// * `self` - The ByteArray to convert to a Bytes struct
+///
+/// #### Returns
+/// * `Bytes` - A new Bytes struct containing all bytes from the input ByteArray
 pub impl ByteArrayIntoBytes of Into<ByteArray, Bytes> {
     fn into(self: ByteArray) -> Bytes {
         let mut res = BytesTrait::new_empty();
@@ -731,6 +779,17 @@ pub impl ByteArrayIntoBytes of Into<ByteArray, Bytes> {
     }
 }
 
+/// Implementation for converting a Bytes struct to a ByteArray
+///
+/// This conversion efficiently transfers data from a Bytes structure to a ByteArray
+/// by reading data in optimal chunks (31-byte words when possible, single bytes otherwise).
+/// The conversion preserves all data and maintains byte order.
+///
+/// #### Arguments
+/// * `self` - The Bytes struct to convert to ByteArray
+///
+/// #### Returns
+/// * `ByteArray` - A new ByteArray containing all bytes from the input Bytes struct
 pub impl BytesIntoByteArray of Into<Bytes, ByteArray> {
     fn into(self: Bytes) -> ByteArray {
         let mut res: ByteArray = Default::default();
@@ -750,6 +809,8 @@ pub impl BytesIntoByteArray of Into<Bytes, ByteArray> {
     }
 }
 
+/// Implementation of Serde trait for Bytes.
+/// Provides serialization and deserialization functionality for Bytes structures.
 impl BytesSerde of Serde<Bytes> {
     fn serialize(self: @Bytes, ref output: Array<felt252>) {
         self.size.serialize(ref output);
