@@ -98,7 +98,7 @@ let tx_hash = create_signature_hash(transaction_data, SIGHASH_ALL);
 
 ---
 
-### 4. `bip322.cairo` — BIP322 M%essage hash
+### 4. `bip322.cairo` — BIP322 Message hash
 
 This module implements BIP-322 message hasing used in Bitcoin Taproot.
 

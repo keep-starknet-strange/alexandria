@@ -1,7 +1,6 @@
 pub mod address;
 pub mod bip322;
 pub mod bip340;
-pub mod bytes_utils;
 pub mod decoder;
 pub mod encoder;
 pub mod hash;
