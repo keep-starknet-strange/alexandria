@@ -1,9 +1,9 @@
 //! The cumulative product of the elements.
 
 /// Compute the cumulative product of a sequence.
-/// # Arguments
+/// #### Arguments
 /// * `sequence` - The sequence to operate.
-/// # Returns
+/// #### Returns
 /// * `Array<T>` - The cumulative product of sequence.
 pub fn cumprod<T, +Mul<T>, +Copy<T>, +Drop<T>>(mut sequence: Span<T>) -> Array<T> {
     // [Check] Inputs

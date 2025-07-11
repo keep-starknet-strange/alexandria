@@ -32,12 +32,12 @@ pub struct Graph<T> {
 /// Graph trait defining operations for working with weighted directed graphs.
 pub trait GraphTrait {
     /// Create a new empty graph instance.
-    /// # Returns
+    /// #### Returns
     /// * `Graph<Nullable<Span<Node>>>` - A new empty graph
     fn new() -> Graph<Nullable<Span<Node>>>;
 
     /// Add a weighted directed edge to the graph.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The graph instance to modify
     /// * `source` - The source node ID
     /// * `dest` - The destination node ID
@@ -45,18 +45,18 @@ pub trait GraphTrait {
     fn add_edge(ref self: Graph<Nullable<Span<Node>>>, source: u32, dest: u32, weight: u128);
 
     /// Calculate shortest paths from a source node to all other nodes using Dijkstra's algorithm.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The graph instance
     /// * `source` - The starting node ID to calculate paths from
-    /// # Returns
+    /// #### Returns
     /// * `Felt252Dict<u128>` - Dictionary mapping node IDs to shortest distances
     fn shortest_path(ref self: Graph<Nullable<Span<Node>>>, source: u32) -> Felt252Dict<u128>;
 
     /// Get adjacent nodes for a given source node.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The graph instance
     /// * `source` - The node ID to get adjacencies for
-    /// # Returns
+    /// #### Returns
     /// * `Nullable<Span<Node>>` - Span of adjacent nodes or null if none exist
     fn adj_nodes(ref self: Graph<Nullable<Span<Node>>>, source: felt252) -> Nullable<Span<Node>>;
 }
@@ -115,14 +115,14 @@ impl GraphImpl of GraphTrait {
 /// Time complexity: O((V + E) log V) where V is vertices and E is edges
 /// Space complexity: O(V) for distance tracking and priority queue
 ///
-/// # Arguments
+/// #### Arguments
 /// * `self` - The graph containing nodes and adjacency information
 /// * `source` - The starting node to calculate shortest paths from
 ///
-/// # Returns
+/// #### Returns
 /// * `Felt252Dict<u128>` - Dictionary mapping node IDs to their shortest distances from source
 ///
-/// # Algorithm Overview
+/// #### Algorithm Overview
 /// 1. Initialize all distances to infinity except source (distance 0)
 /// 2. Use priority queue to always process the closest unvisited node
 /// 3. For each node, update distances to its neighbors if a shorter path is found

@@ -297,11 +297,11 @@ impl U256TryIntoPoint of TryInto<u256, Point> {
 
 /// Function that performs point multiplication for an Elliptic Curve point using the double and add
 /// method.
-/// # Arguments
+/// #### Arguments
 /// * `scalar` - Scalar such that scalar * P = P + P + P + ... + P.
 /// * `P` - Elliptic Curve point
 /// * `prime_nz` - Field prime in NonZero form.
-/// # Returns
+/// #### Returns
 /// * `u256` - Resulting point
 pub fn point_mult_double_and_add(mut scalar: u256, mut P: Point, prime_nz: NonZero<u256>) -> Point {
     let mut Q = Point { x: 0, y: 1 }; // neutral element
@@ -320,12 +320,12 @@ pub fn point_mult_double_and_add(mut scalar: u256, mut P: Point, prime_nz: NonZe
 }
 
 /// Function that checks the equality [S]B = R + [k]A'
-/// # Arguments
+/// #### Arguments
 /// * `S` - Scalar coming from the second half of the signature.
 /// * `R` - Result of point decoding of the first half of the signature
 /// * `k` - SHA512(dom2(F, C) || R || A || PH(M)) interpreted as a scalar
 /// * `A_prime` - Result of point decoding of the public key
-/// # Returns
+/// #### Returns
 /// * `bool` - true if the signature fits to the message and the public key, false otherwise.
 fn check_group_equation(S: u256, R: Point, k: u256, A_prime: Point) -> bool {
     // (X(P),Y(P)) of edwards25519 in https://datatracker.ietf.org/doc/html/rfc7748
@@ -345,11 +345,11 @@ fn check_group_equation(S: u256, R: Point, k: u256, A_prime: Point) -> bool {
 
 /// Experimental feature: use with caution. Not recommended for production.
 /// Verifies an Ed25519 signature against a message and public key.
-/// # Arguments
+/// #### Arguments
 /// * `msg` - The message that was signed as a span of bytes
 /// * `signature` - The signature as a span of two u256 values [R, S]
 /// * `pub_key` - The public key as a u256 value
-/// # Returns
+/// #### Returns
 /// * `bool` - true if the signature is valid, false otherwise
 pub fn verify_signature(msg: Span<u8>, signature: Span<u256>, pub_key: u256) -> bool {
     if (signature.len() != 2) {

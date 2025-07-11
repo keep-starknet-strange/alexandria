@@ -22,7 +22,7 @@ pub trait ListTrait<T> {
     /// Instantiates a new List with the given base address.
     ///
     ///
-    /// # Arguments
+    /// #### Arguments
     ///
     /// * `address_domain` - The domain of the address. Only address_domain 0 is
     /// currently supported, in the future it will enable access to address
@@ -30,7 +30,7 @@ pub trait ListTrait<T> {
     /// * `base` - The base address of the List. This corresponds to the
     /// location in storage of the List's first element.
     ///
-    /// # Returns
+    /// #### Returns
     ///
     /// A new List.
     fn new(address_domain: u32, base: StorageBaseAddress) -> List<T>;
@@ -38,7 +38,7 @@ pub trait ListTrait<T> {
     /// Fetches an existing List stored at the given base address.
     /// Returns an error if the storage read fails.
     ///
-    /// # Arguments
+    /// #### Arguments
     ///
     /// * `address_domain` - The domain of the address. Only address_domain 0 is
     /// currently supported, in the future it will enable access to address
@@ -46,7 +46,7 @@ pub trait ListTrait<T> {
     /// * `base` - The base address of the List. This corresponds to the
     /// location in storage of the List's first element.
     ///
-    /// # Returns
+    /// #### Returns
     ///
     /// An instance of the List fetched from storage, or an error in
     /// `SyscallResult`.
@@ -55,26 +55,26 @@ pub trait ListTrait<T> {
     /// Appends an existing Span to a List. Returns an error if the span
     /// cannot be appended to the a list due to storage errors
     ///
-    /// # Arguments
+    /// #### Arguments
     ///
     /// * `self` - The List to add the span to.
     /// * `span` - A Span to append to the List.
     ///
-    /// # Returns
+    /// #### Returns
     ///
     /// A List constructed from the span or an error in `SyscallResult`.
     fn append_span(ref self: List<T>, span: Span<T>) -> SyscallResult<()>;
 
     /// Gets the length of the List.
     ///
-    /// # Returns
+    /// #### Returns
     ///
     /// The number of elements in the List.
     fn len(self: @List<T>) -> u32;
 
     /// Checks if the List is empty.
     ///
-    /// # Returns
+    /// #### Returns
     ///
     /// `true` if the List is empty, `false` otherwise.
     fn is_empty(self: @List<T>) -> bool;
@@ -82,11 +82,11 @@ pub trait ListTrait<T> {
     /// Appends a value to the end of the List. Returns an error if the append
     /// operation fails due to reasons such as storage issues.
     ///
-    /// # Arguments
+    /// #### Arguments
     ///
     /// * `value` - The value to append.
     ///
-    /// # Returns
+    /// #### Returns
     ///
     /// The index at which the value was appended or an error in `SyscallResult`.
     fn append(ref self: List<T>, value: T) -> SyscallResult<u32>;
@@ -94,11 +94,11 @@ pub trait ListTrait<T> {
     /// Retrieves an element by index from the List. Returns an error if there
     /// is a retrieval issue.
     ///
-    /// # Arguments
+    /// #### Arguments
     ///
     /// * `index` - The index of the element to retrieve.
     ///
-    /// # Returns
+    /// #### Returns
     ///
     /// An `Option<T>` which is `None` if the list is empty, or
     /// `Some(value)` if an element was found, encapsulated
@@ -107,16 +107,16 @@ pub trait ListTrait<T> {
 
     /// Sets the value of an element at a given index.
     ///
-    /// # Arguments
+    /// #### Arguments
     ///
     /// * `index` - The index of the element to modify.
     /// * `value` - The value to set at the given index.
     ///
-    /// # Returns
+    /// #### Returns
     ///
     /// A result indicating success or encapsulating the error in `SyscallResult`.
     ///
-    /// # Panics
+    /// #### Panics
     ///
     /// Panics if the index is out of bounds.
     fn set(ref self: List<T>, index: u32, value: T) -> SyscallResult<()>;
@@ -134,7 +134,7 @@ pub trait ListTrait<T> {
     /// one.
     /// The value popped can still be accessible using low-level syscalls, but
     /// cannot be accessed through the list interface.
-    /// # Returns
+    /// #### Returns
     ///
     /// An `Option<T>` which is `None` if the index is out of bounds, or
     /// `Some(value)` if an element was found at the given index, encapsulated
@@ -144,7 +144,7 @@ pub trait ListTrait<T> {
     /// Converts the List into an Array.  If the list cannot be converted
     /// to an array due storage errors, an error is returned.
     ///
-    /// # Returns
+    /// #### Returns
     ///
     /// An `Array<T>` containing all the elements of the List, encapsulated
     /// in `SyscallResult`.

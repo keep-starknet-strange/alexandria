@@ -4,10 +4,10 @@ use core::ops::AddAssign;
 //! Integrate using the composite trapezoidal rule
 
 /// Integrate y(x).
-/// # Arguments
+/// #### Arguments
 /// * `xs` - The sorted abscissa sequence of len L.
 /// * `ys` - The ordinate sequence of len L.
-/// # Returns
+/// #### Returns
 /// * `T` - The approximate integral.
 pub fn trapezoidal_rule<
     T,

@@ -16,14 +16,11 @@ use crate::types::{
 pub trait TransactionDecoderTrait {
     /// Creates a new Bitcoin transaction decoder from raw transaction data.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `data` - Raw Bitcoin transaction data as a ByteArray
     ///
-    /// # Returns
+    /// #### Returns
     /// * `BTCDecoder` - Initialized decoder context with offset set to 0
-    ///
-    /// # Usage
-    /// This is the entry point for all Bitcoin transaction decoding operations.
     fn new(data: ByteArray) -> BTCDecoder;
 
     /// Decodes a complete Bitcoin transaction from the current decoder context.
@@ -32,14 +29,11 @@ pub trait TransactionDecoderTrait {
     /// witness data (if SegWit), and locktime. Automatically detects SegWit
     /// transactions by checking for the marker (0x00) and flag (0x01) bytes.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Mutable reference to the decoder context
     ///
-    /// # Returns
+    /// #### Returns
     /// * `BitcoinTransaction` - Complete decoded transaction structure
-    ///
-    /// # Usage
-    /// Used to parse raw transaction hex data into structured Bitcoin transaction data.
     fn decode_transaction(ref self: BTCDecoder) -> BitcoinTransaction;
 
     /// Decodes a single Bitcoin transaction input from the current position.
@@ -47,10 +41,10 @@ pub trait TransactionDecoderTrait {
     /// Parses input structure: previous TXID (32 bytes), previous output index,
     /// script signature with compact size length prefix, and sequence number.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Mutable reference to the decoder context
     ///
-    /// # Returns
+    /// #### Returns
     /// * `TransactionInput` - Decoded input with all fields populated
     fn decode_input(ref self: BTCDecoder) -> TransactionInput;
 
@@ -59,10 +53,10 @@ pub trait TransactionDecoderTrait {
     /// Parses output structure: value (8 bytes, little-endian) and script public key
     /// with compact size length prefix.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Mutable reference to the decoder context
     ///
-    /// # Returns
+    /// #### Returns
     /// * `TransactionOutput` - Decoded output with value and script
     fn decode_output(ref self: BTCDecoder) -> TransactionOutput;
 
@@ -71,10 +65,10 @@ pub trait TransactionDecoderTrait {
     /// Parses witness stack structure: witness item count (compact size) followed
     /// by each witness item with its length prefix and data.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Mutable reference to the decoder context
     ///
-    /// # Returns
+    /// #### Returns
     /// * `TransactionWitness` - Decoded witness data with all stack items
     fn decode_witness(ref self: BTCDecoder) -> TransactionWitness;
 
@@ -86,61 +80,55 @@ pub trait TransactionDecoderTrait {
     /// - 0xfe: 5 bytes (1 + 4 little-endian)
     /// - 0xff: 9 bytes (1 + 8 little-endian)
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Mutable reference to the decoder context
     ///
-    /// # Returns
+    /// #### Returns
     /// * `u64` - The decoded integer value
-    ///
-    /// # Usage
-    /// Used for reading array lengths, script sizes, and other variable-length fields.
     fn read_compact_size(ref self: BTCDecoder) -> u64;
 
     /// Reads a single byte from the current position.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Mutable reference to the decoder context
     ///
-    /// # Returns
+    /// #### Returns
     /// * `u8` - The byte value at the current position
     fn read_u8(ref self: BTCDecoder) -> u8;
 
     /// Reads 4 bytes as a little-endian unsigned 32-bit integer.
     ///
-    /// # Arguments
+    /// ####### Arguments
     /// * `self` - Mutable reference to the decoder context
     ///
-    /// # Returns
+    /// ####### Returns
     /// * `u32` - The decoded little-endian u32 value
     ///
-    /// # Panics
+    /// #### Panics
     /// Panics with 'Not enough bytes for u32' if fewer than 4 bytes remain.
     fn read_u32_le(ref self: BTCDecoder) -> u32;
 
     /// Reads 8 bytes as a little-endian unsigned 64-bit integer.
     ///
-    /// # Arguments
+    /// ####### Arguments
     /// * `self` - Mutable reference to the decoder context
     ///
-    /// # Returns
+    /// ####### Returns
     /// * `u64` - The decoded little-endian u64 value
     ///
-    /// # Panics
+    /// ##### Panics
     /// Panics with 'Not enough bytes for u64' if fewer than 8 bytes remain.
     fn read_u64_le(ref self: BTCDecoder) -> u64;
 
     /// Checks if there are sufficient bytes remaining to read from the specified offset.
     ///
-    /// # Arguments
+    /// ####### Arguments
     /// * `self` - Reference to the decoder context
     /// * `offset` - The offset position to check from
     /// * `count` - Number of bytes needed
     ///
-    /// # Returns
+    /// ####### Returns
     /// * `bool` - True if sufficient bytes remain, false otherwise
-    ///
-    /// # Usage
-    /// Used internally for bounds checking before reading operations.
     fn remaining(self: @BTCDecoder, offset: usize, count: usize) -> bool;
 }
 

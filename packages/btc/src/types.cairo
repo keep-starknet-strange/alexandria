@@ -35,11 +35,11 @@ pub struct BitcoinPublicKeyCoords {
 impl BitcoinPublicKeyImpl of BitcoinPublicKeyTrait {
     /// Create a compressed public key from x-coordinate and y-parity
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `x` - The x-coordinate (32 bytes)
     /// * `is_even_y` - Whether y-coordinate is even (true) or odd (false)
     ///
-    /// # Returns
+    /// #### Returns
     /// * `BitcoinPublicKey` - 33-byte compressed public key
     fn from_x_coordinate(x: u256, is_even_y: bool) -> BitcoinPublicKey {
         let mut bytes = Default::default();
@@ -60,11 +60,11 @@ impl BitcoinPublicKeyImpl of BitcoinPublicKeyTrait {
 
     /// Create an uncompressed public key from x and y coordinates
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `x` - The x-coordinate (32 bytes)
     /// * `y` - The y-coordinate (32 bytes)
     ///
-    /// # Returns
+    /// #### Returns
     /// * `BitcoinPublicKey` - 65-byte uncompressed public key
     fn from_coordinates(x: u256, y: u256) -> BitcoinPublicKey {
         let mut bytes = Default::default();
@@ -86,10 +86,10 @@ impl BitcoinPublicKeyImpl of BitcoinPublicKeyTrait {
     /// Create from hex string (e.g.,
     /// "02862130f1fb98f93631802facfa603c943ad85626663fe79450de881a5222f4b2")
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `hex_string` - Hex string of public key bytes
     ///
-    /// # Returns
+    /// #### Returns
     /// * `BitcoinPublicKey` - Public key from hex
     fn from_hex(hex_string: ByteArray) -> BitcoinPublicKey {
         // TODO: Implement hex parsing
@@ -99,7 +99,7 @@ impl BitcoinPublicKeyImpl of BitcoinPublicKeyTrait {
 
     /// Check if this is a compressed public key
     ///
-    /// # Returns
+    /// #### Returns
     /// * `bool` - True if compressed (33 bytes), false if uncompressed (65 bytes)
     fn is_compressed(self: @BitcoinPublicKey) -> bool {
         self.bytes.len() == 33
@@ -107,7 +107,7 @@ impl BitcoinPublicKeyImpl of BitcoinPublicKeyTrait {
 
     /// Get the x-coordinate from the public key
     ///
-    /// # Returns
+    /// #### Returns
     /// * `u256` - The x-coordinate
     fn get_x_coordinate(self: @BitcoinPublicKey) -> u256 {
         if self.bytes.len() < 33 {
@@ -126,7 +126,7 @@ impl BitcoinPublicKeyImpl of BitcoinPublicKeyTrait {
 
     /// Get the y-coordinate from uncompressed public key
     ///
-    /// # Returns
+    /// #### Returns
     /// * `Option<u256>` - The y-coordinate if uncompressed, None if compressed
     fn get_y_coordinate(self: @BitcoinPublicKey) -> Option<u256> {
         if self.bytes.len() != 65 {
@@ -145,7 +145,7 @@ impl BitcoinPublicKeyImpl of BitcoinPublicKeyTrait {
 
     /// Convert to legacy coordinate format for compatibility
     ///
-    /// # Returns
+    /// #### Returns
     /// * `BitcoinPublicKeyCoords` - Legacy format with x, y, compressed fields
     fn to_coords(self: @BitcoinPublicKey) -> BitcoinPublicKeyCoords {
         let x = self.get_x_coordinate();
@@ -255,15 +255,11 @@ impl BitcoinNetworkImpl of Into<BitcoinNetwork, u8> {
     /// This conversion is used when generating Bitcoin addresses to determine
     /// the appropriate version byte for different network types.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The Bitcoin network type to convert
     ///
-    /// # Returns
+    /// #### Returns
     /// * `u8` - The network prefix byte (0x00 for mainnet, 0x6f for testnet/regtest)
-    ///
-    /// # Usage
-    /// Used internally by address generation functions to set the correct
-    /// network-specific prefix for P2PKH and P2SH addresses.
     fn into(self: BitcoinNetwork) -> u8 {
         match self {
             BitcoinNetwork::Mainnet => 0x00,
@@ -281,15 +277,11 @@ impl BitcoinAddressTypeImpl of Into<BitcoinAddressType, u8> {
     /// (P2WPKH, P2WSH, P2TR) use bech32 encoding and return 0x00 as they don't
     /// use traditional version bytes.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The Bitcoin address type to convert
     ///
-    /// # Returns
+    /// #### Returns
     /// * `u8` - The version byte (0x00 for P2PKH, 0x05 for P2SH on mainnet)
-    ///
-    /// # Usage
-    /// Used during legacy address encoding to determine the appropriate
-    /// version byte for Base58Check encoding.
     fn into(self: BitcoinAddressType) -> u8 {
         match self {
             BitcoinAddressType::P2PKH => 0x00, // Mainnet prefix

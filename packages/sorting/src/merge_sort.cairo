@@ -3,9 +3,9 @@ use super::Sortable;
 
 pub impl MergeSort of Sortable {
     // Merge Sort
-    /// # Arguments
+    /// #### Arguments
     /// * `arr` - Array to sort
-    /// # Returns
+    /// #### Returns
     /// * `Array<T>` - Sorted array
     fn sort<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(mut array: Span<T>) -> Array<T> {
         let len = array.len();
@@ -31,15 +31,13 @@ pub impl MergeSort of Sortable {
     }
 }
 
-// Merge two sorted arrays
-/// # Arguments
-/// * `left_arr` - Left array
-/// * `right_arr` - Right array
-/// * `result_arr` - Result array
-/// * `left_arr_ix` - Left array index
-/// * `right_arr_ix` - Right array index
-/// # Returns
-/// * `Array<usize>` - Sorted array
+/// Recursively merges two sorted arrays into a result array
+/// #### Arguments
+/// * `left_arr` - Left sorted array to merge
+/// * `right_arr` - Right sorted array to merge
+/// * `result_arr` - Reference to the result array being built
+/// * `left_arr_ix` - Current index in left array
+/// * `right_arr_ix` - Current index in right array
 fn merge_recursive<T, +Copy<T>, +Drop<T>, +PartialOrd<T>>(
     mut left_arr: Array<T>,
     mut right_arr: Array<T>,

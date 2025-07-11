@@ -26,129 +26,129 @@ impl BitArrayDefaultImpl of Default<BitArray> {
 
 pub trait BitArrayTrait {
     /// Creates a new BitArray instance.
-    /// # Arguments
+    /// #### Arguments
     /// * `data` - Array of bytes31 data
     /// * `current` - Current working felt252 value
     /// * `read_pos` - Current read position
     /// * `write_pos` - Current write position
     fn new(data: Array<bytes31>, current: felt252, read_pos: usize, write_pos: usize) -> BitArray;
     /// Gets the current working felt252 value.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to get the current value from
     fn current(self: @BitArray) -> felt252;
     /// Gets the underlying data array.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to get the data from
     fn data(self: BitArray) -> Array<bytes31>;
     /// Appends a single bit to the BitArray
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to append to
     /// * `bit` - either true or false, representing a single bit to be appended
     fn append_bit(ref self: BitArray, bit: bool);
     /// Reads a single bit from the array
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to read from
     /// * `index` - the index into the array to read
-    /// # Returns
+    /// #### Returns
     /// `Option<bool>` - if the index is found, the stored bool is returned
     fn at(self: @BitArray, index: usize) -> Option<bool>;
     /// The current length of the BitArray
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to get the length of
-    /// # Returns
+    /// #### Returns
     /// `usize` - length in bits of the BitArray
     fn len(self: @BitArray) -> usize;
     /// Returns and removes the first element of the BitArray
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to pop from
-    /// # Returns
+    /// #### Returns
     /// `Option<bool>` - If the array is non-empty, a `bool` is removed from the front and returned
     fn pop_front(ref self: BitArray) -> Option<bool>;
     /// Reads a single word of the specified length up to 248 bits in big endian bit representation
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to read from
     /// * `length` - The bit length of the word to read, max 248
-    /// # Returns
+    /// #### Returns
     /// `Option<felt252>` - If there are `length` bits remaining, the word is returned as felt252
     fn read_word_be(ref self: BitArray, length: usize) -> Option<felt252>;
     /// Reads a single word of the specified length up to 256 bits in big endian representation.
     /// For words shorter than (or equal to) 248 bits use `read_word_be(...)` instead.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to read from
     /// * `length` - The bit length of the word to read, max 256
-    /// # Returns
+    /// #### Returns
     /// `Option<u256>` - If there are `length` bits remaining, the word is returned as u256
     fn read_word_be_u256(ref self: BitArray, length: usize) -> Option<u256>;
     /// Reads a single word of the specified length up to 512 bits in big endian representation.
     /// For words shorter than (or equal to) 256 bits consider the other read calls instead.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to read from
     /// * `length` - The bit length of the word to read, max 512
-    /// # Returns
+    /// #### Returns
     /// `Option<u512>` - If there are `length` bits remaining, the word is returned as u512
     fn read_word_be_u512(ref self: BitArray, length: usize) -> Option<u512>;
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in big endian representation
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to write to
     /// * `word` - The value to store onto the bit array of type `felt252`
     /// * `length` - The length of the word in bits, maximum 248
     fn write_word_be(ref self: BitArray, word: felt252, length: usize);
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in big endian representation
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to write to
     /// * `word` - The value to store onto the bit array of type `u256`
     /// * `length` - The length of the word in bits, maximum 256
     fn write_word_be_u256(ref self: BitArray, word: u256, length: usize);
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in big endian representation
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to write to
     /// * `word` - The value to store onto the bit array of type `u512`
     /// * `length` - The length of the word in bits, maximum 512
     fn write_word_be_u512(ref self: BitArray, word: u512, length: usize);
     /// Reads a single word of the specified length up to 248 bits in little endian bit
     /// representation
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to read from
     /// * `length` - The bit length of the word to read, max 248
-    /// # Returns
+    /// #### Returns
     /// `Option<felt252>` - If there are `length` bits remaining, the word is returned as felt252
     fn read_word_le(ref self: BitArray, length: usize) -> Option<felt252>;
     /// Reads a single word of the specified length up to 256 bits in little endian representation.
     /// For words shorter than (or equal to) 248 bits use `read_word_be(...)` instead.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to read from
     /// * `length` - The bit length of the word to read, max 256
-    /// # Returns
+    /// #### Returns
     /// `Option<u256>` - If there are `length` bits remaining, the word is returned as u256
     fn read_word_le_u256(ref self: BitArray, length: usize) -> Option<u256>;
     /// Reads a single word of the specified length up to 512 bits in little endian representation.
     /// For words shorter than (or equal to) 256 bits consider the other read calls instead.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to read from
     /// * `length` - The bit length of the word to read, max 512
-    /// # Returns
+    /// #### Returns
     /// `Option<u512>` - If there are `length` bits remaining, the word is returned as u512
     fn read_word_le_u512(ref self: BitArray, length: usize) -> Option<u512>;
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in little endian representation
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to write to
     /// * `word` - The value to store onto the bit array of type `felt252`
     /// * `length` - The length of the word in bits, maximum 248
     fn write_word_le(ref self: BitArray, word: felt252, length: usize);
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in little endian representation
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to write to
     /// * `word` - The value to store onto the bit array of type `u256`
     /// * `length` - The length of the word in bits, maximum 256
     fn write_word_le_u256(ref self: BitArray, word: u256, length: usize);
     /// Writes the bits of the specified length from `word` onto the BitArray
     /// in little endian representation
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The BitArray to write to
     /// * `word` - The value to store onto the bit array of type `u512`
     /// * `length` - The length of the word in bits, maximum 512
@@ -515,7 +515,17 @@ impl BitArraySerde of Serde<BitArray> {
     }
 }
 
-// helper
+/// Computes 2^number for bit positions 0-7 within a byte
+///
+/// This helper function returns the value of 2 raised to the given power,
+/// specifically designed for bit manipulation within a single byte (0-7 bit positions).
+/// It provides fast lookup for common bit shift operations.
+///
+/// #### Arguments
+/// * `number` - The bit position (0-7) to compute 2^number for
+///
+/// #### Returns
+/// * `u8` - The value 2^number as a u8, panics if number > 7
 #[inline(always)]
 pub fn shift_bit(number: usize) -> u8 {
     if number == 0 {
@@ -550,7 +560,17 @@ fn select(word: felt252, byte_index: usize, bit_index: usize) -> bool {
     (shifted_bytes / shift_bit(bit_index).into()) % SELECT_BIT == 1
 }
 
-// TODO Copied from standard library as those aren't visible anymore
+/// Computes 256^n_bytes for felt252 byte shifting operations
+///
+/// This function calculates the value needed to shift bytes within a felt252 value.
+/// Since felt252 can hold up to 31 bytes, this function handles the full range
+/// by splitting calculations between the low and high 128-bit parts when necessary.
+///
+/// #### Arguments
+/// * `n_bytes` - The number of byte positions to shift (0-30)
+///
+/// #### Returns
+/// * `felt252` - The value 256^n_bytes for byte shifting operations
 pub fn one_shift_left_bytes_felt252(n_bytes: usize) -> felt252 {
     if n_bytes < BYTES_IN_U128 {
         one_shift_left_bytes_u128(n_bytes).into()
@@ -559,6 +579,17 @@ pub fn one_shift_left_bytes_felt252(n_bytes: usize) -> felt252 {
     }
 }
 
+/// Computes 256^n_bytes for u128 byte shifting operations
+///
+/// This function provides a lookup table for powers of 256 up to 256^15,
+/// which covers the full range of byte positions within a u128 value.
+/// Each position represents shifting by one byte (8 bits) to the left.
+///
+/// #### Arguments
+/// * `n_bytes` - The number of byte positions to shift (0-15)
+///
+/// #### Returns
+/// * `u128` - The value 256^n_bytes, panics if n_bytes > 15
 pub fn one_shift_left_bytes_u128(n_bytes: usize) -> u128 {
     match n_bytes {
         0 => 0x1,

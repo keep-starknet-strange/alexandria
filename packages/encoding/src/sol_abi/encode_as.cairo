@@ -8,18 +8,17 @@ use alexandria_math::{U128BitShift, U256BitShift};
 /// `let encoded: Bytes = Bytes::new_empty().encode_as(32, x).encode_as(13, y)...`
 pub trait SolAbiEncodeAsTrait<T> {
     /// Encodes a value of type T into bytes with specified byte size
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The Bytes object to append encoded data to
     /// * `byteSize` - The number of bytes to use for encoding (must be <= 32)
     /// * `x` - The value to encode
-    /// # Returns
+    /// #### Returns
     /// * `Bytes` - The original Bytes object with the encoded value appended
     fn encode_as(self: Bytes, byteSize: usize, x: T) -> Bytes;
 }
 
 /// Encode as from int types
 /// Integers are encoded as `byteSize` bytes, which are right-aligned/left-padded Big-endian.
-
 pub impl SolAbiEncodeAsU256 of SolAbiEncodeAsTrait<u256> {
     fn encode_as(mut self: Bytes, byteSize: usize, mut x: u256) -> Bytes {
         assert!(byteSize <= 32, "byteSize must be <= 32");
@@ -67,7 +66,6 @@ pub impl SolAbiEncodeAsBytes31 of SolAbiEncodeAsTrait<bytes31> {
 
 /// Encode as from bytes types
 /// Bytes are encoded as `byteSize` bytes, which are left-aligned/right-padded.
-
 pub impl SolAbiEncodeAsBytes of SolAbiEncodeAsTrait<Bytes> {
     fn encode_as(mut self: Bytes, byteSize: usize, x: Bytes) -> Bytes {
         self.concat(@BytesTrait::new(byteSize, x.data()));

@@ -35,12 +35,12 @@ const cos_table: [u64; 10] = [
 
 // Calculate fast sin(x)
 // Since there is no float in cairo, we multiply every number by 1e8
-// # Arguments
+// #### Arguments
 // * `x` - The number to calculate sin(x)
-// # Returns
+// #### Returns
 // * `bool` - true if the result is positive, false if the result is negative
 // * `u64` - sin(x) * 1e8
-// # Example
+// #### Example
 // * fast_sin(3000000000) = (true, 50000000)
 pub fn fast_sin_inner(x: u64) -> (bool, u64) {
     let hollyst: u64 = 1745329_u64;
@@ -69,11 +69,11 @@ pub fn fast_sin_inner(x: u64) -> (bool, u64) {
 
 // Calculate fast sin(x)
 // Since there is no float in cairo, we multiply every number by 1e8
-// # Arguments
+// #### Arguments
 // * `x` - The number to calculate sin(x)
-// # Returns
+// #### Returns
 // * `i64` - sin(x) * 1e8
-// # Example
+// #### Example
 // * fast_sin(3000000000) = 50000000
 pub fn fast_sin(x: i64) -> i64 {
     let mut a = x;
@@ -96,11 +96,11 @@ pub fn fast_sin(x: i64) -> i64 {
 
 // Calculate fast cos(x)
 // Since there is no float in cairo, we multiply every number by 1e8
-// # Arguments
+// #### Arguments
 // * `x` - The number to calculate cos(x)
-// # Returns
+// #### Returns
 // * `i64` - cos(x) * 1e8
-// # Example
+// #### Example
 // * fast_cos(6000000000) = 50000000
 pub fn fast_cos(x: i64) -> i64 {
     let mut a = x + FAST_I90;
@@ -119,11 +119,11 @@ pub fn fast_cos(x: i64) -> i64 {
 
 // Calculate fast tan(x)
 // Since there is no float in cairo, we multiply every number by 1e8
-// # Arguments
+// #### Arguments
 // * `x` - The number to calculate tan(x)
-// # Returns
+// #### Returns
 // * `i64` - tan(x) * 1e8
-// # Example
+// #### Example
 // * fast_tan(4500000000) = 100000000
 pub fn fast_tan(x: i64) -> i64 {
     let mut a = x;

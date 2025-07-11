@@ -45,6 +45,9 @@ pub impl BytesStore of Store<Bytes> {
 
 /// Returns a pointer to the `chunk`'th of the Bytes object at `address`.
 /// The pointer is the `Poseidon` hash of:
+///
+/// #### Arguments
+///
 /// * `address` - The address of the Bytes object (where the size is stored).
 /// * `chunk` - The index of the chunk.
 /// * The short string `Bytes` is used as the capacity argument of the sponge

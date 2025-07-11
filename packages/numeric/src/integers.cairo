@@ -5,9 +5,9 @@ pub trait UIntBytes<T> {
 
 impl U32BytesImpl of UIntBytes<u32> {
     /// Packs 4 bytes into a u32
-    /// # Arguments
+    /// #### Arguments
     /// * `input` a Span<u8> of len <=4
-    /// # Returns
+    /// #### Returns
     /// * Option::Some(u32) if the operation succeeds
     /// * Option::None otherwise
     fn from_bytes(mut input: Span<u8>) -> Option<u32> {
@@ -27,9 +27,9 @@ impl U32BytesImpl of UIntBytes<u32> {
     }
 
     /// Unpacks a u32 into an array of bytes
-    /// # Arguments
+    /// #### Arguments
     /// * `self` a `u32` value.
-    /// # Returns
+    /// #### Returns
     /// * The bytes array representation of the value.
     fn to_bytes(mut self: u32) -> Span<u8> {
         let val0: u8 = (self & 0xFF).try_into().unwrap();
