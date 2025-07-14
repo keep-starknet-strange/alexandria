@@ -1,40 +1,20 @@
-use starknet::{
-    SyscallResultTrait,
-    secp256_trait::{Secp256PointTrait, Secp256Trait},
-    secp256k1::Secp256k1Point
-};
-use crate::encoder::{TransactionEncoderTrait};
-use crate::types::{
-    BitcoinTransaction,
-    TransactionInput,
-    TransactionOutput,
-    TransactionWitness,
-};
-use crate::taproot::{
-    tagged_hash_byte_array,
-    tagged_hash_u256,
-    lift_x_coordinate
-};
-use crate::hash::sha256_byte_array;
 use alexandria_bytes::byte_array_ext::{ByteArrayTraitExt, SpanU8IntoByteArray};
+use starknet::SyscallResultTrait;
+use starknet::secp256_trait::{Secp256PointTrait, Secp256Trait};
+use starknet::secp256k1::Secp256k1Point;
+use crate::encoder::TransactionEncoderTrait;
+use crate::hash::sha256_byte_array;
+use crate::taproot::{lift_x_coordinate, tagged_hash_byte_array, tagged_hash_u256};
+use crate::types::{BitcoinTransaction, TransactionInput, TransactionOutput, TransactionWitness};
 
 const SIGHASH_ALL: u8 = 0x01;
 const EMPTY_32_BYTES: [u8; 32] = [
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ];
 
 #[inline(always)]
-fn build_to_spend_tx(
-    message: @ByteArray,
-    script_pubkey: @ByteArray
-) -> BitcoinTransaction {
-    let message_hash = tagged_hash_byte_array(
-        "BIP0322-signed-message",
-        message
-    );
+fn build_to_spend_tx(message: @ByteArray, script_pubkey: @ByteArray) -> BitcoinTransaction {
+    let message_hash = tagged_hash_byte_array("BIP0322-signed-message", message);
     let mut script_sig: ByteArray = "";
 
     script_sig.append_byte(0x0);
@@ -46,26 +26,17 @@ fn build_to_spend_tx(
     BitcoinTransaction {
         version: 0,
         locktime: 0,
-        inputs: array![TransactionInput {
-            previous_txid,
-            script_sig,
-            previous_vout: 0xFFFFFFFF,
-            sequence: 0,
-        }],
-        outputs: array![TransactionOutput {
-            value: 0,
-            script_pubkey: script_pubkey.clone(),
-        }],
+        inputs: array![
+            TransactionInput { previous_txid, script_sig, previous_vout: 0xFFFFFFFF, sequence: 0 },
+        ],
+        outputs: array![TransactionOutput { value: 0, script_pubkey: script_pubkey.clone() }],
         witness: array![],
-        is_segwit: false
+        is_segwit: false,
     }
 }
 
 #[inline(always)]
-fn build_to_sign_tx(
-    to_spend_tx_id: ByteArray,
-    script_pubkey: ByteArray,
-) -> BitcoinTransaction {
+fn build_to_sign_tx(to_spend_tx_id: ByteArray, script_pubkey: ByteArray) -> BitcoinTransaction {
     let mut script: ByteArray = "";
 
     script.append_byte(0x6a);
@@ -73,20 +44,14 @@ fn build_to_sign_tx(
     BitcoinTransaction {
         version: 0,
         locktime: 0,
-        inputs: array![TransactionInput {
-            previous_txid: to_spend_tx_id,
-            script_sig: "",
-            previous_vout: 0,
-            sequence: 0
-        }],
-        outputs: array![TransactionOutput {
-            value: 0,
-            script_pubkey: script,
-        }],
-        witness: array![TransactionWitness {
-            witness_stack: array![script_pubkey]
-        }],
-        is_segwit: false
+        inputs: array![
+            TransactionInput {
+                previous_txid: to_spend_tx_id, script_sig: "", previous_vout: 0, sequence: 0,
+            },
+        ],
+        outputs: array![TransactionOutput { value: 0, script_pubkey: script }],
+        witness: array![TransactionWitness { witness_stack: array![script_pubkey] }],
+        is_segwit: false,
     }
 }
 
@@ -111,9 +76,7 @@ fn get_transaction_id(tx: BitcoinTransaction) -> ByteArray {
 }
 
 #[inline(always)]
-fn hash_for_witness_v1(
-    tx: @BitcoinTransaction
-) -> ByteArray {
+fn hash_for_witness_v1(tx: @BitcoinTransaction) -> ByteArray {
     let prev_out_scripts = tx.witness[0].witness_stack[0];
 
     if tx.inputs.len() != 1 || prev_out_scripts.len() == 0 {
@@ -178,8 +141,7 @@ pub fn tweak_public_key(internal_key: u256) -> u256 {
     internal_key_bytes.append_u256(internal_key);
 
     let tweak = tagged_hash_u256("TapTweak", @internal_key_bytes);
-    let tweek_G = Secp256Trait::<Secp256k1Point>::get_generator_point()
-        .mul(tweak).unwrap_syscall();
+    let tweek_G = Secp256Trait::<Secp256k1Point>::get_generator_point().mul(tweak).unwrap_syscall();
     let Q = P.add(tweek_G).unwrap_syscall();
     let (x, _) = Q.get_coordinates().unwrap_syscall();
 
@@ -187,19 +149,11 @@ pub fn tweak_public_key(internal_key: u256) -> u256 {
 }
 
 #[inline(always)]
-pub fn bip322_msg_hash(
-    pub_key: u256,
-    message: ByteArray
-) -> ByteArray {
+pub fn bip322_msg_hash(pub_key: u256, message: ByteArray) -> ByteArray {
     let script_pubkey = get_script_pubkey(pub_key);
     let to_spend_tx = build_to_spend_tx(@message, @script_pubkey);
     let to_spend_tx_id = get_transaction_id(to_spend_tx);
-    let to_sign_tx = build_to_sign_tx(
-        to_spend_tx_id,
-        script_pubkey,
-    );
+    let to_sign_tx = build_to_sign_tx(to_spend_tx_id, script_pubkey);
 
-    hash_for_witness_v1(
-        @to_sign_tx
-    )
+    hash_for_witness_v1(@to_sign_tx)
 }

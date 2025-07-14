@@ -10,7 +10,7 @@ use starknet::SyscallResultTrait;
 use starknet::secp256_trait::Secp256Trait;
 use starknet::secp256k1::Secp256k1Point;
 use crate::bip340::verify as bip340_verify;
-use crate::hash::{sha256_from_byte_array, sha256_u256, sha256_byte_array};
+use crate::hash::{sha256_byte_array, sha256_from_byte_array, sha256_u256};
 
 /// Taproot tweaked public key result
 #[derive(Drop, Copy)]
