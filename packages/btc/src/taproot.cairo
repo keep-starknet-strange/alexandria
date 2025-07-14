@@ -10,7 +10,7 @@ use starknet::SyscallResultTrait;
 use starknet::secp256_trait::Secp256Trait;
 use starknet::secp256k1::Secp256k1Point;
 use crate::bip340::verify as bip340_verify;
-use crate::hash::sha256_from_byte_array;
+use crate::hash::{sha256_byte_array, sha256_from_byte_array, sha256_u256};
 
 /// Taproot tweaked public key result
 #[derive(Drop, Copy)]
@@ -55,6 +55,44 @@ pub fn tagged_hash(tag: ByteArray, data: Span<u8>) -> Array<u8> {
 
     // Return SHA256(tag_hash || tag_hash || data)
     sha256_from_byte_array(@message_ba)
+}
+
+/// Create a tagged hash from byte arrays according to BIP-340 tagged hash specification
+///
+/// # Arguments
+/// * `tag` - The tag string (e.g., "TapTweak", "TapLeaf")
+/// * `data` - The byte array data to hash
+///
+/// # Returns
+/// * `ByteArray` - The tagged hash as ByteArray array
+#[inline(always)]
+pub fn tagged_hash_byte_array(tag: ByteArray, data: @ByteArray) -> ByteArray {
+    let mut preimage = sha256_byte_array(@tag);
+
+    preimage = ByteArrayTrait::concat(@preimage, @preimage);
+
+    preimage.append(data);
+
+    sha256_byte_array(@preimage)
+}
+
+/// Create a tagged hash from byte arrays according to BIP-340 tagged hash specification
+///
+/// # Arguments
+/// * `tag` - The tag string (e.g., "TapTweak", "TapLeaf")
+/// * `data` - The byte array data to hash
+///
+/// # Returns
+/// * `u256` - The tagged hash as u256
+#[inline(always)]
+pub fn tagged_hash_u256(tag: ByteArray, data: @ByteArray) -> u256 {
+    let mut preimage = sha256_byte_array(@tag);
+
+    preimage = ByteArrayTrait::concat(@preimage, @preimage);
+
+    preimage.append(data);
+
+    sha256_u256(@preimage)
 }
 
 /// Tweak a public key for Taproot according to BIP-341
@@ -103,7 +141,7 @@ pub fn tweak_public_key(internal_key: u256, merkle_root: Option<u256>) -> Option
 ///
 /// #### Returns
 /// * `Option<Secp256k1Point>` - The point if x is valid, None otherwise
-fn lift_x_coordinate(x: u256) -> Option<Secp256k1Point> {
+pub fn lift_x_coordinate(x: u256) -> Option<Secp256k1Point> {
     // Try to get point with even y-coordinate first
     match Secp256Trait::<Secp256k1Point>::secp256_ec_get_point_from_x_syscall(x, false)
         .unwrap_syscall() {
