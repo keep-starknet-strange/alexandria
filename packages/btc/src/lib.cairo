@@ -1,4 +1,5 @@
 pub mod address;
+pub mod bip322;
 pub mod bip340;
 pub mod decoder;
 pub mod encoder;

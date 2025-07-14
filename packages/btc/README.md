@@ -2,9 +2,10 @@
 
 This package provides a comprehensive set of Cairo modules for Bitcoin protocol operations and cryptographic primitives. It is designed to enable Bitcoin functionality on Starknet by providing utilities for:
 
-- Bitcoin transaction encoding/decoding  
+- Bitcoin transaction encoding/decoding
 - Bitcoin address generation and validation
 - ECDSA and BIP-340 Schnorr signature verification
+- BIP-322 message hashing
 - Bitcoin key management and derivation
 - Taproot operations and script trees
 - Bitcoin hashing primitives
@@ -15,6 +16,7 @@ This package provides a comprehensive set of Cairo modules for Bitcoin protocol 
 packages/btc/
 ├── address.cairo           # Bitcoin address generation and validation
 ├── bip340.cairo           # BIP-340 Schnorr signatures for Taproot
+├── bip322.cairo           # BIP-322 message hashing for Taproot
 ├── decoder.cairo          # Bitcoin transaction decoding logic  
 ├── encoder.cairo          # Bitcoin transaction encoding logic
 ├── hash.cairo             # Bitcoin cryptographic hash functions
@@ -35,11 +37,11 @@ This module provides functionality for generating and validating Bitcoin address
 #### Features
 
 - Generates addresses for all Bitcoin types:
-  - `P2PKH` (Pay to Public Key Hash) - Legacy addresses
-  - `P2SH` (Pay to Script Hash) - Script addresses  
-  - `P2WPKH` (Pay to Witness Public Key Hash) - SegWit v0
-  - `P2WSH` (Pay to Witness Script Hash) - SegWit v0 scripts
-  - `P2TR` (Pay to Taproot) - SegWit v1 Taproot
+    - `P2PKH` (Pay to Public Key Hash) - Legacy addresses
+    - `P2SH` (Pay to Script Hash) - Script addresses
+    - `P2WPKH` (Pay to Witness Public Key Hash) - SegWit v0
+    - `P2WSH` (Pay to Witness Script Hash) - SegWit v0 scripts
+    - `P2TR` (Pay to Taproot) - SegWit v1 Taproot
 - Supports mainnet, testnet, and regtest networks
 - Address validation and format detection
 
@@ -96,7 +98,27 @@ let tx_hash = create_signature_hash(transaction_data, SIGHASH_ALL);
 
 ---
 
-### 4. `bip340.cairo` — Schnorr Signatures
+### 4. `bip322.cairo` — BIP322 Message hash
+
+This module implements BIP-322 message hasing used in Bitcoin Taproot.
+
+#### Features
+
+- BIP-322 message hash compute
+- Compatible with Bitcoin's Taproot upgrade
+
+#### Example
+
+```rust
+let pubkey: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
+let message = "Message to sign";
+let message_hash = bip322_msg_hash(pubkey, message);
+// Process hash sig verify or other flows
+```
+
+---
+
+### 5. `bip340.cairo` — Schnorr Signatures
 
 This module implements BIP-340 Schnorr signatures used in Bitcoin Taproot.
 
@@ -117,7 +139,7 @@ verify_bip340_signature(message, signature, pubkey);
 
 ---
 
-### 5. `taproot.cairo` — Taproot Operations
+### 6. `taproot.cairo` — Taproot Operations
 
 This module provides Taproot address generation and script tree operations for Bitcoin's latest upgrade.
 
@@ -139,23 +161,23 @@ let script_tree = create_script_tree(scripts.span());
 
 ---
 
-### 6. `encoder.cairo` / `decoder.cairo` — Transaction Processing
+### 7. `encoder.cairo` / `decoder.cairo` — Transaction Processing
 
 These modules handle Bitcoin transaction serialization and deserialization in the standard Bitcoin wire format.
 
 #### Features
 
 - **Encoder**: Serializes Bitcoin transactions to raw bytes
-  - Legacy and SegWit transaction formats
-  - Compact size encoding for variable-length fields
-  - Little-endian integer encoding
-  - Witness data serialization
+    - Legacy and SegWit transaction formats
+    - Compact size encoding for variable-length fields
+    - Little-endian integer encoding
+    - Witness data serialization
 
 - **Decoder**: Parses Bitcoin transactions from raw bytes
-  - Automatic SegWit detection
-  - Compact size decoding
-  - Transaction input/output parsing
-  - Witness data extraction
+    - Automatic SegWit detection
+    - Compact size decoding
+    - Transaction input/output parsing
+    - Witness data extraction
 
 #### Example
 
@@ -171,7 +193,7 @@ let decoded_tx = decoder.decode_transaction();
 
 ---
 
-### 7. `hash.cairo` — Cryptographic Hashing
+### 8. `hash.cairo` — Cryptographic Hashing
 
 This module provides Bitcoin-specific cryptographic hash functions.
 
@@ -192,7 +214,7 @@ let tx_hash = hash256(transaction_data.span());
 
 ---
 
-### 8. `types.cairo` — Bitcoin Data Structures
+### 9. `types.cairo` — Bitcoin Data Structures
 
 This module defines all Bitcoin data structures and type definitions.
 
@@ -215,6 +237,7 @@ Make sure to import the relevant modules in your own contract/project:
 use alexandria_btc::address;
 use alexandria_btc::keys;
 use alexandria_btc::legacy_signature;
+use alexandria_btc::bip322;
 use alexandria_btc::bip340;
 use alexandria_btc::taproot;
 use alexandria_btc::encoder;
