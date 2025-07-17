@@ -16,6 +16,7 @@ mod karatsuba_test;
 mod lcm_of_n_numbers_test;
 mod math_test;
 mod mod_arithmetics_test;
+mod opt_math_test;
 mod perfect_number_test;
 mod ripemd160_tests;
 mod sha256_test;
