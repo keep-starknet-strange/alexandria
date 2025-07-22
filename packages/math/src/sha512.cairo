@@ -1,5 +1,6 @@
 use core::num::traits::{Bounded, WrappingAdd};
 use core::traits::{BitAnd, BitOr, BitXor};
+use alexandria_math::opt_math::OptBitShift;
 
 // Variable naming is compliant to RFC-6234 (https://datatracker.ietf.org/doc/html/rfc6234)
 
@@ -142,14 +143,14 @@ pub trait WordOperations<T> {
 
 pub impl Word64WordOperations of WordOperations<Word64> {
     fn shr(self: Word64, n: u64) -> Word64 {
-        Word64 { data: math_shr_u64(self.data, n) }
+        Word64 { data: OptBitShift::shr(self.data, n.try_into().unwrap()) }
     }
     fn shl(self: Word64, n: u64) -> Word64 {
-        Word64 { data: math_shl_u64(self.data, n) }
+        Word64 { data: OptBitShift::shl(self.data, n.try_into().unwrap()) }
     }
     fn rotr(self: Word64, n: u64) -> Word64 {
         let data = BitOr::bitor(
-            math_shr_u64(self.data, n), math_shl_u64(self.data, (U64_BIT_NUM - n)),
+            OptBitShift::shr(self.data, n.try_into().unwrap()), OptBitShift::shl(self.data, (U64_BIT_NUM - n).try_into().unwrap()),
         );
         Word64 { data }
     }
@@ -170,7 +171,7 @@ pub impl Word64WordOperations of WordOperations<Word64> {
     }
     fn rotl(self: Word64, n: u64) -> Word64 {
         let data = BitOr::bitor(
-            math_shl_u64(self.data, n), math_shr_u64(self.data, (U64_BIT_NUM - n)),
+            OptBitShift::shl(self.data, n.try_into().unwrap()), OptBitShift::shr(self.data, (U64_BIT_NUM - n).try_into().unwrap()),
         );
         Word64 { data }
     }
@@ -288,35 +289,7 @@ pub fn two_pow<T, +DivRem<T>, +Mul<T>, +Into<u64, T>, +Drop<T>>(mut power: u64) 
     result
 }
 
-// Shift left with math_shl_precomputed function
-/// Performs left shift operation using precomputed powers of 2
-/// #### Arguments
-/// * `x` - Value to shift
-/// * `n` - Number of positions to shift left
-/// #### Returns
-/// * `u128` - Result of x << n
-fn math_shl(x: u128, n: u64) -> u128 {
-    math_shl_precomputed(x, two_pow(n))
-}
-
-// Shift right with math_shr_precomputed function
-/// Performs right shift operation using precomputed powers of 2
-/// #### Arguments
-/// * `x` - Value to shift
-/// * `n` - Number of positions to shift right
-/// #### Returns
-/// * `u128` - Result of x >> n
-fn math_shr(x: u128, n: u64) -> u128 {
-    math_shr_precomputed(x, two_pow(n))
-}
-
 // Shift left with precomputed powers of 2
-/// Performs left shift using precomputed power of 2 value
-/// #### Arguments
-/// * `x` - Value to shift
-/// * `two_power_n` - Precomputed value of 2^n
-/// #### Returns
-/// * `T` - Result of x * 2^n (equivalent to x << n)
 fn math_shl_precomputed<T, +Mul<T>, +Rem<T>, +Drop<T>, +Copy<T>, +Into<T, u128>>(
     x: T, two_power_n: T,
 ) -> T {
@@ -334,28 +307,6 @@ fn math_shr_precomputed<T, +Div<T>, +Rem<T>, +Drop<T>, +Copy<T>, +Into<T, u128>>
     x: T, two_power_n: T,
 ) -> T {
     x / two_power_n
-}
-
-// Shift left wrapper for u64
-/// Performs left shift on u64 with overflow protection
-/// #### Arguments
-/// * `x` - u64 value to shift
-/// * `n` - Number of positions to shift left
-/// #### Returns
-/// * `u64` - Result of x << n with overflow handling
-fn math_shl_u64(x: u64, n: u64) -> u64 {
-    (math_shl(x.into(), n) % Bounded::<u64>::MAX.into()).try_into().unwrap()
-}
-
-// Shift right wrapper for u64
-/// Performs right shift on u64 with overflow protection
-/// #### Arguments
-/// * `x` - u64 value to shift
-/// * `n` - Number of positions to shift right
-/// #### Returns
-/// * `u64` - Result of x >> n with overflow handling
-fn math_shr_u64(x: u64, n: u64) -> u64 {
-    (math_shr(x.into(), n) % Bounded::<u64>::MAX.into()).try_into().unwrap()
 }
 
 /// Adds trailing zero bytes for SHA-512 padding

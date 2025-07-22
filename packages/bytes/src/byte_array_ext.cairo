@@ -1,4 +1,4 @@
-use alexandria_math::{U128BitShift, U256BitShift};
+use alexandria_math::opt_math::OptBitShift;
 use core::integer::u512;
 use core::num::traits::Zero;
 use starknet::ContractAddress;
@@ -429,9 +429,9 @@ pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
         let (new_offset, high) = self.read_u128(offset);
         let (new_offset, low) = self.read_uint_within_size::<u128>(new_offset, 15);
 
-        let low = U128BitShift::shl(low, 8);
+        let low = OptBitShift::shl(low, 8);
         let mut value: u256 = u256 { high, low };
-        value = U256BitShift::shr(value, 8);
+        value = OptBitShift::shr(value, 8);
 
         // Unwrap is always safe here, because highest byte is always 0
         let value: felt252 = value.try_into().expect('Couldn\'t convert to felt252');
@@ -656,7 +656,7 @@ pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
     /// Append a bytes31 to ByteArray
     fn append_bytes31(ref self: ByteArray, value: bytes31) {
         let mut value: u256 = value.into();
-        value = U256BitShift::shl(value, 8);
+        value = OptBitShift::shl(value, 8);
         Self::append_u256(ref self, value);
     }
 
