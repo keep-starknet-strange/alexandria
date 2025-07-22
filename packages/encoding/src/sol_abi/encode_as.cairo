@@ -1,5 +1,5 @@
 use alexandria_bytes::{Bytes, BytesTrait};
-use alexandria_math::{U128BitShift, U256BitShift};
+use alexandria_math::opt_math::OptBitShift;
 
 /// Encode trait for arbitrarily sized encodings, meant to allow easy bytesX
 /// type encodings. Encode the value `x` as `Bytes` with a specific `byteSize`.
@@ -22,7 +22,7 @@ pub trait SolAbiEncodeAsTrait<T> {
 pub impl SolAbiEncodeAsU256 of SolAbiEncodeAsTrait<u256> {
     fn encode_as(mut self: Bytes, byteSize: usize, mut x: u256) -> Bytes {
         assert!(byteSize <= 32, "byteSize must be <= 32");
-        x = U256BitShift::shl(x, 8 * (32 - byteSize.into()));
+        x = OptBitShift::shl(x, 8 * (32 - byteSize.try_into().unwrap()));
         let bytesRes: Bytes = BytesTrait::new(byteSize, array![x.high, x.low]);
         self.concat(@bytesRes);
         self
@@ -34,7 +34,7 @@ pub impl SolAbiEncodeAsU128 of SolAbiEncodeAsTrait<u128> {
         if byteSize > 16 {
             self = self.encode_as(byteSize, Into::<u128, u256>::into(x));
         } else {
-            x = U128BitShift::shl(x, 8 * (16 - byteSize.into()));
+            x = OptBitShift::shl(x, 8 * (16 - byteSize.try_into().unwrap()));
             let bytesRes: Bytes = BytesTrait::new(byteSize, array![x]);
             self.concat(@bytesRes);
         }
@@ -46,7 +46,7 @@ pub impl SolAbiEncodeAsFelt252 of SolAbiEncodeAsTrait<felt252> {
     fn encode_as(mut self: Bytes, byteSize: usize, x: felt252) -> Bytes {
         assert!(byteSize <= 32, "byteSize must be <= 32");
         let mut x: u256 = x.into();
-        x = U256BitShift::shl(x, 8 * (32 - byteSize.into()));
+        x = OptBitShift::shl(x, 8 * (32 - byteSize.try_into().unwrap()));
         let bytesRes: Bytes = BytesTrait::new(byteSize, array![x.high, x.low]);
         self.concat(@bytesRes);
         self
@@ -57,7 +57,7 @@ pub impl SolAbiEncodeAsBytes31 of SolAbiEncodeAsTrait<bytes31> {
     fn encode_as(mut self: Bytes, byteSize: usize, x: bytes31) -> Bytes {
         assert!(byteSize <= 32, "byteSize must be <= 32");
         let mut x: u256 = x.into();
-        x = U256BitShift::shl(x, 8 * (32 - byteSize.into()));
+        x = OptBitShift::shl(x, 8 * (32 - byteSize.try_into().unwrap()));
         let bytesRes: Bytes = BytesTrait::new(byteSize, array![x.high, x.low]);
         self.concat(@bytesRes);
         self
