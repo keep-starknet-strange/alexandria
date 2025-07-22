@@ -100,7 +100,9 @@ fn encode_bech32m(hrp: ByteArray, data: Span<u8>) -> ByteArray {
     let mut i = 0_u32;
     while i < 6 {
         let shift_amount = 5 * (5 - i);
-        let checksum_value = (OptBitShift::shr(checksum, shift_amount.try_into().unwrap()) & 31).try_into().unwrap();
+        let checksum_value = (OptBitShift::shr(checksum, shift_amount.try_into().unwrap()) & 31)
+            .try_into()
+            .unwrap();
         result.append_byte(get_bech32_char(checksum_value));
         i += 1;
     }

@@ -1,6 +1,6 @@
+use alexandria_math::opt_math::OptBitShift;
 use core::num::traits::{Bounded, WrappingAdd};
 use core::traits::{BitAnd, BitOr, BitXor};
-use alexandria_math::opt_math::OptBitShift;
 
 // Variable naming is compliant to RFC-6234 (https://datatracker.ietf.org/doc/html/rfc6234)
 
@@ -150,7 +150,8 @@ pub impl Word64WordOperations of WordOperations<Word64> {
     }
     fn rotr(self: Word64, n: u64) -> Word64 {
         let data = BitOr::bitor(
-            OptBitShift::shr(self.data, n.try_into().unwrap()), OptBitShift::shl(self.data, (U64_BIT_NUM - n).try_into().unwrap()),
+            OptBitShift::shr(self.data, n.try_into().unwrap()),
+            OptBitShift::shl(self.data, (U64_BIT_NUM - n).try_into().unwrap()),
         );
         Word64 { data }
     }
@@ -171,7 +172,8 @@ pub impl Word64WordOperations of WordOperations<Word64> {
     }
     fn rotl(self: Word64, n: u64) -> Word64 {
         let data = BitOr::bitor(
-            OptBitShift::shl(self.data, n.try_into().unwrap()), OptBitShift::shr(self.data, (U64_BIT_NUM - n).try_into().unwrap()),
+            OptBitShift::shl(self.data, n.try_into().unwrap()),
+            OptBitShift::shr(self.data, (U64_BIT_NUM - n).try_into().unwrap()),
         );
         Word64 { data }
     }
