@@ -1,5 +1,5 @@
 use alexandria_bytes::utils::u256_reverse_endian;
-use alexandria_math::U256BitShift;
+use alexandria_math::opt_math::OptBitShift;
 use core::keccak::compute_keccak_byte_array;
 
 #[generate_trait]
@@ -17,7 +17,7 @@ pub impl SelectorImpl of SelectorTrait {
         let cairo_hash = compute_keccak_byte_array(@self);
         // Reconstruct the u256 in EVM's big-endian layout
         let evm_hash = u256_reverse_endian(cairo_hash);
-        let selector = U256BitShift::shr(evm_hash, 224);
+        let selector = OptBitShift::shr(evm_hash, 224);
         selector.try_into().expect('Couldn\'t convert to felt252')
     }
 }
