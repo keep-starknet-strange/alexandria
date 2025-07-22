@@ -1,6 +1,6 @@
 use alexandria_bytes::byte_array_ext::ByteArrayTraitExt;
-use alexandria_math::opt_math::OptBitShift;
 use alexandria_math::bitmap::Bitmap;
+use alexandria_math::opt_math::OptBitShift;
 use core::num::traits::Bounded;
 use core::traits::DivRem;
 use crate::constants::FELT252_MAX;
