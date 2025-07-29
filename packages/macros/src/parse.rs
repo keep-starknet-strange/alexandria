@@ -1,13 +1,20 @@
 use cairo_lang_macro::TokenStream;
 use cairo_lang_parser::utils::SimpleParserDatabase;
 use cairo_lang_syntax::node::kind::SyntaxKind::{
-    Member, OptionWrappedGenericParamListEmpty, TerminalStruct, TokenIdentifier,
+    ExprPath, Member, OptionWrappedGenericParamListEmpty, TerminalStruct, TokenIdentifier,
     WrappedGenericParamList,
 };
+
+pub(crate) struct FieldInfo {
+    pub(crate) name: String,
+    pub(crate) field_type: String,
+}
 
 pub(crate) struct StructInfo {
     pub(crate) name: String,
     pub(crate) generic_params: Option<Vec<String>>,
+    pub(crate) fields: Vec<FieldInfo>,
+    // Keep backward compatibility
     pub(crate) members: Vec<String>,
 }
 
@@ -48,22 +55,49 @@ pub(crate) fn parse_struct_info(token_stream: TokenStream) -> StructInfo {
         }
     }
 
-    // collect struct members - all TokenIdentifier nodes after each Member
-    let mut members = Vec::new();
+    // collect struct members with their types
+    let mut fields = Vec::new();
+    let mut members = Vec::new(); // Keep for backward compatibility
+
+    // Re-parse from the beginning to get member information
+    let nodes = parsed.descendants(&db);
+
     for node in nodes {
         if node.kind(&db) == Member {
-            let member = node
-                .descendants(&db)
-                .find(|node| node.kind(&db) == TokenIdentifier)
-                .map(|node| node.get_text(&db))
-                .unwrap();
-            members.push(member);
+            let member_descendants: Vec<_> = node.descendants(&db).collect();
+
+            // Find field name (first TokenIdentifier)
+            let field_name = member_descendants
+                .iter()
+                .find(|n| n.kind(&db) == TokenIdentifier)
+                .map(|n| n.get_text(&db))
+                .unwrap_or_default();
+
+            // Extract type information by looking for ExprPath node after colon
+            let field_type = member_descendants
+                .iter()
+                .find(|n| n.kind(&db) == ExprPath)
+                .map(|n| n.get_text(&db))
+                .unwrap_or_default();
+
+            if !field_name.is_empty() {
+                fields.push(FieldInfo {
+                    name: field_name.clone(),
+                    field_type: if field_type.is_empty() {
+                        "ByteArray".to_string()
+                    } else {
+                        field_type
+                    },
+                });
+                members.push(field_name); // Backward compatibility
+            }
         }
     }
 
     StructInfo {
         name: struct_name,
         generic_params,
+        fields,
         members,
     }
 }

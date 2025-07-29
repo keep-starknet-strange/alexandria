@@ -49,6 +49,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "alexandria_json"
+version = "0.5.1"
+dependencies = [
+ "alexandria_macros",
+ "alexandria_math",
+]
+
+[[package]]
 name = "alexandria_linalg"
 version = "0.5.1"
 dependencies = [

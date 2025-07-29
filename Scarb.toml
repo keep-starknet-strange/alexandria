@@ -7,6 +7,7 @@ members = [
   "packages/math",
   "packages/merkle_tree",
   "packages/numeric",
+  "packages/json",
   "packages/searching",
   "packages/sorting",
   "packages/storage",
