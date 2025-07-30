@@ -17,7 +17,7 @@ pub fn generate_events(_attr: TokenStream, token_stream: TokenStream) -> ProcMac
 
     let cleaned_enum = clean_enum(&input);
 
-    let output = format!("{}\n{}", cleaned_enum, structs);
+    let output = format!("{cleaned_enum}\n{structs}");
 
     ProcMacroResult::new(TokenStream::new(output))
 }
@@ -96,8 +96,7 @@ fn generate_structs(struct_names: &[String]) -> String {
     struct_names.iter()
         .map(|name| {
             format!(
-                "#[derive(Drop, starknet::Event)]\npub struct {} {{\n    pub data: Span<felt252>,\n}}",
-                name
+                "#[derive(Drop, starknet::Event)]\npub struct {name} {{\n    pub data: Span<felt252>,\n}}"
             )
         })
         .collect::<Vec<_>>()

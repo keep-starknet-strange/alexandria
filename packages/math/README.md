@@ -1,5 +1,29 @@
 # Math
 
+## [Fixed-Point Decimal](./src/decimal.cairo)
+
+The decimal implementation provides a 64/64 bit fixed-point number system designed for precise decimal arithmetic without floating-point precision issues. Unlike IEEE 754 floating-point formats, this uses pure fixed-point arithmetic with separate 64-bit fields for the integer and fractional parts, providing approximately 19 decimal places of precision with consistent accuracy across all values.
+
+### Key Features:
+
+- **User-friendly construction**: Create decimals using `from_parts(3, 35)` for 3.35 or `from_parts(56, 678)` for 56.678
+- **Overflow-safe arithmetic**: All operations (add, sub, mul, div) use u256 intermediate calculations to prevent overflow
+- **Operator overloads**: Supports `+`, `-`, `*`, `/` operators for natural mathematical expressions
+- **String conversion**: Complete string representation and parsing capabilities with 6-digit precision format
+- **JSON integration**: Seamless serialization and deserialization with the parser package
+
+### String Format:
+
+All decimal values are formatted with **6 decimal places** (microsecond precision) when converted to strings:
+- `DecimalTrait::from_int(25)` → `"25.000000"`
+- `DecimalTrait::from_parts(99, 5)` → `"99.500000"` (99.5)
+- `DecimalTrait::from_parts(5, 25)` → `"5.250000"` (5.25)
+- `DecimalTrait::from_int(0)` → `"0.000000"`
+
+This consistent 6-digit format ensures predictable string representations for JSON serialization, database storage, and display purposes, providing microsecond-level precision suitable for financial calculations and scientific applications.
+
+The decimal system supports all basic arithmetic operations with proper overflow protection and integrates with other Alexandria packages for comprehensive mathematical operations.
+
 ## [Fast Root](./src/fast_root.cairo)
 
 The fast root algorithm uses Newton-Raphson method to calculate a arbitrary root of a given number (e.g., square root, cubic root, etc.). The algorithm is used to find the roots of a polynomial equation, which has applications in various areas of mathematics, including algebra, calculus, and number theory. The fast root algorithm is also used in computer science, as it can be used to solve problems involving the roots of a polynomial equation.

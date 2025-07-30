@@ -4,6 +4,7 @@ pub mod armstrong_number;
 pub mod bitmap;
 pub mod collatz_sequence;
 pub mod const_pow;
+pub mod decimal;
 pub mod ed25519;
 pub mod extended_euclidean_algorithm;
 pub mod fast_power;
