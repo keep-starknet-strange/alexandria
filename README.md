@@ -59,7 +59,7 @@ Current version can be found in the [toml file](./Scarb.toml)
 
 Actual version is **0.5.1** compatible with starknet **2.11.2**
 
-## Features
+## Packages
 
 This repository is composed of multiple crates:
 
@@ -123,6 +123,10 @@ scarb test -f math
 ```bash
 scarb fmt
 ```
+
+## Security
+
+The codebase is not audited. It is actively developed, but no professional security checks have been performed on it. Use it at your own risk. We highly recommend writing your own tests for your specific use cases.
 
 ## Roadmap
 

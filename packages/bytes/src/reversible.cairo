@@ -9,7 +9,7 @@ const SELECT_BIT: u8 = 0b10;
 pub trait ReversibleBytes<T> {
     /// Reverses the byte order or endianness of `self`.
     /// For example, the word `0x1122_u16` is reversed into `0x2211_u16`.
-    /// # Returns
+    /// #### Returns
     /// * `T` - returns the byte reversal of `self` into the same type T
     fn reverse_bytes(self: @T) -> T;
 }
@@ -18,11 +18,24 @@ pub trait ReversibleBytes<T> {
 pub trait ReversibleBits<T> {
     /// Reverses the underlying ordering of the bit representation of `self`.
     /// For example, the word `0b10111010_u8` is reversed into `0b01011101`.
-    /// # Returns
+    /// #### Returns
     /// * `T` - the bit-representation of `self` reversed into the same type T
     fn reverse_bits(self: @T) -> T;
 }
 
+/// Reverses the order of elements in a value by extracting and reassembling them
+///
+/// This generic function reverses the ordering of elements within a value by repeatedly
+/// dividing by a step size and building the result in reverse order. It's commonly used
+/// for reversing bits or bytes within numeric types.
+///
+/// #### Arguments
+/// * `word` - The value to reverse
+/// * `size` - The number of elements to reverse
+/// * `step` - The step size for each element (e.g., 2 for bits, 256 for bytes)
+///
+/// #### Returns
+/// * `(T, T)` - A tuple containing (reversed_value, remaining_value)
 #[inline]
 pub fn reversing<
     T,
@@ -41,6 +54,20 @@ pub fn reversing<
     reversing_partial_result(word, result, size, step)
 }
 
+/// Reverses elements from a word onto an existing partial result
+///
+/// This function extends the reversing operation by allowing it to build upon
+/// an existing partial result. It extracts elements from the input word and
+/// appends them to the ongoing result, useful for multi-stage reversing operations.
+///
+/// #### Arguments
+/// * `word` - The value to extract elements from for reversal
+/// * `onto` - The existing partial result to build upon
+/// * `size` - The number of elements to reverse and append
+/// * `step` - The step size for each element (e.g., 2 for bits, 256 for bytes)
+///
+/// #### Returns
+/// * `(T, T)` - A tuple containing (final_result_with_appended_elements, remaining_word)
 #[inline]
 pub fn reversing_partial_result<
     T,

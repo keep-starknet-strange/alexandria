@@ -7,11 +7,11 @@ pub impl SelectorImpl of SelectorTrait {
     /// Computes the EVM function selector (first 4 bytes of the Keccak-256 hash of a function
     /// signature).
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - A `ByteArray` containing the UTF-8 string of the function signature, e.g.,
     /// `"transfer(address,uint256)"`.
     ///
-    /// # Returns
+    /// #### Returns
     /// * `felt252` - The 4-byte (32-bit) selector represented as a `felt252` value.
     fn compute_selector(self: ByteArray) -> felt252 {
         let cairo_hash = compute_keccak_byte_array(@self);

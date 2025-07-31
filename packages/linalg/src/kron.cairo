@@ -6,10 +6,10 @@ pub enum KronError {
 }
 
 /// Compute the Kronecker product for 2 given arrays.
-/// # Arguments
+/// #### Arguments
 /// * `xs` - The first sequence of len L.
 /// * `ys` - The second sequence of len L.
-/// # Returns
+/// #### Returns
 /// * `Result<Array<T>, KronError>` - The Kronecker product.
 pub fn kron<T, +Mul<T>, +Copy<T>, +Drop<T>>(
     mut xs: Span<T>, mut ys: Span<T>,

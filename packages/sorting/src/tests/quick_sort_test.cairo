@@ -1,9 +1,10 @@
 use alexandria_data_structures::vec::{Felt252Vec, VecTrait};
 use alexandria_sorting::QuickSort;
 
+/// #### Arguments
 /// * `a` - The first Felt252Vec.
 /// * `b` - The second array.
-/// # Returns
+/// #### Returns
 /// * `bool` - True if the arrays are equal, false otherwise.
 fn is_equal_vec(mut a: Felt252Vec<u32>, mut b: Span<u32>) -> bool {
     if a.len() != b.len() {

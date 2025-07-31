@@ -5,7 +5,7 @@ use core::ops::index::Index;
 //! Vec implementation.
 //!
 //! # Example
-//! ```
+//! ```rust
 //! use alexandria::data_structures::vec::VecTrait;
 //!
 //! // Create a new vec instance.
@@ -18,44 +18,44 @@ use core::ops::index::Index;
 
 pub trait VecTrait<V, T> {
     /// Creates a new V instance.
-    /// Returns
+    /// #### Returns
     /// * V The new vec instance.
     fn new() -> V;
 
     /// Returns the item at the given index, or None if the index is out of bounds.
-    /// Parameters
+    /// #### Arguments
     /// * self The vec instance.
     /// * index The index of the item to get.
-    /// Returns
+    /// #### Returns
     /// * Option<T> The item at the given index, or None if the index is out of bounds.
     fn get(ref self: V, index: usize) -> Option<T>;
 
     /// Returns the item at the given index, or panics if the index is out of bounds.
-    /// Parameters
+    /// #### Arguments
     /// * self The vec instance.
     /// * index The index of the item to get.
-    /// Returns
+    /// #### Returns
     /// * T The item at the given index.
     fn at(ref self: V, index: usize) -> T;
 
     /// Pushes a new item to the vec.
-    /// Parameters
+    /// #### Arguments
     /// * self The vec instance.
     /// * value The value to push onto the vec.
     fn push(ref self: V, value: T);
 
     /// Sets the item at the given index to the given value.
     /// Panics if the index is out of bounds.
-    /// Parameters
+    /// #### Arguments
     /// * self The vec instance.
     /// * index The index of the item to set.
     /// * value The value to set the item to.
     fn set(ref self: V, index: usize, value: T);
 
     /// Returns the length of the vec.
-    /// Parameters
+    /// #### Arguments
     /// * self The vec instance.
-    /// Returns
+    /// #### Returns
     /// * usize The length of the vec.
     fn len(self: @V) -> usize;
 }

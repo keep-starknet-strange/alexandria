@@ -27,12 +27,12 @@ pub impl RLPImpl of RLPTrait {
     /// Returns RLPType from the leading byte with
     /// its offset in the array as well as its size.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `input` - Array of byte to decode
-    /// # Returns
+    /// #### Returns
     /// * `(RLPType, offset, size)` - A tuple containing the RLPType
     /// the offset and the size of the RLPItem to decode
-    /// # Errors
+    /// #### Errors
     /// * empty input - if the input is empty
     /// * input too short - if the input is too short for a given
     #[deprecated(
@@ -77,11 +77,11 @@ pub impl RLPImpl of RLPTrait {
     }
 
     /// Recursively encodes multiple a list of RLPItems
-    /// # Arguments
+    /// #### Arguments
     /// * `input` - Span of RLPItem to encode
-    /// # Returns
+    /// #### Returns
     /// * `Span<u8> - RLP encoded items as a span of bytes
-    /// # Errors
+    /// #### Errors
     /// * empty input - if the input is empty
     #[deprecated(
         feature: "deprecated-encode",
@@ -128,9 +128,9 @@ pub impl RLPImpl of RLPTrait {
     }
 
     /// RLP encodes a Array of bytes representing a RLP String.
-    /// # Arguments
+    /// #### Arguments
     /// * `input` - Array of bytes representing a RLP String to encode
-    /// # Returns
+    /// #### Returns
     /// * `Span<u8> - RLP encoded items as a span of bytes
     #[deprecated(
         feature: "deprecated-encode_string",
@@ -166,11 +166,11 @@ pub impl RLPImpl of RLPTrait {
     /// Recursively decodes a rlp encoded byte array
     /// as described in https://ethereum.org/en/developers/docs/data-structures-and-encoding/rlp/
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `input` - Array of bytes to decode
-    /// # Returns
+    /// #### Returns
     /// * `Span<RLPItem>` - Span of RLPItem
-    /// # Errors
+    /// #### Errors
     /// * input too short - if the input is too short for a given
     #[deprecated(
         feature: "deprecated-decode",

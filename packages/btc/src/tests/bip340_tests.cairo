@@ -264,3 +264,261 @@ fn test_bip340_verify_pk_failure() {
 
     verify_bip340_signature(msg, sig, pub_key);
 }
+
+#[test]
+fn test_bip340_zero_public_key() {
+    // Test with zero public key (invalid)
+    let pub_key: u256 = 0x0;
+    let msg: u256 = 0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89;
+    let rx: u256 = 0x6896bd60eeae296db48a229ff71dfe071bde413e6d43f917dc8dcf8c78de3341;
+    let s: u256 = 0x8906d11ac976abccb20b091292bff4ea897efcb639ea871cfa95f6de339e4b0a;
+
+    assert_eq!(verify(pub_key, rx, s, msg.into()), false);
+}
+
+#[test]
+fn test_bip340_zero_rx() {
+    // Test with zero r value (invalid)
+    let pub_key: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
+    let msg: u256 = 0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89;
+    let rx: u256 = 0x0;
+    let s: u256 = 0x8906d11ac976abccb20b091292bff4ea897efcb639ea871cfa95f6de339e4b0a;
+
+    assert_eq!(verify(pub_key, rx, s, msg.into()), false);
+}
+
+#[test]
+fn test_bip340_zero_s() {
+    // Test with zero s value (invalid)
+    let pub_key: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
+    let msg: u256 = 0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89;
+    let rx: u256 = 0x6896bd60eeae296db48a229ff71dfe071bde413e6d43f917dc8dcf8c78de3341;
+    let s: u256 = 0x0;
+
+    assert_eq!(verify(pub_key, rx, s, msg.into()), false);
+}
+
+#[test]
+fn test_bip340_max_public_key() {
+    // Test with maximum field value public key (invalid)
+    let pub_key: u256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F;
+    let msg: u256 = 0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89;
+    let rx: u256 = 0x6896bd60eeae296db48a229ff71dfe071bde413e6d43f917dc8dcf8c78de3341;
+    let s: u256 = 0x8906d11ac976abccb20b091292bff4ea897efcb639ea871cfa95f6de339e4b0a;
+
+    assert_eq!(verify(pub_key, rx, s, msg.into()), false);
+}
+
+#[test]
+fn test_bip340_max_rx() {
+    // Test with maximum field value rx (invalid)
+    let pub_key: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
+    let msg: u256 = 0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89;
+    let rx: u256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F;
+    let s: u256 = 0x8906d11ac976abccb20b091292bff4ea897efcb639ea871cfa95f6de339e4b0a;
+
+    assert_eq!(verify(pub_key, rx, s, msg.into()), false);
+}
+
+#[test]
+fn test_bip340_max_s() {
+    // Test with maximum curve order s (invalid)
+    let pub_key: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
+    let msg: u256 = 0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89;
+    let rx: u256 = 0x6896bd60eeae296db48a229ff71dfe071bde413e6d43f917dc8dcf8c78de3341;
+    let s: u256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141;
+
+    assert_eq!(verify(pub_key, rx, s, msg.into()), false);
+}
+
+#[test]
+fn test_bip340_out_of_range_public_key() {
+    // Test with public key exceeding field size (invalid)
+    let pub_key: u256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC30;
+    let msg: u256 = 0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89;
+    let rx: u256 = 0x6896bd60eeae296db48a229ff71dfe071bde413e6d43f917dc8dcf8c78de3341;
+    let s: u256 = 0x8906d11ac976abccb20b091292bff4ea897efcb639ea871cfa95f6de339e4b0a;
+
+    assert_eq!(verify(pub_key, rx, s, msg.into()), false);
+}
+
+#[test]
+fn test_bip340_out_of_range_rx() {
+    // Test with rx exceeding field size (invalid)
+    let pub_key: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
+    let msg: u256 = 0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89;
+    let rx: u256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC30;
+    let s: u256 = 0x8906d11ac976abccb20b091292bff4ea897efcb639ea871cfa95f6de339e4b0a;
+
+    assert_eq!(verify(pub_key, rx, s, msg.into()), false);
+}
+
+#[test]
+fn test_bip340_out_of_range_s() {
+    // Test with s exceeding curve order (invalid)
+    let pub_key: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
+    let msg: u256 = 0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89;
+    let rx: u256 = 0x6896bd60eeae296db48a229ff71dfe071bde413e6d43f917dc8dcf8c78de3341;
+    let s: u256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364142;
+
+    assert_eq!(verify(pub_key, rx, s, msg.into()), false);
+}
+
+#[test]
+fn test_bip340_wrong_message_format() {
+    // Test with invalid message format (should still work as it's converted to ByteArray)
+    let pub_key: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
+    let rx: u256 = 0x6896bd60eeae296db48a229ff71dfe071bde413e6d43f917dc8dcf8c78de3341;
+    let s: u256 = 0x8906d11ac976abccb20b091292bff4ea897efcb639ea871cfa95f6de339e4b0a;
+
+    // Test with empty message
+    let empty_msg = "";
+    let result_empty = verify(pub_key, rx, s, empty_msg);
+    // Should handle empty message gracefully
+    assert_eq!(result_empty, false);
+
+    // Test with very long message
+    let long_msg =
+        "This is a very long message that exceeds normal bounds to test how the verification handles large inputs and whether it can process them correctly without failing or producing unexpected results";
+    let result_long = verify(pub_key, rx, s, long_msg);
+    // Should handle long message gracefully
+    assert_eq!(result_long, false);
+}
+
+#[test]
+fn test_bip340_boundary_values() {
+    // Test with boundary values for all parameters
+    let pub_key: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
+    let msg: u256 = 0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89;
+
+    // Test with rx = 1 (minimum valid value)
+    let rx_min: u256 = 0x1;
+    let s: u256 = 0x8906d11ac976abccb20b091292bff4ea897efcb639ea871cfa95f6de339e4b0a;
+    let result_min = verify(pub_key, rx_min, s, msg.into());
+    assert_eq!(result_min, false);
+
+    // Test with s = 1 (minimum valid value)
+    let rx: u256 = 0x6896bd60eeae296db48a229ff71dfe071bde413e6d43f917dc8dcf8c78de3341;
+    let s_min: u256 = 0x1;
+    let result_s_min = verify(pub_key, rx, s_min, msg.into());
+    assert_eq!(result_s_min, false);
+
+    // Test with s = curve_order - 1 (maximum valid value)
+    let s_max: u256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140;
+    let result_s_max = verify(pub_key, rx, s_max, msg.into());
+    assert_eq!(result_s_max, false);
+}
+
+#[test]
+fn test_bip340_malformed_signature_components() {
+    let pub_key: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
+    let msg: u256 = 0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89;
+
+    // Test with bit-flipped rx
+    let rx_valid: u256 = 0x6896bd60eeae296db48a229ff71dfe071bde413e6d43f917dc8dcf8c78de3341;
+    let rx_flipped: u256 =
+        0x6896bd60eeae296db48a229ff71dfe071bde413e6d43f917dc8dcf8c78de3340; // Last bit flipped
+    let s: u256 = 0x8906d11ac976abccb20b091292bff4ea897efcb639ea871cfa95f6de339e4b0a;
+
+    let result_flipped = verify(pub_key, rx_flipped, s, msg.into());
+    assert_eq!(result_flipped, false);
+
+    // Test with bit-flipped s
+    let s_flipped: u256 =
+        0x8906d11ac976abccb20b091292bff4ea897efcb639ea871cfa95f6de339e4b0b; // Last bit flipped
+    let result_s_flipped = verify(pub_key, rx_valid, s_flipped, msg.into());
+    assert_eq!(result_s_flipped, false);
+}
+
+#[test]
+fn test_bip340_signature_malleability() {
+    // Test against signature malleability attacks
+    let pub_key: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
+    let msg: u256 = 0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89;
+    let rx: u256 = 0x6896bd60eeae296db48a229ff71dfe071bde413e6d43f917dc8dcf8c78de3341;
+    let s: u256 = 0x8906d11ac976abccb20b091292bff4ea897efcb639ea871cfa95f6de339e4b0a;
+
+    // Original signature should be valid
+    assert!(verify(pub_key, rx, s, msg.into()));
+
+    // Test with negated s (should be invalid due to BIP340 canonicality)
+    let curve_order: u256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141;
+    let s_negated = curve_order - s;
+    let result_negated = verify(pub_key, rx, s_negated, msg.into());
+    assert_eq!(result_negated, false);
+}
+
+#[test]
+fn test_bip340_edge_case_messages() {
+    let pub_key: u256 = 0x778caa53b4393ac467774d09497a87224bf9fab6f6e68b23086497324d6fd117;
+    let rx: u256 = 0x71535db165ecd9fbbc046e5ffaea61186bb6ad436732fccc25291a55895464cf;
+    let s: u256 = 0x6069ce26bf03466228f19a3a62db8a649f2d560fac652827d1af0574e427ab63;
+
+    // Test with messages of different lengths
+    let msg_empty = "";
+    let msg_single = "A";
+    let msg_32_bytes = "This is exactly 32 bytes length!!";
+    let msg_64_bytes = "This is exactly 64 bytes length and should be handled correctly!";
+
+    // These should all be processed (though likely fail verification with wrong signature)
+    let result_empty = verify(pub_key, rx, s, msg_empty);
+    let result_single = verify(pub_key, rx, s, msg_single);
+    let result_32 = verify(pub_key, rx, s, msg_32_bytes);
+    let result_64 = verify(pub_key, rx, s, msg_64_bytes);
+
+    // Only the empty message should pass with the test vector
+    assert!(result_empty);
+    assert_eq!(result_single, false);
+    assert_eq!(result_32, false);
+    assert_eq!(result_64, false);
+}
+
+#[test]
+fn test_bip340_consistency_check() {
+    // Test that the same inputs always produce the same result
+    let pub_key: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
+    let msg: u256 = 0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89;
+    let rx: u256 = 0x6896bd60eeae296db48a229ff71dfe071bde413e6d43f917dc8dcf8c78de3341;
+    let s: u256 = 0x8906d11ac976abccb20b091292bff4ea897efcb639ea871cfa95f6de339e4b0a;
+
+    // Run verification multiple times with same inputs
+    let result1 = verify(pub_key, rx, s, msg.into());
+    let result2 = verify(pub_key, rx, s, msg.into());
+    let result3 = verify(pub_key, rx, s, msg.into());
+
+    // All results should be identical
+    assert_eq!(result1, result2);
+    assert_eq!(result2, result3);
+    assert!(result1); // Should be true for this test vector
+}
+
+#[test]
+fn test_bip340_random_invalid_inputs() {
+    // Test with completely random invalid inputs
+    let pub_key: u256 = 0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890;
+    let msg: u256 = 0x1111111111111111111111111111111111111111111111111111111111111111;
+    let rx: u256 = 0x2222222222222222222222222222222222222222222222222222222222222222;
+    let s: u256 = 0x3333333333333333333333333333333333333333333333333333333333333333;
+
+    // Should handle gracefully and return false
+    let result = verify(pub_key, rx, s, msg.into());
+    assert_eq!(result, false);
+}
+
+#[test]
+fn test_bip340_field_overflow_protection() {
+    // Test protection against field overflow attacks
+    let pub_key: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
+    let msg: u256 = 0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89;
+
+    // Test with values that would overflow if not properly handled
+    let rx_overflow: u256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+    let s_overflow: u256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+
+    let result_rx_overflow = verify(pub_key, rx_overflow, 0x1, msg.into());
+    let result_s_overflow = verify(pub_key, 0x1, s_overflow, msg.into());
+
+    // Both should be handled gracefully and return false
+    assert_eq!(result_rx_overflow, false);
+    assert_eq!(result_s_overflow, false);
+}

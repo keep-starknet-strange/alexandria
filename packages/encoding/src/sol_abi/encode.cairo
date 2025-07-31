@@ -9,10 +9,10 @@ use starknet::{ContractAddress, EthAddress};
 /// BytesTrait::new_empty().encode_selector(selector).encode(arg1).encode(arg2)...
 pub trait SolAbiEncodeSelectorTrait {
     /// Encodes a function selector as 4 bytes at the beginning of the data
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The Bytes object to append the selector to
     /// * `selector` - The 4-byte function selector (u32)
-    /// # Returns
+    /// #### Returns
     /// * `Bytes` - The original Bytes object with the selector appended
     fn encode_selector(self: Bytes, selector: u32) -> Bytes;
 }
@@ -39,7 +39,6 @@ pub trait SolAbiEncodeTrait<T> {
 /// Encode int types
 /// Integers are encoded as 32 bytes long, which are right-aligned/left-padded Big-endian.
 /// Packed encodings are not padded and only append the bytes of the value based on type.
-
 pub impl SolAbiEncodeU8 of SolAbiEncodeTrait<u8> {
     fn encode(mut self: Bytes, x: u8) -> Bytes {
         self.append_u256(x.into());
@@ -115,7 +114,6 @@ pub impl SolAbiEncodeU256 of SolAbiEncodeTrait<u256> {
 /// Encode other primitives
 /// Primitives are encoded as 32 bytes long, which are right-aligned/left-padded Big-endian.
 /// Packed encodings are not padded and only append the bytes of the value based on type.
-
 pub impl SolAbiEncodeBool of SolAbiEncodeTrait<bool> {
     fn encode(mut self: Bytes, x: bool) -> Bytes {
         if x {
@@ -163,7 +161,6 @@ pub impl SolAbiEncodeBytes31 of SolAbiEncodeTrait<bytes31> {
 /// Encode byte types
 /// Bytes are encoded as 32 bytes long, which are left-aligned/right-padded.
 /// Packed encodings are not padded and only append the bytes up to the length of the value.
-
 pub impl SolAbiEncodeBytes of SolAbiEncodeTrait<Bytes> {
     fn encode(mut self: Bytes, mut x: Bytes) -> Bytes {
         self.concat(@x);
@@ -200,7 +197,6 @@ pub impl SolAbiEncodeByteArray of SolAbiEncodeTrait<ByteArray> {
 /// Encode address types
 /// Addresses are encoded as 32 bytes long, which are right-aligned/left-padded Big-endian.
 /// Packed encodings are not padded and only append the bytes of the value based on type.
-
 pub impl SolAbiEncodeStarknetAddress of SolAbiEncodeTrait<ContractAddress> {
     fn encode(mut self: Bytes, x: ContractAddress) -> Bytes {
         let address_felt252: felt252 = x.into();

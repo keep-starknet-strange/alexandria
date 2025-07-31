@@ -9,10 +9,10 @@ use starknet::{ContractAddress, EthAddress};
 /// were encoded using the `abi.encode` function in Solidity.
 pub trait SolAbiDecodeTrait<T> {
     /// Decodes a value of type T from bytes starting at the given offset
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Reference to the Bytes containing encoded data
     /// * `offset` - Mutable reference to the current offset position (updated after decode)
-    /// # Returns
+    /// #### Returns
     /// * `T` - The decoded value of type T
     fn decode(self: @Bytes, ref offset: usize) -> T;
 }
@@ -20,7 +20,6 @@ pub trait SolAbiDecodeTrait<T> {
 /// Decode int types
 /// Integers are decoded by reading 32 bytes from the `offset`
 /// `Bytes` encoding is right-aligned/left-paddded Big-endian.
-
 pub impl SolAbiDecodeU8 of SolAbiDecodeTrait<u8> {
     fn decode(self: @Bytes, ref offset: usize) -> u8 {
         let (new_offset, decodedU8) = self.read_u256(offset);
@@ -123,7 +122,6 @@ pub impl SolAbiDecodeByteArray of SolAbiDecodeTrait<ByteArray> {
 /// Decode address types
 /// Addresses are decoded by reading 32 bytes from the `offset`
 /// `Bytes` encoding is right-aligned/left-paddded Big-endian.
-
 pub impl SolAbiDecodeStarknetAddress of SolAbiDecodeTrait<ContractAddress> {
     fn decode(self: @Bytes, ref offset: usize) -> ContractAddress {
         let (new_offset, decodedAddress) = self.read_u256(offset);

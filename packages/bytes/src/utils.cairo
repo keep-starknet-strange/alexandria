@@ -5,10 +5,12 @@ use core::integer::u128_byte_reverse;
 use core::keccak::cairo_keccak;
 use core::to_byte_array::FormatAsByteArray;
 
-/// Formats a single byte as a hexadecimal string with leading zero if needed.
-/// # Arguments
+/// Formats a single byte as a hexadecimal string with leading zero if needed
+/// #### Arguments
 /// * `byte` - The byte value to format as hex
 /// * `f` - Reference to the formatter
+/// #### Returns
+/// * `Result<(), Error>` - Ok if formatting succeeds, Error otherwise
 fn format_byte_hex(byte: u8, ref f: Formatter) -> Result<(), Error> {
     let base: NonZero<u8> = 16_u8.try_into().unwrap();
     if byte < 0x10 {
@@ -19,6 +21,8 @@ fn format_byte_hex(byte: u8, ref f: Formatter) -> Result<(), Error> {
     Display::fmt(@byte.format_as_byte_array(base), ref f)
 }
 
+/// Implementation of Debug trait for Bytes.
+/// Formats the Bytes as a hexadecimal string prefixed with "0x".
 pub impl BytesDebug of Debug<Bytes> {
     fn fmt(self: @Bytes, ref f: Formatter) -> Result<(), Error> {
         let mut i: usize = 0;
@@ -37,6 +41,8 @@ pub impl BytesDebug of Debug<Bytes> {
     }
 }
 
+/// Implementation of Display trait for Bytes.
+/// Formats the Bytes as a hexadecimal string prefixed with "0x".
 pub impl BytesDisplay of Display<Bytes> {
     fn fmt(self: @Bytes, ref f: Formatter) -> Result<(), Error> {
         let mut i: usize = 0;
@@ -58,19 +64,28 @@ pub impl BytesDisplay of Display<Bytes> {
 /// Computes the keccak256 of multiple uint128 values.
 /// The values are interpreted as big-endian.
 /// https://github.com/starkware-libs/cairo/blob/main/corelib/src/keccak.cairo
+/// #### Arguments
+/// * `input` - Span of u128 values to hash
+/// * `n_bytes` - Total number of bytes to process
+/// #### Returns
+/// * `u256` - The keccak256 hash
 pub fn keccak_u128s_be(input: Span<u128>, n_bytes: usize) -> u256 {
     let mut keccak_input = array![];
     let mut size = n_bytes;
+    // Convert u128 values to u64 array for keccak input
     for v in input {
         let value_size = core::cmp::min(size, 16);
         keccak_add_uint128_be(ref keccak_input, *v, value_size);
         size -= value_size;
     }
 
+    // Handle alignment for keccak computation
     let aligned = n_bytes % 8 == 0;
     if aligned {
+        // Data is 8-byte aligned, use normal keccak
         u256_reverse_endian(cairo_keccak(ref keccak_input, 0, 0))
     } else {
+        // Data is not aligned, handle last partial word
         let last_input_num_bytes = n_bytes % 8;
         let last_input_word = *keccak_input[keccak_input.len() - 1];
         let mut inputs = u64_array_slice(@keccak_input, 0, keccak_input.len() - 1);
@@ -79,32 +94,38 @@ pub fn keccak_u128s_be(input: Span<u128>, n_bytes: usize) -> u256 {
 }
 
 /// Reverses the endianness of a u256 value.
-/// # Arguments
+/// #### Arguments
 /// * `input` - The u256 value to reverse endianness
+/// #### Returns
+/// * `u256` - The u256 value with reversed endianness
 pub fn u256_reverse_endian(input: u256) -> u256 {
     let low = u128_byte_reverse(input.high);
     let high = u128_byte_reverse(input.low);
     u256 { low, high }
 }
 
-/// Adds a u128 value to the keccak input array in big-endian format.
-/// # Arguments
+/// Adds a u128 value to the keccak input array in big-endian format
+/// #### Arguments
 /// * `keccak_input` - Reference to the array to append u64 values to
 /// * `value` - The u128 value to add
 /// * `value_size` - The size of the value in bytes
 fn keccak_add_uint128_be(ref keccak_input: Array<u64>, value: u128, value_size: usize) {
     if value_size == 16 {
+        // Full u128 value, split into two u64 values
         let (high, low) = core::integer::u128_safe_divmod(
             u128_byte_reverse(value), 0x10000000000000000_u128.try_into().unwrap(),
         );
         keccak_input.append(low.try_into().unwrap());
         keccak_input.append(high.try_into().unwrap());
     } else {
+        // Partial u128 value, process accordingly
         let reversed_value = u128_byte_reverse(value);
         let (reversed_value, _) = u128_split(reversed_value, 16, value_size);
         if value_size <= 8 {
+            // Fits in single u64
             keccak_input.append(reversed_value.try_into().unwrap());
         } else {
+            // Spans two u64 values
             let (high, low) = DivRem::div_rem(
                 reversed_value, pow2(64).try_into().expect('Division by 0'),
             );
@@ -114,11 +135,13 @@ fn keccak_add_uint128_be(ref keccak_input: Array<u64>, value: u128, value_size: 
     }
 }
 
-/// Updates an element at the specified index in a u256 array.
-/// # Arguments
+/// Updates an element in a u256 array at a specific index by creating a new array
+/// #### Arguments
 /// * `arr` - The array to update
 /// * `index` - The index of the element to update
 /// * `value` - The new value to set at the index
+/// #### Returns
+/// * `Array<u256>` - A new array with the updated value
 fn update_u256_array_at(arr: @Array<u256>, index: usize, value: u256) -> Array<u256> {
     assert(index < arr.len(), 'index out of range');
     let mut new_arr = array![];
@@ -136,19 +159,21 @@ fn update_u256_array_at(arr: @Array<u256>, index: usize, value: u256) -> Array<u
 }
 
 /// Convert sha256 result(Array<u8>) to u256
-/// # Arguments
+/// #### Arguments
 /// * `arr` - Span of u8 values, length MUST be 32
+/// #### Returns
+/// * `u256` - The converted u256 value
 pub fn u8_array_to_u256(arr: Span<u8>) -> u256 {
     assert(arr.len() == 32, 'too large');
     let mut i = 0;
     let mut high = 0;
     let mut low = 0;
-    // process high
+    // Process first 16 bytes for high part
     while i < arr.len() && i != 16 {
         high = u128_join(high, (*arr[i]).into(), 1);
         i += 1;
     }
-    // process low
+    // Process remaining 16 bytes for low part
     while i < arr.len() && i != 32 {
         low = u128_join(low, (*arr[i]).into(), 1);
         i += 1;
@@ -158,8 +183,10 @@ pub fn u8_array_to_u256(arr: Span<u8>) -> u256 {
 }
 
 /// Converts an array of 8 u32 values to a u256 value.
-/// # Arguments
+/// #### Arguments
 /// * `arr` - Span of u32 values (must be exactly 8 elements)
+/// #### Returns
+/// * `u256` - The converted u256 value
 pub fn u32s_to_u256(arr: Span<u32>) -> u256 {
     assert!(arr.len() == 8, "u32s_to_u2562: input must be 8 elements long");
     let low: u128 = (*arr[7]).into()
@@ -175,11 +202,13 @@ pub fn u32s_to_u256(arr: Span<u32>) -> u256 {
     u256 { high, low }
 }
 
-/// Creates a slice of a u64 array.
-/// # Arguments
+/// Creates a slice of a u64 array
+/// #### Arguments
 /// * `src` - The source array to slice
 /// * `begin` - The starting index of the slice
 /// * `len` - The length of the slice
+/// #### Returns
+/// * `Array<u64>` - A new array containing the sliced elements
 fn u64_array_slice(src: @Array<u64>, mut begin: usize, len: usize) -> Array<u64> {
     let mut slice = array![];
     let end = begin + len;
@@ -191,10 +220,11 @@ fn u64_array_slice(src: @Array<u64>, mut begin: usize, len: usize) -> Array<u64>
 }
 
 /// Returns the slice of an array.
+/// #### Arguments
 /// * `arr` - The array to slice.
 /// * `begin` - The index to start the slice at.
 /// * `len` - The length of the slice.
-/// # Returns
+/// #### Returns
 /// * `Array<u128>` - The slice of the array.
 pub fn u128_array_slice(src: @Array<u128>, mut begin: usize, len: usize) -> Array<u128> {
     let mut slice = array![];
@@ -206,11 +236,13 @@ pub fn u128_array_slice(src: @Array<u128>, mut begin: usize, len: usize) -> Arra
     slice
 }
 
-/// Creates a slice of a generic array.
-/// # Arguments
+/// Creates a slice of a generic array
+/// #### Arguments
 /// * `src` - The source array to slice
 /// * `begin` - The starting index of the slice
 /// * `len` - The length of the slice
+/// #### Returns
+/// * `Array<T>` - A new array containing the sliced elements
 fn array_slice<T, +Drop<T>, +Copy<T>>(src: @Array<T>, mut begin: usize, len: usize) -> Array<T> {
     let mut slice = array![];
     let end = begin + len;
@@ -222,17 +254,19 @@ fn array_slice<T, +Drop<T>, +Copy<T>>(src: @Array<T>, mut begin: usize, len: usi
 }
 
 /// Split a u128 into two parts, [0, left_size-1] and [left_size, end]
-/// # Arguments
+/// #### Arguments
 /// * `value` - data of u128
 /// * `value_size` - the size of `value` in bytes
 /// * `left_size` - the size of left part in bytes
-/// # Returns
+/// #### Returns
 /// * `left` - [0, left_size-1] of the origin u128
 /// * `right` - [left_size, end] of the origin u128 which size is (value_size - left_size)
-/// # Examples
+/// #### Examples
+/// ```rust
 /// u128_split(0x01020304, 4, 0) -> (0, 0x01020304)
 /// u128_split(0x01020304, 4, 1) -> (0x01, 0x020304)
 /// u128_split(0x0001020304, 5, 1) -> (0x00, 0x01020304)
+/// ```
 pub fn u128_split(value: u128, value_size: usize, left_size: usize) -> (u128, u128) {
     assert(value_size <= 16, 'value_size can not be gt 16');
     assert(left_size <= value_size, 'size can not be gt value_size');
@@ -246,15 +280,17 @@ pub fn u128_split(value: u128, value_size: usize, left_size: usize) -> (u128, u1
 }
 
 /// Read sub value from u128 just like substr in other language
-/// # Arguments
+/// #### Arguments
 /// * `value` - data of u128
 /// * `value_size` - the size of data in bytes
 /// * `offset` - the offset of sub value
 /// * `size` - the size of sub value in bytes
-/// # Returns
+/// #### Returns
 /// * `sub_value` - the sub value of origin u128
-/// # Examples
+/// #### Examples
+/// ```rust
 /// u128_sub_value(0x000001020304, 6, 1, 3) -> 0x000102
+/// ```
 pub fn read_sub_u128(value: u128, value_size: usize, offset: usize, size: usize) -> u128 {
     assert(offset + size <= value_size, 'too long');
 
@@ -272,15 +308,17 @@ pub fn read_sub_u128(value: u128, value_size: usize, offset: usize, size: usize)
 }
 
 /// Join two u128 into one
-/// # Arguments
+/// #### Arguments
 /// * `left` - the left part of u128
 /// * `right` - the right part of u128
 /// * `right_size` - the size of right part in bytes
-/// # Returns
+/// #### Returns
 /// * `value` - the joined u128
-/// # Examples
+/// #### Examples
+/// ```rust
 /// u128_join(0x010203, 0xaabb, 2) -> 0x010203aabb
 /// u128_join(0x010203, 0, 2) -> 0x0102030000
+/// ```
 pub fn u128_join(left: u128, right: u128, right_size: usize) -> u128 {
     let left_size = u128_bytes_len(left);
     assert(left_size + right_size <= 16, 'left shift overflow');
@@ -288,11 +326,15 @@ pub fn u128_join(left: u128, right: u128, right_size: usize) -> u128 {
     left * shift + right
 }
 
-/// Return the bytes len represent in u128
-/// # Arguments
+/// Returns the number of bytes needed to represent a u128 value
+/// #### Arguments
 /// * `value` - The u128 value to get byte length for
-/// Examples:
+/// #### Returns
+/// * `usize` - The number of bytes needed to represent the value
+/// #### Examples
+/// ```rust
 /// u128_bytes_len(0x0102) -> 2
+/// ```
 fn u128_bytes_len(value: u128) -> usize {
     if value <= 0xff_u128 {
         1_usize
@@ -332,15 +374,15 @@ fn u128_bytes_len(value: u128) -> usize {
 /// Pads each `u128` value in the given array with zeros on the left if its byte size is smaller
 /// than `bytes_per_element`.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `data` - An array of `u128` values that may require padding.
 /// * `bytes_per_element` - The target byte size for each element in the array.
 ///
-/// # Returns
+/// #### Returns
 /// * A new `Array<u128>` where each element is either unchanged (if already `bytes_per_element`
 /// bytes) or padded with zeros.
 ///
-/// # Padding Strategy
+/// #### Padding Strategy
 /// If the byte size of `value` is less than `bytes_per_element`, zeros are added to the left using
 /// `u128_join`.
 pub fn pad_left_data(data: Array<u128>, bytes_per_element: usize) -> Array<u128> {

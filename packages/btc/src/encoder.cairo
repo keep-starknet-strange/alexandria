@@ -15,11 +15,8 @@ use crate::types::{
 pub trait TransactionEncoderTrait {
     /// Creates a new Bitcoin transaction encoder with an empty ByteArray.
     ///
-    /// # Returns
+    /// #### Returns
     /// * `BTCEncoder` - Initialized encoder context with empty data buffer
-    ///
-    /// # Usage
-    /// This is the entry point for all Bitcoin transaction encoding operations.
     fn new() -> BTCEncoder;
 
     /// Encodes a complete Bitcoin transaction to raw bytes.
@@ -28,15 +25,12 @@ pub trait TransactionEncoderTrait {
     /// witness data (if SegWit), and locktime. Automatically includes SegWit
     /// marker (0x00) and flag (0x01) bytes for SegWit transactions.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Mutable reference to the encoder context
     /// * `transaction` - Complete Bitcoin transaction structure to encode
     ///
-    /// # Returns
+    /// #### Returns
     /// * `ByteArray` - Raw transaction bytes ready for broadcast
-    ///
-    /// # Usage
-    /// Used to serialize structured Bitcoin transaction data into network format.
     fn encode_transaction(ref self: BTCEncoder, transaction: BitcoinTransaction) -> ByteArray;
 
     /// Encodes a single Bitcoin transaction input to the current position.
@@ -44,12 +38,9 @@ pub trait TransactionEncoderTrait {
     /// Serializes input structure: previous TXID (32 bytes), previous output index,
     /// script signature with compact size length prefix, and sequence number.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Mutable reference to the encoder context
     /// * `input` - Transaction input to encode
-    ///
-    /// # Usage
-    /// Used internally by encode_transaction to serialize individual inputs.
     fn encode_input(ref self: BTCEncoder, input: TransactionInput);
 
     /// Encodes a single Bitcoin transaction output to the current position.
@@ -57,12 +48,9 @@ pub trait TransactionEncoderTrait {
     /// Serializes output structure: value (8 bytes, little-endian) and script public key
     /// with compact size length prefix.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Mutable reference to the encoder context
     /// * `output` - Transaction output to encode
-    ///
-    /// # Usage
-    /// Used internally by encode_transaction to serialize individual outputs.
     fn encode_output(ref self: BTCEncoder, output: TransactionOutput);
 
     /// Encodes SegWit witness data for a single input.
@@ -70,12 +58,9 @@ pub trait TransactionEncoderTrait {
     /// Serializes witness stack structure: witness item count (compact size) followed
     /// by each witness item with its length prefix and data.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Mutable reference to the encoder context
     /// * `witness` - Witness data to encode
-    ///
-    /// # Usage
-    /// Used internally by encode_transaction to serialize witness data for SegWit transactions.
     fn encode_witness(ref self: BTCEncoder, witness: TransactionWitness);
 
     /// Writes a Bitcoin compact size integer (variable-length encoding).
@@ -86,43 +71,37 @@ pub trait TransactionEncoderTrait {
     /// - 0xfe: 5 bytes (1 + 4 little-endian)
     /// - 0xff: 9 bytes (1 + 8 little-endian)
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Mutable reference to the encoder context
     /// * `value` - The integer value to encode
-    ///
-    /// # Usage
-    /// Used for encoding array lengths, script sizes, and other variable-length fields.
     fn write_compact_size(ref self: BTCEncoder, value: u64);
 
     /// Writes a single byte to the current position.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Mutable reference to the encoder context
     /// * `value` - The byte value to write
     fn write_u8(ref self: BTCEncoder, value: u8);
 
     /// Writes a 32-bit unsigned integer as little-endian bytes.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Mutable reference to the encoder context
     /// * `value` - The u32 value to encode
     fn write_u32_le(ref self: BTCEncoder, value: u32);
 
     /// Writes a 64-bit unsigned integer as little-endian bytes.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Mutable reference to the encoder context
     /// * `value` - The u64 value to encode
     fn write_u64_le(ref self: BTCEncoder, value: u64);
 
     /// Writes raw bytes to the current position.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - Mutable reference to the encoder context
     /// * `bytes` - The ByteArray to append
-    ///
-    /// # Usage
-    /// Used for writing script data, TXIDs, and other raw byte sequences.
     fn write_bytes(ref self: BTCEncoder, bytes: ByteArray);
 }
 

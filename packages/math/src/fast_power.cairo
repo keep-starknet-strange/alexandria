@@ -3,12 +3,12 @@ use core::ops::DivAssign;
 
 /// Calculate the base ^ power
 /// using the fast powering algorithm
-/// # Arguments
+/// #### Arguments
 /// * ` base ` - The base of the exponentiation
 /// * ` power ` - The power of the exponentiation
-/// # Returns
+/// #### Returns
 /// * ` T ` - The result of base ^ power
-/// # Panics
+/// #### Panics
 /// * ` base ` is 0
 pub fn fast_power<
     T,
@@ -45,13 +45,13 @@ pub fn fast_power<
 
 /// Calculate the ( base ^ power ) mod modulus
 /// using the fast powering algorithm
-/// # Arguments
+/// #### Arguments
 /// * ` base ` - The base of the exponentiation
 /// * ` power ` - The power of the exponentiation
 /// * ` modulus ` - The modulus used in the calculation
-/// # Returns
+/// #### Returns
 /// * ` T ` - The result of ( base ^ power ) mod modulus
-/// # Panics
+/// #### Panics
 /// * ` base ` is 0
 pub fn fast_power_mod<
     T,

@@ -24,10 +24,10 @@ pub impl Bitmap<
     +Copy<T>,
 > of BitmapTrait<T> {
     /// The bit value at the provided index of a number.
-    /// # Arguments
+    /// #### Arguments
     /// * `x` - The value for which to extract the bit value.
     /// * `i` - The index.
-    /// # Returns
+    /// #### Returns
     /// * The value at index.
     #[inline(always)]
     fn get_bit_at(x: T, i: u8) -> bool {
@@ -36,11 +36,11 @@ pub impl Bitmap<
     }
 
     /// Set the bit to value at the provided index of a number.
-    /// # Arguments
+    /// #### Arguments
     /// * `x` - The value for which to extract the bit value.
     /// * `i` - The index.
     /// * `value` - The value to set the bit to.
-    /// # Returns
+    /// #### Returns
     /// * The value with the bit set to value.
     #[inline(always)]
     fn set_bit_at(x: T, i: u8, value: bool) -> T {
@@ -54,9 +54,9 @@ pub impl Bitmap<
 
     /// The index of the most significant bit of the number,
     /// where the least significant bit is at index 0 and the most significant bit is at index 255
-    /// # Arguments
+    /// #### Arguments
     /// * `x` - The value for which to compute the most significant bit, must be greater than 0.
-    /// # Returns
+    /// #### Returns
     /// * The index of the most significant bit
     #[inline(always)]
     fn most_significant_bit(x: T) -> Option<u8> {
@@ -102,9 +102,9 @@ pub impl Bitmap<
 
     /// The index of the least significant bit of the number,
     /// where the least significant bit is at index 0 and the most significant bit is at index 255
-    /// # Arguments
+    /// #### Arguments
     /// * `x` - The value for which to compute the least significant bit, must be greater than 0.
-    /// # Returns
+    /// #### Returns
     /// * The index of the least significant bit
     #[inline(always)]
     fn least_significant_bit(x: T) -> Option<u8> {
@@ -156,10 +156,10 @@ pub impl Bitmap<
     }
 
     /// The index of the nearest left significant bit to the index of a number.
-    /// # Arguments
+    /// #### Arguments
     /// * `x` - The value for which to compute the most significant bit.
     /// * `i` - The index for which to start the search.
-    /// # Returns
+    /// #### Returns
     /// * The index of the nearest left significant bit, None is returned if no significant bit is
     /// found.
     #[inline(always)]
@@ -169,10 +169,10 @@ pub impl Bitmap<
     }
 
     /// The index of the nearest right significant bit to the index of a number.
-    /// # Arguments
+    /// #### Arguments
     /// * `x` - The value for which to compute the most significant bit.
     /// * `i` - The index for which to start the search.
-    /// # Returns
+    /// #### Returns
     /// * The index of the nearest right significant bit, None is returned if no significant bit is
     /// found.
     #[inline(always)]
@@ -183,12 +183,12 @@ pub impl Bitmap<
 
     /// The index of the nearest significant bit to the index of a number,
     /// where the least significant bit is at index 0 and the most significant bit is at index 255
-    /// # Arguments
+    /// #### Arguments
     /// * `x` - The value for which to compute the most significant bit, must be greater than 0.
     /// * `i` - The index for which to start the search.
     /// * `priority` - if priority is set to true then right is prioritized over left, left over
     /// right otherwise.
-    /// # Returns
+    /// #### Returns
     /// * The index of the nearest significant bit, None is returned if no significant bit is found.
     #[inline(always)]
     fn nearest_significant_bit(x: T, i: u8, priority: bool) -> Option<u8> {

@@ -21,11 +21,11 @@ const POW_2_32: u64 = 0x100000000;
 /// Converts 4 bytes from ByteArray to u32 in little-endian format
 /// This function safely handles cases where fewer than 4 bytes are available
 ///
-/// # Arguments
+/// #### Arguments
 /// * `bytes` - The ByteArray containing the data
 /// * `index` - Starting index for reading bytes
 ///
-/// # Returns
+/// #### Returns
 /// * `u32` - The converted 32-bit value in little-endian format
 #[inline(always)]
 fn bytes_to_u32_swap(bytes: @ByteArray, index: usize) -> u32 {
@@ -512,13 +512,13 @@ pub fn ripemd160_context_as_u256(ctx: @RIPEMD160Context) -> u256 {
 /// Computes the RIPEMD-160 hash of the input data. This implementation is based on
 /// the original work by j1mbo64: https://github.com/j1mbo64/ripemd160_cairo
 ///
-/// # Arguments
+/// #### Arguments
 /// * `data` - Input data to hash
 ///
-/// # Returns
+/// #### Returns
 /// * `RIPEMD160Context` - Context containing the computed hash
 ///
-/// # Example
+/// #### Example
 /// ```rust
 /// let data: ByteArray = "Hello, World!";
 /// let hash_ctx = ripemd160_hash(@data);

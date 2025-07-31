@@ -2,6 +2,10 @@ use core::integer::u512;
 use core::ops::index::IndexView;
 use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 
+/// Represents the state of a byte reader for sequential reading operations.
+/// #### Fields
+/// * `data` - A snapshot reference to the underlying data structure
+/// * `index` - The current position in the data for reading operations
 #[derive(Clone, Drop)]
 pub struct ByteReaderState<T> {
     pub(crate) data: @T,
@@ -11,166 +15,176 @@ pub struct ByteReaderState<T> {
 
 pub trait ByteReader<T> {
     /// Wraps the array of bytes in a ByteReader for sequential consumption of integers and/or bytes
-    /// # Returns
+    /// #### Returns
     /// * `ByteReader` - The reader struct wrapping a read-only snapshot of this ByteArray
     fn reader(self: @T) -> ByteReaderState<T>;
     /// Checks that there are enough remaining bytes available
-    /// # Arguments
+    /// #### Arguments
     /// * `at` - the start index position of the byte data
     /// * `count` - the number of bytes required
-    /// # Returns
+    /// #### Returns
     /// * `bool` - `true` when there are `count` bytes remaining, `false` otherwise.
     fn remaining(self: @T, at: usize, count: usize) -> bool;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
-    /// # Arguments
+    /// #### Arguments
     /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
+    /// #### Returns
     /// * `Option<u16>` - Returns an integer if there are enough consecutive bytes available in the
     /// ByteArray
     fn word_u16(self: @T, offset: usize) -> Option<u16>;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
+    /// #### Returns
     /// * `Option<u16>` - Returns an integer if there are enough consecutive bytes available in the
     /// ByteArray
     fn word_u16_le(self: @T, offset: usize) -> Option<u16>;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
-    /// # Arguments
+    /// #### Arguments
     /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
+    /// #### Returns
     /// * `Option<u32>` - Returns an integer if there are enough consecutive bytes available in the
     /// ByteArray
     fn word_u32(self: @T, offset: usize) -> Option<u32>;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
+    /// #### Returns
     /// * `Option<u32>` - Returns an integer if there are enough consecutive bytes available in the
     /// ByteArray
     fn word_u32_le(self: @T, offset: usize) -> Option<u32>;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
-    /// # Arguments
+    /// #### Arguments
     /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
+    /// #### Returns
     /// * `Option<u64>` - Returns an integer if there are enough consecutive bytes available in the
     /// ByteArray
     fn word_u64(self: @T, offset: usize) -> Option<u64>;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
+    /// #### Returns
     /// * `Option<u64>` - Returns an integer if there are enough consecutive bytes available in the
     /// ByteArray
     fn word_u64_le(self: @T, offset: usize) -> Option<u64>;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in big endian
-    /// # Arguments
+    /// #### Arguments
     /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
+    /// #### Returns
     /// * `Option<u128>` - Returns an integer if there are enough consecutive bytes available in the
     /// ByteArray
     fn word_u128(self: @T, offset: usize) -> Option<u128>;
     /// Reads consecutive bytes from a specified offset as an unsigned integer in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `offset` - the start location of the consecutive bytes to read
-    /// # Returns
+    /// #### Returns
     /// * `Option<u128>` - Returns an integer if there are enough consecutive bytes available in the
     /// ByteArray
     fn word_u128_le(self: @T, offset: usize) -> Option<u128>;
     /// Reads a u8 unsigned integer
-    /// # Returns
+    /// #### Returns
     /// * `Option<u8>` - If there are enough bytes remaining an optional integer is returned
     fn read_u8(ref self: ByteReaderState<T>) -> Option<u8>;
     /// Reads a u16 unsigned integer in big endian byte order
-    /// # Returns
+    /// #### Returns
     /// * `Option<u16>` - If there are enough bytes remaining an optional integer is returned
     fn read_u16(ref self: ByteReaderState<T>) -> Option<u16>;
     /// Reads a u16 unsigned integer in little endian byte order
-    /// # Returns
+    /// #### Returns
     /// * `Option<u16>` - If there are enough bytes remaining an optional integer is returned
     fn read_u16_le(ref self: ByteReaderState<T>) -> Option<u16>;
     /// Reads a u32 unsigned integer in big endian byte order
-    /// # Returns
+    /// #### Returns
     /// * `Option<u32>` - If there are enough bytes remaining an optional integer is returned
     fn read_u32(ref self: ByteReaderState<T>) -> Option<u32>;
     /// Reads a u32 unsigned integer in little endian byte order
-    /// # Returns
+    /// #### Returns
     /// * `Option<u32>` - If there are enough bytes remaining an optional integer is returned
     fn read_u32_le(ref self: ByteReaderState<T>) -> Option<u32>;
     /// Reads a u64 unsigned integer in big endian byte order
-    /// # Returns
+    /// #### Returns
     /// * `Option<u64>` - If there are enough bytes remaining an optional integer is returned
     fn read_u64(ref self: ByteReaderState<T>) -> Option<u64>;
     /// Reads a u64 unsigned integer in little endian byte order
-    /// # Returns
+    /// #### Returns
     /// * `Option<u64>` - If there are enough bytes remaining an optional integer is returned
     fn read_u64_le(ref self: ByteReaderState<T>) -> Option<u64>;
     /// Reads a u128 unsigned integer in big endian byte order
-    /// # Returns
-    /// * `Option<u218>` - If there are enough bytes remaining an optional integer is returned
+    /// #### Returns
+    /// * `Option<u128>` - If there are enough bytes remaining an optional integer is returned
     fn read_u128(ref self: ByteReaderState<T>) -> Option<u128>;
     /// Reads a u128 unsigned integer in little endian byte order
-    /// # Returns
-    /// * `Option<u218>` - If there are enough bytes remaining an optional integer is returned
+    /// #### Returns
+    /// * `Option<u128>` - If there are enough bytes remaining an optional integer is returned
     fn read_u128_le(ref self: ByteReaderState<T>) -> Option<u128>;
     /// Reads a u256 unsigned integer in big endian byte order
-    /// # Returns
+    /// #### Returns
     /// * `Option<u256>` - If there are enough bytes remaining an optional integer is returned
     fn read_u256(ref self: ByteReaderState<T>) -> Option<u256>;
     /// Reads a u256 unsigned integer in little endian byte order
-    /// # Returns
+    /// #### Returns
     /// * `Option<u256>` - If there are enough bytes remaining an optional integer is returned
     fn read_u256_le(ref self: ByteReaderState<T>) -> Option<u256>;
     /// Reads a u512 unsigned integer in big endian byte order
-    /// # Returns
+    /// #### Returns
     /// * `Option<u512>` - If there are enough bytes remaining an optional integer is returned
     fn read_u512(ref self: ByteReaderState<T>) -> Option<u512>;
     /// Reads a u512 unsigned integer in little endian byte order
-    /// # Returns
+    /// #### Returns
     /// * `Option<u512>` - If there are enough bytes remaining an optional integer is returned
     fn read_u512_le(ref self: ByteReaderState<T>) -> Option<u512>;
     /// Reads an i8 signed integer in two's complement encoding from the ByteArray
-    /// # Returns
+    /// #### Returns
     /// * `Option<i8>` - If there are enough bytes remaining an optional integer is returned
     fn read_i8(ref self: ByteReaderState<T>) -> Option<i8>;
     /// Reads an i16 signed integer in two's complement encoding from the ByteArray in big endian
-    /// byte order # Returns
+    /// byte order
+    /// #### Returns
     /// * `Option<i16>` - If there are enough bytes remaining an optional integer is returned
     fn read_i16(ref self: ByteReaderState<T>) -> Option<i16>;
     /// Reads an i16 signed integer in two's complement encoding from the ByteArray in little endian
-    /// byte order # Returns
+    /// byte order
+    /// #### Returns
     /// * `Option<i16>` - If there are enough bytes remaining an optional integer is returned
     fn read_i16_le(ref self: ByteReaderState<T>) -> Option<i16>;
     /// Reads an i32 signed integer in two's complement encoding from the ByteArray in big endian
-    /// byte order # Returns
+    /// byte order
+    /// #### Returns
     /// * `Option<i32>` - If there are enough bytes remaining an optional integer is returned
     fn read_i32(ref self: ByteReaderState<T>) -> Option<i32>;
     /// Reads an i32 signed integer in two's complement encoding from the ByteArray in little endian
-    /// byte order # Returns
+    /// byte order
+    /// #### Returns
     /// * `Option<i32>` - If there are enough bytes remaining an optional integer is returned
     fn read_i32_le(ref self: ByteReaderState<T>) -> Option<i32>;
     /// Reads an i64 signed integer in two's complement encoding from the ByteArray in big endian
-    /// byte order # Returns
+    /// byte order
+    /// #### Returns
     /// * `Option<i64>` - If there are enough bytes remaining an optional integer is returned
     fn read_i64(ref self: ByteReaderState<T>) -> Option<i64>;
     /// Reads an i64 signed integer in two's complement encoding from the ByteArray in little endian
-    /// byte order # Returns
+    /// byte order
+    /// #### Returns
     /// * `Option<i64>` - If there are enough bytes remaining an optional integer is returned
     fn read_i64_le(ref self: ByteReaderState<T>) -> Option<i64>;
     /// Reads an i128 signed integer in two's complement encoding from the ByteArray in big endian
-    /// byte order # Returns
+    /// byte order
+    /// #### Returns
     /// * `Option<i128>` - If there are enough bytes remaining an optional integer is returned
     fn read_i128(ref self: ByteReaderState<T>) -> Option<i128>;
     /// Reads an i128 signed integer in two's complement encoding from the ByteArray in little
-    /// endian byte order # Returns
+    /// endian byte order
+    /// #### Returns
     /// * `Option<i128>` - If there are enough bytes remaining an optional integer is returned
     fn read_i128_le(ref self: ByteReaderState<T>) -> Option<i128>;
     /// Remaining length count relative to what has already been consume/read
-    /// # Returns
+    /// #### Returns
     /// * `usize` - count number of bytes remaining
     fn len(self: @ByteReaderState<T>) -> usize;
 }
 
+/// Implementation of ByteReader trait for types that support indexing and length operations.
+/// Provides sequential byte reading functionality with big-endian and little-endian support.
 impl ByteReaderImpl<
     T, +Drop<T>, +Len<T>, +IndexView<T, usize>, +Into<IndexView::<T, usize>::Target, @u8>,
 > of ByteReader<T> {
@@ -526,6 +540,12 @@ impl ByteReaderImpl<
     }
 }
 
+/// Parses a signed integer from its two's complement representation.
+/// #### Arguments
+/// * `value` - The unsigned value to interpret as signed
+/// * `bytes` - The number of bytes in the representation
+/// #### Returns
+/// * `Option<T>` - The parsed signed integer, or None if conversion fails
 fn parse_signed<T, +TryInto<felt252, T>>(value: felt252, bytes: usize) -> Option<T> {
     match value.try_into() {
         Option::Some(pos) => Option::Some(pos),
@@ -536,11 +556,16 @@ fn parse_signed<T, +TryInto<felt252, T>>(value: felt252, bytes: usize) -> Option
     }
 }
 
-/// Len trait that abstracts the `len()` property of `Array<u8>`, `Span<u8>` and `ByteArray` types
+/// Trait that abstracts the `len()` property of `Array<u8>`, `Span<u8>` and `ByteArray` types.
+/// Provides a unified interface for getting the length of different byte container types.
 trait Len<T> {
+    /// Returns the length of the container.
+    /// #### Returns
+    /// * `usize` - The number of elements in the container
     fn len(self: @T) -> usize;
 }
 
+/// Implementation of Len trait for Array<u8>.
 impl ArrayU8LenImpl of Len<Array<u8>> {
     #[inline]
     fn len(self: @Array<u8>) -> usize {
@@ -548,6 +573,7 @@ impl ArrayU8LenImpl of Len<Array<u8>> {
     }
 }
 
+/// Implementation of Len trait for Span<u8>.
 impl SpanU8LenImpl of Len<Span<u8>> {
     #[inline]
     fn len(self: @Span<u8>) -> usize {
@@ -556,6 +582,7 @@ impl SpanU8LenImpl of Len<Span<u8>> {
 }
 
 
+/// Implementation of Len trait for ByteArray.
 impl ByteArrayLenImpl of Len<ByteArray> {
     #[inline]
     fn len(self: @ByteArray) -> usize {
@@ -565,8 +592,8 @@ impl ByteArrayLenImpl of Len<ByteArray> {
 
 impl ByteReaderLenImpl<T, +Len<T>> of Len<ByteReaderState<T>> {
     /// Returns the remaining length of the ByteReader
-    /// # Returns
-    /// `usize` - The number of bytes remaining, considering the number of bytes that have already
+    /// #### Returns
+    /// - `usize` - The number of bytes remaining, considering the number of bytes that have already
     /// been consumed
     #[inline]
     fn len(self: @ByteReaderState<T>) -> usize {
@@ -576,6 +603,7 @@ impl ByteReaderLenImpl<T, +Len<T>> of Len<ByteReaderState<T>> {
     }
 }
 
+/// Implementation of Into trait for converting u8 to @u8 reference.
 impl IntoU8Impl of Into<u8, @u8> {
     #[inline(always)]
     fn into(self: u8) -> @u8 {
@@ -583,6 +611,9 @@ impl IntoU8Impl of Into<u8, @u8> {
     }
 }
 
+/// Type alias for ByteReader implementation with Array<u8>.
 impl ArrayU8ReaderImpl = ByteReaderImpl<Array<u8>>;
+/// Type alias for ByteReader implementation with Span<u8>.
 impl SpanU8ReaderImpl = ByteReaderImpl<Span<u8>>;
+/// Type alias for ByteReader implementation with ByteArray.
 impl ByteArrayReaderImpl = ByteReaderImpl<ByteArray>;

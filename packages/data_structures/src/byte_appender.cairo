@@ -10,17 +10,19 @@ use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 /// only one implementation is worthwhile.
 pub trait ByteAppenderSupportTrait<T> {
     /// Appends `bytes` data of size `count` ordered in big endian
-    /// # Arguments
+    /// #### Arguments
     /// * `bytes` - big endian ordered bytes to append
     /// * `count` - number of bytes from input to append
     fn append_bytes_be(ref self: T, bytes: felt252, count: usize);
     /// Appends `bytes` data of size `count` ordered in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `bytes` - little endian ordered bytes to append
     /// * `count` - number of bytes from input to append
     fn append_bytes_le(ref self: T, bytes: felt252, count: usize);
 }
 
+/// Implementation of ByteAppenderSupportTrait for Array<u8>.
+/// Provides byte appending functionality for u8 arrays with big-endian and little-endian support.
 impl ByteAppenderSupportArrayU8Impl of ByteAppenderSupportTrait<Array<u8>> {
     fn append_bytes_be(ref self: Array<u8>, bytes: felt252, mut count: usize) {
         assert(count <= 16, 'count too big');
@@ -46,6 +48,8 @@ impl ByteAppenderSupportArrayU8Impl of ByteAppenderSupportTrait<Array<u8>> {
         };
     }
 }
+/// Implementation of ByteAppenderSupportTrait for ByteArray.
+/// Provides efficient byte appending functionality for ByteArray with endianness support.
 impl ByteAppenderSupportByteArrayImpl of ByteAppenderSupportTrait<ByteArray> {
     #[inline(always)]
     fn append_bytes_be(ref self: ByteArray, bytes: felt252, count: usize) {
@@ -69,91 +73,94 @@ impl ByteAppenderSupportByteArrayImpl of ByteAppenderSupportTrait<ByteArray> {
 )]
 pub trait ByteAppender<T> {
     /// Appends an unsigned 16 bit integer encoded in big endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 16 bit unsigned integer typed as u16
     fn append_u16(ref self: T, word: u16);
     /// Appends an unsigned 16 bit integer encoded in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 16 bit unsigned integer typed as u16
     fn append_u16_le(ref self: T, word: u16);
     /// Appends an unsigned 32 bit integer encoded in big endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 32 bit unsigned integer typed as u32
     fn append_u32(ref self: T, word: u32);
     /// Appends an unsigned 32 bit integer encoded in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 32 bit unsigned integer typed as u32
     fn append_u32_le(ref self: T, word: u32);
     /// Appends an unsigned 64 bit integer encoded in big endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 64 bit unsigned integer typed as u64
     fn append_u64(ref self: T, word: u64);
     /// Appends an unsigned 64 bit integer encoded in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 64 bit unsigned integer typed as u64
     fn append_u64_le(ref self: T, word: u64);
     /// Appends an unsigned 128 bit integer encoded in big endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 128 bit unsigned integer typed as u128
     fn append_u128(ref self: T, word: u128);
     /// Appends an unsigned 128 bit integer encoded in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 128 bit unsigned integer typed as u128
     fn append_u128_le(ref self: T, word: u128);
     /// Appends an unsigned 256 bit integer encoded in big endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 256 bit unsigned integer typed as u256
     fn append_u256(ref self: T, word: u256);
     /// Appends an unsigned 256 bit integer encoded in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 256 bit unsigned integer typed as u256
     fn append_u256_le(ref self: T, word: u256);
     /// Appends an unsigned 512 bit integer encoded in big endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 512 bit unsigned integer typed as u32
     fn append_u512(ref self: T, word: u512);
     /// Appends an unsigned 512 bit integer encoded in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 512 bit unsigned integer typed as u32
     fn append_u512_le(ref self: T, word: u512);
     /// Appends a signed 8 bit integer
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - an 8 bit signed integer typed as i8
     fn append_i8(ref self: T, word: i8);
     /// Appends a signed 16 bit integer encoded in big endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 16 bit signed integer typed as i16
     fn append_i16(ref self: T, word: i16);
     /// Appends a signed 16 bit integer encoded in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 16 bit signed integer typed as i16
     fn append_i16_le(ref self: T, word: i16);
     /// Appends a signed 32 bit integer encoded in big endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 32 bit signed integer typed as i32
     fn append_i32(ref self: T, word: i32);
     /// Appends a signed 32 bit integer encoded in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 32 bit signed integer typed as i32
     fn append_i32_le(ref self: T, word: i32);
     /// Appends a signed 64 bit integer encoded in big endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 64 bit signed integer typed as i64
     fn append_i64(ref self: T, word: i64);
     /// Appends a signed 64 bit integer encoded in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 64 bit signed integer typed as i64
     fn append_i64_le(ref self: T, word: i64);
     /// Appends a signed 128 bit integer encoded in big endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 128 bit signed integer typed as i128
     fn append_i128(ref self: T, word: i128);
     /// Appends a signed 128 bit integer encoded in little endian
-    /// # Arguments
+    /// #### Arguments
     /// * `word` - a 128 bit signed integer typed as i128
     fn append_i128_le(ref self: T, word: i128);
 }
 
+/// Generic implementation of ByteAppender trait for types that support byte appending.
+/// Provides methods for appending various integer types in both big-endian and little-endian
+/// formats.
 impl ByteAppenderImpl<T, +Drop<T>, +ByteAppenderSupportTrait<T>> of ByteAppender<T> {
     fn append_u16(ref self: T, word: u16) {
         self.append_bytes_be(word.into(), 2);
@@ -288,11 +295,20 @@ impl ByteAppenderImpl<T, +Drop<T>, +ByteAppenderSupportTrait<T>> of ByteAppender
     }
 }
 
+/// Type alias for ByteAppender implementation with Array<u8>.
 impl ArrayU8ByteAppenderImpl = ByteAppenderImpl<Array<u8>>;
+/// Type alias for ByteAppender implementation with ByteArray.
 impl ByteArrayByteAppenderImpl = ByteAppenderImpl<ByteArray>;
 
 // Duplicated functions from encoding. To fix dependency publish problem.
 
+/// Reverses the byte order of a value by repeatedly dividing and reconstructing.
+/// #### Arguments
+/// * `word` - The value to reverse
+/// * `size` - The number of steps to perform
+/// * `step` - The step size for division/reconstruction
+/// #### Returns
+/// * `(T, T)` - Tuple containing the reversed value and remaining value
 #[inline]
 pub fn reversing<
     T,
@@ -311,6 +327,14 @@ pub fn reversing<
     reversing_partial_result(word, result, size, step)
 }
 
+/// Reverses byte order with an existing partial result.
+/// #### Arguments
+/// * `word` - The value to reverse
+/// * `onto` - The existing partial result to build upon
+/// * `size` - The number of steps to perform
+/// * `step` - The step size for division/reconstruction
+/// #### Returns
+/// * `(T, T)` - Tuple containing the final reversed value and remaining value
 #[inline]
 pub fn reversing_partial_result<
     T,

@@ -1,9 +1,9 @@
 //! # Collatz Sequence
 
 /// Generates the Collatz sequence for a given number.
-/// # Arguments
+/// #### Arguments
 /// * `number` - The number to generate the Collatz sequence for.
-/// # Returns
+/// #### Returns
 /// * `Array` - The Collatz sequence as an array of `felt252` numbers.
 pub fn sequence(mut number: u128) -> Array<u128> {
     let mut arr = array![];

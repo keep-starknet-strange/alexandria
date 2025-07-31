@@ -5,11 +5,11 @@ use keccak::cairo_keccak;
 impl U64Impl of U64Trait {
     /// Converts a little-endian byte slice to a 64-bit unsigned integer
     ///
-    /// # Arguments
+    /// #### Arguments
     ///
     /// * `self` - A `Span<u8>` slice of size n <=8.
     ///
-    /// # Returns
+    /// #### Returns
     ///
     /// A tuple containing the converted 64-bit unsigned integer and the amount of bytes consumed
     fn from_le_bytes(mut self: Span<u8>) -> (u64, u32) {
@@ -37,11 +37,11 @@ fn reverse_endianness(value: u256) -> u256 {
 
 /// Computes the Solidity-compatible Keccak hash of an array of bytes.
 ///
-/// # Arguments
+/// #### Arguments
 ///
 /// * `self` - A `Array<u8>` of bytes.
 ///
-/// # Returns
+/// #### Returns
 ///
 /// A `u256` value representing the Keccak hash of the input bytes array.
 #[deprecated(

@@ -1,7 +1,7 @@
 //! Stack implementation.
 //!
-//! # Example
-//! ```
+//! #### Example
+//! ```rust
 //! use alexandria::data_structures::stack::StackTrait;
 //!
 //! // Create a new stack instance.
@@ -18,24 +18,24 @@ pub trait StackTrait<S, T> {
     /// Creates a new Stack instance.
     fn new() -> S;
     /// Pushes a new value onto the stack.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The stack to push the value onto
     /// * `value` - The value to push onto the stack
     fn push(ref self: S, value: T);
     /// Removes the last item from the stack and returns it, or None if the stack is empty.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The stack to pop the item from
     fn pop(ref self: S) -> Option<T>;
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The stack to peek at
     fn peek(ref self: S) -> Option<T>;
     /// Returns the number of items in the stack.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The stack to get the length of
     fn len(self: @S) -> usize;
     /// Returns true if the stack is empty.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The stack to check if it is empty
     fn is_empty(self: @S) -> bool;
 }
@@ -56,7 +56,7 @@ impl Felt252StackImpl<
 > of StackTrait<Felt252Stack<T>, T> {
     #[inline(always)]
     /// Creates a new Stack instance.
-    /// Returns
+    /// #### Returns
     /// * Stack The new stack instance.
     fn new() -> Felt252Stack<T> {
         let elements: Felt252Dict<T> = Default::default();
@@ -72,8 +72,9 @@ impl Felt252StackImpl<
     }
 
     /// Removes the last item from the stack and returns it, or None if the stack is empty.
+    /// #### Arguments
     /// * `self` - The stack to pop the item off of.
-    /// Returns
+    /// #### Returns
     /// * Stack The stack with the item removed.
     /// * Option<u256> The item removed or None if the stack is empty.
     fn pop(ref self: Felt252Stack<T>) -> Option<T> {
@@ -87,8 +88,9 @@ impl Felt252StackImpl<
     }
 
     /// Returns the last item from the stack without removing it, or None if the stack is empty.
+    /// #### Arguments
     /// * `self` - The stack to peek the item off of.
-    /// Returns
+    /// #### Returns
     /// * Option<u256> The last item of the stack
     fn peek(ref self: Felt252Stack<T>) -> Option<T> {
         if self.is_empty() {
@@ -98,16 +100,18 @@ impl Felt252StackImpl<
     }
 
     /// Returns the number of items in the stack.
+    /// #### Arguments
     /// * `self` - The stack to get the length of.
-    /// Returns
+    /// #### Returns
     /// * usize The number of items in the stack.
     fn len(self: @Felt252Stack<T>) -> usize {
         *self.len
     }
 
     /// Returns true if the stack is empty.
+    /// #### Arguments
     /// * `self` - The stack to check if it is empty.
-    /// Returns
+    /// #### Returns
     /// * bool True if the stack is empty, false otherwise.
     fn is_empty(self: @Felt252Stack<T>) -> bool {
         *self.len == 0

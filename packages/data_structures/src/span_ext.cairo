@@ -5,72 +5,72 @@ use super::array_ext::ArrayTraitExt;
 
 pub trait SpanTraitExt<T, +Clone<T>, +Drop<T>> {
     /// Removes up to `n` elements from the front of `self` and returns them in a new span.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The span to modify
     /// * `n` - The number of elements to remove from the front
     fn pop_front_n(ref self: Span<T>, n: usize) -> Span<T>;
     /// Removes up to `n` elements from the back of `self` and returns them in a new span.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The span to modify
     /// * `n` - The number of elements to remove from the back
     fn pop_back_n(ref self: Span<T>, n: usize) -> Span<T>;
     /// Removes up to `n` elements from the front of `self`.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The span to modify
     /// * `n` - The number of elements to remove from the front
     fn remove_front_n(ref self: Span<T>, n: usize);
     /// Removes up to `n` elements from the back of `self`.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The span to modify
     /// * `n` - The number of elements to remove from the back
     fn remove_back_n(ref self: Span<T>, n: usize);
     /// Clones and appends all the elements of `self` and then `other` in a single new array.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The first span to concatenate
     /// * `other` - The second span to concatenate
     fn concat(self: Span<T>, other: Span<T>) -> Array<T>;
     /// Return a new array containing the elements of `self` in a reversed order.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The span to reverse
     fn reversed(self: Span<T>) -> Array<T>;
     /// Returns `true` if the span contains an element with the given value.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The span to search
     /// * `item` - The value to search for
     fn contains<+PartialEq<T>>(self: Span<T>, item: @T) -> bool;
     /// Searches for an element the span, returning its index.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The span to search
     /// * `item` - The value to search for
     fn position<+PartialEq<T>>(self: Span<T>, item: @T) -> Option<usize>;
     /// Returns the number of elements in the span with the given value.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The span to search
     /// * `item` - The value to count
     fn occurrences<+PartialEq<T>>(self: Span<T>, item: @T) -> usize;
     /// Returns the minimum element of a span.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The span to find the minimum value in
     fn min<+PartialOrd<@T>>(self: Span<T>) -> Option<T>;
     /// Returns the position of the minimum element of a span.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The span to find the minimum position in
     fn min_position<+PartialOrd<@T>>(self: Span<T>) -> Option<usize>;
     /// Returns the maximum element of a span.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The span to find the maximum value in
     fn max<+PartialOrd<@T>>(self: Span<T>) -> Option<T>;
     /// Returns the position of the maximum element of a span.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The span to find the maximum position in
     fn max_position<+PartialOrd<@T>>(self: Span<T>) -> Option<usize>;
     /// Returns a new array, cloned from `self` but removes consecutive repeated elements.
     /// If the span is sorted, this removes all duplicates.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The span to deduplicate
     fn dedup<+PartialEq<T>>(self: Span<T>) -> Array<T>;
     /// Returns a new array, cloned from `self` but without any duplicate.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The span to get unique elements from
     fn unique<+PartialEq<T>>(self: Span<T>) -> Array<T>;
 }

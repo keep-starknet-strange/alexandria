@@ -10,7 +10,7 @@ pub impl SignatureImpl of SignatureTrait {
     /// This function expects a 65-byte signature (r, s, v) in the standard Ethereum format.
     /// It extracts the components, builds a `Signature` struct, and calls the verification routine.
     ///
-    /// # Arguments
+    /// #### Arguments
     /// * `msg_hash` - The hash of the signed message (typically a Keccak256 hash of a message
     /// prefix + payload).
     /// * `signature` - The 65-byte signature as a `ByteArray`: r (32 bytes) | s (32 bytes) | v (1

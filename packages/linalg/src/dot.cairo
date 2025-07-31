@@ -3,10 +3,10 @@ use core::ops::AddAssign;
 //! Dot product of two arrays
 
 /// Compute the dot product for 2 given arrays.
-/// # Arguments
+/// #### Arguments
 /// * `xs` - The first sequence of len L.
 /// * `ys` - The second sequence of len L.
-/// # Returns
+/// #### Returns
 /// * `sum` - The dot product.
 pub fn dot<T, +Mul<T>, +AddAssign<T, T>, +Zero<T>, +Copy<T>, +Drop<T>>(
     mut xs: Span<T>, mut ys: Span<T>,

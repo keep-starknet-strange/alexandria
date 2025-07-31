@@ -3,10 +3,10 @@ use core::num::traits::{OverflowingAdd, OverflowingSub};
 use core::result::ResultTrait;
 
 /// Performs addition with overflow detection
-/// # Arguments
+/// #### Arguments
 /// * `lhs` - Left operand (u256)
 /// * `rhs` - Right operand (u256)
-/// # Returns
+/// #### Returns
 /// * `Result<u256, u256>` - Ok(sum) if no overflow, Err(wrapped_sum) if overflow
 fn u256_overflow_add(lhs: u256, rhs: u256) -> Result<u256, u256> implicits(RangeCheck) {
     let (sum, overflow) = lhs.overflowing_add(rhs);
@@ -18,10 +18,10 @@ fn u256_overflow_add(lhs: u256, rhs: u256) -> Result<u256, u256> implicits(Range
 }
 
 /// Performs subtraction with overflow detection
-/// # Arguments
+/// #### Arguments
 /// * `lhs` - Left operand (u256)
 /// * `rhs` - Right operand (u256)
-/// # Returns
+/// #### Returns
 /// * `Result<u256, u256>` - Ok(difference) if no overflow, Err(wrapped_difference) if overflow
 fn u256_overflow_sub(lhs: u256, rhs: u256) -> Result<u256, u256> implicits(RangeCheck) {
     let (sum, overflow) = lhs.overflowing_sub(rhs);
@@ -47,12 +47,12 @@ pub impl U512Intou256X2 of Into<u512, u256X2> {
 }
 
 /// Adds two u512 values with overflow panic
-/// # Arguments
+/// #### Arguments
 /// * `lhs` - Left operand (u512)
 /// * `rhs` - Right operand (u512)
-/// # Returns
+/// #### Returns
 /// * `u512` - Sum of lhs and rhs
-/// # Panics
+/// #### Panics
 /// * Panics if the addition would overflow u512 bounds
 #[inline(always)]
 pub fn u512_add(lhs: u512, rhs: u512) -> u512 {
@@ -86,12 +86,12 @@ pub fn u512_add(lhs: u512, rhs: u512) -> u512 {
 }
 
 /// Subtracts two u512 values with overflow panic
-/// # Arguments
+/// #### Arguments
 /// * `lhs` - Left operand (u512)
 /// * `rhs` - Right operand (u512)
-/// # Returns
+/// #### Returns
 /// * `u512` - Difference of lhs and rhs
-/// # Panics
+/// #### Panics
 /// * Panics if the subtraction would underflow (result < 0)
 #[inline(always)]
 pub fn u512_sub(lhs: u512, rhs: u512) -> u512 {

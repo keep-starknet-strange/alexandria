@@ -2,9 +2,9 @@ use core::num::traits::Zero;
 //! The discrete difference of the elements.
 
 /// Compute the discrete difference of a sorted sequence.
-/// # Arguments
+/// #### Arguments
 /// * `sequence` - The sorted sequence to operate.
-/// # Returns
+/// #### Returns
 /// * `Array<T>` - The discrete difference of sorted sequence.
 pub fn diff<T, +PartialOrd<T>, +Sub<T>, +Copy<T>, +Drop<T>, +Zero<T>>(
     mut sequence: Span<T>,

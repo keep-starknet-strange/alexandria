@@ -1,6 +1,6 @@
 //! MerkleTree implementation.
 //!
-//! # Examples
+//! ## Examples
 //!
 //! ```
 //! // This version uses the pedersen hash method because the PedersenHasherImpl is in the scope.
@@ -87,39 +87,39 @@ pub struct StoredMerkleTree<T> {
 /// MerkleTree trait defining operations for Merkle tree construction and verification.
 pub trait MerkleTreeTrait<T> {
     /// Create a new merkle tree instance.
-    /// # Returns
+    /// #### Returns
     /// * `MerkleTree<T>` - A new merkle tree with the specified hasher type
     fn new() -> MerkleTree<T>;
 
     /// Compute the merkle root of a given proof by iteratively hashing with proof elements.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The merkle tree instance
     /// * `current_node` - The starting leaf node (felt252 hash value)
     /// * `proof` - Array of sibling hashes needed to compute the root
-    /// # Returns
+    /// #### Returns
     /// * `felt252` - The computed merkle root hash
     fn compute_root(
         ref self: MerkleTree<T>, current_node: felt252, proof: Span<felt252>,
     ) -> felt252;
 
     /// Verify that a leaf belongs to the merkle tree with the given root.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The merkle tree instance
     /// * `root` - The expected merkle root hash
     /// * `leaf` - The leaf value to verify
     /// * `proof` - Array of sibling hashes for verification path
-    /// # Returns
+    /// #### Returns
     /// * `bool` - True if the leaf is valid for the given root, false otherwise
     fn verify(ref self: MerkleTree<T>, root: felt252, leaf: felt252, proof: Span<felt252>) -> bool;
 
     /// Generate a merkle proof for a specific leaf at the given index.
     /// WARNING: This rebuilds the entire tree and is O(n) complexity. Use StoredMerkleTree for
     /// efficiency.
-    /// # Arguments
+    /// #### Arguments
     /// * `self` - The merkle tree instance
     /// * `leaves` - Array of all leaf values in the tree (will be sorted)
     /// * `index` - The index of the leaf to generate proof for
-    /// # Returns
+    /// #### Returns
     /// * `Span<felt252>` - Array of sibling hashes forming the merkle proof
     fn compute_proof(ref self: MerkleTree<T>, leaves: Array<felt252>, index: u32) -> Span<felt252>;
 }
@@ -132,10 +132,10 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
     }
 
     /// Compute the merkle root of a given proof using the generic T hasher.
-    /// # Arguments
+    /// #### Arguments
     /// * `current_node` - The current node of the proof.
     /// * `proof` - The proof.
-    /// # Returns
+    /// #### Returns
     /// The merkle root.
     fn compute_root(
         ref self: MerkleTree<T>, mut current_node: felt252, mut proof: Span<felt252>,
@@ -156,11 +156,11 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
     }
 
     /// Verify a merkle proof using the generic T hasher.
-    /// # Arguments
+    /// #### Arguments
     /// * `root` - The merkle root.
     /// * `leaf` - The leaf to verify.
     /// * `proof` - The proof.
-    /// # Returns
+    /// #### Returns
     /// True if the proof is valid, false otherwise.
     fn verify(
         ref self: MerkleTree<T>, root: felt252, mut leaf: felt252, mut proof: Span<felt252>,
@@ -181,10 +181,10 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
     }
 
     /// Compute a merkle proof of given leaves and at a given index using the generic T hasher.
-    /// # Arguments
+    /// #### Arguments
     /// * `leaves` - The sorted leaves.
     /// * `index` - The index of the given.
-    /// # Returns
+    /// #### Returns
     /// The merkle proof.
     fn compute_proof(
         ref self: MerkleTree<T>, mut leaves: Array<felt252>, index: u32,
@@ -204,7 +204,7 @@ pub impl MerkleTreeImpl<T, +HasherTrait<T>, +Copy<T>, +Drop<T>> of MerkleTreeTra
 
 /// Helper function to compute a merkle proof of given leaves and at a given index.
 /// Should only be used with an even number of leaves.
-/// # Arguments
+/// #### Arguments
 /// * `nodes` - The sorted nodes.
 /// * `index` - The index of the given.
 /// * `hasher` - The hasher to use.
@@ -229,10 +229,10 @@ fn compute_proof<T, +HasherTrait<T>, +Drop<T>>(
 }
 
 /// Helper function to compute the next layer of a merkle tree providing a layer of nodes.
-/// # Arguments
+/// #### Arguments
 /// * `nodes` - The sorted nodes.
 /// * `hasher` - The hasher to use.
-/// # Returns
+/// #### Returns
 /// The next layer of nodes.
 fn get_next_level<T, +HasherTrait<T>, +Drop<T>>(
     mut nodes: Span<felt252>, ref hasher: T,

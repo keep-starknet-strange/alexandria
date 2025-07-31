@@ -17,12 +17,12 @@ pub const SIGHASH_ANYONECANPAY: u8 = 0x80;
 
 /// Create a signature with known y_parity
 ///
-/// # Arguments
+/// #### Arguments
 /// * `r` - The r component of the signature
 /// * `s` - The s component of the signature
 /// * `y_parity` - Whether the y-coordinate of the R point is even (false) or odd (true)
 ///
-/// # Returns
+/// #### Returns
 /// * `Signature` - The complete signature structure
 pub fn create_signature(r: u256, s: u256, y_parity: bool) -> Signature {
     Signature { r, s, y_parity }
@@ -34,12 +34,12 @@ pub fn create_signature(r: u256, s: u256, y_parity: bool) -> Signature {
 /// It validates the signature by recovering the public key from the signature and message,
 /// then comparing it with the expected public key.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `message_hash` - The hash of the message that was signed (typically a transaction hash)
 /// * `signature` - The ECDSA signature (r, s components and y_parity for recovery)
 /// * `public_key` - The public key coordinates to verify against
 ///
-/// # Returns
+/// #### Returns
 /// * `bool` - True if signature is valid, false otherwise
 pub fn verify_ecdsa_signature_coords(
     message_hash: u256, signature: Signature, public_key: BitcoinPublicKeyCoords,
@@ -75,12 +75,12 @@ pub fn verify_ecdsa_signature_coords(
 /// This function works with the new ByteArray-based BitcoinPublicKey structure
 /// that properly represents Bitcoin's 33-byte compressed or 65-byte uncompressed format.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `message_hash` - The hash of the message that was signed
 /// * `signature` - The ECDSA signature (r, s components and y_parity for recovery)
 /// * `public_key` - The BitcoinPublicKey to verify against
 ///
-/// # Returns
+/// #### Returns
 /// * `bool` - True if signature is valid, false otherwise
 pub fn verify_ecdsa_signature(
     message_hash: u256, signature: Signature, public_key: BitcoinPublicKey,
@@ -96,13 +96,13 @@ pub fn verify_ecdsa_signature(
 /// with the provided public key. This is useful when the y_parity is unknown
 /// or when working with DER signatures that don't include recovery information.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `message_hash` - The hash of the message that was signed
 /// * `r` - The r component of the signature
 /// * `s` - The s component of the signature
 /// * `public_key` - The public key to verify against
 ///
-/// # Returns
+/// #### Returns
 /// * `bool` - True if signature is valid with either y_parity value
 pub fn verify_ecdsa_signature_auto_recovery(
     message_hash: u256, r: u256, s: u256, public_key: BitcoinPublicKey,
@@ -124,12 +124,12 @@ pub fn verify_ecdsa_signature_auto_recovery(
 /// the provided message hash and public key. Since DER signatures don't
 /// include recovery information, it automatically tries both y_parity values.
 ///
-/// # Arguments
+/// #### Arguments
 /// * `message_hash` - The hash of the message that was signed
 /// * `der_signature` - DER-encoded signature bytes
 /// * `public_key` - The public key to verify against
 ///
-/// # Returns
+/// #### Returns
 /// * `bool` - True if the DER signature is valid
 pub fn verify_der_signature(
     message_hash: u256, der_signature: Span<u8>, public_key: BitcoinPublicKey,
@@ -147,10 +147,10 @@ pub fn verify_der_signature(
 
 /// Parse DER-encoded signature using ByteArray utilities
 ///
-/// # Arguments
+/// #### Arguments
 /// * `der_bytes` - DER-encoded signature bytes
 ///
-/// # Returns
+/// #### Returns
 /// * `Option<Signature>` - Parsed signature or None if invalid
 pub fn parse_der_signature(der_bytes: Span<u8>) -> Option<Signature> {
     if der_bytes.len() < 6 {
@@ -227,11 +227,11 @@ fn bytes_array_to_u256(bytes: Span<u8>) -> u256 {
 /// For secp256k1 curve order n (which is prime), we use Fermat's little theorem:
 /// If p is prime and a ≢ 0 (mod p), then a^(-1) ≡ a^(p-2) (mod p)
 ///
-/// # Arguments
+/// #### Arguments
 /// * `a` - The value to find the modular inverse of
 /// * `m` - The modulus (should be prime)
 ///
-/// # Returns
+/// #### Returns
 /// * `u256` - The modular inverse a^(-1) mod m, or 0 if no inverse exists
 pub fn mod_inverse(a: u256, m: u256) -> u256 {
     if a == 0 || m <= 1 {
@@ -271,11 +271,11 @@ fn mod_pow(mut base: u256, mut exp: u256, modulus: u256) -> u256 {
 
 /// Create a signature hash for transaction signing using ByteArray
 ///
-/// # Arguments
+/// #### Arguments
 /// * `transaction_data` - The transaction data to be signed
 /// * `sighash_type` - The type of signature hash (SIGHASH_ALL, etc.)
 ///
-/// # Returns
+/// #### Returns
 /// * `u256` - The hash to be signed
 pub fn create_signature_hash(transaction_data: Span<u8>, sighash_type: u8) -> u256 {
     // Convert to ByteArray and append sighash type
@@ -302,13 +302,13 @@ fn hash256_from_byte_array(data: ByteArray) -> Array<u8> {
 
 /// Verify a signature against transaction data
 ///
-/// # Arguments
+/// #### Arguments
 /// * `transaction_data` - The transaction data that was signed
 /// * `signature` - The ECDSA signature
 /// * `public_key` - The public key to verify against
 /// * `sighash_type` - The signature hash type used
 ///
-/// # Returns
+/// #### Returns
 /// * `bool` - True if signature is valid for the transaction
 pub fn verify_transaction_signature(
     transaction_data: Span<u8>,

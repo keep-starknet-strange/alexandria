@@ -17,13 +17,13 @@ pub enum Extrapolation {
 }
 
 /// Interpolate y(x) at x.
-/// # Arguments
+/// #### Arguments
 /// * `x` - The position at which to interpolate.
 /// * `xs` - The sorted abscissa sequence of len L.
 /// * `ys` - The ordinate sequence of len L.
 /// * `interpolation` - The interpolation method to use.
 /// * `extrapolation` - The extrapolation method to use.
-/// # Returns
+/// #### Returns
 /// * `T` - The interpolated y at x.
 pub fn interpolate<
     T, +PartialOrd<T>, +Add<T>, +Sub<T>, +Mul<T>, +Div<T>, +Zero<T>, +Copy<T>, +Drop<T>,
@@ -95,7 +95,7 @@ pub fn interpolate<
 /// Time complexity: O(log n) due to binary search
 /// Space complexity: O(1)
 ///
-/// # Arguments
+/// #### Arguments
 /// * `x` - The position at which to interpolate
 /// * `xs` - The sorted abscissa sequence of length L (must be monotonically increasing)
 /// * `ys` - The ordinate sequence of length L corresponding to xs values
@@ -103,16 +103,16 @@ pub fn interpolate<
 /// ConstantRight)
 /// * `extrapolation` - The extrapolation method for values outside xs range (Null, Constant)
 ///
-/// # Returns
+/// #### Returns
 /// * `T` - The interpolated/extrapolated value y at position x
 ///
-/// # Requirements
+/// #### Requirements
 /// * xs and ys must have the same length
 /// * xs must be sorted in ascending order
 /// * Both arrays must have at least 2 elements
 /// * Type T must implement required arithmetic and comparison traits
 ///
-/// # Panics
+/// #### Panics
 /// * If xs and ys have different lengths
 /// * If arrays have fewer than 2 elements
 /// * If xs is not properly sorted

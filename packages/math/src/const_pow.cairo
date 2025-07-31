@@ -1,10 +1,10 @@
 /// Calculate 2 raised to the power of the given exponent
 /// using a pre-computed lookup table
-/// # Arguments
+/// #### Arguments
 /// * `exponent` - The exponent to raise 2 to
-/// # Returns
+/// #### Returns
 /// * `u256` - The result of 2^exponent
-/// # Panics
+/// #### Panics
 /// * If `exponent` is greater than 255 (out of the supported range)
 pub fn pow2_u256(exponent: u32) -> u256 {
     if exponent < 128 {
@@ -16,11 +16,11 @@ pub fn pow2_u256(exponent: u32) -> u256 {
 
 /// Calculate 2 raised to the power of the given exponent
 /// using a pre-computed lookup table
-/// # Arguments
+/// #### Arguments
 /// * `exponent` - The exponent to raise 2 to
-/// # Returns
+/// #### Returns
 /// * `u128` - The result of 2^exponent
-/// # Panics
+/// #### Panics
 /// * If `exponent` is greater than 127 (out of the supported range)
 pub fn pow2(exponent: u32) -> u128 {
     let hardcoded_results: [u128; 128] = [
@@ -63,11 +63,11 @@ pub fn pow2(exponent: u32) -> u128 {
 
 /// Calculate 2 raised to the power of the given exponent
 /// using a pre-computed lookup table
-/// # Arguments
+/// #### Arguments
 /// * `exponent` - The exponent to raise 2 to
-/// # Returns
+/// #### Returns
 /// * `felt252` - The result of 2^exponent
-/// # Panics
+/// #### Panics
 /// * If `exponent` is greater than 251 (out of the supported range)
 pub fn pow2_felt252(exponent: u32) -> felt252 {
     let hardcoded_results: [felt252; 251] = [
@@ -213,11 +213,11 @@ pub fn pow2_felt252(exponent: u32) -> felt252 {
 
 /// Calculate 10 raised to the power of the given exponent
 /// using a pre-computed lookup table
-/// # Arguments
+/// #### Arguments
 /// * `exponent` - The exponent to raise 10 to
-/// # Returns
+/// #### Returns
 /// * `u128` - The result of 10^exponent
-/// # Panics
+/// #### Panics
 /// * If `exponent` is greater than 38 (out of the supported range)
 pub fn pow10(exponent: u32) -> u128 {
     let hardcoded_results: [u128; 38] = [
@@ -238,11 +238,11 @@ pub fn pow10(exponent: u32) -> u128 {
 
 /// Calculate 10 raised to the power of the given exponent
 /// using a pre-computed lookup table
-/// # Arguments
+/// #### Arguments
 /// * `exponent` - The exponent to raise 10 to
-/// # Returns
+/// #### Returns
 /// * `u128` - The result of 10^exponent
-/// # Panics
+/// #### Panics
 /// * If `exponent` is greater than 77 (out of the supported range)
 pub fn pow10_u256(exponent: u32) -> u256 {
     let hardcoded_results: [u256; 77] = [
