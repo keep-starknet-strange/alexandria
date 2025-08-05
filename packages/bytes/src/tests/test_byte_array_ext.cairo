@@ -3,11 +3,9 @@ use alexandria_bytes::byte_array_ext::{
 };
 
 #[test]
-#[available_gas(20000000)]
 fn test_new() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -20,14 +18,12 @@ fn test_new() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_new_empty() {
     let ba: ByteArray = ByteArrayTraitExt::new_empty();
     assert!(ba.len() == 0, "Failed to instantiate new empty ByteArray");
 }
 
 #[test]
-#[available_gas(20000000)]
 #[should_panic(expected: ('out of bound',))]
 fn test_read_from_empty_byte_array() {
     let ba = Default::default();
@@ -35,7 +31,6 @@ fn test_read_from_empty_byte_array() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_write_max_u16() {
     let max_u16 = 0xffff_u16;
     let mut ba: ByteArray = Default::default();
@@ -47,7 +42,6 @@ fn test_read_write_max_u16() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_write_max_u32() {
     let max_u32 = 0xffffffff_u32;
     let mut ba = Default::default();
@@ -58,7 +52,6 @@ fn test_read_write_max_u32() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_zero_length_u128_array() {
     let mut ba = Default::default();
     let (new_offset, result) = ba.read_u128_array_packed(0, 0, 16);
@@ -68,7 +61,6 @@ fn test_read_zero_length_u128_array() {
 
 // Tests for appending values
 #[test]
-#[available_gas(20000000)]
 fn test_append_u128() {
     let mut ba = Default::default();
     ba.append_u128(0x01020304050607080910111213141516);
@@ -78,7 +70,6 @@ fn test_append_u128() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_append_u256() {
     let mut ba = Default::default();
     ba
@@ -93,7 +84,6 @@ fn test_append_u256() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_append_felt252() {
     let mut ba = Default::default();
     let felt_value: felt252 = 0x91020304050607080910111213141516171819202122232425262728293031
@@ -107,7 +97,6 @@ fn test_append_felt252() {
 
 // Tests for reading values
 #[test]
-#[available_gas(20000000)]
 fn test_read_felt252() {
     let mut ba = Default::default();
     let felt_value: felt252 = 0x0102030405060708091011121314151617181920212223242526272829303132
@@ -120,7 +109,6 @@ fn test_read_felt252() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_u16_at_boundary() {
     let mut ba = Default::default();
     ba.append_u32(0x03040506);
@@ -130,7 +118,6 @@ fn test_read_u16_at_boundary() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_append() {
     let mut ba = Default::default();
     ba.append_u16(0x0102);
@@ -162,7 +149,6 @@ fn test_bytes_append() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_append_byte_31() {
     let b31: bytes31 = 0x030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f1700
         .try_into()
@@ -177,7 +163,6 @@ fn test_append_byte_31() {
 
 // Tests for reading specific data types
 #[test]
-#[available_gas(20000000)]
 fn test_read_u16() {
     let mut ba = Default::default();
     ba.append_u32(0x03040506);
@@ -187,7 +172,6 @@ fn test_read_u16() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_u32() {
     let mut ba = Default::default();
     ba.append_u32(0x03040506);
@@ -197,7 +181,6 @@ fn test_read_u32() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_usize() {
     let mut ba = Default::default();
     ba.append_u128(0x01020304050607080910111213141516);
@@ -209,7 +192,6 @@ fn test_bytes_read_usize() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_u64() {
     let mut ba = Default::default();
     ba.append_u64(0x0708091011121314);
@@ -219,7 +201,6 @@ fn test_read_u64() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u128() {
     let mut ba = Default::default();
     ba.append_u128(0x01020304050607080910111213141516);
@@ -231,7 +212,6 @@ fn test_bytes_read_u128() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u128_packed() {
     let mut ba = Default::default();
     ba.append_u128(0x01020304050607080910111213141516);
@@ -260,7 +240,6 @@ fn test_bytes_read_u128_packed() {
 }
 
 #[test]
-#[available_gas(20000000)]
 #[should_panic(expected: ('out of bound',))]
 fn test_bytes_read_u128_packed_out_of_bound() {
     let mut ba = Default::default();
@@ -272,7 +251,6 @@ fn test_bytes_read_u128_packed_out_of_bound() {
 }
 
 #[test]
-#[available_gas(20000000)]
 #[should_panic(expected: ('too large',))]
 fn test_bytes_read_u128_packed_too_large() {
     let mut ba = Default::default();
@@ -284,7 +262,6 @@ fn test_bytes_read_u128_packed_too_large() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_felt252_packed() {
     let mut ba = Default::default();
     ba.append_u128(0x01020304050607080910111213141516);
@@ -297,7 +274,6 @@ fn test_bytes_read_felt252_packed() {
 }
 
 #[test]
-#[available_gas(20000000)]
 #[should_panic(expected: ('out of bound',))]
 fn test_bytes_read_felt252_packed_out_of_bound() {
     let mut ba = Default::default();
@@ -308,7 +284,6 @@ fn test_bytes_read_felt252_packed_out_of_bound() {
 }
 
 #[test]
-#[available_gas(20000000)]
 #[should_panic(expected: ('too large',))]
 fn test_bytes_read_felt252_packed_too_large() {
     let mut ba = Default::default();
@@ -319,7 +294,6 @@ fn test_bytes_read_felt252_packed_too_large() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u256() {
     let mut ba = Default::default();
     ba.append_u128(0x01020304050607080910111213141516);
@@ -332,7 +306,6 @@ fn test_bytes_read_u256() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_address() {
     let mut ba = Default::default();
     ba.append_u128(0x01020304050607080910111213140154);
@@ -348,7 +321,6 @@ fn test_bytes_read_address() {
 
 // Tests for reading bytes
 #[test]
-#[available_gas(20000000)]
 fn test_read_bytes_size_0() {
     let mut ba = Default::default();
     let (new_offset, result) = ba.read_bytes(0, 0);
@@ -357,7 +329,6 @@ fn test_read_bytes_size_0() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_bytes_lower_than_32() {
     let mut ba = Default::default();
     let mut expected_result = Default::default();
@@ -369,7 +340,6 @@ fn test_read_bytes_lower_than_32() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_read_bytes_greater_than_32() {
     let mut ba = Default::default();
     let mut expected_result = Default::default();
@@ -383,7 +353,6 @@ fn test_read_bytes_greater_than_32() {
 
 // Tests for updating bytes
 #[test]
-#[available_gas(20000000)]
 fn test_update_at() {
     let mut ba = Default::default();
     let mut expected_result = Default::default();
@@ -395,7 +364,6 @@ fn test_update_at() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_update_at_first_byte() {
     let mut ba = Default::default();
     let mut expected_result = Default::default();
@@ -407,7 +375,6 @@ fn test_update_at_first_byte() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_update_at_last_byte() {
     let mut ba = Default::default();
     let mut expected_result = Default::default();
@@ -420,7 +387,6 @@ fn test_update_at_last_byte() {
 
 // Tests for reading arrays
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u128_array_packed() {
     let mut ba = Default::default();
     ba.append_u128(0x01020304050607080910111213141516);
@@ -442,7 +408,6 @@ fn test_bytes_read_u128_array_packed() {
 }
 
 #[test]
-#[available_gas(20000000)]
 #[should_panic(expected: ('out of bound',))]
 fn test_bytes_read_u128_array_packed_out_of_bound() {
     let mut ba = Default::default();
@@ -451,7 +416,6 @@ fn test_bytes_read_u128_array_packed_out_of_bound() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u256_array() {
     let mut ba = Default::default();
     ba.append_u128(0x01020304050607080910111213141516);
@@ -472,7 +436,6 @@ fn test_bytes_read_u256_array() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_bytes31() {
     let mut ba = Default::default();
     ba.append_u128(0x0102030405060708090a0b0c0d0e0f10);
@@ -491,7 +454,6 @@ fn test_bytes_read_bytes31() {
 
 
 #[test]
-#[available_gas(1000000)]
 fn test_span_u8_into_byte_array() {
     let array: Array<u8> = array![1, 2, 3, 4, 5, 6, 7, 8];
     let ba: ByteArray = array.span().into();
@@ -503,7 +465,6 @@ fn test_span_u8_into_byte_array() {
 }
 
 #[test]
-#[available_gas(10000000)]
 fn test_byte_array_into_array_u8() {
     let array: Array<u8> = test_byte_array_64().into();
     let mut index = 0_usize;
@@ -522,7 +483,6 @@ fn test_byte_array_64() -> ByteArray {
 }
 
 #[test]
-#[available_gas(1000000)]
 fn test_append_u16_new() {
     let mut ba: ByteArray = Default::default();
     ba.append_u16(0x0102_u16);

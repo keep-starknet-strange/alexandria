@@ -2,7 +2,6 @@ use alexandria_searching::levenshtein_distance::levenshtein_distance;
 
 
 #[test]
-#[available_gas(5000000)]
 fn bm_search_test_1() {
     // FROG -> 46,52,4f,47
     let mut arr1: ByteArray = Default::default();
@@ -21,7 +20,6 @@ fn bm_search_test_1() {
 }
 
 #[test]
-#[available_gas(5000000)]
 fn bm_search_test_2() {
     let mut arr1: ByteArray = Default::default();
     let mut arr2: ByteArray = Default::default();
@@ -31,7 +29,6 @@ fn bm_search_test_2() {
 }
 
 #[test]
-#[available_gas(5000000)]
 fn bm_search_test_3() {
     let mut arr1: ByteArray = Default::default();
     let mut arr2: ByteArray = Default::default();
@@ -42,7 +39,6 @@ fn bm_search_test_3() {
 }
 
 #[test]
-#[available_gas(5000000)]
 fn bm_search_test_4() {
     let mut arr1: ByteArray = Default::default();
     arr1.append_byte(0x61_u8);
@@ -53,7 +49,6 @@ fn bm_search_test_4() {
 }
 
 #[test]
-#[available_gas(5000000)]
 fn bm_search_test_5() {
     let mut arr1: ByteArray = Default::default();
     arr1.append_byte(0x61_u8);
@@ -66,7 +61,6 @@ fn bm_search_test_5() {
 }
 
 #[test]
-#[available_gas(5000000)]
 fn bm_search_test_6() {
     // foobar -> 66,6f,6f,62,61,72
     let mut arr1: ByteArray = Default::default();
@@ -90,7 +84,6 @@ fn bm_search_test_6() {
 }
 
 #[test]
-#[available_gas(5000000)]
 fn bm_search_test_7() {
     // foobar -> 66,6f,6f,62,61,72
     let mut arr1: ByteArray = Default::default();

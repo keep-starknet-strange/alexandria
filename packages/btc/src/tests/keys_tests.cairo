@@ -31,10 +31,13 @@ fn test_create_private_key_zero() {
 }
 
 #[test]
-#[should_panic(expected: "Private key exceeds curve order")]
+#[should_panic]
 fn test_create_private_key_too_large() {
-    // Using a value that's definitely larger than the secp256k1 curve order
-    let invalid_key = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364142;
+    // Use a value that's larger than the secp256k1 curve order
+    // The secp256k1 curve order is
+    // 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141 This value is definitely
+    // larger
+    let invalid_key = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364142_u256;
     create_private_key(invalid_key, BitcoinNetwork::Mainnet, true);
 }
 

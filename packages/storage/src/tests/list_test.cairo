@@ -139,14 +139,12 @@ fn mock_addr() -> ContractAddress {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_deploy() {
     let contract = deploy_mock();
     assert_eq!(contract.do_get_len(), (0, 0));
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_new_initializes_empty_list() {
     let mut contract_state = AListHolder::contract_state_for_testing();
 
@@ -170,7 +168,6 @@ fn test_new_initializes_empty_list() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_new_then_fill_list() {
     let mut contract_state = AListHolder::contract_state_for_testing();
 
@@ -192,7 +189,6 @@ fn test_new_then_fill_list() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_fetch_empty_list() {
     let storage_address = storage_base_address_from_felt252('empty_address');
 
@@ -205,7 +201,6 @@ fn test_fetch_empty_list() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_fetch_existing_list() {
     let mut contract_state = AListHolder::contract_state_for_testing();
     let mock_addr = mock_addr();
@@ -229,7 +224,6 @@ fn test_fetch_existing_list() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_is_empty() {
     let contract = deploy_mock();
 
@@ -239,7 +233,6 @@ fn test_is_empty() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_append_few() {
     let contract = deploy_mock();
 
@@ -249,7 +242,6 @@ fn test_append_few() {
 }
 
 #[test]
-#[available_gas(100000000000)]
 fn test_append_get_many() {
     let contract = deploy_mock();
     let mock_addr = mock_addr();
@@ -280,7 +272,6 @@ fn test_append_get_many() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_get_pass() {
     let contract = deploy_mock();
     let mock_addr = mock_addr();
@@ -309,7 +300,6 @@ fn test_get_pass() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_get_empty() {
     let contract = deploy_mock();
     let (addr, number) = contract.do_get(0);
@@ -318,7 +308,6 @@ fn test_get_empty() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_get_out_of_bounds() {
     let contract = deploy_mock();
     contract.do_append(mock_addr(), 10);
@@ -328,7 +317,6 @@ fn test_get_out_of_bounds() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_get_index_pass() {
     let contract = deploy_mock();
     let mock_addr = mock_addr();
@@ -343,7 +331,6 @@ fn test_get_index_pass() {
 }
 
 #[test]
-#[available_gas(100000000)]
 #[should_panic(expected: ('List index out of bounds', 'ENTRYPOINT_FAILED'))]
 fn test_get_index_out_of_bounds() {
     let contract = deploy_mock();
@@ -352,7 +339,6 @@ fn test_get_index_out_of_bounds() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_set_pass() {
     let contract = deploy_mock();
     let mock_addr = mock_addr();
@@ -372,7 +358,6 @@ fn test_set_pass() {
 }
 
 #[test]
-#[available_gas(100000000)]
 #[should_panic(expected: ('List index out of bounds', 'ENTRYPOINT_FAILED'))]
 fn test_set_out_of_bounds() {
     let contract = deploy_mock();
@@ -380,7 +365,6 @@ fn test_set_out_of_bounds() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_pop_front_pass() {
     let contract = deploy_mock();
     let mock_addr = mock_addr();
@@ -414,7 +398,6 @@ fn test_pop_front_pass() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_pop_front_empty() {
     let contract = deploy_mock();
 
@@ -424,7 +407,6 @@ fn test_pop_front_empty() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_pop_append() {
     let contract = deploy_mock();
     // write something
@@ -445,7 +427,6 @@ fn test_pop_append() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_array_pass() {
     let contract = deploy_mock();
     let mock_addr = mock_addr();
@@ -463,7 +444,6 @@ fn test_array_pass() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_array_empty() {
     let contract = deploy_mock();
 
@@ -472,7 +452,6 @@ fn test_array_empty() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_array_clean() {
     let contract = deploy_mock();
     let mock_addr = mock_addr();
@@ -485,7 +464,6 @@ fn test_array_clean() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_array_clean_with_empty_array() {
     let contract = deploy_mock();
 
@@ -497,7 +475,6 @@ fn test_array_clean_with_empty_array() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_array_get_value_after_clean() {
     let contract = deploy_mock();
     let mock_addr = mock_addr();
@@ -519,7 +496,6 @@ fn test_array_get_value_after_clean() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_append_array_empty() {
     let contract = deploy_mock();
 
@@ -528,7 +504,6 @@ fn test_append_array_empty() {
 }
 
 #[test]
-#[available_gas(100000000)]
 fn test_append_span_existing_list() {
     let contract = deploy_mock();
     let mock_addr = mock_addr();

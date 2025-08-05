@@ -2,7 +2,6 @@ use alexandria_bytes::utils::{BytesDebug, BytesDisplay};
 use alexandria_bytes::{Bytes, BytesIndex, BytesTrait};
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_zero() {
     let bytes = BytesTrait::zero(1);
     assert_eq!(bytes.size(), 1);
@@ -21,7 +20,6 @@ fn test_bytes_zero() {
 }
 
 #[test]
-#[available_gas(200000000)]
 #[should_panic(expected: ('update out of bound',))]
 fn test_bytes_update_panic() {
     let mut bytes = BytesTrait::new_empty();
@@ -29,7 +27,6 @@ fn test_bytes_update_panic() {
 }
 
 #[test]
-#[available_gas(200000000)]
 fn test_bytes_update() {
     let mut bytes = BytesTrait::new(5, array![0x01020304050000000000000000000000]);
 
@@ -56,8 +53,7 @@ fn test_bytes_update() {
     let mut bytes = BytesTrait::new(
         42,
         array![
-            0x01020304050607080910111213141516,
-            0x01020304050607080910111213141516,
+            0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
             0x01020304050607080910000000000000,
         ],
     );
@@ -76,11 +72,9 @@ fn test_bytes_update() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u128_packed() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -108,12 +102,10 @@ fn test_bytes_read_u128_packed() {
 }
 
 #[test]
-#[available_gas(20000000)]
 #[should_panic(expected: ('out of bound',))]
 fn test_bytes_read_u128_packed_out_of_bound() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -123,12 +115,10 @@ fn test_bytes_read_u128_packed_out_of_bound() {
 }
 
 #[test]
-#[available_gas(20000000)]
 #[should_panic(expected: ('too large',))]
 fn test_bytes_read_u128_packed_too_large() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -138,11 +128,9 @@ fn test_bytes_read_u128_packed_too_large() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u128_array_packed() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -163,12 +151,10 @@ fn test_bytes_read_u128_array_packed() {
 }
 
 #[test]
-#[available_gas(20000000)]
 #[should_panic(expected: ('out of bound',))]
 fn test_bytes_read_u128_array_packed_out_of_bound() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -178,12 +164,10 @@ fn test_bytes_read_u128_array_packed_out_of_bound() {
 }
 
 #[test]
-#[available_gas(20000000)]
 #[should_panic(expected: ('too large',))]
 fn test_bytes_read_u128_array_packed_too_large() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -193,11 +177,9 @@ fn test_bytes_read_u128_array_packed_too_large() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_felt252_packed() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -209,12 +191,10 @@ fn test_bytes_read_felt252_packed() {
 }
 
 #[test]
-#[available_gas(20000000)]
 #[should_panic(expected: ('out of bound',))]
 fn test_bytes_read_felt252_packed_out_of_bound() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -224,12 +204,10 @@ fn test_bytes_read_felt252_packed_out_of_bound() {
 }
 
 #[test]
-#[available_gas(20000000)]
 #[should_panic(expected: ('too large',))]
 fn test_bytes_read_felt252_packed_too_large() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -239,11 +217,9 @@ fn test_bytes_read_felt252_packed_too_large() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u8() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -255,11 +231,9 @@ fn test_bytes_read_u8() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u16() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -271,11 +245,9 @@ fn test_bytes_read_u16() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u32() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -287,11 +259,9 @@ fn test_bytes_read_u32() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_usize() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -303,11 +273,9 @@ fn test_bytes_read_usize() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u64() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -319,11 +287,9 @@ fn test_bytes_read_u64() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u128() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -335,11 +301,9 @@ fn test_bytes_read_u128() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u256() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x01020304050607080910111213141516,
         0x01020304050607080910000000000000,
     ];
 
@@ -352,7 +316,6 @@ fn test_bytes_read_u256() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_bytes31() {
     let bytes: Bytes = BytesTrait::new(
         42, array![0x0102030405060708090a0b0c0d0e0f10, 0x1112131415161718191a1b1c1d1e1f17, 0x0],
@@ -366,15 +329,11 @@ fn test_bytes_read_bytes31() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_u256_array() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x16151413121110090807060504030201,
-        0x16151413121110090807060504030201,
-        0x01020304050607080910111213141516,
-        0x01020304050607080910111213141516,
-        0x16151413121110090000000000000000,
+        0x01020304050607080910111213141516, 0x16151413121110090807060504030201,
+        0x16151413121110090807060504030201, 0x01020304050607080910111213141516,
+        0x01020304050607080910111213141516, 0x16151413121110090000000000000000,
     ];
 
     let bytes = BytesTrait::new(88, array);
@@ -390,11 +349,9 @@ fn test_bytes_read_u256_array() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_address() {
     let array = array![
-        0x01020304050607080910111213140154,
-        0x01855d7796176b05d160196ff92381eb,
+        0x01020304050607080910111213140154, 0x01855d7796176b05d160196ff92381eb,
         0x7910f5446c2e0e04e13db2194a4f0000,
     ];
 
@@ -407,11 +364,9 @@ fn test_bytes_read_address() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_read_bytes() {
     let array = array![
-        0x01020304050607080910111213140154,
-        0x01855d7796176b05d160196ff92381eb,
+        0x01020304050607080910111213140154, 0x01855d7796176b05d160196ff92381eb,
         0x7910f5446c2e0e04e13db2194a4f0000,
     ];
 
@@ -447,7 +402,6 @@ fn test_bytes_read_bytes() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_append() {
     let mut bytes = BytesTrait::new_empty();
 
@@ -536,23 +490,17 @@ fn test_bytes_append() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_concat() {
     let array: Array<u128> = array![
-        0x10111213141516171810111213141516,
-        0x17180101020102030400000001000003,
-        0x04050607080000000000000010111213,
-        0x14151617180000000000000001020304,
-        0x05060708090000000000000000000102,
-        0x0304050607015401855d7796176b05d1,
-        0x60196ff92381eb7910f5446c2e0e04e1,
-        0x3db2194a4f0000000000000000000000,
+        0x10111213141516171810111213141516, 0x17180101020102030400000001000003,
+        0x04050607080000000000000010111213, 0x14151617180000000000000001020304,
+        0x05060708090000000000000000000102, 0x0304050607015401855d7796176b05d1,
+        0x60196ff92381eb7910f5446c2e0e04e1, 0x3db2194a4f0000000000000000000000,
     ];
     let mut bytes = BytesTrait::new(117, array);
 
     let array: Array<u128> = array![
-        0x01020304050607080910111213140154,
-        0x01855d7796176b05d160196ff92381eb,
+        0x01020304050607080910111213140154, 0x01855d7796176b05d160196ff92381eb,
         0x7910f5446c2e0e04e13db2194a4f0000,
     ];
     let other = BytesTrait::new(46, array);
@@ -608,7 +556,6 @@ fn test_bytes_concat() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_keccak() {
     // Calculating keccak by Python
     // from Crypto.Hash import keccak
@@ -651,7 +598,6 @@ fn test_bytes_keccak() {
 }
 
 #[test]
-#[available_gas(20000000000)]
 fn test_bytes_sha256() {
     // empty
     let bytes = BytesTrait::new_empty();
@@ -669,14 +615,10 @@ fn test_bytes_sha256() {
 
     // test_bytes_append bytes
     let array = array![
-        0x10111213141516171810111213141516,
-        0x17180101020102030400000001000003,
-        0x04050607080000000000000010111213,
-        0x14151617180000000000000001020304,
-        0x05060708090000000000000000000102,
-        0x0304050607015401855d7796176b05d1,
-        0x60196ff92381eb7910f5446c2e0e04e1,
-        0x3db2194a4f0000000000000000000000,
+        0x10111213141516171810111213141516, 0x17180101020102030400000001000003,
+        0x04050607080000000000000010111213, 0x14151617180000000000000001020304,
+        0x05060708090000000000000000000102, 0x0304050607015401855d7796176b05d1,
+        0x60196ff92381eb7910f5446c2e0e04e1, 0x3db2194a4f0000000000000000000000,
     ];
 
     let bytes: Bytes = BytesTrait::new(117, array);
@@ -691,10 +633,8 @@ fn test_byte_array_conversions() {
     let bytes = BytesTrait::new(
         64,
         array![
-            0x01020304050607080910111213141516,
-            0x16151413121110090807060504030201,
-            0x60196ff92381eb7910f5446c2e0e04e1,
-            0x3db2194a000000000000000000000000,
+            0x01020304050607080910111213141516, 0x16151413121110090807060504030201,
+            0x60196ff92381eb7910f5446c2e0e04e1, 0x3db2194a000000000000000000000000,
         ],
     );
     let byte_array: ByteArray = bytes.clone().into();
@@ -703,7 +643,6 @@ fn test_byte_array_conversions() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_new_with_padded_first() {
     let array = array![
         0x0123, 0x01020304050607080910111213141516, 0x01020304050607080910000000000000,
@@ -717,7 +656,6 @@ fn test_bytes_new_with_padded_first() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_new_with_padded_mid() {
     let array = array![
         0x01020304050607080910111213141516, 0x0123, 0x01020304050607080910111213141516,
@@ -731,7 +669,6 @@ fn test_bytes_new_with_padded_mid() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_new_with_padded_last() {
     let array = array![
         0x01020304050607080910111213141516, 0x01020304050607080910111213141516, 0x0123,
@@ -745,13 +682,9 @@ fn test_bytes_new_with_padded_last() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_bytes_new_with_padded_multi() {
     let array = array![
-        0x01020304050607080910111213141516,
-        0x0123,
-        0x01020304050607080910111213141516,
-        0x1234,
+        0x01020304050607080910111213141516, 0x0123, 0x01020304050607080910111213141516, 0x1234,
         0x123450,
     ];
 
@@ -775,7 +708,6 @@ fn test_bytes_new_with_padded_multi() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_serde() {
     let mut out = array![];
     let mut array = array![0x01, 0x02, 0x03];
@@ -804,7 +736,6 @@ fn test_serde() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_serde_with_first_padded() {
     let mut out = array![];
     let mut array = array![0x01020304050607, 0x01020304050607080910111213141516];
@@ -829,7 +760,6 @@ fn test_serde_with_first_padded() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_serde_with_last_padded() {
     let mut out = array![];
     let mut array = array![0x01020304050607080910111213141516, 0x010203040506];
@@ -854,14 +784,10 @@ fn test_serde_with_last_padded() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_serde_with_multi_padded() {
     let mut out = array![];
     let mut array = array![
-        0x01020304050607080910111213141516,
-        0x0123,
-        0x01020304050607080910111213141516,
-        0x01,
+        0x01020304050607080910111213141516, 0x0123, 0x01020304050607080910111213141516, 0x01,
         0x012345,
     ];
 
@@ -897,14 +823,12 @@ fn test_serde_with_multi_padded() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_serde_deser() {
     let mut out = array![];
 
     let array = array![0x01, 0x02, 0x03];
     let expected_array = array![
-        0x00000000000000000000000000000001,
-        0x00000000000000000000000000000002,
+        0x00000000000000000000000000000001, 0x00000000000000000000000000000002,
         0x00000000000000000000000000000003,
     ];
     let mut bytes = BytesTrait::new(16, array);
@@ -919,22 +843,16 @@ fn test_serde_deser() {
 
 
 #[test]
-#[available_gas(20000000)]
 fn test_serde_deser_multi_padded() {
     let mut out = array![];
     let array = array![
-        0x01020304050607080910111213141516,
-        0x0123,
-        0x01020304050607080910111213141516,
-        0x1234,
+        0x01020304050607080910111213141516, 0x0123, 0x01020304050607080910111213141516, 0x1234,
         0x012345,
     ];
 
     let expected_array = array![
-        0x01020304050607080910111213141516,
-        0x00000000000000000000000000000123,
-        0x01020304050607080910111213141516,
-        0x00000000000000000000000000001234,
+        0x01020304050607080910111213141516, 0x00000000000000000000000000000123,
+        0x01020304050607080910111213141516, 0x00000000000000000000000000001234,
         0x00000000000000000000000000012345,
     ];
 
@@ -949,22 +867,16 @@ fn test_serde_deser_multi_padded() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_serde_deser_last_not_padded() {
     let mut out = array![];
     let array = array![
-        0x01020304050607080910111213141516,
-        0x0123,
-        0x1234,
-        0x012345,
+        0x01020304050607080910111213141516, 0x0123, 0x1234, 0x012345,
         0x01020304050607080910111213141516,
     ];
 
     let expected_array = array![
-        0x01020304050607080910111213141516,
-        0x00000000000000000000000000000123,
-        0x00000000000000000000000000001234,
-        0x00000000000000000000000000012345,
+        0x01020304050607080910111213141516, 0x00000000000000000000000000000123,
+        0x00000000000000000000000000001234, 0x00000000000000000000000000012345,
         0x01020304050607080910111213141516,
     ];
 
@@ -980,14 +892,10 @@ fn test_serde_deser_last_not_padded() {
 
 
 #[test]
-#[available_gas(20000000)]
 fn test_serde_deser_compare_bytes() {
     let mut out = array![];
     let array = array![
-        0x01020304050607080910111213141516,
-        0x0123,
-        0x1234,
-        0x012345,
+        0x01020304050607080910111213141516, 0x0123, 0x1234, 0x012345,
         0x01020304050607080910111213141516,
     ];
 
@@ -997,12 +905,7 @@ fn test_serde_deser_compare_bytes() {
     let mut deser = Serde::<Bytes>::deserialize(ref span).unwrap();
 
     let expected_array: Array<felt252> = array![
-        80,
-        5,
-        0x01020304050607080910111213141516,
-        0x0123,
-        0x1234,
-        0x012345,
+        80, 5, 0x01020304050607080910111213141516, 0x0123, 0x1234, 0x012345,
         0x01020304050607080910111213141516,
     ];
 
@@ -1014,16 +917,10 @@ fn test_serde_deser_compare_bytes() {
 }
 
 #[test]
-#[available_gas(20000000)]
 #[should_panic()]
 fn test_deser_exceed_u128() {
     let expected_array: Array<felt252> = array![
-        80,
-        5,
-        0x0102030405060708091011121314151617,
-        0x0123,
-        0x1234,
-        0x012345,
+        80, 5, 0x0102030405060708091011121314151617, 0x0123, 0x1234, 0x012345,
         0x01020304050607080910111213141516,
     ];
 

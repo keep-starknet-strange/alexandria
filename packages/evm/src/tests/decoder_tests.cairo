@@ -489,9 +489,7 @@ fn test_decode_complex() {
     let decoded = calldata
         .decode(
             array![
-                EVMTypes::Bytes,
-                EVMTypes::Uint256,
-                EVMTypes::Int128,
+                EVMTypes::Bytes, EVMTypes::Uint256, EVMTypes::Int128,
                 EVMTypes::Array(
                     array![EVMTypes::Tuple(array![EVMTypes::Uint128, EVMTypes::Uint128].span())]
                         .span(),
@@ -867,9 +865,7 @@ fn test_decode_transfer_from() {
     let decoded = calldata
         .decode(
             array![
-                EVMTypes::FunctionSignature,
-                EVMTypes::Address,
-                EVMTypes::Address,
+                EVMTypes::FunctionSignature, EVMTypes::Address, EVMTypes::Address,
                 EVMTypes::Uint256,
             ]
                 .span(),

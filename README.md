@@ -57,7 +57,7 @@ Current version can be found in the [toml file](./Scarb.toml)
 
 ## Version
 
-Actual version is **0.5.2** compatible with starknet **2.11.2**
+Actual version is **0.5.2** compatible with starknet **2.12.0**
 
 ## Packages
 
@@ -74,7 +74,7 @@ This repository is composed of multiple crates:
 - [Storage](./packages/storage/README.md)
 - [Bytes](./packages/bytes/README.md)
 - [Evm](./packages/evm/README.md)
-- [Bitcoin](./packages/btc//README.md)
+- [Bitcoin](./packages/btc/README.md)
 
 ## Getting Started
 
@@ -123,6 +123,10 @@ scarb test -f math
 ```bash
 scarb fmt
 ```
+
+## Documentation
+
+[Alexandria documentation](https://keep-starknet-strange.github.io/alexandria)
 
 ## Security
 
