@@ -10,8 +10,8 @@ cairo-version = "2.12.0"
 fmt.workspace = true
 
 [dependencies]
-alexandria_math = { path = "../math", version = "0.5.2" }
-alexandria_searching = { path = "../searching", version = "0.5.2" }
+alexandria_math = { path = "../math", version = "0.6.0" }
+alexandria_searching = { path = "../searching", version = "0.6.0" }
 
 [dev-dependencies]
 cairo_test.workspace = true
