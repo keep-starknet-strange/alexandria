@@ -1,6 +1,6 @@
 use alexandria_bytes::byte_array_ext::ByteArrayTraitExt;
-use alexandria_math::U256BitShift;
 use alexandria_math::bitmap::Bitmap;
+use alexandria_math::opt_math::OptBitShift;
 use core::num::traits::Bounded;
 use core::traits::DivRem;
 use crate::constants::FELT252_MAX;
@@ -641,7 +641,7 @@ fn encode_array(ref ctx: EVMCalldata, types: Span<EVMTypes>, values: Span<felt25
                             let shift_amount = (31 - k) * 8;
                             padded_value = padded_value
                                 + (byte_val.into()
-                                    * U256BitShift::shl(1_u256, shift_amount.into()));
+                                    * OptBitShift::shl(1_u256, shift_amount.try_into().unwrap()));
                             k += 1;
                         }
                         write_u256(ref element_data, padded_value);
@@ -775,7 +775,7 @@ fn encode_bytes(ref ctx: EVMCalldata, values: Span<felt252>) -> usize {
             let (_, byte_val) = partial_bytes.read_u8(j);
             let shift_amount = (31 - j) * 8;
             padded_value = padded_value
-                + (byte_val.into() * U256BitShift::shl(1_u256, shift_amount.into()));
+                + (byte_val.into() * OptBitShift::shl(1_u256, shift_amount.try_into().unwrap()));
             j += 1;
         }
         write_u256(ref ctx.dynamic_data, padded_value);
@@ -796,8 +796,7 @@ fn encode_bytes32_u256(ref ctx: EVMCalldata, low: felt252, high: felt252) {
 fn encode_fixed_bytes(ref ctx: EVMCalldata, value: felt252, size: usize) {
     let u256_value: u256 = value.into();
     // Shift left to align bytes to the left of the 32-byte slot
-    let shift_amount: u256 = ((32 - size) * 8).into();
-    let shifted = U256BitShift::shl(u256_value, shift_amount);
+    let shifted = OptBitShift::shl(u256_value, ((32 - size) * 8).try_into().unwrap());
     write_u256(ref ctx.calldata, shifted);
 }
 
@@ -806,7 +805,7 @@ fn encode_function_signature(ref ctx: EVMCalldata, value: felt252) {
     let u32_value: u32 = value.try_into().expect('Invalid function signature');
     // Pad to 32 bytes (left-aligned)
     let u256_value: u256 = u32_value.into();
-    let shifted = U256BitShift::shl(u256_value, 224_u256); // Shift left by 28 bytes
+    let shifted = OptBitShift::shl(u256_value, 224_u8); // Shift left by 28 bytes
     write_u256(ref ctx.calldata, shifted);
 }
 
