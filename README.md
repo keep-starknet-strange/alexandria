@@ -57,7 +57,7 @@ Current version can be found in the [toml file](./Scarb.toml)
 
 ## Version
 
-Actual version is **0.5.2** compatible with starknet **2.12.0**
+Actual version is **0.6.0** compatible with starknet **2.12.0**
 
 ## Packages
 
@@ -87,18 +87,19 @@ This repository is composed of multiple crates:
 
 ### Installation from Scarb registries
 
-- ASCII : `scarb add alexandria_ascii@0.5.2`
-- Data Structures : `scarb add alexandria_data_structures@0.5.2`
-- Encoding : `scarb add alexandria_encoding@0.5.2`
-- Linalg : `scarb add alexandria_linalg@0.5.2`
-- Math : `scarb add alexandria_math@0.5.2`
-- Numeric : `scarb add alexandria_numeric@0.5.2`
-- Searching : `scarb add alexandria_searching@0.5.2`
-- Sorting : `scarb add alexandria_sorting@0.5.2`
-- Storage : `scarb add alexandria_storage@0.5.2`
-- Bytes : `scarb add alexandria_bytes@0.5.2`
-- Evm : `scarb add alexandria_evm@0.5.2`
-- Bitcoin : `scarb add alexandria_btc@0.5.2`
+- ASCII : `scarb add alexandria_ascii@0.6.0`
+- Data Structures : `scarb add alexandria_data_structures@0.6.0`
+- Encoding : `scarb add alexandria_encoding@0.6.0`
+- Linalg : `scarb add alexandria_linalg@0.6.0`
+- Math : `scarb add alexandria_math@0.6.0`
+- Numeric : `scarb add alexandria_numeric@0.6.0`
+- Searching : `scarb add alexandria_searching@0.6.0`
+- Sorting : `scarb add alexandria_sorting@0.6.0`
+- Storage : `scarb add alexandria_storage@0.6.0`
+- Bytes : `scarb add alexandria_bytes@0.6.0`
+- Evm : `scarb add alexandria_evm@0.6.0`
+- Bitcoin : `scarb add alexandria_btc@0.6.0`
+- Json : `scarb add alexandria_json@0.6.0`
 
 ## Usage
 
