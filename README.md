@@ -59,6 +59,7 @@ Current version can be found in the [toml file](./Scarb.toml)
 
 Actual version is **0.6.0** compatible with starknet **2.12.0**
 
+
 ## Packages
 
 This repository is composed of multiple crates:
@@ -100,6 +101,7 @@ This repository is composed of multiple crates:
 - Evm : `scarb add alexandria_evm@0.6.0`
 - Bitcoin : `scarb add alexandria_btc@0.6.0`
 - Json : `scarb add alexandria_json@0.6.0`
+
 
 ## Usage
 
