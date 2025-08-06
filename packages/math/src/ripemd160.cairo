@@ -434,22 +434,14 @@ fn ripemd160_update(ref ctx: RIPEMD160Context, data: ByteArray) {
 
     while i != len {
         let mut block: Array<u32> = array![
-            bytes_to_u32_swap(@data, i),
-            bytes_to_u32_swap(@data, i + 4),
-            bytes_to_u32_swap(@data, i + 8),
-            bytes_to_u32_swap(@data, i + 12),
-            bytes_to_u32_swap(@data, i + 16),
-            bytes_to_u32_swap(@data, i + 20),
-            bytes_to_u32_swap(@data, i + 24),
-            bytes_to_u32_swap(@data, i + 28),
-            bytes_to_u32_swap(@data, i + 32),
-            bytes_to_u32_swap(@data, i + 36),
-            bytes_to_u32_swap(@data, i + 40),
-            bytes_to_u32_swap(@data, i + 44),
-            bytes_to_u32_swap(@data, i + 48),
-            bytes_to_u32_swap(@data, i + 52),
-            bytes_to_u32_swap(@data, i + 56),
-            bytes_to_u32_swap(@data, i + 60),
+            bytes_to_u32_swap(@data, i), bytes_to_u32_swap(@data, i + 4),
+            bytes_to_u32_swap(@data, i + 8), bytes_to_u32_swap(@data, i + 12),
+            bytes_to_u32_swap(@data, i + 16), bytes_to_u32_swap(@data, i + 20),
+            bytes_to_u32_swap(@data, i + 24), bytes_to_u32_swap(@data, i + 28),
+            bytes_to_u32_swap(@data, i + 32), bytes_to_u32_swap(@data, i + 36),
+            bytes_to_u32_swap(@data, i + 40), bytes_to_u32_swap(@data, i + 44),
+            bytes_to_u32_swap(@data, i + 48), bytes_to_u32_swap(@data, i + 52),
+            bytes_to_u32_swap(@data, i + 56), bytes_to_u32_swap(@data, i + 60),
         ];
 
         ripemd160_process_block(ref ctx, @block);

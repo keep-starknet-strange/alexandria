@@ -1,7 +1,6 @@
 use alexandria_encoding::base64::{Base64Decoder, Base64Encoder, Base64UrlDecoder, Base64UrlEncoder};
 
 #[test]
-#[available_gas(2000000000)]
 fn base64encode_empty_test() {
     let input = array![];
     let result = Base64Encoder::encode(input);
@@ -9,7 +8,6 @@ fn base64encode_empty_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64encode_simple_test() {
     let input = array!['a'];
 
@@ -22,7 +20,6 @@ fn base64encode_simple_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64encode_hello_world_test() {
     let input = array!['h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'];
 
@@ -47,7 +44,6 @@ fn base64encode_hello_world_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64decode_empty_test() {
     let input = array![];
 
@@ -56,7 +52,6 @@ fn base64decode_empty_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64decode_simple_test() {
     let input = array!['Y', 'Q', '=', '='];
 
@@ -66,7 +61,6 @@ fn base64decode_simple_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64decode_hello_world_test() {
     let input = array![
         'a', 'G', 'V', 's', 'b', 'G', '8', 'g', 'd', '2', '9', 'y', 'b', 'G', 'Q', '=',
@@ -88,7 +82,6 @@ fn base64decode_hello_world_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64encode_with_plus_and_slash() {
     let input = array![255, 239];
 
@@ -101,7 +94,6 @@ fn base64encode_with_plus_and_slash() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64urlencode_with_plus_and_slash() {
     let input = array![255, 239];
 
@@ -114,7 +106,6 @@ fn base64urlencode_with_plus_and_slash() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64decode_with_plus_and_slash() {
     let input = array!['/', '+', '8', '='];
 
@@ -125,7 +116,6 @@ fn base64decode_with_plus_and_slash() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64urldecode_with_plus_and_slash() {
     let input = array!['_', '-', '8', '='];
 
@@ -136,7 +126,6 @@ fn base64urldecode_with_plus_and_slash() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_round_trip_test() {
     // Basic round trip test for "Test"
     let input1 = array!['T', 'e', 's', 't'];
@@ -190,7 +179,6 @@ fn base64_round_trip_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_binary_data_test() {
     // Test with binary data
     let input = array![0, 127, 128, 255];
@@ -206,7 +194,6 @@ fn base64_binary_data_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_longer_input_test() {
     // Test with longer input (16 bytes)
     let mut input = array![];
@@ -229,7 +216,6 @@ fn base64_longer_input_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_sample_byte_values_test() {
     // Test with some sample byte values
     let samples = array![0, 50, 100, 150, 200, 255];
@@ -249,7 +235,6 @@ fn base64_sample_byte_values_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_double_padding_test() {
     // Test with input that requires double padding
     let input = array!['f'];
@@ -265,7 +250,6 @@ fn base64_double_padding_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_single_padding_test() {
     // Test with input that requires single padding
     let input = array!['f', 'o'];
@@ -281,7 +265,6 @@ fn base64_single_padding_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_no_padding_test() {
     // Test with input that requires no padding
     let input = array!['f', 'o', 'o'];
@@ -301,7 +284,6 @@ fn base64_no_padding_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64url_round_trip_test() {
     // Test with URL-safe encoding/decoding
     let input = array![255, 239, 223, 191]; // Binary data with values that produce special chars

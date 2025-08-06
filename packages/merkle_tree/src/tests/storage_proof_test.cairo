@@ -5,7 +5,6 @@ const DAI: felt252 = 0x00da114221cb83fa859dbdb4c44beeaa0bb37c7537ad5ae66fe5e0efd
 const ETH: felt252 = 0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7;
 
 #[test]
-#[available_gas(2000000)]
 fn balance_lsb_proof_test() {
     let state_commitment = 0x07dc88984a2d8f9c2a6d2d431b2d8f2c32957da514c16ceef0761b6933121708;
     let contract_address = DAI;
@@ -18,7 +17,6 @@ fn balance_lsb_proof_test() {
 
 #[test]
 #[should_panic(expected: ('invalid proof path',))]
-#[available_gas(2000000)]
 fn balance_msb_proof_test() {
     let state_commitment = 0x07dc88984a2d8f9c2a6d2d431b2d8f2c32957da514c16ceef0761b6933121708;
     let contract_address = DAI;
@@ -31,7 +29,6 @@ fn balance_msb_proof_test() {
 
 #[test]
 #[should_panic(expected: ('invalid node hash',))]
-#[available_gas(2000000)]
 fn wrong_contract_address_proof_test() {
     let state_commitment = 0x07dc88984a2d8f9c2a6d2d431b2d8f2c32957da514c16ceef0761b6933121708;
     let contract_address = ETH;
@@ -43,7 +40,6 @@ fn wrong_contract_address_proof_test() {
 }
 
 #[test]
-#[available_gas(50000000)]
 fn total_balance_lsb_proof_test() {
     let state_commitment = 0x07dc88984a2d8f9c2a6d2d431b2d8f2c32957da514c16ceef0761b6933121708;
     let contract_address = DAI;

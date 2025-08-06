@@ -1,7 +1,6 @@
 use alexandria_numeric::integers::UIntBytes;
 
 #[test]
-#[available_gas(2000000)]
 fn test_u32_from_bytes() {
     let input: Array<u8> = array![0xf4, 0x32, 0x15, 0x62];
     let res: Option<u32> = UIntBytes::from_bytes(input.span());
@@ -11,7 +10,6 @@ fn test_u32_from_bytes() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_u32_from_bytes_too_big() {
     let input: Array<u8> = array![0xf4, 0x32, 0x15, 0x62, 0x01];
     let res: Option<u32> = UIntBytes::from_bytes(input.span());
@@ -21,7 +19,6 @@ fn test_u32_from_bytes_too_big() {
 
 
 #[test]
-#[available_gas(2000000)]
 fn test_u32_to_bytes_full() {
     let input: u32 = 0xf4321562;
     let res: Span<u8> = input.to_bytes();
@@ -34,7 +31,6 @@ fn test_u32_to_bytes_full() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_u32_to_bytes_partial() {
     let input: u32 = 0xf43215;
     let res: Span<u8> = input.to_bytes();
@@ -47,7 +43,6 @@ fn test_u32_to_bytes_partial() {
 
 
 #[test]
-#[available_gas(2000000)]
 fn test_u32_to_bytes_leading_zeros() {
     let input: u32 = 0x00f432;
     let res: Span<u8> = input.to_bytes();

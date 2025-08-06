@@ -5,7 +5,6 @@ mod pop_front_n {
     use super::{SpanTraitExt, get_felt252_array, get_u128_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn of_felt() {
         let mut arr = get_felt252_array().span();
 
@@ -19,7 +18,6 @@ mod pop_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn of_u128() {
         let mut arr = get_u128_array().span();
 
@@ -30,7 +28,6 @@ mod pop_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty_array() {
         let mut arr: Span<felt252> = array![].span();
 
@@ -41,7 +38,6 @@ mod pop_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn pop_zero() {
         let mut arr = get_felt252_array().span();
 
@@ -55,7 +51,6 @@ mod pop_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn exact_len() {
         let mut arr = get_felt252_array().span();
 
@@ -66,7 +61,6 @@ mod pop_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn more_then_len() {
         let mut arr = get_felt252_array().span();
 
@@ -80,7 +74,6 @@ mod pop_back_n {
     use super::{SpanTraitExt, get_felt252_array, get_u128_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn of_felt() {
         let mut arr = get_felt252_array().span();
 
@@ -94,7 +87,6 @@ mod pop_back_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn of_u128() {
         let mut arr = get_u128_array().span();
 
@@ -105,7 +97,6 @@ mod pop_back_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty_array() {
         let mut arr: Span<felt252> = array![].span();
 
@@ -116,7 +107,6 @@ mod pop_back_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn pop_zero() {
         let mut arr = get_felt252_array().span();
 
@@ -130,7 +120,6 @@ mod pop_back_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn exact_len() {
         let mut arr = get_felt252_array().span();
 
@@ -141,7 +130,6 @@ mod pop_back_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn more_then_len() {
         let mut arr = get_felt252_array().span();
 
@@ -155,7 +143,6 @@ mod remove_front_n {
     use super::{SpanTraitExt, get_felt252_array, get_u128_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn of_felt() {
         let mut arr = get_felt252_array().span();
 
@@ -166,7 +153,6 @@ mod remove_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn of_u128() {
         let mut arr = get_u128_array().span();
 
@@ -177,7 +163,6 @@ mod remove_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty_array() {
         let mut arr: Span<felt252> = array![].span();
 
@@ -187,7 +172,6 @@ mod remove_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn remove_zero() {
         let mut arr = get_felt252_array().span();
 
@@ -200,7 +184,6 @@ mod remove_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn exact_len() {
         let mut arr = get_felt252_array().span();
 
@@ -210,7 +193,6 @@ mod remove_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn more_then_len() {
         let mut arr = get_felt252_array().span();
 
@@ -224,7 +206,6 @@ mod remove_back_n {
     use super::{SpanTraitExt, get_felt252_array, get_u128_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn of_felt() {
         let mut arr = get_felt252_array().span();
 
@@ -235,7 +216,6 @@ mod remove_back_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn of_u128() {
         let mut arr = get_u128_array().span();
 
@@ -246,7 +226,6 @@ mod remove_back_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty_array() {
         let mut arr: Span<felt252> = array![].span();
 
@@ -256,7 +235,6 @@ mod remove_back_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn remove_zero() {
         let mut arr = get_felt252_array().span();
 
@@ -269,7 +247,6 @@ mod remove_back_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn exact_len() {
         let mut arr = get_felt252_array().span();
 
@@ -279,7 +256,6 @@ mod remove_back_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn more_then_len() {
         let mut arr = get_felt252_array().span();
 

@@ -1,7 +1,6 @@
 use alexandria_math::const_pow::{pow10, pow10_u256, pow2, pow2_u256};
 
 #[test]
-#[available_gas(1000000000)]
 fn pow2_test() {
     assert_eq!(pow2(0), 1, "2^0 should be 1");
     assert_eq!(pow2(1), 2, "2^1 should be 2");
@@ -17,7 +16,6 @@ fn pow2_test() {
 }
 
 #[test]
-#[available_gas(1000000000)]
 fn pow2_u256_test() {
     assert_eq!(pow2_u256(0), 1, "2^0 should be 1");
     assert_eq!(pow2_u256(1), 2, "2^1 should be 2");
@@ -34,7 +32,6 @@ fn pow2_u256_test() {
 }
 
 #[test]
-#[available_gas(1000000000)]
 fn pow10_test() {
     assert_eq!(pow10(0), 1, "10^0 should be 1");
     assert_eq!(pow10(1), 10, "10^1 should be 10");
@@ -49,7 +46,6 @@ fn pow10_test() {
 }
 
 #[test]
-#[available_gas(1000000000)]
 fn pow10_u256_test() {
     assert_eq!(pow10_u256(0), 1, "10^0 should be 1");
     assert_eq!(pow10_u256(1), 10, "10^1 should be 10");

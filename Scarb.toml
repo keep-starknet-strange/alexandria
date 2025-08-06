@@ -18,20 +18,21 @@ members = [
   "packages/btc",
 ]
 name = "alexandria"
-version = "0.5.2"
+version = "0.6.0"
+
 description = "Community maintained Cairo and Starknet libraries"
 homepage = "https://github.com/keep-starknet-strange/alexandria/"
-cairo-version = "2.11.2"
+cairo-version = "2.12.0"
 
 [workspace.dependencies]
-starknet = "2.11.2"
-cairo_test = "2.11.2"
+starknet = "2.12.0"
+cairo_test = "2.12.0"
 
 [workspace.tool.fmt]
 sort-module-level-items = true
 
 [workspace.package]
-version = "0.5.2"
+version = "0.6.0"
 
 [scripts]
 all = "scarb build && scarb test"

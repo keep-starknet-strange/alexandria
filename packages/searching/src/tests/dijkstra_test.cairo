@@ -3,7 +3,6 @@ use core::nullable::{FromNullableResult, match_nullable};
 
 
 #[test]
-#[available_gas(2000000)]
 fn add_edge() {
     let source = 0_u32;
     let dest = 1_u32;
@@ -46,7 +45,6 @@ fn add_edge() {
 
 
 #[test]
-#[available_gas(1500000)]
 fn calculate_shortest_path() {
     let mut graph = GraphTrait::new();
     GraphTrait::add_edge(ref graph, 0, 1, 5);
@@ -68,7 +66,6 @@ fn calculate_shortest_path() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn calculate_shortest_path_random() {
     let mut graph = GraphTrait::new();
     GraphTrait::add_edge(ref graph, 0, 2, 4);
@@ -89,7 +86,6 @@ fn calculate_shortest_path_random() {
 
 
 #[test]
-#[available_gas(1050000)]
 fn calculate_shortest_path_node_visited() {
     let mut graph = GraphTrait::new();
     GraphTrait::add_edge(ref graph, 0, 1, 5);

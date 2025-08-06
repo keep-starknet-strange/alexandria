@@ -4,14 +4,14 @@ version.workspace = true
 description = "Starknet json utilities"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/json"
 edition = "2023_11"
-cairo-version = "2.11.2"
+cairo-version = "2.12.0"
 
 [tool]
 fmt.workspace = true
 
 [dependencies]
-alexandria_math = { path = "../math", version ="0.5.2" }
-alexandria_macros = { path = "../macros" }
+alexandria_math = { path = "../math", version ="0.6.0" }
+alexandria_macros = { path = "../macros", version ="0.6.0" }
 
 starknet.workspace = true
 

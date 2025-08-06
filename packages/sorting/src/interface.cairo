@@ -1,4 +1,4 @@
-use alexandria_data_structures::vec::{Felt252Vec, VecTrait};
+use alexandria_data_structures::vec::Felt252Vec;
 
 /// Trait for sorting algorithms that work with Array spans
 pub trait Sortable {

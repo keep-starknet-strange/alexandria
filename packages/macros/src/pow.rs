@@ -1,11 +1,12 @@
 use bigdecimal::num_bigint::BigInt;
 use bigdecimal::{num_traits::pow, BigDecimal};
 
+use crate::token_tree_parser::TokenTreeParser;
 use cairo_lang_filesystem::ids::{FileKind, FileLongId, VirtualFile};
 use cairo_lang_macro::{inline_macro, Diagnostic, ProcMacroResult, TokenStream};
 use cairo_lang_parser::db::ParserGroup;
 use cairo_lang_parser::utils::SimpleParserDatabase;
-use cairo_lang_syntax::node::ast::{ArgClause, Expr, ExprInlineMacro, WrappedArgList};
+use cairo_lang_syntax::node::ast::{Expr, ExprInlineMacro};
 use cairo_lang_utils::{Intern, Upcast};
 
 /// Compile-time power function.
@@ -21,30 +22,29 @@ pub fn pow(token_stream: TokenStream) -> ProcMacroResult {
     let db = SimpleParserDatabase::default();
     // Get the ExprInlineMacro object so we can use the helper functions.
     let mac = parse_inline_macro(token_stream, &db);
-    // Get the arguments of the macro. This macro expects a tuple as argument so we get the WrappedArgList::ParenthesizedArgList
-    let macro_args = if let WrappedArgList::ParenthesizedArgList(args) = mac.arguments(db.upcast())
-    {
-        args.arguments(db.upcast()).elements(db.upcast())
-    } else {
-        vec![]
-    };
+    // Get the arguments of the macro. In Cairo 2.12.0, arguments are now TokenTreeNode
+    let token_tree = mac.arguments(db.upcast());
+
+    // Parse the token tree to extract arguments - use the proper TokenTreeParser
+    let macro_args = TokenTreeParser::parse_simple_string(&token_tree, &db);
 
     if macro_args.len() != 2 {
         return ProcMacroResult::new(TokenStream::empty())
             .with_diagnostics(Diagnostic::error("Invalid number of arguments").into());
     }
-    let base = match get_arg_value(db.upcast(), &macro_args[0].arg_clause(db.upcast())) {
-        Some(val) => val,
-        None => {
+
+    let base = match macro_args[0].parse::<BigInt>() {
+        Ok(val) => val,
+        Err(_) => {
             return ProcMacroResult::new(TokenStream::empty())
                 .with_diagnostics(Diagnostic::error("Invalid base value").into())
         }
     }
     .into();
 
-    let exp = match get_arg_value(db.upcast(), &macro_args[1].arg_clause(db.upcast())) {
-        Some(val) => val,
-        None => {
+    let exp = match macro_args[1].parse::<BigInt>() {
+        Ok(val) => val,
+        Err(_) => {
             return ProcMacroResult::new(TokenStream::empty())
                 .with_diagnostics(Diagnostic::error("Invalid exponent value").into())
         }
@@ -72,6 +72,7 @@ fn parse_inline_macro(token_stream: impl ToString, db: &SimpleParserDatabase) ->
         content: format!("pow!{}", token_stream.to_string()).into(), // easiest workaround after change
         code_mappings: [].into(),
         kind: FileKind::Expr, // this part is different than db.parse_virtual
+        original_item_removed: false,
     })
     .intern(db);
 
@@ -84,17 +85,4 @@ fn parse_inline_macro(token_stream: impl ToString, db: &SimpleParserDatabase) ->
     };
 
     inline_macro
-}
-
-/// Returns the value of a literal argument.
-fn get_arg_value(db: &SimpleParserDatabase, arg_clause: &ArgClause) -> Option<BigInt> {
-    let base_expr = match arg_clause {
-        ArgClause::Unnamed(arg_clause) => arg_clause.value(db.upcast()),
-        _ => return None,
-    };
-    if let Expr::Literal(base_lit) = base_expr {
-        base_lit.numeric_value(db.upcast())
-    } else {
-        None
-    }
 }

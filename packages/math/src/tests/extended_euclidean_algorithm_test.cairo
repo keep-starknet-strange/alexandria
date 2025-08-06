@@ -12,7 +12,6 @@ fn test_case(a: u128, b: u128, expected: (u128, u128, u128)) {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn extended_euclidean_algorithm_test() {
     test_case(101, 13, (1, 4, 0.wrapping_sub(31)));
     test_case(123, 19, (1, 0.wrapping_sub(2), 13));
