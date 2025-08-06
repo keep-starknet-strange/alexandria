@@ -1,4 +1,4 @@
-use alexandria_math::opt_math::OptBitShift;
+use alexandria_math::opt_math::{OptBitShift, OptWrapping};
 use core::num::traits::{Bounded, WrappingAdd};
 use core::traits::{BitAnd, BitOr, BitXor};
 
@@ -115,14 +115,6 @@ pub trait WordOperations<T> {
     /// * `T` - The shifted value
     fn shl(self: T, n: u64) -> T;
 
-    /// Performs rotate right operation.
-    /// #### Arguments
-    /// * `self` - The value to rotate
-    /// * `n` - Number of positions to rotate right
-    /// #### Returns
-    /// * `T` - The rotated value
-    fn rotr(self: T, n: u64) -> T;
-
     /// Performs rotate right with precomputed power values for efficiency.
     /// #### Arguments
     /// * `self` - The value to rotate
@@ -148,27 +140,9 @@ pub impl Word64WordOperations of WordOperations<Word64> {
     fn shl(self: Word64, n: u64) -> Word64 {
         Word64 { data: OptBitShift::shl(self.data, n.try_into().unwrap()) }
     }
-    fn rotr(self: Word64, n: u64) -> Word64 {
-        let data = BitOr::bitor(
-            OptBitShift::shr(self.data, n.try_into().unwrap()),
-            OptBitShift::shl(self.data, (U64_BIT_NUM - n).try_into().unwrap()),
-        );
-        Word64 { data }
-    }
     // does the work of rotr but with precomputed values 2**n and 2**(64-n)
     fn rotr_precomputed(self: Word64, two_pow_n: u64, two_pow_64_n: u64) -> Word64 {
-        let data = self.data.into();
-        let data: u128 = BitOr::bitor(
-            math_shr_precomputed::<u128>(data, two_pow_n.into()),
-            math_shl_precomputed::<u128>(data, two_pow_64_n.into()),
-        );
-
-        let data: u64 = match data.try_into() {
-            Option::Some(data) => data,
-            Option::None => (data & MAX_U64).try_into().unwrap(),
-        };
-
-        Word64 { data }
+        Word64 { data: self.data / two_pow_n | self.data.opt_wrapping_mul(two_pow_64_n) }
     }
     fn rotl(self: Word64, n: u64) -> Word64 {
         let data = BitOr::bitor(
@@ -255,36 +229,6 @@ pub fn fpow(mut base: u128, mut power: u128) -> u128 {
             result = (result * base);
         }
         base = base * base;
-        power = q;
-    }
-
-    result
-}
-
-const two_squarings: [u64; 6] = [
-    TWO_POW_1, TWO_POW_2, TWO_POW_4, TWO_POW_8, TWO_POW_16, TWO_POW_32,
-];
-/// Computes 2^power using cached powers of 2 for optimization
-///
-/// This function efficiently calculates powers of 2 using pre-computed constants
-/// and binary exponentiation. It supports generic types that implement the required
-/// arithmetic traits, commonly used for u64 and u128 types.
-///
-/// #### Arguments
-/// * `power` - The exponent for computing 2^power
-///
-/// #### Returns
-/// * `T` - The result of 2^power in the specified type T
-pub fn two_pow<T, +DivRem<T>, +Mul<T>, +Into<u64, T>, +Drop<T>>(mut power: u64) -> T {
-    let mut i = 0;
-    let mut result: T = 1_u64.into();
-    let two_squarings = two_squarings.span();
-    while (power != 0) {
-        let (q, r) = DivRem::div_rem(power, 2);
-        if r == 1 {
-            result = result * (*two_squarings[i]).into();
-        }
-        i = i + 1;
         power = q;
     }
 
