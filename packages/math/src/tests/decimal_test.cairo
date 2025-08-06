@@ -330,28 +330,71 @@ fn test_decimal_string_conversion_basic() {
 
     let large = DecimalTrait::from_int(12345);
     let large_str = large.to_string();
+
     assert!(large_str.len() > 0);
 }
 
 #[test]
 fn test_decimal_string_parsing_basic() {
-    // Test basic string parsing - limited to what the current implementation supports
+    // Test basic string parsing
     let zero_opt = DecimalTrait::from_string("0");
     assert!(zero_opt.is_some());
     let zero_dec = zero_opt.unwrap();
     assert!(zero_dec.int_part() == 0);
+    let zero_str: ByteArray = zero_dec.to_string();
+    assert!(zero_str == "0.0");
 
     let simple_opt = DecimalTrait::from_string("42");
     assert!(simple_opt.is_some());
     let simple_dec = simple_opt.unwrap();
     assert!(simple_dec.int_part() == 42);
+    let simple_str: ByteArray = simple_dec.to_string();
+    assert!(simple_str == "42.0");
 
-    // Note: decimal parsing like "3.14" may not be fully implemented yet
-    // Testing with simpler cases for now
     let small_opt = DecimalTrait::from_string("5");
     assert!(small_opt.is_some());
     let small_dec = small_opt.unwrap();
     assert!(small_dec.int_part() == 5);
+    let small_str: ByteArray = small_dec.to_string();
+    assert!(small_str == "5.0");
+
+    // Test decimal parsing with fractional parts
+    let decimal_opt = DecimalTrait::from_string("3.14");
+    assert!(decimal_opt.is_some());
+    let decimal_dec = decimal_opt.unwrap();
+    assert!(decimal_dec.int_part() == 3);
+    let decimal_str: ByteArray = decimal_dec.to_string();
+    assert!(decimal_str == "3.14");
+
+    // Test zero with decimal point
+    let zero_decimal_opt = DecimalTrait::from_string("0.0");
+    assert!(zero_decimal_opt.is_some());
+    let zero_decimal_dec = zero_decimal_opt.unwrap();
+    assert!(zero_decimal_dec.int_part() == 0);
+    let zero_decimal_str: ByteArray = zero_decimal_dec.to_string();
+    assert!(zero_decimal_str == "0.0");
+
+    // Test larger integer
+    let large_opt = DecimalTrait::from_string("12345");
+    assert!(large_opt.is_some());
+    let large_dec = large_opt.unwrap();
+    assert!(large_dec.int_part() == 12345);
+    let large_str: ByteArray = large_dec.to_string();
+    assert!(large_str == "12345.0");
+
+    // Test parsing with more fractional precision
+    let precise_opt = DecimalTrait::from_string("1.5");
+    assert!(precise_opt.is_some());
+    let precise_dec = precise_opt.unwrap();
+    let precise_str: ByteArray = precise_dec.to_string();
+    assert!(precise_str == "1.5");
+
+    // Test parsing integer that should convert cleanly
+    let clean_opt = DecimalTrait::from_string("100");
+    assert!(clean_opt.is_some());
+    let clean_dec = clean_opt.unwrap();
+    let clean_str: ByteArray = clean_dec.to_string();
+    assert!(clean_str == "100.0");
 }
 
 #[test]
@@ -389,21 +432,6 @@ fn test_decimal_equality() {
 
     assert!(d == e);
     assert!(!(d == f));
-}
-
-#[test]
-fn test_decimal_scale_constant() {
-    // Test that DECIMAL_SCALE constant is correct
-    assert!(DECIMAL_SCALE == 0x10000000000000000); // 2^64
-
-    // Test that scale is used correctly in construction
-    let one = DecimalTrait::from_int(1);
-    assert!(one.int_part == 1);
-    assert!(one.frac_part == 0);
-
-    let two = DecimalTrait::from_int(2);
-    assert!(two.int_part == 2);
-    assert!(two.frac_part == 0);
 }
 
 #[test]
@@ -522,4 +550,381 @@ fn test_decimal_mathematical_properties() {
     assert!((a / one) == a); // Division by one
     assert!((a / a).int_part() == 1); // Self division
     assert!((a / a).frac_part() == 0);
+}
+
+// ========== SIGNED DECIMAL TESTS ==========
+
+#[test]
+fn test_signed_decimal_construction_from_parts() {
+    // Test creating positive signed decimals
+    let positive = DecimalTrait::from_parts_signed(10, 25, false); // 10.25
+    assert!(positive.int_part() == 10);
+    assert!(positive.is_negative() == false);
+    let expected_25_frac = DECIMAL_SCALE / 4; // 0.25 = 1/4
+    assert!(positive.frac_part() == expected_25_frac.try_into().unwrap());
+
+    // Test creating negative signed decimals
+    let negative = DecimalTrait::from_parts_signed(10, 25, true); // -10.25
+    assert!(negative.int_part() == 10);
+    assert!(negative.is_negative() == true);
+    assert!(negative.frac_part() == expected_25_frac.try_into().unwrap());
+
+    // Test creating negative zero
+    let negative_zero = DecimalTrait::from_parts_signed(0, 0, true); // -0.0
+    assert!(negative_zero.int_part() == 0);
+    assert!(negative_zero.frac_part() == 0);
+    assert!(negative_zero.is_negative() == true);
+}
+
+#[test]
+fn test_signed_decimal_construction_from_raw_parts() {
+    // Test creating signed decimals from raw parts
+    let positive = DecimalTrait::from_raw_parts_signed(5, 100, false);
+    assert!(positive.int_part() == 5);
+    assert!(positive.frac_part() == 100);
+    assert!(positive.is_negative() == false);
+
+    let negative = DecimalTrait::from_raw_parts_signed(5, 100, true);
+    assert!(negative.int_part() == 5);
+    assert!(negative.frac_part() == 100);
+    assert!(negative.is_negative() == true);
+}
+
+#[test]
+fn test_signed_decimal_construction_from_felt() {
+    // Test creating signed decimals from felt252
+    let positive = DecimalTrait::from_felt_signed(42, false);
+    assert!(positive.int_part() == 42);
+    assert!(positive.frac_part() == 0);
+    assert!(positive.is_negative() == false);
+
+    let negative = DecimalTrait::from_felt_signed(42, true);
+    assert!(negative.int_part() == 42);
+    assert!(negative.frac_part() == 0);
+    assert!(negative.is_negative() == true);
+
+    // Test zero with different signs
+    let positive_zero = DecimalTrait::from_felt_signed(0, false);
+    assert!(positive_zero.is_negative() == false);
+
+    let negative_zero = DecimalTrait::from_felt_signed(0, true);
+    assert!(negative_zero.is_negative() == true);
+}
+
+#[test]
+fn test_signed_decimal_to_felt_conversion() {
+    // Test converting signed decimals to felt252
+    let positive = DecimalTrait::from_parts_signed(42, 75, false); // 42.75
+    assert!(positive.to_felt() == 42); // Truncates fractional part
+
+    let negative = DecimalTrait::from_parts_signed(42, 75, true); // -42.75
+    assert!(negative.to_felt() == -42); // Should be negative
+
+    let positive_zero = DecimalTrait::from_parts_signed(0, 0, false);
+    assert!(positive_zero.to_felt() == 0);
+
+    let negative_zero = DecimalTrait::from_parts_signed(0, 0, true);
+    assert!(negative_zero.to_felt() == 0); // -0 converts to 0
+}
+
+#[test]
+fn test_signed_decimal_addition_mixed_signs() {
+    // Test addition with mixed signs
+    let pos_a = DecimalTrait::from_parts_signed(10, 5, false); // 10.5
+    let neg_b = DecimalTrait::from_parts_signed(5, 25, true); // -5.25
+
+    // 10.5 + (-5.25) = 5.25
+    let result1 = pos_a.add(@neg_b);
+    assert!(result1.int_part() == 5);
+    assert!(result1.is_negative() == false);
+    let expected_25_frac = DECIMAL_SCALE / 4;
+    assert!(result1.frac_part() == expected_25_frac.try_into().unwrap());
+
+    // (-5.25) + 10.5 = 5.25
+    let result2 = neg_b.add(@pos_a);
+    assert!(result2.int_part() == 5);
+    assert!(result2.is_negative() == false);
+    assert!(result2.frac_part() == expected_25_frac.try_into().unwrap());
+
+    // Test when negative magnitude is larger
+    let neg_c = DecimalTrait::from_parts_signed(15, 75, true); // -15.75
+    let pos_d = DecimalTrait::from_parts_signed(10, 5, false); // 10.5
+
+    // 10.5 + (-15.75) = -5.25
+    let result3 = pos_d.add(@neg_c);
+    assert!(result3.int_part() == 5);
+    assert!(result3.is_negative() == true);
+    assert!(result3.frac_part() == expected_25_frac.try_into().unwrap());
+}
+
+#[test]
+fn test_signed_decimal_addition_same_signs() {
+    // Test addition with same signs (both negative)
+    let neg_a = DecimalTrait::from_parts_signed(5, 25, true); // -5.25
+    let neg_b = DecimalTrait::from_parts_signed(3, 75, true); // -3.75
+
+    // (-5.25) + (-3.75) = -9.0
+    let result = neg_a.add(@neg_b);
+    assert!(result.int_part() == 9);
+    assert!(result.frac_part() == 0);
+    assert!(result.is_negative() == true);
+
+    // Test addition with same signs (both positive)
+    let pos_a = DecimalTrait::from_parts_signed(5, 25, false); // 5.25
+    let pos_b = DecimalTrait::from_parts_signed(3, 75, false); // 3.75
+
+    let result2 = pos_a.add(@pos_b);
+    assert!(result2.int_part() == 9);
+    assert!(result2.frac_part() == 0);
+    assert!(result2.is_negative() == false);
+}
+
+#[test]
+fn test_signed_decimal_subtraction() {
+    // Test subtraction with mixed signs
+    let pos_a = DecimalTrait::from_parts_signed(10, 0, false); // 10.0
+    let neg_b = DecimalTrait::from_parts_signed(5, 0, true); // -5.0
+
+    // 10.0 - (-5.0) = 10.0 + 5.0 = 15.0
+    let result1 = pos_a.sub(@neg_b);
+    assert!(result1.int_part() == 15);
+    assert!(result1.frac_part() == 0);
+    assert!(result1.is_negative() == false);
+
+    // (-5.0) - 10.0 = (-5.0) + (-10.0) = -15.0
+    let result2 = neg_b.sub(@pos_a);
+    assert!(result2.int_part() == 15);
+    assert!(result2.frac_part() == 0);
+    assert!(result2.is_negative() == true);
+
+    // Test subtracting same negative numbers: (-5.0) - (-5.0) = 0.0
+    let result3 = neg_b.sub(@neg_b);
+    assert!(result3.int_part() == 0);
+    assert!(result3.frac_part() == 0);
+    assert!(result3.is_negative() == false);
+}
+
+#[test]
+fn test_signed_decimal_multiplication() {
+    // Test multiplication with mixed signs
+    let pos_a = DecimalTrait::from_parts_signed(5, 0, false); // 5.0
+    let neg_b = DecimalTrait::from_parts_signed(3, 0, true); // -3.0
+
+    // 5.0 * (-3.0) = -15.0
+    let result1 = pos_a.mul(@neg_b);
+    assert!(result1.int_part() == 15);
+    assert!(result1.frac_part() == 0);
+    assert!(result1.is_negative() == true);
+
+    // (-3.0) * 5.0 = -15.0
+    let result2 = neg_b.mul(@pos_a);
+    assert!(result2.int_part() == 15);
+    assert!(result2.frac_part() == 0);
+    assert!(result2.is_negative() == true);
+
+    // Test multiplication of two negatives: (-3.0) * (-2.0) = 6.0
+    let neg_c = DecimalTrait::from_parts_signed(2, 0, true); // -2.0
+    let result3 = neg_b.mul(@neg_c);
+    assert!(result3.int_part() == 6);
+    assert!(result3.frac_part() == 0);
+    assert!(result3.is_negative() == false);
+
+    // Test multiplication with fractional parts
+    let pos_d = DecimalTrait::from_parts_signed(2, 5, false); // 2.5
+    let neg_e = DecimalTrait::from_parts_signed(4, 0, true); // -4.0
+
+    // 2.5 * (-4.0) = -10.0
+    let result4 = pos_d.mul(@neg_e);
+    assert!(result4.int_part() == 10);
+    assert!(result4.frac_part() == 0);
+    assert!(result4.is_negative() == true);
+}
+
+#[test]
+fn test_signed_decimal_division() {
+    // Test division with mixed signs
+    let pos_a = DecimalTrait::from_parts_signed(15, 0, false); // 15.0
+    let neg_b = DecimalTrait::from_parts_signed(3, 0, true); // -3.0
+
+    // 15.0 / (-3.0) = -5.0
+    let result1 = pos_a.div(@neg_b);
+    assert!(result1.int_part() == 5);
+    assert!(result1.frac_part() == 0);
+    assert!(result1.is_negative() == true);
+
+    // (-15.0) / 3.0 = -5.0
+    let neg_c = DecimalTrait::from_parts_signed(15, 0, true); // -15.0
+    let pos_d = DecimalTrait::from_parts_signed(3, 0, false); // 3.0
+    let result2 = neg_c.div(@pos_d);
+    assert!(result2.int_part() == 5);
+    assert!(result2.frac_part() == 0);
+    assert!(result2.is_negative() == true);
+
+    // Test division of two negatives: (-15.0) / (-3.0) = 5.0
+    let result3 = neg_c.div(@neg_b);
+    assert!(result3.int_part() == 5);
+    assert!(result3.frac_part() == 0);
+    assert!(result3.is_negative() == false);
+
+    // Test division resulting in fractional result
+    let pos_e = DecimalTrait::from_parts_signed(10, 0, false); // 10.0
+    let neg_f = DecimalTrait::from_parts_signed(4, 0, true); // -4.0
+
+    // 10.0 / (-4.0) = -2.5
+    let result4 = pos_e.div(@neg_f);
+    assert!(result4.int_part() == 2);
+    assert!(result4.is_negative() == true);
+    let expected_half = DECIMAL_SCALE / 2; // 0.5
+    assert!(result4.frac_part() == expected_half.try_into().unwrap());
+}
+
+#[test]
+fn test_signed_decimal_string_representation() {
+    // Test string representation with positive numbers
+    let pos = DecimalTrait::from_parts_signed(42, 75, false); // 42.75
+    let pos_str: ByteArray = pos.to_string();
+    assert!(pos_str == "42.75");
+
+    // Test string representation with negative numbers
+    let neg = DecimalTrait::from_parts_signed(42, 75, true); // -42.75
+    let neg_str: ByteArray = neg.to_string();
+    assert!(neg_str == "-42.75");
+
+    // Test negative zero (should display as positive zero)
+    let neg_zero = DecimalTrait::from_parts_signed(0, 0, true); // -0.0
+    let neg_zero_str: ByteArray = neg_zero.to_string();
+    assert!(neg_zero_str == "0.0");
+
+    // Test positive zero
+    let pos_zero = DecimalTrait::from_parts_signed(0, 0, false); // 0.0
+    let pos_zero_str: ByteArray = pos_zero.to_string();
+    assert!(pos_zero_str == "0.0");
+
+    // Test integer values
+    let integer_val = DecimalTrait::from_parts_signed(123, 0, false); // 123.0
+    let integer_str: ByteArray = integer_val.to_string();
+    assert!(integer_str == "123.0");
+
+    // Test negative integer
+    let neg_integer = DecimalTrait::from_parts_signed(456, 0, true); // -456.0
+    let neg_integer_str: ByteArray = neg_integer.to_string();
+    assert!(neg_integer_str == "-456.0");
+
+    // Test small fractional values
+    let small_frac = DecimalTrait::from_parts_signed(0, 5, false); // 0.5
+    let small_frac_str: ByteArray = small_frac.to_string();
+    assert!(small_frac_str == "0.5");
+
+    // Test large number with fractional part
+    let large_val = DecimalTrait::from_parts_signed(999999, 123456789, false);
+    let large_str: ByteArray = large_val.to_string();
+    assert!(large_str == "999999.123456789");
+}
+
+#[test]
+fn test_signed_decimal_operator_overloads() {
+    // Test operator overloads with signed decimals
+    let pos_a = DecimalTrait::from_parts_signed(10, 0, false); // 10.0
+    let neg_b = DecimalTrait::from_parts_signed(3, 0, true); // -3.0
+
+    // Test addition operator: 10.0 + (-3.0) = 7.0
+    let sum = pos_a + neg_b;
+    assert!(sum.int_part() == 7);
+    assert!(sum.frac_part() == 0);
+    assert!(sum.is_negative() == false);
+
+    // Test subtraction operator: 10.0 - (-3.0) = 13.0
+    let diff = pos_a - neg_b;
+    assert!(diff.int_part() == 13);
+    assert!(diff.frac_part() == 0);
+    assert!(diff.is_negative() == false);
+
+    // Test multiplication operator: 10.0 * (-3.0) = -30.0
+    let product = pos_a * neg_b;
+    assert!(product.int_part() == 30);
+    assert!(product.frac_part() == 0);
+    assert!(product.is_negative() == true);
+
+    // Test division operator: 10.0 / (-3.0) = -3.333... (truncated)
+    let quotient = pos_a / neg_b;
+    assert!(quotient.int_part() == 3);
+    assert!(quotient.is_negative() == true);
+}
+
+#[test]
+fn test_signed_decimal_edge_cases() {
+    // Test operations with zero
+    let zero_pos = DecimalTrait::from_parts_signed(0, 0, false); // 0.0
+    let zero_neg = DecimalTrait::from_parts_signed(0, 0, true); // -0.0
+    let num = DecimalTrait::from_parts_signed(5, 5, false); // 5.5
+
+    // Adding positive zero: 5.5 + 0.0 = 5.5
+    let result1 = num + zero_pos;
+    assert!(result1.int_part() == 5);
+    assert!(result1.is_negative() == false);
+
+    // Adding negative zero: 5.5 + (-0.0) = 5.5
+    let result2 = num + zero_neg;
+    assert!(result2.int_part() == 5);
+    assert!(result2.is_negative() == false);
+
+    // Multiplying by negative zero: 5.5 * (-0.0) = 0.0 (should be positive)
+    let result3 = num * zero_neg;
+    assert!(result3.int_part() == 0);
+    assert!(result3.frac_part() == 0);
+
+    // Test very small negative numbers
+    let tiny_neg = DecimalTrait::from_parts_signed(0, 1, true); // -0.1
+    assert!(tiny_neg.int_part() == 0);
+    assert!(tiny_neg.is_negative() == true);
+    assert!(tiny_neg.frac_part() > 0);
+}
+
+#[test]
+fn test_signed_decimal_equality() {
+    // Test equality with signed decimals
+    let pos_a = DecimalTrait::from_parts_signed(5, 25, false); // 5.25
+    let pos_b = DecimalTrait::from_parts_signed(5, 25, false); // 5.25
+    let neg_c = DecimalTrait::from_parts_signed(5, 25, true); // -5.25
+
+    // Same positive values should be equal
+    assert!(pos_a == pos_b);
+
+    // Positive and negative versions should not be equal
+    assert!(!(pos_a == neg_c));
+
+    // Test negative zeros
+    let zero_pos = DecimalTrait::from_parts_signed(0, 0, false); // 0.0
+    let zero_neg = DecimalTrait::from_parts_signed(0, 0, true); // -0.0
+
+    // Mathematical equality: +0.0 should not equal -0.0 in our implementation
+    // since we preserve the sign
+    assert!(!(zero_pos == zero_neg));
+}
+
+#[test]
+fn test_signed_decimal_chained_operations() {
+    // Test chaining operations with signed decimals
+    let a = DecimalTrait::from_parts_signed(10, 0, false); // 10.0
+    let b = DecimalTrait::from_parts_signed(5, 0, true); // -5.0
+    let c = DecimalTrait::from_parts_signed(2, 0, false); // 2.0
+
+    // Test: 10.0 + (-5.0) + 2.0 = 7.0
+    let result1 = (a + b) + c;
+    assert!(result1.int_part() == 7);
+    assert!(result1.frac_part() == 0);
+    assert!(result1.is_negative() == false);
+
+    // Test: 10.0 - (-5.0) * 2.0 = 10.0 - (-10.0) = 10.0 + 10.0 = 20.0
+    let result2 = a - (b * c);
+    assert!(result2.int_part() == 20);
+    assert!(result2.frac_part() == 0);
+    assert!(result2.is_negative() == false);
+
+    // Test: (10.0 + (-5.0)) / 2.0 = 5.0 / 2.0 = 2.5
+    let result3 = (a + b) / c;
+    assert!(result3.int_part() == 2);
+    assert!(result3.is_negative() == false);
+    let expected_half = DECIMAL_SCALE / 2;
+    assert!(result3.frac_part() == expected_half.try_into().unwrap());
 }

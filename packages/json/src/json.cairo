@@ -1,4 +1,4 @@
-use alexandria_math::decimal::{Decimal, DecimalTrait};
+use alexandria_math::decimal::{DECIMAL_SCALE, Decimal, DecimalTrait};
 
 #[derive(Drop, Clone, PartialEq, Debug)]
 pub enum JsonValue {
@@ -210,7 +210,7 @@ pub impl JsonParserImpl of JsonParserTrait {
             let mut frac_digits = 0;
 
             while !self.is_at_end() && self.is_digit(self.current_char()?) {
-                if frac_digits == 6 {
+                if frac_digits == 18 { // Support up to 18 decimal
                     break;
                 }
                 let digit = (self.current_char()? - '0').into();
@@ -219,30 +219,24 @@ pub impl JsonParserImpl of JsonParserTrait {
                 self.advance();
             }
 
-            // Skip remaining fractional digits if more than 6
+            // Skip remaining fractional digits if more than 18
             while !self.is_at_end() && self.is_digit(self.current_char()?) {
                 self.advance();
             }
 
-            // Scale fractional part to 6 digits
-            let scale_factor = match frac_digits {
-                0 => 1000000,
-                1 => 100000,
-                2 => 10000,
-                3 => 1000,
-                4 => 100,
-                5 => 10,
-                6 => 1,
-                _ => 1,
-            };
-            frac_part = frac_part * scale_factor;
+            // Calculate scale factor dynamically based on digits parsed
+            let mut scale_factor: u128 = 1;
+            let mut remaining_digits: u32 = 18 - frac_digits;
+            while remaining_digits > 0 {
+                scale_factor *= 10;
+                remaining_digits -= 1;
+            }
 
-            // Convert to fixed-point fractional representation
-            let decimal_scale: u128 = 0x10000000000000000; // 2^64
-            let frac_fixed = (frac_part.into() * decimal_scale) / 1000000;
+            // Scale fractional part to match DECIMAL_SCALE precision
+            let frac_fixed = frac_part.into() * scale_factor;
 
-            let decimal = DecimalTrait::from_raw_parts(
-                int_part, frac_fixed.try_into().unwrap_or(0),
+            let decimal = DecimalTrait::from_raw_parts_signed(
+                int_part, frac_fixed.try_into().unwrap_or(0), is_negative,
             );
 
             Result::Ok(JsonValue::Decimal(decimal))

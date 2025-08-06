@@ -460,3 +460,90 @@ fn test_parse_complex_nested_json() {
         panic!("Expected object at root level");
     }
 }
+
+#[test]
+fn test_parse_signed_decimal_negative() {
+    // Test parsing negative decimal values
+    let result = parse_json("-3.5");
+    assert!(result.is_ok());
+
+    if let JsonValue::Decimal(d) = result.unwrap() {
+        assert!(d.int_part() == 3);
+        assert!(d.is_negative() == true);
+    } else {
+        panic!("Expected decimal for -3.5");
+    }
+}
+
+#[test]
+fn test_parse_signed_decimal_positive() {
+    // Test parsing positive decimal values (should work as before)
+    let result = parse_json("3.5");
+    assert!(result.is_ok());
+
+    if let JsonValue::Decimal(d) = result.unwrap() {
+        assert!(d.int_part() == 3);
+        assert!(d.is_negative() == false);
+    } else {
+        panic!("Expected decimal for 3.5");
+    }
+}
+
+#[test]
+fn test_parse_signed_decimal_zero() {
+    // Test parsing zero decimal
+    let result = parse_json("0.0");
+    assert!(result.is_ok());
+
+    if let JsonValue::Decimal(d) = result.unwrap() {
+        assert!(d.int_part() == 0);
+        assert!(d.is_negative() == false);
+    } else {
+        panic!("Expected decimal for 0.0");
+    }
+}
+
+#[test]
+fn test_parse_signed_decimal_negative_zero() {
+    // Test parsing negative zero decimal
+    let result = parse_json("-0.0");
+    assert!(result.is_ok());
+
+    if let JsonValue::Decimal(d) = result.unwrap() {
+        assert!(d.int_part() == 0);
+        assert!(d.is_negative() == true); // Should preserve the negative sign even for zero
+    } else {
+        panic!("Expected decimal for -0.0");
+    }
+}
+
+#[test]
+fn test_parse_signed_decimal_in_object() {
+    // Test signed decimals in JSON objects
+    let result = parse_json("{\"temperature\": -15.7, \"humidity\": 65.2}");
+    assert!(result.is_ok());
+
+    if let JsonValue::Object(obj) = result.unwrap() {
+        assert!(obj.len() == 2);
+
+        let (temp_key, temp_value) = obj.at(0);
+        assert!(temp_key == @"temperature");
+        if let JsonValue::Decimal(d) = temp_value {
+            assert!(d.int_part() == 15);
+            assert!(d.is_negative() == true);
+        } else {
+            panic!("Expected decimal for temperature");
+        }
+
+        let (hum_key, hum_value) = obj.at(1);
+        assert!(hum_key == @"humidity");
+        if let JsonValue::Decimal(d) = hum_value {
+            assert!(d.int_part() == 65);
+            assert!(d.is_negative() == false);
+        } else {
+            panic!("Expected decimal for humidity");
+        }
+    } else {
+        panic!("Expected object");
+    }
+}

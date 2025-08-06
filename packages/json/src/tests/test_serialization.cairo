@@ -238,7 +238,7 @@ fn test_serialize_decimal_struct() {
     assert!(json_string.at(json_string.len() - 1).unwrap() == '}');
 
     // Test the full string contains expected values
-    let expected_json = "{\"amount\": 25.000000, \"currency\": \"USD\"}";
+    let expected_json = "{\"amount\": 25.0, \"currency\": \"USD\"}";
     assert!(json_string == expected_json);
 }
 
@@ -261,7 +261,7 @@ fn test_serialize_mixed_types_with_decimal() {
 
     // Test the full string contains expected values
     let expected_json =
-        "{\"name\": \"Premium Widget\", \"price\": 199.000000, \"discount\": 20.000000, \"in_stock\": true, \"quantity\": 123}";
+        "{\"name\": \"Premium Widget\", \"price\": 199.0, \"discount\": 20.0, \"in_stock\": true, \"quantity\": 123}";
     assert!(json_string == expected_json);
 }
 
@@ -284,7 +284,7 @@ fn test_serialize_decimal_edge_cases() {
 
     // Test the full string contains expected values
     let expected_json =
-        "{\"name\": \"Edge Case\", \"price\": 0.000000, \"discount\": 1.000000, \"in_stock\": false, \"quantity\": 0}";
+        "{\"name\": \"Edge Case\", \"price\": 0.0, \"discount\": 1.0, \"in_stock\": false, \"quantity\": 0}";
     assert!(json_string == expected_json);
 }
 
@@ -307,6 +307,6 @@ fn test_serialize_decimal_precision() {
 
     // Test the full string contains expected decimal values
     let expected_json =
-        "{\"name\": \"Precise Item\", \"price\": 99.500000, \"discount\": 5.250000, \"in_stock\": true, \"quantity\": 10}";
+        "{\"name\": \"Precise Item\", \"price\": 99.5, \"discount\": 5.25, \"in_stock\": true, \"quantity\": 10}";
     assert!(json_string == expected_json);
 }
