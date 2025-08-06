@@ -7,7 +7,6 @@ const pow_256_minus_1: u256 =
     115792089237316195423570985008687907853269984665640564039457584007913129639935;
 
 #[test]
-#[available_gas(500000000)]
 fn add_mod_p_test() {
     let prime_non_zero = p.try_into().unwrap();
 
@@ -21,14 +20,12 @@ fn add_mod_p_test() {
 }
 
 #[test]
-#[available_gas(500000000)]
 fn add_mod_2_test() {
     assert_eq!(add_mod(p, 2, 2), 1);
     assert_eq!(add_mod(p, 1, 2), 0);
 }
 
 #[test]
-#[available_gas(500000000)]
 fn add_mod_1_test() {
     assert_eq!(add_mod(p, 2, 1), 0);
     assert_eq!(add_mod(p, p, 1), 0);
@@ -36,7 +33,6 @@ fn add_mod_1_test() {
 }
 
 #[test]
-#[available_gas(500000000)]
 fn sub_mod_test() {
     assert_eq!(sub_mod(p, p, p), 0);
     assert_eq!(sub_mod(p, 1, p), (p - 1));
@@ -49,7 +45,6 @@ fn sub_mod_test() {
 }
 
 #[test]
-#[available_gas(500000000)]
 fn sub_mod_1_test() {
     assert_eq!(sub_mod(p, p, 1), 0);
     assert_eq!(sub_mod(p, 1, 1), 0);
@@ -62,7 +57,6 @@ fn sub_mod_1_test() {
 }
 
 #[test]
-#[available_gas(500000000)]
 fn sub_mod_2_test() {
     assert_eq!(sub_mod(p, p, 2), 0);
     assert_eq!(sub_mod(p, 1, 2), 0);
@@ -75,7 +69,6 @@ fn sub_mod_2_test() {
 }
 
 #[test]
-#[available_gas(500000000)]
 fn mult_mod_test() {
     let prime_non_zero = p.try_into().unwrap();
     assert_eq!(mult_mod(p, p, prime_non_zero), 0);
@@ -89,7 +82,6 @@ fn mult_mod_test() {
 }
 
 #[test]
-#[available_gas(500000000)]
 fn mult_mod_1_test() {
     assert_eq!(mult_mod(p, p, 1), 0);
     assert_eq!(mult_mod(p, 1, 1), 0);
@@ -102,7 +94,6 @@ fn mult_mod_1_test() {
 }
 
 #[test]
-#[available_gas(500000000)]
 fn mult_mod_2_test() {
     assert_eq!(mult_mod(p, p, 2), 1);
     assert_eq!(mult_mod(p, 1, 2), 1);
@@ -115,7 +106,6 @@ fn mult_mod_2_test() {
 }
 
 #[test]
-#[available_gas(500000000)]
 fn sqr_mod_test() {
     assert_eq!(sqr_mod(p, 2), 1);
     assert_eq!(
@@ -131,7 +121,6 @@ fn sqr_mod_test() {
 }
 
 #[test]
-#[available_gas(500000000)]
 fn div_mod_test() {
     let prime_non_zero = p.try_into().unwrap();
     let div_10_30_mod_p =
@@ -142,7 +131,6 @@ fn div_mod_test() {
 }
 
 #[test]
-#[available_gas(500000000)]
 fn pow_mod_test() {
     let prime_non_zero = p.try_into().unwrap();
     assert_eq!(pow_mod(2, 4, prime_non_zero), 16);
@@ -157,7 +145,6 @@ fn pow_mod_test() {
 }
 
 #[test]
-#[available_gas(500000000)]
 fn pow_mod_1_test() {
     assert_eq!(pow_mod(2, 4, 1), 0);
     assert_eq!(pow_mod(2, 256, 1), 0);
@@ -168,7 +155,6 @@ fn pow_mod_1_test() {
 }
 
 #[test]
-#[available_gas(500000000)]
 fn pow_mod_2_test() {
     assert_eq!(pow_mod(2, 4, 2), 0);
     assert_eq!(pow_mod(2, 256, 2), 0);

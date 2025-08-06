@@ -5,7 +5,6 @@ mod append_all {
     use super::{ArrayTraitExt, get_felt252_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn of_felt() {
         let mut destination = array![21];
         let mut source = array![42, 84];
@@ -23,7 +22,6 @@ mod append_all {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn of_u128() {
         let mut destination = array![21_u128];
         let mut source = array![42_u128, 84_u128];
@@ -41,7 +39,6 @@ mod append_all {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn destination_empty() {
         let mut destination: Array<felt252> = array![];
         let mut source = get_felt252_array();
@@ -55,7 +52,6 @@ mod append_all {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn source_empty() {
         let mut destination: Array<felt252> = array![];
         let mut source = get_felt252_array();
@@ -69,7 +65,6 @@ mod append_all {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn both_empty() {
         let mut destination: Array<felt252> = array![];
         let mut source = array![];
@@ -85,7 +80,6 @@ mod extend_from_span {
     use super::{ArrayTraitExt, get_felt252_array, get_u128_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn of_felt() {
         let mut arr = get_felt252_array();
         let span = array![1, 2, 3].span();
@@ -96,7 +90,6 @@ mod extend_from_span {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn of_u128() {
         let mut arr = get_u128_array();
         let span = array![1_u128, 2_u128, 3_u128].span();
@@ -107,7 +100,6 @@ mod extend_from_span {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty_array() {
         let mut arr1 = array![];
         let arr2 = array![1, 2, 3];
@@ -118,7 +110,6 @@ mod extend_from_span {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty_span() {
         let mut arr1 = array![1, 2, 3];
         let arr2 = array![];
@@ -129,7 +120,6 @@ mod extend_from_span {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn from_self() {
         let mut arr = array![1, 2, 3];
 
@@ -143,7 +133,6 @@ mod concat {
     use super::{ArrayTraitExt, get_felt252_array, get_u128_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn of_felt() {
         let arr1 = get_felt252_array();
         let arr2 = array![1, 2, 3];
@@ -156,7 +145,6 @@ mod concat {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn of_u128() {
         let arr1 = get_u128_array();
         let arr2 = array![1_u128, 2_u128, 3_u128];
@@ -169,7 +157,6 @@ mod concat {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty_array_1() {
         let arr1 = array![];
         let arr2 = get_felt252_array();
@@ -179,7 +166,6 @@ mod concat {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty_array_2() {
         let arr1 = get_felt252_array();
         let arr2 = array![];
@@ -189,7 +175,6 @@ mod concat {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn both_empty() {
         let arr1 = core::array::ArrayTrait::<felt252>::new();
         let arr2 = array![];
@@ -204,7 +189,6 @@ mod pop_front_n {
     use super::{ArrayTraitExt, get_felt252_array, get_u128_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn of_felt() {
         let mut arr = get_felt252_array();
 
@@ -219,7 +203,6 @@ mod pop_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn of_u128() {
         let mut arr = get_u128_array();
 
@@ -230,7 +213,6 @@ mod pop_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty_array() {
         let mut arr: Array<felt252> = array![];
 
@@ -241,7 +223,6 @@ mod pop_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn pop_zero() {
         let mut arr = get_felt252_array();
 
@@ -255,7 +236,6 @@ mod pop_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn exact_len() {
         let mut arr = get_felt252_array();
 
@@ -266,7 +246,6 @@ mod pop_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn more_then_len() {
         let mut arr = get_felt252_array();
 
@@ -280,7 +259,6 @@ mod remove_front_n {
     use super::{ArrayTraitExt, get_felt252_array, get_u128_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn of_felt() {
         let mut arr = get_felt252_array();
 
@@ -291,7 +269,6 @@ mod remove_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn of_u128() {
         let mut arr = get_u128_array();
 
@@ -302,7 +279,6 @@ mod remove_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty_array() {
         let mut arr: Array<felt252> = array![];
 
@@ -312,7 +288,6 @@ mod remove_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn remove_zero() {
         let mut arr = get_felt252_array();
 
@@ -325,7 +300,6 @@ mod remove_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn exact_len() {
         let mut arr = get_felt252_array();
 
@@ -335,7 +309,6 @@ mod remove_front_n {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn more_then_len() {
         let mut arr = get_felt252_array();
 
@@ -349,7 +322,6 @@ mod reversed {
     use super::{ArrayTraitExt, get_felt252_array, get_u128_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn of_felt() {
         let mut arr = get_felt252_array();
 
@@ -362,7 +334,6 @@ mod reversed {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn of_u128() {
         let mut arr = get_u128_array();
 
@@ -373,7 +344,6 @@ mod reversed {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn even() {
         let mut arr = array![21, 42];
 
@@ -384,7 +354,6 @@ mod reversed {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn size_1() {
         let mut arr = array![21];
 
@@ -395,7 +364,6 @@ mod reversed {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty() {
         let mut arr: Array<felt252> = array![];
         let response = arr.reversed();
@@ -407,7 +375,6 @@ mod contains {
     use super::{ArrayTraitExt, get_felt252_array, get_u128_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn of_felt() {
         let arr = get_felt252_array();
         assert!(arr.contains(@21));
@@ -417,7 +384,6 @@ mod contains {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn of_u128() {
         let arr = get_u128_array();
         assert!(arr.contains(@21_u128));
@@ -427,7 +393,6 @@ mod contains {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty_array() {
         let arr: Array<felt252> = array![];
         assert!(!arr.contains(@21));
@@ -438,7 +403,6 @@ mod position {
     use super::{ArrayTraitExt, get_felt252_array, get_u128_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn of_felt() {
         let arr = get_felt252_array();
         assert_eq!(arr.position(@21).unwrap(), 0);
@@ -448,7 +412,6 @@ mod position {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn of_u128() {
         let arr = get_u128_array();
         assert_eq!(arr.position(@21_u128).unwrap(), 0);
@@ -458,7 +421,6 @@ mod position {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty_array() {
         let arr: Array<felt252> = array![];
         assert!(arr.position(@21).is_none());
@@ -469,7 +431,6 @@ mod occurrences {
     use super::ArrayTraitExt;
 
     #[test]
-    #[available_gas(2000000)]
     fn of_felt() {
         let arr = array![1, 2, 2, 3, 3, 3];
         assert_eq!(arr.occurrences(@1), 1);
@@ -479,7 +440,6 @@ mod occurrences {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn of_u128() {
         let arr = array![1_u128, 2_u128, 2_u128, 3_u128, 3_u128, 3_u128];
         assert_eq!(arr.occurrences(@1_u128), 1);
@@ -489,7 +449,6 @@ mod occurrences {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty_array() {
         let arr: Array<felt252> = array![];
         assert_eq!(arr.occurrences(@21), 0);
@@ -500,7 +459,6 @@ mod min {
     use super::{ArrayTraitExt, get_u128_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn of_felt() {
         let mut arr = get_u128_array();
         assert_eq!(arr.min().unwrap(), 21_u128);
@@ -510,7 +468,6 @@ mod min {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn of_u128() {
         let mut arr = get_u128_array();
         assert_eq!(arr.min().unwrap(), 21_u128);
@@ -520,7 +477,6 @@ mod min {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn one_item() {
         let arr = array![21_u128];
         assert_eq!(arr.min().unwrap(), 21_u128);
@@ -528,7 +484,6 @@ mod min {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty() {
         let arr: Array<u128> = array![];
         assert!(arr.min().is_none());
@@ -540,7 +495,6 @@ mod min_position {
     use super::{ArrayTraitExt, get_u128_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn of_u128() {
         let mut arr = get_u128_array();
         assert_eq!(arr.min_position().unwrap(), 0);
@@ -552,14 +506,12 @@ mod min_position {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn min_position_empty_array() {
         let arr: Array<u128> = array![];
         assert!(arr.min_position().is_none());
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn min_position_one_item() {
         let arr = array![21_u128];
         assert_eq!(arr.min_position().unwrap(), 0);
@@ -570,7 +522,6 @@ mod max {
     use super::{ArrayTraitExt, get_u128_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn max() {
         let mut arr = get_u128_array();
 
@@ -579,21 +530,18 @@ mod max {
         assert_eq!(arr.max().unwrap(), 85_u128);
     }
     #[test]
-    #[available_gas(2000000)]
     fn max_empty_array() {
         let arr: Array<u128> = array![];
         assert!(arr.position(@12).is_none());
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn max_one_item() {
         let arr = array![21_u128];
         assert_eq!(arr.max().unwrap(), 21_u128);
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty() {
         let arr: Array<u128> = array![];
         assert!(arr.max().is_none());
@@ -605,7 +553,6 @@ mod max_position {
     use super::{ArrayTraitExt, get_u128_array};
 
     #[test]
-    #[available_gas(2000000)]
     fn max_position() {
         let mut arr = get_u128_array();
         assert_eq!(arr.max_position().unwrap(), 2);
@@ -617,14 +564,12 @@ mod max_position {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn max_position_empty_array() {
         let arr: Array<u128> = array![];
         assert!(arr.max_position().is_none());
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn max_position_one_item() {
         let arr = array![21_u128];
         assert_eq!(arr.max_position().unwrap(), 0);
@@ -636,7 +581,6 @@ mod dedup {
     use super::ArrayTraitExt;
 
     #[test]
-    #[available_gas(2000000)]
     fn all_different() {
         let arr = array![1, 2, 3, 4];
         let new_arr = arr.dedup();
@@ -645,7 +589,6 @@ mod dedup {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn one_match() {
         let arr = array![1, 2, 2, 3, 4];
         let new_arr = arr.dedup();
@@ -654,7 +597,6 @@ mod dedup {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn two_matches() {
         let arr = array![1, 2, 2, 3, 4, 4];
         let new_arr = arr.dedup();
@@ -663,7 +605,6 @@ mod dedup {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn one_match_more() {
         let arr = array![1, 2, 2, 2, 3, 4, 4];
         let new_arr = arr.dedup();
@@ -672,7 +613,6 @@ mod dedup {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn all_same() {
         let arr = array![2, 2, 2, 2];
         let new_arr = arr.dedup();
@@ -682,7 +622,6 @@ mod dedup {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn one_elem() {
         let arr = array![2];
         let new_arr = arr.dedup();
@@ -691,7 +630,6 @@ mod dedup {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn no_elem() {
         let arr: Array<u128> = array![];
         let new_arr = arr.dedup();
@@ -700,7 +638,6 @@ mod dedup {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn multiple_duplicates_same() {
         let mut arr = array![1, 1, 3, 4, 3, 3, 3, 4, 2, 2];
         let new_arr = arr.dedup();
@@ -719,7 +656,6 @@ mod unique {
     use super::ArrayTraitExt;
 
     #[test]
-    #[available_gas(2000000)]
     fn one_duplicate() {
         let arr = array![32_u128, 256_u128, 128_u128, 256_u128, 1024_u128];
 
@@ -733,7 +669,6 @@ mod unique {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn all_same() {
         let arr = array![84_u128, 84_u128, 84_u128];
 
@@ -744,7 +679,6 @@ mod unique {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn empty() {
         let arr: Array<u128> = array![];
 
@@ -754,7 +688,6 @@ mod unique {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn duplicate_front() {
         let arr = array![16_u128, 16_u128, 16_u128, 128_u128, 64_u128, 32_u128];
 
@@ -768,7 +701,6 @@ mod unique {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn duplicate_middle() {
         let arr = array![128_u128, 256_u128, 84_u128, 84_u128, 84_u128, 1_u128];
 
@@ -782,7 +714,6 @@ mod unique {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn duplicate_back() {
         let arr = array![32_u128, 16_u128, 64_u128, 128_u128, 128_u128, 128_u128];
 
@@ -796,7 +727,6 @@ mod unique {
     }
 
     #[test]
-    #[available_gas(2000000)]
     fn without_duplicates() {
         let arr = array![42_u128, 84_u128, 21_u128];
 

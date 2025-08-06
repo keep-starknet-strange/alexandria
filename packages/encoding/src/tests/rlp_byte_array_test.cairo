@@ -2,7 +2,6 @@ use alexandria_bytes::byte_array_ext::ByteArrayTraitExt;
 use alexandria_encoding::rlp_byte_array::{RLPError, RLPItemByteArray, RLPTrait};
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_type_byte() {
     let mut ba: ByteArray = Default::default();
     ba.append_byte(0x78);
@@ -13,7 +12,6 @@ fn test_ba_rlp_decode_type_byte() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_type_short_string() {
     let mut ba: ByteArray = Default::default();
     ba.append_u16(0x8181);
@@ -24,7 +22,6 @@ fn test_ba_rlp_decode_type_short_string() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_type_long_string() {
     let mut ba: ByteArray = Default::default();
     ba.append_word(0xb90102, 3);
@@ -43,7 +40,6 @@ fn test_ba_rlp_decode_type_long_string() {
 
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_type_short_list() {
     let mut input_ba: ByteArray = Default::default();
     input_ba.append_u32(0xc3814180); // list prefix (3 bytes)
@@ -56,7 +52,6 @@ fn test_ba_rlp_decode_type_short_list() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_type_long_list() {
     let mut input_ba: ByteArray = Default::default();
     input_ba.append_u256(0x7070707070707070707070707070707070707070707070707070707070707070);
@@ -72,7 +67,6 @@ fn test_ba_rlp_decode_type_long_list() {
 
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_type_long_list_len_too_short() {
     let mut input_ba: ByteArray = Default::default();
     input_ba.append_word(0xf901, 2);
@@ -85,7 +79,6 @@ fn test_ba_rlp_decode_type_long_list_len_too_short() {
 
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_type_long_string_payload_too_long() {
     let mut input_ba: ByteArray = Default::default();
     input_ba.append_word(0xbf0102020202020202, 9);
@@ -97,7 +90,6 @@ fn test_ba_rlp_decode_type_long_string_payload_too_long() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_type_long_list_payload_too_long() {
     let mut input_ba: ByteArray = Default::default();
     input_ba.append_word(0xfc0102020202, 6);
@@ -109,7 +101,6 @@ fn test_ba_rlp_decode_type_long_list_payload_too_long() {
 }
 
 #[test]
-#[available_gas(9999999)]
 fn test_ba_rlp_decode_empty() {
     let res = RLPTrait::decode_byte_array(Default::default());
 
@@ -118,7 +109,6 @@ fn test_ba_rlp_decode_empty() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_string_default_value() {
     let mut ba: ByteArray = Default::default();
     ba.append_byte(0x80);
@@ -128,7 +118,6 @@ fn test_ba_rlp_decode_string_default_value() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_string() {
     let mut i = 0;
     while (i != 128) {
@@ -142,7 +131,6 @@ fn test_ba_rlp_decode_string() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_short_string() {
     let mut ba: ByteArray = Default::default();
     ba.append_word(0x9b5a806cf634c0398d8f2d89fd49a91ef33da474cd8494bba8da3bf7, 28);
@@ -154,7 +142,6 @@ fn test_ba_rlp_decode_short_string() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_short_string_input_too_short() {
     let mut ba: ByteArray = Default::default();
     ba.append_word(0x9b5a806cf634c0398d8f2d89fd49a91ef33da474cd8494bba8da3b, 27);
@@ -166,7 +153,6 @@ fn test_ba_rlp_decode_short_string_input_too_short() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_long_string_with_payload_len_on_1_byte() {
     let mut ba: ByteArray = Default::default();
     ba.append_u256(0xb83cf7a17ef959d488388ddc347b3a10dd85431d0c37986a63bd18baa38db1a4);
@@ -179,7 +165,6 @@ fn test_ba_rlp_decode_long_string_with_payload_len_on_1_byte() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_long_string_with_input_too_short() {
     let mut ba: ByteArray = Default::default();
     ba.append_u256(0xb83cf7a17ef959d488388ddc347b3a10dd85431d0c37986a63bd18baa38db1a4);
@@ -193,7 +178,6 @@ fn test_ba_rlp_decode_long_string_with_input_too_short() {
 
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_long_string_with_payload_len_on_2_bytes() {
     let mut ba: ByteArray = Default::default();
     ba.append_u256(0xb90102f7a17ef959d488388ddc347b3a10dd85431d0c37986a63bd18baa38db1); //29
@@ -214,7 +198,6 @@ fn test_ba_rlp_decode_long_string_with_payload_len_on_2_bytes() {
 }
 
 #[test]
-#[available_gas(99999999)]
 fn test_ba_rlp_decode_long_string_with_payload_len_too_short() {
     let mut ba: ByteArray = Default::default();
     ba.append_word(0xb901, 2);
@@ -226,7 +209,6 @@ fn test_ba_rlp_decode_long_string_with_payload_len_too_short() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_ba_rlp_decode_short_list() {
     let mut ba: ByteArray = Default::default();
     ba.append_word(0xc9833535354283453892, 10);
@@ -244,7 +226,6 @@ fn test_ba_rlp_decode_short_list() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_ba_rlp_decode_short_nested_list() {
     let mut ba: ByteArray = Default::default();
     ba.append_u64(0xc7c0c1c0c3c0c1c0);
@@ -260,7 +241,6 @@ fn test_ba_rlp_decode_short_nested_list() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_ba_rlp_decode_multi_list() {
     let mut ba: ByteArray = Default::default();
     ba.append_word(0xc6827a77c10401, 7);
@@ -280,7 +260,6 @@ fn test_ba_rlp_decode_multi_list() {
 
 
 #[test]
-#[available_gas(99999999999)]
 fn test_ba_rlp_decode_short_list_with_input_too_short() {
     let mut ba: ByteArray = Default::default();
     ba.append_word(0xc98335358942834538, 9);
@@ -292,7 +271,6 @@ fn test_ba_rlp_decode_short_list_with_input_too_short() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_ba_rlp_decode_long_list() {
     let mut ba: ByteArray = Default::default();
     ba.append_u256(0xf90211a07770cf09b5067a1b35df62a924898175ceaeecad1f68cdb4a844400c);
@@ -373,7 +351,6 @@ fn test_ba_rlp_decode_long_list() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_ba_rlp_decode_long_list_with_input_too_short() {
     let mut ba: ByteArray = Default::default();
     ba.append_word(0xf90211a07770cf09b5067a1b35df62a924898175ceaeecad1f68cdb4, 28);
@@ -386,7 +363,6 @@ fn test_ba_rlp_decode_long_list_with_input_too_short() {
 
 
 #[test]
-#[available_gas(99999999999)]
 fn test_ba_rlp_decode_long_list_with_len_too_short() {
     let mut ba: ByteArray = Default::default();
     ba.append_word(0xf902, 2);
@@ -398,7 +374,6 @@ fn test_ba_rlp_decode_long_list_with_len_too_short() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_ba_rlp_encode_empty_input_should_fail() {
     let res = RLPTrait::encode_byte_array(array![].span(), 0);
     assert!(res.is_err(), "Should have failed");
@@ -406,7 +381,6 @@ fn test_ba_rlp_encode_empty_input_should_fail() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_ba_rlp_encode_default_value() {
     let input = RLPItemByteArray::String(Default::default());
 
@@ -418,7 +392,6 @@ fn test_ba_rlp_encode_default_value() {
 
 
 #[test]
-#[available_gas(20000000)]
 fn test_ba_rlp_encode_string_single_byte_lt_0x80() {
     let mut ba: ByteArray = Default::default();
     ba.append_byte(0x40);
@@ -432,7 +405,6 @@ fn test_ba_rlp_encode_string_single_byte_lt_0x80() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_ba_rlp_encode_string_single_byte_ge_0x80() {
     let mut ba: ByteArray = Default::default();
     ba.append_byte(0x80);
@@ -447,7 +419,6 @@ fn test_ba_rlp_encode_string_single_byte_ge_0x80() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_ba_rlp_encode_string_length_between_2_and_55() {
     let mut ba: ByteArray = Default::default();
     ba.append_byte(0x40);
@@ -464,7 +435,6 @@ fn test_ba_rlp_encode_string_length_between_2_and_55() {
 }
 
 #[test]
-#[available_gas(200000000)]
 fn test_ba_rlp_encode_string_length_exactly_56() {
     let mut input_ba: ByteArray = Default::default();
     input_ba.append_u256(0x6060606060606060606060606060606060606060606060606060606060606060);
@@ -483,7 +453,6 @@ fn test_ba_rlp_encode_string_length_exactly_56() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_ba_rlp_encode_string_length_greater_than_56() {
     let mut input_ba: ByteArray = Default::default();
     input_ba.append_u256(0x7070707070707070707070707070707070707070707070707070707070707070);
@@ -503,7 +472,6 @@ fn test_ba_rlp_encode_string_length_greater_than_56() {
 }
 
 #[test]
-#[available_gas(200000000)]
 fn test_ba_rlp_encode_string_large_bytearray_inputs() {
     let mut input_ba: ByteArray = Default::default();
     let mut i = 0;
@@ -527,7 +495,6 @@ fn test_ba_rlp_encode_string_large_bytearray_inputs() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_ba_rlp_encode_mutilple_string() {
     let mut input_ba1: ByteArray = Default::default();
     input_ba1.append_u64(0x4053159450404040);
@@ -546,7 +513,6 @@ fn test_ba_rlp_encode_mutilple_string() {
 }
 
 #[test]
-#[available_gas(20000000)]
 fn test_ba_rlp_encode_short_list() {
     let mut input_ba1: ByteArray = Default::default();
     input_ba1.append_word(0x353535, 3);
@@ -570,7 +536,6 @@ fn test_ba_rlp_encode_short_list() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_ba_rlp_encode_short_nested_list() {
     let input1 = RLPItemByteArray::List(array![].span());
     let input2 = RLPItemByteArray::List(array![input1].span());
@@ -581,8 +546,7 @@ fn test_ba_rlp_encode_short_nested_list() {
     let list = RLPItemByteArray::List(
         array![
             RLPItemByteArray::List(array![].span()),
-            RLPItemByteArray::List(array![RLPItemByteArray::List(array![].span())].span()),
-            input3,
+            RLPItemByteArray::List(array![RLPItemByteArray::List(array![].span())].span()), input3,
         ]
             .span(),
     );
@@ -596,7 +560,6 @@ fn test_ba_rlp_encode_short_nested_list() {
 }
 
 #[test]
-#[available_gas(99999999999)]
 fn test_ba_rlp_encode_long_list() {
     let mut ba1: ByteArray = Default::default();
     ba1.append_u256(0x7770cf09b5067a1b35df62a924898175ceaeecad1f68cdb4a844400c73c14af4);
@@ -665,23 +628,8 @@ fn test_ba_rlp_encode_long_list() {
     let input17 = RLPItemByteArray::String(Default::default());
 
     let strings_list = array![
-        input1,
-        input2,
-        input3,
-        input4,
-        input5,
-        input6,
-        input7,
-        input8,
-        input9,
-        input10,
-        input11,
-        input12,
-        input13,
-        input14,
-        input15,
-        input16,
-        input17,
+        input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11,
+        input12, input13, input14, input15, input16, input17,
     ];
 
     let list = RLPItemByteArray::List(strings_list.span());
@@ -778,15 +726,8 @@ fn test_rlp_encode_legacy_tx_calldata_long() {
     let calldata = RLPItemByteArray::String(ba);
 
     let strings_list = array![
-        chain_id,
-        nonce,
-        max_priority_fee_per_gas,
-        max_fee_per_gas,
-        gas_limit,
-        to,
-        value,
-        access_list,
-        calldata,
+        chain_id, nonce, max_priority_fee_per_gas, max_fee_per_gas, gas_limit, to, value,
+        access_list, calldata,
     ];
     let list = RLPItemByteArray::List(strings_list.span());
     let res = RLPTrait::encode_byte_array(array![list].span(), 0x02).unwrap();
@@ -863,15 +804,8 @@ fn test_rlp_encode_legacy_tx_calldata_long_without_using_rlp_type() {
     let calldata = RLPTrait::encode_byte_array_string(@ba).unwrap();
 
     let strings_list = array![
-        chain_id,
-        nonce,
-        max_priority_fee_per_gas,
-        max_fee_per_gas,
-        gas_limit,
-        to,
-        value,
-        access_list,
-        calldata,
+        chain_id, nonce, max_priority_fee_per_gas, max_fee_per_gas, gas_limit, to, value,
+        access_list, calldata,
     ];
 
     let result = RLPTrait::encode_byte_array_list(strings_list.span(), 0x2).unwrap();
@@ -880,7 +814,6 @@ fn test_rlp_encode_legacy_tx_calldata_long_without_using_rlp_type() {
 
 
 #[test]
-#[available_gas(99999999999)]
 fn test_ba_rlp_encode_short_nested_list_without_using_rlp_type() {
     let string_0 = RLPTrait::encode_byte_array_list(array![].span(), 0x0).unwrap();
     let string_1 = RLPTrait::encode_byte_array_list(array![string_0].span(), 0x0).unwrap();

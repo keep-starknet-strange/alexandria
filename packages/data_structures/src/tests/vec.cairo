@@ -100,34 +100,29 @@ fn vec_index_trait_out_of_bounds_test<
 
 
 #[test]
-#[available_gas(2000000)]
 fn felt252_vec_new_test() {
     vec_new_test(@VecTrait::<Felt252Vec, u128>::new());
 }
 
 #[test]
-#[available_gas(2000000)]
 fn felt252_vec_len_test() {
     let mut vec = VecTrait::<Felt252Vec, u128>::new();
     vec_len_test(ref vec, 1);
 }
 
 #[test]
-#[available_gas(2000000)]
 fn felt252_vec_get_test() {
     let mut vec = VecTrait::<Felt252Vec, u128>::new();
     vec_get_test(ref vec, 1);
 }
 
 #[test]
-#[available_gas(2000000)]
 fn felt252_vec_at_test() {
     let mut vec = VecTrait::<Felt252Vec, u128>::new();
     vec_at_test(ref vec, 1);
 }
 
 #[test]
-#[available_gas(2000000)]
 #[should_panic(expected: ('Index out of bounds',))]
 fn felt252_vec_at_out_of_bounds_test() {
     let mut vec = VecTrait::<Felt252Vec, u128>::new();
@@ -135,21 +130,18 @@ fn felt252_vec_at_out_of_bounds_test() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn felt252_vec_push_test() {
     let mut vec = VecTrait::<Felt252Vec, u128>::new();
     vec_push_test(ref vec, 1);
 }
 
 #[test]
-#[available_gas(2000000)]
 fn felt252_vec_set_test() {
     let mut vec = VecTrait::<Felt252Vec, u128>::new();
     vec_set_test(ref vec, 1, 2);
 }
 
 #[test]
-#[available_gas(2000000)]
 #[should_panic(expected: ('Index out of bounds',))]
 fn felt252_vec_set_test_expect_error() {
     let mut vec = VecTrait::<Felt252Vec, u128>::new();
@@ -157,14 +149,12 @@ fn felt252_vec_set_test_expect_error() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn felt252_vec_index_trait_test() {
     let mut vec = VecTrait::<Felt252Vec, u128>::new();
     vec_index_trait_test(ref vec, 1, 2);
 }
 
 #[test]
-#[available_gas(2000000)]
 #[should_panic(expected: ('Index out of bounds',))]
 fn felt252_vec_index_trait_out_of_bounds_test() {
     let mut vec = VecTrait::<Felt252Vec, u128>::new();
@@ -172,34 +162,29 @@ fn felt252_vec_index_trait_out_of_bounds_test() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn nullable_vec_new_test() {
     vec_new_test(@VecTrait::<NullableVec, u128>::new());
 }
 
 #[test]
-#[available_gas(2000000)]
 fn nullable_vec_len_test() {
     let mut vec = VecTrait::<NullableVec, u128>::new();
     vec_len_test(ref vec, 1);
 }
 
 #[test]
-#[available_gas(2000000)]
 fn nullable_vec_get_test() {
     let mut vec = VecTrait::<NullableVec, u128>::new();
     vec_get_test(ref vec, 1);
 }
 
 #[test]
-#[available_gas(2000000)]
 fn nullable_vec_at_test() {
     let mut vec = VecTrait::<NullableVec, u128>::new();
     vec_at_test(ref vec, 1);
 }
 
 #[test]
-#[available_gas(2000000)]
 #[should_panic(expected: ('Index out of bounds',))]
 fn nullable_vec_at_out_of_bounds_test() {
     let mut vec = VecTrait::<NullableVec, u128>::new();
@@ -207,21 +192,18 @@ fn nullable_vec_at_out_of_bounds_test() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn nullable_vec_push_test() {
     let mut vec = VecTrait::<NullableVec, u128>::new();
     vec_push_test(ref vec, 1);
 }
 
 #[test]
-#[available_gas(2000000)]
 fn nullable_vec_set_test() {
     let mut vec = VecTrait::<NullableVec, u128>::new();
     vec_set_test(ref vec, 1, 2);
 }
 
 #[test]
-#[available_gas(2000000)]
 #[should_panic(expected: ('Index out of bounds',))]
 fn nullable_vec_set_test_expect_error() {
     let mut vec = VecTrait::<NullableVec, u128>::new();
@@ -229,14 +211,12 @@ fn nullable_vec_set_test_expect_error() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn nullable_vec_index_trait_test() {
     let mut vec = VecTrait::<NullableVec, u128>::new();
     vec_index_trait_test(ref vec, 1, 2);
 }
 
 #[test]
-#[available_gas(2000000)]
 #[should_panic(expected: ('Index out of bounds',))]
 fn nullable_vec_index_trait_out_of_bounds_test() {
     let mut vec = VecTrait::<NullableVec, u128>::new();

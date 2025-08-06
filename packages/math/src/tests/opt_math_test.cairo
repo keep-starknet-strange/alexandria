@@ -3,7 +3,6 @@ use alexandria_math::pow;
 use core::num::traits::Bounded;
 
 #[test]
-#[available_gas(2000000)]
 fn shl_should_not_overflow() {
     assert_eq!(OptBitShift::shl(pow::<u8>(2, 7), 1), 0);
     assert_eq!(OptBitShift::shl(pow::<u16>(2, 15), 1), 0);
@@ -14,7 +13,6 @@ fn shl_should_not_overflow() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn shr_should_not_underflow() {
     assert_eq!(OptBitShift::shr(0_u8, 1), 0);
     assert_eq!(OptBitShift::shr(0_u16, 1), 0);
@@ -25,7 +23,6 @@ fn shr_should_not_underflow() {
 }
 
 #[test]
-#[available_gas(3000000)]
 fn test_rotl_min() {
     assert_eq!(OptBitRotate::rotl(pow::<u8>(2, 7) + 1, 1), 3);
     assert_eq!(OptBitRotate::rotl(pow::<u16>(2, 15) + 1, 1), 3);
@@ -36,7 +33,6 @@ fn test_rotl_min() {
 }
 
 #[test]
-#[available_gas(3000000)]
 fn test_rotl_max() {
     assert_eq!(OptBitRotate::rotl(0b101, 7), pow::<u8>(2, 7) + 0b10);
     assert_eq!(OptBitRotate::rotl(0b101, 15), pow::<u16>(2, 15) + 0b10);
@@ -47,7 +43,6 @@ fn test_rotl_max() {
 }
 
 #[test]
-#[available_gas(4000000)]
 fn test_rotr_min() {
     assert_eq!(OptBitRotate::rotr(pow::<u8>(2, 7) + 1, 1), 0b11 * pow(2, 6));
     assert_eq!(OptBitRotate::rotr(pow::<u16>(2, 15) + 1, 1), 0b11 * pow(2, 14));
@@ -58,7 +53,6 @@ fn test_rotr_min() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn test_rotr_max() {
     assert_eq!(OptBitRotate::rotr(0b101_u8, 7), 0b1010);
     assert_eq!(OptBitRotate::rotr(0b101_u16, 15), 0b1010);

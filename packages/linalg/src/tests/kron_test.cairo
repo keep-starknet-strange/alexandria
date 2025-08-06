@@ -1,7 +1,6 @@
 use alexandria_linalg::kron::{KronError, kron};
 
 #[test]
-#[available_gas(2000000)]
 fn kron_product_test() {
     let xs = array![1_u64, 10, 100];
     let ys = array![5, 6, 7];
@@ -18,7 +17,6 @@ fn kron_product_test() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn kron_product_test_check_len() {
     let xs = array![1_u64];
     let ys = array![];

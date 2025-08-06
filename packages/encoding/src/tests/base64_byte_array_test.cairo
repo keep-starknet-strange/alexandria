@@ -3,14 +3,12 @@ use alexandria_encoding::base64::{
 };
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_encode_ba_empty_test() {
     let result = Base64ByteArrayEncoder::encode(Default::default());
     assert_eq!(result.len(), 0);
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_encode_ba_simple_test() {
     let mut ba: ByteArray = "a";
 
@@ -23,7 +21,6 @@ fn base64_encode_ba_simple_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_encode_ba_hello_world_test() {
     let mut ba: ByteArray = "hello world";
 
@@ -34,14 +31,12 @@ fn base64_encode_ba_hello_world_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_decode_ba_empty_test() {
     let result = Base64ByteArrayDecoder::decode(Default::default());
     assert_eq!(result.len(), 0);
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_decode_ba_simple_test() {
     let mut ba: ByteArray = "YQ==";
 
@@ -52,7 +47,6 @@ fn base64_decode_ba_simple_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_decode_ba_hello_world_test() {
     let mut ba: ByteArray = "aGVsbG8gd29ybGQ=";
 
@@ -63,7 +57,6 @@ fn base64_decode_ba_hello_world_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_encode_ba_with_plus_and_slash() {
     let mut ba: ByteArray = Default::default();
     ba.append_byte(255);
@@ -76,7 +69,6 @@ fn base64_encode_ba_with_plus_and_slash() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_url_encode_ba_with_plus_and_slash() {
     let mut ba: ByteArray = Default::default();
     ba.append_byte(255);
@@ -89,7 +81,6 @@ fn base64_url_encode_ba_with_plus_and_slash() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_decode_ba_with_plus_and_slash() {
     let mut ba: ByteArray = "/+8=";
 
@@ -100,7 +91,6 @@ fn base64_decode_ba_with_plus_and_slash() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_url_decode_ba_with_plus_and_slash() {
     let mut ba: ByteArray = "_-8=";
 
@@ -111,7 +101,6 @@ fn base64_url_decode_ba_with_plus_and_slash() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_ba_round_trip_test() {
     // Basic round trip test for "Test"
     let mut ba: ByteArray = "Test";
@@ -147,7 +136,6 @@ fn base64_ba_round_trip_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_ba_binary_data_test() {
     // Test with binary data
     let mut ba: ByteArray = Default::default();
@@ -167,7 +155,6 @@ fn base64_ba_binary_data_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_ba_longer_input_test() {
     // Test with longer input (16 bytes)
     let mut ba = Default::default();
@@ -190,7 +177,6 @@ fn base64_ba_longer_input_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_ba_sample_byte_values_test() {
     // Test with some sample byte values
     let mut ba: ByteArray = Default::default();
@@ -217,7 +203,6 @@ fn base64_ba_sample_byte_values_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_ba_double_padding_test() {
     // Test with input that requires double padding
     let mut ba: ByteArray = "f";
@@ -233,7 +218,6 @@ fn base64_ba_double_padding_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_ba_single_padding_test() {
     // Test with input that requires single padding
     let mut ba: ByteArray = "fo";
@@ -247,7 +231,6 @@ fn base64_ba_single_padding_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_ba_no_padding_test() {
     // Test with input that requires no padding
     let mut ba: ByteArray = "foo";
@@ -265,7 +248,6 @@ fn base64_ba_no_padding_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base64_url_ba_round_trip_test() {
     // Test with URL-safe encoding/decoding
     // Binary data with values that produce special chars

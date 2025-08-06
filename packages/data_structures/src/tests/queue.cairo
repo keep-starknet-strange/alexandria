@@ -1,7 +1,6 @@
 use alexandria_data_structures::queue::QueueTrait;
 
 #[test]
-#[available_gas(2000000)]
 fn queue_new_test() {
     let queue = QueueTrait::<felt252>::new();
     let result_len = queue.len();
@@ -10,7 +9,6 @@ fn queue_new_test() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn queue_is_empty_test() {
     let queue = QueueTrait::<felt252>::new();
     let result = queue.is_empty();
@@ -19,7 +17,6 @@ fn queue_is_empty_test() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn queue_enqueue_test() {
     let mut queue = QueueTrait::new();
     queue.enqueue(1);
@@ -30,7 +27,6 @@ fn queue_enqueue_test() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn queue_peek_front_test() {
     let mut queue = QueueTrait::new();
     queue.enqueue(1);
@@ -47,7 +43,6 @@ fn queue_peek_front_test() {
 }
 
 #[test]
-#[available_gas(2000000)]
 fn queue_dequeue_test() {
     let mut queue = QueueTrait::new();
     queue.enqueue(1);

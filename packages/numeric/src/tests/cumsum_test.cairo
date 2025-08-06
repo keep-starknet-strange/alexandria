@@ -1,7 +1,6 @@
 use alexandria_numeric::cumsum::cumsum;
 
 #[test]
-#[available_gas(2000000)]
 fn cumsum_test() {
     let xs: Array<u64> = array![3, 5, 7];
     let ys = cumsum(xs.span());
@@ -12,7 +11,6 @@ fn cumsum_test() {
 
 #[test]
 #[should_panic(expected: ('Array must have at least 1 elt',))]
-#[available_gas(2000000)]
 fn cumsum_test_revert_empty() {
     let xs: Array<u64> = array![];
     cumsum(xs.span());

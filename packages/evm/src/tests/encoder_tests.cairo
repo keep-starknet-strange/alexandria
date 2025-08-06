@@ -614,8 +614,7 @@ fn test_encode_array_of_struct_with_different_types() {
     // Array length=2, then 2 tuples
     let values = array![
         0x2, // array length
-        0x123,
-        0x0, // first struct: uint256 = (0x123, 0x0)
+        0x123, 0x0, // first struct: uint256 = (0x123, 0x0)
         0x742d35Cc6634C0532925a3b844Bc454e4438f44e, // address
         0x456,
         0x0, // second struct: uint256 = (0x456, 0x0)
@@ -675,8 +674,7 @@ fn test_encode_struct_with_multiple_static_fields() {
     let mut encoder_ctx = new_encoder();
     // Struct with multiple static fields: (uint256, address, bool, uint128)
     let values = array![
-        0x1234,
-        0x0, // uint256 = (0x1234, 0x0)
+        0x1234, 0x0, // uint256 = (0x1234, 0x0)
         0x742d35Cc6634C0532925a3b844Bc454e4438f44e, // address
         0x1, // bool = true
         0x5678 // uint128 = 0x5678
@@ -711,20 +709,12 @@ fn test_encode_true_nested_arrays() {
     let values = array![
         0x3, // outer array length = 3
         // First inner array: [10,20,30]
-        0x3,
-        0xa,
-        0x14,
-        0x1e, // length=3, then 10, 20, 30
+        0x3, 0xa, 0x14, 0x1e, // length=3, then 10, 20, 30
         // Second inner array: [40,50]
-        0x2,
-        0x28,
+        0x2, 0x28,
         0x32, // length=2, then 40, 50
         // Third inner array: [60,70,80,90]
-        0x4,
-        0x3c,
-        0x46,
-        0x50,
-        0x5a // length=4, then 60, 70, 80, 90
+        0x4, 0x3c, 0x46, 0x50, 0x5a // length=4, then 60, 70, 80, 90
     ]
         .span();
 

@@ -1,7 +1,6 @@
 use alexandria_encoding::base58::{Base58Decoder, Base58Encoder};
 
 #[test]
-#[available_gas(2000000000)]
 fn base58encode_empty_test() {
     let input = array![];
     let result = Base58Encoder::encode(input.span());
@@ -9,7 +8,6 @@ fn base58encode_empty_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base58encode_simple_test() {
     let input = array!['a'];
 
@@ -20,7 +18,6 @@ fn base58encode_simple_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base58encode_hello_world_test() {
     let input = array!['h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'];
 
@@ -44,41 +41,10 @@ fn base58encode_hello_world_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base58encode_address_test() {
     let input = array![
-        15,
-        181,
-        131,
-        219,
-        98,
-        77,
-        9,
-        216,
-        225,
-        154,
-        138,
-        91,
-        195,
-        49,
-        118,
-        165,
-        0,
-        95,
-        61,
-        77,
-        212,
-        150,
-        215,
-        98,
-        99,
-        14,
-        7,
-        163,
-        32,
-        175,
-        12,
-        99,
+        15, 181, 131, 219, 98, 77, 9, 216, 225, 154, 138, 91, 195, 49, 118, 165, 0, 95, 61, 77, 212,
+        150, 215, 98, 99, 14, 7, 163, 32, 175, 12, 99,
     ];
 
     let result = Base58Encoder::encode(input.span());
@@ -89,50 +55,9 @@ fn base58encode_address_test() {
 
     // Verify the encoded result matches expected value
     let expected = array![
-        '2',
-        '4',
-        'K',
-        'e',
-        'b',
-        'v',
-        'J',
-        'C',
-        's',
-        'c',
-        'D',
-        'w',
-        'V',
-        'm',
-        '5',
-        'K',
-        'D',
-        'M',
-        'F',
-        '3',
-        'B',
-        'J',
-        'z',
-        'Z',
-        '8',
-        'F',
-        '6',
-        'N',
-        'q',
-        'X',
-        'p',
-        'P',
-        'U',
-        'G',
-        'G',
-        'V',
-        'C',
-        '9',
-        'N',
-        'z',
-        '1',
-        'b',
-        'G',
-        '6',
+        '2', '4', 'K', 'e', 'b', 'v', 'J', 'C', 's', 'c', 'D', 'w', 'V', 'm', '5', 'K', 'D', 'M',
+        'F', '3', 'B', 'J', 'z', 'Z', '8', 'F', '6', 'N', 'q', 'X', 'p', 'P', 'U', 'G', 'G', 'V',
+        'C', '9', 'N', 'z', '1', 'b', 'G', '6',
     ];
     let mut i = 0;
     while i < result.len() {
@@ -142,7 +67,6 @@ fn base58encode_address_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base58decode_empty_test() {
     let input = array![];
 
@@ -151,7 +75,6 @@ fn base58decode_empty_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base58decode_simple_test() {
     let input = array!['2', 'g'];
 
@@ -161,7 +84,6 @@ fn base58decode_simple_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base58decode_hello_world_test() {
     let input = array!['S', 't', 'V', '1', 'D', 'L', '6', 'C', 'w', 'T', 'r', 'y', 'K', 'y', 'V'];
 
@@ -181,7 +103,6 @@ fn base58decode_hello_world_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base58encode_with_leading_zeros() {
     let input = array![0, 0, 'a'];
 
@@ -194,7 +115,6 @@ fn base58encode_with_leading_zeros() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base58decode_with_leading_zeros() {
     let input = array!['1', '1', '2', 'g'];
 
@@ -206,7 +126,6 @@ fn base58decode_with_leading_zeros() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base58_all_zeros_test() {
     // Test encoding of all zeros
     let input = array![0, 0, 0, 0, 0];
@@ -231,7 +150,6 @@ fn base58_all_zeros_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base58_binary_data_test() {
     // Test with binary data (non-ASCII)
     let input = array![255, 254, 253, 252, 251];
@@ -249,7 +167,6 @@ fn base58_binary_data_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base58_invalid_characters_test() {
     // Test with invalid characters
 
@@ -280,7 +197,6 @@ fn base58_invalid_characters_test() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base58_round_trip_test_1() {
     // ASCII text
     let original = array!['T', 'e', 's', 't', ' ', 'c', 'a', 's', 'e'];
@@ -297,7 +213,6 @@ fn base58_round_trip_test_1() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base58_round_trip_test_2() {
     // Binary data mixed with text
     let original = array!['C', 'a', 'i', 'r', 'o', 0, 1, 2, 255];
@@ -314,7 +229,6 @@ fn base58_round_trip_test_2() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base58_round_trip_test_3() {
     // Sequential numbers
     let original = array![1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -331,7 +245,6 @@ fn base58_round_trip_test_3() {
 }
 
 #[test]
-#[available_gas(2000000000)]
 fn base58_single_byte_edge_cases() {
     // Test a few select byte values instead of all 256
     let test_bytes = array![0, 1, 127, 128, 255];
