@@ -11,7 +11,7 @@ fmt.workspace = true
 
 [dependencies]
 alexandria_math = { path = "../math", version ="0.6.0" }
-alexandria_macros = { path = "../macros" }
+alexandria_macros = { path = "../macros", version ="0.6.0" }
 
 starknet.workspace = true
 
