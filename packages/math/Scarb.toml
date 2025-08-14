@@ -6,6 +6,8 @@ homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packag
 edition = "2023_11"
 cairo-version = "2.12.0"
 
+experimental-features = ["user_defined_inline_macros"]
+
 [tool]
 fmt.workspace = true
 
