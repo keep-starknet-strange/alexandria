@@ -13,8 +13,8 @@ use cairo_lang_utils::{Intern, Upcast};
 ///
 /// **DEPRECATED**: This procedural macro is deprecated. Use the new Cairo 2.12.0+ inline macro instead:
 /// ```
-/// use alexandria_math::pow_macro::pow;
-/// const pow_res: u64 = pow!(2, 20);
+/// use alexandria_math::pow_macro::pow_inline;
+/// const pow_res: u64 = pow_inline!(2, 20);
 /// assert_eq!(pow_res, 1048576);
 /// ```
 ///
