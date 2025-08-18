@@ -107,3 +107,11 @@ version = "0.6.0"
 [[package]]
 name = "alexandria_utils"
 version = "0.6.0"
+
+[[package]]
+name = "macros_tests"
+version = "0.1.0"
+dependencies = [
+ "alexandria_macros",
+ "alexandria_math",
+]
