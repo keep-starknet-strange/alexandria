@@ -143,3 +143,77 @@ fn merkle_tree_poseidon_test() {
     >::verify(ref merkle_tree, root, invalid_leaf, valid_proof);
     assert!(!result, "wrong result");
 }
+
+#[test]
+fn test_odd_number_of_leaves() {
+    // Test that merkle tree handles odd number of leaves correctly
+    // using the blockchain standard of duplicating the last hash
+    let mut merkle_tree: MerkleTree<Hasher> = MerkleTreeImpl::<_, PoseidonHasherImpl>::new();
+
+    // Test with 5 leaves (odd) - this was the original failing case
+    let leaves_5 = array![1, 2, 3, 4, 5];
+    let proof_5 = MerkleTreeImpl::<
+        _, PoseidonHasherImpl,
+    >::compute_proof(ref merkle_tree, leaves_5, 2);
+    assert!(proof_5.len() > 0, "5 leaves should generate valid proof");
+
+    // Verify the proof works
+    let root_5 = MerkleTreeImpl::<_, PoseidonHasherImpl>::compute_root(ref merkle_tree, 3, proof_5);
+    let is_valid_5 = MerkleTreeImpl::<
+        _, PoseidonHasherImpl,
+    >::verify(ref merkle_tree, root_5, 3, proof_5);
+    assert!(is_valid_5, "Proof for 5 leaves should be valid");
+
+    // Test with 7 leaves (odd)
+    let leaves_7 = array![10, 20, 30, 40, 50, 60, 70];
+    let proof_7 = MerkleTreeImpl::<
+        _, PoseidonHasherImpl,
+    >::compute_proof(ref merkle_tree, leaves_7, 4);
+    assert!(proof_7.len() > 0, "7 leaves should generate valid proof");
+
+    // Verify the proof works
+    let root_7 = MerkleTreeImpl::<
+        _, PoseidonHasherImpl,
+    >::compute_root(ref merkle_tree, 50, proof_7);
+    let is_valid_7 = MerkleTreeImpl::<
+        _, PoseidonHasherImpl,
+    >::verify(ref merkle_tree, root_7, 50, proof_7);
+    assert!(is_valid_7, "Proof for 7 leaves should be valid");
+
+    // Test with 9 leaves (odd)
+    let leaves_9 = array![100, 200, 300, 400, 500, 600, 700, 800, 900];
+    let proof_9 = MerkleTreeImpl::<
+        _, PoseidonHasherImpl,
+    >::compute_proof(ref merkle_tree, leaves_9, 6);
+    assert!(proof_9.len() > 0, "9 leaves should generate valid proof");
+
+    // Verify the proof works
+    let root_9 = MerkleTreeImpl::<
+        _, PoseidonHasherImpl,
+    >::compute_root(ref merkle_tree, 700, proof_9);
+    let is_valid_9 = MerkleTreeImpl::<
+        _, PoseidonHasherImpl,
+    >::verify(ref merkle_tree, root_9, 700, proof_9);
+    assert!(is_valid_9, "Proof for 9 leaves should be valid");
+}
+
+#[test]
+fn test_single_leaf_edge_case() {
+    // Test the edge case of a single leaf (gets paired with 0)
+    let mut merkle_tree: MerkleTree<Hasher> = MerkleTreeImpl::<_, PoseidonHasherImpl>::new();
+
+    let single_leaf = array![42];
+    let proof = MerkleTreeImpl::<
+        _, PoseidonHasherImpl,
+    >::compute_proof(ref merkle_tree, single_leaf, 0);
+
+    // Single leaf gets padded to [42, 0], so proof should contain the sibling (0)
+    assert!(proof.len() == 1, "Single leaf should have exactly 1 proof element");
+    assert!(*proof.at(0) == 0, "Single leaf proof should contain 0 as sibling");
+
+    let root = MerkleTreeImpl::<_, PoseidonHasherImpl>::compute_root(ref merkle_tree, 42, proof);
+    let is_valid = MerkleTreeImpl::<
+        _, PoseidonHasherImpl,
+    >::verify(ref merkle_tree, root, 42, proof);
+    assert!(is_valid, "Single leaf proof should be valid");
+}
