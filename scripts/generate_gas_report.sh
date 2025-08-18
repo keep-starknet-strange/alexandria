@@ -17,7 +17,7 @@ generate_gas_report() {
 
     # Create a temporary file to store previous gas values
     local prev_gas_file=$(mktemp)
-    local root_gas_report="../gas_report.json"
+    local root_gas_report="gas_report.json"
     if [ -f "$root_gas_report" ]; then
         echo "Loading previous gas report from $root_gas_report..."
         # Parse JSON entries and store in temporary file
