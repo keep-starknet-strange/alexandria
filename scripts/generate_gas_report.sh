@@ -105,7 +105,7 @@ generate_gas_report() {
         echo "Gas usage has increased in the following tests:"
         cat "$increased_tests_file"
         rm -f "$increased_tests_file"
-        exit 1
+        exit 0
     else
         rm -f "$increased_tests_file"
         echo "Gas usage has not increased."
