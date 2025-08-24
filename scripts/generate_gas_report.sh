@@ -7,12 +7,12 @@ run_tests_and_collect_gas() {
 generate_gas_report() {
     echo "Running tests and collecting gas data..."
     local gas_data=$(run_tests_and_collect_gas)
-    
+
     if [ -z "$gas_data" ]; then
         echo "Error: No gas data found. Make sure 'scarb test' is running correctly."
         exit 1
     fi
-    
+
     echo "Found $(echo "$gas_data" | wc -l) tests with gas usage data"
 
     # Create a temporary file to store previous gas values
@@ -27,11 +27,11 @@ generate_gas_report() {
                 # Extract test name (between first " and last ":)
                 test_name="${line#*\"}"
                 test_name="${test_name%\":*}"
-                
+
                 # Extract gas value (after ": " and before optional comma)
                 gas_value="${line#*\": }"
                 gas_value="${gas_value%,*}"
-                
+
                 if [ -n "$test_name" ] && [ -n "$gas_value" ] && [[ "$gas_value" =~ ^[0-9]+$ ]]; then
                     echo "$test_name|$gas_value" >> "$prev_gas_file"
                 fi
@@ -75,13 +75,13 @@ generate_gas_report() {
             fi
         fi
     done <<< "$gas_data"
-    
+
     echo "Gas comparison complete: $changes_count changes found ($increases_count increases)"
 
     echo "}" >> new_gas_report.json
     echo "Updating gas_report.json with new values..."
     mv new_gas_report.json "$root_gas_report"
-    
+
     echo "Generating gas_report_diff.json..."
     echo "{" > gas_report_diff.json
 
@@ -100,7 +100,7 @@ generate_gas_report() {
 
     # Clean up temporary files
     rm -f "$prev_gas_file" "$gas_diff_file"
-    
+
     if [ "$increased_gas" = true ]; then
         echo "Gas usage has increased in the following tests:"
         cat "$increased_tests_file"

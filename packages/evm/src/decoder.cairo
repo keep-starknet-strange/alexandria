@@ -1,6 +1,6 @@
 use alexandria_bytes::byte_array_ext::ByteArrayTraitExt;
-use alexandria_math::U256BitShift;
 use alexandria_math::bitmap::Bitmap;
+use alexandria_math::opt_math::OptBitShift;
 use core::num::traits::Bounded;
 use core::traits::DivRem;
 use crate::constants::FELT252_MAX;
@@ -266,7 +266,9 @@ fn decode_bytes(ref ctx: EVMCalldata) -> Span<felt252> {
         let (new_offset, last_slot) = ctx.calldata.read_u256(ctx.offset);
         ctx.offset = new_offset;
 
-        let last_word = U256BitShift::shr(last_slot, 256 - (last_slot_bytes * 8));
+        let last_word = OptBitShift::shr(
+            last_slot, (256 - (last_slot_bytes * 8)).try_into().unwrap(),
+        );
         ba
             .append_word(
                 last_word.try_into().unwrap(), last_slot_bytes.try_into().unwrap(),
