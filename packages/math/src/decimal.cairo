@@ -2,20 +2,22 @@ use alexandria_math::const_pow;
 
 /// Fixed-point decimal number using separate 64-bit fields
 /// int_part: integer portion (0 to 2^64-1)
-/// frac_part: fractional portion in raw DECIMAL_SCALE units (0 to 2^64-1)
+/// frac_part: fractional portion in raw DECIMAL_SCALE units (0 to 10^18-1)
+/// is_negative: sign of the decimal number
 #[derive(Drop, Copy, PartialEq, Debug)]
 pub struct Decimal {
     pub int_part: u64, // Integer portion
-    pub frac_part: u64 // Fractional portion (raw units)
+    pub frac_part: u64, // Fractional portion (raw units)
+    pub is_negative: bool // Sign of the number
 }
 
-pub const DECIMAL_SCALE: u128 = 0x10000000000000000; // 2^64
+pub const DECIMAL_SCALE: u128 = 1000000000000000000; // 10^18 for better decimal precision
 
 #[generate_trait]
 pub impl DecimalImpl of DecimalTrait {
     /// Create a decimal from an integer part
     fn from_int(int_part: u64) -> Decimal {
-        Decimal { int_part, frac_part: 0 }
+        Decimal { int_part, frac_part: 0, is_negative: false }
     }
 
     /// Create a decimal from integer and decimal parts (user-friendly)
@@ -39,19 +41,58 @@ pub impl DecimalImpl of DecimalTrait {
         let frac_part = ((decimal_part.into() * DECIMAL_SCALE) / divisor.into())
             .try_into()
             .unwrap_or(0);
-        Decimal { int_part, frac_part }
+        Decimal { int_part, frac_part, is_negative: false }
     }
 
     /// Create a decimal from integer and raw fractional parts (internal use)
-    /// frac_part should be in range [0, 2^64) - raw fractional units
+    /// frac_part should be in range [0, 10^18) - raw DECIMAL_SCALE units
     fn from_raw_parts(int_part: u64, frac_part: u64) -> Decimal {
-        Decimal { int_part, frac_part }
+        Decimal { int_part, frac_part, is_negative: false }
+    }
+
+    /// Create a signed decimal from integer and raw fractional parts (internal use)
+    /// frac_part should be in range [0, 10^18) - raw DECIMAL_SCALE units
+    fn from_raw_parts_signed(int_part: u64, frac_part: u64, is_negative: bool) -> Decimal {
+        Decimal { int_part, frac_part, is_negative }
     }
 
     /// Create a decimal from a felt252 (treating it as integer)
+    /// Note: This method treats all felt252 values as positive
+    /// For negative values, use from_felt_signed or other constructors
     fn from_felt(value: felt252) -> Decimal {
         let int_part: u64 = value.try_into().unwrap_or(0);
         Self::from_int(int_part)
+    }
+
+    /// Create a signed decimal from a felt252
+    fn from_felt_signed(value: felt252, is_negative: bool) -> Decimal {
+        let int_part: u64 = value.try_into().unwrap_or(0);
+        Decimal { int_part, frac_part: 0, is_negative }
+    }
+
+    /// Create a signed decimal from integer and decimal parts (user-friendly)
+    /// int_part: integer portion (e.g., 3 for 3.35)
+    /// decimal_part: decimal portion as integer (e.g., 35 for 0.35)
+    /// is_negative: sign of the number
+    /// Example: from_parts_signed(3, 35, true) creates -3.35
+    fn from_parts_signed(int_part: u64, decimal_part: u64, is_negative: bool) -> Decimal {
+        // Determine the number of decimal digits to calculate the proper divisor
+        let mut temp = decimal_part;
+        let mut divisor = 1_u64;
+        while temp > 0 {
+            temp = temp / 10;
+            divisor = divisor * 10;
+        }
+
+        // Handle zero decimal part
+        if decimal_part == 0 {
+            divisor = 1;
+        }
+
+        let frac_part = ((decimal_part.into() * DECIMAL_SCALE) / divisor.into())
+            .try_into()
+            .unwrap_or(0);
+        Decimal { int_part, frac_part, is_negative }
     }
 
     /// Get the integer part
@@ -64,30 +105,74 @@ pub impl DecimalImpl of DecimalTrait {
         *self.frac_part
     }
 
+    /// Get the sign (true if negative)
+    fn is_negative(self: @Decimal) -> bool {
+        *self.is_negative
+    }
+
     /// Convert to felt252 (truncates fractional part)
     fn to_felt(self: @Decimal) -> felt252 {
-        self.int_part().into()
+        let value: felt252 = self.int_part().into();
+        if *self.is_negative {
+            -value
+        } else {
+            value
+        }
     }
 
     /// Add two decimals
     fn add(self: @Decimal, other: @Decimal) -> Decimal {
-        let total_frac: u128 = (*self.frac_part).into() + (*other.frac_part).into();
-        let carry = (total_frac / DECIMAL_SCALE).try_into().unwrap_or(0);
-        let new_frac = (total_frac % DECIMAL_SCALE).try_into().unwrap_or(0);
-        Decimal { int_part: *self.int_part + *other.int_part + carry, frac_part: new_frac }
+        // Convert to total values for comparison
+        let self_total: u128 = (*self.int_part).into() * DECIMAL_SCALE + (*self.frac_part).into();
+        let other_total: u128 = (*other.int_part).into() * DECIMAL_SCALE
+            + (*other.frac_part).into();
+
+        // Handle sign cases
+        if *self.is_negative == *other.is_negative {
+            // Same signs: add magnitudes, keep sign
+            let result_total = self_total + other_total;
+            let new_int_part = (result_total / DECIMAL_SCALE).try_into().unwrap_or(0);
+            let new_frac_part = (result_total % DECIMAL_SCALE).try_into().unwrap_or(0);
+            Decimal {
+                int_part: new_int_part, frac_part: new_frac_part, is_negative: *self.is_negative,
+            }
+        } else {
+            // Different signs: subtract smaller from larger
+            if self_total >= other_total {
+                let result_total = self_total - other_total;
+                let new_int_part = (result_total / DECIMAL_SCALE).try_into().unwrap_or(0);
+                let new_frac_part = (result_total % DECIMAL_SCALE).try_into().unwrap_or(0);
+                // If result is zero, always make it positive
+                let is_negative = if new_int_part == 0 && new_frac_part == 0 {
+                    false
+                } else {
+                    *self.is_negative
+                };
+                Decimal { int_part: new_int_part, frac_part: new_frac_part, is_negative }
+            } else {
+                let result_total = other_total - self_total;
+                let new_int_part = (result_total / DECIMAL_SCALE).try_into().unwrap_or(0);
+                let new_frac_part = (result_total % DECIMAL_SCALE).try_into().unwrap_or(0);
+                // If result is zero, always make it positive
+                let is_negative = if new_int_part == 0 && new_frac_part == 0 {
+                    false
+                } else {
+                    *other.is_negative
+                };
+                Decimal { int_part: new_int_part, frac_part: new_frac_part, is_negative }
+            }
+        }
     }
 
     /// Subtract two decimals
     fn sub(self: @Decimal, other: @Decimal) -> Decimal {
-        let self_total: u128 = (*self.int_part).into() * DECIMAL_SCALE + (*self.frac_part).into();
-        let other_total: u128 = (*other.int_part).into() * DECIMAL_SCALE
-            + (*other.frac_part).into();
-        let result_total = self_total - other_total;
-
-        let new_int_part = (result_total / DECIMAL_SCALE).try_into().unwrap_or(0);
-        let new_frac_part = (result_total % DECIMAL_SCALE).try_into().unwrap_or(0);
-
-        Decimal { int_part: new_int_part, frac_part: new_frac_part }
+        // Subtraction is equivalent to adding the negative
+        let negated_other = Decimal {
+            int_part: *other.int_part,
+            frac_part: *other.frac_part,
+            is_negative: !*other.is_negative,
+        };
+        self.add(@negated_other)
     }
 
     /// Multiply two decimals
@@ -115,7 +200,9 @@ pub impl DecimalImpl of DecimalTrait {
         let new_int_part = (result_total / DECIMAL_SCALE).try_into().unwrap_or(0);
         let new_frac_part = (result_total % DECIMAL_SCALE).try_into().unwrap_or(0);
 
-        Decimal { int_part: new_int_part, frac_part: new_frac_part }
+        // Result is negative if signs differ
+        let is_negative = *self.is_negative != *other.is_negative;
+        Decimal { int_part: new_int_part, frac_part: new_frac_part, is_negative }
     }
 
     /// Divide two decimals
@@ -124,7 +211,7 @@ pub impl DecimalImpl of DecimalTrait {
         let other_total: u128 = (*other.int_part).into() * DECIMAL_SCALE
             + (*other.frac_part).into();
         if other_total == 0 {
-            return Decimal { int_part: 0, frac_part: 0 };
+            return Decimal { int_part: 0, frac_part: 0, is_negative: false };
         }
 
         // Convert to total values and use u256 for intermediate calculation to prevent overflow
@@ -147,46 +234,96 @@ pub impl DecimalImpl of DecimalTrait {
         let new_int_part = (result_total / DECIMAL_SCALE).try_into().unwrap_or(0);
         let new_frac_part = (result_total % DECIMAL_SCALE).try_into().unwrap_or(0);
 
-        Decimal { int_part: new_int_part, frac_part: new_frac_part }
+        // Result is negative if signs differ
+        let is_negative = *self.is_negative != *other.is_negative;
+        Decimal { int_part: new_int_part, frac_part: new_frac_part, is_negative }
     }
 
-    /// Convert to string representation (basic implementation)
+    /// Convert to string representation
     fn to_string(self: @Decimal) -> ByteArray {
         let int_part = self.int_part();
         let frac_part = self.frac_part();
 
-        // Convert integer part
+        // Convert integer part to string
         let int_str = convert_u64_to_string(int_part);
 
-        // Convert fractional part to decimal representation
-        // This is a simplified version - for production, you'd want more precision
-        let frac_decimal: u64 = ((frac_part.into() * 1000000_u128) / DECIMAL_SCALE)
+        // Handle special case where fractional part is zero
+        if frac_part == 0 {
+            let mut result: ByteArray = "";
+            // Only add minus sign for negative non-zero values
+            if *self.is_negative && int_part != 0 {
+                result.append(@"-");
+            }
+            result.append(@int_str);
+            result.append(@".0");
+            return result;
+        }
+
+        const MAX_PRECISION: u128 = 1000000000000000000; // 10^18
+        let high_precision_frac: u128 = (frac_part.into() * MAX_PRECISION) / DECIMAL_SCALE;
+
+        // Split into chunks that fit in u64 for string conversion
+        let high_part: u64 = (high_precision_frac / 1000000000)
             .try_into()
-            .unwrap_or(0); // 6 decimal places
-        let frac_str = convert_u64_to_string(frac_decimal);
+            .unwrap_or(0); // First 9 digits
+        let low_part: u64 = (high_precision_frac % 1000000000)
+            .try_into()
+            .unwrap_or(0); // Last 9 digits
 
-        // Combine parts
-        let mut result = int_str;
+        // Convert each part to string with proper padding
+        let high_str = convert_u64_to_string(high_part);
+        let low_str = convert_u64_to_string(low_part);
+
+        // Combine fractional parts with proper zero padding
+        let mut full_frac_str: ByteArray = "";
+        full_frac_str.append(@high_str);
+
+        // Pad low_part to exactly 9 digits with leading zeros
+        let low_len = low_str.len();
+        let mut zeros_to_add = 9_u32 - low_len;
+        while zeros_to_add > 0 {
+            full_frac_str.append(@"0");
+            zeros_to_add -= 1;
+        }
+        full_frac_str.append(@low_str);
+
+        // Remove trailing zeros for cleaner output
+        let mut trimmed_frac: ByteArray = "";
+        let frac_len = full_frac_str.len();
+        let mut last_non_zero_pos = 0_u32;
+        let mut i = 0_u32;
+
+        // Find last non-zero digit
+        while i < frac_len {
+            let current_byte = full_frac_str.at(i).unwrap();
+            if current_byte != '0' {
+                last_non_zero_pos = i;
+            }
+            i += 1;
+        }
+
+        // Build trimmed fractional string (keep at least one digit)
+        i = 0;
+        while i <= last_non_zero_pos {
+            trimmed_frac.append_byte(full_frac_str.at(i).unwrap());
+            i += 1;
+        }
+
+        // If all digits were zero, keep just one zero
+        if trimmed_frac.len() == 0 {
+            trimmed_frac.append(@"0");
+        }
+
+        // Combine all parts with proper sign handling
+        let mut result: ByteArray = "";
+        // Add minus sign for negative values (avoid -0.0 case)
+        if *self.is_negative && (int_part != 0 || frac_part != 0) {
+            result.append(@"-");
+        }
+        result.append(@int_str);
         result.append(@".");
+        result.append(@trimmed_frac);
 
-        // Pad fractional part with leading zeros if needed
-        if frac_decimal < 100000 {
-            result.append(@"0");
-        }
-        if frac_decimal < 10000 {
-            result.append(@"0");
-        }
-        if frac_decimal < 1000 {
-            result.append(@"0");
-        }
-        if frac_decimal < 100 {
-            result.append(@"0");
-        }
-        if frac_decimal < 10 {
-            result.append(@"0");
-        }
-
-        result.append(@frac_str);
         result
     }
 

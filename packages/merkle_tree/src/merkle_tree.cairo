@@ -229,17 +229,35 @@ fn compute_proof<T, +HasherTrait<T>, +Drop<T>>(
 }
 
 /// Helper function to compute the next layer of a merkle tree providing a layer of nodes.
+///
+/// For odd number of nodes at any level, the last unpaired node is duplicated and hashed
+/// with itself.
+///
+/// #### Example with odd nodes:
+/// ```
+/// Level: [H1, H2, H3]  <- 3 nodes (odd)
+/// Pairs: (H1,H2), (H3,H3)  <- H3 duplicated
+/// Result: [hash(H1,H2), hash(H3,H3)]
+/// ```
+///
 /// #### Arguments
-/// * `nodes` - The sorted nodes.
-/// * `hasher` - The hasher to use.
+/// * `nodes` - The sorted nodes from the current level.
+/// * `hasher` - The hasher to use for computing parent nodes.
 /// #### Returns
-/// The next layer of nodes.
+/// The next layer of nodes (parent level).
 fn get_next_level<T, +HasherTrait<T>, +Drop<T>>(
     mut nodes: Span<felt252>, ref hasher: T,
 ) -> Array<felt252> {
     let mut next_level: Array<felt252> = array![];
     while let Option::Some(left) = nodes.pop_front() {
-        let right = *nodes.pop_front().expect('Index out of bounds');
+        // Handle odd number of nodes by duplicating the last hash
+        let right = if let Option::Some(right_node) = nodes.pop_front() {
+            *right_node // Normal case: use the actual right sibling
+        } else {
+            *left // Odd case: duplicate the left node to pair with itself
+        };
+
+        // Hash the pair in sorted order to ensure deterministic results
         let node = if Into::<felt252, u256>::into(*left) < right.into() {
             hasher.hash(*left, right)
         } else {

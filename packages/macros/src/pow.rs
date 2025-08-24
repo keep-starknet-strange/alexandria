@@ -11,12 +11,14 @@ use cairo_lang_utils::{Intern, Upcast};
 
 /// Compile-time power function.
 ///
-/// Takes two arguments, `x, y`, calculates the value of `x` raised to the power of `y`.
+/// **DEPRECATED**: This procedural macro is deprecated. Use the new Cairo 2.12.0+ inline macro instead:
+/// ```
+/// use alexandria_math::pow_macro::pow_inline;
+/// const pow_res: u64 = pow_inline!(2, 20);
+/// assert_eq!(pow_res, 1048576);
+/// ```
 ///
-/// ```
-/// const MEGABYTE: u64 = pow!(2, 20);
-/// assert_eq!(MEGABYTE, 1048576);
-/// ```
+/// Takes two arguments, `x, y`, calculates the value of `x` raised to the power of `y`.
 #[inline_macro]
 pub fn pow(token_stream: TokenStream) -> ProcMacroResult {
     let db = SimpleParserDatabase::default();
