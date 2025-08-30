@@ -1,9 +1,11 @@
 use alexandria_math::{U128BitShift, U256BitShift};
 use core::integer::u512;
 use core::num::traits::Zero;
+use keccak::compute_keccak_byte_array;
 use starknet::ContractAddress;
 use crate::bit_array::one_shift_left_bytes_felt252;
 use crate::byte_appender::{ByteAppender, ByteAppenderSupportTrait};
+use crate::utils::u256_reverse_endian;
 
 
 /// Implementation for converting a Span<u8> to a ByteArray
@@ -307,6 +309,18 @@ pub trait ByteArrayTraitExt {
     >(
         self: @ByteArray, offset: usize, size: usize,
     ) -> (usize, T);
+    /// Computes the keccak256 hash of the ByteArray in big-endian format.
+    /// #### Arguments
+    /// * `self` - The ByteArray to compute keccak for
+    /// #### Returns
+    /// * `u256` - The keccak256 hash
+    fn keccak_be(self: @ByteArray) -> u256;
+    /// Computes the keccak256 hash of the ByteArray in little-endian format.
+    /// #### Arguments
+    /// * `self` - The ByteArray to compute keccak for
+    /// #### Returns
+    /// * `u256` - The keccak256 hash
+    fn keccak_le(self: @ByteArray) -> u256;
 }
 
 
@@ -670,6 +684,17 @@ pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
         new_byte_array.append_byte(value);
         new_byte_array.append(@temp_r);
         self = new_byte_array;
+    }
+
+    /// Computes the keccak256 hash of the ByteArray in big-endian format
+    fn keccak_be(self: @ByteArray) -> u256 {
+        let regular_keccak = compute_keccak_byte_array(self);
+        u256_reverse_endian(regular_keccak)
+    }
+
+    /// Computes the keccak256 hash of the ByteArray in little-endian format
+    fn keccak_le(self: @ByteArray) -> u256 {
+        compute_keccak_byte_array(self)
     }
 }
 

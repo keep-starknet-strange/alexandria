@@ -1,6 +1,7 @@
 use alexandria_bytes::byte_array_ext::{
     ByteArrayIntoArrayU8, ByteArrayTraitExt, SpanU8IntoByteArray,
 };
+use crate::utils::u256_reverse_endian;
 
 #[test]
 fn test_new() {
@@ -487,3 +488,52 @@ fn test_append_u16_new() {
     let mut ba: ByteArray = Default::default();
     ba.append_u16(0x0102_u16);
 }
+
+#[test]
+fn test_keccak_be() {
+    let x = 1234_u256;
+    let solidity_expected: u256 =
+        10845050086153542540880384713334172698320754731055414623607759687799872907108;
+
+    let mut ba: ByteArray = Default::default();
+    ba.append_u256(x);
+    let keccak_be_result = ba.keccak_be();
+
+    assert_eq!(keccak_be_result, solidity_expected);
+}
+
+#[test]
+fn test_keccak_le() {
+    let x = 1234_u256;
+    let expected: u256 =
+        45413456864617728695064797052814794331488824331538534789368531831582969100823;
+
+    let mut ba: ByteArray = Default::default();
+    ba.append_u256(x);
+    let keccak_le_result = ba.keccak_le();
+
+    assert_eq!(keccak_le_result, expected);
+}
+
+#[test]
+fn test_keccak_le_be_endian_difference() {
+    let x = 1234_u256;
+
+    let mut ba: ByteArray = Default::default();
+    ba.append_u256(x);
+
+    let keccak_le_result = ba.keccak_le();
+    let keccak_be_result = ba.keccak_be();
+
+    // Verify they are not equal (different endianness)
+    assert_ne!(keccak_le_result, keccak_be_result);
+
+    // Verify that reversing the endianness of keccak_le gives keccak_be
+    let keccak_le_reversed = u256_reverse_endian(keccak_le_result);
+    assert_eq!(keccak_le_reversed, keccak_be_result);
+
+    // Verify that reversing the endianness of keccak_be gives keccak_le
+    let keccak_be_reversed = u256_reverse_endian(keccak_be_result);
+    assert_eq!(keccak_be_reversed, keccak_le_result);
+}
+

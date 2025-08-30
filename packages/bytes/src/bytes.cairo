@@ -273,8 +273,8 @@ pub trait BytesTrait {
     /// keccak hash
     #[deprecated(
         feature: "deprecated-keccak",
-        note: "Use `core::keccak::compute_keccak_byte_array`.",
-        since: "2.7.0",
+        note: "Use `alexandria_bytes::byte_array_ext::ByteArrayTraitExt::keccak_be`.",
+        since: "2.12.0",
     )]
     fn keccak(self: @Bytes) -> u256;
     /// sha256 hash
