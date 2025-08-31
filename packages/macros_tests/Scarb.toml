@@ -3,12 +3,12 @@ name = "macros_tests"
 description = "Dummy package only used to test macros. Not part of the workspace."
 version = "0.1.0"
 edition = "2024_07"
-cairo-version = "2.12.0"
+cairo-version = "2.12.1"
 
 [dependencies]
-starknet = "2.12.0"
+starknet = "2.12.1"
 alexandria_macros = { path = "../macros" }
 alexandria_math = { path = "../math" }
 
 [dev-dependencies]
-cairo_test = "2.12.0"
+cairo_test = "2.12.1"

@@ -108,8 +108,8 @@ fn clean_enum(input: &str) -> String {
         .lines()
         .filter(|line| {
             let trimmed = line.trim();
-            // Remove #[event_macro] and #[derive(...)] lines
-            !trimmed.starts_with("#[event_macro]") && !trimmed.starts_with("#[derive(")
+            // Only remove #[generate_events] lines, keep everything else including #[derive(...)]
+            !trimmed.starts_with("#[generate_events]")
         })
         .collect::<Vec<_>>()
         .join("\n")
