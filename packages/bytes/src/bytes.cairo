@@ -2,7 +2,7 @@ use alexandria_bytes::utils::{
     keccak_u128s_be, pad_left_data, read_sub_u128, u128_array_slice, u128_join, u128_split,
     u32s_to_u256,
 };
-use alexandria_math::{U128BitShift, U256BitShift};
+use alexandria_math::opt_math::OptBitShift;
 use core::byte_array::ByteArrayTrait;
 use core::ops::index::IndexView;
 use core::serde::Serde;
@@ -568,11 +568,11 @@ impl BytesImpl of BytesTrait {
         let (new_offset, high) = self.read_u128(offset);
         let (new_offset, low) = self.read_u128_packed(new_offset, 15);
         // low bits shifting to remove the left padded 0 byte on u128 type
-        let low = U128BitShift::shl(low, 8);
+        let low = OptBitShift::shl(low, 8);
         let mut value: u256 = u256 { high, low };
         // shift left aligned 31 bytes to the right
         // thus the value is stored in the last 31 bytes of u256
-        value = U256BitShift::shr(value, 8);
+        value = OptBitShift::shr(value, 8);
         // Unwrap is always safe here, because highest byte is always 0
         let value: felt252 = value.try_into().expect('Couldn\'t convert to felt252');
         let value: bytes31 = value.try_into().expect('Couldn\'t convert to bytes31');
@@ -682,7 +682,7 @@ impl BytesImpl of BytesTrait {
     #[inline(always)]
     fn append_bytes31(ref self: Bytes, value: bytes31) {
         let mut value: u256 = value.into();
-        value = U256BitShift::shl(value, 8);
+        value = OptBitShift::shl(value, 8);
         self.concat(@Self::new(31, array![value.high, value.low]));
     }
 

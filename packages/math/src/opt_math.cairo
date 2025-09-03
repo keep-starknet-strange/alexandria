@@ -7,10 +7,10 @@ use core::num::traits::WideMul;
 // Overflowing
 
 /// Optimized overflowing mul over u128.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Left hand side of multiplication.
 /// * `b` - Right hand side of multiplication.
-/// # Returns
+/// #### Returns
 /// * `u128` - result of overflowing multiplication
 #[inline(always)]
 fn overflowing_mul128(x: u128, y: u128) -> u128 {
@@ -20,10 +20,10 @@ fn overflowing_mul128(x: u128, y: u128) -> u128 {
 }
 
 /// Optimized overflowing mul over u64.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Left hand side of multiplication.
 /// * `b` - Right hand side of multiplication.
-/// # Returns
+/// #### Returns
 /// * `u64` - result of overflowing multiplication
 #[inline(always)]
 fn overflowing_mul64(x: u64, y: u64) -> u64 {
@@ -33,10 +33,10 @@ fn overflowing_mul64(x: u64, y: u64) -> u64 {
 }
 
 /// Optimized overflowing mul over u32.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Left hand side of multiplication.
 /// * `b` - Right hand side of multiplication.
-/// # Returns
+/// #### Returns
 /// * `u32` - result of overflowing multiplication
 #[inline(always)]
 fn overflowing_mul32(x: u32, y: u32) -> u32 {
@@ -46,10 +46,10 @@ fn overflowing_mul32(x: u32, y: u32) -> u32 {
 }
 
 /// Optimized overflowing mul over u16.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Left hand side of multiplication.
 /// * `b` - Right hand side of multiplication.
-/// # Returns
+/// #### Returns
 /// * `u16` - result of overflowing multiplication
 #[inline(always)]
 fn overflowing_mul16(x: u16, y: u16) -> u16 {
@@ -59,10 +59,10 @@ fn overflowing_mul16(x: u16, y: u16) -> u16 {
 }
 
 /// Optimized overflowing mul over u8.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Left hand side of multiplication.
 /// * `b` - Right hand side of multiplication.
-/// # Returns
+/// #### Returns
 /// * `u8` - result of overflowing multiplication
 #[inline(always)]
 fn overflowing_mul8(a: u8, b: u8) -> u8 {
@@ -378,151 +378,151 @@ const SHIFT_TABLE256: [u256; 256] = [
 ];
 
 /// Optimized right bit shift of `b` by `a` over u256.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Number of shifts (must be <= 255).
 /// * `b` - Value to be shifted.
-/// # Returns
+/// #### Returns
 /// * `u256` - result of right shift
 #[inline(always)]
-fn shr256(a: u8, b: u256) -> u256 {
+pub fn shr256(a: u8, b: u256) -> u256 {
     b / *SHIFT_TABLE256.span()[a.into()]
 }
 
 /// Optimized left bit shift of `b` by `a` over u256.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Number of shifts (must be <= 255).
 /// * `b` - Value to be shifted.
-/// # Returns
+/// #### Returns
 /// * `u256` - result of left shift
 #[inline(always)]
-fn shl256(a: u8, b: u256) -> u256 {
+pub fn shl256(a: u8, b: u256) -> u256 {
     b.wrapping_mul(*SHIFT_TABLE256.span()[a.into()])
 }
 
 /// Optimized right bit shift of `b` by `a` over u128.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Number of shifts (must be <= 127).
 /// * `b` - Value to be shifted.
-/// # Returns
+/// #### Returns
 /// * `u128` - result of right shift
 #[inline(always)]
-fn shr128(a: u8, b: u128) -> u128 {
+pub fn shr128(a: u8, b: u128) -> u128 {
     b / *SHIFT_TABLE128.span()[a.into()]
 }
 
 /// Optimized left bit shift of `b` by `a` over u128.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Number of shifts (must be <= 127).
 /// * `b` - Value to be shifted.
-/// # Returns
+/// #### Returns
 /// * `u128` - result of left shift
 #[inline(always)]
-fn shl128(a: u8, b: u128) -> u128 {
+pub fn shl128(a: u8, b: u128) -> u128 {
     overflowing_mul128(b, *SHIFT_TABLE128.span()[a.into()])
 }
 
 /// Optimized right bit shift of `b` by `a` over u64.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Number of shifts (must be <= 63).
 /// * `b` - Value to be shifted.
-/// # Returns
+/// #### Returns
 /// * `u64` - result of right shift
 #[inline(always)]
-fn shr64(a: u8, b: u64) -> u64 {
+pub fn shr64(a: u8, b: u64) -> u64 {
     b / *SHIFT_TABLE64.span()[a.into()]
 }
 
 /// Optimized left bit shift of `b` by `a` over u64.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Number of shifts (must be <= 63).
 /// * `b` - Value to be shifted.
-/// # Returns
+/// #### Returns
 /// * `u64` - result of left shift
 #[inline(always)]
-fn shl64(a: u8, b: u64) -> u64 {
+pub fn shl64(a: u8, b: u64) -> u64 {
     overflowing_mul64(b, *SHIFT_TABLE64.span()[a.into()])
 }
 
 /// Optimized right bit shift of `b` by `a` over u32.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Number of shifts (must be <= 31).
 /// * `b` - Value to be shifted.
-/// # Returns
+/// #### Returns
 /// * `u32` - result of right shift
 #[inline(always)]
-fn shr32(a: u8, b: u32) -> u32 {
+pub fn shr32(a: u8, b: u32) -> u32 {
     b / *SHIFT_TABLE32.span()[a.into()]
 }
 
 /// Optimized left bit shift of `b` by `a` over u64.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Number of shifts (must be <= 31).
 /// * `b` - Value to be shifted.
-/// # Returns
+/// #### Returns
 /// * `u32` - result of left shift
 #[inline(always)]
-fn shl32(a: u8, b: u32) -> u32 {
+pub fn shl32(a: u8, b: u32) -> u32 {
     overflowing_mul32(b, *SHIFT_TABLE32.span()[a.into()])
 }
 
 /// Optimized right bit shift of `b` by `a` over u16.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Number of shifts (must be <= 15).
 /// * `b` - Value to be shifted.
-/// # Returns
+/// #### Returns
 /// * `u16` - result of right shift
 #[inline(always)]
-fn shr16(a: u8, b: u16) -> u16 {
+pub fn shr16(a: u8, b: u16) -> u16 {
     b / *SHIFT_TABLE16.span()[a.into()]
 }
 
 /// Optimized left bit shift of `b` by `a` over u64.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Number of shifts (must be <= 15).
 /// * `b` - Value to be shifted.
-/// # Returns
+/// #### Returns
 /// * `u16` - result of left shift
 #[inline(always)]
-fn shl16(a: u8, b: u16) -> u16 {
+pub fn shl16(a: u8, b: u16) -> u16 {
     overflowing_mul16(b, *SHIFT_TABLE16.span()[a.into()])
 }
 
 /// Optimized right bit shift of `b` by `a` over u8.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Number of shifts (must be <= 7).
 /// * `b` - Value to be shifted.
-/// # Returns
+/// #### Returns
 /// * `u8` - result of right shift
 #[inline(always)]
-fn shr8(a: u8, b: u8) -> u8 {
+pub fn shr8(a: u8, b: u8) -> u8 {
     b / *SHIFT_TABLE8.span()[a.into()]
 }
 
 /// Optimized left bit shift of `b` by `a` over u64.
-/// # Arguments
+/// #### Arguments
 /// * `a` - Number of shifts (must be <= 7).
 /// * `b` - Value to be shifted.
-/// # Returns
+/// #### Returns
 /// * `u8` - result of left shift
 #[inline(always)]
-fn shl8(a: u8, b: u8) -> u8 {
+pub fn shl8(a: u8, b: u8) -> u8 {
     overflowing_mul8(b, *SHIFT_TABLE8.span()[a.into()])
 }
 
 /// Optimized bit shift trait.
 pub trait OptBitShift<T, +WideMul<T, T>> {
     /// Optimized left bit shift of `x` by `y` up to T.bits - 1.
-    /// # Arguments
+    /// #### Arguments
     /// * `x` - Value to be shifted.
     /// * `y` - Number of shifts.
-    /// # Returns
+    /// #### Returns
     /// * `T` - result of left shift
     fn shl(x: T, n: u8) -> T;
     /// Optimized right bit shift of `x` by `y` up to T.bits - 1.
-    /// # Arguments
+    /// #### Arguments
     /// * `x` - Value to be shifted.
     /// * `y` - Number of shifts.
-    /// # Returns
+    /// #### Returns
     /// * `T` - result of left shift
     fn shr(x: T, n: u8) -> T;
 }
@@ -541,10 +541,14 @@ pub impl U256OptBitShift of OptBitShift<u256> {
 pub impl U128OptBitShift of OptBitShift<u128> {
     #[inline(always)]
     fn shl(x: u128, n: u8) -> u128 {
+        assert!(n < 0x80, "`n` must be < 128");
+
         shl128(n, x)
     }
     #[inline(always)]
     fn shr(x: u128, n: u8) -> u128 {
+        assert!(n < 0x80, "`n` must be < 128");
+
         shr128(n, x)
     }
 }
@@ -552,10 +556,14 @@ pub impl U128OptBitShift of OptBitShift<u128> {
 pub impl U64OptBitShift of OptBitShift<u64> {
     #[inline(always)]
     fn shl(x: u64, n: u8) -> u64 {
+        assert!(n < 0x40, "`n` must be < 64");
+
         shl64(n, x)
     }
     #[inline(always)]
     fn shr(x: u64, n: u8) -> u64 {
+        assert!(n < 0x40, "`n` must be < 64");
+
         shr64(n, x)
     }
 }
@@ -563,10 +571,14 @@ pub impl U64OptBitShift of OptBitShift<u64> {
 pub impl U32OptBitShift of OptBitShift<u32> {
     #[inline(always)]
     fn shl(x: u32, n: u8) -> u32 {
+        assert!(n < 0x20, "`n` must be < 32");
+
         shl32(n, x)
     }
     #[inline(always)]
     fn shr(x: u32, n: u8) -> u32 {
+        assert!(n < 0x20, "`n` must be < 32");
+
         shr32(n, x)
     }
 }
@@ -574,10 +586,14 @@ pub impl U32OptBitShift of OptBitShift<u32> {
 pub impl U16OptBitShift of OptBitShift<u16> {
     #[inline(always)]
     fn shl(x: u16, n: u8) -> u16 {
+        assert!(n < 0x10, "`n` must be < 16");
+
         shl16(n, x)
     }
     #[inline(always)]
     fn shr(x: u16, n: u8) -> u16 {
+        assert!(n < 0x10, "`n` must be < 16");
+
         shr16(n, x)
     }
 }
@@ -585,15 +601,151 @@ pub impl U16OptBitShift of OptBitShift<u16> {
 pub impl U8OptBitShift of OptBitShift<u8> {
     #[inline(always)]
     fn shl(x: u8, n: u8) -> u8 {
+        assert!(n < 0x8, "`n` must be < 8");
+
         shl8(n, x)
     }
     #[inline(always)]
     fn shr(x: u8, n: u8) -> u8 {
+        assert!(n < 0x8, "`n` must be < 8");
+
         shr8(n, x)
     }
 }
 
 // Bit rotate
+
+/// Optimized left bit rotate of `b` by `a` over u256.
+/// #### Arguments
+/// * `a` - Number of rotations (0 < `a` <= 255).
+/// * `b` - Value to be rotated.
+/// #### Returns
+/// * `u256` - result of left rotate
+#[inline(always)]
+pub fn rotl256(a: u8, b: u256) -> u256 {
+    shl256(a, b) | shr256((0x100 - a.into()).try_into().unwrap(), b)
+}
+
+/// Optimized right bit rotate of `b` by `a` over u256.
+/// #### Arguments
+/// * `a` - Number of rotations (0 < `a` <= 255).
+/// * `b` - Value to be rotated.
+/// #### Returns
+/// * `u256` - result of left rotate
+#[inline(always)]
+pub fn rotr256(a: u8, b: u256) -> u256 {
+    shr256(a, b) | shl256((0x100 - a.into()).try_into().unwrap(), b)
+}
+
+/// Optimized left bit rotate of `b` by `a` over u128.
+/// #### Arguments
+/// * `a` - Number of rotations (0 < `a` <= 127).
+/// * `b` - Value to be rotated.
+/// #### Returns
+/// * `u128` - result of left rotate
+#[inline(always)]
+pub fn rotl128(a: u8, b: u128) -> u128 {
+    shl128(a, b) | shr128((0x80 - a.into()).try_into().unwrap(), b)
+}
+
+/// Optimized right bit rotate of `b` by `a` over u128.
+/// #### Arguments
+/// * `a` - Number of rotations (0 < `a` <= 127).
+/// * `b` - Value to be rotated.
+/// #### Returns
+/// * `u128` - result of left rotate
+#[inline(always)]
+pub fn rotr128(a: u8, b: u128) -> u128 {
+    shr128(a, b) | shl128((0x80 - a.into()).try_into().unwrap(), b)
+}
+
+/// Optimized left bit rotate of `b` by `a` over u64.
+/// #### Arguments
+/// * `a` - Number of rotations (0 < `a` <= 63).
+/// * `b` - Value to be rotated.
+/// #### Returns
+/// * `u64` - result of left rotate
+#[inline(always)]
+pub fn rotl64(a: u8, b: u64) -> u64 {
+    shl64(a, b) | shr64((0x40 - a.into()).try_into().unwrap(), b)
+}
+
+/// Optimized right bit rotate of `b` by `a` over u64.
+/// #### Arguments
+/// * `a` - Number of rotations (0 < `a` <= 63).
+/// * `b` - Value to be rotated.
+/// #### Returns
+/// * `u64` - result of left rotate
+#[inline(always)]
+pub fn rotr64(a: u8, b: u64) -> u64 {
+    shr64(a, b) | shl64((0x40 - a.into()).try_into().unwrap(), b)
+}
+
+/// Optimized left bit rotate of `b` by `a` over u32.
+/// #### Arguments
+/// * `a` - Number of rotations (0 < `a` <= 31).
+/// * `b` - Value to be rotated.
+/// #### Returns
+/// * `u32` - result of left rotate
+#[inline(always)]
+pub fn rotl32(a: u8, b: u32) -> u32 {
+    shl32(a, b) | shr32((0x20 - a.into()).try_into().unwrap(), b)
+}
+
+/// Optimized right bit rotate of `b` by `a` over u32.
+/// #### Arguments
+/// * `a` - Number of rotations (0 < `a` <= 31).
+/// * `b` - Value to be rotated.
+/// #### Returns
+/// * `u32` - result of left rotate
+#[inline(always)]
+pub fn rotr32(a: u8, b: u32) -> u32 {
+    shr32(a, b) | shl32((0x20 - a.into()).try_into().unwrap(), b)
+}
+
+/// Optimized left bit rotate of `b` by `a` over u16.
+/// #### Arguments
+/// * `a` - Number of rotations (0 < `a` <= 15).
+/// * `b` - Value to be rotated.
+/// #### Returns
+/// * `u16` - result of left rotate
+#[inline(always)]
+pub fn rotl16(a: u8, b: u16) -> u16 {
+    shl16(a, b) | shr16((0x10 - a.into()).try_into().unwrap(), b)
+}
+
+/// Optimized right bit rotate of `b` by `a` over u16.
+/// #### Arguments
+/// * `a` - Number of rotations (0 < `a` <= 15).
+/// * `b` - Value to be rotated.
+/// #### Returns
+/// * `u16` - result of left rotate
+#[inline(always)]
+pub fn rotr16(a: u8, b: u16) -> u16 {
+    shr16(a, b) | shl16((0x10 - a.into()).try_into().unwrap(), b)
+}
+
+/// Optimized left bit rotate of `b` by `a` over u8.
+/// #### Arguments
+/// * `a` - Number of rotations (0 < `a` <= 7).
+/// * `b` - Value to be rotated.
+/// #### Returns
+/// * `u8` - result of left rotate
+#[inline(always)]
+pub fn rotl8(a: u8, b: u8) -> u8 {
+    shl8(a, b) | shr8((0x8 - a.into()).try_into().unwrap(), b)
+}
+
+/// Optimized right bit rotate of `b` by `a` over u8.
+/// #### Arguments
+/// * `a` - Number of rotations (0 < `a` <= 7).
+/// * `b` - Value to be rotated.
+/// #### Returns
+/// * `u8` - result of left rotate
+#[inline(always)]
+pub fn rotr8(a: u8, b: u8) -> u8 {
+    shr8(a, b) | shl8((0x8 - a.into()).try_into().unwrap(), b)
+}
 
 /// Optimized bit rotation trait.
 pub trait OptBitRotate<T, +WideMul<T, T>> {
@@ -605,65 +757,125 @@ pub trait OptBitRotate<T, +WideMul<T, T>> {
 pub impl U256OptBitRotate of OptBitRotate<u256> {
     #[inline(always)]
     fn rotl(x: u256, n: u8) -> u256 {
-        shl256(n, x) | shr256((256 - n.into()).try_into().unwrap(), x)
+        rotl256(n, x)
     }
     #[inline(always)]
     fn rotr(x: u256, n: u8) -> u256 {
-        shr256(n, x) | shl256((256 - n.into()).try_into().unwrap(), x)
+        rotr256(n, x)
     }
 }
 
 pub impl U128OptBitRotate of OptBitRotate<u128> {
     #[inline(always)]
     fn rotl(x: u128, n: u8) -> u128 {
-        shl128(n, x) | shr128(128 - n, x)
+        if n == 0 {
+            return x;
+        }
+
+        assert!(n < 0x80, "`n` must be < 128");
+
+        rotl128(n, x)
     }
     #[inline(always)]
     fn rotr(x: u128, n: u8) -> u128 {
-        shr128(n, x) | shl128(128 - n, x)
+        if n == 0 {
+            return x;
+        }
+
+        assert!(n < 0x80, "`n` must be < 128");
+
+        rotr128(n, x)
     }
 }
 
 pub impl U64OptBitRotate of OptBitRotate<u64> {
     #[inline(always)]
     fn rotl(x: u64, n: u8) -> u64 {
-        shl64(n, x) | shr64(64 - n, x)
+        if n == 0 {
+            return x;
+        }
+
+        assert!(n < 0x40, "`n` must be < 64");
+
+        rotl64(n, x)
     }
     #[inline(always)]
     fn rotr(x: u64, n: u8) -> u64 {
-        shr64(n, x) | shl64(64 - n, x)
+        if n == 0 {
+            return x;
+        }
+
+        assert!(n < 0x40, "`n` must be < 64");
+
+        rotr64(n, x)
     }
 }
 
 pub impl U32OptBitRotate of OptBitRotate<u32> {
     #[inline(always)]
     fn rotl(x: u32, n: u8) -> u32 {
-        shl32(n, x) | shr32(32 - n, x)
+        if n == 0 {
+            return x;
+        }
+
+        assert!(n < 0x20, "`n` must be < 32");
+
+        rotl32(n, x)
     }
     #[inline(always)]
     fn rotr(x: u32, n: u8) -> u32 {
-        shr32(n, x) | shl32(32 - n, x)
+        if n == 0 {
+            return x;
+        }
+
+        assert!(n < 0x20, "`n` must be < 32");
+
+        rotr32(n, x)
     }
 }
 
 pub impl U16OptBitRotate of OptBitRotate<u16> {
     #[inline(always)]
     fn rotl(x: u16, n: u8) -> u16 {
-        shl16(n, x) | shr16(16 - n, x)
+        if n == 0 {
+            return x;
+        }
+
+        assert!(n < 0x10, "`n` must be < 16");
+
+        rotl16(n, x)
     }
     #[inline(always)]
     fn rotr(x: u16, n: u8) -> u16 {
-        shr16(n, x) | shl16(16 - n, x)
+        if n == 0 {
+            return x;
+        }
+
+        assert!(n < 0x10, "`n` must be < 16");
+
+        rotr16(n, x)
     }
 }
 
 pub impl U8OptBitRotate of OptBitRotate<u8> {
     #[inline(always)]
     fn rotl(x: u8, n: u8) -> u8 {
-        shl8(n, x) | shr8(8 - n, x)
+        if n == 0 {
+            return x;
+        }
+
+        assert!(n < 0x8, "`n` must be < 8");
+
+        rotl8(n, x)
     }
     #[inline(always)]
     fn rotr(x: u8, n: u8) -> u8 {
-        shr8(n, x) | shl8(8 - n, x)
+        if n == 0 {
+            return x;
+        }
+
+        assert!(n < 0x8, "`n` must be < 8");
+
+        rotr8(n, x)
     }
 }

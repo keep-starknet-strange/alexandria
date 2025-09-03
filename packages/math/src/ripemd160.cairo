@@ -14,7 +14,7 @@
 //! - Final combination of left and right results
 
 use core::num::traits::WrappingAdd;
-use crate::U32BitRotate;
+use crate::opt_math::OptBitRotate;
 
 const POW_2_32: u64 = 0x100000000;
 
@@ -50,7 +50,7 @@ fn bytes_to_u32_swap(bytes: @ByteArray, index: usize) -> u32 {
 
 #[inline(always)]
 fn u32_leftrotate(value: u32, shift: u32) -> u32 {
-    U32BitRotate::rotate_left(value, shift)
+    OptBitRotate::rotl(value, shift.try_into().unwrap())
 }
 
 #[inline(always)]
@@ -148,8 +148,8 @@ fn round_op(
         Option::Some(k_val) => a.wrapping_add(func_result).wrapping_add(x).wrapping_add(k_val),
         Option::None => a.wrapping_add(func_result).wrapping_add(x),
     };
-    a = U32BitRotate::rotate_left(temp, s).wrapping_add(e);
-    c = U32BitRotate::rotate_left(c, 10);
+    a = OptBitRotate::rotl(temp, s.try_into().unwrap()).wrapping_add(e);
+    c = OptBitRotate::rotl(c, 10);
 }
 
 #[inline(always)]

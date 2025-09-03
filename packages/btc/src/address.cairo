@@ -1,7 +1,7 @@
 use alexandria_bytes::byte_array_ext::SpanU8IntoByteArray;
 use alexandria_encoding::base58::Base58Encoder;
 use alexandria_encoding::bech32::{Encoder, convert_bits};
-use alexandria_math::BitShift;
+use alexandria_math::opt_math::OptBitShift;
 use crate::hash::{hash160, sha256};
 use crate::keys::{private_key_to_public_key, public_key_hash, public_key_to_bytes};
 use crate::taproot::{create_key_path_output, u256_to_32_bytes_be};
@@ -100,7 +100,9 @@ fn encode_bech32m(hrp: ByteArray, data: Span<u8>) -> ByteArray {
     let mut i = 0_u32;
     while i < 6 {
         let shift_amount = 5 * (5 - i);
-        let checksum_value = (BitShift::shr(checksum, shift_amount) & 31).try_into().unwrap();
+        let checksum_value = (OptBitShift::shr(checksum, shift_amount.try_into().unwrap()) & 31)
+            .try_into()
+            .unwrap();
         result.append_byte(get_bech32_char(checksum_value));
         i += 1;
     }
@@ -124,12 +126,12 @@ fn bech32m_polymod(values: Span<u8>) -> u32 {
 
     while i < values.len() {
         let value = *values.at(i);
-        let top = BitShift::shr(chk, 25);
-        chk = (BitShift::shl(chk & 0x1ffffff, 5)) ^ value.into();
+        let top = OptBitShift::shr(chk, 25);
+        chk = (OptBitShift::shl(chk & 0x1ffffff, 5)) ^ value.into();
 
         let mut j = 0_u32;
         while j < 5 {
-            if (BitShift::shr(top, j) & 1) == 1 {
+            if (OptBitShift::shr(top, j.try_into().unwrap()) & 1) == 1 {
                 chk = chk ^ *gen.at(j);
             }
             j += 1;
@@ -156,7 +158,7 @@ fn hrp_to_values(hrp: ByteArray) -> Array<u8> {
     let mut i = 0_u32;
     while i < hrp.len() {
         let char = hrp.at(i).unwrap();
-        values.append(BitShift::shr(char, 5));
+        values.append(OptBitShift::shr(char, 5));
         i += 1;
     }
 
