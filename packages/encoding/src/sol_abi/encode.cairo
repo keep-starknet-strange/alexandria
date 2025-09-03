@@ -221,7 +221,7 @@ pub impl SolAbiEncodeEthAddress of SolAbiEncodeTrait<EthAddress> {
     fn encode_packed(mut self: Bytes, x: EthAddress) -> Bytes {
         let x: felt252 = x.into();
         let mut address256: u256 = x.into();
-        address256 = alexandria_math::U256BitShift::shl(address256, 96); // 12 * 8
+        address256 = alexandria_math::opt_math::OptBitShift::shl(address256, 96); // 12 * 8
         self.concat(@BytesTrait::new(20, array![address256.high, address256.low]));
         self
     }
