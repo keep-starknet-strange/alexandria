@@ -28,6 +28,7 @@ cairo-version = "2.12.1"
 [workspace.dependencies]
 starknet = "2.12.1"
 cairo_test = "2.12.1"
+snforge_std = { git = "https://github.com/foundry-rs/starknet-foundry", tag = "v0.49.0" }
 
 [workspace.tool.fmt]
 sort-module-level-items = true
@@ -35,5 +36,8 @@ sort-module-level-items = true
 [workspace.package]
 version = "0.6.1"
 
+[profile.coverage]
+sierra = true
+
 [scripts]
-all = "scarb build && scarb test"
+all = "scarb build && snforge test"

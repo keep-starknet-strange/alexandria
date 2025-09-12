@@ -5,5 +5,3 @@ pub mod rlp;
 pub mod rlp_byte_array;
 pub mod sol_abi;
 
-#[cfg(test)]
-mod tests;

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 run_tests_and_collect_gas() {
-    scarb test | grep -E 'test .* \.\.\. ok \(gas usage est\.: [0-9]+\)' | sed -E 's/test (.*) \.\.\. ok \(gas usage est\.: ([0-9]+)\)/\1 \2/' | sort -k2 -nr
+    snforge test | grep -E '\[PASS\] .* \(l1_gas: ~[0-9]+, l1_data_gas: ~[0-9]+, l2_gas: ~[0-9]+\)' | sed -E 's/\[PASS\] ([^(]*) \(l1_gas: ~[0-9]+, l1_data_gas: ~[0-9]+, l2_gas: ~([0-9]+)\)/\1 \2/' | sort -k2 -nr
 }
 
 generate_gas_report() {
@@ -9,7 +9,7 @@ generate_gas_report() {
     local gas_data=$(run_tests_and_collect_gas)
 
     if [ -z "$gas_data" ]; then
-        echo "Error: No gas data found. Make sure 'scarb test' is running correctly."
+        echo "Error: No gas data found. Make sure 'snforge test' is running correctly."
         exit 1
     fi
 

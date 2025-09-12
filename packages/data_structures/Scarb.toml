@@ -10,4 +10,4 @@ cairo-version = "2.12.1"
 fmt.workspace = true
 
 [dev-dependencies]
-cairo_test.workspace = true
+snforge_std.workspace = true

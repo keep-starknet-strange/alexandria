@@ -16,4 +16,4 @@ alexandria_data_structures = { path = "../data_structures", version ="0.6.1" }
 starknet.workspace = true
 
 [dev-dependencies]
-cairo_test.workspace = true
+snforge_std.workspace = true

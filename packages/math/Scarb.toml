@@ -12,4 +12,4 @@ experimental-features = ["user_defined_inline_macros"]
 fmt.workspace = true
 
 [dev-dependencies]
-cairo_test.workspace = true
+snforge_std.workspace = true

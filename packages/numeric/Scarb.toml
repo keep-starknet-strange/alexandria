@@ -14,4 +14,4 @@ alexandria_math = { path = "../math", version = "0.6.1" }
 alexandria_searching = { path = "../searching", version = "0.6.1" }
 
 [dev-dependencies]
-cairo_test.workspace = true
+snforge_std.workspace = true

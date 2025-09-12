@@ -13,4 +13,4 @@ fmt.workspace = true
 starknet.workspace = true
 
 [dev-dependencies]
-cairo_test.workspace = true
+snforge_std.workspace = true

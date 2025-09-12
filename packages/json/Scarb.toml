@@ -16,4 +16,4 @@ alexandria_macros = { path = "../macros", version ="0.6.1" }
 starknet.workspace = true
 
 [dev-dependencies]
-cairo_test.workspace = true
+snforge_std.workspace = true

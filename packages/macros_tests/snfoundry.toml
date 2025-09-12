@@ -1,0 +1,5 @@
+[snforge.default]
+# See more config options https://foundry-rs.github.io/starknet-foundry/appendix/snfoundry-toml.html
+sierra = true
+casm = true
+
