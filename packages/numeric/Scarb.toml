@@ -4,7 +4,7 @@ version.workspace = true
 description = "A set of numerical analysis libraries and algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/numeric"
 edition = "2023_11"
-cairo-version = "2.12.1"
+cairo-version = "2.12.2"
 
 [tool]
 fmt.workspace = true

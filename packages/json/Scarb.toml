@@ -4,7 +4,7 @@ version.workspace = true
 description = "Starknet json utilities"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/src/json"
 edition = "2023_11"
-cairo-version = "2.12.1"
+cairo-version = "2.12.2"
 
 [tool]
 fmt.workspace = true
