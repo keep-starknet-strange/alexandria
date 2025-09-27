@@ -1,5 +1,2 @@
 pub mod integer;
-
-#[cfg(test)]
-mod tests;
-use integer::{ToAsciiArrayTrait, ToAsciiTrait};
+pub use integer::{ToAsciiArrayTrait, ToAsciiTrait};

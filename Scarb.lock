@@ -6,6 +6,7 @@ name = "alexandria_ascii"
 version = "0.6.1"
 dependencies = [
  "alexandria_data_structures",
+ "snforge_std",
 ]
 
 [[package]]
@@ -16,6 +17,7 @@ dependencies = [
  "alexandria_data_structures",
  "alexandria_encoding",
  "alexandria_math",
+ "snforge_std",
 ]
 
 [[package]]
@@ -24,11 +26,15 @@ version = "0.6.1"
 dependencies = [
  "alexandria_data_structures",
  "alexandria_math",
+ "snforge_std",
 ]
 
 [[package]]
 name = "alexandria_data_structures"
 version = "0.6.1"
+dependencies = [
+ "snforge_std",
+]
 
 [[package]]
 name = "alexandria_encoding"
@@ -38,6 +44,7 @@ dependencies = [
  "alexandria_data_structures",
  "alexandria_math",
  "alexandria_numeric",
+ "snforge_std",
 ]
 
 [[package]]
@@ -46,6 +53,7 @@ version = "0.6.1"
 dependencies = [
  "alexandria_bytes",
  "alexandria_math",
+ "snforge_std",
 ]
 
 [[package]]
@@ -54,6 +62,7 @@ version = "0.6.1"
 dependencies = [
  "alexandria_macros",
  "alexandria_math",
+ "snforge_std",
 ]
 
 [[package]]
@@ -61,6 +70,7 @@ name = "alexandria_linalg"
 version = "0.6.1"
 dependencies = [
  "alexandria_math",
+ "snforge_std",
 ]
 
 [[package]]
@@ -70,12 +80,16 @@ version = "0.6.1"
 [[package]]
 name = "alexandria_math"
 version = "0.6.1"
+dependencies = [
+ "snforge_std",
+]
 
 [[package]]
 name = "alexandria_merkle_tree"
 version = "0.6.1"
 dependencies = [
  "alexandria_math",
+ "snforge_std",
 ]
 
 [[package]]
@@ -84,6 +98,7 @@ version = "0.6.1"
 dependencies = [
  "alexandria_math",
  "alexandria_searching",
+ "snforge_std",
 ]
 
 [[package]]
@@ -91,6 +106,7 @@ name = "alexandria_searching"
 version = "0.6.1"
 dependencies = [
  "alexandria_data_structures",
+ "snforge_std",
 ]
 
 [[package]]
@@ -98,15 +114,22 @@ name = "alexandria_sorting"
 version = "0.6.1"
 dependencies = [
  "alexandria_data_structures",
+ "snforge_std",
 ]
 
 [[package]]
 name = "alexandria_storage"
 version = "0.6.1"
+dependencies = [
+ "snforge_std",
+]
 
 [[package]]
 name = "alexandria_utils"
 version = "0.6.1"
+dependencies = [
+ "snforge_std",
+]
 
 [[package]]
 name = "macros_tests"
@@ -114,4 +137,18 @@ version = "0.1.0"
 dependencies = [
  "alexandria_macros",
  "alexandria_math",
+ "snforge_std",
+]
+
+[[package]]
+name = "snforge_scarb_plugin"
+version = "0.49.0"
+source = "git+https://github.com/foundry-rs/starknet-foundry?tag=v0.49.0#ddaa0a0cb1946b31de619d2343a44636bc50e945"
+
+[[package]]
+name = "snforge_std"
+version = "0.49.0"
+source = "git+https://github.com/foundry-rs/starknet-foundry?tag=v0.49.0#ddaa0a0cb1946b31de619d2343a44636bc50e945"
+dependencies = [
+ "snforge_scarb_plugin",
 ]

@@ -4,7 +4,7 @@ version.workspace = true
 description = "Encoding utilities"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/encoding"
 edition = "2023_11"
-cairo-version = "2.12.1"
+cairo-version = "2.12.2"
 
 [tool]
 fmt.workspace = true
@@ -17,4 +17,4 @@ alexandria_data_structures = { path = "../data_structures", version ="0.6.1" }
 
 
 [dev-dependencies]
-cairo_test.workspace = true
+snforge_std.workspace = true

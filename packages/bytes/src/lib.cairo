@@ -6,8 +6,6 @@ pub mod bytes;
 pub mod reversible;
 pub mod storage;
 
-#[cfg(test)]
-mod tests;
 pub mod utils;
 
 

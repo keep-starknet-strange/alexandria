@@ -25,7 +25,7 @@ pub impl NodeGetters of NodeGettersTrait {
 
 /// Graph representation.
 pub struct Graph<T> {
-    pub(crate) nodes: Array<Node>,
+    pub nodes: Array<Node>,
     adj_nodes: Felt252Dict<T>,
 }
 

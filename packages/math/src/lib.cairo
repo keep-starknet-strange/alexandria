@@ -25,13 +25,13 @@ pub mod ripemd160;
 pub mod sha256;
 pub mod sha512;
 
-#[cfg(test)]
-mod tests;
 pub mod trigonometry;
 pub mod u512_arithmetics;
 pub mod wad_ray_math;
 pub mod zellers_congruence;
-use core::num::traits::{Bounded, OverflowingMul, WideMul, WrappingAdd, WrappingMul, WrappingSub};
+pub use core::num::traits::{
+    Bounded, OverflowingMul, WideMul, WrappingAdd, WrappingMul, WrappingSub,
+};
 
 /// Raise a number to a power.
 /// O(log n) time complexity.
@@ -60,7 +60,7 @@ pub fn pow<T, +Sub<T>, +Mul<T>, +Div<T>, +Rem<T>, +PartialEq<T>, +Into<u8, T>, +
 /// * `base` - Base in which to count the digits.
 /// #### Returns
 /// * `u32` - The number of digits in num of base
-fn count_digits_of_base(mut num: u128, base: u128) -> u32 {
+pub fn count_digits_of_base(mut num: u128, base: u128) -> u32 {
     let mut res = 0;
     while (num != 0) {
         num = num / base;
@@ -117,7 +117,7 @@ pub impl U256BitShift of BitShift<u256> {
 }
 
 /// Rotate the bits of an unsigned integer of type T
-trait BitRotate<T> {
+pub trait BitRotate<T> {
     /// Take the bits of an unsigned integer and rotate in the left direction
     /// #### Arguments
     /// * `x` - rotate its bit representation in the leftward direction
@@ -221,7 +221,7 @@ pub impl U256BitRotate of BitRotate<u256> {
     }
 }
 
-trait WrappingMath<T> {
+pub trait WrappingMath<T> {
     fn wrapping_add(self: T, rhs: T) -> T;
     fn wrapping_sub(self: T, rhs: T) -> T;
     fn wrapping_mul(self: T, rhs: T) -> T;

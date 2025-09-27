@@ -10,8 +10,8 @@ const POW2_8: u32 = 256; // 2^8
 
 #[derive(Drop)]
 pub struct List<T> {
-    pub(crate) address_domain: u32,
-    pub(crate) base: StorageBaseAddress,
+    pub address_domain: u32,
+    pub base: StorageBaseAddress,
     len: u32 // number of elements in array
 }
 

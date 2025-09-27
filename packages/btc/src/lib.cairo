@@ -7,7 +7,4 @@ pub mod hash;
 pub mod keys;
 pub mod legacy_signature;
 pub mod taproot;
-
-#[cfg(test)]
-mod tests;
 pub mod types;

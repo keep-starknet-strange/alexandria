@@ -8,7 +8,5 @@ pub mod queue;
 pub mod span_ext;
 pub mod stack;
 
-#[cfg(test)]
-mod tests;
 
 pub mod vec;

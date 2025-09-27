@@ -4,7 +4,7 @@ use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 
 #[derive(Clone, Drop)]
 pub struct ByteReaderState<T> {
-    pub(crate) data: @T,
+    pub data: @T,
     index: usize,
 }
 
