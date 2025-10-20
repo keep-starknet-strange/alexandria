@@ -301,11 +301,11 @@ impl BytesImpl of BytesTrait {
 
     fn zero(size: usize) -> Bytes {
         let mut data = array![];
-        let (data_index, mut data_len) = DivRem::div_rem(
+        let (mut data_len, remainder) = DivRem::div_rem(
             size, BYTES_PER_ELEMENT.try_into().expect('Division by 0'),
         );
 
-        if data_index != 0 {
+        if remainder != 0 {
             data_len += 1;
         }
 
