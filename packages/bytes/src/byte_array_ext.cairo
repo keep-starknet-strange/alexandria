@@ -352,10 +352,10 @@ pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
         self.len()
     }
 
-    /// Read a u_ from ByteArray
+    /// Read a u8 from ByteArray
     #[inline(always)]
     fn read_u8(self: @ByteArray, offset: usize) -> (usize, u8) {
-        assert(offset <= self.len(), 'out of bound');
+        assert(offset < self.len(), 'out of bound');
         (offset + 1, self.at(offset).unwrap())
     }
 
