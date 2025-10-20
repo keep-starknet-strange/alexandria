@@ -46,6 +46,8 @@ pub struct Bytes {
 pub impl BytesIndex of IndexView<Bytes, usize> {
     type Target = @u128;
     fn index(self: @Bytes, index: usize) -> @u128 {
+        let max_valid_index = (*self.size + BYTES_PER_ELEMENT - 1) / BYTES_PER_ELEMENT;
+        assert(index < max_valid_index, 'Index out of bounds');
         self.data[index]
     }
 }
