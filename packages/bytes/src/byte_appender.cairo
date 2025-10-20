@@ -87,11 +87,11 @@ pub trait ByteAppender<T> {
     fn append_u256_le(ref self: T, word: u256);
     /// Appends an unsigned 512 bit integer encoded in big endian
     /// #### Arguments
-    /// * `word` - a 512 bit unsigned integer typed as u32
+    /// * `word` - a 512 bit unsigned integer typed as u512
     fn append_u512(ref self: T, word: u512);
     /// Appends an unsigned 512 bit integer encoded in little endian
     /// #### Arguments
-    /// * `word` - a 512 bit unsigned integer typed as u32
+    /// * `word` - a 512 bit unsigned integer typed as u512
     fn append_u512_le(ref self: T, word: u512);
     /// Appends a signed 8 bit integer
     /// #### Arguments
