@@ -291,6 +291,8 @@ pub trait BytesTrait {
 impl BytesImpl of BytesTrait {
     #[inline(always)]
     fn new(size: usize, data: Array<u128>) -> Bytes {
+        let expected_len = (size + BYTES_PER_ELEMENT - 1) / BYTES_PER_ELEMENT;
+        assert(data.len() == expected_len, 'Size/data mismatch');
         Bytes { size, data: pad_left_data(data, BYTES_PER_ELEMENT) }
     }
 
