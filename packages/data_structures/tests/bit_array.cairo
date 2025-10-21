@@ -87,8 +87,10 @@ fn test_read_word_be() {
 
 #[test]
 fn test_read_word_le() {
-    let mut ba = sample_bit_array();
-    assert!(ba.read_word_le(length: 128).unwrap() == 0x7fffffffffffffffffffffffffffffff);
+    let mut ba: BitArray = Default::default();
+    let value = 0x7fffffffffffffffffffffffffffffff_u128;
+    ba.write_word_le(value.into(), 128);
+    assert!(ba.read_word_le(length: 128).unwrap() == value.into());
 }
 
 #[test]
@@ -102,10 +104,10 @@ fn test_read_word_be_u256() {
 
 #[test]
 fn test_read_word_le_u256() {
-    let mut ba = sample_bit_array();
+    let mut ba: BitArray = Default::default();
     let low = 0x7fffffffffffffffffffffffffffffff_u128;
     let high = 0x101112131415161718191a1b1c1d1e1f_u128;
-    ba.write_word_le(high.into(), 128);
+    ba.write_word_le_u256(u256 { low, high }, 256);
     assert!(ba.read_word_le_u256(length: 256).unwrap() == u256 { low, high });
 }
 
@@ -124,14 +126,12 @@ fn test_read_word_be_u512() {
 
 #[test]
 fn test_read_word_le_u512() {
-    let mut ba = sample_bit_array();
+    let mut ba: BitArray = Default::default();
+    let limb0 = 0x7fffffffffffffffffffffffffffffff_u128;
     let limb1 = 0x101112131415161718191a1b1c1d1e1f_u128;
     let limb2 = 0x202122232425262728292a2b2c2d2e2f_u128;
     let limb3 = 0x303132333435363738393a3b3c3d3e3f_u128;
-    ba.write_word_le(limb1.into(), 128);
-    ba.write_word_le(limb2.into(), 128);
-    ba.write_word_le(limb3.into(), 128);
-    let limb0 = 0x7fffffffffffffffffffffffffffffff_u128;
+    ba.write_word_le_u512(u512 { limb0, limb1, limb2, limb3 }, 512);
     assert!(ba.read_word_le_u512(length: 512).unwrap() == u512 { limb0, limb1, limb2, limb3 });
 }
 
@@ -144,7 +144,9 @@ fn test_read_word_be_half() {
 
 #[test]
 fn test_read_word_le_half() {
-    let mut ba = sample_bit_array();
+    let mut ba: BitArray = Default::default();
+    ba.write_word_le(0xffffffffffffffff_u64.into(), 64);
+    ba.write_word_le(0x7fffffffffffffff_u64.into(), 64);
     assert!(ba.read_word_le(64).unwrap() == 0xffffffffffffffff, "unexpected result");
     assert!(ba.read_word_le(64).unwrap() == 0x7fffffffffffffff, "unexpected result");
 }

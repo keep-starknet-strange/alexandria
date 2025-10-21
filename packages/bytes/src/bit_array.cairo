@@ -315,32 +315,53 @@ impl BitArrayImpl of BitArrayTrait {
         if length == 0 {
             return Option::None;
         }
-        let (byte_limit, bit_limit) = DivRem::div_rem(length, 8_usize.try_into().unwrap());
-        let mut bit_offset = 0_usize;
-        let mut byte_offset = 0_usize;
-        let mut result: Option<felt252> = Option::Some(0);
-        while (bit_offset != bit_limit || byte_offset != byte_limit) {
-            match self.pop_front() {
-                Option::Some(bit) => {
-                    if bit {
-                        let shifted = one_shift_left_bytes_felt252(byte_offset);
-                        let value = (shifted * shift_bit(bit_offset).into()) + result.unwrap();
-                        result = Option::Some(value);
-                    }
-                },
-                Option::None => {
-                    result = Option::None;
-                    break;
-                },
+        // For byte-order LE: read bytes from LSB to MSB
+        // Within each byte, bits are read from MSB to LSB (same as BE)
+        let (num_bytes, remainder_bits) = DivRem::div_rem(length, 8_usize.try_into().unwrap());
+        let total_bytes = if remainder_bits > 0 {
+            num_bytes + 1
+        } else {
+            num_bytes
+        };
+
+        let mut result: felt252 = 0;
+        let mut byte_offset: usize = 0;
+
+        loop {
+            if byte_offset >= total_bytes {
+                break;
             }
-            if bit_offset == 7 {
-                byte_offset += 1;
-                bit_offset = 0;
+
+            // Calculate bits in this byte
+            let bits_in_byte = if byte_offset == total_bytes - 1 && remainder_bits > 0 {
+                remainder_bits
             } else {
-                bit_offset += 1;
+                8
+            };
+
+            // Read bits from MSB to LSB within this byte
+            let mut byte_value: felt252 = 0;
+            let mut bit_idx = bits_in_byte;
+            loop {
+                if bit_idx == 0 {
+                    break;
+                }
+                bit_idx -= 1;
+
+                match self.pop_front() {
+                    Option::Some(bit) => { if bit {
+                        byte_value += shift_bit(bit_idx).into();
+                    } },
+                    Option::None => { return Option::None; },
+                }
             }
+
+            // Place this byte at its correct position (LE: byte 0 at lowest position)
+            result += byte_value * one_shift_left_bytes_felt252(byte_offset);
+            byte_offset += 1;
         }
-        result
+
+        Option::Some(result)
     }
 
     fn read_word_le_u256(ref self: BitArray, length: usize) -> Option<u256> {
@@ -406,18 +427,49 @@ impl BitArrayImpl of BitArrayTrait {
 
     fn write_word_le(ref self: BitArray, word: felt252, length: usize) {
         assert(length <= 248, 'illegal length');
-        let u256 { low, high } = word.into();
-        if length > 128 {
-            self._write_word_le_recursive(low, 128);
-            self._write_word_le_recursive(high, length - 128);
-        } else {
-            self._write_word_le_recursive(low, length);
+        if length == 0 {
+            return;
         }
+        // For little-endian, write bytes from LSB (byte 0) to MSB
+        // Within each byte, write bits from MSB to LSB (same as BE)
+        let (num_bytes, remainder_bits) = DivRem::div_rem(length, 8_usize.try_into().unwrap());
+        let total_bytes = if remainder_bits > 0 {
+            num_bytes + 1
+        } else {
+            num_bytes
+        };
+
+        let mut byte_offset: usize = 0;
+        loop {
+            if byte_offset >= total_bytes {
+                break;
+            }
+
+            // Calculate bits in this byte
+            let bits_in_byte = if byte_offset == total_bytes - 1 && remainder_bits > 0 {
+                remainder_bits
+            } else {
+                8
+            };
+
+            // Write bits from MSB to LSB within this byte
+            let mut bit_offset = bits_in_byte;
+            loop {
+                if bit_offset == 0 {
+                    break;
+                }
+                bit_offset -= 1;
+                self.append_bit(select(word, byte_offset, bit_offset));
+            }
+
+            byte_offset += 1;
+        };
     }
 
     fn write_word_le_u256(ref self: BitArray, word: u256, length: usize) {
         assert(length <= 256, 'illegal length');
         let u256 { low, high } = word;
+        // For LE, write low bytes first, then high bytes
         if length > 128 {
             self.write_word_le(low.into(), 128);
             self.write_word_le(high.into(), length - 128);
