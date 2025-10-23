@@ -1,6 +1,5 @@
 use alexandria_bytes::utils::{
-    keccak_u128s_be, pad_left_data, read_sub_u128, u128_array_slice, u128_join, u128_split,
-    u32s_to_u256,
+    keccak_u128s_be, read_sub_u128, u128_array_slice, u128_join, u128_split, u32s_to_u256,
 };
 use alexandria_math::opt_math::OptBitShift;
 use core::byte_array::ByteArrayTrait;
@@ -295,7 +294,7 @@ impl BytesImpl of BytesTrait {
     fn new(size: usize, data: Array<u128>) -> Bytes {
         let min_len = (size + BYTES_PER_ELEMENT - 1) / BYTES_PER_ELEMENT;
         assert(data.len() >= min_len, 'Insufficient data');
-        Bytes { size, data: pad_left_data(data, BYTES_PER_ELEMENT) }
+        Bytes { size, data }
     }
 
     #[inline(always)]
@@ -824,7 +823,7 @@ impl BytesSerde of Serde<Bytes> {
     fn deserialize(ref serialized: Span<felt252>) -> Option<Bytes> {
         let size = Serde::<usize>::deserialize(ref serialized)?;
         let data = Serde::<Array<u128>>::deserialize(ref serialized)?;
-        Option::Some(Bytes { size, data: pad_left_data(data, BYTES_PER_ELEMENT) })
+        Option::Some(Bytes { size, data })
     }
 }
 
