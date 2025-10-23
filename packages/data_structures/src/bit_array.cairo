@@ -219,7 +219,7 @@ impl BitArrayImpl of BitArrayTrait {
             } else if length > 128 {
                 let limb3 = 0;
                 let limb2 = 0;
-                let limb1 = self._read_word_be_recursive(0, length - 256)?.try_into().unwrap();
+                let limb1 = self._read_word_be_recursive(0, length - 128)?.try_into().unwrap();
                 let limb0 = self._read_word_be_recursive(0, 128)?.try_into().unwrap();
                 u512 { limb0, limb1, limb2, limb3 }
             } else {

@@ -46,6 +46,8 @@ pub struct Bytes {
 pub impl BytesIndex of IndexView<Bytes, usize> {
     type Target = @u128;
     fn index(self: @Bytes, index: usize) -> @u128 {
+        let max_valid_index = (*self.size + BYTES_PER_ELEMENT - 1) / BYTES_PER_ELEMENT;
+        assert(index < max_valid_index, 'Index out of bounds');
         self.data[index]
     }
 }
@@ -291,6 +293,8 @@ pub trait BytesTrait {
 impl BytesImpl of BytesTrait {
     #[inline(always)]
     fn new(size: usize, data: Array<u128>) -> Bytes {
+        let min_len = (size + BYTES_PER_ELEMENT - 1) / BYTES_PER_ELEMENT;
+        assert(data.len() >= min_len, 'Insufficient data');
         Bytes { size, data: pad_left_data(data, BYTES_PER_ELEMENT) }
     }
 
@@ -301,11 +305,11 @@ impl BytesImpl of BytesTrait {
 
     fn zero(size: usize) -> Bytes {
         let mut data = array![];
-        let (data_index, mut data_len) = DivRem::div_rem(
+        let (mut data_len, remainder) = DivRem::div_rem(
             size, BYTES_PER_ELEMENT.try_into().unwrap(),
         );
 
-        if data_index != 0 {
+        if remainder != 0 {
             data_len += 1;
         }
 

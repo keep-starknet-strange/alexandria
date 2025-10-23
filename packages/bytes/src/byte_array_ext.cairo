@@ -77,11 +77,10 @@ pub impl ByteArrayIntoArrayU8 of Into<ByteArray, Array<u8>> {
 pub trait ByteArrayTraitExt {
     /// Create a ByteArray from an array of u128
     /// #### Arguments
-    /// * `size` - The size of the ByteArray
     /// * `data` - Array of u128 values to create ByteArray from
     /// #### Returns
     /// * `ByteArray` - A new ByteArray created from the input data
-    fn new(size: usize, data: Array<u128>) -> ByteArray;
+    fn new(data: Array<u128>) -> ByteArray;
     /// instantiate a new ByteArray
     /// #### Returns
     /// * `ByteArray` - A new empty ByteArray
@@ -327,7 +326,7 @@ pub trait ByteArrayTraitExt {
 pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
     /// Create a ByteArray from an array of u128
     #[inline(always)]
-    fn new(size: usize, mut data: Array<u128>) -> ByteArray {
+    fn new(mut data: Array<u128>) -> ByteArray {
         if data.len() == 0 {
             return Default::default();
         }
@@ -352,10 +351,10 @@ pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
         self.len()
     }
 
-    /// Read a u_ from ByteArray
+    /// Read a u8 from ByteArray
     #[inline(always)]
     fn read_u8(self: @ByteArray, offset: usize) -> (usize, u8) {
-        assert(offset <= self.len(), 'out of bound');
+        assert(offset < self.len(), 'out of bound');
         (offset + 1, self.at(offset).unwrap())
     }
 
@@ -676,7 +675,7 @@ pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
 
     /// Update a byte at a specific offset in ByteArray
     fn update_at(ref self: ByteArray, offset: usize, value: u8) {
-        assert(offset <= self.len(), 'out of bound');
+        assert(offset < self.len(), 'out of bound');
 
         let (_, temp_l) = self.read_bytes(0, offset);
         let (_, temp_r) = self.read_bytes(offset + 1, self.len() - 1 - offset);
@@ -861,15 +860,9 @@ pub impl ByteArrayAppenderImpl of ByteAppender<T: ByteArray> {
 ///   - The new offset after reading the specified number of bytes.
 ///   - The value of type T read from the ByteArray.
 fn read_uint<T, +Add<T>, +Mul<T>, +Zero<T>, +TryInto<felt252, T>, +Drop<T>, +Into<u8, T>>(
-    self: @ByteArray, offset: usize, mut size: usize,
+    self: @ByteArray, offset: usize, size: usize,
 ) -> (usize, T) {
-    // Uncomment the following line to enforce bounds checking
     assert(offset + size <= self.len(), 'out of bound');
-
-    // Adjust size if it exceeds the length of the ByteArray
-    if size > self.len() && offset == 0 {
-        size = self.len() - offset;
-    }
 
     let mut value: T = Zero::zero();
     let mut i = 0;
