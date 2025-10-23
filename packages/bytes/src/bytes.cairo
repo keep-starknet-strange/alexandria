@@ -306,7 +306,7 @@ impl BytesImpl of BytesTrait {
     fn zero(size: usize) -> Bytes {
         let mut data = array![];
         let (mut data_len, remainder) = DivRem::div_rem(
-            size, BYTES_PER_ELEMENT.try_into().expect('Division by 0'),
+            size, BYTES_PER_ELEMENT.try_into().unwrap(),
         );
 
         if remainder != 0 {
