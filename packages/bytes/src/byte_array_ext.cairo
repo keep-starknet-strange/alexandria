@@ -676,7 +676,7 @@ pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
 
     /// Update a byte at a specific offset in ByteArray
     fn update_at(ref self: ByteArray, offset: usize, value: u8) {
-        assert(offset <= self.len(), 'out of bound');
+        assert(offset < self.len(), 'out of bound');
 
         let (_, temp_l) = self.read_bytes(0, offset);
         let (_, temp_r) = self.read_bytes(offset + 1, self.len() - 1 - offset);
