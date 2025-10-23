@@ -77,11 +77,10 @@ pub impl ByteArrayIntoArrayU8 of Into<ByteArray, Array<u8>> {
 pub trait ByteArrayTraitExt {
     /// Create a ByteArray from an array of u128
     /// #### Arguments
-    /// * `size` - The size of the ByteArray
     /// * `data` - Array of u128 values to create ByteArray from
     /// #### Returns
     /// * `ByteArray` - A new ByteArray created from the input data
-    fn new(size: usize, data: Array<u128>) -> ByteArray;
+    fn new(data: Array<u128>) -> ByteArray;
     /// instantiate a new ByteArray
     /// #### Returns
     /// * `ByteArray` - A new empty ByteArray
@@ -327,7 +326,7 @@ pub trait ByteArrayTraitExt {
 pub impl ByteArrayTraitExtImpl of ByteArrayTraitExt {
     /// Create a ByteArray from an array of u128
     #[inline(always)]
-    fn new(size: usize, mut data: Array<u128>) -> ByteArray {
+    fn new(mut data: Array<u128>) -> ByteArray {
         if data.len() == 0 {
             return Default::default();
         }
