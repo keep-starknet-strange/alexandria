@@ -861,15 +861,9 @@ pub impl ByteArrayAppenderImpl of ByteAppender<T: ByteArray> {
 ///   - The new offset after reading the specified number of bytes.
 ///   - The value of type T read from the ByteArray.
 fn read_uint<T, +Add<T>, +Mul<T>, +Zero<T>, +TryInto<felt252, T>, +Drop<T>, +Into<u8, T>>(
-    self: @ByteArray, offset: usize, mut size: usize,
+    self: @ByteArray, offset: usize, size: usize,
 ) -> (usize, T) {
-    // Uncomment the following line to enforce bounds checking
     assert(offset + size <= self.len(), 'out of bound');
-
-    // Adjust size if it exceeds the length of the ByteArray
-    if size > self.len() && offset == 0 {
-        size = self.len() - offset;
-    }
 
     let mut value: T = Zero::zero();
     let mut i = 0;
