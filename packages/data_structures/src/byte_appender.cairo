@@ -303,18 +303,27 @@ impl ByteArrayByteAppenderImpl = ByteAppenderImpl<ByteArray>;
 // Duplicated functions from encoding. To fix dependency publish problem.
 
 /// Reverses the byte order of a value by repeatedly dividing and reconstructing.
+///
+/// The `step` parameter MUST be a power of 2 (e.g., 2, 256, 65536).
+/// Using a non-power-of-2 step will produce incorrect results and data corruption.
+/// Valid steps: 2 (bits), 256 (bytes), 65536 (u16 words), etc.
+///
 /// #### Arguments
 /// * `word` - The value to reverse
 /// * `size` - The number of steps to perform
-/// * `step` - The step size for division/reconstruction
+/// * `step` - The step size for division/reconstruction (MUST be a power of 2)
 /// #### Returns
 /// * `(T, T)` - Tuple containing the reversed value and remaining value
+/// #### Panics
+/// * If `step` is not a power of 2 (runtime check performed)
 #[inline]
 pub fn reversing<
     T,
     +Copy<T>,
     +Zero<T>,
     +TryInto<T, NonZero<T>>,
+    +Into<T, u128>,
+    +TryInto<u128, T>,
     +DivRem<T>,
     +Drop<T>,
     +MulAssign<T, T>,
@@ -328,19 +337,28 @@ pub fn reversing<
 }
 
 /// Reverses byte order with an existing partial result.
+///
+/// The `step` parameter MUST be a power of 2 (e.g., 2, 256, 65536).
+/// Using a non-power-of-2 step will produce incorrect results and data corruption.
+/// Valid steps: 2 (bits), 256 (bytes), 65536 (u16 words), etc.
+///
 /// #### Arguments
 /// * `word` - The value to reverse
 /// * `onto` - The existing partial result to build upon
 /// * `size` - The number of steps to perform
-/// * `step` - The step size for division/reconstruction
+/// * `step` - The step size for division/reconstruction (MUST be a power of 2)
 /// #### Returns
 /// * `(T, T)` - Tuple containing the final reversed value and remaining value
+/// #### Panics
+/// * If `step` is not a power of 2 (runtime check performed)
 #[inline]
 pub fn reversing_partial_result<
     T,
     +Copy<T>,
     +DivRem<T>,
     +TryInto<T, NonZero<T>>,
+    +Into<T, u128>,
+    +TryInto<u128, T>,
     +Drop<T>,
     +MulAssign<T, T>,
     +Rem<T>,
@@ -348,6 +366,12 @@ pub fn reversing_partial_result<
 >(
     mut word: T, mut onto: T, size: usize, step: T,
 ) -> (T, T) {
+    // Validate that step is a power of 2
+    // A number is a power of 2 if (n & (n-1)) == 0 and n != 0
+    let step_u128: u128 = step.into();
+    assert(step_u128 != 0, 'step must be non-zero');
+    assert((step_u128 & (step_u128 - 1)) == 0, 'step must be power of 2');
+
     let mut i: usize = 0;
     while i != size {
         let (new_word, remainder) = DivRem::div_rem(word, step.try_into().unwrap());

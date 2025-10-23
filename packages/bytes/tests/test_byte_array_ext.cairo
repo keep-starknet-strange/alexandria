@@ -10,7 +10,7 @@ fn test_new() {
         0x01020304050607080910000000000000,
     ];
 
-    let ba: ByteArray = ByteArrayTraitExt::new(48, array);
+    let ba: ByteArray = ByteArrayTraitExt::new(array);
     assert!(ba.len() == 48, "Failed to instantiate new ByteArray from array");
 
     let (new_offset, result) = ba.read_u128(15);

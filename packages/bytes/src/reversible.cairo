@@ -29,19 +29,28 @@ pub trait ReversibleBits<T> {
 /// dividing by a step size and building the result in reverse order. It's commonly used
 /// for reversing bits or bytes within numeric types.
 ///
+/// The `step` parameter MUST be a power of 2 (e.g., 2, 256, 65536).
+/// Using a non-power-of-2 step will produce incorrect results and data corruption.
+/// Valid steps: 2 (bits), 256 (bytes), 65536 (u16 words), etc.
+///
 /// #### Arguments
 /// * `word` - The value to reverse
 /// * `size` - The number of elements to reverse
-/// * `step` - The step size for each element (e.g., 2 for bits, 256 for bytes)
+/// * `step` - The step size for each element (MUST be a power of 2: 2, 256, 65536, etc.)
 ///
 /// #### Returns
 /// * `(T, T)` - A tuple containing (reversed_value, remaining_value)
+///
+/// #### Panics
+/// * If `step` is not a power of 2 (runtime check performed)
 #[inline]
 pub fn reversing<
     T,
     +Copy<T>,
     +Zero<T>,
     +TryInto<T, NonZero<T>>,
+    +Into<T, u128>,
+    +TryInto<u128, T>,
     +DivRem<T>,
     +Drop<T>,
     +MulAssign<T, T>,
@@ -60,20 +69,29 @@ pub fn reversing<
 /// an existing partial result. It extracts elements from the input word and
 /// appends them to the ongoing result, useful for multi-stage reversing operations.
 ///
+/// The `step` parameter MUST be a power of 2 (e.g., 2, 256, 65536).
+/// Using a non-power-of-2 step will produce incorrect results and data corruption.
+/// Valid steps: 2 (bits), 256 (bytes), 65536 (u16 words), etc.
+///
 /// #### Arguments
 /// * `word` - The value to extract elements from for reversal
 /// * `onto` - The existing partial result to build upon
 /// * `size` - The number of elements to reverse and append
-/// * `step` - The step size for each element (e.g., 2 for bits, 256 for bytes)
+/// * `step` - The step size for each element (MUST be a power of 2: 2, 256, 65536, etc.)
 ///
 /// #### Returns
 /// * `(T, T)` - A tuple containing (final_result_with_appended_elements, remaining_word)
+///
+/// #### Panics
+/// * If `step` is not a power of 2 (runtime check performed)
 #[inline]
 pub fn reversing_partial_result<
     T,
     +Copy<T>,
     +DivRem<T>,
     +TryInto<T, NonZero<T>>,
+    +Into<T, u128>,
+    +TryInto<u128, T>,
     +Drop<T>,
     +MulAssign<T, T>,
     +Rem<T>,
@@ -81,6 +99,12 @@ pub fn reversing_partial_result<
 >(
     mut word: T, mut onto: T, size: usize, step: T,
 ) -> (T, T) {
+    // Validate that step is a power of 2
+    // A number is a power of 2 if (n & (n-1)) == 0 and n != 0
+    let step_u128: u128 = step.into();
+    assert(step_u128 != 0, 'step must be non-zero');
+    assert((step_u128 & (step_u128 - 1)) == 0, 'step must be power of 2');
+
     let mut i: usize = 0;
     while i != size {
         let (new_word, remainder) = DivRem::div_rem(word, step.try_into().unwrap());
