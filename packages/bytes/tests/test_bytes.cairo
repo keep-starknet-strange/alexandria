@@ -712,7 +712,7 @@ fn test_serde() {
     let mut out = array![];
     let mut array = array![0x01, 0x02, 0x03];
 
-    let bytes = BytesTrait::new(16, array);
+    let bytes = BytesTrait::new(48, array);
 
     bytes.serialize(ref out);
 
@@ -831,7 +831,7 @@ fn test_serde_deser() {
         0x00000000000000000000000000000001, 0x00000000000000000000000000000002,
         0x00000000000000000000000000000003,
     ];
-    let mut bytes = BytesTrait::new(16, array);
+    let mut bytes = BytesTrait::new(48, array);
     bytes.serialize(ref out);
 
     let mut span = out.span();
