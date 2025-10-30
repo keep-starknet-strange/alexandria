@@ -51,13 +51,13 @@
 
 ## About
 
-Alexandria is a community maintained standard library for Cairo 1.0.
+Alexandria is a community maintained standard library for Cairo.
 It is a collection of useful algorithms and data structures implemented in Cairo.
 Current version can be found in the [toml file](./Scarb.toml)
 
 ## Version
 
-Actual version is **0.6.1** compatible with starknet **2.12.2**
+Actual version is **0.6.2** compatible with starknet **2.12.2**
 
 
 ## Packages
@@ -88,19 +88,19 @@ This repository is composed of multiple crates:
 
 ### Installation from Scarb registries
 
-- ASCII : `scarb add alexandria_ascii@0.6.1`
-- Data Structures : `scarb add alexandria_data_structures@0.6.1`
-- Encoding : `scarb add alexandria_encoding@0.6.1`
-- Linalg : `scarb add alexandria_linalg@0.6.1`
-- Math : `scarb add alexandria_math@0.6.1`
-- Numeric : `scarb add alexandria_numeric@0.6.1`
-- Searching : `scarb add alexandria_searching@0.6.1`
-- Sorting : `scarb add alexandria_sorting@0.6.1`
-- Storage : `scarb add alexandria_storage@0.6.1`
-- Bytes : `scarb add alexandria_bytes@0.6.1`
-- Evm : `scarb add alexandria_evm@0.6.1`
-- Bitcoin : `scarb add alexandria_btc@0.6.1`
-- Json : `scarb add alexandria_json@0.6.1`
+- ASCII : `scarb add alexandria_ascii@0.6.2`
+- Data Structures : `scarb add alexandria_data_structures@0.6.2`
+- Encoding : `scarb add alexandria_encoding@0.6.2`
+- Linalg : `scarb add alexandria_linalg@0.6.2`
+- Math : `scarb add alexandria_math@0.6.2`
+- Numeric : `scarb add alexandria_numeric@0.6.2`
+- Searching : `scarb add alexandria_searching@0.6.2`
+- Sorting : `scarb add alexandria_sorting@0.6.2`
+- Storage : `scarb add alexandria_storage@0.6.2`
+- Bytes : `scarb add alexandria_bytes@0.6.2`
+- Evm : `scarb add alexandria_evm@0.6.2`
+- Bitcoin : `scarb add alexandria_btc@0.6.2`
+- Json : `scarb add alexandria_json@0.6.2`
 
 
 ## Usage
@@ -114,11 +114,11 @@ scarb build
 ### Test
 
 ```bash
-scarb test
+snforge test
 ```
 Running a specific subset of tests
 ```bash
-scarb test -f math
+snforge test -f math
 ```
 
 ### Format
