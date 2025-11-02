@@ -28,7 +28,7 @@ fn test_tagged_hash() {
 #[test]
 fn test_key_tweaking() {
     // Test with a valid internal key
-    let internal_key = 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef;
+    let internal_key = 0xd361b5f2fc7d3251de1536fa2e81a50f48e9fbe04ac257f9b72902121dc922df;
 
     let tweaked_result = tweak_public_key(internal_key, Option::None);
 
@@ -46,7 +46,7 @@ fn test_key_tweaking() {
 
 #[test]
 fn test_key_tweaking_with_merkle_root() {
-    let internal_key = 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef;
+    let internal_key = 0xd361b5f2fc7d3251de1536fa2e81a50f48e9fbe04ac257f9b72902121dc922df;
     let merkle_root = 0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321;
 
     let tweaked_result = tweak_public_key(internal_key, Option::Some(merkle_root));
@@ -101,7 +101,7 @@ fn test_u256_to_32_bytes_conversion() {
 
 #[test]
 fn test_create_key_path_output() {
-    let internal_key = 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef;
+    let internal_key = 0xd361b5f2fc7d3251de1536fa2e81a50f48e9fbe04ac257f9b72902121dc922df;
 
     let output = create_key_path_output(internal_key);
 
@@ -137,7 +137,7 @@ fn test_script_tree_operations() {
 
 #[test]
 fn test_create_script_path_output() {
-    let internal_key = 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef;
+    let internal_key = 0xd361b5f2fc7d3251de1536fa2e81a50f48e9fbe04ac257f9b72902121dc922df;
     let script = array![0x51]; // OP_1
     let script_tree = create_script_tree(script, 0xc0);
 
@@ -164,7 +164,7 @@ fn test_create_script_path_output() {
 #[test]
 fn test_p2tr_address_generation() {
     let private_key = create_private_key(
-        0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef,
+        0xd361b5f2fc7d3251de1536fa2e81a50f48e9fbe04ac257f9b72902121dc922df,
         BitcoinNetwork::Mainnet,
         true,
     );
@@ -224,7 +224,7 @@ fn test_taproot_signature_verification_interface() {
 
     let message1: ByteArray = "Hello, Taproot!";
     let message2: ByteArray = "Hello, Taproot!";
-    let public_key = 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef;
+    let public_key = 0xd361b5f2fc7d3251de1536fa2e81a50f48e9fbe04ac257f9b72902121dc922df;
 
     // This will likely return false since we're using dummy data,
     // but it tests that the interface works
@@ -241,7 +241,7 @@ fn test_taproot_signature_verification_interface() {
 
 #[test]
 fn test_deterministic_tweaking() {
-    let internal_key = 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef;
+    let internal_key = 0xd361b5f2fc7d3251de1536fa2e81a50f48e9fbe04ac257f9b72902121dc922df;
 
     // Key tweaking should be deterministic
     let result1 = tweak_public_key(internal_key, Option::None);

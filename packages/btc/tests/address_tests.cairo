@@ -34,7 +34,7 @@ fn test_private_to_public_key() {
 #[test]
 fn test_generate_p2pkh_address() {
     let private_key = create_private_key(
-        0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef,
+        0xb40ed25857cc456f5f91f08a0f2b753438778bac2652b785ee2622851234dba8,
         BitcoinNetwork::Mainnet,
         true,
     );
@@ -43,14 +43,14 @@ fn test_generate_p2pkh_address() {
 
     assert!(address.address_type == BitcoinAddressType::P2PKH);
     assert!(address.network == BitcoinNetwork::Mainnet);
-    assert!(address.address.len() > 0);
+    assert!(address.address == "1D3h4vMQw6FozLiWbNnUowHjstwgbawQ7j");
     assert!(address.script_pubkey.len() > 0);
 }
 
 #[test]
 fn test_generate_p2sh_address() {
     let private_key = create_private_key(
-        0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef,
+        0x158ed2714ccbf104631a5bff08c1b2d1ea0de3efdc87de58e5c67c93b31ce112,
         BitcoinNetwork::Mainnet,
         true,
     );
@@ -59,14 +59,14 @@ fn test_generate_p2sh_address() {
 
     assert!(address.address_type == BitcoinAddressType::P2SH);
     assert!(address.network == BitcoinNetwork::Mainnet);
-    assert!(address.address.len() > 0);
+    assert!(address.address == "36k1N5qEMHbXxBoJmAVYvcQ4jj15CVNvV8");
     assert!(address.script_pubkey.len() > 0);
 }
 
 #[test]
 fn test_generate_p2wpkh_address() {
     let private_key = create_private_key(
-        0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef,
+        0x8ee9028f6a30008ed2d6aad519eecccb031fef46adbb6eacea5c807a950790d8,
         BitcoinNetwork::Mainnet,
         true,
     );
@@ -75,14 +75,14 @@ fn test_generate_p2wpkh_address() {
 
     assert!(address.address_type == BitcoinAddressType::P2WPKH);
     assert!(address.network == BitcoinNetwork::Mainnet);
-    assert!(address.address.len() > 0);
+    assert!(address.address == "bc1q2f5sknuect22mumghhcs9hqhyx4p4zntges30v");
     assert!(address.script_pubkey.len() > 0);
 }
 
 #[test]
 fn test_generate_p2tr_address() {
     let private_key = create_private_key(
-        0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef,
+        0x8f463e5386f6380245832973cafdf8a8cd0ce8e1c972f187083a6274689f4a4d,
         BitcoinNetwork::Mainnet,
         true,
     );
@@ -91,7 +91,7 @@ fn test_generate_p2tr_address() {
 
     assert!(address.address_type == BitcoinAddressType::P2TR);
     assert!(address.network == BitcoinNetwork::Mainnet);
-    assert!(address.address.len() > 0);
+    assert!(address.address == "bc1p0spujd9q48m694705jh6ggcvm28gnjfn2xxrpkcarumyk2gz5pmqrwpa0f");
     assert!(address.script_pubkey.len() > 0);
 }
 
@@ -174,7 +174,7 @@ fn test_invalid_private_key_too_large() {
 #[test]
 fn test_generate_p2wsh_address() {
     let private_key = create_private_key(
-        0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef,
+        0x8ee9028f6a30008ed2d6aad519eecccb031fef46adbb6eacea5c807a950790d8,
         BitcoinNetwork::Mainnet,
         true,
     );
@@ -183,16 +183,8 @@ fn test_generate_p2wsh_address() {
 
     assert!(address.address_type == BitcoinAddressType::P2WSH);
     assert!(address.network == BitcoinNetwork::Mainnet);
-    assert!(address.address.len() > 0);
+    assert!(address.address == "bc1q8m03ydrhjalryjv6vmlj9gumtu87cacyaa2cje5ks470tjhgxjdscacrrf");
     assert!(address.script_pubkey.len() > 0);
-
-    // P2WSH addresses should be longer than P2WPKH addresses
-    assert!(address.address.len() > 50);
-
-    // Should start with 'bc1' for mainnet
-    assert!(address.address.at(0).unwrap() == 'b');
-    assert!(address.address.at(1).unwrap() == 'c');
-    assert!(address.address.at(2).unwrap() == '1');
 }
 
 #[test]
@@ -502,3 +494,4 @@ fn test_all_address_types_consistency() {
     assert!(p2wsh.address_type == BitcoinAddressType::P2WSH);
     assert!(p2tr.address_type == BitcoinAddressType::P2TR);
 }
+

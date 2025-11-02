@@ -1,3 +1,8 @@
+use alexandria_math::opt_math::OptBitShift;
+
+const POW2: [u32; 17] = [1, 2, 4, 8, 16, 32, 64, 128, 256, 0, 0, 0, 0, 0, 0, 0, 65536];
+const CHECKSUM_LEN: usize = 6;
+
 /// Encoder trait for Bech32 encoding
 pub trait Encoder<T> {
     /// Encodes data into Bech32 format
@@ -13,7 +18,9 @@ pub trait Decoder<T> {
 /// Bech32 encoder implementation for u8 spans
 pub impl Bech32Encoder of Encoder<Span<u8>> {
     fn encode(hrp: ByteArray, data: Span<u8>) -> ByteArray {
-        encode(hrp, data)
+        let checksum = compute_bech32_checksum(hrp.clone(), data).span();
+
+        encode(hrp, data, checksum)
     }
 }
 
@@ -24,8 +31,305 @@ pub impl Bech32Decoder of Decoder<ByteArray> {
     }
 }
 
+/// Encode data into Bech32 string
+pub fn encode(hrp: ByteArray, data: Span<u8>, checksum: Span<u8>) -> ByteArray {
+    // Validate HRP length (should be 1-83 characters) — same for Bech32m
+    assert!(hrp.len() >= 1, "HRP too short");
+    assert!(hrp.len() <= 83, "HRP too long");
+    // Validate data length (should not exceed practical limits)
+    assert!(data.len() <= 65, "Data payload too long");
+
+    // // Compute checksum using Bech32 constant
+    // let checksum = compute_bech32_checksum(hrp.clone(), data).span();
+    let mut combined = array![];
+    let mut i = 0_u32;
+
+    while i < data.len() {
+        combined.append(*data.at(i));
+
+        i += 1;
+    }
+
+    let mut i = 0_u32;
+
+    while i < checksum.len() {
+        combined.append(*checksum.at(i));
+
+        i += 1;
+    }
+
+    let mut result = hrp;
+
+    result.append_byte('1');
+
+    let mut i = 0;
+
+    while i < combined.len() {
+        let c = get_bech32_char(*combined.at(i));
+
+        result.append_byte(c);
+
+        i += 1;
+    }
+
+    // Validate total length doesn't exceed 90 chars
+    assert!(result.len() <= 90, "Encoded string would exceed maximum length of 90 characters");
+
+    result
+}
+
+/// Decode Bech32 string into HRP and data
+pub fn decode(encoded: ByteArray) -> (ByteArray, Array<u8>) {
+    // Find the last '1' separator
+    let mut separator_pos = 0_u32;
+    let mut i = encoded.len();
+    while i > 0 {
+        i -= 1;
+        let char = encoded.at(i).unwrap();
+        if char == '1' {
+            separator_pos = i;
+            break;
+        }
+    }
+
+    assert!(separator_pos > 0, "No separator found");
+
+    // Extract HRP
+    let mut hrp = "";
+    let mut i = 0_u32;
+
+    while i < separator_pos {
+        let char = encoded.at(i).unwrap();
+
+        hrp.append_byte(char);
+
+        i += 1;
+    }
+
+    // Extract data (excluding checksum for simplicity)
+    let data_start = separator_pos + 1;
+    let data_len = if encoded.len() > data_start + 6 {
+        encoded.len() - data_start - 6
+    } else {
+        0
+    };
+    let mut data = array![];
+    let mut i = data_start;
+
+    while i < data_start + data_len {
+        let char = encoded.at(i).unwrap();
+        let value = bech32_char_to_value(char);
+
+        data.append(value);
+
+        i += 1;
+    }
+
+    (hrp, data)
+}
+
+/// Helper function to compute 2^n
+fn pow2(n: u32) -> u32 {
+    let pow = *POW2.span()[n];
+
+    if pow == 0 {
+        panic!("Unsupported power");
+    }
+
+    pow
+}
+
+/// Convert 5-bit data to 8-bit data
+pub fn convert_bits(data: Span<u8>, from_bits: u8, to_bits: u8, pad: bool) -> Array<u8> {
+    let mut acc: u32 = 0;
+    let mut bits: u8 = 0;
+    let mut result = array![];
+
+    // max value for to_bits
+    let maxv: u32 = pow2(to_bits.into()) - 1_u32;
+
+    let mut i = 0_u32;
+
+    while i < data.len() {
+        let value = *data.at(i);
+
+        assert!(value.into() < pow2(from_bits.into()), "Invalid value for convert_bits");
+
+        acc = OptBitShift::shl(acc, from_bits.into()) | value.into();
+        bits += from_bits;
+
+        while bits >= to_bits {
+            bits -= to_bits;
+            let v: u8 = (OptBitShift::shr(acc, bits.into()) & maxv).try_into().unwrap();
+
+            result.append(v);
+        }
+
+        i += 1;
+    }
+
+    if pad {
+        if bits > 0 {
+            result
+                .append(
+                    (OptBitShift::shl(acc, (to_bits - bits).into()) & maxv).try_into().unwrap(),
+                );
+        }
+    } else {
+        assert!(bits < from_bits, "Invalid padding");
+        // see if handling leftover bits on incorrect padding
+    // if bits > 0 {
+    //     assert!(acc & (OptBitShift::shl(1, bits) - 1) == 0, "Non-zero padding in
+    //     convert_bits");
+    // }
+    }
+
+    result
+}
+
+/// Convert HRP string to values for polymod
+pub fn hrp_to_values(hrp: ByteArray) -> Array<u8> {
+    let mut values = array![];
+
+    // First, add the high bits of each character (>> 5)
+    let mut i = 0_u32;
+
+    while i < hrp.len() {
+        let char = hrp.at(i).unwrap();
+
+        values.append(OptBitShift::shr(char, 5));
+
+        i += 1;
+    }
+
+    // Add separator
+    values.append(0);
+
+    // Then add the low bits of each character (& 31)
+    let mut i = 0_u32;
+
+    while i < hrp.len() {
+        let char = hrp.at(i).unwrap();
+
+        values.append(char & 31);
+
+        i += 1;
+    }
+
+    values
+}
+
+/// Create the 6-byte checksum for HRP and data
+fn compute_bech32_checksum(hrp: ByteArray, data: Span<u8>) -> Array<u8> {
+    let hrp_values = hrp_to_values(hrp);
+
+    let mut values = array![];
+
+    let mut i = 0_u32;
+
+    while i < hrp_values.len() {
+        values.append(*hrp_values.at(i));
+
+        i += 1;
+    }
+
+    let mut i = 0_u32;
+
+    while i < data.len() {
+        values.append(*data.at(i));
+
+        i += 1;
+    }
+
+    // Append 6 zeros for checksum space
+    values.append(0);
+    values.append(0);
+    values.append(0);
+    values.append(0);
+    values.append(0);
+    values.append(0);
+
+    let polymod = bech32_polymod(values.span()) ^ 1;
+    // Extract 6 5-bit values from polymod
+    let mut checksum = array![];
+    let mut i = 0_u32;
+
+    while i < 6 {
+        let shift_amount: u8 = (5 * (5 - i)).try_into().unwrap();
+
+        checksum.append((OptBitShift::shr(polymod, shift_amount) & 31).try_into().unwrap());
+
+        i += 1;
+    }
+
+    checksum
+}
+
+/// Verify checksum for encoded Bech32 string
+fn verify_bech32_checksum(hrp: ByteArray, data: Span<u8>, checksum: Span<u8>) -> bool {
+    // Convert HRP to values (already includes separator)
+    let hrp_values = hrp_to_values(hrp);
+    // Combine: hrp_values (with separator) || data || checksum
+    let mut values = array![];
+    // hrp_expand(hrp)
+    let mut i = 0_u32;
+
+    while i < hrp_values.len() {
+        values.append(*hrp_values.at(i));
+
+        i += 1;
+    }
+
+    // data
+    let mut i = 0_u32;
+
+    while i < data.len() {
+        values.append(*data.at(i));
+
+        i += 1;
+    }
+
+    let mut i = 0_u32;
+
+    while i < checksum.len() {
+        values.append(*checksum.at(i));
+
+        i += 1;
+    }
+
+    // Must equal 1 for valid Bech32
+    bech32_polymod(values.span()) == 1
+}
+
+/// Calculate Bech32 polymod
+fn bech32_polymod(values: Span<u8>) -> u32 {
+    let gen: Array<u32> = array![0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3];
+    let mut chk: u32 = 1;
+    let mut i = 0_u32;
+
+    while i < values.len() {
+        let top = OptBitShift::shr(chk, 25);
+        chk = OptBitShift::shl(chk & 0x1ffffff, 5) ^ (*values.at(i)).into();
+        let mut j = 0_u32;
+
+        while j < 5 {
+            let j_u8: u8 = j.try_into().unwrap();
+
+            if (OptBitShift::shr(top, j_u8.into()) & 1) == 1 {
+                chk = chk ^ *gen.at(j);
+            }
+
+            j += 1;
+        }
+
+        i += 1;
+    }
+
+    chk
+}
+
 /// Get Bech32 alphabet character by index
-fn get_bech32_char(index: u8) -> u8 {
+pub fn get_bech32_char(index: u8) -> u8 {
     if index == 0 {
         'q'
     } else if index == 1 {
@@ -96,7 +400,7 @@ fn get_bech32_char(index: u8) -> u8 {
 }
 
 /// Convert Bech32 character to value
-fn bech32_char_to_value(char: u8) -> u8 {
+pub fn bech32_char_to_value(char: u8) -> u8 {
     if char == 'q' {
         0
     } else if char == 'p' {
@@ -164,178 +468,4 @@ fn bech32_char_to_value(char: u8) -> u8 {
     } else {
         panic!("Invalid Bech32 character")
     }
-}
-
-/// Simple Bech32 encode function
-pub fn encode(hrp: ByteArray, data: Span<u8>) -> ByteArray {
-    // Validate HRP length (should be 1-83 characters according to BIP-173)
-    assert!(hrp.len() >= 1, "HRP too short");
-    assert!(hrp.len() <= 83, "HRP too long");
-
-    // Calculate total expected length: hrp + separator(1) + data + checksum(6)
-    let expected_length = hrp.len() + 1 + data.len() + 6;
-
-    // Validate total length doesn't exceed 90 characters (BIP-173 limit)
-    assert!(expected_length <= 90, "Encoded string would exceed maximum length of 90 characters");
-
-    // Validate data length (should not exceed practical limits)
-    assert!(data.len() <= 65, "Data payload too long");
-
-    let mut result = hrp;
-    result.append_byte('1'); // Separator
-
-    // Add data
-    let mut i = 0;
-    while i < data.len() {
-        let value = *data.at(i);
-        let char = get_bech32_char(value);
-        result.append_byte(char);
-        i += 1;
-    }
-
-    // Add simple checksum (just repeat first 6 chars for now)
-    let mut checksum_count = 0_u32;
-    let mut j = 0;
-    while checksum_count < 6 {
-        if j >= data.len() {
-            j = 0;
-        }
-        let value = *data.at(j);
-        let char = get_bech32_char(value);
-        result.append_byte(char);
-        j += 1;
-        checksum_count += 1;
-    }
-
-    result
-}
-
-/// Simple Bech32 decode function
-pub fn decode(encoded: ByteArray) -> (ByteArray, Array<u8>) {
-    // Find the last '1' separator
-    let mut separator_pos = 0_u32;
-    let mut i = encoded.len();
-    while i > 0 {
-        i -= 1;
-        let char = encoded.at(i).unwrap();
-        if char == '1' {
-            separator_pos = i;
-            break;
-        }
-    }
-
-    assert!(separator_pos > 0, "No separator found");
-
-    // Extract HRP
-    let mut hrp = "";
-    let mut i = 0_u32;
-    while i < separator_pos {
-        let char = encoded.at(i).unwrap();
-        hrp.append_byte(char);
-        i += 1;
-    }
-
-    // Extract data (excluding checksum for simplicity)
-    let data_start = separator_pos + 1;
-    let data_len = if encoded.len() > data_start + 6 {
-        encoded.len() - data_start - 6
-    } else {
-        0
-    };
-
-    let mut data = array![];
-    let mut i = data_start;
-    while i < data_start + data_len {
-        let char = encoded.at(i).unwrap();
-        let value = bech32_char_to_value(char);
-        data.append(value);
-        i += 1;
-    }
-
-    (hrp, data)
-}
-
-/// Convert 5-bit data to 8-bit data
-pub fn convert_bits(data: Span<u8>, from_bits: u8, to_bits: u8, pad: bool) -> Array<u8> {
-    let mut acc: u32 = 0;
-    let mut bits: u8 = 0;
-    let mut result = array![];
-
-    // Use smaller, safe powers
-    let max_value = 255_u32; // 2^8 - 1
-
-    let mut i = 0_u32;
-    while i < data.len() {
-        let value = *data.at(i);
-
-        // Shift accumulator and add new value
-        if from_bits == 8 {
-            // For 8-bit input, left shift by 8 (multiply by 256)
-            acc = (acc * 256_u32) + value.into();
-        } else if from_bits == 5 {
-            // For 5-bit input, left shift by 5 (multiply by 32)
-            acc = (acc * 32_u32) + value.into();
-        } else {
-            // Generic case for other bit sizes
-            acc = (acc * 4_u32) + value.into(); // Use smaller multiplier to prevent overflow
-        }
-
-        bits += from_bits;
-
-        // Extract complete output values
-        while bits >= to_bits {
-            bits -= to_bits;
-
-            // Right shift to extract the highest bits
-            if bits == 0 {
-                result.append((acc & max_value).try_into().unwrap());
-                acc = 0;
-            } else if bits == 1 {
-                result.append(((acc / 2_u32) & max_value).try_into().unwrap());
-                acc = acc & 1_u32;
-            } else if bits == 2 {
-                result.append(((acc / 4_u32) & max_value).try_into().unwrap());
-                acc = acc & 3_u32;
-            } else if bits == 3 {
-                result.append(((acc / 8_u32) & max_value).try_into().unwrap());
-                acc = acc & 7_u32;
-            } else if bits == 4 {
-                result.append(((acc / 16_u32) & max_value).try_into().unwrap());
-                acc = acc & 15_u32;
-            } else if bits == 5 {
-                result.append(((acc / 32_u32) & max_value).try_into().unwrap());
-                acc = acc & 31_u32;
-            } else if bits == 6 {
-                result.append(((acc / 64_u32) & max_value).try_into().unwrap());
-                acc = acc & 63_u32;
-            } else if bits == 7 {
-                result.append(((acc / 128_u32) & max_value).try_into().unwrap());
-                acc = acc & 127_u32;
-            } else {
-                // For larger bit counts, use a smaller safe divisor
-                result.append(((acc / 256_u32) & max_value).try_into().unwrap());
-                acc = acc & 255_u32;
-            }
-        }
-
-        i += 1;
-    }
-
-    // Handle padding
-    if pad && bits > 0 {
-        let remaining_bits = to_bits - bits;
-        if remaining_bits == 1 {
-            result.append(((acc * 2_u32) & max_value).try_into().unwrap());
-        } else if remaining_bits == 2 {
-            result.append(((acc * 4_u32) & max_value).try_into().unwrap());
-        } else if remaining_bits == 3 {
-            result.append(((acc * 8_u32) & max_value).try_into().unwrap());
-        } else {
-            result.append((acc & max_value).try_into().unwrap());
-        }
-    } else if !pad {
-        assert!(bits < from_bits, "Invalid padding");
-    }
-
-    result
 }

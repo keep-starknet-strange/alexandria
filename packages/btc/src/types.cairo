@@ -1,3 +1,16 @@
+/// Helper function to convert hex character to nibble (4 bits)
+fn hex_char_to_nibble(c: u8) -> u8 {
+    if c >= '0' && c <= '9' {
+        c - '0'
+    } else if c >= 'a' && c <= 'f' {
+        c - 'a' + 10
+    } else if c >= 'A' && c <= 'F' {
+        c - 'A' + 10
+    } else {
+        panic!("Invalid hex character")
+    }
+}
+
 /// Bitcoin network types
 #[derive(Copy, Drop, Serde, PartialEq)]
 pub enum BitcoinNetwork {
@@ -92,9 +105,28 @@ impl BitcoinPublicKeyImpl of BitcoinPublicKeyTrait {
     /// #### Returns
     /// * `BitcoinPublicKey` - Public key from hex
     fn from_hex(hex_string: ByteArray) -> BitcoinPublicKey {
-        // TODO: Implement hex parsing
-        // For now, placeholder implementation
-        BitcoinPublicKey { bytes: hex_string }
+        // Parse hex string to bytes
+        let mut bytes = "";
+        let mut i = 0_usize;
+
+        while i < hex_string.len() {
+            if i + 1 < hex_string.len() {
+                let c1 = hex_string.at(i).unwrap();
+                let c2 = hex_string.at(i + 1).unwrap();
+
+                let b1 = hex_char_to_nibble(c1);
+                let b2 = hex_char_to_nibble(c2);
+
+                let byte_val = b1 * 16 + b2;
+                bytes.append_byte(byte_val);
+
+                i += 2;
+            } else {
+                i += 1;
+            }
+        }
+
+        BitcoinPublicKey { bytes }
     }
 
     /// Check if this is a compressed public key

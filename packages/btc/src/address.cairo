@@ -1,7 +1,7 @@
 use alexandria_bytes::byte_array_ext::SpanU8IntoByteArray;
 use alexandria_encoding::base58::Base58Encoder;
 use alexandria_encoding::bech32::{Encoder, convert_bits};
-use alexandria_math::opt_math::OptBitShift;
+use alexandria_encoding::bech32m;
 use crate::hash::{hash160, sha256};
 use crate::keys::{private_key_to_public_key, public_key_hash, public_key_to_bytes};
 use crate::taproot::{create_key_path_output, u256_to_32_bytes_be};
@@ -25,6 +25,7 @@ pub fn private_key_to_address(
     private_key: BitcoinPrivateKey, address_type: BitcoinAddressType,
 ) -> BitcoinAddress {
     let public_key = private_key_to_public_key(private_key);
+
     public_key_to_address(public_key, address_type, private_key.network)
 }
 
@@ -51,139 +52,6 @@ pub fn public_key_to_address(
         BitcoinAddressType::P2WSH => generate_p2wsh_address(public_key, network),
         BitcoinAddressType::P2TR => generate_p2tr_address(public_key, network),
     }
-}
-
-/// Encodes data using Bech32m encoding (BIP-350) for witness version 1+ addresses.
-///
-/// Implements complete Bech32m encoding with proper polymod checksum for Taproot (P2TR) addresses.
-/// Uses the Bech32m constant (0x2bc830a3) as specified in BIP-350.
-///
-/// # Arguments
-/// * `hrp` - Human readable part (bc, tb, bcrt)
-/// * `data` - The 5-bit converted witness program data
-///
-/// # Returns
-/// * `ByteArray` - Bech32m encoded address
-///
-/// # Usage
-/// Used specifically for encoding P2TR (Taproot) addresses.
-fn encode_bech32m(hrp: ByteArray, data: Span<u8>) -> ByteArray {
-    // Create HRP values for polymod calculation
-    let hrp_values = hrp_to_values(hrp.clone());
-
-    // Combine hrp values with data for checksum calculation
-    let mut combined_data = hrp_values;
-    combined_data.append(0); // separator
-
-    // Add data to combined array
-    let mut i = 0_u32;
-    while i < data.len() {
-        combined_data.append(*data.at(i));
-        i += 1;
-    }
-
-    // Calculate checksum
-    let checksum = bech32m_polymod(combined_data.span());
-
-    // Build final address
-    let mut result = hrp;
-    result.append_byte('1'); // Separator
-
-    // Add data characters
-    let mut i = 0_u32;
-    while i < data.len() {
-        result.append_byte(get_bech32_char(*data.at(i)));
-        i += 1;
-    }
-
-    // Add 6 checksum characters
-    let mut i = 0_u32;
-    while i < 6 {
-        let shift_amount = 5 * (5 - i);
-        let checksum_value = (OptBitShift::shr(checksum, shift_amount.try_into().unwrap()) & 31)
-            .try_into()
-            .unwrap();
-        result.append_byte(get_bech32_char(checksum_value));
-        i += 1;
-    }
-
-    result
-}
-
-/// Calculates the Bech32m polymod checksum using the BIP-350 specification.
-///
-/// # Arguments
-/// * `values` - The combined HRP and data values
-///
-/// # Returns
-/// * `u32` - The calculated checksum
-fn bech32m_polymod(values: Span<u8>) -> u32 {
-    // Bech32m generator constants
-    let gen: Array<u32> = array![0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3];
-
-    let mut chk: u32 = 1;
-    let mut i = 0_u32;
-
-    while i < values.len() {
-        let value = *values.at(i);
-        let top = OptBitShift::shr(chk, 25);
-        chk = (OptBitShift::shl(chk & 0x1ffffff, 5)) ^ value.into();
-
-        let mut j = 0_u32;
-        while j < 5 {
-            if (OptBitShift::shr(top, j.try_into().unwrap()) & 1) == 1 {
-                chk = chk ^ *gen.at(j);
-            }
-            j += 1;
-        }
-
-        i += 1;
-    }
-
-    // Apply Bech32m final XOR (0x2bc830a3)
-    chk ^ 0x2bc830a3
-}
-
-/// Converts HRP string to 5-bit values for polymod calculation.
-///
-/// # Arguments
-/// * `hrp` - Human readable part
-///
-/// # Returns
-/// * `Array<u8>` - HRP as 5-bit values
-fn hrp_to_values(hrp: ByteArray) -> Array<u8> {
-    let mut values = array![];
-
-    // First, add the high bits of each character
-    let mut i = 0_u32;
-    while i < hrp.len() {
-        let char = hrp.at(i).unwrap();
-        values.append(OptBitShift::shr(char, 5));
-        i += 1;
-    }
-
-    // Then add the low bits of each character
-    let mut i = 0_u32;
-    while i < hrp.len() {
-        let char = hrp.at(i).unwrap();
-        values.append(char & 31);
-        i += 1;
-    }
-
-    values
-}
-
-
-/// Converts a 5-bit value to its corresponding Bech32 character.
-///
-/// # Arguments
-/// * `value` - 5-bit value (0-31)
-///
-/// # Returns
-/// * `u8` - ASCII character for the value
-fn get_bech32_char(value: u8) -> u8 {
-    let charset: ByteArray = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
-    charset.at(value.into()).unwrap()
 }
 
 /// Encodes data using Base58Check encoding (Base58 with checksum).
@@ -340,31 +208,32 @@ fn generate_p2wpkh_address(
 ) -> BitcoinAddress {
     let pubkey_hash = public_key_hash(public_key);
 
-    // Create witness program: version 0 + pubkey_hash
-    let mut witness_program = array![0x00]; // Version 0
+    // Convert raw data bytes into 5-bit groups
+    let data_5bit: Array<u8> = convert_bits(pubkey_hash.span(), 8, 5, true);
+
+    // Prepend version as 5-bit (0 for v0)
+    let mut data = array![0_u8];
     let mut i = 0_u32;
-    while i < pubkey_hash.len() {
-        witness_program.append(*pubkey_hash.at(i));
+
+    while i < data_5bit.len() {
+        data.append(*data_5bit.at(i));
+
         i += 1;
     }
 
-    // Convert to 5-bit for Bech32
-    let converted = convert_bits(witness_program.span(), 8, 5, true);
-
-    // Get HRP based on network
     let hrp: ByteArray = match network {
         BitcoinNetwork::Mainnet => "bc",
         BitcoinNetwork::Testnet => "tb",
         BitcoinNetwork::Regtest => "bcrt",
     };
-
-    let address = Encoder::encode(hrp, converted.span());
-
-    // Create script_pubkey: OP_0 <pubkey_hash>
+    let address = Encoder::encode(hrp, data.span());
     let mut script_pubkey = "";
+
     script_pubkey.append_byte(0x00); // OP_0
     script_pubkey.append_byte(0x14); // Push 20 bytes
+
     let mut i = 0_u32;
+
     while i < pubkey_hash.len() {
         script_pubkey.append_byte(*pubkey_hash.at(i));
         i += 1;
@@ -386,30 +255,36 @@ fn generate_p2wpkh_address(
 /// * `BitcoinAddress` - P2WSH address with corresponding script_pubkey
 fn generate_p2wsh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) -> BitcoinAddress {
     let pubkey_bytes = public_key_to_bytes(public_key);
-
     // Create a simple script: <pubkey> OP_CHECKSIG
     let mut script = array![];
+
     script.append(0x21); // Push 33 bytes (compressed pubkey)
+
     let mut i = 0_u32;
+
     while i < pubkey_bytes.len() {
         script.append(*pubkey_bytes.at(i));
+
         i += 1;
     }
+
     script.append(0xac); // OP_CHECKSIG
 
     // SHA256 hash of the script
     let script_hash = sha256(script.span());
 
-    // Create witness program: version 0 + script_hash
-    let mut witness_program = array![0x00]; // Version 0
+    // Convert script_hash to 5-bit groups
+    let data_5bit = convert_bits(script_hash.span(), 8, 5, true);
+
+    // Prepend version as 5-bit (0 for v0)
+    let mut data = array![0_u8];
     let mut i = 0_u32;
-    while i < script_hash.len() {
-        witness_program.append(*script_hash.at(i));
+
+    while i < data_5bit.len() {
+        data.append(*data_5bit.at(i));
+
         i += 1;
     }
-
-    // Convert to 5-bit for Bech32
-    let converted = convert_bits(witness_program.span(), 8, 5, true);
 
     // Get HRP based on network
     let hrp: ByteArray = match network {
@@ -418,15 +293,19 @@ fn generate_p2wsh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork)
         BitcoinNetwork::Regtest => "bcrt",
     };
 
-    let address = Encoder::encode(hrp, converted.span());
+    let address = Encoder::encode(hrp, data.span());
 
     // Create script_pubkey: OP_0 <script_hash>
     let mut script_pubkey = "";
+
     script_pubkey.append_byte(0x00); // OP_0
     script_pubkey.append_byte(0x20); // Push 32 bytes
+
     let mut i = 0_u32;
+
     while i < script_hash.len() {
         script_pubkey.append_byte(*script_hash.at(i));
+
         i += 1;
     }
 
@@ -462,15 +341,21 @@ fn generate_p2tr_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) 
     // Convert output key to 32 bytes (big-endian)
     let output_key_bytes = u256_to_32_bytes_be(output_key);
 
-    // For P2TR (witness version 1), we need to handle the version separately
-    // Convert only the 32-byte output key to 5-bit (not the version byte)
-    let converted_data = convert_bits(output_key_bytes.span(), 8, 5, true);
+    // For P2TR, we need to manually prepare the data for Bech32m:
+    // 1. Convert output_key_bytes (32 bytes) to 5-bit representation
+    // 2. Prepend witness version (1) as a 5-bit value
+    // 3. Encode with Bech32m
 
-    // Prepare the complete 5-bit data: witness_version + converted_data
-    let mut converted = array![1_u8]; // Witness version 1 directly as 5-bit value
+    // Convert output key to 5-bit
+    let output_key_5bit = convert_bits(output_key_bytes.span(), 8, 5, true);
+
+    // Prepend witness version 1 as 5-bit value
+    let mut witness_data = array![1_u8]; // Witness version 1
     let mut i = 0_u32;
-    while i < converted_data.len() {
-        converted.append(*converted_data.at(i));
+
+    while i < output_key_5bit.len() {
+        witness_data.append(*output_key_5bit.at(i));
+
         i += 1;
     }
 
@@ -481,19 +366,61 @@ fn generate_p2tr_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) 
         BitcoinNetwork::Regtest => "bcrt",
     };
 
-    let address = encode_bech32m(hrp, converted.span());
+    // Encode using Bech32m - pass 5-bit data directly, not 8-bit
+    // We need to build the address manually since bech32m::encode expects 8-bit input
+    let address = encode_bech32m_with_5bit_data(hrp, witness_data.span());
 
     // Create script_pubkey: OP_1 <output_key>
     let mut script_pubkey = "";
+
     script_pubkey.append_byte(0x51); // OP_1 (Taproot version)
     script_pubkey.append_byte(0x20); // Push 32 bytes
+
     let mut i = 0_u32;
+
     while i < output_key_bytes.len() {
         script_pubkey.append_byte(*output_key_bytes.at(i));
         i += 1;
     }
 
     BitcoinAddress { address, address_type: BitcoinAddressType::P2TR, network, script_pubkey }
+}
+
+/// Encode Bech32m with 5-bit data (not 8-bit)
+/// This is a special case for witness v1+ addresses where data is already in 5-bit format
+fn encode_bech32m_with_5bit_data(hrp: ByteArray, data_5bit: Span<u8>) -> ByteArray {
+    // Use the bech32m checksum calculation from the encoding package
+    let checksum = bech32m::compute_bech32m_checksum(hrp.clone(), data_5bit);
+
+    // Build address: hrp + '1' + data_chars + checksum_chars
+    let mut result = hrp;
+
+    result.append_byte('1'); // separator
+
+    // Append data characters
+    let charset: ByteArray = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
+    let mut i = 0_u32;
+
+    while i < data_5bit.len() {
+        let val = *data_5bit.at(i);
+
+        result.append_byte(charset.at(val.into()).unwrap());
+
+        i += 1;
+    }
+
+    // Append checksum characters
+    let mut i = 0_u32;
+
+    while i < checksum.len() {
+        let val = *checksum.at(i);
+
+        result.append_byte(charset.at(val.into()).unwrap());
+
+        i += 1;
+    }
+
+    result
 }
 
 /// Validates a Bitcoin address format for the specified network.
@@ -589,8 +516,6 @@ fn is_base58check_address(address: @ByteArray, network: BitcoinNetwork) -> bool 
         return false;
     }
 
-    // Try to decode and verify checksum
-    // For now, just check the prefix since decode_check can panic
-    // In a real implementation, you'd want proper error handling
+    // See decode and verify checksum
     true
 }
