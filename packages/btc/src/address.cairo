@@ -1,6 +1,6 @@
 use alexandria_bytes::byte_array_ext::SpanU8IntoByteArray;
 use alexandria_encoding::base58::Base58Encoder;
-use alexandria_encoding::bech32::{Encoder, convert_bits};
+use alexandria_encoding::bech32::{Encoder, convert_bits, get_bech32_char};
 use alexandria_encoding::bech32m;
 use crate::hash::{hash160, sha256};
 use crate::keys::{private_key_to_public_key, public_key_hash, public_key_to_bytes};
@@ -395,16 +395,16 @@ fn encode_bech32m_with_5bit_data(hrp: ByteArray, data_5bit: Span<u8>) -> ByteArr
     // Build address: hrp + '1' + data_chars + checksum_chars
     let mut result = hrp;
 
-    result.append_byte('1'); // separator
+    // separator
+    result.append_byte('1');
 
     // Append data characters
-    let charset: ByteArray = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
     let mut i = 0_u32;
 
     while i < data_5bit.len() {
         let val = *data_5bit.at(i);
 
-        result.append_byte(charset.at(val.into()).unwrap());
+        result.append_byte(get_bech32_char(val));
 
         i += 1;
     }
@@ -415,7 +415,7 @@ fn encode_bech32m_with_5bit_data(hrp: ByteArray, data_5bit: Span<u8>) -> ByteArr
     while i < checksum.len() {
         let val = *checksum.at(i);
 
-        result.append_byte(charset.at(val.into()).unwrap());
+        result.append_byte(get_bech32_char(val));
 
         i += 1;
     }
