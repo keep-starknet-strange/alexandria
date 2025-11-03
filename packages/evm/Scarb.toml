@@ -4,7 +4,7 @@ version.workspace = true
 description = "An implementation similar to Solidity bytes written in Cairo 1"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/evm"
 edition = "2023_11"
-cairo-version = "2.12.2"
+cairo-version = "2.13.1"
 
 [tool]
 fmt.workspace = true
