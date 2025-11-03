@@ -11,4 +11,4 @@ alexandria_macros = { path = "../macros" }
 alexandria_math = { path = "../math" }
 
 [dev-dependencies]
-snforge_std = { git = "https://github.com/foundry-rs/starknet-foundry", tag = "v0.49.0" }
+snforge_std.workspace = true
