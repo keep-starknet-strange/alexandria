@@ -26,7 +26,7 @@ jobs:
       - name: Step 3 - Setup Starknet Foundry
         uses: foundry-rs/setup-snfoundry@v3
         with:
-          starknet-foundry-version: '0.49.0'
+          starknet-foundry-version: '0.51.1'
       - name: Step 4 - Running tests
         run: snforge test
 
@@ -54,7 +54,7 @@ jobs:
       - name: Step 3 - Setup Starknet Foundry
         uses: foundry-rs/setup-snfoundry@v3
         with:
-          starknet-foundry-version: '0.49.0'
+          starknet-foundry-version: '0.51.1'
       - name: Step 4 - Generate and compare gas report
         run: ./scripts/generate_gas_report.sh
         shell: bash

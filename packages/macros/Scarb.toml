@@ -4,7 +4,7 @@ version.workspace = true
 description = "A set of useful macros"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/macros"
 edition = "2024_07"
-cairo-version = "2.12.2"
+cairo-version = "2.13.1"
 
 [cairo-plugin]
 
