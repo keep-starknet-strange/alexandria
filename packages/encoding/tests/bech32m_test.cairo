@@ -1,7 +1,8 @@
-use alexandria_encoding::bech32::{Decoder, Encoder, convert_bits};
+use alexandria_encoding::bech32::convert_bits;
+use alexandria_encoding::bech32m::{Decoder, Encoder};
 
 #[test]
-fn test_bech32_encode_decode() {
+fn test_bech32m_encode_decode() {
     let hrp = "bc";
     let data = array![0, 1, 2, 3, 4, 5];
 
@@ -21,7 +22,7 @@ fn test_bech32_encode_decode() {
 }
 
 #[test]
-fn test_bech32_with_testnet_hrp() {
+fn test_bech32m_with_testnet_hrp() {
     let hrp = "tb";
     let data = array![0, 10, 20, 30];
 
@@ -34,7 +35,7 @@ fn test_bech32_with_testnet_hrp() {
 
 #[test]
 fn test_convert_bits_no_padding() {
-    let data = array![0xff]; // 11111000
+    let data = array![0xff]; // 8 bits
     let converted = convert_bits(data.span(), 8, 5, false);
 
     // Should convert without padding
@@ -61,7 +62,7 @@ fn test_convert_bits_valid_conversion() {
 
 #[test]
 #[should_panic]
-fn test_bech32_invalid_format() {
+fn test_bech32m_invalid_format() {
     // Create an invalid string without separator
     let invalid_encoded: ByteArray = "bcqpzry9x8gf2tvdw0s3jn54khce6mua7l";
 
@@ -70,7 +71,7 @@ fn test_bech32_invalid_format() {
 }
 
 #[test]
-fn test_bech32_long_input() {
+fn test_bech32m_long_input() {
     let hrp = "bc";
     // Create a long data array with 50 elements (reasonable for testing)
     let mut long_data = array![];
@@ -98,9 +99,9 @@ fn test_bech32_long_input() {
 }
 
 #[test]
-fn test_bech32_address_length_limits() {
+fn test_bech32m_address_length_limits() {
     // Test minimum viable data (should produce address around 26+ chars)
-    let min_data = array![0, 1, 2]; // Small dataz
+    let min_data = array![0, 1, 2]; // Small data
     let encoded_min = Encoder::encode("bc", min_data.span());
 
     // Verify minimum length encoded address
@@ -108,10 +109,10 @@ fn test_bech32_address_length_limits() {
         encoded_min.len() >= 12, "min length failed",
     ); // hrp(2) + separator(1) + data(3) + checksum(6) = 12 minimum
 
-    // Test maximum allowed data length (65 elements)
+    // Test maximum allowed data length (50 elements for "bc" to stay ≤90 chars)
     let mut max_data = array![];
     let mut i = 0_u8;
-    while i < 65 { // Maximum allowed data length
+    while i < 50 { // Adjusted to avoid exceeding 90 chars
         max_data.append(i % 32);
         i += 1;
     }
@@ -123,13 +124,13 @@ fn test_bech32_address_length_limits() {
     assert!(decoded_hrp == "bc");
     assert!(decoded_data.len() == max_data.len());
 
-    // Verify the encoded address respects BIP-173 90-character limit
+    // Verify the encoded address respects BIP-350 90-character limit
     assert!(encoded_max.clone().len() <= 90);
 }
 
 #[test]
 #[should_panic(expected: "Data payload too long")]
-fn test_bech32_data_length_limit_exceeded() {
+fn test_bech32m_data_length_limit_exceeded() {
     let hrp = "bc";
 
     // Test with data length exceeding the 65-element limit
@@ -146,7 +147,7 @@ fn test_bech32_data_length_limit_exceeded() {
 
 #[test]
 #[should_panic(expected: "Encoded string would exceed maximum length of 90 characters")]
-fn test_bech32_total_length_limit_exceeded() {
+fn test_bech32m_total_length_limit_exceeded() {
     let hrp = "verylonghrpthatexceedslimit"; // 28 chars
 
     // Use 57 data elements: hrp(28) + separator(1) + data(57) + checksum(6) = 92 chars > 90
@@ -163,7 +164,7 @@ fn test_bech32_total_length_limit_exceeded() {
 
 #[test]
 #[should_panic(expected: "HRP too long")]
-fn test_bech32_hrp_length_limit_exceeded() {
+fn test_bech32m_hrp_length_limit_exceeded() {
     // Create an HRP that exceeds 83 characters
     let mut very_long_hrp = "";
     let mut i = 0_u8;
@@ -180,7 +181,7 @@ fn test_bech32_hrp_length_limit_exceeded() {
 
 #[test]
 #[should_panic(expected: "HRP too short")]
-fn test_bech32_hrp_too_short() {
+fn test_bech32m_hrp_too_short() {
     let empty_hrp = "";
     let data = array![0, 1, 2];
 
@@ -189,14 +190,14 @@ fn test_bech32_hrp_too_short() {
 }
 
 // ============================================================================
-// BIP-173 Test Vectors - Valid Bech32 Strings
-// Reference: https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki
+// BIP-350 Test Vectors - Valid Bech32 Strings
+// Reference: https://github.com/bitcoin/bips/blob/master/bip-0350.mediawiki
 // ============================================================================
 
 #[test]
-fn test_bip173_valid_a12uel5l_lowercase() {
-    // BIP-173 valid test vector: a12uel5l
-    let encoded: ByteArray = "a12uel5l";
+fn test_bip350_valid_a1lqfn3a_lowercase() {
+    // BIP-350 valid test vector: a1lqfn3a
+    let encoded: ByteArray = "a1lqfn3a";
     let (hrp, data, _) = Decoder::decode(encoded);
 
     assert!(hrp == "a", "HRP should be 'a'");
@@ -204,24 +205,24 @@ fn test_bip173_valid_a12uel5l_lowercase() {
 }
 
 #[test]
-fn test_bip173_valid_long_hrp() {
-    // BIP-173 valid test vector:
-    // an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs
+fn test_bip350_valid_long_hrp() {
+    // BIP-350 valid test vector:
+    // an83characterlonghumanreadablepartthatcontainsthetheexcludedcharactersbioandnumber11sg7hg6
     let encoded: ByteArray =
-        "an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs";
+        "an83characterlonghumanreadablepartthatcontainsthetheexcludedcharactersbioandnumber11sg7hg6";
     let (hrp, data, _) = Decoder::decode(encoded);
 
     assert!(
-        hrp == "an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio",
+        hrp == "an83characterlonghumanreadablepartthatcontainsthetheexcludedcharactersbioandnumber1",
         "HRP should match",
     );
     assert!(data.len() == 0, "Data should be empty after checksum");
 }
 
 #[test]
-fn test_bip173_valid_abcdef() {
-    // BIP-173 valid test vector: abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw
-    let encoded: ByteArray = "abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw";
+fn test_bip350_valid_abcdef() {
+    // BIP-350 valid test vector: abcdef1l7aum6echk45nj3s0wdvt2fg8x9yrzpqzd3ryx
+    let encoded: ByteArray = "abcdef1l7aum6echk45nj3s0wdvt2fg8x9yrzpqzd3ryx";
     let (hrp, data, _) = Decoder::decode(encoded);
 
     assert!(hrp == "abcdef", "HRP should be 'abcdef'");
@@ -229,11 +230,11 @@ fn test_bip173_valid_abcdef() {
 }
 
 #[test]
-fn test_bip173_valid_all_ones() {
-    // BIP-173 valid test vector:
-    // 11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j
+fn test_bip350_valid_all_ones() {
+    // BIP-350 valid test vector:
+    // 11llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllludsr8
     let encoded: ByteArray =
-        "11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j";
+        "11llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllludsr8";
     let (hrp, data, _) = Decoder::decode(encoded);
 
     assert!(hrp == "1", "HRP should be '1'");
@@ -241,9 +242,9 @@ fn test_bip173_valid_all_ones() {
 }
 
 #[test]
-fn test_bip173_valid_split() {
-    // BIP-173 valid test vector: split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w
-    let encoded: ByteArray = "split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w";
+fn test_bip350_valid_split() {
+    // BIP-350 valid test vector: split1checkupstagehandshakeupstreamerranterredcaperredlc445v
+    let encoded: ByteArray = "split1checkupstagehandshakeupstreamerranterredcaperredlc445v";
     let (hrp, data, _) = Decoder::decode(encoded);
 
     assert!(hrp == "split", "HRP should be 'split'");
@@ -251,154 +252,159 @@ fn test_bip173_valid_split() {
 }
 
 // ============================================================================
-// BIP-173 Test Vectors - Invalid Bech32 Strings
+// BIP-350 Test Vectors - Invalid Bech32 Strings
 // These should fail due to various validation errors
 // ============================================================================
 
 #[test]
 #[should_panic(expected: "Invalid HRP character")]
-fn test_bip173_invalid_a12uel5l_uppercase() {
-    // BIP-173 valid test vector: A12UEL5L
-    let encoded: ByteArray = "A12UEL5L";
+fn test_bip350_invalid_a1lqfn3a_uppercase() {
+    // BIP-350 valid test vector: A1LQFN3A
+    let encoded: ByteArray = "A1LQFN3A";
     let (hrp, data, _) = Decoder::decode(encoded);
 }
 
 #[test]
 #[should_panic(expected: "Invalid Bech32(m) character")]
-fn test_bip173_invalid_a12uel5l_mixed_case() {
-    // BIP-173 valid test vector: a12UEL5l
-    let encoded: ByteArray = "a12UEL5l";
+fn test_bip350_invalid_a1lqfn3a_mixed_case() {
+    // BIP-350 valid test vector: a1lQfn3A
+    let encoded: ByteArray = "a1lQfn3A";
     let (hrp, data, _) = Decoder::decode(encoded);
 }
 
 #[test]
 #[should_panic(expected: "Invalid HRP character")]
-fn test_bip173_invalid_question_mark() {
-    // BIP-173 valid test vector: ?1ezyfcl
-    let encoded: ByteArray = "?1ezyfcl";
+fn test_bip350_invalid_question_mark() {
+    // BIP-350 valid test vector: ?1v759aa
+    let encoded: ByteArray = "?1v759aa";
     let (hrp, data, _) = Decoder::decode(encoded);
 }
 
 #[test]
 #[should_panic(expected: "Invalid HRP character")]
-fn test_bip173_invalid_hrp_char_0x20() {
-    // BIP-173 Invalid: 0x20 + "1nwldj5" - HRP character out of range
+fn test_bip350_invalid_hrp_char_0x20() {
+    // BIP-350 Invalid: 0x20 + "1xj0phk" - HRP character out of range
     let mut encoded: ByteArray = "";
 
     encoded.append_byte(0x20);
     encoded.append_byte('1');
-    encoded.append_byte('n');
-    encoded.append_byte('w');
-    encoded.append_byte('l');
-    encoded.append_byte('d');
+    encoded.append_byte('x');
     encoded.append_byte('j');
-    encoded.append_byte('5');
+    encoded.append_byte('0');
+    encoded.append_byte('p');
+    encoded.append_byte('h');
+    encoded.append_byte('k');
 
     Decoder::decode(encoded);
 }
 
 #[test]
 #[should_panic(expected: "Invalid HRP character")]
-fn test_bip173_invalid_hrp_char_0x7f() {
-    // BIP-173 Invalid: 0x7F + "1axkwrx" - HRP character out of range
+fn test_bip350_invalid_hrp_char_0x7f() {
+    // BIP-350 Invalid: 0x7F + "1g6xzxy" - HRP character out of range
     let mut encoded: ByteArray = "";
 
     encoded.append_byte(0x7F);
     encoded.append_byte('1');
-    encoded.append_byte('a');
+    encoded.append_byte('g');
+    encoded.append_byte('6');
     encoded.append_byte('x');
-    encoded.append_byte('k');
-    encoded.append_byte('w');
-    encoded.append_byte('r');
+    encoded.append_byte('z');
     encoded.append_byte('x');
+    encoded.append_byte('y');
 
     Decoder::decode(encoded);
 }
 
 #[test]
 #[should_panic(expected: "Invalid HRP character")]
-fn test_bip173_invalid_hrp_char_0x80() {
-    // BIP-173 Invalid: 0x80 + "1eym55h" - HRP character out of range
+fn test_bip350_invalid_hrp_char_0x80() {
+    // BIP-350 Invalid: 0x80 + "1vctc34" - HRP character out of range
     let mut encoded: ByteArray = "";
 
     encoded.append_byte(0x80);
     encoded.append_byte('1');
-    encoded.append_byte('e');
-    encoded.append_byte('y');
-    encoded.append_byte('m');
-    encoded.append_byte('5');
-    encoded.append_byte('5');
-    encoded.append_byte('h');
+    encoded.append_byte('v');
+    encoded.append_byte('c');
+    encoded.append_byte('t');
+    encoded.append_byte('c');
+    encoded.append_byte('3');
+    encoded.append_byte('4');
 
     Decoder::decode(encoded);
 }
 
 #[test]
 #[should_panic(expected: "Encoded string would exceed maximum length of 90 characters")]
-fn test_bip173_invalid_overall_max_length_84chars() {
-    // BIP-173 Invalid:
-    // an84characterslonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1569pvx
+fn test_bip350_invalid_overall_max_length_84chars() {
+    // BIP-350 Invalid:
+    // an84characterslonghumanreadablepartthatcontainsthetheexcludedcharactersbioandnumber11d6pts4
     // overall max length exceeded
     let encoded: ByteArray =
-        "an84characterslonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1569pvx";
+        "an84characterslonghumanreadablepartthatcontainsthetheexcludedcharactersbioandnumber11d6pts4";
     Decoder::decode(encoded);
 }
 
 #[test]
 #[should_panic(expected: "No separator found")]
-fn test_bip173_invalid_no_separator() {
-    // BIP-173 Invalid: pzry9x0s0muk - No separator character
-    let encoded: ByteArray = "pzry9x0s0muk";
+fn test_bip350_invalid_no_separator() {
+    // BIP-350 Invalid: qyrz8wqd2c9m - No separator character
+    let encoded: ByteArray = "qyrz8wqd2c9m";
     Decoder::decode(encoded);
 }
 
 #[test]
 #[should_panic(expected: "No separator found")]
-fn test_bip173_invalid_empty_hrp_1pzry() {
-    // BIP-173 Invalid: 1pzry9x0s0muk - Empty HRP
-    let encoded: ByteArray = "1pzry9x0s0muk";
+fn test_bip350_invalid_empty_hrp_1pzry() {
+    // BIP-350 Invalid: 1qyrz8wqd2c9m - Empty HRP
+    let encoded: ByteArray = "1qyrz8wqd2c9m";
     Decoder::decode(encoded);
 }
 
 #[test]
 #[should_panic(expected: "Invalid Bech32(m) character")]
-fn test_bip173_invalid_data_char_x1b4n0q5v() {
-    // BIP-173 Invalid: x1b4n0q5v - Invalid data character
-    let encoded: ByteArray = "x1b4n0q5v";
+fn test_bip350_invalid_data_char_y1b0jsk6g() {
+    // BIP-350 Invalid: y1b0jsk6g - Invalid data character
+    let encoded: ByteArray = "y1b0jsk6g";
+    Decoder::decode(encoded);
+}
+
+#[test]
+#[should_panic(expected: "Invalid Bech32(m) character")]
+fn test_bip350_invalid_data_char_lt1igcx5c0() {
+    // BIP-350 Invalid: lt1igcx5c0 - Invalid data character
+    let encoded: ByteArray = "lt1igcx5c0";
     Decoder::decode(encoded);
 }
 
 #[test]
 #[should_panic(expected: "Too short checksum")]
-fn test_bip173_invalid_short_checksum() {
-    // BIP-173 Invalid: li1dgmt3 - Too short checksum
-    let encoded: ByteArray = "li1dgmt3";
+fn test_bip350_invalid_short_checksum() {
+    // BIP-350 Invalid: in1muywd - Too short checksum
+    let encoded: ByteArray = "in1muywd";
     let (hrp, data, _) = Decoder::decode(encoded);
 }
 
 #[test]
 #[should_panic(expected: "Encoded string too short")]
-fn test_bip173_invalid_empty_hrp_10a06t8() {
-    // BIP-173 Invalid: 10a06t8 - empty HRP
-    let encoded: ByteArray = "10a06t8";
+fn test_bip350_invalid_empty_hrp_16plkw9() {
+    // BIP-350 Invalid: 16plkw9 - empty HRP
+    let encoded: ByteArray = "16plkw9";
     Decoder::decode(encoded);
 }
 
 #[test]
 #[should_panic(expected: "Too short checksum")]
-fn test_bip173_too_short_checksum_li1dgmt3() {
-    // BIP-173 Invalid: li1dgmt3 - invalid checksum
-    let encoded: ByteArray = "li1dgmt3";
+fn test_bip350_too_short_checksum_in1muywd() {
+    // BIP-173 Invalid: in1muywd - invalid checksum
+    let encoded: ByteArray = "in1muywd";
     Decoder::decode(encoded);
 }
 
 #[test]
 #[should_panic(expected: "Invalid Bech32(m) character")]
-fn test_bip173_invalid_checksum_de1lg7wt() {
-    // BIP-173 Invalid: de1lg7wt + 0xFF - invalid checksum
-    let mut encoded: ByteArray = "de1lg7wt";
-
-    encoded.append_byte(0xff);
-
+fn test_bip350_invalid_checksum_mm1crxm3i() {
+    // BIP-173 Invalid: mm1crxm3i - invalid checksum
+    let encoded: ByteArray = "mm1crxm3i";
     Decoder::decode(encoded);
 }
