@@ -3,15 +3,9 @@ use alexandria_btc::keys::{create_private_key, private_key_to_public_key};
 use alexandria_btc::types::{BitcoinAddressType, BitcoinNetwork, BitcoinPublicKeyTrait};
 
 fn test_generate_address(
-    publick_key: u256,
-    address_type: BitcoinAddressType,
-    expected_address: ByteArray
+    publick_key: u256, address_type: BitcoinAddressType, expected_address: ByteArray,
 ) {
-    let private_key = create_private_key(
-        publick_key,
-        BitcoinNetwork::Mainnet,
-        true,
-    );
+    let private_key = create_private_key(publick_key, BitcoinNetwork::Mainnet, true);
 
     let address = private_key_to_address(private_key, address_type);
 
@@ -22,14 +16,9 @@ fn test_generate_address(
 }
 
 fn test_public_key_to_address(
-    publick_key: u256,
-    address_type: BitcoinAddressType,
-    expected_address: ByteArray
+    publick_key: u256, address_type: BitcoinAddressType, expected_address: ByteArray,
 ) {
-    let public_key = BitcoinPublicKeyTrait::from_x_coordinate(
-        publick_key,
-        true,
-    );
+    let public_key = BitcoinPublicKeyTrait::from_x_coordinate(publick_key, true);
     let address = public_key_to_address(public_key, address_type, BitcoinNetwork::Mainnet);
 
     assert!(address.address_type == address_type);
@@ -79,9 +68,7 @@ fn test_generate_p2pkh_address() {
 #[test]
 fn test_public_key_to_address_p2pkh_min_public_key() {
     test_public_key_to_address(
-        0x0,
-        BitcoinAddressType::P2PKH,
-        "15wJjXvfQzo3SXqoWGbWZmNYND1Si4siqV",
+        0x0, BitcoinAddressType::P2PKH, "15wJjXvfQzo3SXqoWGbWZmNYND1Si4siqV",
     );
 }
 
@@ -105,11 +92,7 @@ fn test_generate_p2sh_address() {
 
 #[test]
 fn test_public_key_to_address_p2sh_min_public_key() {
-    test_public_key_to_address(
-        0x0,
-        BitcoinAddressType::P2SH,
-        "3NF7VcQwLUCQuktZfPb2k5w488bHSuk2c8",
-    );
+    test_public_key_to_address(0x0, BitcoinAddressType::P2SH, "3NF7VcQwLUCQuktZfPb2k5w488bHSuk2c8");
 }
 
 #[test]
@@ -133,9 +116,7 @@ fn test_generate_p2wpkh_address() {
 #[test]
 fn test_public_key_to_address_p2wpkh_min_public_key() {
     test_public_key_to_address(
-        0x0,
-        BitcoinAddressType::P2WPKH,
-        "bc1qxcjufgh2jarkp2qkx68azh08w9v5gah854mwt2",
+        0x0, BitcoinAddressType::P2WPKH, "bc1qxcjufgh2jarkp2qkx68azh08w9v5gah854mwt2",
     );
 }
 

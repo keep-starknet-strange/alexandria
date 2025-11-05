@@ -23,7 +23,7 @@ fn pow2(n: u32) -> u32 {
         14 => panic!("Unsupported power"),
         15 => panic!("Unsupported power"),
         16 => 65536,
-        _ => panic!("Unsupported power")
+        _ => panic!("Unsupported power"),
     }
 }
 
@@ -59,7 +59,9 @@ pub impl Bech32Decoder of Decoder<ByteArray> {
         let (hrp, data, checksum) = decode(data);
 
         // Verify checksum with HRP
-        assert!(verify_bech32_checksum(hrp.clone(), data.span(), checksum.span()), "Invalid checksum");
+        assert!(
+            verify_bech32_checksum(hrp.clone(), data.span(), checksum.span()), "Invalid checksum",
+        );
 
         (hrp, data, checksum)
     }

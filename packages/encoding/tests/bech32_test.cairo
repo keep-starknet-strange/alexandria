@@ -205,11 +205,16 @@ fn test_bip173_valid_a12uel5l_lowercase() {
 
 #[test]
 fn test_bip173_valid_long_hrp() {
-    // BIP-173 valid test vector: an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs
-    let encoded: ByteArray = "an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs";
+    // BIP-173 valid test vector:
+    // an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs
+    let encoded: ByteArray =
+        "an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs";
     let (hrp, data, _) = Decoder::decode(encoded);
 
-    assert!(hrp == "an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio", "HRP should match");
+    assert!(
+        hrp == "an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio",
+        "HRP should match",
+    );
     assert!(data.len() == 0, "Data should be empty after checksum");
 }
 
@@ -225,8 +230,10 @@ fn test_bip173_valid_abcdef() {
 
 #[test]
 fn test_bip173_valid_all_ones() {
-    // BIP-173 valid test vector: 11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j
-    let encoded: ByteArray = "11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j";
+    // BIP-173 valid test vector:
+    // 11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j
+    let encoded: ByteArray =
+        "11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j";
     let (hrp, data, _) = Decoder::decode(encoded);
 
     assert!(hrp == "1", "HRP should be '1'");
@@ -329,9 +336,11 @@ fn test_bip173_invalid_hrp_char_0x80() {
 #[test]
 #[should_panic(expected: "Encoded string would exceed maximum length of 90 characters")]
 fn test_bip173_invalid_overall_max_length_84chars() {
-    // BIP-173 Invalid: an84characterslonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1569pvx
+    // BIP-173 Invalid:
+    // an84characterslonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1569pvx
     // overall max length exceeded
-    let encoded: ByteArray = "an84characterslonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1569pvx";
+    let encoded: ByteArray =
+        "an84characterslonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1569pvx";
     Decoder::decode(encoded);
 }
 
@@ -360,7 +369,7 @@ fn test_bip173_invalid_data_char_x1b4n0q5v() {
 }
 
 #[test]
-#[should_panic(expected: "Too short checksum" )]
+#[should_panic(expected: "Too short checksum")]
 fn test_bip173_invalid_short_checksum() {
     // BIP-173 Invalid: li1dgmt3 - Too short checksum
     let encoded: ByteArray = "li1dgmt3";

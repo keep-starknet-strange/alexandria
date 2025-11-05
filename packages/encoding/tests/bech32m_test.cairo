@@ -206,11 +206,16 @@ fn test_bip350_valid_a1lqfn3a_lowercase() {
 
 #[test]
 fn test_bip350_valid_long_hrp() {
-    // BIP-350 valid test vector: an83characterlonghumanreadablepartthatcontainsthetheexcludedcharactersbioandnumber11sg7hg6
-    let encoded: ByteArray = "an83characterlonghumanreadablepartthatcontainsthetheexcludedcharactersbioandnumber11sg7hg6";
+    // BIP-350 valid test vector:
+    // an83characterlonghumanreadablepartthatcontainsthetheexcludedcharactersbioandnumber11sg7hg6
+    let encoded: ByteArray =
+        "an83characterlonghumanreadablepartthatcontainsthetheexcludedcharactersbioandnumber11sg7hg6";
     let (hrp, data, _) = Decoder::decode(encoded);
 
-    assert!(hrp == "an83characterlonghumanreadablepartthatcontainsthetheexcludedcharactersbioandnumber1", "HRP should match");
+    assert!(
+        hrp == "an83characterlonghumanreadablepartthatcontainsthetheexcludedcharactersbioandnumber1",
+        "HRP should match",
+    );
     assert!(data.len() == 0, "Data should be empty after checksum");
 }
 
@@ -226,8 +231,10 @@ fn test_bip350_valid_abcdef() {
 
 #[test]
 fn test_bip350_valid_all_ones() {
-    // BIP-350 valid test vector: 11llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllludsr8
-    let encoded: ByteArray = "11llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllludsr8";
+    // BIP-350 valid test vector:
+    // 11llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllludsr8
+    let encoded: ByteArray =
+        "11llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllludsr8";
     let (hrp, data, _) = Decoder::decode(encoded);
 
     assert!(hrp == "1", "HRP should be '1'");
@@ -330,9 +337,11 @@ fn test_bip350_invalid_hrp_char_0x80() {
 #[test]
 #[should_panic(expected: "Encoded string would exceed maximum length of 90 characters")]
 fn test_bip350_invalid_overall_max_length_84chars() {
-    // BIP-350 Invalid: an84characterslonghumanreadablepartthatcontainsthetheexcludedcharactersbioandnumber11d6pts4
+    // BIP-350 Invalid:
+    // an84characterslonghumanreadablepartthatcontainsthetheexcludedcharactersbioandnumber11d6pts4
     // overall max length exceeded
-    let encoded: ByteArray = "an84characterslonghumanreadablepartthatcontainsthetheexcludedcharactersbioandnumber11d6pts4";
+    let encoded: ByteArray =
+        "an84characterslonghumanreadablepartthatcontainsthetheexcludedcharactersbioandnumber11d6pts4";
     Decoder::decode(encoded);
 }
 
@@ -369,7 +378,7 @@ fn test_bip350_invalid_data_char_lt1igcx5c0() {
 }
 
 #[test]
-#[should_panic(expected: "Too short checksum" )]
+#[should_panic(expected: "Too short checksum")]
 fn test_bip350_invalid_short_checksum() {
     // BIP-350 Invalid: in1muywd - Too short checksum
     let encoded: ByteArray = "in1muywd";

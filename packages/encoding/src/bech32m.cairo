@@ -28,7 +28,9 @@ pub impl Bech32mDecoder of Decoder<ByteArray> {
         let (hrp, data, checksum) = decode(data);
 
         // Verify checksum with HRP
-        assert!(verify_bech32m_checksum(hrp.clone(), data.span(), checksum.span()), "Invalid checksum");
+        assert!(
+            verify_bech32m_checksum(hrp.clone(), data.span(), checksum.span()), "Invalid checksum",
+        );
 
         (hrp, data, checksum)
     }
