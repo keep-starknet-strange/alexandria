@@ -4,13 +4,13 @@ version.workspace = true
 description = "A set of linear algebra libraries and algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/linalg"
 edition = "2023_11"
-cairo-version = "2.12.2"
+cairo-version = "2.13.1"
 
 [tool]
 fmt.workspace = true
 
 [dependencies]
-alexandria_math = { path = "../math", version ="0.6.2" }
+alexandria_math = { path = "../math", version ="0.7.0" }
 
 [dev-dependencies]
 snforge_std.workspace = true

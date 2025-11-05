@@ -1,12 +1,21 @@
 #!/bin/bash
 
+# $1: (optional) package  filter option
 run_tests_and_collect_gas() {
-    snforge test | grep -E '\[PASS\] .* \(l1_gas: ~[0-9]+, l1_data_gas: ~[0-9]+, l2_gas: ~[0-9]+\)' | sed -E 's/\[PASS\] ([^(]*) \(l1_gas: ~[0-9]+, l1_data_gas: ~[0-9]+, l2_gas: ~([0-9]+)\)/\1 \2/' | sort -k2 -nr
+    snforge test $1 | grep -E '\[PASS\] .* \(l1_gas: ~[0-9]+, l1_data_gas: ~[0-9]+, l2_gas: ~[0-9]+\)' | sed -E 's/\[PASS\] ([^(]*) \(l1_gas: ~[0-9]+, l1_data_gas: ~[0-9]+, l2_gas: ~([0-9]+)\)/\1 \2/' | sort -k2 -nr
 }
 
 generate_gas_report() {
+    test_args=""
+
+    # checking if any package provided (short form => btc, math, bytes...)
+    if [[ -n $1 ]]; then
+        test_args="-p alexandria_$1"
+    fi
+
     echo "Running tests and collecting gas data..."
-    local gas_data=$(run_tests_and_collect_gas)
+
+    local gas_data=$(run_tests_and_collect_gas $test_args)
 
     if [ -z "$gas_data" ]; then
         echo "Error: No gas data found. Make sure 'snforge test' is running correctly."
@@ -18,6 +27,7 @@ generate_gas_report() {
     # Create a temporary file to store previous gas values
     local prev_gas_file=$(mktemp)
     local root_gas_report="gas_report.json"
+
     if [ -f "$root_gas_report" ]; then
         echo "Loading previous gas report from $root_gas_report..."
         # Parse JSON entries and store in temporary file

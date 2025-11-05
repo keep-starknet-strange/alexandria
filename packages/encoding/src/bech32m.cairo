@@ -10,7 +10,7 @@ pub trait Encoder<T> {
 /// Decoder trait for Bech32 decoding
 pub trait Decoder<T> {
     /// Decodes Bech32 encoded data back to raw format
-    fn decode(data: T) -> (ByteArray, Array<u8>);
+    fn decode(data: T) -> (ByteArray, Array<u8>, Array<u8>);
 }
 
 /// Bech32m encoder implementation for u8 spans
@@ -24,11 +24,15 @@ pub impl Bech32mEncoder of Encoder<Span<u8>> {
 
 /// Bech32m decoder implementation for ByteArray
 pub impl Bech32mDecoder of Decoder<ByteArray> {
-    fn decode(data: ByteArray) -> (ByteArray, Array<u8>) {
-        decode(data)
+    fn decode(data: ByteArray) -> (ByteArray, Array<u8>, Array<u8>) {
+        let (hrp, data, checksum) = decode(data);
+
+        // Verify checksum with HRP
+        assert!(verify_bech32m_checksum(hrp.clone(), data.span(), checksum.span()), "Invalid checksum");
+
+        (hrp, data, checksum)
     }
 }
-
 
 /// Compute Bech32m checksum according to BIP-350
 pub fn compute_bech32m_checksum(hrp: ByteArray, data: Span<u8>) -> Array<u8> {
@@ -61,7 +65,8 @@ pub fn compute_bech32m_checksum(hrp: ByteArray, data: Span<u8>) -> Array<u8> {
     values.append(0);
 
     // Calculate polymod
-    let polymod = bech32m_polymod(values.span());
+    let polymod = bech32m_polymod(values.span()) ^ 0x2bc830a3;
+
     // Extract 6 5-bit values from polymod
     let mut checksum = array![];
     let mut i = 0_u32;
@@ -139,7 +144,6 @@ fn bech32m_polymod(values: Span<u8>) -> u32 {
         i += 1;
     }
 
-    // Apply Bech32m final XOR (0x2bc830a3)
-    chk ^ 0x2bc830a3
+    chk
 }
 

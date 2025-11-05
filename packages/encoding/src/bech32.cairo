@@ -1,7 +1,36 @@
 use alexandria_math::opt_math::OptBitShift;
 
 const POW2: [u32; 17] = [1, 2, 4, 8, 16, 32, 64, 128, 256, 0, 0, 0, 0, 0, 0, 0, 65536];
-const CHECKSUM_LEN: usize = 6;
+pub const CHECKSUM_LEN: usize = 6;
+
+/// Helper function to compute 2^n
+fn pow2(n: u32) -> u32 {
+    match n {
+        0 => 1,
+        1 => 2,
+        2 => 4,
+        3 => 8,
+        4 => 16,
+        5 => 32,
+        6 => 64,
+        7 => 128,
+        8 => 256,
+        9 => panic!("Unsupported power"),
+        10 => panic!("Unsupported power"),
+        11 => panic!("Unsupported power"),
+        12 => panic!("Unsupported power"),
+        13 => panic!("Unsupported power"),
+        14 => panic!("Unsupported power"),
+        15 => panic!("Unsupported power"),
+        16 => 65536,
+        _ => panic!("Unsupported power")
+    }
+}
+
+/// Helper function to check if a character is lowercase alphanumeric
+fn is_lower_alphanum(char: u8) -> bool {
+    (char > 96 && char < 123) || (char > 47 && char < 58)
+}
 
 /// Encoder trait for Bech32 encoding
 pub trait Encoder<T> {
@@ -12,7 +41,7 @@ pub trait Encoder<T> {
 /// Decoder trait for Bech32 decoding
 pub trait Decoder<T> {
     /// Decodes Bech32 encoded data back to raw format
-    fn decode(data: T) -> (ByteArray, Array<u8>);
+    fn decode(data: T) -> (ByteArray, Array<u8>, Array<u8>);
 }
 
 /// Bech32 encoder implementation for u8 spans
@@ -26,21 +55,25 @@ pub impl Bech32Encoder of Encoder<Span<u8>> {
 
 /// Bech32 decoder implementation for ByteArray
 pub impl Bech32Decoder of Decoder<ByteArray> {
-    fn decode(data: ByteArray) -> (ByteArray, Array<u8>) {
-        decode(data)
+    fn decode(data: ByteArray) -> (ByteArray, Array<u8>, Array<u8>) {
+        let (hrp, data, checksum) = decode(data);
+
+        // Verify checksum with HRP
+        assert!(verify_bech32_checksum(hrp.clone(), data.span(), checksum.span()), "Invalid checksum");
+
+        (hrp, data, checksum)
     }
 }
 
 /// Encode data into Bech32 string
+/// Does not verify checksum; caller must ensure checksum is correct
 pub fn encode(hrp: ByteArray, data: Span<u8>, checksum: Span<u8>) -> ByteArray {
-    // Validate HRP length (should be 1-83 characters) — same for Bech32m
+    // Validate HRP length (should be 1-83 characters)
     assert!(hrp.len() >= 1, "HRP too short");
     assert!(hrp.len() <= 83, "HRP too long");
     // Validate data length (should not exceed practical limits)
     assert!(data.len() <= 65, "Data payload too long");
 
-    // // Compute checksum using Bech32 constant
-    // let checksum = compute_bech32_checksum(hrp.clone(), data).span();
     let mut combined = array![];
     let mut i = 0_u32;
 
@@ -78,16 +111,27 @@ pub fn encode(hrp: ByteArray, data: Span<u8>, checksum: Span<u8>) -> ByteArray {
     result
 }
 
-/// Decode Bech32 string into HRP and data
-pub fn decode(encoded: ByteArray) -> (ByteArray, Array<u8>) {
+/// Decode Bech32 string into HRP, data and checksum
+/// For consistency, only supports a lowercase string
+/// Does not verify checksum; caller must ensure checksum is correct
+/// HRP must be lowercase alphanumeric characters only (not supporting ?, !, etc)
+pub fn decode(encoded: ByteArray) -> (ByteArray, Array<u8>, Array<u8>) {
+    // Validate total length doesn't exceed 90 chars
+    assert!(encoded.len() <= 90, "Encoded string would exceed maximum length of 90 characters");
+    assert!(encoded.len() >= 8, "Encoded string too short");
+
     // Find the last '1' separator
     let mut separator_pos = 0_u32;
     let mut i = encoded.len();
+
     while i > 0 {
         i -= 1;
+
         let char = encoded.at(i).unwrap();
+
         if char == '1' {
             separator_pos = i;
+
             break;
         }
     }
@@ -101,18 +145,22 @@ pub fn decode(encoded: ByteArray) -> (ByteArray, Array<u8>) {
     while i < separator_pos {
         let char = encoded.at(i).unwrap();
 
+        // Only checking HRP as bech chars will be checked later on data and checksum
+        assert!(is_lower_alphanum(char), "Invalid HRP character");
+
         hrp.append_byte(char);
 
         i += 1;
     }
 
-    // Extract data (excluding checksum for simplicity)
+    // Full data part length (data + checksum)
+    let full_data_len = encoded.len() - separator_pos - 1;
+
+    assert!(full_data_len >= CHECKSUM_LEN, "Too short checksum");
+
+    // Extract data (lowercased chars)
     let data_start = separator_pos + 1;
-    let data_len = if encoded.len() > data_start + 6 {
-        encoded.len() - data_start - 6
-    } else {
-        0
-    };
+    let data_len = full_data_len - CHECKSUM_LEN;
     let mut data = array![];
     let mut i = data_start;
 
@@ -125,18 +173,20 @@ pub fn decode(encoded: ByteArray) -> (ByteArray, Array<u8>) {
         i += 1;
     }
 
-    (hrp, data)
-}
+    // Extract checksum (lowercased chars)
+    let mut checksum = array![];
+    let mut i = data_start + data_len;
 
-/// Helper function to compute 2^n
-fn pow2(n: u32) -> u32 {
-    let pow = *POW2.span()[n];
+    while i < encoded.len() {
+        let char = encoded.at(i).unwrap();
+        let value = bech32_char_to_value(char);
 
-    if pow == 0 {
-        panic!("Unsupported power");
+        checksum.append(value);
+
+        i += 1;
     }
 
-    pow
+    (hrp, data, checksum)
 }
 
 /// Convert 5-bit data to 8-bit data
@@ -220,7 +270,7 @@ pub fn hrp_to_values(hrp: ByteArray) -> Array<u8> {
 }
 
 /// Create the 6-byte checksum for HRP and data
-fn compute_bech32_checksum(hrp: ByteArray, data: Span<u8>) -> Array<u8> {
+pub fn compute_bech32_checksum(hrp: ByteArray, data: Span<u8>) -> Array<u8> {
     let hrp_values = hrp_to_values(hrp);
 
     let mut values = array![];
@@ -266,7 +316,7 @@ fn compute_bech32_checksum(hrp: ByteArray, data: Span<u8>) -> Array<u8> {
 }
 
 /// Verify checksum for encoded Bech32 string
-fn verify_bech32_checksum(hrp: ByteArray, data: Span<u8>, checksum: Span<u8>) -> bool {
+pub fn verify_bech32_checksum(hrp: ByteArray, data: Span<u8>, checksum: Span<u8>) -> bool {
     // Convert HRP to values (already includes separator)
     let hrp_values = hrp_to_values(hrp);
     // Combine: hrp_values (with separator) || data || checksum
@@ -466,6 +516,6 @@ pub fn bech32_char_to_value(char: u8) -> u8 {
     } else if char == 'l' {
         31
     } else {
-        panic!("Invalid Bech32 character")
+        panic!("Invalid Bech32(m) character")
     }
 }

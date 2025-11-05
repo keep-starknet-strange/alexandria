@@ -3,12 +3,12 @@ name = "macros_tests"
 description = "Dummy package only used to test macros. Not part of the workspace."
 version = "0.1.0"
 edition = "2024_07"
-cairo-version = "2.12.2"
+cairo-version = "2.13.1"
 
 [dependencies]
-starknet = "2.12.2"
-alexandria_macros = { path = "../macros" }
-alexandria_math = { path = "../math" }
+starknet = "2.13.1"
+alexandria_macros = { path = "../macros", version = "*" }
+alexandria_math = { path = "../math", version = "*" }
 
 [dev-dependencies]
-snforge_std = { git = "https://github.com/foundry-rs/starknet-foundry", tag = "v0.49.0" }
+snforge_std.workspace = true
