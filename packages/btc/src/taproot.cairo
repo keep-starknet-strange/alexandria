@@ -7,7 +7,7 @@
 use alexandria_bytes::byte_array_ext::SpanU8IntoByteArray;
 use alexandria_bytes::reversible::ReversibleBytes;
 use starknet::SyscallResultTrait;
-use starknet::secp256_trait::Secp256Trait;
+use starknet::secp256_trait::{Secp256PointTrait, Secp256Trait};
 use starknet::secp256k1::Secp256k1Point;
 use crate::bip340::verify as bip340_verify;
 use crate::hash::{sha256_byte_array, sha256_from_byte_array, sha256_u256};
@@ -104,34 +104,46 @@ pub fn tagged_hash_u256(tag: ByteArray, data: @ByteArray) -> u256 {
 /// #### Returns
 /// * `TweakedPublicKey` - The tweaked output key and parity
 pub fn tweak_public_key(internal_key: u256, merkle_root: Option<u256>) -> Option<TweakedPublicKey> {
-    // For demonstration, use a simplified approach that generates a valid output
-    // In a production implementation, you'd do proper point lifting and validation
+    // Convert internal key to bytes (32 bytes, big-endian)
+    let internal_key_bytes = u256_to_32_bytes_be(internal_key);
 
-    // Generate a deterministic tweak based on the internal key and merkle root
-    let curve_order = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140_u256;
-    let tweak_base = match merkle_root {
+    // Prepare tweak message: internal_key || merkle_root (if present)
+    let mut tweak_data: ByteArray = internal_key_bytes.span().into();
+    match merkle_root {
         Option::Some(root) => {
-            let key_mod = internal_key % curve_order;
-            let root_mod = root % curve_order;
-            // Use XOR to avoid overflow
-            key_mod ^ root_mod
+            let root_bytes = u256_to_32_bytes_be(root);
+            tweak_data.append(@root_bytes.span().into());
         },
-        Option::None => (internal_key % curve_order) ^ 1 // Simple key-path tweak
+        Option::None => { // Key-path only: no merkle root
+        },
+    }
+
+    // Calculate tweak = tagged_hash("TapTweak", internal_key || merkle_root)
+    let tweak_hash = tagged_hash_u256("TapTweak", @tweak_data);
+
+    // Lift the internal key x-coordinate to a point
+    let internal_point = match lift_x_coordinate(internal_key) {
+        Option::Some(p) => p,
+        Option::None => { return Option::None; },
     };
 
-    // Ensure the result is different from the input and non-zero
-    let base_result = tweak_base % curve_order;
-    let output_key = if base_result == internal_key {
-        // If by chance we get the same key, add a constant
-        (base_result + 0x123456789abcdef) % curve_order
-    } else if base_result == 0 {
-        // Ensure non-zero
-        1
-    } else {
-        base_result
-    };
+    // Get the generator point for elliptic curve operations
+    let generator = Secp256Trait::<Secp256k1Point>::get_generator_point();
 
-    Option::Some(TweakedPublicKey { output_key, parity: output_key % 2 == 0 })
+    // Calculate tweaked point: P' = P + tweak*G
+    // where P is the internal_point and G is the generator
+    let tweak_point = generator.mul(tweak_hash).unwrap_syscall();
+
+    // Add the points
+    let output_point = internal_point.add(tweak_point).unwrap_syscall();
+
+    // Extract x-coordinate and parity from the output point
+    let (x, y) = output_point.get_coordinates().unwrap_syscall();
+
+    // Check if y is even (parity = even means positive y)
+    let parity = y % 2 == 0;
+
+    Option::Some(TweakedPublicKey { output_key: x, parity })
 }
 
 /// Lift an x-coordinate to a valid secp256k1 point
