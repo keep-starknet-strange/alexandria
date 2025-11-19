@@ -150,11 +150,7 @@ pub fn tweak_public_key(internal_key: u256, merkle_root: Option<u256>) -> Option
 /// * `Option<Secp256k1Point>` - The point if x is valid, None otherwise
 pub fn lift_x_coordinate(x: u256) -> Option<Secp256k1Point> {
     // Try to get point with even y-coordinate first
-    match Secp256Trait::<Secp256k1Point>::secp256_ec_get_point_from_x_syscall(x, false)
-        .unwrap_syscall() {
-        Option::Some(point) => Option::Some(point),
-        Option::None => Option::None,
-    }
+    Secp256Trait::<Secp256k1Point>::secp256_ec_get_point_from_x_syscall(x, false).unwrap_syscall()
 }
 
 /// Convert u256 to 32-byte array (big-endian)
