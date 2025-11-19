@@ -907,3 +907,38 @@ fn test_decode_transfer_from() {
     assert!(*decoded.at(2) == expected_to.into());
     assert!(*decoded.at(3) == expected_amount.into());
 }
+
+#[test]
+fn test_decode_multiple_bytes32() {
+    let mut data: ByteArray = Default::default();
+
+    data.append_u256(0x1111111111111111111111111111111111111111111111111111111111111111);
+    data.append_u256(0x2222222222222222222222222222222222222222222222222222222222222222);
+    data.append_u256(0x3333333333333333333333333333333333333333333333333333333333333333);
+    data.append_u256(0x4444444444444444444444444444444444444444444444444444444444444444);
+
+    let mut calldata = cd(data);
+
+    let decoded = calldata
+        .decode(
+            array![EVMTypes::Bytes32, EVMTypes::Bytes32, EVMTypes::Bytes32, EVMTypes::Bytes32]
+                .span(),
+        );
+
+    assert!(*decoded.at(0) == 1);
+    assert!(*decoded.at(1) == 0x11111111111111111111111111111111111111111111111111111111111111);
+    assert!(*decoded.at(2) == 0x11);
+    assert!(*decoded.at(3) == 1);
+    assert!(*decoded.at(4) == 1);
+    assert!(*decoded.at(5) == 0x22222222222222222222222222222222222222222222222222222222222222);
+    assert!(*decoded.at(6) == 0x22);
+    assert!(*decoded.at(7) == 1);
+    assert!(*decoded.at(8) == 1);
+    assert!(*decoded.at(9) == 0x33333333333333333333333333333333333333333333333333333333333333);
+    assert!(*decoded.at(10) == 0x33);
+    assert!(*decoded.at(11) == 1);
+    assert!(*decoded.at(12) == 1);
+    assert!(*decoded.at(13) == 0x44444444444444444444444444444444444444444444444444444444444444);
+    assert!(*decoded.at(14) == 0x44);
+    assert!(*decoded.at(15) == 1);
+}
