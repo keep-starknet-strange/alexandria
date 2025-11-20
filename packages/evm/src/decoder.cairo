@@ -287,7 +287,9 @@ fn decode_bytes(ref ctx: EVMCalldata) -> Span<felt252> {
 /// A `Span<felt252>` containing 32 bytes split into 31 bytes and the MSB.
 #[inline(always)]
 fn decode_bytes_32(ref ctx: EVMCalldata) -> Span<felt252> {
-    let (_, value) = ctx.calldata.read_u256(ctx.offset);
+    let (new_offset, value) = ctx.calldata.read_u256(ctx.offset);
+
+    ctx.offset = new_offset;
 
     let mut ba: ByteArray = Default::default();
     ba.append_u256(value);
