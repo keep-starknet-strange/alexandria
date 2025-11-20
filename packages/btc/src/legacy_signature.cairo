@@ -57,9 +57,8 @@ pub fn verify_ecdsa_signature_coords(
         Secp256k1Point,
     >(msg_hash: message_hash, signature: signature);
 
-    let recovered_point = match recovered_point_result {
-        Option::Some(point) => point,
-        Option::None => { return false; },
+    let Some(recovered_point) = recovered_point_result else {
+        return false;
     };
 
     // Step 3: Get coordinates of the recovered public key
@@ -136,13 +135,12 @@ pub fn verify_der_signature(
 ) -> bool {
     // Parse the DER signature
     let signature_option = parse_der_signature(der_signature);
-    let signature = match signature_option {
-        Option::Some(sig) => sig,
-        Option::None => { return false; },
-    };
 
-    // Use auto-recovery since DER doesn't include y_parity information
-    verify_ecdsa_signature_auto_recovery(message_hash, signature.r, signature.s, public_key)
+    if let Some(signature) = signature_option {
+        verify_ecdsa_signature_auto_recovery(message_hash, signature.r, signature.s, public_key)
+    } else {
+        false
+    }
 }
 
 /// Parse DER-encoded signature using ByteArray utilities
