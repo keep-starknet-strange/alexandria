@@ -46,11 +46,48 @@ pub fn public_key_to_address(
     public_key: BitcoinPublicKey, address_type: BitcoinAddressType, network: BitcoinNetwork,
 ) -> BitcoinAddress {
     match address_type {
-        BitcoinAddressType::P2PKH => generate_p2pkh_address(public_key, network),
-        BitcoinAddressType::P2SH => generate_p2sh_address(public_key, network),
-        BitcoinAddressType::P2WPKH => generate_p2wpkh_address(public_key, network),
+        BitcoinAddressType::P2PKH => {
+            let pubkey_hash = public_key_hash(public_key);
+            generate_p2pkh_address(pubkey_hash, network)
+        },
+        BitcoinAddressType::P2SH => {
+            let pubkey_hash = public_key_hash(public_key);
+            generate_p2sh_address(pubkey_hash, network)
+        },
+        BitcoinAddressType::P2WPKH => {
+            let pubkey_hash = public_key_hash(public_key);
+            generate_p2wpkh_address(pubkey_hash, network)
+        },
         BitcoinAddressType::P2WSH => generate_p2wsh_address(public_key, network),
         BitcoinAddressType::P2TR => generate_p2tr_address(public_key, network),
+    }
+}
+
+/// Generates a Bitcoin address from a public key hash for the specified address type and network.
+///
+/// This function generates addresses for address types that can be derived directly from
+/// a public key hash: P2PKH, P2SH, and P2WPKH. For P2WSH and P2TR, use `public_key_to_address`
+/// instead as they require additional information beyond the pubkey hash.
+///
+/// #### Arguments
+/// * `pubkey_hash` - The 20-byte public key hash (HASH160 of public key)
+/// * `address_type` - The type of Bitcoin address to generate (P2PKH, P2SH, or P2WPKH)
+/// * `network` - The Bitcoin network (Mainnet, Testnet, or Regtest)
+///
+/// #### Returns
+/// * `BitcoinAddress` - Complete address structure including encoded address and script_pubkey
+///
+/// #### Panics
+/// Panics if address_type is P2WSH or P2TR (use `public_key_to_address` for these types)
+pub fn pubkey_hash_to_address(
+    pubkey_hash: Array<u8>, address_type: BitcoinAddressType, network: BitcoinNetwork,
+) -> BitcoinAddress {
+    match address_type {
+        BitcoinAddressType::P2PKH => generate_p2pkh_address(pubkey_hash, network),
+        BitcoinAddressType::P2SH => generate_p2sh_address(pubkey_hash, network),
+        BitcoinAddressType::P2WPKH => generate_p2wpkh_address(pubkey_hash, network),
+        BitcoinAddressType::P2WSH => panic!("P2WSH requires public key, not just pubkey hash"),
+        BitcoinAddressType::P2TR => panic!("P2TR requires public key, not just pubkey hash"),
     }
 }
 
@@ -94,14 +131,12 @@ fn encode_base58_check(payload: Span<u8>) -> Array<u8> {
 /// and encoding it with Base58Check using the appropriate network version byte.
 ///
 /// #### Arguments
-/// * `public_key` - The Bitcoin public key to generate address from
+/// * `pubkey_hash` - The 20-byte public key hash (HASH160 of public key)
 /// * `network` - The Bitcoin network (affects version byte)
 ///
 /// #### Returns
 /// * `BitcoinAddress` - P2PKH address with corresponding script_pubkey
-fn generate_p2pkh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) -> BitcoinAddress {
-    let pubkey_hash = public_key_hash(public_key);
-
+fn generate_p2pkh_address(pubkey_hash: Array<u8>, network: BitcoinNetwork) -> BitcoinAddress {
     // Create version + pubkey_hash payload
     let version_byte = match network {
         BitcoinNetwork::Mainnet => 0x00,
@@ -141,14 +176,13 @@ fn generate_p2pkh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork)
 /// SegWit functionality while maintaining compatibility with older wallets.
 ///
 /// #### Arguments
-/// * `public_key` - The Bitcoin public key to generate address from
+/// * `pubkey_hash` - The 20-byte public key hash (HASH160 of public key)
 /// * `network` - The Bitcoin network (affects version byte)
 ///
 /// #### Returns
 /// * `BitcoinAddress` - P2SH address with corresponding script_pubkey
-fn generate_p2sh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) -> BitcoinAddress {
+fn generate_p2sh_address(pubkey_hash: Array<u8>, network: BitcoinNetwork) -> BitcoinAddress {
     // For simplicity, we'll create a P2SH-wrapped P2WPKH
-    let pubkey_hash = public_key_hash(public_key);
 
     // Create redeem script: OP_0 <pubkey_hash>
     let mut redeem_script = array![0x00, 0x14]; // OP_0 + Push 20 bytes
@@ -198,16 +232,12 @@ fn generate_p2sh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) 
 /// efficient address type for single-signature transactions.
 ///
 /// #### Arguments
-/// * `public_key` - The Bitcoin public key to generate address from
+/// * `pubkey_hash` - The 20-byte public key hash (HASH160 of public key)
 /// * `network` - The Bitcoin network (affects HRP: bc/tb/bcrt)
 ///
 /// #### Returns
 /// * `BitcoinAddress` - P2WPKH address with corresponding script_pubkey
-fn generate_p2wpkh_address(
-    public_key: BitcoinPublicKey, network: BitcoinNetwork,
-) -> BitcoinAddress {
-    let pubkey_hash = public_key_hash(public_key);
-
+fn generate_p2wpkh_address(pubkey_hash: Array<u8>, network: BitcoinNetwork) -> BitcoinAddress {
     // Convert raw data bytes into 5-bit groups
     let data_5bit: Array<u8> = convert_bits(pubkey_hash.span(), 8, 5, true);
 
