@@ -17,7 +17,7 @@ packages/btc/
 ├── address.cairo           # Bitcoin address generation and validation
 ├── bip340.cairo           # BIP-340 Schnorr signatures for Taproot
 ├── bip322.cairo           # BIP-322 message hashing for Taproot
-├── decoder.cairo          # Bitcoin transaction decoding logic  
+├── decoder.cairo          # Bitcoin transaction decoding logic
 ├── encoder.cairo          # Bitcoin transaction encoding logic
 ├── hash.cairo             # Bitcoin cryptographic hash functions
 ├── keys.cairo             # Bitcoin key generation and management
@@ -112,7 +112,8 @@ This module implements BIP-322 message hasing used in Bitcoin Taproot.
 ```rust
 let pubkey: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
 let message = "Message to sign";
-let message_hash = bip322_msg_hash(pubkey, message);
+let sighash_type = SighashType.ALL;
+let message_hash = bip322_msg_hash(sighash_type, pubkey, message);
 // Process hash sig verify or other flows
 ```
 
@@ -186,7 +187,7 @@ These modules handle Bitcoin transaction serialization and deserialization in th
 let mut encoder = TransactionEncoderTrait::new();
 let encoded_data = encoder.encode_transaction(transaction);
 
-// Decoding  
+// Decoding
 let mut decoder = TransactionDecoderTrait::new(raw_data);
 let decoded_tx = decoder.decode_transaction();
 ```

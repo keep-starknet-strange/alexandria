@@ -1,4 +1,5 @@
 use alexandria_bytes::byte_array_ext::{ByteArrayTraitExt, SpanU8IntoByteArray};
+use core::traits::Into;
 use starknet::SyscallResultTrait;
 use starknet::secp256_trait::{Secp256PointTrait, Secp256Trait};
 use starknet::secp256k1::Secp256k1Point;
@@ -7,10 +8,24 @@ use crate::hash::sha256_byte_array;
 use crate::taproot::{lift_x_coordinate, tagged_hash_byte_array, tagged_hash_u256};
 use crate::types::{BitcoinTransaction, TransactionInput, TransactionOutput, TransactionWitness};
 
-const SIGHASH_ALL: u8 = 0x01;
 const EMPTY_32_BYTES: [u8; 32] = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ];
+
+#[derive(Drop, Copy, PartialEq)]
+pub enum SighashType {
+    DEFAULT,
+    ALL,
+}
+
+impl SighashTypeIntoU8 of Into<SighashType, u8> {
+    const fn into(self: SighashType) -> u8 {
+        match self {
+            SighashType::DEFAULT => 0_u8,
+            SighashType::ALL => 1_u8,
+        }
+    }
+}
 
 #[inline(always)]
 fn build_to_spend_tx(message: @ByteArray, script_pubkey: @ByteArray) -> BitcoinTransaction {
@@ -76,7 +91,7 @@ fn get_transaction_id(tx: BitcoinTransaction) -> ByteArray {
 }
 
 #[inline(always)]
-fn hash_for_witness_v1(tx: @BitcoinTransaction) -> ByteArray {
+fn hash_for_witness_v1(sighash_type: SighashType, tx: @BitcoinTransaction) -> ByteArray {
     let prev_out_scripts = tx.witness[0].witness_stack[0];
 
     if tx.inputs.len() != 1 || prev_out_scripts.len() == 0 {
@@ -120,7 +135,7 @@ fn hash_for_witness_v1(tx: @BitcoinTransaction) -> ByteArray {
     let mut sig_msg: ByteArray = "";
 
     sig_msg.append_byte(0x0);
-    sig_msg.append_byte(SIGHASH_ALL);
+    sig_msg.append_byte(sighash_type.into());
     sig_msg.append_u32_le(*tx.version);
     sig_msg.append_u32_le(*tx.locktime);
     sig_msg.append(@hash_prevouts);
@@ -149,11 +164,18 @@ pub fn tweak_public_key(internal_key: u256) -> u256 {
 }
 
 #[inline(always)]
-pub fn bip322_msg_hash(pub_key: u256, message: ByteArray) -> ByteArray {
+pub fn bip322_msg_hash_with_type(
+    sighash_type: SighashType, pub_key: u256, message: ByteArray,
+) -> ByteArray {
     let script_pubkey = get_script_pubkey(pub_key);
     let to_spend_tx = build_to_spend_tx(@message, @script_pubkey);
     let to_spend_tx_id = get_transaction_id(to_spend_tx);
     let to_sign_tx = build_to_sign_tx(to_spend_tx_id, script_pubkey);
 
-    hash_for_witness_v1(@to_sign_tx)
+    hash_for_witness_v1(sighash_type, @to_sign_tx)
+}
+
+#[inline(always)]
+pub fn bip322_msg_hash(pub_key: u256, message: ByteArray) -> ByteArray {
+    bip322_msg_hash_with_type(SighashType::ALL, pub_key, message)
 }
