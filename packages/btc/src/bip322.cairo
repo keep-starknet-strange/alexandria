@@ -164,11 +164,18 @@ pub fn tweak_public_key(internal_key: u256) -> u256 {
 }
 
 #[inline(always)]
-pub fn bip322_msg_hash(sighash_type: SighashType, pub_key: u256, message: ByteArray) -> ByteArray {
+pub fn bip322_msg_hash_with_type(
+    sighash_type: SighashType, pub_key: u256, message: ByteArray,
+) -> ByteArray {
     let script_pubkey = get_script_pubkey(pub_key);
     let to_spend_tx = build_to_spend_tx(@message, @script_pubkey);
     let to_spend_tx_id = get_transaction_id(to_spend_tx);
     let to_sign_tx = build_to_sign_tx(to_spend_tx_id, script_pubkey);
 
     hash_for_witness_v1(sighash_type, @to_sign_tx)
+}
+
+#[inline(always)]
+pub fn bip322_msg_hash(pub_key: u256, message: ByteArray) -> ByteArray {
+    bip322_msg_hash_with_type(SighashType::ALL, pub_key, message)
 }

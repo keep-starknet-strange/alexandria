@@ -1,4 +1,6 @@
-use alexandria_btc::bip322::{SighashType, bip322_msg_hash, tweak_public_key};
+use alexandria_btc::bip322::{
+    SighashType, bip322_msg_hash, bip322_msg_hash_with_type, tweak_public_key,
+};
 use alexandria_btc::bip340::verify;
 
 const PUB_KEY: u256 = 0x08c80f3bf06bcc87154dcd3cf294aada4ee9b3218d4ba60e2bbaf91c17d351ee;
@@ -24,7 +26,7 @@ fn test_bip322_verify_short_msg_success() {
     let r = 0xb004d6cc1e748ba99479ff294c456055572cbf96aa5ba485f562cc5daa8ee7c4;
     let s = 0x9c04219cbc45a3915c447f5fefa3ac8878056e2e5780fb12049fd4c55ed360cc;
 
-    let msg_hash = bip322_msg_hash(SighashType::ALL, PUB_KEY, input);
+    let msg_hash = bip322_msg_hash(PUB_KEY, input);
 
     assert!(verify(PUB_KEY, r, s, msg_hash));
 }
@@ -39,7 +41,7 @@ fn test_bip322_sighash_default_verify_short_msg_success() {
     let r = 0x58b23bf34f410f9da8e82eaf143750525473e274a605db6d123b2a82857a8e3d;
     let s = 0xfd5ab0b79e481a6e5f5fa60f8cc4a1c9f4e2dd7c2206938f32dd712e89dbb9ba;
 
-    let msg_hash = bip322_msg_hash(SighashType::DEFAULT, PUB_KEY, input);
+    let msg_hash = bip322_msg_hash_with_type(SighashType::DEFAULT, PUB_KEY, input);
 
     assert!(verify(PUB_KEY, r, s, msg_hash));
 }
@@ -52,7 +54,7 @@ fn test_bip322_verify_long_msg_success() {
     let r = 0x52cffafb54d8fc578c9de6bac3ff91fb746e6bb3abb94cd1c8baf3098d15de7c;
     let s = 0xfebf73e052d8f28b4124640fd2ce8fde6a153a9081af4124f29d5cf55136c72a;
 
-    let msg_hash = bip322_msg_hash(SighashType::ALL, PUB_KEY, input);
+    let msg_hash = bip322_msg_hash(PUB_KEY, input);
 
     assert!(verify(PUB_KEY, r, s, msg_hash));
 }
@@ -65,7 +67,7 @@ fn test_bip322_sighash_default_verify_long_msg_success() {
     let r = 0x4fc32c433189c49015377b8873d0d2a73690893978520088b1d2a6740a8ef51d;
     let s = 0x7145b09bfc55584144c1f5aad74edf296f13eaaad2c4945af1f4905066a8e4bf;
 
-    let msg_hash = bip322_msg_hash(SighashType::DEFAULT, PUB_KEY, input);
+    let msg_hash = bip322_msg_hash_with_type(SighashType::DEFAULT, PUB_KEY, input);
 
     assert!(verify(PUB_KEY, r, s, msg_hash));
 }
@@ -81,7 +83,7 @@ fn test_bip322_verify_pk_failure() {
     let r = 0x48bb4ea8372506e27909eaf455fc416ca144ba40cdb05a8c042c508e0bee0999;
     let s = 0xc57195b075c8ef323453ca530a3e36fe2778e104c623e3b9bb21187f4ebf8b91;
 
-    let msg_hash = bip322_msg_hash(SighashType::ALL, pub_key, input);
+    let msg_hash = bip322_msg_hash(pub_key, input);
 
     assert!(!verify(pub_key, r, s, msg_hash));
 }
@@ -97,7 +99,7 @@ fn test_bip322_verify_msg_failure() {
     let r = 0x48bb4ea8372506e27909eaf455fc416ca144ba40cdb05a8c042c508e0bee0999;
     let s = 0xc57195b075c8ef323453ca530a3e36fe2778e104c623e3b9bb21187f4ebf8b91;
 
-    let msg_hash = bip322_msg_hash(SighashType::ALL, pub_key, input);
+    let msg_hash = bip322_msg_hash(pub_key, input);
 
     assert!(!verify(pub_key, r, s, msg_hash));
 }
@@ -113,7 +115,7 @@ fn test_bip322_verify_sig_failure() {
     let r = 0x48bb4ea9372506e27909eaf455fc416ca144ba40cdb05a8c042c508e0bee0999;
     let s = 0xc57195b075c8ef323453ca530a3e36fe2778e104c623e3b9bb21187f4ebf8b91;
 
-    let msg_hash = bip322_msg_hash(SighashType::ALL, pub_key, input);
+    let msg_hash = bip322_msg_hash(pub_key, input);
 
     assert!(!verify(pub_key, r, s, msg_hash));
 }
