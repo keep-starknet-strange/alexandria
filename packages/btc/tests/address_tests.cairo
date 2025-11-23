@@ -1,13 +1,14 @@
 use alexandria_btc::address::{
-    decode_address, private_key_to_address, public_key_to_address, validate_address,
+    decode_address, private_key_to_address, pubkey_hash_to_address, public_key_to_address,
+    validate_address,
 };
-use alexandria_btc::keys::{create_private_key, private_key_to_public_key};
+use alexandria_btc::keys::{create_private_key, private_key_to_public_key, public_key_hash};
 use alexandria_btc::types::{BitcoinAddressType, BitcoinNetwork, BitcoinPublicKeyTrait};
 
 fn test_generate_address(
-    publick_key: u256, address_type: BitcoinAddressType, expected_address: ByteArray,
+    public_key: u256, address_type: BitcoinAddressType, expected_address: ByteArray,
 ) {
-    let private_key = create_private_key(publick_key, BitcoinNetwork::Mainnet, true);
+    let private_key = create_private_key(public_key, BitcoinNetwork::Mainnet, true);
 
     let address = private_key_to_address(private_key, address_type);
 
@@ -18,10 +19,23 @@ fn test_generate_address(
 }
 
 fn test_public_key_to_address(
-    publick_key: u256, address_type: BitcoinAddressType, expected_address: ByteArray,
+    public_key: u256, address_type: BitcoinAddressType, expected_address: ByteArray,
 ) {
-    let public_key = BitcoinPublicKeyTrait::from_x_coordinate(publick_key, true);
+    let public_key = BitcoinPublicKeyTrait::from_x_coordinate(public_key, true);
     let address = public_key_to_address(public_key, address_type, BitcoinNetwork::Mainnet);
+
+    assert!(address.address_type == address_type);
+    assert!(address.network == BitcoinNetwork::Mainnet);
+    assert!(address.address == expected_address);
+    assert!(address.script_pubkey.len() > 0);
+}
+
+fn test_pubkey_hash_to_address(
+    public_key: u256, address_type: BitcoinAddressType, expected_address: ByteArray,
+) {
+    let public_key = BitcoinPublicKeyTrait::from_x_coordinate(public_key, true);
+    let pubkey_hash = public_key_hash(public_key);
+    let address = pubkey_hash_to_address(pubkey_hash, address_type, BitcoinNetwork::Mainnet);
 
     assert!(address.address_type == address_type);
     assert!(address.network == BitcoinNetwork::Mainnet);
@@ -84,6 +98,22 @@ fn test_public_key_to_address_p2pkh_max_public_key() {
 }
 
 #[test]
+fn test_pubkey_hash_to_address_p2pkh_min_public_key() {
+    test_pubkey_hash_to_address(
+        0x0, BitcoinAddressType::P2PKH, "15wJjXvfQzo3SXqoWGbWZmNYND1Si4siqV",
+    );
+}
+
+#[test]
+fn test_pubkey_hash_to_address_p2pkh_max_public_key() {
+    test_pubkey_hash_to_address(
+        0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff,
+        BitcoinAddressType::P2PKH,
+        "14kDNktHa2gEVxhtS2upv9tpZQGhUnyHHd",
+    );
+}
+
+#[test]
 fn test_generate_p2sh_address() {
     test_generate_address(
         0x158ed2714ccbf104631a5bff08c1b2d1ea0de3efdc87de58e5c67c93b31ce112,
@@ -107,11 +137,36 @@ fn test_public_key_to_address_p2sh_max_public_key() {
 }
 
 #[test]
+fn test_pubkey_hash_to_address_p2sh_min_public_key() {
+    test_pubkey_hash_to_address(
+        0x0, BitcoinAddressType::P2SH, "3NF7VcQwLUCQuktZfPb2k5w488bHSuk2c8",
+    );
+}
+
+#[test]
+fn test_pubkey_hash_to_address_p2sh_max_public_key() {
+    test_pubkey_hash_to_address(
+        0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff,
+        BitcoinAddressType::P2SH,
+        "36yJVk8r14ThJqLQ8J1HdSyPyhGZ7a2XaH",
+    );
+}
+
+#[test]
 fn test_generate_p2wpkh_address() {
     test_generate_address(
         0x8ee9028f6a30008ed2d6aad519eecccb031fef46adbb6eacea5c807a950790d8,
         BitcoinAddressType::P2WPKH,
         "bc1q2f5sknuect22mumghhcs9hqhyx4p4zntges30v",
+    );
+}
+
+#[test]
+fn test_generate_p2wpkh_address_2() {
+    test_generate_address(
+        0x01e533e65ebff02c4e521596e2618a917352a11e90fe690a54404f238a77f5c4,
+        BitcoinAddressType::P2WPKH,
+        "bc1q4gsm3wweqg66aynahflxtqx9540gspcmthehxj",
     );
 }
 
@@ -125,6 +180,22 @@ fn test_public_key_to_address_p2wpkh_min_public_key() {
 #[test]
 fn test_public_key_to_address_p2wpkh_max_public_key() {
     test_public_key_to_address(
+        0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff,
+        BitcoinAddressType::P2WPKH,
+        "bc1q9y2fsrqymmpr4vpulntppt0nn43d030m2q0r35",
+    );
+}
+
+#[test]
+fn test_pubkey_hash_to_address_p2wpkh_min_public_key() {
+    test_pubkey_hash_to_address(
+        0x0, BitcoinAddressType::P2WPKH, "bc1qxcjufgh2jarkp2qkx68azh08w9v5gah854mwt2",
+    );
+}
+
+#[test]
+fn test_pubkey_hash_to_address_p2wpkh_max_public_key() {
+    test_pubkey_hash_to_address(
         0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff,
         BitcoinAddressType::P2WPKH,
         "bc1q9y2fsrqymmpr4vpulntppt0nn43d030m2q0r35",
@@ -567,6 +638,49 @@ fn test_all_address_types_consistency() {
     assert!(p2wpkh.address_type == BitcoinAddressType::P2WPKH);
     assert!(p2wsh.address_type == BitcoinAddressType::P2WSH);
     assert!(p2tr.address_type == BitcoinAddressType::P2TR);
+}
+
+#[test]
+fn test_pubkey_hash_to_address_consistency() {
+    // Test that pubkey_hash_to_address produces the same results as public_key_to_address
+    let private_key = create_private_key(
+        0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef,
+        BitcoinNetwork::Mainnet,
+        true,
+    );
+
+    let public_key = private_key_to_public_key(private_key);
+    let pubkey_hash = public_key_hash(public_key.clone());
+
+    // Test P2PKH
+    let address_from_pubkey_p2pkh = public_key_to_address(
+        public_key.clone(), BitcoinAddressType::P2PKH, BitcoinNetwork::Mainnet,
+    );
+    let address_from_hash_p2pkh = pubkey_hash_to_address(
+        pubkey_hash.clone(), BitcoinAddressType::P2PKH, BitcoinNetwork::Mainnet,
+    );
+    assert!(address_from_pubkey_p2pkh.address == address_from_hash_p2pkh.address);
+    assert!(address_from_pubkey_p2pkh.script_pubkey == address_from_hash_p2pkh.script_pubkey);
+
+    // Test P2SH
+    let address_from_pubkey_p2sh = public_key_to_address(
+        public_key.clone(), BitcoinAddressType::P2SH, BitcoinNetwork::Mainnet,
+    );
+    let address_from_hash_p2sh = pubkey_hash_to_address(
+        pubkey_hash.clone(), BitcoinAddressType::P2SH, BitcoinNetwork::Mainnet,
+    );
+    assert!(address_from_pubkey_p2sh.address == address_from_hash_p2sh.address);
+    assert!(address_from_pubkey_p2sh.script_pubkey == address_from_hash_p2sh.script_pubkey);
+
+    // Test P2WPKH
+    let address_from_pubkey_p2wpkh = public_key_to_address(
+        public_key.clone(), BitcoinAddressType::P2WPKH, BitcoinNetwork::Mainnet,
+    );
+    let address_from_hash_p2wpkh = pubkey_hash_to_address(
+        pubkey_hash.clone(), BitcoinAddressType::P2WPKH, BitcoinNetwork::Mainnet,
+    );
+    assert!(address_from_pubkey_p2wpkh.address == address_from_hash_p2wpkh.address);
+    assert!(address_from_pubkey_p2wpkh.script_pubkey == address_from_hash_p2wpkh.script_pubkey);
 }
 
 /// Helper function to verify decoded address matches generated address

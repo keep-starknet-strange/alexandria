@@ -81,11 +81,9 @@ pub fn verify(px: u256, rx: u256, s: u256, m: ByteArray) -> bool {
 
     // p - field size, n - curve order
     // point P for which x(P) = px and has_even_y(P),
-    let P =
-        match Secp256Trait::<Secp256k1Point>::secp256_ec_get_point_from_x_syscall(px, false)
-            .unwrap_syscall() {
-        Option::Some(P) => P,
-        Option::None => { return false; },
+    let Some(P) = Secp256Trait::<Secp256k1Point>::secp256_ec_get_point_from_x_syscall(px, false)
+        .unwrap_syscall() else {
+        return false;
     };
 
     // e = int(hashBIP0340/challenge(bytes(rx) || bytes(px) || m)) mod n.

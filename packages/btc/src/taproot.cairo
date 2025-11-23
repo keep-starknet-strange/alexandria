@@ -109,22 +109,17 @@ pub fn tweak_public_key(internal_key: u256, merkle_root: Option<u256>) -> Option
 
     // Prepare tweak message: internal_key || merkle_root (if present)
     let mut tweak_data: ByteArray = internal_key_bytes.span().into();
-    match merkle_root {
-        Option::Some(root) => {
-            let root_bytes = u256_to_32_bytes_be(root);
-            tweak_data.append(@root_bytes.span().into());
-        },
-        Option::None => { // Key-path only: no merkle root
-        },
+    if let Some(root) = merkle_root {
+        let root_bytes = u256_to_32_bytes_be(root);
+        tweak_data.append(@root_bytes.span().into());
     }
 
     // Calculate tweak = tagged_hash("TapTweak", internal_key || merkle_root)
     let tweak_hash = tagged_hash_u256("TapTweak", @tweak_data);
 
     // Lift the internal key x-coordinate to a point
-    let internal_point = match lift_x_coordinate(internal_key) {
-        Option::Some(p) => p,
-        Option::None => { return Option::None; },
+    let Some(internal_point) = lift_x_coordinate(internal_key) else {
+        return Option::None;
     };
 
     // Get the generator point for elliptic curve operations
@@ -155,11 +150,7 @@ pub fn tweak_public_key(internal_key: u256, merkle_root: Option<u256>) -> Option
 /// * `Option<Secp256k1Point>` - The point if x is valid, None otherwise
 pub fn lift_x_coordinate(x: u256) -> Option<Secp256k1Point> {
     // Try to get point with even y-coordinate first
-    match Secp256Trait::<Secp256k1Point>::secp256_ec_get_point_from_x_syscall(x, false)
-        .unwrap_syscall() {
-        Option::Some(point) => Option::Some(point),
-        Option::None => Option::None,
-    }
+    Secp256Trait::<Secp256k1Point>::secp256_ec_get_point_from_x_syscall(x, false).unwrap_syscall()
 }
 
 /// Convert u256 to 32-byte array (big-endian)
