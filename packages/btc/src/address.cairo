@@ -743,7 +743,7 @@ fn decode_p2sh_address(address: ByteArray) -> BitcoinAddress {
     );
 
     // Extract script hash (20 bytes after version byte)
-    assert!(payload.len() == 21, "Invalid P2SH payload length");
+    assert!(payload.len() >= 21, "Invalid P2SH payload length");
     let mut script_hash = array![];
     let mut i = 1_u32;
     while i < payload.len() {
