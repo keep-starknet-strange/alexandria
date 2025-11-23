@@ -125,6 +125,115 @@ fn encode_base58_check(payload: Span<u8>) -> Array<u8> {
     Base58Encoder::encode(payload_with_checksum.span())
 }
 
+/// Creates a P2PKH script_pubkey from a public key hash.
+///
+/// Generates the standard P2PKH script: OP_DUP OP_HASH160 <pubkey_hash> OP_EQUALVERIFY OP_CHECKSIG
+///
+/// #### Arguments
+/// * `pubkey_hash` - The 20-byte public key hash
+///
+/// #### Returns
+/// * `ByteArray` - The script_pubkey as a ByteArray
+fn create_p2pkh_script_pubkey(pubkey_hash: Array<u8>) -> ByteArray {
+    let mut script_pubkey = "";
+    script_pubkey.append_byte(0x76); // OP_DUP
+    script_pubkey.append_byte(0xa9); // OP_HASH160
+    script_pubkey.append_byte(0x14); // Push 20 bytes
+    let mut i = 0_u32;
+    while i < pubkey_hash.len() {
+        script_pubkey.append_byte(*pubkey_hash.at(i));
+        i += 1;
+    }
+    script_pubkey.append_byte(0x88); // OP_EQUALVERIFY
+    script_pubkey.append_byte(0xac); // OP_CHECKSIG
+    script_pubkey
+}
+
+/// Creates a P2SH script_pubkey from a script hash.
+///
+/// Generates the standard P2SH script: OP_HASH160 <script_hash> OP_EQUAL
+///
+/// #### Arguments
+/// * `script_hash` - The 20-byte script hash
+///
+/// #### Returns
+/// * `ByteArray` - The script_pubkey as a ByteArray
+fn create_p2sh_script_pubkey(script_hash: Array<u8>) -> ByteArray {
+    let mut script_pubkey = "";
+    script_pubkey.append_byte(0xa9); // OP_HASH160
+    script_pubkey.append_byte(0x14); // Push 20 bytes
+    let mut i = 0_u32;
+    while i < script_hash.len() {
+        script_pubkey.append_byte(*script_hash.at(i));
+        i += 1;
+    }
+    script_pubkey.append_byte(0x87); // OP_EQUAL
+    script_pubkey
+}
+
+/// Creates a P2WPKH script_pubkey from a public key hash.
+///
+/// Generates the standard P2WPKH script: OP_0 <pubkey_hash>
+///
+/// #### Arguments
+/// * `pubkey_hash` - The 20-byte public key hash
+///
+/// #### Returns
+/// * `ByteArray` - The script_pubkey as a ByteArray
+fn create_p2wpkh_script_pubkey(pubkey_hash: Array<u8>) -> ByteArray {
+    let mut script_pubkey = "";
+    script_pubkey.append_byte(0x00); // OP_0
+    script_pubkey.append_byte(0x14); // Push 20 bytes
+    let mut i = 0_u32;
+    while i < pubkey_hash.len() {
+        script_pubkey.append_byte(*pubkey_hash.at(i));
+        i += 1;
+    }
+    script_pubkey
+}
+
+/// Creates a P2WSH script_pubkey from a script hash.
+///
+/// Generates the standard P2WSH script: OP_0 <script_hash>
+///
+/// #### Arguments
+/// * `script_hash` - The 32-byte script hash
+///
+/// #### Returns
+/// * `ByteArray` - The script_pubkey as a ByteArray
+fn create_p2wsh_script_pubkey(script_hash: Array<u8>) -> ByteArray {
+    let mut script_pubkey = "";
+    script_pubkey.append_byte(0x00); // OP_0
+    script_pubkey.append_byte(0x20); // Push 32 bytes
+    let mut i = 0_u32;
+    while i < script_hash.len() {
+        script_pubkey.append_byte(*script_hash.at(i));
+        i += 1;
+    }
+    script_pubkey
+}
+
+/// Creates a P2TR script_pubkey from an output key.
+///
+/// Generates the standard P2TR script: OP_1 <output_key>
+///
+/// #### Arguments
+/// * `output_key` - The 32-byte Taproot output key
+///
+/// #### Returns
+/// * `ByteArray` - The script_pubkey as a ByteArray
+fn create_p2tr_script_pubkey(output_key: Array<u8>) -> ByteArray {
+    let mut script_pubkey = "";
+    script_pubkey.append_byte(0x51); // OP_1 (Taproot version)
+    script_pubkey.append_byte(0x20); // Push 32 bytes
+    let mut i = 0_u32;
+    while i < output_key.len() {
+        script_pubkey.append_byte(*output_key.at(i));
+        i += 1;
+    }
+    script_pubkey
+}
+
 /// Generates a P2PKH (Pay to Public Key Hash) legacy Bitcoin address.
 ///
 /// Creates a traditional Bitcoin address by hashing the public key (HASH160)
@@ -154,18 +263,7 @@ fn generate_p2pkh_address(pubkey_hash: Array<u8>, network: BitcoinNetwork) -> Bi
     let address_bytes = encode_base58_check(payload.span());
     let address: ByteArray = address_bytes.span().into();
 
-    // Create script_pubkey: OP_DUP OP_HASH160 <pubkey_hash> OP_EQUALVERIFY OP_CHECKSIG
-    let mut script_pubkey = "";
-    script_pubkey.append_byte(0x76); // OP_DUP
-    script_pubkey.append_byte(0xa9); // OP_HASH160
-    script_pubkey.append_byte(0x14); // Push 20 bytes
-    let mut i = 0_u32;
-    while i < pubkey_hash.len() {
-        script_pubkey.append_byte(*pubkey_hash.at(i));
-        i += 1;
-    }
-    script_pubkey.append_byte(0x88); // OP_EQUALVERIFY
-    script_pubkey.append_byte(0xac); // OP_CHECKSIG
+    let script_pubkey = create_p2pkh_script_pubkey(pubkey_hash);
 
     BitcoinAddress { address, address_type: BitcoinAddressType::P2PKH, network, script_pubkey }
 }
@@ -212,16 +310,7 @@ fn generate_p2sh_address(pubkey_hash: Array<u8>, network: BitcoinNetwork) -> Bit
     let address_bytes = encode_base58_check(payload.span());
     let address: ByteArray = address_bytes.span().into();
 
-    // Create script_pubkey: OP_HASH160 <script_hash> OP_EQUAL
-    let mut script_pubkey = "";
-    script_pubkey.append_byte(0xa9); // OP_HASH160
-    script_pubkey.append_byte(0x14); // Push 20 bytes
-    let mut i = 0_u32;
-    while i < script_hash.len() {
-        script_pubkey.append_byte(*script_hash.at(i));
-        i += 1;
-    }
-    script_pubkey.append_byte(0x87); // OP_EQUAL
+    let script_pubkey = create_p2sh_script_pubkey(script_hash);
 
     BitcoinAddress { address, address_type: BitcoinAddressType::P2SH, network, script_pubkey }
 }
@@ -257,17 +346,7 @@ fn generate_p2wpkh_address(pubkey_hash: Array<u8>, network: BitcoinNetwork) -> B
         BitcoinNetwork::Regtest => "bcrt",
     };
     let address = Encoder::encode(hrp, data.span());
-    let mut script_pubkey = "";
-
-    script_pubkey.append_byte(0x00); // OP_0
-    script_pubkey.append_byte(0x14); // Push 20 bytes
-
-    let mut i = 0_u32;
-
-    while i < pubkey_hash.len() {
-        script_pubkey.append_byte(*pubkey_hash.at(i));
-        i += 1;
-    }
+    let script_pubkey = create_p2wpkh_script_pubkey(pubkey_hash);
 
     BitcoinAddress { address, address_type: BitcoinAddressType::P2WPKH, network, script_pubkey }
 }
@@ -324,20 +403,7 @@ fn generate_p2wsh_address(public_key: BitcoinPublicKey, network: BitcoinNetwork)
     };
 
     let address = Encoder::encode(hrp, data.span());
-
-    // Create script_pubkey: OP_0 <script_hash>
-    let mut script_pubkey = "";
-
-    script_pubkey.append_byte(0x00); // OP_0
-    script_pubkey.append_byte(0x20); // Push 32 bytes
-
-    let mut i = 0_u32;
-
-    while i < script_hash.len() {
-        script_pubkey.append_byte(*script_hash.at(i));
-
-        i += 1;
-    }
+    let script_pubkey = create_p2wsh_script_pubkey(script_hash);
 
     BitcoinAddress { address, address_type: BitcoinAddressType::P2WSH, network, script_pubkey }
 }
@@ -399,19 +465,7 @@ fn generate_p2tr_address(public_key: BitcoinPublicKey, network: BitcoinNetwork) 
     // Encode using Bech32m - pass 5-bit data directly, not 8-bit
     // We need to build the address manually since bech32m::encode expects 8-bit input
     let address = encode_bech32m_with_5bit_data(hrp, witness_data.span());
-
-    // Create script_pubkey: OP_1 <output_key>
-    let mut script_pubkey = "";
-
-    script_pubkey.append_byte(0x51); // OP_1 (Taproot version)
-    script_pubkey.append_byte(0x20); // Push 32 bytes
-
-    let mut i = 0_u32;
-
-    while i < output_key_bytes.len() {
-        script_pubkey.append_byte(*output_key_bytes.at(i));
-        i += 1;
-    }
+    let script_pubkey = create_p2tr_script_pubkey(output_key_bytes);
 
     BitcoinAddress { address, address_type: BitcoinAddressType::P2TR, network, script_pubkey }
 }
@@ -651,7 +705,7 @@ fn decode_p2pkh_address(address: ByteArray) -> BitcoinAddress {
     );
 
     // Extract pubkey hash (20 bytes after version byte)
-    assert!(payload.len() == 21, "Invalid P2PKH payload length");
+    assert!(payload.len() >= 21, "Invalid P2PKH payload length");
     let mut pubkey_hash = array![];
     let mut i = 1_u32;
     while i < payload.len() {
@@ -659,18 +713,7 @@ fn decode_p2pkh_address(address: ByteArray) -> BitcoinAddress {
         i += 1;
     }
 
-    // Create script_pubkey: OP_DUP OP_HASH160 <pubkey_hash> OP_EQUALVERIFY OP_CHECKSIG
-    let mut script_pubkey = "";
-    script_pubkey.append_byte(0x76); // OP_DUP
-    script_pubkey.append_byte(0xa9); // OP_HASH160
-    script_pubkey.append_byte(0x14); // Push 20 bytes
-    let mut i = 0_u32;
-    while i < pubkey_hash.len() {
-        script_pubkey.append_byte(*pubkey_hash.at(i));
-        i += 1;
-    }
-    script_pubkey.append_byte(0x88); // OP_EQUALVERIFY
-    script_pubkey.append_byte(0xac); // OP_CHECKSIG
+    let script_pubkey = create_p2pkh_script_pubkey(pubkey_hash);
 
     BitcoinAddress {
         address: address_clone, address_type: BitcoinAddressType::P2PKH, network, script_pubkey,
@@ -708,16 +751,7 @@ fn decode_p2sh_address(address: ByteArray) -> BitcoinAddress {
         i += 1;
     }
 
-    // Create script_pubkey: OP_HASH160 <script_hash> OP_EQUAL
-    let mut script_pubkey = "";
-    script_pubkey.append_byte(0xa9); // OP_HASH160
-    script_pubkey.append_byte(0x14); // Push 20 bytes
-    let mut i = 0_u32;
-    while i < script_hash.len() {
-        script_pubkey.append_byte(*script_hash.at(i));
-        i += 1;
-    }
-    script_pubkey.append_byte(0x87); // OP_EQUAL
+    let script_pubkey = create_p2sh_script_pubkey(script_hash);
 
     BitcoinAddress {
         address: address_clone, address_type: BitcoinAddressType::P2SH, network, script_pubkey,
@@ -769,15 +803,7 @@ fn decode_p2wpkh_address(address: ByteArray) -> BitcoinAddress {
     // Verify hash length is 20 bytes
     assert!(pubkey_hash.len() == 20, "Invalid P2WPKH hash length");
 
-    // Create script_pubkey: OP_0 <pubkey_hash>
-    let mut script_pubkey = "";
-    script_pubkey.append_byte(0x00); // OP_0
-    script_pubkey.append_byte(0x14); // Push 20 bytes
-    let mut i = 0_u32;
-    while i < pubkey_hash.len() {
-        script_pubkey.append_byte(*pubkey_hash.at(i));
-        i += 1;
-    }
+    let script_pubkey = create_p2wpkh_script_pubkey(pubkey_hash);
 
     BitcoinAddress {
         address: address_clone, address_type: BitcoinAddressType::P2WPKH, network, script_pubkey,
@@ -829,15 +855,7 @@ fn decode_p2wsh_address(address: ByteArray) -> BitcoinAddress {
     // Verify hash length is 32 bytes
     assert!(script_hash.len() == 32, "Invalid P2WSH hash length");
 
-    // Create script_pubkey: OP_0 <script_hash>
-    let mut script_pubkey = "";
-    script_pubkey.append_byte(0x00); // OP_0
-    script_pubkey.append_byte(0x20); // Push 32 bytes
-    let mut i = 0_u32;
-    while i < script_hash.len() {
-        script_pubkey.append_byte(*script_hash.at(i));
-        i += 1;
-    }
+    let script_pubkey = create_p2wsh_script_pubkey(script_hash);
 
     BitcoinAddress {
         address: address_clone, address_type: BitcoinAddressType::P2WSH, network, script_pubkey,
@@ -889,15 +907,7 @@ fn decode_p2tr_address(address: ByteArray) -> BitcoinAddress {
     // Verify output key length is 32 bytes
     assert!(output_key.len() == 32, "Invalid P2TR output key length");
 
-    // Create script_pubkey: OP_1 <output_key>
-    let mut script_pubkey = "";
-    script_pubkey.append_byte(0x51); // OP_1 (Taproot version)
-    script_pubkey.append_byte(0x20); // Push 32 bytes
-    let mut i = 0_u32;
-    while i < output_key.len() {
-        script_pubkey.append_byte(*output_key.at(i));
-        i += 1;
-    }
+    let script_pubkey = create_p2tr_script_pubkey(output_key);
 
     BitcoinAddress {
         address: address_clone, address_type: BitcoinAddressType::P2TR, network, script_pubkey,
