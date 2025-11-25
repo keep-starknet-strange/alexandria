@@ -27,7 +27,6 @@ const POW_2_32: u64 = 0x100000000;
 ///
 /// #### Returns
 /// * `u32` - The converted 32-bit value in little-endian format
-#[inline(always)]
 fn bytes_to_u32_swap(bytes: @ByteArray, index: usize) -> u32 {
     let len = bytes.len();
     let mut result: u32 = 0;
@@ -48,27 +47,22 @@ fn bytes_to_u32_swap(bytes: @ByteArray, index: usize) -> u32 {
     result
 }
 
-#[inline(always)]
 fn u32_leftrotate(value: u32, shift: u32) -> u32 {
     OptBitRotate::rotl(value, shift.try_into().unwrap())
 }
 
-#[inline(always)]
 fn u32_mod_add(a: u32, b: u32) -> u32 {
     a.wrapping_add(b)
 }
 
-#[inline(always)]
 fn u32_mod_add_3(a: u32, b: u32, c: u32) -> u32 {
     a.wrapping_add(b).wrapping_add(c)
 }
 
-#[inline(always)]
 fn u32_mod_add_4(a: u32, b: u32, c: u32, d: u32) -> u32 {
     a.wrapping_add(b).wrapping_add(c).wrapping_add(d)
 }
 
-#[inline(always)]
 fn u32_byte_swap(value: u32) -> u32 {
     let byte0 = value & 0xff;
     let byte1 = (value / 0x100) & 0xff;
@@ -107,32 +101,26 @@ pub impl RIPEMD160ContextIntoArray of Into<RIPEMD160Context, Array<u32>> {
     }
 }
 
-#[inline(always)]
 fn f(x: u32, y: u32, z: u32) -> u32 {
     x ^ y ^ z
 }
 
-#[inline(always)]
 fn g(x: u32, y: u32, z: u32) -> u32 {
     (x & y) | (~x & z)
 }
 
-#[inline(always)]
 fn h(x: u32, y: u32, z: u32) -> u32 {
     (x | ~y) ^ z
 }
 
-#[inline(always)]
 fn i(x: u32, y: u32, z: u32) -> u32 {
     (x & z) | (y & ~z)
 }
 
-#[inline(always)]
 fn j(x: u32, y: u32, z: u32) -> u32 {
     x ^ (y | ~z)
 }
 
-#[inline(always)]
 fn round_op(
     ref a: u32,
     b: u32,
@@ -152,52 +140,42 @@ fn round_op(
     c = OptBitRotate::rotl(c, 10);
 }
 
-#[inline(always)]
 fn l1(ref a: u32, b: u32, ref c: u32, d: u32, e: u32, x: u32, s: u32) {
     round_op(ref a, b, ref c, d, e, x, s, f(b, c, d), Option::None);
 }
 
-#[inline(always)]
 fn l2(ref a: u32, b: u32, ref c: u32, d: u32, e: u32, x: u32, s: u32) {
     round_op(ref a, b, ref c, d, e, x, s, g(b, c, d), Option::Some(0x5a827999));
 }
 
-#[inline(always)]
 fn l3(ref a: u32, b: u32, ref c: u32, d: u32, e: u32, x: u32, s: u32) {
     round_op(ref a, b, ref c, d, e, x, s, h(b, c, d), Option::Some(0x6ed9eba1));
 }
 
-#[inline(always)]
 fn l4(ref a: u32, b: u32, ref c: u32, d: u32, e: u32, x: u32, s: u32) {
     round_op(ref a, b, ref c, d, e, x, s, i(b, c, d), Option::Some(0x8f1bbcdc));
 }
 
-#[inline(always)]
 fn l5(ref a: u32, b: u32, ref c: u32, d: u32, e: u32, x: u32, s: u32) {
     round_op(ref a, b, ref c, d, e, x, s, j(b, c, d), Option::Some(0xa953fd4e));
 }
 
-#[inline(always)]
 fn r1(ref a: u32, b: u32, ref c: u32, d: u32, e: u32, x: u32, s: u32) {
     round_op(ref a, b, ref c, d, e, x, s, j(b, c, d), Option::Some(0x50a28be6));
 }
 
-#[inline(always)]
 fn r2(ref a: u32, b: u32, ref c: u32, d: u32, e: u32, x: u32, s: u32) {
     round_op(ref a, b, ref c, d, e, x, s, i(b, c, d), Option::Some(0x5c4dd124));
 }
 
-#[inline(always)]
 fn r3(ref a: u32, b: u32, ref c: u32, d: u32, e: u32, x: u32, s: u32) {
     round_op(ref a, b, ref c, d, e, x, s, h(b, c, d), Option::Some(0x6d703ef3));
 }
 
-#[inline(always)]
 fn r4(ref a: u32, b: u32, ref c: u32, d: u32, e: u32, x: u32, s: u32) {
     round_op(ref a, b, ref c, d, e, x, s, g(b, c, d), Option::Some(0x7a6d76e9));
 }
 
-#[inline(always)]
 fn r5(ref a: u32, b: u32, ref c: u32, d: u32, e: u32, x: u32, s: u32) {
     round_op(ref a, b, ref c, d, e, x, s, f(b, c, d), Option::None);
 }
