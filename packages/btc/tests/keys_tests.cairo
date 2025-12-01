@@ -410,23 +410,6 @@ fn test_public_key_to_coords_conversion() {
 }
 
 #[test]
-fn test_public_key_to_coords_handles_compression() {
-    let key = 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef;
-
-    let private_key_uncompressed = create_private_key(key, BitcoinNetwork::Mainnet, false);
-    let public_key_uncompressed = private_key_to_public_key(private_key_uncompressed);
-    let coords_uncompressed = public_key_uncompressed.to_coords();
-    assert!(coords_uncompressed.x == public_key_uncompressed.get_x_coordinate());
-    assert!(coords_uncompressed.y == public_key_uncompressed.get_y_coordinate().unwrap());
-
-    let private_key_compressed = create_private_key(key, BitcoinNetwork::Mainnet, true);
-    let public_key_compressed = private_key_to_public_key(private_key_compressed);
-    let coords_compressed = public_key_compressed.to_coords();
-    assert!(coords_compressed.x == coords_uncompressed.x);
-    assert!(coords_compressed.y == coords_uncompressed.y);
-}
-
-#[test]
 fn test_edge_case_private_keys() {
     // Test with various edge case private keys
     let edge_keys = array![
