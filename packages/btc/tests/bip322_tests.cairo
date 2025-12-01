@@ -6,9 +6,13 @@ use alexandria_btc::bip322::{
 use alexandria_btc::bip340::verify;
 use alexandria_btc::encoder::TransactionEncoderTrait;
 use alexandria_btc::hash::{hash160_from_byte_array, hash256_from_byte_array};
+use alexandria_btc::legacy_signature::verify_ecdsa_signature_auto_recovery;
 use alexandria_btc::taproot::u256_to_32_bytes_be;
 use alexandria_btc::types::{BitcoinPublicKey, BitcoinPublicKeyTrait, BitcoinTransaction};
-use alexandria_bytes::byte_array_ext::SpanU8IntoByteArray;
+use alexandria_bytes::byte_array_ext::{ByteArrayTraitExt, SpanU8IntoByteArray};
+use starknet::SyscallResultTrait;
+use starknet::secp256_trait::{Secp256PointTrait, Secp256Trait};
+use starknet::secp256k1::Secp256k1Point;
 
 const PUB_KEY: u256 = 0x08c80f3bf06bcc87154dcd3cf294aada4ee9b3218d4ba60e2bbaf91c17d351ee;
 const BIP322_VECTOR_PUBKEY_X: u256 =
@@ -177,13 +181,12 @@ fn test_bip322_verify_sig_failure() {
 #[test]
 fn test_bip322_p2wpkh_hash_matches_reference() {
     let message: ByteArray = "Hello World";
-    let public_key = bip322_vector_public_key();
+    let compressed_public_key = bip322_vector_public_key();
 
-    let hash = bip322_msg_hash_p2wpkh(public_key, message);
+    let hash = bip322_msg_hash_p2wpkh(compressed_public_key, message);
 
     let expected_hex: u256 = 0xaf8a0cd31d9b0976e2aab2b82974c4388c4a3532b2ef828b96f14039ca372c14;
     let expected_hex_bytes: ByteArray = u256_to_32_bytes_be(expected_hex).span().into();
-
     assert!(hash == expected_hex_bytes);
 }
 
@@ -222,3 +225,35 @@ fn test_bip322_to_sign_tx_hash_hello_world() {
 
     assert!(hash == expected_bytes);
 }
+
+#[test]
+fn test_bip322_p2wpkh_signature_verifies_with_legacy() {
+    let message: ByteArray = "Hello World";
+    let compressed_public_key = bip322_vector_public_key();
+
+    // Build the SegWit v0 message hash using the standard BIP-322 flow
+    let msg_hash_bytes = bip322_msg_hash_p2wpkh(compressed_public_key.clone(), message);
+    let (_, msg_hash_u256) = ByteArrayTraitExt::read_u256(@msg_hash_bytes, 0);
+    let expected_msg_hash: u256 =
+        0xaf8a0cd31d9b0976e2aab2b82974c4388c4a3532b2ef828b96f14039ca372c14;
+    assert!(msg_hash_u256 == expected_msg_hash, "Message hash mismatch vs reference");
+
+    // Convert to full public key coordinates for signature verification
+    let pubkey_point = Secp256Trait::<
+        Secp256k1Point,
+    >::secp256_ec_get_point_from_x_syscall(BIP322_VECTOR_PUBKEY_X, false)
+        .unwrap_syscall()
+        .unwrap();
+    let (pubkey_x, pubkey_y) = pubkey_point.get_coordinates().unwrap_syscall();
+    let full_public_key = BitcoinPublicKeyTrait::from_coordinates(pubkey_x, pubkey_y);
+
+    // BIP-322 reference signature (parsed form)
+    let r: u256 = 0x6517c8637a7bfc3a154edcba6196d64bbd5b73955cb7da7d1626bcdde466c364;
+    let s: u256 = 0x22bf10d19fc0bb69b4596e306b362acaa835293cf693bb176f7324b531f5afec;
+
+    assert!(
+        verify_ecdsa_signature_auto_recovery(msg_hash_u256, r, s, full_public_key),
+        "BIP-322 signature should verify against legacy verifier",
+    );
+}
+
