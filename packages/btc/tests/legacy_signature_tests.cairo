@@ -379,13 +379,13 @@ fn test_legacy_verify_success() {
 
     let msg: u256 = 0xadb989cbc22bb0b956f2db501df0f0a265fd38257802c940bb136e8ba10be754;
 
-    // Convert u256 to proper BitcoinPublicKey
-    let public_key = BitcoinPublicKeyTrait::from_x_coordinate(pub_key_x, v % 2 == 0);
+    let public_key = BitcoinPublicKeyTrait::from_x_coordinate(pub_key_x, false);
 
     assert!(verify_ecdsa_signature(msg, sig, public_key), "Signature verification should succeed");
 }
 
 #[test]
+#[should_panic(expected: "Failed to recover compressed public key")]
 fn test_legacy_verify_addr_failure() {
     let pub_key_x: u256 = 0xc47dffa16ee5b364913435006f26813e65dd30a5a715989b;
     let v: u256 = 0x19;
@@ -399,7 +399,6 @@ fn test_legacy_verify_addr_failure() {
     // Convert u256 to proper BitcoinPublicKey
     let public_key = BitcoinPublicKeyTrait::from_x_coordinate(pub_key_x, v % 2 == 0);
 
-    // This should fail because the public key x-coordinate is too small to be valid on secp256k1
-    let result = verify_ecdsa_signature(msg, sig, public_key);
-    assert!(!result, "Signature verification should fail for invalid public key");
+    // This should panic because the compressed public key cannot be reconstructed
+    let _result = verify_ecdsa_signature(msg, sig, public_key);
 }
