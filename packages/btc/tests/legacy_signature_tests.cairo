@@ -382,7 +382,7 @@ fn test_legacy_verify_success() {
     // Convert u256 to proper BitcoinPublicKey
     let public_key = BitcoinPublicKeyTrait::from_x_coordinate(pub_key_x, v % 2 == 0);
 
-    verify_ecdsa_signature(msg, sig, public_key);
+    assert!(verify_ecdsa_signature(msg, sig, public_key), "Signature verification should succeed");
 }
 
 #[test]
