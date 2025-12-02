@@ -1,3 +1,7 @@
+use starknet::SyscallResultTrait;
+use starknet::secp256_trait::{Secp256PointTrait, Secp256Trait};
+use starknet::secp256k1::Secp256k1Point;
+
 /// Helper function to convert hex character to nibble (4 bits)
 fn hex_char_to_nibble(c: u8) -> u8 {
     if c >= '0' && c <= '9' {
@@ -41,7 +45,6 @@ pub struct BitcoinPublicKey {
 pub struct BitcoinPublicKeyCoords {
     pub x: u256,
     pub y: u256,
-    pub compressed: bool,
 }
 
 /// Implementation for BitcoinPublicKey
@@ -175,19 +178,37 @@ impl BitcoinPublicKeyImpl of BitcoinPublicKeyTrait {
         Option::Some(y)
     }
 
-    /// Convert to legacy coordinate format for compatibility
+    /// Convert to legacy coordinate format for compatibility.
+    /// Always returns full affine coordinates, recovering `y` when needed.
     ///
     /// #### Returns
-    /// * `BitcoinPublicKeyCoords` - Legacy format with x, y, compressed fields
+    /// * `BitcoinPublicKeyCoords` - Legacy format with x and y coordinates
     fn to_coords(self: @BitcoinPublicKey) -> BitcoinPublicKeyCoords {
         let x = self.get_x_coordinate();
 
-        if self.is_compressed() {
-            BitcoinPublicKeyCoords { x, y: 0, compressed: true }
-        } else {
-            let y = self.get_y_coordinate().unwrap_or(0);
-            BitcoinPublicKeyCoords { x, y, compressed: false }
+        if !self.is_compressed() {
+            let Option::Some(y) = self.get_y_coordinate() else {
+                panic!("Missing y coordinate for uncompressed public key");
+            };
+            return BitcoinPublicKeyCoords { x, y };
         }
+
+        assert!(self.bytes.len() == 33, "Invalid compressed public key length");
+        let prefix = self.bytes.at(0).unwrap();
+        assert!(prefix == 0x02 || prefix == 0x03, "Invalid compressed public key prefix");
+        let y_is_odd = prefix == 0x03;
+
+        let point_option = Secp256Trait::<
+            Secp256k1Point,
+        >::secp256_ec_get_point_from_x_syscall(x, y_is_odd)
+            .unwrap_syscall();
+
+        let Option::Some(point) = point_option else {
+            panic!("Failed to recover compressed public key");
+        };
+
+        let (_, y) = point.get_coordinates().unwrap_syscall();
+        BitcoinPublicKeyCoords { x, y }
     }
 }
 

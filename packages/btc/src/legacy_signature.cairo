@@ -64,8 +64,8 @@ pub fn verify_ecdsa_signature_coords(
     // Step 3: Get coordinates of the recovered public key
     let (recovered_x, recovered_y) = recovered_point.get_coordinates().unwrap_syscall();
 
-    // Step 4: Compare recovered public key with expected public key
-    // For Bitcoin, we need to check both x and y coordinates
+    // Step 4: Compare recovered public key with expected public key coordinates
+    // For Bitcoin, we need to check both x and y coordinate
     recovered_x == public_key.x && recovered_y == public_key.y
 }
 
