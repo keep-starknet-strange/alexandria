@@ -34,7 +34,6 @@ impl SighashTypeIntoU8 of Into<SighashType, u8> {
     }
 }
 
-#[inline(always)]
 pub fn build_to_spend_tx(message: @ByteArray, script_pubkey: @ByteArray) -> BitcoinTransaction {
     let message_hash = tagged_hash_byte_array("BIP0322-signed-message", message);
     let mut script_sig: ByteArray = "";
@@ -57,7 +56,6 @@ pub fn build_to_spend_tx(message: @ByteArray, script_pubkey: @ByteArray) -> Bitc
     }
 }
 
-#[inline(always)]
 pub fn build_to_sign_tx(
     to_spend_tx_id: ByteArray, script_pubkey: ByteArray, is_segwit: bool,
 ) -> BitcoinTransaction {
@@ -82,7 +80,6 @@ pub fn build_to_sign_tx(
     }
 }
 
-#[inline(always)]
 fn build_p2tr_script_pubkey(pub_key: u256) -> ByteArray {
     let mut key_bytes: ByteArray = "";
     key_bytes.append_u256(pub_key);
@@ -91,7 +88,6 @@ fn build_p2tr_script_pubkey(pub_key: u256) -> ByteArray {
     create_p2tr_script_pubkey(key_array)
 }
 
-#[inline(always)]
 fn build_p2wpkh_script_pubkey(public_key: @BitcoinPublicKey) -> ByteArray {
     if !public_key.is_compressed() {
         core::panic_with_felt252('p2wpkh requires compressed key');
@@ -103,7 +99,6 @@ fn build_p2wpkh_script_pubkey(public_key: @BitcoinPublicKey) -> ByteArray {
     create_p2wpkh_script_pubkey(pubkey_hash)
 }
 
-#[inline(always)]
 fn get_transaction_id(tx: BitcoinTransaction) -> ByteArray {
     let mut encoder = TransactionEncoderTrait::new();
     let serialized = encoder.encode_transaction(tx);
@@ -112,7 +107,6 @@ fn get_transaction_id(tx: BitcoinTransaction) -> ByteArray {
     sha256_byte_array(@first_hash)
 }
 
-#[inline(always)]
 fn hash_for_witness_v1(sighash_type: SighashType, tx: @BitcoinTransaction) -> ByteArray {
     let prev_out_scripts = tx.witness[0].witness_stack[0];
 
@@ -171,7 +165,6 @@ fn hash_for_witness_v1(sighash_type: SighashType, tx: @BitcoinTransaction) -> By
     tagged_hash_byte_array("TapSighash", @sig_msg)
 }
 
-#[inline(always)]
 fn hash_for_witness_v0(sighash_type: SighashType, tx: @BitcoinTransaction) -> ByteArray {
     if tx.inputs.len() != 1 || tx.outputs.len() != 1 {
         core::panic_with_felt252('invalid inputs');
@@ -295,7 +288,6 @@ pub fn tweak_public_key(internal_key: u256) -> u256 {
 }
 
 
-#[inline(always)]
 pub fn bip322_msg_hash_p2tr_with_type(
     sighash_type: SighashType, pub_key: u256, message: ByteArray,
 ) -> ByteArray {
@@ -307,7 +299,6 @@ pub fn bip322_msg_hash_p2tr_with_type(
     hash_for_witness_v1(sighash_type, @to_sign_tx)
 }
 
-#[inline(always)]
 pub fn bip322_msg_hash_p2tr(pub_key: u256, message: ByteArray) -> ByteArray {
     bip322_msg_hash_p2tr_with_type(SighashType::ALL, pub_key, message)
 }
@@ -323,7 +314,6 @@ pub fn bip322_msg_hash_p2wpkh_with_type(
     hash_for_witness_v0(sighash_type, @to_sign_tx)
 }
 
-#[inline(always)]
 pub fn bip322_msg_hash_p2wpkh(public_key: BitcoinPublicKey, message: ByteArray) -> ByteArray {
     bip322_msg_hash_p2wpkh_with_type(SighashType::ALL, public_key, message)
 }
