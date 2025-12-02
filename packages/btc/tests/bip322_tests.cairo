@@ -238,13 +238,8 @@ fn test_bip322_p2wpkh_signature_verifies_with_legacy() {
         0xaf8a0cd31d9b0976e2aab2b82974c4388c4a3532b2ef828b96f14039ca372c14;
     assert!(msg_hash_u256 == expected_msg_hash, "Message hash mismatch vs reference");
 
-    // Convert to full public key coordinates for signature verification
-    let pubkey_point = Secp256Trait::<
-        Secp256k1Point,
-    >::secp256_ec_get_point_from_x_syscall(BIP322_VECTOR_PUBKEY_X, false)
-        .unwrap_syscall()
-        .unwrap();
-    let (pubkey_x, pubkey_y) = pubkey_point.get_coordinates().unwrap_syscall();
+    let pubkey_x = 0xc7f12003196442943d8588e01aee840423cc54fc1521526a3b85c2b0cbd58872;
+    let pubkey_y = 0xe18b74c078d89c58ea278942bcc26563f976d0cc31b5a4cedfa42c716b83b1fe;
     let full_public_key = BitcoinPublicKeyTrait::from_coordinates(pubkey_x, pubkey_y);
 
     // BIP-322 reference signature (parsed form)
