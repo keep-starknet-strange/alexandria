@@ -10,9 +10,6 @@ use alexandria_btc::legacy_signature::verify_ecdsa_signature_auto_recovery;
 use alexandria_btc::taproot::u256_to_32_bytes_be;
 use alexandria_btc::types::{BitcoinPublicKey, BitcoinPublicKeyTrait, BitcoinTransaction};
 use alexandria_bytes::byte_array_ext::{ByteArrayTraitExt, SpanU8IntoByteArray};
-use starknet::SyscallResultTrait;
-use starknet::secp256_trait::{Secp256PointTrait, Secp256Trait};
-use starknet::secp256k1::Secp256k1Point;
 
 const PUB_KEY: u256 = 0x08c80f3bf06bcc87154dcd3cf294aada4ee9b3218d4ba60e2bbaf91c17d351ee;
 const BIP322_VECTOR_PUBKEY_X: u256 =
@@ -59,8 +56,23 @@ fn bip322_to_sign_tx_hash(message: ByteArray) -> ByteArray {
 }
 
 fn serialize_and_hash_transaction(tx: BitcoinTransaction) -> ByteArray {
+    // BIP-322 test vectors have the tx_has of the to_sign transaction without the witness
+    // so we strip the witness to verify correct transaction building
+    let tx_to_hash = if tx.is_segwit {
+        BitcoinTransaction {
+            version: tx.version,
+            inputs: tx.inputs,
+            outputs: tx.outputs,
+            locktime: tx.locktime,
+            witness: array![],
+            is_segwit: false,
+        }
+    } else {
+        tx
+    };
+
     let mut encoder = TransactionEncoderTrait::new();
-    let serialized = encoder.encode_transaction(tx);
+    let serialized = encoder.encode_transaction(tx_to_hash);
     hash256_from_byte_array(@serialized).span().into()
 }
 
