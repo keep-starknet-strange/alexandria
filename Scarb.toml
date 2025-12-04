@@ -28,7 +28,7 @@ cairo-version = "2.14.0"
 [workspace.dependencies]
 starknet = "2.14.0"
 cairo_test = "2.14.0"
-snforge_std = "0.51.1"
+snforge_std = "0.53.0"
 
 [workspace.tool.fmt]
 sort-module-level-items = true

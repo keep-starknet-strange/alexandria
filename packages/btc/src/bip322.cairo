@@ -1,12 +1,19 @@
-use alexandria_bytes::byte_array_ext::{ByteArrayTraitExt, SpanU8IntoByteArray};
+use alexandria_bytes::byte_array_ext::{
+    ByteArrayIntoArrayU8, ByteArrayTraitExt, SpanU8IntoByteArray,
+};
+use core::array::ArrayTrait;
 use core::traits::Into;
 use starknet::SyscallResultTrait;
 use starknet::secp256_trait::{Secp256PointTrait, Secp256Trait};
 use starknet::secp256k1::Secp256k1Point;
+use crate::address::{create_p2tr_script_pubkey, create_p2wpkh_script_pubkey};
 use crate::encoder::TransactionEncoderTrait;
-use crate::hash::sha256_byte_array;
+use crate::hash::{hash160_from_byte_array, sha256_byte_array};
 use crate::taproot::{lift_x_coordinate, tagged_hash_byte_array, tagged_hash_u256};
-use crate::types::{BitcoinTransaction, TransactionInput, TransactionOutput, TransactionWitness};
+use crate::types::{
+    BitcoinPublicKey, BitcoinPublicKeyTrait, BitcoinTransaction, TransactionInput,
+    TransactionOutput, TransactionWitness,
+};
 
 const EMPTY_32_BYTES: [u8; 32] = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -27,8 +34,7 @@ impl SighashTypeIntoU8 of Into<SighashType, u8> {
     }
 }
 
-#[inline(always)]
-fn build_to_spend_tx(message: @ByteArray, script_pubkey: @ByteArray) -> BitcoinTransaction {
+pub fn build_to_spend_tx(message: @ByteArray, script_pubkey: @ByteArray) -> BitcoinTransaction {
     let message_hash = tagged_hash_byte_array("BIP0322-signed-message", message);
     let mut script_sig: ByteArray = "";
 
@@ -50,11 +56,15 @@ fn build_to_spend_tx(message: @ByteArray, script_pubkey: @ByteArray) -> BitcoinT
     }
 }
 
-#[inline(always)]
-fn build_to_sign_tx(to_spend_tx_id: ByteArray, script_pubkey: ByteArray) -> BitcoinTransaction {
+pub fn build_to_sign_tx(
+    to_spend_tx_id: ByteArray, script_pubkey: ByteArray, is_segwit: bool,
+) -> BitcoinTransaction {
     let mut script: ByteArray = "";
 
     script.append_byte(0x6a);
+
+    let witness_stack = array![script_pubkey];
+    let witness = array![TransactionWitness { witness_stack }];
 
     BitcoinTransaction {
         version: 0,
@@ -65,23 +75,30 @@ fn build_to_sign_tx(to_spend_tx_id: ByteArray, script_pubkey: ByteArray) -> Bitc
             },
         ],
         outputs: array![TransactionOutput { value: 0, script_pubkey: script }],
-        witness: array![TransactionWitness { witness_stack: array![script_pubkey] }],
-        is_segwit: false,
+        witness,
+        is_segwit,
     }
 }
 
-#[inline(always)]
-fn get_script_pubkey(pub_key: u256) -> ByteArray {
-    let mut res: ByteArray = "";
+fn build_p2tr_script_pubkey(pub_key: u256) -> ByteArray {
+    let mut key_bytes: ByteArray = "";
+    key_bytes.append_u256(pub_key);
+    let key_array: Array<u8> = key_bytes.into();
 
-    res.append_byte(0x51_u8);
-    res.append_byte(0x20_u8);
-    res.append_u256(pub_key);
-
-    res
+    create_p2tr_script_pubkey(key_array)
 }
 
-#[inline(always)]
+fn build_p2wpkh_script_pubkey(public_key: @BitcoinPublicKey) -> ByteArray {
+    if !public_key.is_compressed() {
+        core::panic_with_felt252('p2wpkh requires compressed key');
+    }
+
+    let pubkey_bytes = public_key.bytes.clone();
+    let pubkey_hash = hash160_from_byte_array(@pubkey_bytes);
+
+    create_p2wpkh_script_pubkey(pubkey_hash)
+}
+
 fn get_transaction_id(tx: BitcoinTransaction) -> ByteArray {
     let mut encoder = TransactionEncoderTrait::new();
     let serialized = encoder.encode_transaction(tx);
@@ -90,7 +107,6 @@ fn get_transaction_id(tx: BitcoinTransaction) -> ByteArray {
     sha256_byte_array(@first_hash)
 }
 
-#[inline(always)]
 fn hash_for_witness_v1(sighash_type: SighashType, tx: @BitcoinTransaction) -> ByteArray {
     let prev_out_scripts = tx.witness[0].witness_stack[0];
 
@@ -149,6 +165,114 @@ fn hash_for_witness_v1(sighash_type: SighashType, tx: @BitcoinTransaction) -> By
     tagged_hash_byte_array("TapSighash", @sig_msg)
 }
 
+fn hash_for_witness_v0(sighash_type: SighashType, tx: @BitcoinTransaction) -> ByteArray {
+    if tx.inputs.len() != 1 || tx.outputs.len() != 1 {
+        core::panic_with_felt252('invalid inputs');
+    }
+    if tx.witness.len() == 0 || tx.witness[0].witness_stack.len() == 0 {
+        core::panic_with_felt252('missing witness');
+    }
+
+    let prev_out_script = tx.witness[0].witness_stack[0];
+
+    if prev_out_script.len() < 22 {
+        core::panic_with_felt252('invalid script len');
+    }
+    if prev_out_script.at(0).unwrap() != 0x00 || prev_out_script.at(1).unwrap() != 0x14 {
+        core::panic_with_felt252('invalid p2wpkh script');
+    }
+
+    let mut pubkey_hash: ByteArray = "";
+    let mut idx: u32 = 2;
+    while idx < prev_out_script.len() {
+        pubkey_hash.append_byte(prev_out_script.at(idx).unwrap());
+        idx += 1;
+    }
+
+    let input = tx.inputs[0];
+    let output = tx.outputs[0];
+
+    let mut prevouts: ByteArray = "";
+    prevouts.append(input.previous_txid);
+    prevouts.append_u32_le(*input.previous_vout);
+    let hash_prevouts = {
+        let first = sha256_byte_array(@prevouts);
+        sha256_byte_array(@first)
+    };
+
+    let mut sequences: ByteArray = "";
+    sequences.append_u32_le(*input.sequence);
+    let hash_sequence = {
+        let first = sha256_byte_array(@sequences);
+        sha256_byte_array(@first)
+    };
+
+    let mut outputs: ByteArray = "";
+    outputs.append_u64_le(*output.value);
+    let script_len = output.script_pubkey.len();
+    if script_len < 0xfd {
+        outputs.append_byte(script_len.try_into().unwrap());
+    } else if script_len <= 0xffff {
+        outputs.append_byte(0xfd);
+        outputs.append_u16_le(script_len.try_into().unwrap());
+    } else if script_len <= 0xffffffff {
+        outputs.append_byte(0xfe);
+        outputs.append_u32_le(script_len.try_into().unwrap());
+    } else {
+        outputs.append_byte(0xff);
+        outputs.append_u64_le(script_len.try_into().unwrap());
+    }
+    let output_script = output.script_pubkey.clone();
+    outputs.append(@output_script);
+    let hash_outputs = {
+        let first = sha256_byte_array(@outputs);
+        sha256_byte_array(@first)
+    };
+
+    let mut script_code: ByteArray = "";
+    script_code.append_byte(0x76);
+    script_code.append_byte(0xa9);
+    script_code.append_byte(0x14);
+    script_code.append(@pubkey_hash);
+    script_code.append_byte(0x88);
+    script_code.append_byte(0xac);
+
+    let mut sighash_msg: ByteArray = "";
+    sighash_msg.append_u32_le(*tx.version);
+    sighash_msg.append(@hash_prevouts);
+    sighash_msg.append(@hash_sequence);
+    sighash_msg.append(input.previous_txid);
+    sighash_msg.append_u32_le(*input.previous_vout);
+
+    let script_code_len = script_code.len();
+    if script_code_len < 0xfd {
+        sighash_msg.append_byte(script_code_len.try_into().unwrap());
+    } else if script_code_len <= 0xffff {
+        sighash_msg.append_byte(0xfd);
+        sighash_msg.append_u16_le(script_code_len.try_into().unwrap());
+    } else if script_code_len <= 0xffffffff {
+        sighash_msg.append_byte(0xfe);
+        sighash_msg.append_u32_le(script_code_len.try_into().unwrap());
+    } else {
+        sighash_msg.append_byte(0xff);
+        sighash_msg.append_u64_le(script_code_len.try_into().unwrap());
+    }
+
+    sighash_msg.append(@script_code);
+    sighash_msg.append_u64_le(0);
+    sighash_msg.append_u32_le(*input.sequence);
+    sighash_msg.append(@hash_outputs);
+    sighash_msg.append_u32_le(*tx.locktime);
+
+    let sighash_flag: u32 = match sighash_type {
+        SighashType::DEFAULT | SighashType::ALL => 1_u32,
+    };
+    sighash_msg.append_u32_le(sighash_flag);
+
+    let first_hash = sha256_byte_array(@sighash_msg);
+    sha256_byte_array(@first_hash)
+}
+
 pub fn tweak_public_key(internal_key: u256) -> u256 {
     let P = lift_x_coordinate(internal_key).unwrap();
     let mut internal_key_bytes: ByteArray = "";
@@ -163,19 +287,33 @@ pub fn tweak_public_key(internal_key: u256) -> u256 {
     x
 }
 
-#[inline(always)]
-pub fn bip322_msg_hash_with_type(
+
+pub fn bip322_msg_hash_p2tr_with_type(
     sighash_type: SighashType, pub_key: u256, message: ByteArray,
 ) -> ByteArray {
-    let script_pubkey = get_script_pubkey(pub_key);
+    let script_pubkey = build_p2tr_script_pubkey(pub_key);
     let to_spend_tx = build_to_spend_tx(@message, @script_pubkey);
     let to_spend_tx_id = get_transaction_id(to_spend_tx);
-    let to_sign_tx = build_to_sign_tx(to_spend_tx_id, script_pubkey);
+    let to_sign_tx = build_to_sign_tx(to_spend_tx_id, script_pubkey.clone(), false);
 
     hash_for_witness_v1(sighash_type, @to_sign_tx)
 }
 
-#[inline(always)]
-pub fn bip322_msg_hash(pub_key: u256, message: ByteArray) -> ByteArray {
-    bip322_msg_hash_with_type(SighashType::ALL, pub_key, message)
+pub fn bip322_msg_hash_p2tr(pub_key: u256, message: ByteArray) -> ByteArray {
+    bip322_msg_hash_p2tr_with_type(SighashType::ALL, pub_key, message)
+}
+
+pub fn bip322_msg_hash_p2wpkh_with_type(
+    sighash_type: SighashType, public_key: BitcoinPublicKey, message: ByteArray,
+) -> ByteArray {
+    let script_pubkey = build_p2wpkh_script_pubkey(@public_key);
+    let to_spend_tx = build_to_spend_tx(@message, @script_pubkey);
+    let to_spend_tx_id = get_transaction_id(to_spend_tx);
+    let to_sign_tx = build_to_sign_tx(to_spend_tx_id, script_pubkey.clone(), true);
+
+    hash_for_witness_v0(sighash_type, @to_sign_tx)
+}
+
+pub fn bip322_msg_hash_p2wpkh(public_key: BitcoinPublicKey, message: ByteArray) -> ByteArray {
+    bip322_msg_hash_p2wpkh_with_type(SighashType::ALL, public_key, message)
 }
