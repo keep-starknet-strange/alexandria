@@ -395,18 +395,18 @@ fn test_public_key_to_coords_conversion() {
     let public_key_compressed = private_key_to_public_key(private_key_compressed);
     let coords_compressed = public_key_compressed.to_coords();
 
-    assert!(coords_compressed.compressed == true);
     assert!(coords_compressed.x == public_key_compressed.get_x_coordinate());
-    assert!(coords_compressed.y == 0); // y should be 0 for compressed
 
     // Test uncompressed key conversion
     let private_key_uncompressed = create_private_key(key, BitcoinNetwork::Mainnet, false);
     let public_key_uncompressed = private_key_to_public_key(private_key_uncompressed);
     let coords_uncompressed = public_key_uncompressed.to_coords();
 
-    assert!(coords_uncompressed.compressed == false);
     assert!(coords_uncompressed.x == public_key_uncompressed.get_x_coordinate());
     assert!(coords_uncompressed.y == public_key_uncompressed.get_y_coordinate().unwrap());
+
+    // y-coordinate should match between compressed and uncompressed representations
+    assert!(coords_compressed.y == coords_uncompressed.y);
 }
 
 #[test]

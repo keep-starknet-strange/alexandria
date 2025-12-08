@@ -16,7 +16,7 @@ This package provides a comprehensive set of Cairo modules for Bitcoin protocol 
 packages/btc/
 ├── address.cairo           # Bitcoin address generation and validation
 ├── bip340.cairo           # BIP-340 Schnorr signatures for Taproot
-├── bip322.cairo           # BIP-322 message hashing for Taproot
+├── bip322.cairo           # BIP-322 message hashing
 ├── decoder.cairo          # Bitcoin transaction decoding logic
 ├── encoder.cairo          # Bitcoin transaction encoding logic
 ├── hash.cairo             # Bitcoin cryptographic hash functions
@@ -37,11 +37,11 @@ This module provides functionality for generating and validating Bitcoin address
 #### Features
 
 - Generates addresses for all Bitcoin types:
-    - `P2PKH` (Pay to Public Key Hash) - Legacy addresses
-    - `P2SH` (Pay to Script Hash) - Script addresses
-    - `P2WPKH` (Pay to Witness Public Key Hash) - SegWit v0
-    - `P2WSH` (Pay to Witness Script Hash) - SegWit v0 scripts
-    - `P2TR` (Pay to Taproot) - SegWit v1 Taproot
+  - `P2PKH` (Pay to Public Key Hash) - Legacy addresses
+  - `P2SH` (Pay to Script Hash) - Script addresses
+  - `P2WPKH` (Pay to Witness Public Key Hash) - SegWit v0
+  - `P2WSH` (Pay to Witness Script Hash) - SegWit v0 scripts
+  - `P2TR` (Pay to Taproot) - SegWit v1 Taproot
 - Supports mainnet, testnet, and regtest networks
 - Address validation and format detection
 
@@ -113,7 +113,17 @@ This module implements BIP-322 message hasing used in Bitcoin Taproot.
 let pubkey: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
 let message = "Message to sign";
 let sighash_type = SighashType.ALL;
-let message_hash = bip322_msg_hash(sighash_type, pubkey, message);
+let message_hash = bip322_msg_hash_p2tr(sighash_type, pubkey, message);
+// Process hash sig verify or other flows
+```
+
+```rust
+let pubkey_x: u256 = 0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659;
+let pubkey = BitcoinPublicKeyTrait::from_x_coordinate(pubkey_x, true)
+
+let message = "Message to sign";
+let sighash_type = SighashType.ALL;
+let message_hash = bip322_msg_hash_p2wpkh(sighash_type, pubkey, message);
 // Process hash sig verify or other flows
 ```
 
@@ -169,16 +179,17 @@ These modules handle Bitcoin transaction serialization and deserialization in th
 #### Features
 
 - **Encoder**: Serializes Bitcoin transactions to raw bytes
-    - Legacy and SegWit transaction formats
-    - Compact size encoding for variable-length fields
-    - Little-endian integer encoding
-    - Witness data serialization
+
+  - Legacy and SegWit transaction formats
+  - Compact size encoding for variable-length fields
+  - Little-endian integer encoding
+  - Witness data serialization
 
 - **Decoder**: Parses Bitcoin transactions from raw bytes
-    - Automatic SegWit detection
-    - Compact size decoding
-    - Transaction input/output parsing
-    - Witness data extraction
+  - Automatic SegWit detection
+  - Compact size decoding
+  - Transaction input/output parsing
+  - Witness data extraction
 
 #### Example
 

@@ -134,7 +134,7 @@ fn encode_base58_check(payload: Span<u8>) -> Array<u8> {
 ///
 /// #### Returns
 /// * `ByteArray` - The script_pubkey as a ByteArray
-fn create_p2pkh_script_pubkey(pubkey_hash: Array<u8>) -> ByteArray {
+pub fn create_p2pkh_script_pubkey(pubkey_hash: Array<u8>) -> ByteArray {
     let mut script_pubkey = "";
     script_pubkey.append_byte(0x76); // OP_DUP
     script_pubkey.append_byte(0xa9); // OP_HASH160
@@ -158,7 +158,7 @@ fn create_p2pkh_script_pubkey(pubkey_hash: Array<u8>) -> ByteArray {
 ///
 /// #### Returns
 /// * `ByteArray` - The script_pubkey as a ByteArray
-fn create_p2sh_script_pubkey(script_hash: Array<u8>) -> ByteArray {
+pub fn create_p2sh_script_pubkey(script_hash: Array<u8>) -> ByteArray {
     let mut script_pubkey = "";
     script_pubkey.append_byte(0xa9); // OP_HASH160
     script_pubkey.append_byte(0x14); // Push 20 bytes
@@ -180,7 +180,7 @@ fn create_p2sh_script_pubkey(script_hash: Array<u8>) -> ByteArray {
 ///
 /// #### Returns
 /// * `ByteArray` - The script_pubkey as a ByteArray
-fn create_p2wpkh_script_pubkey(pubkey_hash: Array<u8>) -> ByteArray {
+pub fn create_p2wpkh_script_pubkey(pubkey_hash: Array<u8>) -> ByteArray {
     let mut script_pubkey = "";
     script_pubkey.append_byte(0x00); // OP_0
     script_pubkey.append_byte(0x14); // Push 20 bytes
@@ -201,7 +201,7 @@ fn create_p2wpkh_script_pubkey(pubkey_hash: Array<u8>) -> ByteArray {
 ///
 /// #### Returns
 /// * `ByteArray` - The script_pubkey as a ByteArray
-fn create_p2wsh_script_pubkey(script_hash: Array<u8>) -> ByteArray {
+pub fn create_p2wsh_script_pubkey(script_hash: Array<u8>) -> ByteArray {
     let mut script_pubkey = "";
     script_pubkey.append_byte(0x00); // OP_0
     script_pubkey.append_byte(0x20); // Push 32 bytes
@@ -222,7 +222,7 @@ fn create_p2wsh_script_pubkey(script_hash: Array<u8>) -> ByteArray {
 ///
 /// #### Returns
 /// * `ByteArray` - The script_pubkey as a ByteArray
-fn create_p2tr_script_pubkey(output_key: Array<u8>) -> ByteArray {
+pub fn create_p2tr_script_pubkey(output_key: Array<u8>) -> ByteArray {
     let mut script_pubkey = "";
     script_pubkey.append_byte(0x51); // OP_1 (Taproot version)
     script_pubkey.append_byte(0x20); // Push 32 bytes
