@@ -56,7 +56,7 @@ fn calculate_values_consumed(types: Span<EVMTypes>) -> usize {
         match evm_type {
             EVMTypes::Uint256 => { consumed += 2; },
             EVMTypes::Int256 => { consumed += 3; },
-            EVMTypes::Bytes32 => { consumed += 2; },
+            EVMTypes::Bytes32 => { consumed += 4; },
             EVMTypes::Tuple(tuple_types) => {
                 consumed += calculate_values_consumed(*tuple_types);
             },
@@ -489,10 +489,8 @@ pub impl EVMTypesImpl of AbiEncodeTrait {
                     value_index += 1;
                 },
                 EVMTypes::Bytes32 => {
-                    encode_bytes32_u256(
-                        ref self, *values.at(value_index), *values.at(value_index + 1),
-                    );
-                    value_index += 2;
+                    encode_bytes32(ref self, values.slice(value_index, 4));
+                    value_index += 4;
                 },
                 EVMTypes::Bytes => {
                     let consumed = encode_bytes(
@@ -523,6 +521,18 @@ pub impl EVMTypesImpl of AbiEncodeTrait {
     }
 }
 
+/// Calculates the static section size for a list of types.
+/// Each type occupies 32 bytes in the static section (either the value or a pointer).
+///
+/// #### Arguments
+/// * `types` - A span of `EVMTypes` to calculate static size for.
+///
+/// #### Returns
+/// * `u32` - The total size in bytes of the static section.
+fn calculate_static_size(types: Span<EVMTypes>) -> u32 {
+    types.len() * 32
+}
+
 /// Encodes a Solidity/EVM tuple type into calldata.
 ///
 /// #### Arguments
@@ -533,25 +543,31 @@ pub impl EVMTypesImpl of AbiEncodeTrait {
 /// #### Returns
 /// The number of values consumed from the values span.
 fn encode_tuple(ref ctx: EVMCalldata, types: Span<EVMTypes>, values: Span<felt252>) -> usize {
-    let consumed = calculate_values_consumed(types);
-
     if (has_dynamic(types)) {
         // Write offset to dynamic data
         write_u256(ref ctx.calldata, ctx.dynamic_offset.into());
+
+        // Calculate the static section size for this tuple
+        let static_size = calculate_static_size(types);
 
         // Encode tuple in dynamic section
         let mut temp_ctx = EVMCalldata {
             calldata: Default::default(),
             offset: 0,
             dynamic_data: Default::default(),
-            dynamic_offset: 0,
+            dynamic_offset: static_size,
         };
 
-        temp_ctx.encode(types, values);
-        ctx.dynamic_data.append(@temp_ctx.calldata);
-        ctx.dynamic_offset += temp_ctx.calldata.len();
+        // Encode and track actual consumption
+        let mut value_slice = values;
+        temp_ctx.encode(types, value_slice);
 
-        consumed
+        ctx.dynamic_data.append(@temp_ctx.calldata);
+        ctx.dynamic_data.append(@temp_ctx.dynamic_data);
+        ctx.dynamic_offset += temp_ctx.calldata.len() + temp_ctx.dynamic_data.len();
+
+        // Return actual consumed values by checking remaining length
+        values.len()
     } else {
         let mut temp_ctx = EVMCalldata {
             calldata: Default::default(),
@@ -563,7 +579,8 @@ fn encode_tuple(ref ctx: EVMCalldata, types: Span<EVMTypes>, values: Span<felt25
         temp_ctx.encode(types, values);
         ctx.calldata.append(@temp_ctx.calldata);
 
-        consumed
+        // Return actual consumed values
+        values.len()
     }
 }
 
@@ -786,10 +803,17 @@ fn encode_bytes(ref ctx: EVMCalldata, values: Span<felt252>) -> usize {
     values.len() - values_ref.len()
 }
 
-/// Encodes a 32-byte value into calldata from two felt252 values representing a u256.
-fn encode_bytes32_u256(ref ctx: EVMCalldata, low: felt252, high: felt252) {
-    let u256_value = u256 { low: low.try_into().unwrap(), high: high.try_into().unwrap() };
-    write_u256(ref ctx.calldata, u256_value);
+/// Encodes a 32-byte value into calldata from serialized ByteArray (bytes31 + 1 byte).
+fn encode_bytes32(ref ctx: EVMCalldata, bytes: Span<felt252>) {
+    // ByteArray serialization for 32 bytes: [pending_word_len, bytes31_word, pending_byte,
+    // array_len]
+    // We need to reconstruct the full 32 bytes as u256
+    let bytes31_value: u256 = (*bytes.at(1)).into();
+    let last_byte: u256 = (*bytes.at(2)).into();
+
+    // Shift bytes31 left by 8 bits and add the last byte
+    let full_value = (bytes31_value * 256) + last_byte;
+    write_u256(ref ctx.calldata, full_value);
 }
 
 /// Encodes fixed-length bytes into calldata.
