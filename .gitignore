@@ -28,3 +28,6 @@ book/
 
 build
 gas_report_diff.json
+
+# macOS
+.DS_Store

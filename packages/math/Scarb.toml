@@ -4,7 +4,7 @@ version.workspace = true
 description = "A set of math libraries and algorithms"
 homepage = "https://github.com/keep-starknet-strange/alexandria/tree/main/packages/math"
 edition = "2023_11"
-cairo-version = "2.14.0"
+cairo-version = "2.15.0"
 
 experimental-features = ["user_defined_inline_macros"]
 
