@@ -34,7 +34,7 @@ snforge_std = "0.54.0"
 sort-module-level-items = true
 
 [workspace.package]
-version = "0.8.0"
+version = "0.9.0"
 
 [profile.coverage]
 sierra = true
