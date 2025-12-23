@@ -57,7 +57,7 @@ Current version can be found in the [toml file](./Scarb.toml)
 
 ## Version
 
-Current version is **0.8.0** compatible with Cairo **2.14.0**
+Current version is **0.9.0** compatible with Cairo **2.15.0**
 
 
 ## Packages
@@ -88,19 +88,19 @@ This repository is composed of multiple crates:
 
 ### Installation from Scarb registries
 
-- ASCII : `scarb add alexandria_ascii@0.8.0`
-- Data Structures : `scarb add alexandria_data_structures@0.8.0`
-- Encoding : `scarb add alexandria_encoding@0.8.0`
-- Linalg : `scarb add alexandria_linalg@0.8.0`
-- Math : `scarb add alexandria_math@0.8.0`
-- Numeric : `scarb add alexandria_numeric@0.8.0`
-- Searching : `scarb add alexandria_searching@0.8.0`
-- Sorting : `scarb add alexandria_sorting@0.8.0`
-- Storage : `scarb add alexandria_storage@0.8.0`
-- Bytes : `scarb add alexandria_bytes@0.8.0`
-- Evm : `scarb add alexandria_evm@0.8.0`
-- Bitcoin : `scarb add alexandria_btc@0.8.0`
-- Json : `scarb add alexandria_json@0.8.0`
+- ASCII : `scarb add alexandria_ascii@0.9.0`
+- Data Structures : `scarb add alexandria_data_structures@0.9.0`
+- Encoding : `scarb add alexandria_encoding@0.9.0`
+- Linalg : `scarb add alexandria_linalg@0.9.0`
+- Math : `scarb add alexandria_math@0.9.0`
+- Numeric : `scarb add alexandria_numeric@0.9.0`
+- Searching : `scarb add alexandria_searching@0.9.0`
+- Sorting : `scarb add alexandria_sorting@0.9.0`
+- Storage : `scarb add alexandria_storage@0.9.0`
+- Bytes : `scarb add alexandria_bytes@0.9.0`
+- Evm : `scarb add alexandria_evm@0.9.0`
+- Bitcoin : `scarb add alexandria_btc@0.9.0`
+- Json : `scarb add alexandria_json@0.9.0`
 
 
 ## Usage
