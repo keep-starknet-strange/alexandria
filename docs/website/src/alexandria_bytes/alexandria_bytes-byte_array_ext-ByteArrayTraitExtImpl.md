@@ -20,7 +20,7 @@ fn new(size: usize, mut data: Array<u128>) -> ByteArray
 
 ### new_empty
 
-instantiate a new ByteArray
+Instantiate a new ByteArray
 
 Fully qualified path: `alexandria_bytes::byte_array_ext::ByteArrayTraitExtImpl::new_empty`
 
