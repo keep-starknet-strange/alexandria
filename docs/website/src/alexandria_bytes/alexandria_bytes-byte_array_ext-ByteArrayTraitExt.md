@@ -51,7 +51,7 @@ fn size(self: @ByteArray) -> usize
 
 ### read_u8
 
-Reads a 8-bit unsigned integer from the given offset.
+Reads an 8-bit unsigned integer from the given offset.
 
 #### Arguments
 
@@ -284,7 +284,7 @@ fn read_bytes(self: @ByteArray, offset: usize, size: usize) -> (usize, ByteArray
 
 ### append_u8
 
-Appends a 8-bit unsigned integer to the `ByteArray`.
+Appends an 8-bit unsigned integer to the `ByteArray`.
 
 #### Arguments
 
