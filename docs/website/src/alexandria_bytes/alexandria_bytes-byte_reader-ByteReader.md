@@ -191,7 +191,7 @@ Reads a u8 unsigned integer
 
 #### Returns
 
-- `Option<u8>` - If there are enough bytes remaining an optional integer is returned
+- `Option<u8>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_u8`
 
@@ -205,7 +205,7 @@ Reads a u16 unsigned integer in big endian byte order
 
 #### Returns
 
-- `Option<u16>` - If there are enough bytes remaining an optional integer is returned
+- `Option<u16>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_u16`
 
@@ -233,7 +233,7 @@ Reads a u32 unsigned integer in big endian byte order
 
 #### Returns
 
-- `Option<u32>` - If there are enough bytes remaining an optional integer is returned
+- `Option<u32>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_u32`
 
@@ -247,7 +247,7 @@ Reads a u32 unsigned integer in little endian byte order
 
 #### Returns
 
-- `Option<u32>` - If there are enough bytes remaining an optional integer is returned
+- `Option<u32>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_u32_le`
 
@@ -261,7 +261,7 @@ Reads a u64 unsigned integer in big endian byte order
 
 #### Returns
 
-- `Option<u64>` - If there are enough bytes remaining an optional integer is returned
+- `Option<u64>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_u64`
 
@@ -275,7 +275,7 @@ Reads a u64 unsigned integer in little endian byte order
 
 #### Returns
 
-- `Option<u64>` - If there are enough bytes remaining an optional integer is returned
+- `Option<u64>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_u64_le`
 
@@ -289,7 +289,7 @@ Reads a u128 unsigned integer in big endian byte order
 
 #### Returns
 
-- `Option<u218>` - If there are enough bytes remaining an optional integer is returned
+- `Option<u218>` - If there are enough bytes remainin,g an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_u128`
 
@@ -303,7 +303,7 @@ Reads a u128 unsigned integer in little endian byte order
 
 #### Returns
 
-- `Option<u218>` - If there are enough bytes remaining an optional integer is returned
+- `Option<u218>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_u128_le`
 
@@ -317,7 +317,7 @@ Reads a u256 unsigned integer in big endian byte order
 
 #### Returns
 
-- `Option<u256>` - If there are enough bytes remaining an optional integer is returned
+- `Option<u256>` - If there are enough bytes remainin,g an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_u256`
 
@@ -331,7 +331,7 @@ Reads a u256 unsigned integer in little endian byte order
 
 #### Returns
 
-- `Option<u256>` - If there are enough bytes remaining an optional integer is returned
+- `Option<u256>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_u256_le`
 
@@ -345,7 +345,7 @@ Reads a u512 unsigned integer in big endian byte order
 
 #### Returns
 
-- `Option<u512>` - If there are enough bytes remaining an optional integer is returned
+- `Option<u512>` - If there are enough bytes remainin,g an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_u512`
 
@@ -359,7 +359,7 @@ Reads a u512 unsigned integer in little endian byte order
 
 #### Returns
 
-- `Option<u512>` - If there are enough bytes remaining an optional integer is returned
+- `Option<u512>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_u512_le`
 
@@ -373,7 +373,7 @@ Reads an i8 signed integer in two's complement encoding from the ByteArray
 
 #### Returns
 
-- `Option<i8>` - If there are enough bytes remaining an optional integer is returned
+- `Option<i8>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_i8`
 
@@ -387,7 +387,7 @@ Reads an i16 signed integer in two's complement encoding from the ByteArray in b
 
 #### Returns
 
-- `Option<i16>` - If there are enough bytes remaining an optional integer is returned
+- `Option<i16>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_i16`
 
@@ -401,7 +401,7 @@ Reads an i16 signed integer in two's complement encoding from the ByteArray in l
 
 #### Returns
 
-- `Option<i16>` - If there are enough bytes remaining an optional integer is returned
+- `Option<i16>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_i16_le`
 
@@ -415,7 +415,7 @@ Reads an i32 signed integer in two's complement encoding from the ByteArray in b
 
 #### Returns
 
-- `Option<i32>` - If there are enough bytes remaining an optional integer is returned
+- `Option<i32>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_i32`
 
@@ -429,7 +429,7 @@ Reads an i32 signed integer in two's complement encoding from the ByteArray in l
 
 #### Returns
 
-- `Option<i32>` - If there are enough bytes remaining an optional integer is returned
+- `Option<i32>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_i32_le`
 
@@ -443,7 +443,7 @@ Reads an i64 signed integer in two's complement encoding from the ByteArray in b
 
 #### Returns
 
-- `Option<i64>` - If there are enough bytes remaining an optional integer is returned
+- `Option<i64>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_i64`
 
@@ -457,7 +457,7 @@ Reads an i64 signed integer in two's complement encoding from the ByteArray in l
 
 #### Returns
 
-- `Option<i64>` - If there are enough bytes remaining an optional integer is returned
+- `Option<i64>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_i64_le`
 
@@ -471,7 +471,7 @@ Reads an i128 signed integer in two's complement encoding from the ByteArray in 
 
 #### Returns
 
-- `Option<i128>` - If there are enough bytes remaining an optional integer is returned
+- `Option<i128>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_i128`
 
@@ -485,7 +485,7 @@ Reads an i128 signed integer in two's complement encoding from the ByteArray in 
 
 #### Returns
 
-- `Option<i128>` - If there are enough bytes remaining an optional integer is returned
+- `Option<i128>` - If there are enough bytes remaining, an optional integer is returned
 
 Fully qualified path: `alexandria_bytes::byte_reader::ByteReader::read_i128_le`
 
@@ -495,7 +495,7 @@ fn read_i128_le(ref self: ByteReaderState<T>) -> Option<i128>
 
 ### len
 
-Remaining length count relative to what has already been consume/read
+Remaining length count relative to what has already been consumed/read
 
 #### Returns
 
