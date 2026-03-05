@@ -1,0 +1,24 @@
+[book]
+authors = ["Alexandria contributors"]
+language = "en"
+src = "src"
+title = "Alexandria - Cairo Standard Library"
+description = "Alexandria is a community maintained standard library for Cairo. A collection of useful algorithms and data structures."
+
+[build]
+create-missing = false
+
+[output.html]
+git-repository-url = "https://github.com/keep-starknet-strange/alexandria"
+edit-url-template = "https://github.com/keep-starknet-strange/alexandria/edit/main/{path}"
+no-section-label = false
+
+[output.html.playground]
+runnable = false
+
+[output.html.fold]
+enable = true
+level = 2
+
+[output.html.code.hidelines]
+cairo = "# "

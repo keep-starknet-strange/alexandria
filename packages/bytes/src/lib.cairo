@@ -1,3 +1,8 @@
+//! # Alexandria Bytes
+//!
+//! Byte manipulation utilities for Cairo, including a `Bytes` type (similar to Solidity bytes),
+//! bit arrays, byte readers, and byte array extensions.
+
 pub mod bit_array;
 pub mod byte_appender;
 pub mod byte_array_ext;

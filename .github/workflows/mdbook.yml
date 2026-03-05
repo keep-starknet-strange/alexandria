@@ -29,6 +29,8 @@ jobs:
       MDBOOK_VERSION: 0.4.36
     steps:
       - uses: actions/checkout@v4
+      - name: Install scarb
+        uses: software-mansion/setup-scarb@v1.3.2
       - name: Install mdBook
         run: |
           curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf -y | sh
@@ -37,12 +39,12 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
-      - name: Build with mdBook
-        run: mdbook build docs/website
+      - name: Generate docs
+        run: bash scripts/generate_doc.sh
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/website/book
+          path: target/doc/book
 
   # Deployment job
   deploy:

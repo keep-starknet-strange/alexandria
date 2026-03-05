@@ -1,3 +1,7 @@
+//! # Alexandria Sorting
+//!
+//! Sorting algorithms for Cairo, including bubble sort, merge sort, and quick sort.
+
 mod bubble_sort;
 pub mod interface;
 pub mod merge_sort;

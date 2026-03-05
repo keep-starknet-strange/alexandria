@@ -1,3 +1,8 @@
+//! # Alexandria Data Structures
+//!
+//! Common data structures for Cairo, including queues, stacks, vectors,
+//! and array/span extensions.
+
 pub mod array_ext;
 
 pub mod bit_array;
