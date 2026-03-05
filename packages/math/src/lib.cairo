@@ -1,3 +1,8 @@
+//! # Alexandria Math
+//!
+//! A collection of math libraries and algorithms for Cairo, including modular arithmetic,
+//! cryptographic primitives (Ed25519, BIP-340), number theory, trigonometry, and fixed-point math.
+
 pub mod aliquot_sum;
 pub mod armstrong_number;
 
